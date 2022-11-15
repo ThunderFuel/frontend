@@ -1,5 +1,5 @@
 {
-  "name": "react-boilerplate",
+  "name": "thunder-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,6 +12,7 @@
     "@types/react": "^17.0.44",
     "@types/react-dom": "^17.0.15",
     "axios": "^0.26.1",
+    "clsx": "^1.2.1",
     "i18next": "^21.6.15",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
