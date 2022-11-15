@@ -3,56 +3,90 @@
 @tailwind utilities;
 
 @layer utilities {
-	.text-h1{
-		@apply text-head1 font-spaceGrotesk;
-	}
-	.text-h2{
-		@apply text-head2 font-spaceGrotesk;
-	}
-	.text-h3{
-		@apply text-head3 font-spaceGrotesk;
-	}
-	.text-h4{
-		@apply text-head4 font-spaceGrotesk;
-	}
-	.text-h5{
-		@apply text-head5 font-spaceGrotesk;
-	}
-	.text-h6{
-		@apply text-head6 font-spaceGrotesk;
-	}
+  .text-h1 {
+    @apply text-head1 font-spaceGrotesk;
+  }
+  .text-h2 {
+    @apply text-head2 font-spaceGrotesk;
+  }
+  .text-h3 {
+    @apply text-head3 font-spaceGrotesk;
+  }
+  .text-h4 {
+    @apply text-head4 font-spaceGrotesk;
+  }
+  .text-h5 {
+    @apply text-head5 font-spaceGrotesk;
+  }
+  .text-h6 {
+    @apply text-head6 font-spaceGrotesk;
+  }
 
-	.body-large {
-		@apply text-bodyLg font-spaceGrotesk;
-	}
-	.body-medium {
-		@apply text-bodyMd font-spaceGrotesk;
-	}
-	.body-small {
-		@apply text-bodySm font-spaceGrotesk;
-	}
+  .body-large {
+    @apply text-bodyLg font-spaceGrotesk;
+  }
+  .body-medium {
+    @apply text-bodyMd font-spaceGrotesk;
+  }
+  .body-small {
+    @apply text-bodySm font-spaceGrotesk;
+  }
 
-	.text-headline-01{
-		@apply text-headlineSm font-bigShoulderDisplay;
-	}
-	.text-headline-02{
-		@apply text-headlineMd font-bigShoulderDisplay;
-	}
+  .text-headline-01 {
+    @apply text-headlineSm font-bigShoulderDisplay;
+  }
+  .text-headline-02 {
+    @apply text-headlineMd font-bigShoulderDisplay;
+  }
+
+  .bg-gradient-default-to-r {
+    @apply bg-gradient-to-r to-gray-default;
+  }
 }
 @layer components {
-	.btn {
-		@apply flex gap-2 p-4 items-center;
-		@apply text-button font-bigShoulderDisplay text-gray-default border bg-white rounded-md;
-	}
-	.btn.btn-secondary{
-		@apply text-white bg-bg-default border-gray-default;
-	}
-	.btn.btn-secondary:hover{
-		@apply bg-gray-light;
-	}
+  .btn {
+    @apply flex gap-2 p-4 items-center;
+    @apply text-button font-bigShoulderDisplay text-gray-default border bg-white rounded-sm;
+  }
+  .btn.btn-secondary {
+    @apply text-white bg-bg-default border-gray-default;
+  }
+  .btn.btn-secondary:hover {
+    @apply bg-gray-light;
+  }
 
-	.btn.btn-sm{
-		@apply py-3 px-5;
-		@apply text-headlineMd;
-	}
+  .btn.btn-sm {
+    @apply py-3 px-5;
+    @apply text-headlineMd;
+  }
+
+  .btn-wallet {
+    @apply flex gap-2.5 items-center;
+    @apply px-5 py-2;
+    @apply text-headlineMd font-bigShoulderDisplay text-white rounded-sm;
+    background-color: transparent;
+    background-image: linear-gradient(90deg, transparent 0%, #252525 100%);
+  }
+  .btn-wallet:hover {
+    background-image: linear-gradient(90deg, #252525 0%, transparent 100%);
+  }
+
+  .tab {
+    @apply flex items-center;
+  }
+  .tab li {
+    @apply block;
+  }
+  .tab li span {
+    @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-white uppercase;
+    @apply bg-gray-default;
+    @apply px-5 py-2;
+    @apply rounded-sm;
+  }
+  .tab li span:hover {
+    @apply bg-bg-default;
+  }
+  .tab li span.active {
+    @apply bg-white text-bg-default;
+  }
 }
