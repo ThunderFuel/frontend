@@ -3,18 +3,34 @@ module.exports = {
   theme: {
     colors: {
       white: "#FFFFFF",
+      black: "#000000",
       bg: {
         light: "#171717",
-        default: "#141414",
+        dark: "#1E1E1E",
+        DEFAULT: "#141414",
       },
       gray: {
         light: "#838383",
-        default: "#252525",
+        DEFAULT: "#252525",
       },
-      green: "#D6FF7E",
+      green: {
+        light: "#01FFC8",
+        DEFAULT: "#D6FF7E",
+      },
       red: "#E64040",
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "landing-slider-bg": "url('/src/assets/landing/landing-slider-bg.svg')",
+      },
+    },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1.25rem",
+        xl: "4.5rem",
+      },
+    },
     fontSize: {
       head1: [
         "52px",
@@ -83,16 +99,16 @@ module.exports = {
         "14px",
         {
           lineHeight: "16px",
-          fontWeight: "800",
-          letterSpacing: "20%",
+          fontWeight: "700",
+          letterSpacing: "0.2rem",
         },
       ],
       headlineSm: [
         "12px",
         {
           lineHeight: "14px",
-          fontWeight: "800",
-          letterSpacing: "20%",
+          fontWeight: "700",
+          letterSpacing: "0.2rem",
         },
       ],
       button: [

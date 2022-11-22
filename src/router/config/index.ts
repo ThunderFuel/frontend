@@ -1,8 +1,9 @@
 import React from "react";
 import { PATHS } from "./paths";
 import Layout from "../../pages/Layout";
+import LayoutLanding from "../../pages/Layout/LayoutLanding";
 
-const Home = React.lazy(() => import("pages/Home"));
+const Landing = React.lazy(() => import("pages/Landing"));
 const Login = React.lazy(() => import("pages/Login"));
 
 export interface RouteConfig {
@@ -16,8 +17,8 @@ export interface RouteConfig {
 export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.HOME,
-    component: Home,
-    layout: Layout,
+    component: Landing,
+    layout: LayoutLanding,
   },
   {
     path: PATHS.LOGIN,
