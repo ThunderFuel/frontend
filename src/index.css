@@ -45,11 +45,11 @@
 }
 @layer components {
   .btn {
-    @apply flex gap-2 p-4 items-center;
-    @apply text-button font-bigShoulderDisplay text-gray-default border bg-white rounded-sm;
+    @apply flex gap-2 p-4 items-center justify-center;
+    @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
   }
   .btn.btn-secondary {
-    @apply text-white bg-bg-default border-gray-default;
+    @apply text-white bg-bg border-gray;
   }
   .btn.btn-secondary:hover {
     @apply bg-gray-light;
@@ -63,11 +63,22 @@
   .btn-wallet {
     @apply flex gap-2.5 items-center;
     @apply px-5 py-2;
-    @apply text-headlineMd font-bigShoulderDisplay text-white rounded-sm;
+    @apply text-headlineMd font-bigShoulderDisplay text-white rounded-md;
     background-color: transparent;
     background-image: linear-gradient(90deg, transparent 0%, #252525 100%);
   }
   .btn-wallet:hover {
+    background-image: linear-gradient(90deg, #252525 0%, transparent 100%);
+  }
+
+  .title-gradient {
+    @apply inline-flex gap-2.5 items-center uppercase;
+    @apply px-5 py-2;
+    @apply text-headlineMd font-bigShoulderDisplay text-white rounded-md;
+    background-color: transparent;
+    background-image: linear-gradient(90deg, transparent 0%, #252525 100%);
+  }
+  .title-gradient:hover {
     background-image: linear-gradient(90deg, #252525 0%, transparent 100%);
   }
 
@@ -79,14 +90,14 @@
   }
   .tab li span {
     @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-white uppercase;
-    @apply bg-gray-default;
+    @apply bg-gray;
     @apply px-5 py-2;
     @apply rounded-sm;
   }
   .tab li span:hover {
-    @apply bg-bg-default;
+    @apply bg-bg;
   }
   .tab li span.active {
-    @apply bg-white text-bg-default;
+    @apply bg-white text-bg;
   }
 }
