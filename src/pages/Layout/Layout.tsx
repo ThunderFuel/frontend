@@ -9,7 +9,7 @@ const Layout = ({ children }: Props) => {
   return (
     <main className={"bg-bg min-h-screen flex flex-col"}>
       <Header />
-      <div className="container">{children}</div>
+      <div className="">{children}</div>
     </main>
   );
 };

@@ -84,6 +84,7 @@
 
   .tab {
     @apply flex items-center;
+    @apply bg-gray rounded-sm;
   }
   .tab li {
     @apply block;
@@ -99,5 +100,24 @@
   }
   .tab li span.active {
     @apply bg-white text-bg;
+  }
+
+  .tab.secondary {
+    @apply bg-none rounded-none;
+  }
+  .tab.secondary li {
+    @apply border-r border-gray;
+  }
+  .tab.secondary li:first-child {
+    @apply border-l border-gray;
+  }
+  .tab.secondary li span {
+    @apply font-spaceGrotesk text-head5 text-gray-light normal-case;
+    @apply rounded-none bg-bg-light;
+    @apply px-7 py-6;
+  }
+  .tab.secondary li span.active {
+    @apply bg-bg-light text-bg text-white relative;
+    @apply after:content-[''] after:block after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:border-b after:border-b-white;
   }
 }
