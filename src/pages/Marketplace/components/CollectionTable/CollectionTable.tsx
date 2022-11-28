@@ -7,31 +7,37 @@ export interface ICollectionTableHeader {
   key: string;
   text: string;
   className?: string;
+  colspan?: number;
   render?: (any?: any) => void;
 }
 
 const CollectionTable = ({
   headers = [],
   items = [],
-  footerSlot = React.Fragment,
+  footerSlot,
 }: {
   headers: ICollectionTableHeader[];
   items: any[];
-  footerSlot: React.ReactNode;
+  footerSlot: JSX.Element;
 }) => {
-  const FooterSlot = footerSlot;
+  const FooterSlot = footerSlot || null;
+
+  const gridCols = headers.reduce((total, item) => {
+    total += item.colspan || 1;
+
+    return total;
+  }, 0);
 
   return (
     <div className="collection-table">
       <div className="thead">
         <div className="container">
-          <div className="tr grid-cols-9">
+          <div className={clsx("tr", `grid-cols-${gridCols}`)}>
             {headers.map((header) => (
-              <div key={header?.key} className={clsx("th", header?.className)}>
+              <div key={header?.key} className={clsx("th", `col-span-${header.colspan || 1}`, header?.className)}>
                 {header?.text}
               </div>
             ))}
-            <div></div>
           </div>
         </div>
       </div>
@@ -40,17 +46,19 @@ const CollectionTable = ({
         <div className="container">
           <div className="tbody">
             {items.map((item, key) => (
-              <div key={key} className={clsx("th", `grid-cols-${headers.length}`)}>
+              <div key={key} className={clsx("tr", `grid-cols-${gridCols}`)}>
                 {headers.map((header, index) => (
-                  <div key={`${key}_${index}`} className={clsx("td", " col-span-2")}>
-                    {header.render ? header.render(item?.[header.key]) : item?.[header.key]}
+                  <div
+                    key={`${key}_${index}`}
+                    className={clsx("td", `col-span-${header.colspan ?? 1}`, header.className)}
+                  >
+                    {header.render ? header.render(item) : item?.[header.key] ?? "-"}
                   </div>
                 ))}
               </div>
             ))}
           </div>
-
-          {!!FooterSlot ?? <FooterSlot />}
+          {FooterSlot}
         </div>
       </div>
     </div>

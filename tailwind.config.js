@@ -126,4 +126,12 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /grid-cols-./,
+    },
+    {
+      pattern: /col-span-./,
+    },
+  ],
 };
