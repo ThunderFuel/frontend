@@ -11,7 +11,7 @@ const LayoutLanding = ({ children }: { children: React.ReactNode }) => {
         </span>
       </div>
       <Header />
-      <div className="py-16">{children}</div>
+      <div className="pt-16">{children}</div>
     </main>
   );
 };

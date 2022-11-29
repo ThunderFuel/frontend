@@ -12,7 +12,7 @@ import Button from "../../../components/Button";
 const Container = () => {
   return (
     <div className="border-t border-gray">
-      <div className="container flex flex-col items-center py-[150px]">
+      <div className="container flex flex-col items-center pt-[150px]">
         <IconLayoutArrowDown className="hidden lg:flex text-white" />
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-12">
           <div className="flex justify-between">
@@ -67,7 +67,7 @@ const Container = () => {
           </div>
           <img alt="timeline-2-image" src={AssetLandingTimeline4Image} loading="lazy" />
         </div>
-        <div className="flex flex-col-reverse bg-no-repeat h-[532px] lg:h-[292px] max-w-[335px] lg:max-w-[1200px] bg-gray lg:flex-row lg:justify-center lg:gap-20 w-full mt-72 rounded-lg lg:bg-[url('assets/landing/landing-timeline-5-image-desktop.png')] bg-[url('assets/landing/landing-timeline-5-image.png')]">
+        <div className="flex flex-col-reverse bg-no-repeat h-[532px] lg:h-[292px] max-w-[335px] lg:max-w-[1200px] bg-gray lg:flex-row lg:justify-center lg:gap-20 w-full mt-[160px] rounded-lg lg:bg-[url('assets/landing/landing-timeline-5-image-desktop.png')] bg-[url('assets/landing/landing-timeline-5-image.png')]">
           <div className="flex flex-col items-start lg:justify-center justify-start text-white w-full pl-5 lg:py-8 lg:pl-8 lg:mt-0 -mt-7">
             <h3 className="text-head3 font-spaceGrotesk">Are you a creator?</h3>
             <span className="text-bodyLg font-spaceGrotesk flex w-[293px] mt-6 mb-8">
