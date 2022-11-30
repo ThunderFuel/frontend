@@ -36,6 +36,12 @@ const MarketplaceList = () => {
     {
       key: "floor",
       text: "FLOOR",
+      render: (item) => (
+        <div className="flex items-center">
+          <h6 className="text-h5">{item.floor}</h6>
+          <IconEthereum className="text-gray-light" />
+        </div>
+      ),
     },
     {
       key: "sales",
@@ -58,6 +64,16 @@ const MarketplaceList = () => {
     {
       collection: "CryptoPunks",
       volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
       image: AssetTable1Image,
       lastSold: "",
       images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
