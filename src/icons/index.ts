@@ -6,3 +6,4 @@ export { ReactComponent as IconDiscord } from "./icon-discord.svg";
 export { ReactComponent as IconSocial3Dots } from "./icon-social-3-dots.svg";
 export { ReactComponent as IconLightning } from "./icon-lightning.svg";
 export { ReactComponent as IconLayoutArrowDown } from "./icon-layout-arrow-down.svg";
+export { ReactComponent as IconThunder } from "./icon-thunder.svg";

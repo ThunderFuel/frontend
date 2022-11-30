@@ -4,3 +4,5 @@ export { default as AssetLandingTimeline1Scroll } from "./landing/landing-timeli
 export { default as AssetLandingTimeline2Image } from "./landing/landing-timeline-2-image.svg";
 export { default as AssetLandingTimeline3Image } from "./landing/landing-timeline-3-image.svg";
 export { default as AssetLandingTimeline4Image } from "./landing/landing-timeline-4-image.svg";
+export { default as AssetLandingTimeline5ImageDesktop } from "./landing/landing-timeline-5-image-desktop.png";
+export { default as AssetLandingTimeline5Image } from "./landing/landing-timeline-5-image.png";
