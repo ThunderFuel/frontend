@@ -22,7 +22,7 @@ const Container = () => {
           <div className="text-white lg:pt-20">
             <div className="title-gradient">powered by fuel</div>
             <div className="px-5 py-7">
-              <span className="text-bodyLg font-spaceGrotesk flex w-[320px]">
+              <span className="text-bodyLg font-spaceGrotesk flex lg:w-[320px]">
                 Approve, list, buy as many NFTs with one single transaction thanks to parallel execution by Fuel.
               </span>
             </div>
@@ -33,7 +33,7 @@ const Container = () => {
             <div className="text-white w-[440px]">
               <div className="title-gradient">REAL-TIME ANALYTICS</div>
               <div className="px-5 py-7">
-                <span className="text-bodyLg font-spaceGrotesk flex w-[320px]">
+                <span className="text-bodyLg font-spaceGrotesk flex lg:w-[320px]">
                   Flip and trade like a pro. Maximize data utilization and get ahead of the curve.
                 </span>
               </div>
@@ -48,7 +48,7 @@ const Container = () => {
           <div className="text-white lg:pt-20">
             <div className="title-gradient">SWEEP</div>
             <div className="px-5 py-7">
-              <span className="text-bodyLg font-spaceGrotesk flex w-[320px]">
+              <span className="text-bodyLg font-spaceGrotesk flex lg:w-[320px]">
                 Sweep across multiple collections with ease.
               </span>
             </div>
@@ -59,7 +59,7 @@ const Container = () => {
             <div className="text-white lg:w-[440px]">
               <div className="title-gradient">LOW FEEs</div>
               <div className="px-5 py-7">
-                <span className="text-bodyLg font-spaceGrotesk flex w-[320px]">
+                <span className="text-bodyLg font-spaceGrotesk flex lg:w-[320px]">
                   Faster, cheaper, cooler. Collect NFTs instantly with the lowest fees.
                 </span>
               </div>
