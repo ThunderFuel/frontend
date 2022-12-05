@@ -9,3 +9,6 @@ export { default as AssetLandingTimeline5Image } from "./landing/landing-timelin
 export { default as AssetHotdrop1Image } from "./marketplace/hot-drop-1.png";
 export { default as AssetTable1Image } from "./marketplace/table-image-1.png";
 export { default as AssetTableImageNft1 } from "./marketplace/table-image-nft-1.png";
+
+export { default as AssetCollectionProfileImage } from "./collection/profile-image.png";
+export { default as AssetCollectionCoverImage } from "./collection/cover-image.png";

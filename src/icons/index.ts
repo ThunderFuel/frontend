@@ -12,3 +12,7 @@ export { ReactComponent as IconDownRight } from "./icon-down-right.svg";
 export { ReactComponent as IconStar } from "./icon-star.svg";
 export { ReactComponent as IconStarFilled } from "./icon-star-filled.svg";
 export { ReactComponent as IconThunder } from "./icon-thunder.svg";
+export { ReactComponent as IconTelegram } from "./icon-telegram.svg";
+export { ReactComponent as IconWeblink } from "./icon-web-link.svg";
+export { ReactComponent as IconShare } from "./icon-share.svg";
+export { ReactComponent as IconChevronDoubleLeft } from "./icon-chevron-double-left.svg";
