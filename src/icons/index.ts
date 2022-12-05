@@ -11,3 +11,4 @@ export { ReactComponent as IconUpRight } from "./icon-up-right.svg";
 export { ReactComponent as IconDownRight } from "./icon-down-right.svg";
 export { ReactComponent as IconStar } from "./icon-star.svg";
 export { ReactComponent as IconStarFilled } from "./icon-star-filled.svg";
+export { ReactComponent as IconThunder } from "./icon-thunder.svg";

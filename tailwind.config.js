@@ -1,6 +1,14 @@
 module.exports = {
   content: ["./src/**/*.tsx", "./public/index.html"],
   theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1.25rem",
+        xl: "3.5rem",
+        "3xl": "3.5rem",
+      },
+    },
     colors: {
       white: "#FFFFFF",
       black: "#000000",
@@ -23,12 +31,8 @@ module.exports = {
       backgroundImage: {
         "landing-slider-bg": "url('/src/assets/landing/landing-slider-bg.svg')",
       },
-    },
-    container: {
-      center: true,
-      padding: {
-        DEFAULT: "1.25rem",
-        xl: "4.5rem",
+      screens: {
+        "3xl": "1920px",
       },
     },
     fontSize: {
