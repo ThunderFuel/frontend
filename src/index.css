@@ -83,21 +83,44 @@
   }
 
   .tab {
+    @apply w-full lg:w-auto;
     @apply flex items-center;
+    @apply bg-gray rounded-sm;
   }
   .tab li {
-    @apply block;
+    @apply block flex-1;
   }
   .tab li span {
     @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-white uppercase;
     @apply bg-gray;
     @apply px-5 py-2;
     @apply rounded-sm;
+    @apply text-center;
   }
   .tab li span:hover {
     @apply bg-bg;
   }
   .tab li span.active {
     @apply bg-white text-bg;
+  }
+
+  .tab.secondary {
+    @apply bg-none rounded-none;
+  }
+  .tab.secondary li {
+    @apply border-r border-gray flex-1;
+  }
+  .tab.secondary li:first-child {
+    @apply border-l border-gray;
+  }
+  .tab.secondary li span {
+    @apply font-spaceGrotesk text-head5 text-gray-light normal-case;
+    @apply rounded-none bg-bg-light;
+    @apply px-2 lg:px-7 py-6;
+    @apply text-center;
+  }
+  .tab.secondary li span.active {
+    @apply bg-bg-light text-bg text-white relative;
+    @apply after:content-[''] after:block after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:border-b after:border-b-white;
   }
 }

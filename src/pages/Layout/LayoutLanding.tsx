@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./Header";
+import Footer from "./Footer";
 
 const LayoutLanding = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -12,6 +13,7 @@ const LayoutLanding = ({ children }: { children: React.ReactNode }) => {
       </div>
       <Header />
       <div className="pt-16">{children}</div>
+      <Footer />
     </main>
   );
 };
