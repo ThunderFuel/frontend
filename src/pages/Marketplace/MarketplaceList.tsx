@@ -1,10 +1,12 @@
 import React, { useMemo } from "react";
+import { useIsMobile } from "hooks/useIsMobile";
 import CollectionTable, { ICollectionTableHeader } from "./components/CollectionTable/CollectionTable";
 import Filter from "./components/Filter";
 import Button from "components/Button";
 import { AssetTable1Image, AssetTableImageNft1 } from "assets";
 import { IconEthereum, IconStar } from "icons";
 import NftImages from "./components/CollectionTable/NftImages";
+import CollectionTableMobile from "./components/CollectionTable/CollectionTableMobile";
 
 const MarketplaceList = () => {
   const headers: ICollectionTableHeader[] = [
@@ -92,7 +94,12 @@ const MarketplaceList = () => {
   return (
     <div>
       <Filter />
-      <CollectionTable headers={headers} items={items} footerSlot={footer} />
+
+      {useIsMobile() ? (
+        <CollectionTableMobile headers={headers} items={items} />
+      ) : (
+        <CollectionTable headers={headers} items={items} footerSlot={footer} />
+      )}
     </div>
   );
 };

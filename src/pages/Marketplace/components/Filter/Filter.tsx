@@ -1,5 +1,5 @@
 import React from "react";
-import Tab from "../../../../components/Tab";
+import Tab from "components/Tab";
 
 const dayValues = [
   {
@@ -28,13 +28,13 @@ const Filter = () => {
   return (
     <div className="border-t border-b border-gray">
       <div className="container">
-        <div className="flex gap-7 items-center">
+        <div className="flex flex-col lg:flex-row gap-7 items-center">
           <Tab initTab={"top"} className="secondary">
             <Tab.Item id={"trending"}>Trending</Tab.Item>
             <Tab.Item id={"top"}>Top</Tab.Item>
             <Tab.Item id={"watchlist"}>Watchlist</Tab.Item>
           </Tab>
-          <div>
+          <div className="w-full lg:w-auto">
             <Tab initTab={1}>
               {dayValues.map((day) => (
                 <Tab.Item key={day.value} id={day.value}>

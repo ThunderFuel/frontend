@@ -1,13 +1,16 @@
 import React from "react";
-import { AssetHotdrop1Image } from "../../assets";
-import { IconEthereum } from "../../icons";
+import { AssetHotdrop1Image } from "assets";
+import { IconEthereum } from "icons";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const HotDrops = () => {
+  const images = useIsMobile() ? [1] : [1, 2, 3, 4, 5];
+
   return (
     <div className="container flex flex-col gap-5">
-      <h3 className="font-spaceGrotesk text-white text-head3">Hot Drops</h3>
-      <div className="flex gap-7">
-        {[1, 2, 3, 4, 5].map((item, k) => {
+      <h3 className="text-white text-h3">Hot Drops</h3>
+      <div className="flex flex-col lg:flex-row gap-7">
+        {images.map((item, k) => {
           return (
             <div key={k} className="border border-gray bg-bg-light text-white">
               <img src={AssetHotdrop1Image} alt={"hot-drop-1"} />
