@@ -1,0 +1,10 @@
+input:focus + .inputIcon {
+  @apply fill-white;
+}
+::placeholder {
+  min-width: 278px;
+}
+.container.headerPadding {
+  padding-right: 0;
+  @apply lg:pr-[56px];
+}

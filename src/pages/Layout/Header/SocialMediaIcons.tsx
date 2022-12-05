@@ -3,16 +3,16 @@ import { IconDiscord, IconSocial3Dots, IconTwitter } from "../../../icons";
 
 const SocialMediaIcons = () => {
   return (
-    <ul className="hidden md:flex gap-3 text-gray-light">
-      <li>
-        <IconTwitter />
-      </li>
-      <li>
+    <ul className="flex gap-3 text-gray-light">
+      <a href="https://discord.gg/WeN88sXCnS">
         <IconDiscord />
-      </li>
-      <li>
+      </a>
+      <a href="twitter.com/ThunderbyFuel">
+        <IconTwitter />
+      </a>
+      <a href="https://medium.com/@ThunderbyFuel/">
         <IconSocial3Dots />
-      </li>
+      </a>
     </ul>
   );
 };
