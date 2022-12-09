@@ -5,7 +5,7 @@ import SocialMediaIcons from "pages/Layout/Header/SocialMediaIcons";
 
 const Footer = () => {
   return (
-    <div className="flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full pt-10 pb-5">
+    <div className="flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full pt-10 pb-5 mt-10">
       <div className="border-b border-b-gray pb-10 mb-5">
         <div className="container">
           <div className="lg:flex lg:items-start lg:justify-between">

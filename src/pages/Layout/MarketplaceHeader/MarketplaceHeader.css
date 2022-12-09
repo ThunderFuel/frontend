@@ -1,5 +1,12 @@
+input {
+  /* background:#141414; */
+  @apply lg:bg-bg;
+}
 input:focus + .inputIcon {
   @apply fill-white;
+}
+input:focus {
+  @apply lg:bg-bg-light;
 }
 ::placeholder {
   min-width: 278px;

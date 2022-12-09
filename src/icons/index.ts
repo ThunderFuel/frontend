@@ -14,3 +14,4 @@ export { ReactComponent as IconStarFilled } from "./icon-star-filled.svg";
 export { ReactComponent as IconThunder } from "./icon-thunder.svg";
 export { ReactComponent as IconShoppingCart } from "./icon-shoppingcart.svg";
 export { ReactComponent as IconHamburger } from "./icon-hamburger.svg";
+export { ReactComponent as IconClose } from "./icon-close.svg";
