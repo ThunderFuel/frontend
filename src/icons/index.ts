@@ -16,3 +16,7 @@ export { ReactComponent as IconTelegram } from "./icon-telegram.svg";
 export { ReactComponent as IconWeblink } from "./icon-web-link.svg";
 export { ReactComponent as IconShare } from "./icon-share.svg";
 export { ReactComponent as IconChevronDoubleLeft } from "./icon-chevron-double-left.svg";
+export { ReactComponent as IconMarketBasket } from "./icon-market-basket.svg";
+export { ReactComponent as IconGrid } from "./icon-grid.svg";
+export { ReactComponent as IconGridExtend } from "./icon-grid-extend.svg";
+export { ReactComponent as IconList } from "./icon-list.svg";

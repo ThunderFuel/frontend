@@ -2,14 +2,18 @@ import React from "react";
 import { AssetCollectionProfileImage } from "assets";
 import Tab from "components/Tab";
 
+import CollectionContextProvider from "./CollectionContext";
+
 import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
 import SidebarFilter from "./components/SidebarFilter";
+import TopFilter from "./components/Filter";
+import CollectionList from "./components/CollectionList";
 
 const Collection = () => {
   return (
-    <div>
+    <CollectionContextProvider>
       <div className="container py-10">
         <div className="flex flex-col gap-5">
           <CoverImage />
@@ -40,17 +44,13 @@ const Collection = () => {
             </Tab>
           </div>
         </div>
-        <div className="border-t border-gray">
-          <div className="container">filters</div>
-        </div>
+        <TopFilter />
       </div>
       <div className="container flex">
         <SidebarFilter />
-        <div className="flex flex-1 pl-5 py-5 gap-5">
-          <div className="text-headline-02 text-gray-light">10,000 ITEMS</div>
-        </div>
+        <CollectionList />
       </div>
-    </div>
+    </CollectionContextProvider>
   );
 };
 

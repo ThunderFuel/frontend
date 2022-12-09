@@ -124,6 +124,29 @@
     @apply after:content-[''] after:block after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:border-b after:border-b-white;
   }
 
+  .tab.icon {
+    background: transparent;
+    @apply inline-flex border border-gray rounded-sm;
+  }
+  .tab.icon li {
+    @apply border-l border-l-gray first:border-none text-gray-light;
+  }
+  .tab.icon li span {
+    background: transparent;
+    @apply p-2 text-gray-light rounded-none;
+  }
+  .tab.icon li span:hover {
+    background: initial;
+    @apply text-white;
+  }
+  .tab.icon li span.active {
+    background: initial;
+    @apply text-white after:hidden;
+  }
+  .tab.icon.link li span.active {
+    @apply text-gray-light;
+  }
+
   .icon-btn {
     @apply p-3 border border-gray rounded-md cursor-pointer;
   }
