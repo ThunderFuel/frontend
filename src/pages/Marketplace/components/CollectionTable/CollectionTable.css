@@ -1,0 +1,29 @@
+.collection-table {
+  @apply w-full text-white;
+}
+.collection-table .thead {
+  @apply border-b border-gray;
+  @apply font-bigShoulderDisplay text-headline-01 text-gray-light;
+}
+.collection-table .thead .tr {
+  @apply w-full grid;
+}
+.collection-table .thead .th {
+  @apply pt-6 pb-4;
+}
+
+.collection-table .tbody {
+  @apply flex flex-col gap-5 py-6;
+}
+
+.collection-table .tbody .tr {
+  @apply grid w-full border border-gray rounded-lg items-center;
+}
+.collection-table .tbody .tr:hover {
+  @apply bg-bg-light;
+}
+
+.collection-table .tbody .tr .td {
+  @apply text-h5;
+  @apply p-2.5;
+}
