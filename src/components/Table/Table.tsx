@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import "./Table.css";
 
 export interface ITableHeader {
   key: string;
@@ -35,7 +36,7 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
 
 const Table = ({ headers = [], items = [], className = "", loading = false, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
-    <th className="py-5 px-8 text-left" key={header.key}>
+    <th className="p-4 text-left text-headline-01 text-gray-light uppercase" key={header.key}>
       {header.text}
     </th>
   ));
@@ -76,12 +77,12 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
   ));
 
   return (
-    <div className={clsx("overflow-hidden border border-jet-100 rounded-md")}>
-      <table className={clsx("w-full", className)} {...props}>
-        <thead data-testid="tableHeader" className={clsx("bg-cultured-500 border-b border-b-jet-100")}>
+    <div className={"overflow-hidden"}>
+      <table className={clsx("w-full border-collapse", className)} {...props}>
+        <thead data-testid="tableHeader" className={"border-t border-b border-gray"}>
           <tr className="text-body text-jet">{_getHeaders}</tr>
         </thead>
-        <tbody data-testid="tableBody" className="text-body text-jet-700 bg-white">
+        <tbody data-testid="tableBody" className="text-h6 text-white">
           {loading ? (
             <TableLoading colSpan={headers.length} />
           ) : items.length ? (

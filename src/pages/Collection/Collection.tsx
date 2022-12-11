@@ -8,7 +8,7 @@ import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
 import SidebarFilter from "./components/SidebarFilter";
-import TopFilter from "./components/Filter";
+import Filter from "./components/Filter";
 import CollectionList from "./components/CollectionList";
 
 const Collection = () => {
@@ -44,7 +44,7 @@ const Collection = () => {
             </Tab>
           </div>
         </div>
-        <TopFilter />
+        <Filter />
       </div>
       <div className="container flex">
         <SidebarFilter />

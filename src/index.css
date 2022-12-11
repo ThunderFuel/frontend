@@ -140,10 +140,10 @@
     @apply text-white;
   }
   .tab.icon li span.active {
-    background: initial;
-    @apply text-white after:hidden;
+    @apply text-bg bg-white rounded-sm after:hidden;
   }
   .tab.icon.link li span.active {
+    background: initial;
     @apply text-gray-light;
   }
 

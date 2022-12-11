@@ -5,12 +5,12 @@ import { DisplayType, useCollectionContext } from "../../CollectionContext";
 import { IconGrid, IconGridExtend, IconList } from "icons";
 
 const TabDisplayType = () => {
-  const { setDisplayType } = useCollectionContext();
+  const { setDisplayType, displayType } = useCollectionContext();
 
   return (
     <Tab
       className="icon"
-      initTab={null}
+      initTab={displayType}
       onChange={(selectedTab) => {
         console.log(selectedTab);
         setDisplayType(selectedTab);

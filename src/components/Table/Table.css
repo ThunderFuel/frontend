@@ -1,0 +1,8 @@
+table {
+}
+table tbody {
+  border: 1.25rem solid transparent;
+}
+table tbody tr {
+  @apply border border-gray;
+}
