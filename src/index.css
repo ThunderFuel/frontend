@@ -143,4 +143,25 @@
     @apply bg-bg-light text-bg text-white relative;
     @apply after:content-[''] after:block after:absolute after:-bottom-[1px] after:left-0 after:right-0 after:border-b after:border-b-white;
   }
+
+  .tab.third {
+    @apply bg-bg;
+  }
+  .tab.third li {
+    @apply border-b border-gray w-full;
+  }
+  .tab.third li:last-child {
+    @apply border-none;
+  }
+  .tab.third li span {
+    @apply container text-head5 tracking-normal font-spaceGrotesk text-gray-light normal-case;
+    @apply bg-bg;
+    @apply py-6;
+  }
+
+  .tab.third li span.active {
+    @apply bg-bg-light text-white relative;
+    @apply rounded-none;
+    @apply after:content-[''] after:block after:absolute after:left-0 after:top-0 after:h-full after:border-l after:border-l-white;
+  }
 }
