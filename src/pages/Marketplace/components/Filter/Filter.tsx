@@ -35,19 +35,32 @@ const Filter = () => {
   const [showModal, setshowModal] = useState(false);
   const [modalData, setmodalData] = useState<any>(filterValues);
 
+  function renderData() {
+    return modalData.map((i: any) => (
+      <Tab.Item key={i.text ? i.text : i} id={i.text ? i.text : i}>
+        {i.text ? i.text : i}
+      </Tab.Item>
+    ));
+  }
+
   return (
     <>
       {useIsMobile() ? (
         <>
           {showModal && (
-            <Modal
-              setshowModal={setshowModal}
-              setdayValue={setdayValue}
-              dayValue={dayValue}
-              setfilterValue={setfilterValue}
-              filterValue={filterValue}
-              data={modalData}
-            ></Modal>
+            <Modal setshowModal={setshowModal} title="PLEASE SELECT">
+              <Tab
+                initTab={modalData.includes(filterValue) ? filterValue : dayValue.text}
+                className="third flex flex-col"
+                onChange={(i) =>
+                  modalData.includes(i)
+                    ? setfilterValue(i.toString())
+                    : setdayValue(modalData.find((k: any) => i === k.text))
+                }
+              >
+                {renderData()}
+              </Tab>
+            </Modal>
           )}
 
           <div className="container flex justify-between items-center border-t border-b border-gray">

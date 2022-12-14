@@ -146,6 +146,7 @@
 
   .tab.third {
     @apply bg-bg;
+    @apply rounded-b-lg;
   }
   .tab.third li {
     @apply border-b border-gray w-full;
@@ -157,11 +158,17 @@
     @apply container text-head5 tracking-normal font-spaceGrotesk text-gray-light normal-case;
     @apply bg-bg;
     @apply py-6;
+    @apply rounded-b-lg;
   }
 
   .tab.third li span.active {
     @apply bg-bg-light text-white relative;
     @apply rounded-none;
     @apply after:content-[''] after:block after:absolute after:left-0 after:top-0 after:h-full after:border-l after:border-l-white;
+  }
+  .tab.third li:last-child span.active {
+    @apply bg-bg-light text-white relative;
+    @apply rounded-b-lg;
+    @apply after:content-[''] after:block after:absolute after:left-0 after:top-0 after:h-[calc(100%-5px)] after:border-l after:border-l-white;
   }
 }
