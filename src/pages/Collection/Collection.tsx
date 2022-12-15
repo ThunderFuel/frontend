@@ -46,7 +46,7 @@ const Collection = () => {
         </div>
         <Filter />
       </div>
-      <div className="container flex">
+      <div className="flex">
         <SidebarFilter />
         <CollectionList />
       </div>

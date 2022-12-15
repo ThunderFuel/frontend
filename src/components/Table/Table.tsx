@@ -5,7 +5,9 @@ import "./Table.css";
 export interface ITableHeader {
   key: string;
   text: React.ReactNode;
-  render?: (any: any) => void;
+  render?: (any: any) => React.ReactNode;
+  width?: string;
+  align?: string;
 }
 
 export interface ITable {
@@ -36,40 +38,42 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
 
 const Table = ({ headers = [], items = [], className = "", loading = false, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
-    <th className="p-4 text-left text-headline-01 text-gray-light uppercase" key={header.key}>
+    <div
+      className="th"
+      style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
+      key={header.key}
+    >
       {header.text}
-    </th>
+    </div>
   ));
   const _getItems = items.map((item, k) => (
     <>
       {item.beforeRow ? (
-        <tr key={`beforeRow_${k.toString()}`} className={clsx("border-b border-b-jet-100")}>
+        <div className="tr" key={`beforeRow_${k.toString()}`}>
           <td colSpan={headers.length} className="py-5 px-8 text-left">
             {item.beforeRow}
           </td>
-        </tr>
+        </div>
       ) : (
         <></>
       )}
-      <tr key={`row_${k.toString()}`} className={clsx("border-b border-b-jet-100 last:border-b-0")}>
+      <div className="tr" key={`row_${k.toString()}`}>
         {headers.map((header) => (
-          <>
-            {header.render ? (
-              header.render(item)
-            ) : (
-              <td key={header.key} className="py-5 px-8 text-left">
-                {item[header.key]}
-              </td>
-            )}
-          </>
+          <div
+            className="td"
+            style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
+            key={header.key}
+          >
+            {header.render ? header.render(item) : <div className="cell">{item[header.key]}</div>}
+          </div>
         ))}
-      </tr>
+      </div>
       {item.afterRow ? (
-        <tr key={`afterRow_${k.toString()}`} className={clsx("border-b border-b-jet-100 last:border-b-0")}>
+        <div key={`afterRow_${k.toString()}`} className={"tr"}>
           <td colSpan={headers.length} className="py-5 px-8 text-left">
             {item.afterRow}
           </td>
-        </tr>
+        </div>
       ) : (
         <></>
       )}
@@ -78,11 +82,11 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
 
   return (
     <div className={"overflow-hidden"}>
-      <table className={clsx("w-full border-collapse", className)} {...props}>
-        <thead data-testid="tableHeader" className={"border-t border-b border-gray"}>
-          <tr className="text-body text-jet">{_getHeaders}</tr>
+      <div className={clsx("table", className)} {...props}>
+        <thead data-testid="tableHeader" className={"thead"}>
+          <div className="tr">{_getHeaders}</div>
         </thead>
-        <tbody data-testid="tableBody" className="text-h6 text-white">
+        <div data-testid="tableBody" className="tbody">
           {loading ? (
             <TableLoading colSpan={headers.length} />
           ) : items.length ? (
@@ -90,8 +94,8 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
           ) : (
             <TableNotFound colSpan={headers.length} />
           )}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
 };

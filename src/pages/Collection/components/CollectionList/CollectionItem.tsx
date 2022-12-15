@@ -1,26 +1,11 @@
 import React from "react";
 import { IconEthereum, IconMarketBasket } from "icons";
-import {
-  AssetCollectionItem0,
-  AssetCollectionItem1,
-  AssetCollectionItem2,
-  AssetCollectionItem3,
-  AssetCollectionItem4,
-} from "assets";
 
 const CollectionItem = ({ collection }: { collection: any }) => {
-  const images = [
-    AssetCollectionItem0,
-    AssetCollectionItem1,
-    AssetCollectionItem2,
-    AssetCollectionItem3,
-    AssetCollectionItem4,
-  ];
-
   return (
     <div className="border border-gray rounded-md">
       <div className="overflow-hidden rounded-t-md">
-        <img className="w-full" src={images[collection.image]} />
+        <img alt={collection.image} className="w-full" src={collection.image} />
       </div>
       <div className="p-2.5 border-b border-b-gray">
         <h6 className="text-h6 text-white">{collection.name}</h6>

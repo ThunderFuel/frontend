@@ -1,8 +1,30 @@
-table {
+.table {
+  @apply w-full;
 }
-table tbody {
-  border: 1.25rem solid transparent;
+
+.table .thead .tr {
+  @apply flex px-5;
+  @apply border-y border-solid border-gray;
 }
-table tbody tr {
-  @apply border border-gray;
+
+.table .thead .tr .th {
+  flex: 1;
+  @apply flex p-4 text-left text-headline-01 text-gray-light uppercase;
+}
+
+.table .tbody {
+  @apply p-5;
+  @apply flex flex-col gap-5;
+}
+.table .tbody .tr {
+  @apply flex flex-row items-center border border-gray rounded-lg;
+  @apply hover:bg-gray;
+}
+.table .tbody .tr .td {
+  flex: 1;
+  @apply flex;
+}
+.table .tbody .tr .td .cell {
+  @apply p-3.5 text-h5 text-white overflow-hidden;
+  @apply whitespace-nowrap overflow-ellipsis;
 }
