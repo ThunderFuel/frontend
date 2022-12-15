@@ -1,0 +1,26 @@
+.modalbase {
+  @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.98)];
+}
+.modalbase .modal {
+  @apply flex flex-col w-[335px] bg-bg rounded-lg;
+}
+
+.modalbase .modal .mhead {
+  @apply container flex justify-between items-center py-5 border-b border-gray;
+}
+.modalbase .modal .mhead .mtitle {
+  @apply text-headlineMd font-bigShoulderDisplay text-white;
+}
+
+.cart {
+  @apply fixed flex w-screen h-screen justify-end items-start z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.98)];
+}
+.cart .modal {
+  @apply flex flex-col h-full w-[480px] bg-bg rounded-none;
+}
+.cart .modal .mhead {
+  @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
+}
+.cart .modal .mhead .mtitle {
+  @apply text-head5 font-spaceGrotesk text-white;
+}
