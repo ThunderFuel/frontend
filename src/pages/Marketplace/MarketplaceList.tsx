@@ -4,11 +4,15 @@ import CollectionTable, { ICollectionTableHeader } from "./components/Collection
 import Filter from "./components/Filter";
 import Button from "components/Button";
 import { AssetTable1Image, AssetTableImageNft1 } from "assets";
-import { IconEthereum, IconStar } from "icons";
+import { IconArrowRight, IconEthereum, IconStar } from "icons";
 import NftImages from "./components/CollectionTable/NftImages";
 import CollectionTableMobile from "./components/CollectionTable/CollectionTableMobile";
 
-const MarketplaceList = () => {
+export interface MarketplaceListProps {
+  itemCount: number;
+}
+
+const MarketplaceList = ({ itemCount }: MarketplaceListProps) => {
   const headers: ICollectionTableHeader[] = [
     {
       key: "collection",
@@ -23,7 +27,7 @@ const MarketplaceList = () => {
     },
     {
       key: "volume",
-      text: "VOLUME (24h)",
+      text: "VOLUME (24H)",
       render: (item) => (
         <div className="flex items-center">
           <h6 className="text-h5">{item.volume}</h6>
@@ -81,24 +85,109 @@ const MarketplaceList = () => {
       images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
       sales: 1,
     },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
+    {
+      collection: "CryptoPunks",
+      volume: 123.21,
+      floor: 123.21,
+      image: AssetTable1Image,
+      lastSold: "",
+      images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
+      sales: 1,
+    },
   ];
+
+  const pathname = window.location.pathname;
+
   const footer = useMemo(
     () => (
       <div>
-        <Button className="btn-secondary btn-sm w-full">view all</Button>
+        {pathname === "/marketplace" ? (
+          <Button className="btn-secondary btn-sm w-full">
+            view all <IconArrowRight />
+          </Button>
+        ) : (
+          <Button className="btn-secondary btn-sm w-full">
+            load more <IconArrowRight />
+          </Button>
+        )}
       </div>
     ),
     []
   );
+
+  const slicedItems = items.slice(0, itemCount);
 
   return (
     <div>
       <Filter />
 
       {useIsMobile() ? (
-        <CollectionTableMobile headers={headers} items={items} />
+        <CollectionTableMobile headers={headers} items={slicedItems} footerSlot={footer} />
       ) : (
-        <CollectionTable headers={headers} items={items} footerSlot={footer} />
+        <CollectionTable headers={headers} items={slicedItems} footerSlot={footer} />
       )}
     </div>
   );
