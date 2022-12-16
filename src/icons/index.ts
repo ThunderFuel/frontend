@@ -16,3 +16,6 @@ export { ReactComponent as IconShoppingCart } from "./icon-shoppingcart.svg";
 export { ReactComponent as IconHamburger } from "./icon-hamburger.svg";
 export { ReactComponent as IconClose } from "./icon-close.svg";
 export { ReactComponent as IconArrowDown } from "./icon-arrow-down.svg";
+export { ReactComponent as IconWarning } from "./icon-warning.svg";
+export { ReactComponent as IconInfo } from "./icon-info.svg";
+export { ReactComponent as IconTrash } from "./icon-trash.svg";
