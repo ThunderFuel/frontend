@@ -3,7 +3,7 @@
 }
 .collection-table .thead {
   @apply border-b border-gray;
-  @apply font-bigShoulderDisplay text-headline-01 text-gray-light;
+  @apply font-bigShoulderDisplay text-headlineSm text-gray-light;
 }
 .collection-table .thead .tr {
   @apply w-full grid;
@@ -24,6 +24,6 @@
 }
 
 .collection-table .tbody .tr .td {
-  @apply text-h5;
+  @apply text-head5;
   @apply p-2.5;
 }

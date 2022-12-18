@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect, useRef } from "react";
+import React, { ChangeEvent, useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
 import { AssetThunderText, AssetMockNFT } from "assets";
 import "./MarketplaceHeader.css";
 import { IconHamburger, IconSearch, IconShoppingCart, IconThunder, IconWallet } from "icons";
@@ -30,7 +30,11 @@ const mocksearchData = {
 const ethPrice = 1322.6;
 const gasPrice = 39;
 
-const Header = () => {
+export interface HeaderProps {
+  showCartModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const Header = ({ showCartModal }: HeaderProps) => {
   const [data, setData] = useState<data>({
     foundCollections: mocksearchData.collections,
     foundAccounts: mocksearchData.accounts,
@@ -143,7 +147,7 @@ const Header = () => {
             <HeaderButton className="hidden header-btn border-l border-gray lg:flex">
               <IconWallet />
             </HeaderButton>
-            <HeaderButton className="header-btn border-x border-gray  ">
+            <HeaderButton className="header-btn border-x border-gray" onClick={() => showCartModal(true)}>
               <IconShoppingCart />
             </HeaderButton>
             <HeaderButton className="header-btn lg:hidden">

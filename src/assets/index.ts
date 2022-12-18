@@ -21,3 +21,5 @@ export { default as AssetCollectionItem1 } from "./collection/item-1.png";
 export { default as AssetCollectionItem2 } from "./collection/item-2.png";
 export { default as AssetCollectionItem3 } from "./collection/item-3.png";
 export { default as AssetCollectionItem4 } from "./collection/item-4.png";
+
+export { default as AssetEmptyCart } from "./cart/cart-empty.svg";

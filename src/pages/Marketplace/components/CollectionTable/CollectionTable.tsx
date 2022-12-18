@@ -46,7 +46,7 @@ const CollectionTable = ({
         <div className="container">
           <div className="tbody">
             {items.map((item, key) => (
-              <div key={key} className={clsx("tr", `grid-cols-${gridCols}`)}>
+              <div key={key} className={clsx("tr", `grid-cols-${gridCols}`, "pl-4")}>
                 {headers.map((header, index) => (
                   <div
                     key={`${key}_${index}`}
