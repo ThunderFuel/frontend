@@ -19,3 +19,6 @@ export { ReactComponent as IconArrowDown } from "./icon-arrow-down.svg";
 export { ReactComponent as IconWarning } from "./icon-warning.svg";
 export { ReactComponent as IconInfo } from "./icon-info.svg";
 export { ReactComponent as IconTrash } from "./icon-trash.svg";
+export { ReactComponent as IconSpinner } from "./icon-spinner.svg";
+export { ReactComponent as IconMilestone } from "./icon-milestone.svg";
+export { ReactComponent as IconDone } from "./icon-done.svg";
