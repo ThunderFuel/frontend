@@ -1,18 +1,9 @@
 import React from "react";
 import clsx from "clsx";
-import { ICollectionTableHeader } from "./CollectionTable";
 
-import "./CollectionTable.css";
 import { IconEthereum, IconStar } from "icons";
 
-const CollectionTableMobile = ({
-  items = [],
-  footerSlot,
-}: {
-  headers: ICollectionTableHeader[];
-  items: any[];
-  footerSlot?: JSX.Element;
-}) => {
+const CollectionTableMobile = ({ items = [], footerSlot }: { items: any[]; footerSlot?: JSX.Element }) => {
   const FooterSlot = footerSlot || null;
 
   return (

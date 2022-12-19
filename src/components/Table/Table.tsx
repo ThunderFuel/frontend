@@ -13,8 +13,10 @@ export interface ITableHeader {
 export interface ITable {
   headers: ITableHeader[];
   items: Array<any>;
+  footer?: any;
   className?: string;
   loading?: boolean;
+  containerClassName?: string;
 }
 
 const TableNotFound = ({ colSpan }: { colSpan: number }) => {
@@ -83,10 +85,10 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
   return (
     <div className={"overflow-hidden"}>
       <div className={clsx("table", className)} {...props}>
-        <thead data-testid="tableHeader" className={"thead"}>
+        <div data-testid="tableHeader" className={clsx("thead", props.containerClassName)}>
           <div className="tr">{_getHeaders}</div>
-        </thead>
-        <div data-testid="tableBody" className="tbody">
+        </div>
+        <div data-testid="tableBody" className={clsx("tbody", props.containerClassName)}>
           {loading ? (
             <TableLoading colSpan={headers.length} />
           ) : items.length ? (
@@ -94,6 +96,9 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
           ) : (
             <TableNotFound colSpan={headers.length} />
           )}
+        </div>
+        <div className={props.containerClassName}>
+          {props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}
         </div>
       </div>
     </div>

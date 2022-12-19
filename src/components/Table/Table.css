@@ -13,7 +13,7 @@
 }
 
 .table .tbody {
-  @apply p-5;
+  @apply py-5;
   @apply flex flex-col gap-5;
 }
 .table .tbody .tr {
@@ -22,9 +22,9 @@
 }
 .table .tbody .tr .td {
   flex: 1;
-  @apply flex;
+  @apply flex text-white;
 }
 .table .tbody .tr .td .cell {
-  @apply p-3.5 text-h5 text-white overflow-hidden;
+  @apply p-3.5 text-h5 overflow-hidden;
   @apply whitespace-nowrap overflow-ellipsis;
 }
