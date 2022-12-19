@@ -17,9 +17,9 @@ const Layout = ({ children }: Props) => {
   return (
     <main className={"bg-bg min-h-screen flex flex-col"}>
       <MarketplaceHeader showCartModal={setShowCartModal} />
-      {/* <Checkout showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} /> */}
+      <Checkout showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} />
       {/* <InsufficentFunds showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} /> */}
-      <MyCart showModal={showCartModal} setShowModal={setShowCartModal} />
+      <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />
       <div className="">{children}</div>
       <Footer />
     </main>
