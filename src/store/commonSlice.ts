@@ -6,4 +6,5 @@ export const commonSlice = createSlice({
   name: "common",
   initialState,
   reducers: {},
+  extraReducers: {},
 });

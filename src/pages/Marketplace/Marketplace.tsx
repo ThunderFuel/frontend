@@ -1,16 +1,17 @@
 import React from "react";
 import HotDrops from "./HotDrops";
 import MarketplaceList from "./MarketplaceList";
-import Filter from "./Filter";
+import Filter from "./Filter/index";
+import MarketplaceProvider from "./MarketplaceContext";
 
 const Marketplace = () => {
   return (
     <div className="flex flex-col gap-20 py-16">
       <HotDrops />
-      <div>
+      <MarketplaceProvider>
         <Filter />
         <MarketplaceList itemCount={5} />
-      </div>
+      </MarketplaceProvider>
     </div>
   );
 };

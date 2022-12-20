@@ -1,6 +1,6 @@
+import React from "react";
 import clsx from "clsx";
 import { IconClose } from "icons";
-import React, { Dispatch, SetStateAction } from "react";
 import "./Modal.css";
 
 export interface ModalProps {
@@ -8,29 +8,30 @@ export interface ModalProps {
   footer?: JSX.Element;
   children: React.ReactNode;
   title: string;
-  setshowModal: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
+  show: boolean;
 }
 
-const Modal = ({ className, footer, children, title, setshowModal }: ModalProps) => {
-  const body = document.querySelector("body");
-  if (body) body.style.overflow = "hidden";
+const body = document.querySelector("body");
 
-  function onClose() {
-    setshowModal(false);
-    if (body) {
+const Modal = ({ show, className, footer, children, title, ...etc }: ModalProps) => {
+  React.useEffect(() => {
+    if (show && body) {
+      body.style.overflow = "hidden";
+    } else if (body) {
       body.style.overflow = "auto";
     }
+  }, [show]);
+  if (!show) {
+    return null;
   }
 
   return (
-    <div className={clsx(className ? className : "modalbase")}>
+    <div className={clsx("modalbase", className)}>
       <div className="modal">
         <div className="mhead">
           <h6 className="mtitle">{title}</h6>
-          <button
-            className="flex justify-center items-center w-[26px] h-[26px] bg-bg-light rounded-full"
-            onClick={() => onClose()}
-          >
+          <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
             <IconClose />
           </button>
         </div>

@@ -6,21 +6,24 @@
   @apply border-b border-solid border-gray;
 }
 .table .thead .tr {
-  @apply flex px-5;
+  @apply flex items-center;
 }
 
 .table .thead .tr .th {
   flex: 1;
-  @apply flex p-4 text-left text-headline-01 text-gray-light uppercase;
+  @apply flex p-4 text-headline-01 text-gray-light uppercase;
+}
+.table .thead .tr .th:first-child .cell {
+  @apply -mx-4;
 }
 
 .table .tbody {
   @apply py-5;
-  @apply flex flex-col gap-5;
+  @apply flex flex-col gap-5 container;
 }
 .table .tbody .tr {
   @apply flex flex-row items-center border border-gray rounded-lg;
-  @apply hover:bg-gray;
+  @apply hover:bg-bg-light;
 }
 .table .tbody .tr .td {
   flex: 1;
