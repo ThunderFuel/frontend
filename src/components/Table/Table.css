@@ -2,9 +2,11 @@
   @apply w-full;
 }
 
+.table .thead {
+  @apply border-b border-solid border-gray;
+}
 .table .thead .tr {
   @apply flex px-5;
-  @apply border-y border-solid border-gray;
 }
 
 .table .thead .tr .th {

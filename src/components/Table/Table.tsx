@@ -85,8 +85,10 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
   return (
     <div className={"overflow-hidden"}>
       <div className={clsx("table", className)} {...props}>
-        <div data-testid="tableHeader" className={clsx("thead", props.containerClassName)}>
-          <div className="tr">{_getHeaders}</div>
+        <div data-testid="tableHeader" className={clsx("thead")}>
+          <div className={props.containerClassName}>
+            <div className="tr">{_getHeaders}</div>
+          </div>
         </div>
         <div data-testid="tableBody" className={clsx("tbody", props.containerClassName)}>
           {loading ? (
