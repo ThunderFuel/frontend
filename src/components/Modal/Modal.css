@@ -1,5 +1,5 @@
 .modalbase {
-  @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.98)];
+  @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
 .modalbase .modal {
   @apply flex flex-col w-[335px] bg-bg rounded-lg;
@@ -13,7 +13,7 @@
 }
 
 .cart {
-  @apply fixed flex w-screen h-screen justify-end items-start z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.98)];
+  @apply fixed flex w-screen h-screen justify-end items-start z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
 .cart .modal {
   @apply flex flex-col h-full w-[480px] bg-bg rounded-none;
@@ -22,5 +22,18 @@
   @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
 }
 .cart .modal .mhead .mtitle {
+  @apply text-head5 font-spaceGrotesk text-white;
+}
+
+.checkout {
+  @apply fixed flex w-screen h-screen items-center justify-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+}
+.checkout .modal {
+  @apply flex flex-col w-[480px] bg-bg rounded-lg;
+}
+.checkout .modal .mhead {
+  @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
+}
+.checkout .modal .mhead .mtitle {
   @apply text-head5 font-spaceGrotesk text-white;
 }

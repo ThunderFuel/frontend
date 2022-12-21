@@ -8,8 +8,9 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 export interface MyCartProps {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
+  setShowCheckoutModal: Dispatch<SetStateAction<boolean>>;
 }
-const MyCart = ({ showModal, setShowModal }: MyCartProps) => {
+const MyCart = ({ showModal, setShowModal, setShowCheckoutModal }: MyCartProps) => {
   const [totalCost, setTotalCost] = useState(0);
   const [itemCount, setItemCount] = useState(0);
 
@@ -107,7 +108,13 @@ const MyCart = ({ showModal, setShowModal }: MyCartProps) => {
         </span>
       </div>
       <div className="flex w-full p-5">
-        <Button className="w-full">
+        <Button
+          className="w-full"
+          onClick={() => {
+            setShowModal(false);
+            setShowCheckoutModal(true);
+          }}
+        >
           PROCEED TO CHECKOUT <IconArrowRight />
         </Button>
       </div>
