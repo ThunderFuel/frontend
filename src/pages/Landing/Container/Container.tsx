@@ -6,27 +6,36 @@ import {
   AssetLandingTimeline3Image,
   AssetLandingTimeline4Image,
 } from "assets";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import Button from "../../../components/Button";
+
+AOS.init();
 
 const Container = () => {
   return (
     <div className="border-t border-gray">
       <div className="container flex flex-col items-center pt-[150px]">
-        <IconLayoutArrowDown className="hidden lg:flex text-white" />
-        <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-12">
-          <div className="flex justify-between">
-            <img alt="timeline-1-image" src={AssetLandingTimeline1Image} loading="lazy" />
-          </div>
-          <div className="text-white lg:pt-20">
-            <div className="title-gradient">powered by fuel</div>
-            <div className="px-5 py-7">
-              <span className="text-bodyLg font-spaceGrotesk flex lg:w-[320px]">
-                Approve, list, buy as many NFTs with one single transaction thanks to parallel execution by Fuel.
-              </span>
+        <div data-aos="fade-up" className="flex flex-col items-center">
+          <IconLayoutArrowDown className="hidden lg:flex text-white" />
+          <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-12">
+            <div className="flex justify-between">
+              <img alt="timeline-1-image" src={AssetLandingTimeline1Image} loading="lazy" />
+            </div>
+            <div className="text-white lg:pt-20">
+              <div className="title-gradient">powered by fuel</div>
+              <div className="px-5 py-7">
+                <span className="text-bodyLg font-spaceGrotesk flex lg:w-[320px]">
+                  Approve, list, buy as many NFTs with one single transaction thanks to parallel execution by Fuel.
+                </span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-72">
+        <div
+          data-aos="fade-up"
+          className="flex flex-col-reverse gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-56"
+        >
           <div className="flex justify-end lg:pt-20">
             <div className="text-white w-[440px]">
               <div className="title-gradient">REAL-TIME ANALYTICS</div>
@@ -39,7 +48,7 @@ const Container = () => {
           </div>
           <img alt="timeline-2-image" src={AssetLandingTimeline2Image} loading="lazy" />
         </div>
-        <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-72">
+        <div data-aos="fade-up" className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-56">
           <div className="flex lg:justify-end">
             <img alt="timeline-3-image" src={AssetLandingTimeline3Image} loading="lazy" />
           </div>
@@ -52,7 +61,10 @@ const Container = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse gap-12 lg:flex-row lg:justify-center lg:gap-20 w-full mt-72">
+        <div
+          data-aos="fade-up"
+          className="flex flex-col-reverse gap-12 lg:flex-row lg:justify-center lg:gap-20 w-full mt-56"
+        >
           <div className="flex lg:justify-end lg:pt-20">
             <div className="text-white lg:w-[440px]">
               <div className="title-gradient">LOW FEEs</div>
@@ -71,7 +83,7 @@ const Container = () => {
             <span className="text-bodyLg font-spaceGrotesk flex w-[293px] mt-6 mb-8">
               Lorem ipsum dolor sit amet, eiusmod consectetur adipiscing elit so det tempor incididunt.
             </span>
-            <Button className="w-[140px] h-[52px] mb-8 lg:mb-0">
+            <Button className="">
               APPLY NOW <IconArrowRight />
             </Button>
           </div>
