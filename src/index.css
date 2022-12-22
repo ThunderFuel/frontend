@@ -61,11 +61,11 @@
     @apply flex gap-2 p-4 items-center justify-center;
     @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
   }
+  .btn:hover {
+    @apply gap-4;
+  }
   .btn.btn-secondary {
     @apply text-white bg-bg border-gray;
-  }
-  .btn.btn-secondary:hover {
-    @apply bg-gray-light;
   }
 
   .btn.btn-sm {
