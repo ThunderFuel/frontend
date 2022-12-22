@@ -3,6 +3,10 @@ import "./Slider.css";
 import { IconArrowRight, IconDiscord, IconLightning } from "../../../icons";
 import Button from "../../../components/Button";
 
+import AOS from "aos";
+import "aos/dist/aos.css";
+AOS.init({ duration: 600 });
+
 export const openInNewTab = (url: string): void => {
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
   if (newWindow) newWindow.opener = null;
@@ -16,7 +20,7 @@ export const onClickUrl =
 const Slider = () => {
   return (
     <div className="slider-container">
-      <div className="container relative z-10 flex flex-col">
+      <div data-aos="fade-up" className="container relative z-10 flex flex-col">
         <div className="mt-[]">
           <div className="text-headline-02 flex gap-1">
             EXPLORE, CREATE AND TRADE
@@ -28,7 +32,7 @@ const Slider = () => {
             No more multi step signings. Thunder enables bulk executions in a single transaction.
           </div>
           <div className="mt-10 flex flex-col lg:flex-row gap-2.5">
-            <Button className="">
+            <Button className="" onClick={() => openInNewTab("https://forms.gle/U66sM86mTXHdGDqQ9")}>
               START CREATING WITH THUNDER
               <IconArrowRight />
             </Button>
