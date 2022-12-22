@@ -1,8 +1,9 @@
 import React from "react";
 import { useIsMobile } from "hooks/useIsMobile";
+import marketplace from "api/marketplace";
 
 import MarketPlaceTable from "./MarketPlaceTable";
-import marketplace from "api/marketplace";
+import MarketPlaceMobileTable from "./MarketPlaceMobileTable";
 
 export interface MarketplaceListProps {
   itemCount: number;
@@ -13,7 +14,7 @@ const MarketplaceList = ({ itemCount }: MarketplaceListProps) => {
 
   const slicedItems = items.slice(0, itemCount);
 
-  return useIsMobile() ? <MarketPlaceTable items={slicedItems} /> : <MarketPlaceTable items={slicedItems} />;
+  return useIsMobile() ? <MarketPlaceMobileTable items={slicedItems} /> : <MarketPlaceTable items={slicedItems} />;
 };
 
 export default MarketplaceList;

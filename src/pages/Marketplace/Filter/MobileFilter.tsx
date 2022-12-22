@@ -42,7 +42,7 @@ const MobileFilter = () => {
       </Modal>
 
       <div className="border-t border-b border-gray">
-        <div className={"container flex justify-between items-center"}>
+        <div className={"container-fluid flex justify-between items-center"}>
           <Tab.Button className="secondary" value={filterTabValue} onClick={onShowFilterTabModal} />
           <Tab.Button value={dayTabValue} onClick={onShowDayTabModal} />
         </div>

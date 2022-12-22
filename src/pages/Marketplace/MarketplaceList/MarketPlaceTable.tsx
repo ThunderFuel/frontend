@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Table, { ITableHeader } from "components/Table";
-import Button from "components/Button";
-import { IconArrowRight, IconEthereum, IconStar, IconUpRight } from "icons";
+import { IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
+import Favorite from "./components/Favorite";
+import Footer from "./components/Footer";
+import Collection from "./components/Collection";
+import Price from "./components/Price";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   return (
@@ -18,15 +21,6 @@ const NftImages = React.memo(({ images }: { images: any[] }) => {
 });
 NftImages.displayName = "NftImages";
 
-const Footer = React.memo(() => {
-  return (
-    <Button className="btn-secondary btn-sm w-full">
-      view all <IconArrowRight />
-    </Button>
-  );
-});
-Footer.displayName = "Footer";
-
 const Change = ({ change }: { change: any }) => {
   const className = change < 0 ? "text-red" : "text-green";
 
@@ -39,17 +33,6 @@ const Change = ({ change }: { change: any }) => {
 };
 Change.displayName = "Change";
 
-const Favorite = ({ item }: { item: any }) => {
-  const [isFavorite, setIsFavorite] = useState<boolean>(item.favorite ?? false);
-
-  return (
-    <div className="cursor-pointer" onClick={() => setIsFavorite((value: boolean) => !value)}>
-      <IconStar className={clsx("hover:fill-gray", isFavorite ? "fill-white hover:fill-white" : "text-gray")} />
-    </div>
-  );
-};
-Favorite.displayName = "Favorite";
-
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   const { dayTabValue } = useMarketplace();
 
@@ -57,24 +40,14 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     {
       key: "collection",
       text: "COLLECTION",
-      render: (item) => (
-        <div className="p-4 flex items-center gap-5">
-          <img src={item.image} loading="lazy" alt={""} />
-          <h6 className="text-h6">{item.collection}</h6>
-        </div>
-      ),
+      render: (item) => <Collection image={item.image} title={item.collection} />,
     },
     {
       key: "volume",
       text: `VOLUME (${dayTabValue?.text})`,
       width: "10%",
       align: "flex-end",
-      render: (item) => (
-        <div className="p-4 flex items-center">
-          <h6 className="text-h5">{item.volume}</h6>
-          <IconEthereum className="text-gray-light" />
-        </div>
-      ),
+      render: (item) => <Price price={item.volume} />,
     },
     {
       key: "change",
@@ -88,12 +61,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "FLOOR",
       width: "10%",
       align: "flex-end",
-      render: (item) => (
-        <div className="p-4 flex items-center">
-          <h6 className="text-h5">{item.floor}</h6>
-          <IconEthereum className="text-gray-light" />
-        </div>
-      ),
+      render: (item) => <Price price={item.floor} />,
     },
     {
       key: "sales",
@@ -115,7 +83,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     },
   ];
 
-  return <Table containerClassName={"container"} headers={headers} items={items} footer={<Footer />} />;
+  return <Table headers={headers} items={items} footer={<Footer />} />;
 };
 
 export default MarketPlaceTable;

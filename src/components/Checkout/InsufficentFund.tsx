@@ -24,28 +24,28 @@ const InsufficentFunds = ({ showModal, setShowModal }: InsufficentFundsProps) =>
   );
 
   return (
-    <>
-      {showModal ? (
-        <Modal className="checkout" title="Insufficent Funds" setshowModal={setShowModal} footer={footer}>
-          <div className="flex justify-center gap-x-5 py-8 px-6 border-y border-gray ">
-            <div className="flex mt-[2px]">
-              <IconWarning fill="red" />
-            </div>
-            <div className="flex flex-col">
-              <h5 className="text-head5 font-spaceGrotesk text-white">
-                You need <span className="text-head6 font-spaceGrotesk text-red">4.2 ETH + gas fees.</span>
-              </h5>
-              <span className="text-bodyMd font-spaceGrotesk text-gray-light">
-                Transfer funds to your wallet or add funds with a card. It can take up to a minute for your balance to
-                update.
-              </span>
-            </div>
-          </div>
-        </Modal>
-      ) : (
-        <></>
-      )}
-    </>
+    <Modal
+      show={showModal}
+      className="checkout"
+      title="Insufficent Funds"
+      onClose={() => setShowModal(false)}
+      footer={footer}
+    >
+      <div className="flex justify-center gap-x-5 py-8 px-6 border-y border-gray ">
+        <div className="flex mt-[2px]">
+          <IconWarning fill="red" />
+        </div>
+        <div className="flex flex-col">
+          <h5 className="text-head5 font-spaceGrotesk text-white">
+            You need <span className="text-head6 font-spaceGrotesk text-red">4.2 ETH + gas fees.</span>
+          </h5>
+          <span className="text-bodyMd font-spaceGrotesk text-gray-light">
+            Transfer funds to your wallet or add funds with a card. It can take up to a minute for your balance to
+            update.
+          </span>
+        </div>
+      </div>
+    </Modal>
   );
 };
 

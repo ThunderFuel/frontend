@@ -192,62 +192,57 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
   );
 
   return (
-    <>
-      {showModal ? (
-        <Modal
-          className="checkout"
-          title="Checkout"
-          setshowModal={setShowModal}
-          footer={cartData.length !== 0 ? footer : undefined}
-        >
-          <div className="flex flex-col h-full p-5">
-            {cartData.length !== 0 ? (
-              <>
-                <div className="flex flex-col gap-2 overflow-y-scroll no-scrollbar ">
+    <Modal
+      show={showModal}
+      onClose={() => setShowModal(false)}
+      className="checkout"
+      title="Checkout"
+      footer={cartData.length !== 0 ? footer : undefined}
+    >
+      <div className="flex flex-col h-full p-5">
+        {cartData.length !== 0 ? (
+          <>
+            <div className="flex flex-col gap-2 overflow-y-scroll no-scrollbar ">
+              <CartItem
+                key={"checkoutCartItem"}
+                text="Total"
+                name={itemCount + " Items"}
+                price={totalCost}
+                image={mockData[0].image}
+                id={1}
+                removeItem={removeItem}
+                checkoutMultipleImages={getMultipleImages()}
+                showDetails={showDetails}
+                setShowDetails={setShowDetails}
+                className={showDetails ? "rounded-b-none" : " "}
+              ></CartItem>
+            </div>
+            {showDetails && (
+              <div className="flex flex-col min-h-fit max-h-[500px] overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
+                {cartData.map((i, index) => (
                   <CartItem
-                    key={"checkoutCartItem"}
-                    text="Total"
-                    name={itemCount + " Items"}
-                    price={totalCost}
-                    image={mockData[0].image}
-                    id={1}
+                    key={index}
+                    text="Price"
+                    name={i.name}
+                    price={i.price}
+                    image={i.image}
+                    id={i.id}
                     removeItem={removeItem}
-                    checkoutMultipleImages={getMultipleImages()}
-                    showDetails={showDetails}
-                    setShowDetails={setShowDetails}
-                    className={showDetails ? "rounded-b-none" : " "}
                   ></CartItem>
-                </div>
-                {showDetails && (
-                  <div className="flex flex-col min-h-fit max-h-[500px] overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
-                    {cartData.map((i, index) => (
-                      <CartItem
-                        key={index}
-                        text="Price"
-                        name={i.name}
-                        price={i.price}
-                        image={i.image}
-                        id={i.id}
-                        removeItem={removeItem}
-                      ></CartItem>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="flex flex-col w-full h-full justify-center items-center">
-                <img src={AssetEmptyCart}></img>
-                <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">
-                  Your cart is empty. Start adding NFTs to your cart to collect.
-                </span>
+                ))}
               </div>
             )}
+          </>
+        ) : (
+          <div className="flex flex-col w-full h-full justify-center items-center">
+            <img src={AssetEmptyCart}></img>
+            <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">
+              Your cart is empty. Start adding NFTs to your cart to collect.
+            </span>
           </div>
-        </Modal>
-      ) : (
-        <></>
-      )}
-    </>
+        )}
+      </div>
+    </Modal>
   );
 };
 

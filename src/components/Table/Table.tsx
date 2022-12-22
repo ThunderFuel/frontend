@@ -16,7 +16,6 @@ export interface ITable {
   footer?: any;
   className?: string;
   loading?: boolean;
-  containerClassName?: string;
 }
 
 const TableNotFound = ({ colSpan }: { colSpan: number }) => {
@@ -43,7 +42,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
     <div
       className="th"
       style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
-      key={header.key}
+      key={`th_${header.key.toString()}`}
     >
       {header.text}
     </div>
@@ -64,7 +63,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
           <div
             className="td"
             style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
-            key={header.key}
+            key={`td_${header.key}`}
           >
             {header.render ? header.render(item) : <div className="cell">{item[header.key]}</div>}
           </div>
@@ -86,11 +85,11 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
     <div className={"overflow-hidden"}>
       <div className={clsx("table", className)} {...props}>
         <div data-testid="tableHeader" className={clsx("thead")}>
-          <div className={"container"}>
+          <div className="container-fluid">
             <div className="tr">{_getHeaders}</div>
           </div>
         </div>
-        <div data-testid="tableBody" className={clsx("tbody")}>
+        <div data-testid="tableBody" className={"tbody container-fluid"}>
           {loading ? (
             <TableLoading colSpan={headers.length} />
           ) : items.length ? (
@@ -99,9 +98,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
             <TableNotFound colSpan={headers.length} />
           )}
         </div>
-        <div className={props.containerClassName}>
-          {props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}
-        </div>
+        <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
       </div>
     </div>
   );

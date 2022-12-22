@@ -5,8 +5,7 @@ module.exports = {
       center: true,
       padding: {
         DEFAULT: "1.25rem",
-        xl: "40px",
-        "3xl": "40px",
+        lg: "2.5rem",
       },
     },
     colors: {

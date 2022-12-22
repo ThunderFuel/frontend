@@ -37,10 +37,12 @@ const TabRoot = (props: TabProps) => {
 };
 
 const Button = ({ className, value, onClick }: { className?: string; value: any; onClick: () => void }) => {
+  const isSecondary = className === "secondary";
+
   return (
     <button className={clsx("tab-button", className)} onClick={onClick}>
       {value.text ?? value}
-      <IconArrowDown className={clsx("w-4 h-4", "fill-black", "fill-white")} />
+      <IconArrowDown className={clsx("w-4 h-4", isSecondary ? "fill-white" : "fill-black")} />
     </button>
   );
 };
