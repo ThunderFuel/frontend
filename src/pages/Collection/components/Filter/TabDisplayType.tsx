@@ -12,7 +12,6 @@ const TabDisplayType = () => {
       className="icon"
       initTab={displayType}
       onChange={(selectedTab) => {
-        console.log(selectedTab);
         setDisplayType(selectedTab);
       }}
     >
