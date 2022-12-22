@@ -1,6 +1,8 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { IconEthereum, IconInfo, IconTrash, IconWarning } from "icons";
 import clsx from "clsx";
+import { remove } from "store/cartSlice";
+import { useAppDispatch } from "store";
 
 export interface CartItemProps {
   className?: string;
@@ -10,7 +12,6 @@ export interface CartItemProps {
   price: number;
   id: number;
   checkoutMultipleImages?: string[];
-  removeItem: (i: number) => void;
   showDetails?: boolean;
   setShowDetails?: Dispatch<SetStateAction<boolean>>;
 }
@@ -22,10 +23,11 @@ const CartItem = ({
   id,
   checkoutMultipleImages,
   className,
-  removeItem,
   showDetails,
   setShowDetails,
 }: CartItemProps) => {
+  const dispatch = useAppDispatch();
+
   const warning = (text: string) => (
     <div className="flex border justify-center items-center border-gray rounded-[5px] w-fit p-1 ">
       {text === "Unavailable" || text === "Failed" ? (
@@ -74,7 +76,7 @@ const CartItem = ({
                 <img src={image} className="min-h-[64px] min-w-[64px]"></img>
                 {id === 3 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
                 <div className="absolute h-[64px] w-[64px] bg-gray/80 flex items-center justify-center opacity-0  group-hover:opacity-100">
-                  <IconTrash className="cursor-pointer" onClick={() => removeItem(id)} />
+                  <IconTrash className="cursor-pointer" onClick={() => dispatch(remove(id))} />
                 </div>
               </>
             )}
