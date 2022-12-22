@@ -9,8 +9,9 @@ import {
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Button from "../../../components/Button";
+import { openInNewTab } from "../Slider/Slider";
 
-AOS.init();
+AOS.init({ duration: 600 });
 
 const Container = () => {
   return (
@@ -83,7 +84,7 @@ const Container = () => {
             <span className="text-bodyLg font-spaceGrotesk flex w-[293px] mt-6 mb-8">
               Lorem ipsum dolor sit amet, eiusmod consectetur adipiscing elit so det tempor incididunt.
             </span>
-            <Button className="">
+            <Button className="" onClick={() => openInNewTab("https://forms.gle/d9sYqvXaF2PoHNvc7")}>
               APPLY NOW <IconArrowRight />
             </Button>
           </div>
