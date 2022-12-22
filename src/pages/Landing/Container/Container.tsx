@@ -2,7 +2,6 @@ import React from "react";
 import { IconArrowRight, IconLayoutArrowDown } from "icons";
 import {
   AssetLandingTimeline1Image,
-  AssetLandingTimeline1Scroll,
   AssetLandingTimeline2Image,
   AssetLandingTimeline3Image,
   AssetLandingTimeline4Image,
@@ -16,7 +15,6 @@ const Container = () => {
         <IconLayoutArrowDown className="hidden lg:flex text-white" />
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-12">
           <div className="flex justify-between">
-            <img alt="timeline-1-scroll" className="hidden lg:flex" src={AssetLandingTimeline1Scroll} loading="lazy" />
             <img alt="timeline-1-image" src={AssetLandingTimeline1Image} loading="lazy" />
           </div>
           <div className="text-white lg:pt-20">
