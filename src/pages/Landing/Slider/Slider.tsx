@@ -3,6 +3,16 @@ import "./Slider.css";
 import { IconArrowRight, IconDiscord, IconLightning } from "../../../icons";
 import Button from "../../../components/Button";
 
+export const openInNewTab = (url: string): void => {
+  const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+  if (newWindow) newWindow.opener = null;
+};
+
+export const onClickUrl =
+  (url: string): (() => void) =>
+  () =>
+    openInNewTab(url);
+
 const Slider = () => {
   return (
     <div className="slider-container">
@@ -22,7 +32,7 @@ const Slider = () => {
               START CREATING WITH THUNDER
               <IconArrowRight />
             </Button>
-            <Button className="btn-secondary">
+            <Button className="btn-secondary" onClick={() => openInNewTab("https://discord.gg/thundernftmarket")}>
               joın communıty
               <IconDiscord />
             </Button>
