@@ -32,7 +32,7 @@ const Slider = () => {
             No more multi step signings. Thunder enables bulk executions in a single transaction.
           </div>
           <div className="mt-10 flex flex-col lg:flex-row gap-2.5">
-            <Button className="" onClick={() => openInNewTab("https://forms.gle/U66sM86mTXHdGDqQ9")}>
+            <Button className="" onClick={() => openInNewTab("https://forms.gle/d9sYqvXaF2PoHNvc7")}>
               START CREATING WITH THUNDER
               <IconArrowRight />
             </Button>

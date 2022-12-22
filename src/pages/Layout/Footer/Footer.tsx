@@ -51,7 +51,7 @@ const Footer = () => {
       <div className="container flex flex-col gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
           <img src={AssetLogo} />
-          <div className="flex flex-col items-center lg:flex-row gap-6">
+          {/* <div className="flex flex-col items-center lg:flex-row gap-6">
             <h5 className="text-headline-01 text-gray-light">EXPLORE</h5>
             <h5 className="text-headline-01 text-gray-light">SELL</h5>
             <h5 className="text-headline-01 text-gray-light">CREATE</h5>
@@ -59,7 +59,7 @@ const Footer = () => {
             <h5 className="text-headline-01 text-gray-light">PRROFILE</h5>
             <h5 className="text-headline-01 text-gray-light">TERMS</h5>
             <h5 className="text-headline-01 text-gray-light">SERVICES</h5>
-          </div>
+          </div> */}
         </div>
         <div className="flex justify-center">
           <SocialMediaIcons />

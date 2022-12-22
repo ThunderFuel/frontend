@@ -84,7 +84,7 @@ const Container = () => {
             <span className="text-bodyLg font-spaceGrotesk flex w-[293px] mt-6 mb-8">
               Lorem ipsum dolor sit amet, eiusmod consectetur adipiscing elit so det tempor incididunt.
             </span>
-            <Button className="" onClick={() => openInNewTab("https://forms.gle/U66sM86mTXHdGDqQ9")}>
+            <Button className="" onClick={() => openInNewTab("https://forms.gle/d9sYqvXaF2PoHNvc7")}>
               APPLY NOW <IconArrowRight />
             </Button>
           </div>
