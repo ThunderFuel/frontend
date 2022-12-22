@@ -1,20 +1,8 @@
 import React, { useState } from "react";
 import Modal from "../../../components/Modal";
 import Tab from "../../../components/Tab";
-import { IconArrowDown } from "../../../icons";
 import { useMarketplace } from "../MarketplaceContext";
 
-const SelectPickerButton = ({ value, onClick }: { value: any; onClick: () => void }) => {
-  return (
-    <button
-      className="flex h-fit items-center text-center gap-x-0.5 px-2 pt-2.5 pb-3 rounded text-h6 text-bg bg-white"
-      onClick={onClick}
-    >
-      {value}
-      <IconArrowDown className="fill-black w-4 h-4" />
-    </button>
-  );
-};
 const MobileFilter = () => {
   const { filterValues, filterTabValue, setFilterTabValue, dayValues, dayTabValue, setDayTabValue } = useMarketplace();
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +27,7 @@ const MobileFilter = () => {
     setTemplate(
       <Tab initTab={dayTabValue} className="third flex flex-col" onChange={(tab) => setDayTabValue(tab)}>
         {dayValues.map((dayValue) => (
-          <Tab.Item key={dayValue.id} id={dayValue.id}>
+          <Tab.Item key={dayValue.id} id={dayValue}>
             {dayValue.text}
           </Tab.Item>
         ))}
@@ -55,8 +43,8 @@ const MobileFilter = () => {
 
       <div className="border-t border-b border-gray">
         <div className={"container flex justify-between items-center"}>
-          <SelectPickerButton value={filterTabValue} onClick={onShowFilterTabModal} />
-          <SelectPickerButton value={dayTabValue} onClick={onShowDayTabModal} />
+          <Tab.Button className="secondary" value={filterTabValue} onClick={onShowFilterTabModal} />
+          <Tab.Button value={dayTabValue} onClick={onShowDayTabModal} />
         </div>
       </div>
     </>

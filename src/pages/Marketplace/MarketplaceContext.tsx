@@ -5,7 +5,7 @@ interface IMarketplaceContext {
   items: any[];
   getMarketplaceItems?: any;
   dayValues: any[];
-  dayTabValue: number;
+  dayTabValue: any;
   setDayTabValue: any;
   filterValues: string[];
   filterTabValue: any;
@@ -40,7 +40,10 @@ export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState([]);
-  const [dayTabValue, setDayTabValue] = useState(1);
+  const [dayTabValue, setDayTabValue] = useState({
+    text: "1H",
+    value: 1,
+  });
   const [filterTabValue, setFilterTabValue] = useState("Trending");
 
   const getMarketplaceItems = async () => {

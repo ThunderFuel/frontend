@@ -198,4 +198,14 @@
     @apply rounded-b-lg;
     @apply after:content-[''] after:block after:absolute after:left-0 after:top-0 after:h-[calc(100%-5px)] after:border-l after:border-l-white;
   }
+
+  .tab-button {
+    @apply flex items-center text-center gap-x-0.5 px-2 pt-2.5 pb-3 rounded text-h6 text-bg bg-white;
+  }
+  .tab-button.secondary {
+    margin: -1px 0;
+    @apply text-white;
+    @apply px-8 py-7;
+    @apply bg-bg-light border border-gray border-b-white rounded-none;
+  }
 }

@@ -18,9 +18,9 @@ const Filter = () => {
           </Tab>
           <div className="w-full lg:w-auto">
             <Tab initTab={dayTabValue} onChange={(value) => setDayTabValue(value)}>
-              {dayValues.map((day) => (
-                <Tab.Item key={day.value} id={day.value}>
-                  {day.text}
+              {dayValues.map((item) => (
+                <Tab.Item key={item.value} id={item}>
+                  {item.text}
                 </Tab.Item>
               ))}
             </Tab>

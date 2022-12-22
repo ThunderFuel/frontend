@@ -66,7 +66,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     },
     {
       key: "volume",
-      text: `VOLUME (${dayTabValue}H)`,
+      text: `VOLUME (${dayTabValue?.text})`,
       width: "10%",
       align: "flex-end",
       render: (item) => (
