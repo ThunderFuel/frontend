@@ -20,15 +20,15 @@ const SearchInput = ({ children, onChange, showResults, ...props }: InputProps) 
       >
         <input
           id="searchInput"
-          className="text-bodyMd font-spaceGrotesk w-full lg:w-[281px] outline-none text-white placeholder-gray-light "
-          placeholder="Search "
+          className="body-medium w-full lg:w-[281px] outline-none text-white placeholder-gray-light "
+          placeholder="Search"
           onClick={() => {
             showResults(true);
           }}
           onChange={onChange}
           style={{ background: "none", fontSize: "16px" }}
         ></input>
-        <IconSearch className="inputIcon cursor-pointer fill-[#838383] mr-[8px] ml-[18px]" />
+        <IconSearch className="inputIcon cursor-pointer fill-gray-light mr-2 ml-4" />
       </div>
     </div>
   );
