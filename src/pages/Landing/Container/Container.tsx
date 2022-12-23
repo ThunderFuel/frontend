@@ -78,11 +78,12 @@ const Container = () => {
           </div>
           <img alt="timeline-2-image" src={AssetLandingTimeline4Image} loading="lazy" />
         </div>
-        <div className="flex flex-col-reverse bg-no-repeat pb-[32px] lg:pb-0 h-[532px] lg:h-[292px] max-w-[335px] lg:max-w-[1200px] bg-gray lg:flex-row lg:justify-center lg:gap-20 w-full mt-[160px] rounded-lg lg:bg-[url('assets/landing/landing-timeline-5-image-desktop.png')] bg-[url('assets/landing/landing-timeline-5-image.png')]">
+        <div className="flex flex-col-reverse bg-no-repeat pb-[32px] lg:pb-0 h-[590px] lg:h-[292px] max-w-[335px] lg:max-w-[1200px] bg-gray lg:flex-row lg:justify-center lg:gap-20 w-full mt-[160px] rounded-lg lg:bg-[url('assets/landing/landing-timeline-5-image-desktop.png')] bg-[url('assets/landing/landing-timeline-5-image.png')]">
           <div className="flex flex-col items-start lg:justify-center justify-start text-white w-full pl-5 lg:py-8 lg:pl-8 lg:mt-0 -mt-7">
             <h3 className="text-head3 font-spaceGrotesk">Are you a creator?</h3>
-            <span className="text-bodyLg font-spaceGrotesk flex w-[293px] mt-6 mb-8">
-              Lorem ipsum dolor sit amet, eiusmod consectetur adipiscing elit so det tempor incididunt.
+            <span className="text-bodyLg font-spaceGrotesk flex lg:w-[375px] mt-6 mb-8">
+              Empowering creators! Thunder prioritizes to help creators by providing assistance in technical support,
+              networking and community building.
             </span>
             <Button className="" onClick={() => openInNewTab("https://forms.gle/d9sYqvXaF2PoHNvc7")}>
               APPLY NOW <IconArrowRight />
