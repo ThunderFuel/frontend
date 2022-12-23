@@ -15,10 +15,10 @@ AOS.init({ duration: 600 });
 
 const Container = () => {
   return (
-    <div className="border-t border-gray">
-      <div className="container flex flex-col items-center pt-[150px]">
+    <div className="flex flex-col items-center justify-center border-t border-gray">
+      <IconLayoutArrowDown className="hidden lg:flex text-white mt-8" />
+      <div className="container flex flex-col items-center pt-[120px]">
         <div data-aos="fade-up" className="flex flex-col items-center">
-          <IconLayoutArrowDown className="hidden lg:flex text-white" />
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-12">
             <div className="flex justify-between">
               <img alt="timeline-1-image" src={AssetLandingTimeline1Image} loading="lazy" />
