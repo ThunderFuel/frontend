@@ -37,12 +37,10 @@ const Search = () => {
   };
 
   return (
-    <div className="ml-8" ref={ref}>
-      <div className="hidden lg:flex bg-bg-light">
-        <SearchInput onChange={onChange} onFocus={() => setShow(true)} />
-      </div>
+    <div className="hidden lg:flex flex-col" ref={ref}>
+      <SearchInput onChange={onChange} onFocus={() => setShow(true)} />
       {show && (
-        <div className="relative hidden lg:block">
+        <div className="relative">
           <SearchDropDown data={results} />
         </div>
       )}
