@@ -24,6 +24,7 @@ export { ReactComponent as IconGrid } from "./icon-grid.svg";
 export { ReactComponent as IconGridExtend } from "./icon-grid-extend.svg";
 export { ReactComponent as IconList } from "./icon-list.svg";
 export { ReactComponent as IconArrowDown } from "./icon-arrow-down.svg";
+export { ReactComponent as IconArrowUp } from "./icon-arrow-up.svg";
 export { ReactComponent as IconWarning } from "./icon-warning.svg";
 export { ReactComponent as IconInfo } from "./icon-info.svg";
 export { ReactComponent as IconTrash } from "./icon-trash.svg";

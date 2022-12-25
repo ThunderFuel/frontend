@@ -226,4 +226,32 @@
     @apply px-8 py-7;
     @apply bg-bg-light border border-gray border-b-white rounded-none;
   }
+
+  .checkbox {
+    @apply flex gap-2 items-center cursor-pointer;
+  }
+  .checkbox > input[type="checkbox"] {
+    @apply hidden;
+  }
+  .checkbox > span {
+    @apply bg-gray w-4 h-4 rounded-sm;
+  }
+
+  .checkbox > input:checked + span {
+    @apply bg-white;
+  }
+
+  .radio {
+    @apply flex gap-2 items-center;
+  }
+  .radio > input[type="radio"] {
+    @apply hidden;
+  }
+  .radio > span {
+    @apply bg-gray w-4 h-4 rounded-full;
+  }
+
+  .radio > input:checked + span {
+    @apply bg-white;
+  }
 }
