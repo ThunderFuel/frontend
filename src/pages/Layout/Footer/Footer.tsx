@@ -1,5 +1,5 @@
 import React from "react";
-import SocialMediaIcons from "pages/Layout/Header/SocialMediaIcons";
+import SocialMediaIcons from "components/SocialMediaIcons";
 import { AssetLogo } from "assets";
 
 const Footer = () => {

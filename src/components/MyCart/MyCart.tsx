@@ -122,45 +122,26 @@ const MyCart = ({ showModal, setShowModal, setShowCheckoutModal }: MyCartProps) 
   );
 
   return (
-    <Modal
-      show={showModal}
-      className="cart"
-      title="My Cart"
-      onClose={() => setShowModal(false)}
-      footer={cartData.length !== 0 ? footer : undefined}
-    >
+    <Modal show={showModal} className="cart" title="My Cart" onClose={() => setShowModal(false)} footer={cartData.length !== 0 ? footer : undefined}>
       <div className="flex flex-col h-full px-5 pt-5">
         {cartData.length !== 0 ? (
           <>
             <div className="flex justify-between items-center pb-5">
               <span className="text-headlineMd font-bigShoulderDisplay text-white">{itemCount} ITEMS</span>
-              <button
-                className="text-headlineSm font-bigShoulderDisplay text-gray-light"
-                onClick={() => setCartData([])}
-              >
+              <button className="text-headlineSm font-bigShoulderDisplay text-gray-light" onClick={() => setCartData([])}>
                 CLEAR ALL
               </button>
             </div>
             <div className="flex flex-col h-[calc(100vh-265px)] gap-2 overflow-y-scroll no-scrollbar ">
               {cartData.map((i, index) => (
-                <CartItem
-                  key={index}
-                  text="Price"
-                  name={i.name}
-                  price={i.price}
-                  image={i.image}
-                  id={i.id}
-                  removeItem={removeItem}
-                ></CartItem>
+                <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id} removeItem={removeItem}></CartItem>
               ))}
             </div>
           </>
         ) : (
           <div className="flex flex-col w-full h-full justify-center items-center">
             <img src={AssetEmptyCart} alt="" />
-            <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">
-              Your cart is empty. Start adding NFTs to your cart to collect.
-            </span>
+            <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">Your cart is empty. Start adding NFTs to your cart to collect.</span>
           </div>
         )}
       </div>

@@ -48,7 +48,7 @@
   }
 
   .container-fluid {
-    @apply w-full px-5 lg:px-10;
+    @apply w-full px-5 lg:px-10 3xl:m-auto 3xl:max-w-[1980px];
   }
 
   @variants responsive {
@@ -91,6 +91,15 @@
   }
   .btn-wallet:hover {
     background-image: linear-gradient(90deg, #252525 0%, transparent 100%);
+  }
+
+  .input {
+    background: transparent;
+    @apply body-medium w-full outline-none text-white placeholder-gray-light;
+    @apply h-12;
+  }
+  .input:focus {
+    background: transparent;
   }
 
   .header-btn {

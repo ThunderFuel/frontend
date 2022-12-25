@@ -1,5 +1,5 @@
 import SearchDropDown from "components/SearchDropDown";
-import SearchInput from "components/SearchInput";
+import InputSearch from "components/InputSearch";
 import { IconClose } from "icons";
 import React, { InputHTMLAttributes } from "react";
 
@@ -25,7 +25,7 @@ const MobileSearch = ({ onChange, data, showMobileSearchMenu }: InputProps) => {
               <IconClose />
             </div>
           </div>
-          <SearchInput onChange={onChange} className="flex items-center"></SearchInput>
+          <InputSearch onChange={onChange} className="flex items-center"></InputSearch>
         </div>
         <SearchDropDown data={data}></SearchDropDown>
       </div>

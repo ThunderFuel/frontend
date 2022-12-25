@@ -1,7 +1,7 @@
 import { AssetMockNFT } from "../assets";
 
 export default {
-  getSearchResult: () => {
+  getSearchResult: async () => {
     return {
       collections: [
         { id: "1", name: "Bored Ape Club", image: AssetMockNFT, itemCount: "10.000 ITEMS" },
