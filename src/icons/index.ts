@@ -30,3 +30,5 @@ export { ReactComponent as IconTrash } from "./icon-trash.svg";
 export { ReactComponent as IconSpinner } from "./icon-spinner.svg";
 export { ReactComponent as IconMilestone } from "./icon-milestone.svg";
 export { ReactComponent as IconDone } from "./icon-done.svg";
+
+export { ReactComponent as IconNotFound } from "./icon-not-found.svg";

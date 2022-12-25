@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import "./Table.css";
+import NotFound from "../NotFound/NotFound";
 
 export interface ITableHeader {
   key: string;
@@ -18,15 +19,15 @@ export interface ITable {
   loading?: boolean;
 }
 
-const TableNotFound = ({ colSpan }: { colSpan: number }) => {
+const TableNotFound = React.memo(() => {
   return (
-    <tr>
-      <td colSpan={colSpan} className="py-5 px-8 text-center">
-        Kayıt Bulunamadı
-      </td>
-    </tr>
+    <div>
+      <NotFound />
+    </div>
   );
-};
+});
+TableNotFound.displayName = "TableNotFound";
+
 const TableLoading = ({ colSpan }: { colSpan: number }) => {
   return (
     <tr>
@@ -82,7 +83,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
           </div>
         </div>
         <div data-testid="tableBody" className={"tbody container-fluid"}>
-          {loading ? <TableLoading colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound colSpan={headers.length} />}
+          {loading ? <TableLoading colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
         </div>
         <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
       </div>

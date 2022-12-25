@@ -15,7 +15,7 @@ const Index = () => {
   }, [displayType]);
 
   return (
-    <div className="flex flex-col flex-1 py-5 pl-5 gap-5">
+    <div className="flex flex-col flex-1 py-5 gap-5">
       <div className="text-headline-02 text-gray-light pl-5">{getCollections.length} ITEMS</div>
       {isDisplayTypeList ? <CollectionTable /> : <CollectionGrid />}
     </div>
