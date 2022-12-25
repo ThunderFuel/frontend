@@ -10,13 +10,7 @@ export default {
         change: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -26,13 +20,7 @@ export default {
         change: -123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -41,13 +29,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -56,13 +38,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -71,13 +47,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -86,13 +56,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -101,13 +65,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -116,13 +74,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -131,13 +83,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
       {
@@ -146,13 +92,7 @@ export default {
         floor: 123.21,
         image: AssetTable1Image,
         lastSold: "",
-        images: [
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-          AssetTableImageNft1,
-        ],
+        images: [AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1, AssetTableImageNft1],
         sales: 1,
       },
     ];

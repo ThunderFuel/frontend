@@ -1,18 +1,6 @@
-import {
-  AssetCollectionItem0,
-  AssetCollectionItem1,
-  AssetCollectionItem2,
-  AssetCollectionItem3,
-  AssetCollectionItem4,
-} from "../assets";
+import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "../assets";
 
-const images = [
-  AssetCollectionItem0,
-  AssetCollectionItem1,
-  AssetCollectionItem2,
-  AssetCollectionItem3,
-  AssetCollectionItem4,
-];
+const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
 export default {
   async getCollections() {

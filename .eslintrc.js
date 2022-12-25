@@ -34,11 +34,7 @@ module.exports = {
     ],
 
     "newline-before-return": "error",
-    "padding-line-between-statements": [
-      "error",
-      { blankLine: "always", prev: "*", next: "export" },
-      { blankLine: "any", prev: "export", next: "export" },
-    ],
+    "padding-line-between-statements": ["error", { blankLine: "always", prev: "*", next: "export" }, { blankLine: "any", prev: "export", next: "export" }],
     "no-duplicate-imports": "error",
   },
 };

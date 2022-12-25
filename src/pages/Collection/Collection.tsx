@@ -25,10 +25,7 @@ const Collection = () => {
               <div className="flex flex-col gap-2.5 w-full">
                 <h3 className="text-h3 text-white">Genuine Undead</h3>
                 <SocialButtons />
-                <div className="body-medium text-white">
-                  24*24 pixel PFP you have never seen. 5995 classic, 3996 cyberpunk and 8 legendaries, over 200 hand
-                  drawn traits with a rich variety.
-                </div>
+                <div className="body-medium text-white">24*24 pixel PFP you have never seen. 5995 classic, 3996 cyberpunk and 8 legendaries, over 200 hand drawn traits with a rich variety.</div>
               </div>
             </div>
             <CollectionProperties />
