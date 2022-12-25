@@ -3,10 +3,7 @@ import HeaderButton from "components/HeaderButton";
 
 const CollectionItems = ({ data }: { data: any }) => {
   return data.map((item: any) => (
-    <HeaderButton
-      className="flex items-center justify-between text-h6 tracking-normal text-left border border-gray rounded-md p-3"
-      key={item.id}
-    >
+    <HeaderButton className="flex items-center justify-between text-h6 tracking-normal text-left border border-gray rounded-md p-3" key={item.id}>
       <div className="flex gap-2.5 items-center">
         <img className="rounded-full h-8 w-8" src={item.image} alt={item.name} />
         <span>{item.name}</span>
@@ -18,10 +15,7 @@ const CollectionItems = ({ data }: { data: any }) => {
 
 const AccountItems = ({ data }: { data: any }) => {
   return data.map((item: any) => (
-    <HeaderButton
-      className="flex gap-2.5 items-center text-h6 tracking-normal text-left border border-gray rounded-md p-3"
-      key={item.id}
-    >
+    <HeaderButton className="flex gap-2.5 items-center text-h6 tracking-normal text-left border border-gray rounded-md p-3" key={item.id}>
       <img className="rounded-full h-8 w-8" src={item.image} alt={item.name} />
       <span>{item.name}</span>
     </HeaderButton>

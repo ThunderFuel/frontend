@@ -119,41 +119,21 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
               {waitTransactionConfirm ? <IconSpinner /> : <IconDone />}
               <div className="flex flex-col">
                 <span className="flex text-head5 font-spaceGrotesk text-white">Confirm transaction</span>
-                {waitTransactionConfirm ? (
-                  <span className="flex text-bodyMd font-spaceGrotesk text-gray-light">
-                    Proceed in your wallet and confirm transaction
-                  </span>
-                ) : (
-                  <></>
-                )}
+                {waitTransactionConfirm ? <span className="flex text-bodyMd font-spaceGrotesk text-gray-light">Proceed in your wallet and confirm transaction</span> : <></>}
               </div>
             </div>
             <div className="flex items-center gap-x-[22px]">
               {approved ? <IconDone /> : transactionConfirmed ? <IconSpinner /> : <IconMilestone stroke="#838383" />}
               <div className="flex flex-col">
                 <span className="flex text-head5 font-spaceGrotesk text-white">Wait for approval</span>
-                {transactionConfirmed !== approved ? (
-                  <span className="flex text-bodyMd font-spaceGrotesk text-gray-light">
-                    Waiting for transaction to be approved
-                  </span>
-                ) : (
-                  <></>
-                )}
+                {transactionConfirmed !== approved ? <span className="flex text-bodyMd font-spaceGrotesk text-gray-light">Waiting for transaction to be approved</span> : <></>}
               </div>
             </div>
             <div className="flex items-center gap-x-[22px]">
               {approved ? <IconDone /> : <IconMilestone stroke="#838383" />}
               <div className="flex flex-col">
-                <span className="flex text-head5 font-spaceGrotesk text-white">
-                  Purchase {partiallyFailed && "partially"} completed!
-                </span>
-                {approved ? (
-                  <span className="flex text-bodyMd font-spaceGrotesk text-gray-light">
-                    Congrats your purchase is {partiallyFailed && "partially"} completed.
-                  </span>
-                ) : (
-                  <></>
-                )}
+                <span className="flex text-head5 font-spaceGrotesk text-white">Purchase {partiallyFailed && "partially"} completed!</span>
+                {approved ? <span className="flex text-bodyMd font-spaceGrotesk text-gray-light">Congrats your purchase is {partiallyFailed && "partially"} completed.</span> : <></>}
               </div>
             </div>
             {partiallyFailed && (
@@ -164,8 +144,7 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
                 <div className="flex flex-col">
                   <span className="text-head6 font-spaceGrotesk text-white">1 item failed</span>
                   <span className="text-bodySm font-spaceGrotesk text-gray-light">
-                    Purchases can fail due to network issues, gas fee increases, or because someone else bought the item
-                    before you.
+                    Purchases can fail due to network issues, gas fee increases, or because someone else bought the item before you.
                   </span>
                 </div>
               </div>
@@ -192,13 +171,7 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
   );
 
   return (
-    <Modal
-      show={showModal}
-      onClose={() => setShowModal(false)}
-      className="checkout"
-      title="Checkout"
-      footer={cartData.length !== 0 ? footer : undefined}
-    >
+    <Modal show={showModal} onClose={() => setShowModal(false)} className="checkout" title="Checkout" footer={cartData.length !== 0 ? footer : undefined}>
       <div className="flex flex-col h-full p-5">
         {cartData.length !== 0 ? (
           <>
@@ -220,15 +193,7 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
             {showDetails && (
               <div className="flex flex-col min-h-fit max-h-[500px] overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
                 {cartData.map((i, index) => (
-                  <CartItem
-                    key={index}
-                    text="Price"
-                    name={i.name}
-                    price={i.price}
-                    image={i.image}
-                    id={i.id}
-                    removeItem={removeItem}
-                  ></CartItem>
+                  <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id} removeItem={removeItem}></CartItem>
                 ))}
               </div>
             )}
@@ -236,9 +201,7 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
         ) : (
           <div className="flex flex-col w-full h-full justify-center items-center">
             <img src={AssetEmptyCart}></img>
-            <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">
-              Your cart is empty. Start adding NFTs to your cart to collect.
-            </span>
+            <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">Your cart is empty. Start adding NFTs to your cart to collect.</span>
           </div>
         )}
       </div>

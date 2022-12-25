@@ -39,11 +39,7 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
 
 const Table = ({ headers = [], items = [], className = "", loading = false, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
-    <div
-      className="th"
-      style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
-      key={`th_${header.key.toString()}`}
-    >
+    <div className="th" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
       {header.text}
     </div>
   ));
@@ -60,11 +56,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
       )}
       <div className="tr" key={`row_${k.toString()}`}>
         {headers.map((header) => (
-          <div
-            className="td"
-            style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
-            key={`td_${header.key}`}
-          >
+          <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}`}>
             {header.render ? header.render(item) : <div className="cell">{item[header.key]}</div>}
           </div>
         ))}
@@ -90,13 +82,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
           </div>
         </div>
         <div data-testid="tableBody" className={"tbody container-fluid"}>
-          {loading ? (
-            <TableLoading colSpan={headers.length} />
-          ) : items.length ? (
-            _getItems
-          ) : (
-            <TableNotFound colSpan={headers.length} />
-          )}
+          {loading ? <TableLoading colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound colSpan={headers.length} />}
         </div>
         <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
       </div>
