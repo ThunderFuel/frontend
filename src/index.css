@@ -66,11 +66,12 @@
 }
 @layer components {
   .btn {
-    @apply flex gap-2 p-4 items-center justify-center;
+    @apply flex gap-2 py-4 px-6 items-center justify-center;
     @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
+    @apply transition-all;
   }
   .btn:hover {
-    @apply gap-4;
+    @apply gap-6 px-4;
   }
   .btn.btn-secondary {
     @apply text-white bg-bg border-gray;
