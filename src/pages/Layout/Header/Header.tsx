@@ -34,14 +34,14 @@ HeaderTop.displayName = "HeaderTop";
 
 const HeaderIconButtonGroup = React.memo(() => {
   return (
-    <div className="flex border-x border-gray">
+    <div className="flex divide-x divide-gray border-r border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => console.log(true)}>
         <IconSearch />
       </HeaderIconButton>
-      <HeaderIconButton className="hidden lg:flex border-r border-gray">
+      <HeaderIconButton className="hidden lg:flex">
         <IconWallet />
       </HeaderIconButton>
-      <HeaderIconButton className="border-r border-gray" onClick={() => console.log(true)}>
+      <HeaderIconButton onClick={() => console.log(true)}>
         <IconShoppingCart />
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">

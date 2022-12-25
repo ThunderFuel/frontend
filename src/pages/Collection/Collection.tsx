@@ -14,7 +14,7 @@ import CollectionList from "./components/CollectionList";
 const Collection = () => {
   return (
     <CollectionContextProvider>
-      <div className="container py-10">
+      <div className="container-fluid py-10">
         <div className="flex flex-col gap-5">
           <CoverImage />
           <div className="flex">
@@ -33,7 +33,7 @@ const Collection = () => {
         </div>
       </div>
       <div className="border-t border-b border-gray">
-        <div className="container">
+        <div className="container-fluid">
           <div className="inline-flex">
             <Tab initTab={1} className="secondary">
               <Tab.Item id={1}>Items</Tab.Item>
@@ -43,7 +43,7 @@ const Collection = () => {
         </div>
         <Filter />
       </div>
-      <div className="flex">
+      <div className="container-fluid flex">
         <SidebarFilter />
         <CollectionList />
       </div>
