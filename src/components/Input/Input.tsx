@@ -5,6 +5,7 @@ interface IInput {
   icon?: React.ReactNode;
   className?: string;
   containerClassName?: string;
+  [key: string]: any;
 }
 const Input = ({ className, containerClassName, icon, ...etc }: IInput, ref: any) => {
   return (
