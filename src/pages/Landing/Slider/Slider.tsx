@@ -12,8 +12,8 @@ AOS.init({ duration: 600 });
 const Slider = () => {
   return (
     <div className="slider-container">
-      <div data-aos="fade-up" className="container relative z-10 flex flex-col">
-        <div className="mt-[]">
+      <div data-aos="fade-up" className="container-fluid relative z-10 flex flex-col">
+        <div className="">
           <div className="text-headline-02 flex gap-1">
             EXPLORE, CREATE AND TRADE
             <span className="slider-catchword">ON FUEL</span>

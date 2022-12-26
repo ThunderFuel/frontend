@@ -6,6 +6,7 @@ import "./Modal.css";
 export interface ModalProps {
   className?: string;
   footer?: JSX.Element;
+  checkoutProcess?: JSX.Element;
   children: React.ReactNode;
   title: string;
   onClose: () => void;
@@ -14,7 +15,7 @@ export interface ModalProps {
 
 const body = document.querySelector("body");
 
-const Modal = ({ show, className, footer, children, title, ...etc }: ModalProps) => {
+const Modal = ({ className, footer, children, checkoutProcess, title, show, ...etc }: ModalProps) => {
   React.useEffect(() => {
     if (show && body) {
       body.style.overflow = "hidden";
@@ -35,8 +36,12 @@ const Modal = ({ show, className, footer, children, title, ...etc }: ModalProps)
             <IconClose />
           </button>
         </div>
-        {children}
-        <div className="flex">{footer}</div>
+        <div className="flex flex-col overflow-y-scroll no-scrollbar ">
+          {children}
+          {checkoutProcess && <div className="flex border-t border-gray">{checkoutProcess}</div>}
+        </div>
+
+        {footer && <div className="mt-auto w-full border-t border-gray">{footer}</div>}
       </div>
     </div>
   );

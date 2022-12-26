@@ -29,7 +29,7 @@
   @apply fixed flex w-screen h-screen items-center justify-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
 .checkout .modal {
-  @apply flex flex-col w-[480px] bg-bg rounded-lg;
+  @apply flex flex-col h-fit max-h-[100%] w-[480px] bg-bg rounded-lg;
 }
 .checkout .modal .mhead {
   @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;

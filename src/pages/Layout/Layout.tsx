@@ -11,13 +11,15 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   const [showCartModal, setShowCartModal] = useState(false);
-  const [showCheckoutModal, setShowCheckoutModal] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   return (
     <main className={"bg-bg min-h-screen flex flex-col"}>
       <Header />
-      <Checkout showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} />
+      {showCheckoutModal && <Checkout showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} />}
       {/* <InsufficentFunds showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} /> */}
+      {showCartModal && <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />}
       <div className="">{children}</div>
       <Footer />
 

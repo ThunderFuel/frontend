@@ -10,8 +10,6 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 
 import Search from "./components/Search";
 
-import "./Header.css";
-
 const ethPrice = 1322.6;
 const gasPrice = 39;
 

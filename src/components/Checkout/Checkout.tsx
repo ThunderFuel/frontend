@@ -1,120 +1,49 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { AssetEmptyCart, AssetTableImageNft1 } from "assets";
 import Button from "components/Button";
 import CartItem from "components/CartItem";
 import Modal from "components/Modal";
 import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "store";
+import { getCartTotal } from "store/cartSlice";
 
 export interface MyCartProps {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
-  const [totalCost, setTotalCost] = useState(0);
-  const [itemCount, setItemCount] = useState(0);
+  const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
+  const dispatch = useAppDispatch();
 
-  const mockData = [
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 10,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 20,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 30,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 40,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 50,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 6,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 7,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 8,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 9,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 10,
-    },
-    {
-      name: "Genuine Undead #1289",
-      image: AssetTableImageNft1,
-      price: 10,
-      id: 11,
-    },
-  ];
-
-  const [cartData, setCartData] = useState(mockData);
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    let temp = 0;
-    cartData.forEach((i) => (temp += i.price));
-    setTotalCost(temp);
-    setItemCount(cartData.length);
-  }, [cartData]);
-
-  const removeItem = (id: number) => {
-    const filtered = cartData.filter(function (i) {
-      return i.id !== id;
-    });
-    setCartData(filtered);
-  };
+    dispatch(getCartTotal());
+  }, [items]);
 
   const getMultipleImages = () => {
-    return cartData.slice(0, itemCount > 3 ? 3 : itemCount).map((i) => i.image);
+    return items.slice(0, itemCount > 3 ? 3 : itemCount).map((i) => i.image);
   };
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const [waitTransactionConfirm, setWaitTransactionConfirm] = useState(false);
   const [transactionConfirmed, setTransactionConfirmed] = useState(true);
   const [approved, setApproved] = useState(true);
-  const [partiallyFailed, setPartiallyFailed] = useState(true);
+  const [partiallyFailed, setPartiallyFailed] = useState(false);
   /* eslint-enable @typescript-eslint/no-unused-vars */
 
   const footer = (
-    <div className="flex flex-col w-full h-full items-center">
+    <div className="flex w-full items-center justify-center p-5">
+      <Button className="w-full tracking-widest">VIEW PURCHASE</Button>
+    </div>
+  );
+
+  const checkoutProcess = (
+    <div className="flex flex-col w-full items-center">
       {transactionConfirmed || waitTransactionConfirm ? (
         <div className="flex flex-col w-full ">
-          <div className=" flex flex-col p-5 gap-y-[25px] border-y border-gray">
+          <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
             <div className="flex items-center gap-x-[22px]">
               {waitTransactionConfirm ? <IconSpinner /> : <IconDone />}
               <div className="flex flex-col">
@@ -150,13 +79,6 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
               </div>
             )}
           </div>
-          {approved ? (
-            <div className="flex items-center justify-center p-5">
-              <Button className="w-full tracking-widest">VIEW PURCHASE</Button>
-            </div>
-          ) : (
-            <></>
-          )}
         </div>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
@@ -164,36 +86,42 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
             <IconWarning fill="red" />
             <span className="text-head5 font-spaceGrotesk text-white">You rejected the request in your wallet! </span>
           </div>
-          <Button className="btn-secondary m-5">CLOSE</Button>
+          <Button
+            className="btn-secondary m-5"
+            onClick={() => {
+              setShowModal(false);
+            }}
+          >
+            CLOSE
+          </Button>
         </div>
       )}
     </div>
   );
 
   return (
-    <Modal show={showModal} onClose={() => setShowModal(false)} className="checkout" title="Checkout" footer={cartData.length !== 0 ? footer : undefined}>
-      <div className="flex flex-col h-full p-5">
-        {cartData.length !== 0 ? (
+    <Modal className="checkout" title="Checkout" show={showModal} onClose={() => setShowModal(false)} footer={approved ? footer : undefined} checkoutProcess={checkoutProcess}>
+      <div className="flex flex-col p-5">
+        {items.length !== 0 ? (
           <>
-            <div className="flex flex-col gap-2 overflow-y-scroll no-scrollbar ">
+            <div className="flex flex-col gap-2">
               <CartItem
                 key={"checkoutCartItem"}
                 text="Total"
                 name={itemCount + " Items"}
-                price={totalCost}
-                image={mockData[0].image}
+                price={totalAmount}
+                image={items[0].image}
                 id={1}
-                removeItem={removeItem}
                 checkoutMultipleImages={getMultipleImages()}
-                showDetails={showDetails}
-                setShowDetails={setShowDetails}
+                showDetails={approved ? showDetails : undefined}
+                setShowDetails={approved ? setShowDetails : undefined}
                 className={showDetails ? "rounded-b-none" : " "}
               ></CartItem>
             </div>
             {showDetails && (
-              <div className="flex flex-col min-h-fit max-h-[500px] overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
-                {cartData.map((i, index) => (
-                  <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id} removeItem={removeItem}></CartItem>
+              <div className="flex flex-col min-h-fit overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
+                {items.map((i, index) => (
+                  <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id}></CartItem>
                 ))}
               </div>
             )}

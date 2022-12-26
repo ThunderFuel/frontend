@@ -1,6 +1,8 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { IconEthereum, IconInfo, IconTrash, IconWarning } from "icons";
 import clsx from "clsx";
+import { remove } from "store/cartSlice";
+import { useAppDispatch } from "store";
 
 export interface CartItemProps {
   className?: string;
@@ -10,11 +12,12 @@ export interface CartItemProps {
   price: number;
   id: number;
   checkoutMultipleImages?: string[];
-  removeItem: (i: number) => void;
   showDetails?: boolean;
   setShowDetails?: Dispatch<SetStateAction<boolean>>;
 }
-const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, className, removeItem, showDetails, setShowDetails }: CartItemProps) => {
+const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, className, showDetails, setShowDetails }: CartItemProps) => {
+  const dispatch = useAppDispatch();
+
   const warning = (text: string) => (
     <div className="flex border justify-center items-center border-gray rounded-[5px] w-fit p-1 ">
       {text === "Unavailable" || text === "Failed" ? <IconWarning height="15px" width="15px" fill="red" /> : <IconInfo height="15px" width="15px" fill="#E69040" />}
@@ -36,14 +39,14 @@ const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, classN
             ) : (
               <>
                 <img src={image} className="min-h-[64px] min-w-[64px]"></img>
-                {id === 3 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
+                {id === 9 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
                 <div className="absolute h-[64px] w-[64px] bg-gray/80 flex items-center justify-center opacity-0  group-hover:opacity-100">
-                  <IconTrash className="cursor-pointer" onClick={() => removeItem(id)} />
+                  <IconTrash className="cursor-pointer" onClick={() => dispatch(remove(id))} />
                 </div>
               </>
             )}
           </div>
-          <div className={clsx("flex flex-col w-full justify-between", id === 3 ? "text-gray-light" : "text-white")}>
+          <div className={clsx("flex flex-col w-full justify-between", id === 9 ? "text-gray-light" : "text-white")}>
             <div className="flex w-full justify-between font-spaceGrotesk ">
               <span className="text-head6 text-white">{name}</span>
               {checkoutMultipleImages && setShowDetails ? (
@@ -66,7 +69,7 @@ const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, classN
             </div>
           </div>
         </div>
-        <div className="mt-2 ml-[82px]">{id === 2 ? warning("Price Change") : id === 3 ? warning("Unavailable") : id === 20 ? warning("Failed") : <></>}</div>
+        {[8, 9, 20].includes(id) && <div className="mt-2 ml-[82px]">{id === 8 ? warning("Price Change") : id === 9 ? warning("Unavailable") : id === 20 ? warning("Failed") : <></>}</div>}
       </div>
     </>
   );
