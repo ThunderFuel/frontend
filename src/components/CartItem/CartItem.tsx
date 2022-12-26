@@ -74,14 +74,14 @@ const CartItem = ({
             ) : (
               <>
                 <img src={image} className="min-h-[64px] min-w-[64px]"></img>
-                {id === 3 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
+                {id === 9 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
                 <div className="absolute h-[64px] w-[64px] bg-gray/80 flex items-center justify-center opacity-0  group-hover:opacity-100">
                   <IconTrash className="cursor-pointer" onClick={() => dispatch(remove(id))} />
                 </div>
               </>
             )}
           </div>
-          <div className={clsx("flex flex-col w-full justify-between", id === 3 ? "text-gray-light" : "text-white")}>
+          <div className={clsx("flex flex-col w-full justify-between", id === 9 ? "text-gray-light" : "text-white")}>
             <div className="flex w-full justify-between font-spaceGrotesk ">
               <span className="text-head6 text-white">{name}</span>
               {checkoutMultipleImages && setShowDetails ? (
@@ -107,17 +107,19 @@ const CartItem = ({
             </div>
           </div>
         </div>
-        <div className="mt-2 ml-[82px]">
-          {id === 2 ? (
-            warning("Price Change")
-          ) : id === 3 ? (
-            warning("Unavailable")
-          ) : id === 20 ? (
-            warning("Failed")
-          ) : (
-            <></>
-          )}
-        </div>
+        {[8, 9, 20].includes(id) && (
+          <div className="mt-2 ml-[82px]">
+            {id === 8 ? (
+              warning("Price Change")
+            ) : id === 9 ? (
+              warning("Unavailable")
+            ) : id === 20 ? (
+              warning("Failed")
+            ) : (
+              <></>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
