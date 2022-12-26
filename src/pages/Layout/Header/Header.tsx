@@ -9,7 +9,9 @@ const Header: React.FC = ({ children }: { children?: React.ReactNode }) => {
     <header className="flex border-b border-gray">
       <div className="flex justify-between items-center container">
         <div className=" py-5 flex w-full justify-between items-center">
-          <img src={AssetLogo} style={{ height: "32px" }} />
+          <a href="/">
+            <img src={AssetLogo} style={{ height: "32px" }} />
+          </a>
           {children}
           <div className="flex items-center gap-3">
             <SocialMediaIcons />

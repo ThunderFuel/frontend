@@ -50,7 +50,9 @@ const Footer = () => {
 
       <div className="container flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
-          <img src={AssetLogo} style={{ height: "32px" }} />
+          <a href="/">
+            <img src={AssetLogo} style={{ height: "32px" }} />
+          </a>
           {/* <div className="flex flex-col items-center lg:flex-row gap-6">
             <h5 className="text-headline-01 text-gray-light">EXPLORE</h5>
             <h5 className="text-headline-01 text-gray-light">SELL</h5>
