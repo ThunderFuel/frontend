@@ -5,7 +5,7 @@ const CollectionItem = ({ collection }: { collection: any }) => {
   return (
     <div className="border border-gray rounded-md">
       <div className="overflow-hidden rounded-t-md">
-        <img alt={collection.image} className="w-full" src={collection.image} />
+        <img alt={collection.image} className="w-full transition-all hover:scale-125" src={collection.image} />
       </div>
       <div className="p-2.5 border-b border-b-gray">
         <h6 className="text-h6 text-white">{collection.name}</h6>

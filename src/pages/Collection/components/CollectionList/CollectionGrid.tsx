@@ -17,7 +17,7 @@ const CollectionGrid = () => {
   }, [displayType]);
 
   return (
-    <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7", displayClass)}>
+    <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pl-5", displayClass)}>
       {collections.map((collection: any, i: number) => (
         <CollectionItem key={i} collection={collection} />
       ))}

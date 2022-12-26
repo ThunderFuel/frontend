@@ -36,8 +36,12 @@ const Collection = () => {
         <div className="container-fluid">
           <div className="inline-flex">
             <Tab initTab={1} className="secondary">
-              <Tab.Item id={1}>Items</Tab.Item>
-              <Tab.Item id={2}>Activity</Tab.Item>
+              <Tab.Item id={1} className="text-h6">
+                Items
+              </Tab.Item>
+              <Tab.Item id={2} className="text-h6">
+                Activity
+              </Tab.Item>
             </Tab>
           </div>
         </div>
