@@ -5,8 +5,10 @@ module.exports = {
       center: true,
       padding: {
         DEFAULT: "1.25rem",
-        xl: "3.5rem",
-        "3xl": "3.5rem",
+        xl: "40px",
+        xl2: "40px",
+        xl3: "40px",
+        "3xl": "40px",
       },
     },
     colors: {
@@ -34,6 +36,8 @@ module.exports = {
       },
       screens: {
         "3xl": "1920px",
+        xl2: "1366px",
+        xl3: "1440px",
       },
     },
     fontSize: {
@@ -121,7 +125,7 @@ module.exports = {
         {
           lineHeight: "22px",
           fontWeight: "700",
-          letterSpacing: "8%",
+          letterSpacing: "0.08em",
         },
       ],
     },
