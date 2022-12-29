@@ -9,6 +9,8 @@ import SocialMediaIcons from "../Header/SocialMediaIcons";
 import SearchDropDown from "components/SearchDropDown";
 import SearchInput from "components/SearchInput";
 import MobileSearch from "components/MobileSearch";
+import { Address, ZeroBytes32 } from "fuels";
+// import { useWallet } from "hooks/useWallet";
 
 const mocksearchData = {
   collections: [
@@ -86,6 +88,26 @@ const Header = ({ showCartModal }: HeaderProps) => {
 
     return () => document.body.removeEventListener("mousedown", closeModal);
   }, [modalRef.current]);
+  console.log("RENDERING HEADER");
+  // const x = useWallet();
+
+  async function connect() {
+    // const isConnected = window.FuelWeb3?.on("connection", () => {
+    //   console.log("connected");
+    // });
+
+    const isConnected = await window.FuelWeb3?.connect();
+    console.log("Connection response", isConnected);
+    const x = await window.FuelWeb3?.accounts();
+    console.log("Accounts", x);
+    const prov = window.FuelWeb3?.getProvider();
+    console.log("PROV", prov);
+    if (x) {
+      const address = Address.fromString(x[0]);
+      const ww = await prov?.getBalance(address, ZeroBytes32);
+      if (ww) console.log("getBalance", ww.toNumber());
+    }
+  }
 
   return (
     <header className="bg-bg flex flex-col fixed w-full z-10">
@@ -144,7 +166,7 @@ const Header = ({ showCartModal }: HeaderProps) => {
             >
               <IconSearch />
             </HeaderButton>
-            <HeaderButton className="hidden header-btn border-l border-gray lg:flex">
+            <HeaderButton className="hidden header-btn border-l border-gray lg:flex" onClick={() => connect()}>
               <IconWallet />
             </HeaderButton>
             <HeaderButton className="header-btn border-x border-gray" onClick={() => showCartModal(true)}>
