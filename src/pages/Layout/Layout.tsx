@@ -22,7 +22,7 @@ const Layout = ({ children }: Props) => {
       {showCartModal && (
         <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />
       )}
-      <div className="">{children}</div>
+      <div className="mt-[118px]">{children}</div>
       <Footer />
     </main>
   );
