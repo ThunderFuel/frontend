@@ -88,7 +88,7 @@ const Header = ({ showCartModal }: HeaderProps) => {
   }, [modalRef.current]);
 
   return (
-    <header className="bg-bg flex flex-col">
+    <header className="bg-bg flex flex-col fixed w-full z-10">
       <div className="container flex py-2.5 items-center">
         <div className="w-full font-bigShoulderDisplay text-headlineSm uppercase text-gray-light">
           ETH: <span className="text-white before:content-['$'] mr-[18px]">{ethPrice}</span>
