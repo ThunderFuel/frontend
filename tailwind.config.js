@@ -28,6 +28,7 @@ module.exports = {
         "landing-slider-bg": "url('/src/assets/landing/landing-slider-bg.svg')",
       },
       screens: {
+        xs: "475px",
         "3xl": "1920px",
       },
     },

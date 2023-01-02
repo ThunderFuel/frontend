@@ -5,9 +5,9 @@ import { IconShoppingCart } from "icons";
 
 const Header: React.FC = () => {
   return (
-    <header className="border-b border-gray">
+    <header className="border-b border-gray py-5">
       <div className="container-fluid flex justify-between items-center">
-        <img src={AssetLogo} style={{ height: "32px" }} />
+        <img src={AssetLogo} className="h-8" alt="logo" />
         <div className="flex items-center gap-7">
           <SocialMediaIcons />
           <div className="group hidden lg:flex h-full items-center justify-center p-7 border-x border-x-gray cursor-pointer">

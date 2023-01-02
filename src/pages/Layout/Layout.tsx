@@ -22,7 +22,6 @@ const Layout = ({ children }: Props) => {
       {showCartModal && <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />}
       <div className="">{children}</div>
       <Footer />
-
       <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />
     </main>
   );
