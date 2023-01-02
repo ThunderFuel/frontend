@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import search from "api/search";
 import InputSearch from "components/InputSearch";
 import AutoComplete from "components/AutoComplete/AutoComplete";
@@ -16,6 +16,18 @@ const MobileSearch = () => {
   useEffect(() => {
     search.getSearchResult().then((response) => setResults(response));
   }, []);
+  const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const response = await search.getSearchResult();
+
+    const text = e.target.value.trim().toLowerCase();
+    const collections = response.collections.filter((item: any) => item.name.toLowerCase().search(text) > -1);
+    const accounts = response.accounts.filter((item: any) => item.name.toLowerCase().search(text) > -1);
+
+    setResults({
+      collections,
+      accounts,
+    });
+  };
 
   return (
     <div className={clsx("fixed top-0 left-0 w-full h-full z-10 bg-bg ease-in-out duration-300", show ? "translate-x-0 " : "translate-x-full")}>
@@ -25,7 +37,7 @@ const MobileSearch = () => {
             <IconClose />
           </div>
         </div>
-        <InputSearch />
+        <InputSearch onChange={onChange} />
       </div>
 
       <div className="flex flex-col h-full overflow-hidden overflow-y-scroll">

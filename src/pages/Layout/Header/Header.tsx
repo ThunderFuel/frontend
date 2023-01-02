@@ -13,6 +13,7 @@ import Search from "./components/Search";
 import "./Header.css";
 import { useAppDispatch } from "store";
 import { onToggle } from "store/mobileSearchSlice";
+import MobileSearch from "./components/MobileSearch";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -88,6 +89,7 @@ const Header = () => {
           <HeaderIconButtonGroup />
         </div>
       </div>
+      <MobileSearch />
     </header>
   );
 };
