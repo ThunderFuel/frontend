@@ -4,6 +4,7 @@ import Checkout from "components/Checkout";
 import MyCart from "components/MyCart";
 import Footer from "./Footer";
 import Header from "./Header";
+import MobileSearch from "./Header/components/MobileSearch";
 
 interface Props {
   children: React.ReactNode;
@@ -22,6 +23,8 @@ const Layout = ({ children }: Props) => {
       {showCartModal && <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />}
       <div className="">{children}</div>
       <Footer />
+
+      <MobileSearch />
 
       <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />
     </main>

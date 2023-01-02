@@ -41,7 +41,7 @@ const Search = () => {
   };
 
   return (
-    <AutoComplete ref={ref} onChange={onChange} onFocus={onFocus} show={show} className={"lg:w-[440px]"}>
+    <AutoComplete ref={ref} onChange={onChange} onFocus={onFocus} show={show} className={"hidden lg:flex w-[440px]"}>
       {Object.keys(results).map((resultKey) => {
         return (
           <AutoComplete.Group key={resultKey} title={resultKey}>

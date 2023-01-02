@@ -10,6 +10,10 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 
 import Search from "./components/Search";
 
+import "./Header.css";
+import { useAppDispatch } from "store";
+import { onToggle } from "store/mobileSearchSlice";
+
 const ethPrice = 1322.6;
 const gasPrice = 39;
 
@@ -31,9 +35,11 @@ const HeaderTop = React.memo(() => {
 HeaderTop.displayName = "HeaderTop";
 
 const HeaderIconButtonGroup = React.memo(() => {
+  const dispatch = useAppDispatch();
+
   return (
-    <div className="flex divide-x divide-gray border-r border-gray">
-      <HeaderIconButton className="lg:hidden" onClick={() => console.log(true)}>
+    <div className="flex divide-x divide-gray lg:border-r lg:border-gray">
+      <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
       <HeaderIconButton className="hidden lg:flex">
@@ -64,10 +70,10 @@ const Header = () => {
     <header>
       <HeaderTop />
       <div className="border-y border-gray">
-        <div className="container-fluid flex items-center justify-between">
+        <div className="header-container-fluid">
           <div className="flex items-center gap-6">
             <Link className="flex text-white gap-1" to="/">
-              <IconThunder className="w-7 h-7" />
+              <IconThunder className="w-14 lg:w-7" />
               <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
             </Link>
 

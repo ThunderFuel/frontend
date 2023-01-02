@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { commonSlice } from "./commonSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { cartSlice } from "./cartSlice";
+import { mobileSearchSlice } from "./mobileSearchSlice";
 
 const store = configureStore({
   reducer: {
     common: commonSlice.reducer,
     cart: cartSlice.reducer,
+    mobileSearch: mobileSearchSlice.reducer,
   },
 });
 

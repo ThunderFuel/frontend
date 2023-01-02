@@ -29,7 +29,7 @@ const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
                 <Favorite className="p-5" item={item} />
               </div>
               <div className="grid grid-cols-2">
-                <Cell title={`VOLUME (${dayTabValue.text})`} value={item.volume} />
+                <Cell title={`VOLUME (${dayTabValue?.text})`} value={item.volume} />
                 <Cell title={`floor`} value={item.floor} />
               </div>
             </div>
