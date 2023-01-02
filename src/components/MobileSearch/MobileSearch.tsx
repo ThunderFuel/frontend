@@ -1,5 +1,5 @@
 import SearchDropDown from "components/SearchDropDown";
-import SearchInput from "components/SearchInput";
+import InputSearch from "components/InputSearch";
 import { IconClose } from "icons";
 import React, { InputHTMLAttributes } from "react";
 
@@ -10,7 +10,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   showMobileSearchMenu: (value: boolean) => void;
 }
 
-const MobileSearch = ({ onChange, showResults, data, showMobileSearchMenu }: InputProps) => {
+const MobileSearch = ({ onChange, data, showMobileSearchMenu }: InputProps) => {
   return (
     <div className="fixed no-scrollbar overflow-x-hidden inset-0 w-screen h-screen bg-bg z-20 ">
       <div className="flex flex-col">
@@ -25,14 +25,9 @@ const MobileSearch = ({ onChange, showResults, data, showMobileSearchMenu }: Inp
               <IconClose />
             </div>
           </div>
-          <SearchInput
-            onChange={onChange}
-            showResults={showResults}
-            data={data}
-            className="flex items-center"
-          ></SearchInput>
+          <InputSearch onChange={onChange} className="flex items-center"></InputSearch>
         </div>
-        <SearchDropDown data={data} className="bg-bg"></SearchDropDown>
+        <SearchDropDown data={data}></SearchDropDown>
       </div>
     </div>
   );

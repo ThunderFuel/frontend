@@ -12,7 +12,7 @@ const getInitial = (props: TabProps): TabState => {
 };
 
 export interface TabState {
-  activeTab: number | string;
+  activeTab: number | string | object;
 }
 
 export const TabProvider = (props: TabProps) => {

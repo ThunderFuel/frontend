@@ -3,13 +3,6 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: {
-        DEFAULT: "1.25rem",
-        xl: "40px",
-        xl2: "40px",
-        xl3: "40px",
-        "3xl": "40px",
-      },
     },
     colors: {
       white: "#FFFFFF",
@@ -36,8 +29,6 @@ module.exports = {
       },
       screens: {
         "3xl": "1920px",
-        xl2: "1366px",
-        xl3: "1440px",
       },
     },
     fontSize: {

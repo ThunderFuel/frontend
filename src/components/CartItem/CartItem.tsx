@@ -15,60 +15,25 @@ export interface CartItemProps {
   showDetails?: boolean;
   setShowDetails?: Dispatch<SetStateAction<boolean>>;
 }
-const CartItem = ({
-  text,
-  name,
-  image,
-  price,
-  id,
-  checkoutMultipleImages,
-  className,
-  showDetails,
-  setShowDetails,
-}: CartItemProps) => {
+const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, className, showDetails, setShowDetails }: CartItemProps) => {
   const dispatch = useAppDispatch();
 
   const warning = (text: string) => (
     <div className="flex border justify-center items-center border-gray rounded-[5px] w-fit p-1 ">
-      {text === "Unavailable" || text === "Failed" ? (
-        <IconWarning height="15px" width="15px" fill="red" />
-      ) : (
-        <IconInfo height="15px" width="15px" fill="#E69040" />
-      )}
-      <span
-        className={clsx(
-          "font-spaceGrotesk text-bodyMd ml-1",
-          text === "Unavailable" || text === "Failed" ? "text-red" : "text-[#E69040]"
-        )}
-      >
-        {text}
-      </span>
+      {text === "Unavailable" || text === "Failed" ? <IconWarning height="15px" width="15px" fill="red" /> : <IconInfo height="15px" width="15px" fill="#E69040" />}
+      <span className={clsx("font-spaceGrotesk text-bodyMd ml-1", text === "Unavailable" || text === "Failed" ? "text-red" : "text-[#E69040]")}>{text}</span>
     </div>
   );
 
   return (
     <>
-      <div
-        className={clsx(
-          "flex flex-col border border-gray p-[10px] rounded-md hover:bg-bg-light group",
-          className ? className : ""
-        )}
-      >
+      <div className={clsx("flex flex-col border border-gray p-[10px] rounded-md hover:bg-bg-light group", className ? className : "")}>
         <div className="flex gap-[18px]">
           <div className="relative flex">
             {checkoutMultipleImages ? (
               <div className="flex w-[84px]">
                 {checkoutMultipleImages.map((img, index) => {
-                  return (
-                    <img
-                      key={index}
-                      src={img}
-                      className={clsx(
-                        "min-h-[64px] min-w-[64px]",
-                        index === 1 ? "absolute left-[10px]" : index === 2 ? "absolute left-5" : ""
-                      )}
-                    ></img>
-                  );
+                  return <img key={index} src={img} className={clsx("min-h-[64px] min-w-[64px]", index === 1 ? "absolute left-[10px]" : index === 2 ? "absolute left-5" : "")}></img>;
                 })}
               </div>
             ) : (
@@ -87,10 +52,7 @@ const CartItem = ({
               {checkoutMultipleImages && setShowDetails ? (
                 <div className="flex gap-x-[10px]">
                   <button className="text-bodySm text-gray-light underline">View on Blockchain</button>
-                  <button
-                    className="text-bodySm text-gray-light underline"
-                    onClick={() => setShowDetails(!showDetails)}
-                  >
+                  <button className="text-bodySm text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
                     {showDetails ? "Hide Details" : "Show Details"}
                   </button>
                 </div>
@@ -107,19 +69,7 @@ const CartItem = ({
             </div>
           </div>
         </div>
-        {[8, 9, 20].includes(id) && (
-          <div className="mt-2 ml-[82px]">
-            {id === 8 ? (
-              warning("Price Change")
-            ) : id === 9 ? (
-              warning("Unavailable")
-            ) : id === 20 ? (
-              warning("Failed")
-            ) : (
-              <></>
-            )}
-          </div>
-        )}
+        {[8, 9, 20].includes(id) && <div className="mt-2 ml-[82px]">{id === 8 ? warning("Price Change") : id === 9 ? warning("Unavailable") : id === 20 ? warning("Failed") : <></>}</div>}
       </div>
     </>
   );
