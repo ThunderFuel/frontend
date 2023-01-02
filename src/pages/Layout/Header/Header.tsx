@@ -39,7 +39,7 @@ const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="flex divide-x divide-gray lg:border-r lg:border-gray">
+    <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
