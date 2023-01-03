@@ -68,7 +68,7 @@ HeaderIconButton.displayName = "HeaderIconButton";
 
 const Header = () => {
   return (
-    <header>
+    <header className="sticky top-0 bg-bg z-20">
       <HeaderTop />
       <div className="border-y border-gray">
         <div className="header-container-fluid">

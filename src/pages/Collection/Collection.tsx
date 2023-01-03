@@ -32,7 +32,7 @@ const Collection = () => {
           </div>
         </div>
       </div>
-      <div className="border-t border-b border-gray">
+      <div className="border-t border-t-gray">
         <div className="container-fluid">
           <div className="inline-flex">
             <Tab initTab={1} className="secondary">
@@ -45,8 +45,8 @@ const Collection = () => {
             </Tab>
           </div>
         </div>
-        <Filter />
       </div>
+      <Filter />
       <div className="container-fluid flex">
         <Index />
         <CollectionList />
