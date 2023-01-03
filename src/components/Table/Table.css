@@ -1,0 +1,35 @@
+.table {
+  @apply w-full;
+}
+
+.table .thead {
+  @apply border-b border-solid border-gray;
+}
+.table .thead .tr {
+  @apply flex items-center;
+}
+
+.table .thead .tr .th {
+  flex: 1;
+  @apply flex p-4 text-headline-01 text-gray-light uppercase;
+}
+.table .thead .tr .th:first-child .cell {
+  @apply -mx-4;
+}
+
+.table .tbody {
+  @apply py-5;
+  @apply flex flex-col gap-5;
+}
+.table .tbody .tr {
+  @apply flex flex-row items-center border border-gray rounded-lg;
+  @apply hover:bg-bg-light;
+}
+.table .tbody .tr .td {
+  flex: 1;
+  @apply flex text-white;
+}
+.table .tbody .tr .td .cell {
+  @apply p-3.5 text-h5 overflow-hidden;
+  @apply whitespace-nowrap overflow-ellipsis;
+}

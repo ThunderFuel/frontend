@@ -6,7 +6,7 @@
 }
 
 .modalbase .modal .mhead {
-  @apply container flex justify-between items-center py-5 border-b border-gray;
+  @apply container flex justify-between items-center p-5 border-b border-gray;
 }
 .modalbase .modal .mhead .mtitle {
   @apply text-headlineMd font-bigShoulderDisplay text-white;

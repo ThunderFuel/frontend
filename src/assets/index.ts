@@ -13,4 +13,13 @@ export { default as AssetHotdrop1Image } from "./marketplace/hot-drop-1.png";
 export { default as AssetTable1Image } from "./marketplace/table-image-1.png";
 export { default as AssetTableImageNft1 } from "./marketplace/table-image-nft-1.png";
 
+export { default as AssetCollectionProfileImage } from "./collection/profile-image.png";
+export { default as AssetCollectionCoverImage } from "./collection/cover-image.png";
+
+export { default as AssetCollectionItem0 } from "./collection/item-0.png";
+export { default as AssetCollectionItem1 } from "./collection/item-1.png";
+export { default as AssetCollectionItem2 } from "./collection/item-2.png";
+export { default as AssetCollectionItem3 } from "./collection/item-3.png";
+export { default as AssetCollectionItem4 } from "./collection/item-4.png";
+
 export { default as AssetEmptyCart } from "./cart/cart-empty.svg";
