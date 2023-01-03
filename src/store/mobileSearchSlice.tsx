@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const mobileSearchSlice = createSlice({
-  name: "cart",
+  name: "mobileSearch",
   initialState: {
     show: false,
   },
