@@ -7,7 +7,7 @@ import CollectionContextProvider from "./CollectionContext";
 import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
-import Index from "./components/SidebarFilter/index";
+import SideBar from "./components/SidebarFilter/index";
 import Filter from "./components/Filter";
 import CollectionList from "./components/CollectionList";
 
@@ -48,7 +48,7 @@ const Collection = () => {
       </div>
       <Filter />
       <div className="container-fluid flex">
-        <Index />
+        <SideBar />
         <CollectionList />
       </div>
     </CollectionContextProvider>

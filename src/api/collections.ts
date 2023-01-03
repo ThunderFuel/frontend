@@ -5,6 +5,7 @@ const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2
 export default {
   async getCollections() {
     return [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4].map((item) => ({
+      id: item,
       collection: `Genuine Undead #${item}`,
       name: `Genuine Undead #${item}`,
       image: images[item],

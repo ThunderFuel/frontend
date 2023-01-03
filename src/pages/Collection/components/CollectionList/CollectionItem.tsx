@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { IconEthereum, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
+import { useAppDispatch } from "store";
+import { add, remove } from "store/cartSlice";
 
 const ButtonBuyNow = ({ className, onClick }: any) => {
   return (
@@ -19,8 +21,14 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection }: { collection: any }) => {
+  const dispatch = useAppDispatch();
   const [isSelected, setIsSelected] = useState(false);
   const onSelect = () => {
+    if (!isSelected) {
+      dispatch(add(collection));
+    } else {
+      dispatch(remove(collection.id));
+    }
     setIsSelected(!isSelected);
   };
 
