@@ -3,12 +3,14 @@ import { commonSlice } from "./commonSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { cartSlice } from "./cartSlice";
 import { mobileSearchSlice } from "./mobileSearchSlice";
+import { walletSlice } from "./walletSlice";
 
 const store = configureStore({
   reducer: {
     common: commonSlice.reducer,
     cart: cartSlice.reducer,
     mobileSearch: mobileSearchSlice.reducer,
+    wallet: walletSlice.reducer,
   },
 });
 

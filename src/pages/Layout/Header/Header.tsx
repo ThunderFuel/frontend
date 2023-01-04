@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
@@ -12,8 +12,11 @@ import Search from "./components/Search";
 
 import "./Header.css";
 import { useAppDispatch } from "store";
+import { setAddress, setIsConnected, setProvider } from "store/walletSlice";
 import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/MobileSearch";
+import { useWallet } from "hooks/useWallet";
+import { Address, ZeroBytes32 } from "fuels";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -35,18 +38,45 @@ const HeaderTop = React.memo(() => {
 });
 HeaderTop.displayName = "HeaderTop";
 
-const HeaderIconButtonGroup = React.memo(() => {
+const HeaderIconButtonGroup = React.memo(({ showCartModal }: HeaderProps) => {
   const dispatch = useAppDispatch();
+  const { isConnected } = useWallet();
+
+  async function connect() {
+    if (!window.fuel) return console.log("Error");
+
+    if (!isConnected)
+      await window.fuel
+        .connect()
+        .then((result) => {
+          dispatch(setIsConnected(result));
+        })
+        .catch((error) => {
+          console.error(error);
+          dispatch(setIsConnected(false));
+        });
+    const accounts = await window.fuel.accounts();
+    dispatch(setAddress(accounts[0]));
+    const provider = window.fuel.getProvider();
+    dispatch(setProvider(provider));
+
+    const address = Address.fromString(accounts[0]);
+    const balance = await provider.getBalance(address, ZeroBytes32);
+    if (balance) console.log("getBalance", balance.toNumber());
+
+    // window.fuel.disconnect();
+    // dispatch(disconnect());
+  }
 
   return (
     <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
-      <HeaderIconButton className="hidden lg:flex">
-        <IconWallet />
+      <HeaderIconButton className="hidden lg:flex" onClick={() => connect()}>
+        <IconWallet fill={isConnected ? "white" : "grey"} />
       </HeaderIconButton>
-      <HeaderIconButton onClick={() => console.log(true)}>
+      <HeaderIconButton onClick={() => showCartModal(true)}>
         <IconShoppingCart />
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">
@@ -55,6 +85,7 @@ const HeaderIconButtonGroup = React.memo(() => {
     </div>
   );
 });
+
 HeaderIconButtonGroup.displayName = "HeaderIconButtonGroup";
 
 const HeaderIconButton = React.memo((props: any) => {
@@ -66,9 +97,13 @@ const HeaderIconButton = React.memo((props: any) => {
 });
 HeaderIconButton.displayName = "HeaderIconButton";
 
-const Header = () => {
+export interface HeaderProps {
+  showCartModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const Header = ({ showCartModal }: HeaderProps) => {
   return (
-    <header>
+    <header className="bg-bg flex flex-col fixed w-full z-10">
       <HeaderTop />
       <div className="border-y border-gray">
         <div className="header-container-fluid">
@@ -86,7 +121,7 @@ const Header = () => {
               <Tab.Item id={3}>CREATE</Tab.Item>
             </Tab>
           </div>
-          <HeaderIconButtonGroup />
+          <HeaderIconButtonGroup showCartModal={showCartModal} />
         </div>
       </div>
       <MobileSearch />

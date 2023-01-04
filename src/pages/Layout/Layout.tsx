@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 
 import Checkout from "components/Checkout";
@@ -10,15 +11,14 @@ interface Props {
 }
 
 const Layout = ({ children }: Props) => {
-  const [showCartModal, setShowCartModal] = useState(false);
+  const [showCartModal, setShowCartModal] = useState(false); //redux
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   return (
     <main className={"bg-bg min-h-screen flex flex-col"}>
-      <Header />
+      <Header showCartModal={setShowCartModal} />
       {showCheckoutModal && <Checkout showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} />}
-      {/* <InsufficentFunds showModal={showCheckoutModal} setShowModal={setShowCheckoutModal} /> */}
       {showCartModal && <MyCart showModal={showCartModal} setShowModal={setShowCartModal} setShowCheckoutModal={setShowCheckoutModal} />}
       <div className="mt-[118px]">{children}</div>
       <Footer />

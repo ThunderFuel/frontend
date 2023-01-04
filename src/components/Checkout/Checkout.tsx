@@ -7,6 +7,7 @@ import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal } from "store/cartSlice";
+import InsufficentFunds from "./InsufficentFund";
 
 export interface MyCartProps {
   showModal: boolean;
@@ -98,42 +99,49 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
       )}
     </div>
   );
+  const enoughFund = false;
 
   return (
-    <Modal className="checkout" title="Checkout" show={showModal} onClose={() => setShowModal(false)} footer={approved ? footer : undefined} checkoutProcess={checkoutProcess}>
-      <div className="flex flex-col p-5">
-        {items.length !== 0 ? (
-          <>
-            <div className="flex flex-col gap-2">
-              <CartItem
-                key={"checkoutCartItem"}
-                text="Total"
-                name={itemCount + " Items"}
-                price={totalAmount}
-                image={items[0].image}
-                id={1}
-                checkoutMultipleImages={getMultipleImages()}
-                showDetails={approved ? showDetails : undefined}
-                setShowDetails={approved ? setShowDetails : undefined}
-                className={showDetails ? "rounded-b-none" : " "}
-              ></CartItem>
-            </div>
-            {showDetails && (
-              <div className="flex flex-col min-h-fit overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
-                {items.map((i, index) => (
-                  <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id}></CartItem>
-                ))}
+    <>
+      {enoughFund ? (
+        <InsufficentFunds showModal={showModal} setShowModal={setShowModal} />
+      ) : (
+        <Modal className="checkout" title="Checkout" show={showModal} onClose={() => setShowModal(false)} footer={approved ? footer : undefined} checkoutProcess={checkoutProcess}>
+          <div className="flex flex-col p-5">
+            {items.length !== 0 ? (
+              <>
+                <div className="flex flex-col gap-2">
+                  <CartItem
+                    key={"checkoutCartItem"}
+                    text="Total"
+                    name={itemCount + " Items"}
+                    price={totalAmount}
+                    image={items[0].image}
+                    id={1}
+                    checkoutMultipleImages={getMultipleImages()}
+                    showDetails={approved ? showDetails : undefined}
+                    setShowDetails={approved ? setShowDetails : undefined}
+                    className={showDetails ? "rounded-b-none" : " "}
+                  ></CartItem>
+                </div>
+                {showDetails && (
+                  <div className="flex flex-col min-h-fit overflow-y-scroll no-scrollbar p-[10px] gap-y-[10px] w-full border-x border-b rounded-b-md border-gray">
+                    {items.map((i, index) => (
+                      <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id}></CartItem>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col w-full h-full justify-center items-center">
+                <img src={AssetEmptyCart}></img>
+                <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">Your cart is empty. Start adding NFTs to your cart to collect.</span>
               </div>
             )}
-          </>
-        ) : (
-          <div className="flex flex-col w-full h-full justify-center items-center">
-            <img src={AssetEmptyCart}></img>
-            <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">Your cart is empty. Start adding NFTs to your cart to collect.</span>
           </div>
-        )}
-      </div>
-    </Modal>
+        </Modal>
+      )}
+    </>
   );
 };
 
