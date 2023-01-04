@@ -4,8 +4,10 @@ import { IconArrowRight, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
 import { toggleCheckoutModal } from "store/checkoutSlice";
+import { useWallet } from "../../../../hooks/useWallet";
 
 const CollectionFooter = () => {
+  const { getBalance } = useWallet();
   const dispatch = useAppDispatch();
   const selectedCartItemCount = useAppSelector((state) => state.cart.itemCount);
   const selectedCartTotalAmount = useAppSelector((state) => state.cart.totalAmount);
@@ -27,7 +29,8 @@ const CollectionFooter = () => {
       </Button>
       <Button
         className="uppercase"
-        onClick={() => {
+        onClick={async () => {
+          await getBalance();
           dispatch(toggleCheckoutModal());
         }}
       >

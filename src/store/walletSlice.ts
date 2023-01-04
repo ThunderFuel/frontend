@@ -1,9 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { Address } from "fuels";
 
 export const walletSlice = createSlice({
   name: "wallet",
   initialState: {
-    address: "",
+    address: "" as any,
     provider: null as any,
     isConnected: false,
   },
@@ -25,6 +26,11 @@ export const walletSlice = createSlice({
     },
   },
 });
+
+export const getSerializeAddress = createSelector(
+  (state: any) => (state.address === "" ? Address.fromString(state.address) : ""),
+  (address: any) => address
+);
 
 export const { setProvider, setAddress, setIsConnected, disconnect } = walletSlice.actions;
 
