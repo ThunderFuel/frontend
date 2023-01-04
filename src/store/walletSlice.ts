@@ -28,10 +28,16 @@ export const walletSlice = createSlice({
 });
 
 export const getSerializeAddress = createSelector(
-  (state: any) => (state.address === "" ? Address.fromString(state.address) : ""),
+  (state: any) => {
+    if (state.wallet.address.trim() !== "") {
+      return Address.fromString(state.wallet.address);
+    }
+
+    return "";
+  },
   (address: any) => address
 );
 
-export const { setProvider, setAddress, setIsConnected, disconnect } = walletSlice.actions;
+export const { setAddress } = walletSlice.actions;
 
 export default walletSlice.reducer;

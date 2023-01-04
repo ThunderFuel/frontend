@@ -2,15 +2,16 @@ import { useAppDispatch } from "store";
 import { getSerializeAddress, setAddress } from "../store/walletSlice";
 import { ZeroBytes32 } from "fuels";
 import React from "react";
+import { EventThunderFuelGenericError } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 
 let _isWalletConnected = false;
 
 export const useWallet = () => {
   const [isWalletConnected, setIsWalletConnected] = React.useState(_isWalletConnected);
-  const dispatch = useAppDispatch();
+  const getWalletAddress = useSelector(getSerializeAddress);
 
-  const accountAddress = useSelector(getSerializeAddress);
+  const dispatch = useAppDispatch();
 
   if (!window.fuel) {
     // throw new Error("Fuel Wallet extension is not installed!");
@@ -30,8 +31,7 @@ export const useWallet = () => {
   };
   const getBalance = async () => {
     const provider = await getProvider();
-    const balance = await provider.getBalance(accountAddress, ZeroBytes32);
-    console.log(balance.toNumber());
+    const balance = await provider.getBalance(getWalletAddress, ZeroBytes32);
 
     return balance.toNumber();
   };
@@ -44,10 +44,8 @@ export const useWallet = () => {
 
         const address = await getAccounts();
         dispatch(setAddress(address));
-
-        await getBalance();
       } catch (e) {
-        window.dispatchEvent(new CustomEvent("ThunderFuelGenericError", { detail: "connect" }));
+        window.dispatchEvent(new CustomEvent(EventThunderFuelGenericError, { detail: JSON.stringify(e) }));
       }
     }
   };
@@ -56,8 +54,8 @@ export const useWallet = () => {
       await window.fuel.disconnect();
       _isWalletConnected = false;
       setIsWalletConnected(false);
-    } catch {
-      window.dispatchEvent(new CustomEvent("ThunderFuelGenericError", { detail: "notDisconnect" }));
+    } catch (e) {
+      window.dispatchEvent(new CustomEvent(EventThunderFuelGenericError, { detail: JSON.stringify(e) }));
     }
   };
 
