@@ -2,6 +2,12 @@ import React from "react";
 import Modal from "../../../components/Modal";
 
 export const EventThunderFuelGenericError = "ThunderFuelGenericError";
+
+export const useErrorModal = (e: any) => {
+  window.dispatchEvent(new CustomEvent(EventThunderFuelGenericError, { detail: e.message }));
+  throw e;
+};
+
 const ErrorModal = () => {
   const [show, setShow] = React.useState(false);
   const [message, setMessage] = React.useState("");
@@ -20,7 +26,9 @@ const ErrorModal = () => {
 
   return (
     <Modal title={"hata"} onClose={() => setShow(false)} show={show}>
-      {message}
+      <div className="p-5">
+        <h5 className="text-h5 text-white">{message}</h5>
+      </div>
     </Modal>
   );
 };
