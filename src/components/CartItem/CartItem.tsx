@@ -33,12 +33,12 @@ const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, classN
             {checkoutMultipleImages ? (
               <div className="flex w-[84px]">
                 {checkoutMultipleImages.map((img, index) => {
-                  return <img key={index} src={img} className={clsx("min-h-[64px] min-w-[64px]", index === 1 ? "absolute left-[10px]" : index === 2 ? "absolute left-5" : "")}></img>;
+                  return <img key={index} src={img} className={clsx("max-h-[64px] max-w-[64px]", index === 1 ? "absolute left-[10px]" : index === 2 ? "absolute left-5" : "")}></img>;
                 })}
               </div>
             ) : (
               <>
-                <img src={image} className="min-h-[64px] min-w-[64px]"></img>
+                <img src={image} className="max-h-[64px] max-w-[64px]"></img>
                 {id === 9 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
                 <div className="absolute h-[64px] w-[64px] bg-gray/80 flex items-center justify-center opacity-0  group-hover:opacity-100">
                   <IconTrash className="cursor-pointer" onClick={() => dispatch(remove(id))} />
