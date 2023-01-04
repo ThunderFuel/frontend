@@ -17,6 +17,7 @@ import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/MobileSearch";
 import { useWallet } from "hooks/useWallet";
 import { Address, ZeroBytes32 } from "fuels";
+import { toggleCartModal } from "store/cartSlice";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -38,7 +39,7 @@ const HeaderTop = React.memo(() => {
 });
 HeaderTop.displayName = "HeaderTop";
 
-const HeaderIconButtonGroup = React.memo(({ showCartModal }: HeaderProps) => {
+const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
   const { isConnected } = useWallet();
 
@@ -76,7 +77,7 @@ const HeaderIconButtonGroup = React.memo(({ showCartModal }: HeaderProps) => {
       <HeaderIconButton className="hidden lg:flex" onClick={() => connect()}>
         <IconWallet fill={isConnected ? "white" : "grey"} />
       </HeaderIconButton>
-      <HeaderIconButton onClick={() => showCartModal(true)}>
+      <HeaderIconButton onClick={() => dispatch(toggleCartModal())}>
         <IconShoppingCart />
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">
@@ -101,7 +102,7 @@ export interface HeaderProps {
   showCartModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const Header = ({ showCartModal }: HeaderProps) => {
+const Header = () => {
   return (
     <header className="sticky top-0 bg-bg z-20">
       <HeaderTop />
@@ -121,7 +122,7 @@ const Header = ({ showCartModal }: HeaderProps) => {
               <Tab.Item id={3}>CREATE</Tab.Item>
             </Tab>
           </div>
-          <HeaderIconButtonGroup showCartModal={showCartModal} />
+          <HeaderIconButtonGroup />
         </div>
       </div>
       <MobileSearch />

@@ -3,18 +3,15 @@ import Button from "components/Button";
 import CartItem from "components/CartItem";
 import Modal from "components/Modal";
 import { IconArrowRight, IconEthereum } from "icons";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
-import { clearCart, getCartTotal } from "store/cartSlice";
+import { getCartTotal, removeAll, toggleCartModal } from "store/cartSlice";
+import { toggleCheckoutModal } from "store/checkoutSlice";
 
-export interface MyCartProps {
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-  setShowCheckoutModal: Dispatch<SetStateAction<boolean>>;
-}
-const MyCart = ({ showModal, setShowModal, setShowCheckoutModal }: MyCartProps) => {
-  const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
+const MyCart = () => {
+  const { totalAmount, itemCount, items, show } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(getCartTotal());
   }, [items]);
@@ -31,8 +28,8 @@ const MyCart = ({ showModal, setShowModal, setShowCheckoutModal }: MyCartProps) 
         <Button
           className="w-full"
           onClick={() => {
-            setShowModal(false);
-            setShowCheckoutModal(true);
+            dispatch(toggleCartModal());
+            dispatch(toggleCheckoutModal());
           }}
         >
           PROCEED TO CHECKOUT <IconArrowRight />
@@ -42,13 +39,13 @@ const MyCart = ({ showModal, setShowModal, setShowCheckoutModal }: MyCartProps) 
   );
 
   return (
-    <Modal className="cart" title="My Cart" onClose={() => setShowModal(false)} show={showModal} footer={items.length !== 0 ? footer : undefined}>
+    <Modal className="cart" title="My Cart" onClose={() => dispatch(toggleCartModal())} show={show} footer={items.length !== 0 ? footer : undefined}>
       <div className="flex flex-col h-full px-5 pt-5">
         {items.length !== 0 ? (
           <>
             <div className="flex justify-between items-center pb-5">
               <span className="text-headlineMd font-bigShoulderDisplay text-white">{itemCount} ITEMS</span>
-              <button className="text-headlineSm font-bigShoulderDisplay text-gray-light" onClick={() => dispatch(clearCart())}>
+              <button className="text-headlineSm font-bigShoulderDisplay text-gray-light" onClick={() => dispatch(removeAll())}>
                 CLEAR ALL
               </button>
             </div>
