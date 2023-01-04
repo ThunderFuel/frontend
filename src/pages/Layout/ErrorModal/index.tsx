@@ -4,8 +4,7 @@ import Modal from "../../../components/Modal";
 export const EventThunderFuelGenericError = "ThunderFuelGenericError";
 
 export const useErrorModal = (e: any) => {
-  window.dispatchEvent(new CustomEvent(EventThunderFuelGenericError, { detail: e.message }));
-  throw e;
+  window.dispatchEvent(new CustomEvent(EventThunderFuelGenericError, { detail: e.message ?? e }));
 };
 
 const ErrorModal = () => {
