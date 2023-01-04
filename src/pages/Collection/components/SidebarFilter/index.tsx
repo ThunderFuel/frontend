@@ -3,8 +3,10 @@ import { IconChevronDoubleLeft } from "icons";
 import Checkbox from "components/CheckBox";
 import Collapse from "components/Collapse";
 import clsx from "clsx";
+import { DisplayType, useCollectionContext } from "../../CollectionContext";
 
 const Index = () => {
+  const { displayType, setDisplayType } = useCollectionContext();
   const [show, setShow] = React.useState(false);
 
   return (
@@ -13,7 +15,15 @@ const Index = () => {
         <div className="w-72 pr-5 py-5">
           <div className="flex items-center justify-between border-b border-b-gray pb-5">
             <h5 className="text-h5 text-white">Filters</h5>
-            <div className="icon-btn cursor-pointer" onClick={() => setShow(!show)}>
+            <div
+              className="icon-btn cursor-pointer"
+              onClick={() => {
+                if (displayType !== DisplayType.LIST) {
+                  setDisplayType(DisplayType.GRID5);
+                }
+                setShow(!show);
+              }}
+            >
               <IconChevronDoubleLeft className="text-gray-light" />
             </div>
           </div>

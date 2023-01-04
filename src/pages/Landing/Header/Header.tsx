@@ -5,7 +5,7 @@ import { IconShoppingCart } from "icons";
 
 const Header: React.FC = () => {
   return (
-    <header className="border-b border-gray py-5">
+    <header className="border-b border-gray py-5 lg:py-0">
       <div className="container-fluid flex justify-between items-center">
         <img src={AssetLogo} className="h-8" alt="logo" />
         <div className="flex items-center gap-7">

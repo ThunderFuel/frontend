@@ -103,7 +103,7 @@ export interface HeaderProps {
 
 const Header = ({ showCartModal }: HeaderProps) => {
   return (
-    <header className="bg-bg flex flex-col fixed w-full z-10">
+    <header className="sticky top-0 bg-bg z-20">
       <HeaderTop />
       <div className="border-y border-gray">
         <div className="header-container-fluid">
