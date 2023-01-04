@@ -3,6 +3,7 @@ import Button from "components/Button";
 import { IconArrowRight, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
+import { toggleCheckoutModal } from "store/checkoutSlice";
 
 const CollectionFooter = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +25,12 @@ const CollectionFooter = () => {
         Clear {selectedCartItemCount} ıtem
         <IconTrash />
       </Button>
-      <Button className="uppercase">
+      <Button
+        className="uppercase"
+        onClick={() => {
+          dispatch(toggleCheckoutModal());
+        }}
+      >
         buy {selectedCartItemCount} ıtem - ${selectedCartTotalAmount} eth
         <IconArrowRight />
       </Button>
