@@ -143,26 +143,29 @@
   .tab {
     @apply w-full lg:w-auto;
     @apply flex items-center;
-    @apply bg-gray rounded-sm;
+    @apply rounded-[4px];
+    @apply border border-gray;
   }
 
   .tab li {
     @apply block flex-1;
   }
+  .tab li:nth-of-type(2) {
+    @apply border-x border-gray;
+  }
 
   .tab li span {
-    @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-white uppercase;
-    @apply bg-gray;
-    @apply px-3 py-2;
-    @apply rounded-[4px];
+    @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-gray-light uppercase text-center;
+    @apply px-5 py-[11.5px];
   }
 
   .tab li span:hover {
-    @apply bg-bg;
+    @apply bg-bg-light;
   }
 
   .tab li span.active {
     @apply bg-white text-bg;
+    @apply rounded-[4px];
   }
 
   .tab.secondary {
