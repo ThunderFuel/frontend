@@ -14,7 +14,7 @@ const HotDrops = () => {
           return (
             <div key={k} className="overflow-hidden border border-gray bg-bg-light text-white">
               <div className="overflow-hidden">
-                <img src={AssetHotdrop1Image} className="w-full transition-all ease-out duration-300 hover:scale-[120%]" alt={"hot-drop-1"} />
+                <img src={AssetHotdrop1Image} className="w-full transition-all ease-in duration-300 hover:scale-[120%]" alt={"hot-drop-1"} />
               </div>
               <div className="flex flex-col gap-3 px-4 py-3">
                 <h5 className="text-head5 font-spaceGrotesk">Presence by Tompop</h5>
