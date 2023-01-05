@@ -4,12 +4,12 @@ import { IconEthereum } from "icons";
 import { useIsMobile } from "hooks/useIsMobile";
 
 const HotDrops = () => {
-  const images = useIsMobile() ? [1] : [1, 2, 3, 4, 5];
+  const images = useIsMobile() ? [1] : [1, 2, 3, 4];
 
   return (
     <div className="container-fluid flex flex-col gap-5">
       <h3 className="text-white text-h3">Hot Drops</h3>
-      <div className="flex flex-col lg:flex-row gap-7">
+      <div className="flex flex-col lg:flex-row gap-3">
         {images.map((item, k) => {
           return (
             <div key={k} className="border border-gray bg-bg-light text-white">
