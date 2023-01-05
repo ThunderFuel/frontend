@@ -181,10 +181,16 @@
   }
 
   .tab.secondary li span {
-    @apply text-h6 text-gray-light normal-case;
-    @apply rounded-none bg-bg-light;
+    @apply text-head6 font-spaceGrotesk text-gray-light normal-case;
+    @apply rounded-none;
     @apply px-2 lg:px-7 py-6;
     @apply text-center;
+    @apply tracking-normal;
+  }
+
+  .tab.secondary li span:hover {
+    @apply text-white;
+    background: transparent;
   }
 
   .tab.secondary li span.active {
