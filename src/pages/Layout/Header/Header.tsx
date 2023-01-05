@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetThunderText } from "assets";
-import { IconEthereum, IconGas, IconHamburger, IconSearch, IconShoppingCart, IconThunder, IconWallet } from "icons";
+import { IconCart, IconEthereum, IconGas, IconHamburger, IconSearch, IconThunder, IconWallet } from "icons";
 
 import Tab from "components/Tab";
 import SocialMediaIcons from "components/SocialMediaIcons";
@@ -46,10 +46,10 @@ const HeaderIconButtonGroup = React.memo(() => {
         <IconSearch />
       </HeaderIconButton>
       <HeaderIconButton className="hidden lg:flex">
-        <IconWallet />
+        <IconWallet height="30px" width="30px" />
       </HeaderIconButton>
       <HeaderIconButton onClick={() => console.log(true)}>
-        <IconShoppingCart />
+        <IconCart height="30px" width="30px" />
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">
         <IconHamburger />

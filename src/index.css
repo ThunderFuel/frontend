@@ -120,12 +120,12 @@
   }
 
   .header-btn {
-    @apply p-6;
+    @apply p-[21px];
     @apply text-headlineMd font-bigShoulderDisplay text-white;
   }
 
   .header-btn:hover {
-    @apply bg-gray;
+    @apply bg-bg-light;
   }
 
   .title-gradient {
