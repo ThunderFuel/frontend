@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetThunderText } from "assets";
-import { IconHamburger, IconSearch, IconShoppingCart, IconThunder, IconWallet } from "icons";
+import { IconCart, IconEthereum, IconGas, IconHamburger, IconSearch, IconThunder, IconWallet } from "icons";
 
 import Tab from "components/Tab";
 import SocialMediaIcons from "components/SocialMediaIcons";
@@ -20,13 +20,15 @@ const gasPrice = 39;
 
 const HeaderTop = React.memo(() => {
   return (
-    <div className="container-fluid flex py-2.5 items-center">
-      <div className="flex items-center gap-5 w-full text-headline-01 uppercase text-gray-light">
-        <span>
-          ETH: <span className="text-white">${ethPrice}</span>
+    <div className="container-fluid flex pt-[5px] pb-[9px] items-center">
+      <div className="flex items-center gap-5 w-full text-headlineSm font-bigShoulderDisplay uppercase">
+        <span className="flex items-center">
+          <IconEthereum color="#838383" />
+          <span className="text-white">${ethPrice}</span>
         </span>
-        <span>
-          GAS: <span className="text-white">{gasPrice} GWEI</span>
+        <span className="flex items-center">
+          <IconGas className="mr-[6px]" />
+          <span className="text-white">{gasPrice} GWEI</span>
         </span>
       </div>
       <SocialMediaIcons />
@@ -44,10 +46,10 @@ const HeaderIconButtonGroup = React.memo(() => {
         <IconSearch />
       </HeaderIconButton>
       <HeaderIconButton className="hidden lg:flex">
-        <IconWallet />
+        <IconWallet height="30px" width="30px" />
       </HeaderIconButton>
       <HeaderIconButton onClick={() => console.log(true)}>
-        <IconShoppingCart />
+        <IconCart height="30px" width="30px" />
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">
         <IconHamburger />

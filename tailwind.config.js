@@ -37,70 +37,70 @@ module.exports = {
         "52px",
         {
           lineHeight: "72px",
-          fontWeight: "700",
+          fontWeight: "600",
         },
       ],
       head2: [
         "44px",
         {
           lineHeight: "60px",
-          fontWeight: "700",
+          fontWeight: "600",
         },
       ],
       head3: [
         "32px",
         {
           lineHeight: "44px",
-          fontWeight: "700",
+          fontWeight: "600",
         },
       ],
       head4: [
         "24px",
         {
           lineHeight: "34px",
-          fontWeight: "700",
+          fontWeight: "600",
         },
       ],
       head5: [
         "20px",
         {
           lineHeight: "28px",
-          fontWeight: "700",
+          fontWeight: "600",
         },
       ],
       head6: [
         "16px",
         {
           lineHeight: "22px",
-          fontWeight: "700",
+          fontWeight: "600",
         },
       ],
       bodyLg: [
         "18px",
         {
           lineHeight: "24px",
-          fontWeight: "400",
+          fontWeight: "300",
         },
       ],
       bodyMd: [
         "16px",
         {
           lineHeight: "21px",
-          fontWeight: "400",
+          fontWeight: "300",
         },
       ],
       bodySm: [
         "12px",
         {
           lineHeight: "16px",
-          fontWeight: "400",
+          fontWeight: "300",
         },
       ],
       headlineMd: [
         "14px",
         {
           lineHeight: "16px",
-          fontWeight: "700",
+          fontWeight: "600",
           letterSpacing: "0.2rem",
         },
       ],
@@ -108,7 +108,7 @@ module.exports = {
         "12px",
         {
           lineHeight: "14px",
-          fontWeight: "700",
+          fontWeight: "600",
           letterSpacing: "0.2rem",
         },
       ],
@@ -116,7 +116,7 @@ module.exports = {
         "18px",
         {
           lineHeight: "22px",
-          fontWeight: "700",
+          fontWeight: "600",
           letterSpacing: "0.08em",
         },
       ],

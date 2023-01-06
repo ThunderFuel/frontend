@@ -4,16 +4,18 @@ import { IconEthereum } from "icons";
 import { useIsMobile } from "hooks/useIsMobile";
 
 const HotDrops = () => {
-  const images = useIsMobile() ? [1] : [1, 2, 3, 4, 5];
+  const images = useIsMobile() ? [1] : [1, 2, 3, 4];
 
   return (
     <div className="container-fluid flex flex-col gap-5">
       <h3 className="text-white text-h3">Hot Drops</h3>
-      <div className="flex flex-col lg:flex-row gap-7">
+      <div className="flex flex-col lg:flex-row gap-3">
         {images.map((item, k) => {
           return (
-            <div key={k} className="border border-gray bg-bg-light text-white">
-              <img src={AssetHotdrop1Image} className="w-full" alt={"hot-drop-1"} />
+            <div key={k} className="overflow-hidden border border-gray bg-bg-light text-white">
+              <div className="overflow-hidden">
+                <img src={AssetHotdrop1Image} className="w-full transition-all ease-in duration-300 hover:scale-[120%]" alt={"hot-drop-1"} />
+              </div>
               <div className="flex flex-col gap-3 px-4 py-3">
                 <h5 className="text-head5 font-spaceGrotesk">Presence by Tompop</h5>
                 <div className="flex items-center gap-2.5">
