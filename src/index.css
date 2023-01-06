@@ -71,6 +71,14 @@
       scrollbar-width: none; /* Firefox */
     }
   }
+
+  .button-animation {
+    @apply transition-all hover:gap-6 hover:px-4;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
 }
 
 @layer components {
@@ -81,11 +89,7 @@
   .btn {
     @apply flex gap-2 py-4 px-6 items-center justify-center;
     @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
-    @apply transition-all;
-  }
-
-  .btn:hover {
-    @apply gap-6 px-4;
+    @apply button-animation;
   }
 
   .btn.btn-secondary {

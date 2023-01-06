@@ -90,10 +90,10 @@ module.exports = {
         },
       ],
       bodySm: [
-        "12px",
+        "13px",
         {
-          lineHeight: "16px",
-          fontWeight: "300",
+          lineHeight: "15px",
+          fontWeight: "400",
         },
       ],
       headlineMd: [
