@@ -35,7 +35,7 @@ const CollectionItem = ({ collection }: { collection: any }) => {
   return (
     <div className={clsx("group relative overflow-hidden border rounded-md", isSelected ? "border-white" : "border-gray")}>
       <div className="overflow-hidden relative">
-        <CollectionItemCheckbox checked={isSelected} onClick={onSelect} />
+        <CollectionItemCheckbox checked={isSelected} onChange={onSelect} />
         <img alt={collection.image} className="w-full transition-all hover:scale-125" src={collection.image} />
       </div>
       <div className="p-2.5 border-b border-b-gray">
