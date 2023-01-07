@@ -13,9 +13,15 @@ const Group = ({ children, title }: { title: any; children: React.ReactNode }) =
   );
 };
 
-const Item = ({ id, image, name, className }: { id: number; image?: string; name: string; className?: string }) => {
+const Item = ({ item, className, ...etc }: { className?: string; item: any; [key: string]: any }) => {
+  const { id, image, name } = item;
+
   return (
-    <a className={clsx("cursor-pointer", "flex gap-2.5 items-center text-h6 text-white", "tracking-normal text-left border border-gray rounded-md p-3", "hover:bg-gray", className)} key={id}>
+    <a
+      className={clsx("cursor-pointer", "flex gap-2.5 items-center text-h6 text-white", "tracking-normal text-left border border-gray rounded-md p-3", "hover:bg-gray", className)}
+      key={id}
+      onClick={() => etc?.onClick(item)}
+    >
       {image && <img className="rounded-full h-8 w-8" src={image} alt={name} />}
       <span>{name}</span>
     </a>

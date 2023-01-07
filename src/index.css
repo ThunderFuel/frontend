@@ -120,12 +120,12 @@
   }
 
   .header-btn {
-    @apply p-6;
+    @apply p-[21px];
     @apply text-headlineMd font-bigShoulderDisplay text-white;
   }
 
   .header-btn:hover {
-    @apply bg-gray;
+    @apply bg-bg-light;
   }
 
   .title-gradient {
@@ -143,26 +143,29 @@
   .tab {
     @apply w-full lg:w-auto;
     @apply flex items-center;
-    @apply bg-gray rounded-sm;
+    @apply rounded-[4px];
+    @apply border border-gray;
   }
 
   .tab li {
     @apply block flex-1;
   }
+  .tab li:nth-of-type(2) {
+    @apply border-x border-gray;
+  }
 
   .tab li span {
-    @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-white uppercase;
-    @apply bg-gray;
-    @apply px-3 py-2;
-    @apply rounded-[4px];
+    @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-gray-light uppercase text-center;
+    @apply px-5 py-[11.5px];
   }
 
   .tab li span:hover {
-    @apply bg-bg;
+    @apply bg-bg-light;
   }
 
   .tab li span.active {
     @apply bg-white text-bg;
+    @apply rounded-[4px];
   }
 
   .tab.secondary {
@@ -178,10 +181,16 @@
   }
 
   .tab.secondary li span {
-    @apply text-h6 text-gray-light normal-case;
-    @apply rounded-none bg-bg-light;
+    @apply text-head6 font-spaceGrotesk text-gray-light normal-case;
+    @apply rounded-none;
     @apply px-2 lg:px-7 py-6;
     @apply text-center;
+    @apply tracking-normal;
+  }
+
+  .tab.secondary li span:hover {
+    @apply text-white;
+    background: transparent;
   }
 
   .tab.secondary li span.active {

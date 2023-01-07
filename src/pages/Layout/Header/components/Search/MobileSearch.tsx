@@ -1,33 +1,16 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import search from "api/search";
+import React from "react";
 import InputSearch from "components/InputSearch";
 import AutoComplete from "components/AutoComplete/AutoComplete";
 import { IconClose } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { onToggle } from "store/mobileSearchSlice";
 import clsx from "clsx";
+import { useSearch } from "./useSearch";
 
 const MobileSearch = () => {
+  const { onChange, results, onClickItem } = useSearch();
   const { show } = useAppSelector((state) => state.mobileSearch);
   const dispatch = useAppDispatch();
-
-  const [results, setResults] = useState<any>({});
-
-  useEffect(() => {
-    search.getSearchResult().then((response) => setResults(response));
-  }, []);
-  const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const response = await search.getSearchResult();
-
-    const text = e.target.value.trim().toLowerCase();
-    const collections = response.collections.filter((item: any) => item.name.toLowerCase().search(text) > -1);
-    const accounts = response.accounts.filter((item: any) => item.name.toLowerCase().search(text) > -1);
-
-    setResults({
-      collections,
-      accounts,
-    });
-  };
 
   return (
     <div className={clsx("fixed top-0 left-0 w-full h-full z-10 bg-bg ease-in-out duration-300", show ? "translate-x-0 " : "translate-x-full")}>
@@ -44,8 +27,8 @@ const MobileSearch = () => {
         {Object.keys(results).map((resultKey) => {
           return (
             <AutoComplete.Group key={resultKey} title={resultKey}>
-              {results[resultKey].map((item: any) => (
-                <AutoComplete.Item key={item.id} name={item.name} id={item.id} image={item.image} />
+              {results[resultKey].map((item: any, i: number) => (
+                <AutoComplete.Item key={i} item={item} onClick={onClickItem} />
               ))}
             </AutoComplete.Group>
           );
