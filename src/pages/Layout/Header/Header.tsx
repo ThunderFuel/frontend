@@ -12,11 +12,9 @@ import Search from "./components/Search/Search";
 
 import "./Header.css";
 import { useAppDispatch } from "store";
-import { setAddress, setIsConnected, setProvider } from "store/walletSlice";
 import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
 import { useWallet } from "hooks/useWallet";
-import { Address, ZeroBytes32 } from "fuels";
 import { toggleCartModal } from "store/cartSlice";
 
 const ethPrice = 1322.6;
@@ -43,41 +41,15 @@ HeaderTop.displayName = "HeaderTop";
 
 const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
-  const { isConnected } = useWallet();
-
-  async function connect() {
-    if (!window.fuel) return console.log("Error");
-
-    if (!isConnected)
-      await window.fuel
-        .connect()
-        .then((result) => {
-          dispatch(setIsConnected(result));
-        })
-        .catch((error) => {
-          console.error(error);
-          dispatch(setIsConnected(false));
-        });
-    const accounts = await window.fuel.accounts();
-    dispatch(setAddress(accounts[0]));
-    const provider = window.fuel.getProvider();
-    dispatch(setProvider(provider));
-
-    const address = Address.fromString(accounts[0]);
-    const balance = await provider.getBalance(address, ZeroBytes32);
-    if (balance) console.log("getBalance", balance.toNumber());
-
-    // window.fuel.disconnect();
-    // dispatch(disconnect());
-  }
+  const { walletConnect, isWalletConnected } = useWallet();
 
   return (
     <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
-      <HeaderIconButton className="hidden lg:flex" onClick={() => connect()}>
-        <IconWallet height="30px" width="30px" fill={isConnected ? "white" : "grey"} />
+      <HeaderIconButton className="hidden lg:flex" onClick={walletConnect}>
+        <IconWallet fill={isWalletConnected ? "white" : "grey"} />
       </HeaderIconButton>
       <HeaderIconButton onClick={() => dispatch(toggleCartModal())}>
         <IconCart height="30px" width="30px" />
