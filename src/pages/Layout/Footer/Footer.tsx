@@ -4,7 +4,7 @@ import { AssetLogo } from "assets";
 
 const Footer = () => {
   return (
-    <div className="flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full py-5 lg:py-7">
+    <div className="container-fluid flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full py-5 lg:py-10">
       {/* <div className="border-b border-b-gray pb-10 mb-5">
         <div className="container">
           <div className="lg:flex lg:items-start lg:justify-between">

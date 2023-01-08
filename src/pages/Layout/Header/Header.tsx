@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
@@ -14,6 +14,8 @@ import "./Header.css";
 import { useAppDispatch } from "store";
 import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
+import { useWallet } from "hooks/useWallet";
+import { toggleCartModal } from "store/cartSlice";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -39,16 +41,17 @@ HeaderTop.displayName = "HeaderTop";
 
 const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
+  const { walletConnect, isWalletConnected } = useWallet();
 
   return (
     <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
-      <HeaderIconButton className="hidden lg:flex">
-        <IconWallet height="30px" width="30px" />
+      <HeaderIconButton className="hidden lg:flex" onClick={walletConnect}>
+        <IconWallet fill={isWalletConnected ? "white" : "grey"} />
       </HeaderIconButton>
-      <HeaderIconButton onClick={() => console.log(true)}>
+      <HeaderIconButton onClick={() => dispatch(toggleCartModal())}>
         <IconCart height="30px" width="30px" />
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">
@@ -57,6 +60,7 @@ const HeaderIconButtonGroup = React.memo(() => {
     </div>
   );
 });
+
 HeaderIconButtonGroup.displayName = "HeaderIconButtonGroup";
 
 const HeaderIconButton = React.memo((props: any) => {
@@ -67,6 +71,10 @@ const HeaderIconButton = React.memo((props: any) => {
   );
 });
 HeaderIconButton.displayName = "HeaderIconButton";
+
+export interface HeaderProps {
+  showCartModal: Dispatch<SetStateAction<boolean>>;
+}
 
 const Header = () => {
   return (

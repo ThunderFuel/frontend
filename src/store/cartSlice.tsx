@@ -7,6 +7,7 @@ export const cartSlice = createSlice({
     items: [] as ICartData[],
     totalAmount: 0,
     itemCount: 0,
+    show: false,
   },
 
   reducers: {
@@ -25,7 +26,7 @@ export const cartSlice = createSlice({
           itemCount: 0,
         }
       );
-      state.totalAmount = parseInt(totalAmount.toFixed(2));
+      state.totalAmount = totalAmount.toFixed(2);
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
@@ -37,15 +38,15 @@ export const cartSlice = createSlice({
     add: (state, action) => {
       state.items.push(action.payload);
     },
-    clearCart: (state) => {
-      state.items = [];
-    },
     getCartItems: (state) => {
       state.items = data;
+    },
+    toggleCartModal: (state) => {
+      state.show = !state.show;
     },
   },
 });
 
-export const { getCartTotal, remove, clearCart, getCartItems, add, removeAll } = cartSlice.actions;
+export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal } = cartSlice.actions;
 
 export default cartSlice.reducer;
