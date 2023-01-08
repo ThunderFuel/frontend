@@ -7,13 +7,12 @@ import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal } from "store/cartSlice";
+import { toggleCheckoutModal } from "store/checkoutSlice";
 
-export interface MyCartProps {
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-}
-const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
+const Checkout = () => {
   const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
+  const { show } = useAppSelector((state) => state.checkout);
+
   const dispatch = useAppDispatch();
 
   const [showDetails, setShowDetails] = useState(false);
@@ -89,7 +88,7 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
           <Button
             className="btn-secondary m-5"
             onClick={() => {
-              setShowModal(false);
+              dispatch(toggleCheckoutModal());
             }}
           >
             CLOSE
@@ -100,7 +99,7 @@ const Checkout = ({ showModal, setShowModal }: MyCartProps) => {
   );
 
   return (
-    <Modal className="checkout" title="Checkout" show={showModal} onClose={() => setShowModal(false)} footer={approved ? footer : undefined} checkoutProcess={checkoutProcess}>
+    <Modal className="checkout" title="Checkout" show={show} onClose={() => dispatch(toggleCheckoutModal())} footer={approved ? footer : undefined} checkoutProcess={checkoutProcess}>
       <div className="flex flex-col p-5">
         {items.length !== 0 ? (
           <>
