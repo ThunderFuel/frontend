@@ -15,9 +15,12 @@ interface CollectionContext {
   collections?: any;
   getCollections?: any;
   selectedCarts?: any;
+  collectionItems: any;
 }
 
-export const CollectionContext = createContext<CollectionContext>({});
+export const CollectionContext = createContext<CollectionContext>({
+  collectionItems: [],
+});
 
 const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
   const selectedCarts = useAppSelector((state) => state.cart.items);
@@ -31,12 +34,22 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
     return setCollections(response as any);
   };
 
+  const collectionItems = React.useMemo(() => {
+    const selectedCartsIds = selectedCarts.map((item: any) => item.id);
+
+    return collections.map((item: any) => ({
+      ...item,
+      isSelected: selectedCartsIds.includes(item.id),
+    }));
+  }, [collections, selectedCarts]);
+
   const value = {
     displayType,
     setDisplayType,
     collections,
     getCollections,
     selectedCarts,
+    collectionItems,
   };
 
   return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;

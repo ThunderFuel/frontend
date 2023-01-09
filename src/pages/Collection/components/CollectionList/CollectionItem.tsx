@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { IconEthereum, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch } from "store";
@@ -25,7 +25,7 @@ const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
 ButtonMakeOffer.displayName = "ButtonMakeOffer";
 const CollectionItemCheckbox = (props: any) => {
   return (
-    <label className="absolute top-3 left-3 bg-bg bg-opacity-20 border border-white border-white rounded-full w-6 h-6 z-10">
+    <label className="absolute top-3 left-3 bg-bg bg-opacity-20 border border-white border-white rounded-full w-6 h-6 z-10 cursor-pointer">
       <input type="checkbox" className="peer hidden" {...props} />
       <span className="hidden peer-checked:block bg-white absolute top-1/2 left-1/2 w-4 h-4 border border-white rounded-full -translate-x-1/2 -translate-y-1/2"></span>
     </label>
@@ -33,21 +33,19 @@ const CollectionItemCheckbox = (props: any) => {
 };
 const CollectionItem = ({ collection }: { collection: any }) => {
   const dispatch = useAppDispatch();
-  const [isSelected, setIsSelected] = useState(false);
   const onSelect = () => {
-    if (!isSelected) {
+    if (!collection.isSelected) {
       dispatch(add(collection));
     } else {
       dispatch(remove(collection.id));
     }
-    setIsSelected(!isSelected);
   };
 
   return (
-    <div className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light", isSelected ? "border-white" : "border-gray")}>
+    <div className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light cursor-pointer", collection.isSelected ? "border-white" : "border-gray")}>
       <div className="overflow-hidden relative">
-        <CollectionItemCheckbox checked={isSelected} onChange={onSelect} />
-        <img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[120%]" src={collection.image} />
+        <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />
+        <img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
       </div>
       <div className="p-2.5 border-b border-b-gray">
         <h6 className="text-h6 text-white">{collection.name}</h6>
