@@ -51,14 +51,20 @@ const CollectionItem = ({ collection }: { collection: any }) => {
         <h6 className="text-h6 text-white">{collection.name}</h6>
       </div>
       <div className="p-2.5 flex items-center">
-        <h6 className="text-h5 text-white">{collection.floor}</h6>
-        <IconEthereum className="text-gray-light" />
+        {collection.isActive ? (
+          <>
+            <h6 className="text-h5 text-white">{collection.floor}</h6>
+            <IconEthereum className="text-gray-light" />
+          </>
+        ) : (
+          <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>
+        )}
       </div>
       <div className="p-2.5 flex items-center text-gray-light gap-1">
         <IconMarketBasket />
-        <span className="text-bodySm">Last sale price 0.12 ETH</span>
+        <span className="body-sm">Last sale price 0.12 ETH</span>
       </div>
-      <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{!collection.isActive ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
+      <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.isActive ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
     </div>
   );
 };
