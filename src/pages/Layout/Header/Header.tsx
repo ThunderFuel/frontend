@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetThunderText } from "assets";
-import { IconCart, IconEthereum, IconGas, IconHamburger, IconSearch, IconThunder, IconWallet } from "icons";
+import { IconCart, IconEthereum, IconGas, IconHamburger, IconSearch, IconThunder2, IconWallet } from "icons";
 
 import Tab from "components/Tab";
 import SocialMediaIcons from "components/SocialMediaIcons";
@@ -98,7 +98,7 @@ const Header = () => {
         <div className="header-container-fluid">
           <div className="flex items-center gap-6">
             <Link className="flex text-white gap-1" to="/">
-              <IconThunder className="w-14 lg:w-7" />
+              <IconThunder2 className="w-14" />
               <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
             </Link>
 
