@@ -1,0 +1,25 @@
+.collection-item-checkbox {
+  @apply absolute top-3 left-3 bg-bg bg-opacity-20 border border-white border-opacity-20 border-white;
+  @apply rounded-full w-6 h-6 z-10 cursor-pointer;
+  @apply hover:bg-opacity-50 hover:border-opacity-100;
+}
+.collection-item-checkbox:has(input:checked) {
+  @apply bg-opacity-50 border-opacity-100;
+}
+.collection-item-checkbox input {
+  @apply hidden;
+}
+.collection-item-checkbox input + span {
+  @apply hidden bg-white absolute top-1/2 left-1/2 w-[14px] h-[14px] border border-white rounded-full -translate-x-1/2 -translate-y-1/2;
+}
+.collection-item-checkbox input:checked + span {
+  @apply block;
+}
+
+.button-make-offer {
+  @apply button-animation w-full bg-bg border-t border-t-gray text-headline-02 text-white flex-center py-3 gap-2;
+}
+
+.button-buy-now {
+  @apply button-animation w-full bg-white text-headline-02 flex-center py-1.5 gap-2;
+}
