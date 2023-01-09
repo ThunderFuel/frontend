@@ -4,7 +4,7 @@ import CollectionItem from "./CollectionItem";
 import { DisplayType, useCollectionContext } from "../../CollectionContext";
 
 const CollectionGrid = () => {
-  const { displayType, collections } = useCollectionContext();
+  const { displayType, collectionItems } = useCollectionContext();
 
   const displayClass = useMemo(() => {
     if (displayType === DisplayType.GRID4) {
@@ -18,7 +18,7 @@ const CollectionGrid = () => {
 
   return (
     <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pl-5", displayClass)}>
-      {collections.map((collection: any, i: number) => (
+      {collectionItems.map((collection: any, i: number) => (
         <CollectionItem key={i} collection={collection} />
       ))}
     </div>
