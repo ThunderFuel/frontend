@@ -25,6 +25,9 @@
   @apply flex flex-row items-center border border-gray rounded-lg;
   @apply hover:bg-bg-light;
 }
+.table .tbody .tr.active {
+  @apply bg-gray;
+}
 .table .tbody .tr .td {
   flex: 1;
   @apply flex text-white;
