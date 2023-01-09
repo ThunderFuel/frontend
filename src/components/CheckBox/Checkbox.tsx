@@ -7,7 +7,7 @@ const Checkbox = (props: any, ref: any) => {
     <label className="checkbox">
       <input type="checkbox" className="hidden" ref={ref} {...etc} />
       <span className={className}></span>
-      <div>{children}</div>
+      {children && <div className="pl-2">{children}</div>}
     </label>
   );
 };

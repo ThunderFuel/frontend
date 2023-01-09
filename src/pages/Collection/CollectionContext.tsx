@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import collectionService from "api/collections";
 import { useAppSelector } from "store";
 
@@ -16,11 +16,10 @@ interface CollectionContext {
   getCollections?: any;
   selectedCarts?: any;
   collectionItems: any;
+  isDisplayTypeList: boolean;
 }
 
-export const CollectionContext = createContext<CollectionContext>({
-  collectionItems: [],
-});
+export const CollectionContext = createContext<CollectionContext>({} as any);
 
 const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
   const selectedCarts = useAppSelector((state) => state.cart.items);
@@ -43,6 +42,10 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
     }));
   }, [collections, selectedCarts]);
 
+  const isDisplayTypeList = useMemo(() => {
+    return displayType === DisplayType.LIST;
+  }, [displayType]);
+
   const value = {
     displayType,
     setDisplayType,
@@ -50,6 +53,7 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
     getCollections,
     selectedCarts,
     collectionItems,
+    isDisplayTypeList,
   };
 
   return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;

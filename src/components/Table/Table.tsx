@@ -18,6 +18,7 @@ export interface ITable {
   className?: string;
   loading?: boolean;
   theadClassName?: string;
+  onClick?: (item: any) => void;
 }
 
 const TableNotFound = React.memo(() => {
@@ -39,7 +40,7 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
   );
 };
 
-const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, ...props }: ITable) => {
+const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, onClick, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
       {header.text}
@@ -58,8 +59,17 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
       )}
       <div className="tr" key={`row_${k.toString()}`}>
         {headers.map((header) => (
-          <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}`}>
-            {header.render ? header.render(item) : <div className="cell text-h5">{item[header.key]}</div>}
+          <div
+            className="td"
+            onClick={() => {
+              if (onClick) {
+                onClick(item);
+              }
+            }}
+            style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
+            key={`td_${header.key}`}
+          >
+            {header.render ? header.render(item) : <div className="cell text-h6">{item[header.key]}</div>}
           </div>
         ))}
       </div>
