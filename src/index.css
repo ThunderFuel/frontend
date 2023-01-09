@@ -125,6 +125,7 @@
 
   .header-btn {
     @apply p-[21px];
+    @apply items-center justify-center;
     @apply text-headlineMd font-bigShoulderDisplay text-white;
   }
 
@@ -208,7 +209,7 @@
   }
 
   .tab.icon li {
-    @apply border-l border-l-gray first:border-none text-gray-light;
+    @apply border-l border-l-gray first:border-none text-gray-light last:border-none;
   }
 
   .tab.icon li span {
@@ -231,7 +232,7 @@
   }
 
   .icon-btn {
-    @apply p-3 border border-gray rounded-md cursor-pointer;
+    @apply p-2 border border-gray rounded-md cursor-pointer;
   }
 
   .tab.third {

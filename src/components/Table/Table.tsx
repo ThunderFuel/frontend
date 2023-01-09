@@ -41,7 +41,7 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
 
 const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
-    <div className="th" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
+    <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
       {header.text}
     </div>
   ));
@@ -59,7 +59,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
       <div className="tr" key={`row_${k.toString()}`}>
         {headers.map((header) => (
           <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}`}>
-            {header.render ? header.render(item) : <div className="cell">{item[header.key]}</div>}
+            {header.render ? header.render(item) : <div className="cell text-h5">{item[header.key]}</div>}
           </div>
         ))}
       </div>
