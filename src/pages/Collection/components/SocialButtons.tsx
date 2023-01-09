@@ -6,7 +6,7 @@ const SocialButtons = () => {
   const icons = [IconTwitter, IconDiscord, IconSocial3Dots, IconTelegram, IconWeblink];
 
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 mt-1">
       <Tab initTab={null} className="icon link">
         {icons.map((icon, key) => {
           const IconItem = icon;

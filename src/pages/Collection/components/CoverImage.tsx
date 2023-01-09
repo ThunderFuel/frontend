@@ -4,7 +4,7 @@ import { AssetCollectionCoverImage } from "assets";
 const CoverImage = ({ className }: { className?: string }) => {
   return (
     <div className={className}>
-      <img className="w-full" src={AssetCollectionCoverImage} alt="cover-image" />
+      <img className="w-full max-h-[280px]" src={AssetCollectionCoverImage} alt="cover-image" />
     </div>
   );
 };

@@ -96,7 +96,7 @@ const Header = () => {
       <HeaderTop />
       <div className="border-y border-gray">
         <div className="header-container-fluid">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 pr-6">
             <Link className="flex text-white gap-1" to="/">
               <IconThunder2 className="w-14" />
               <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />

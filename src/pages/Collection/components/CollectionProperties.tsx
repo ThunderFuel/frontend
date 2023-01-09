@@ -2,31 +2,39 @@ import React from "react";
 import { IconEthereum } from "icons";
 
 const CollectionProperties = () => {
+  const items = [
+    {
+      name: "total volume",
+      value: "28.33",
+      icon: <IconEthereum />,
+    },
+    {
+      name: "floor",
+      value: "0.423",
+      icon: <IconEthereum />,
+    },
+    {
+      name: "lısted",
+      value: "10%",
+    },
+    {
+      name: "owners",
+      value: "2,123",
+    },
+  ];
+
   return (
     <div>
       <ul className="inline-flex border border-gray rounded-md">
-        <li className="flex flex-col gap-2 px-4 py-3 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
-          <div className="text-headline-01 uppercase whitespace-nowrap">total volume</div>
-          <div className="flex items-center">
-            <h4 className="text-h4 text-white">28.33</h4>
-            <IconEthereum />
-          </div>
-        </li>
-        <li className="flex flex-col gap-2 px-4 py-3 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
-          <div className="text-headline-01 uppercase whitespace-nowrap">floor</div>
-          <div className="flex items-center">
-            <h4 className="text-h4 text-white">0.423</h4>
-            <IconEthereum />
-          </div>
-        </li>
-        <li className="flex flex-col gap-2 px-4 py-3 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
-          <div className="text-headline-01 uppercase whitespace-nowrap">lısted</div>
-          <h4 className="text-h4 text-white">10%</h4>
-        </li>
-        <li className="flex flex-col gap-2 px-4 py-3 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
-          <div className="text-headline-01 uppercase whitespace-nowrap">owners</div>
-          <h4 className="text-h4 text-white">2,123</h4>
-        </li>
+        {items.map((item) => (
+          <li key={item.name} className="flex flex-col gap-2 px-4 pt-3 pb-1 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
+            <div className="text-headline-01 uppercase whitespace-nowrap">{item.name}</div>
+            <div className="flex items-center">
+              <h4 className="text-h4 text-white">{item.value}</h4>
+              {item.icon ?? <></>}
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );
