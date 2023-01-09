@@ -14,6 +14,7 @@ export default {
       lastSale: 0.88,
       owner: "Apedad23",
       timeListed: "2 hours ago",
+      isActive: item % 4 === 0,
     }));
   },
 };
