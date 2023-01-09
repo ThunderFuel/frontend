@@ -83,7 +83,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     },
   ];
 
-  return <Table headers={headers} items={items} footer={<Footer />} />;
+  return <Table theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
 };
 
 export default MarketPlaceTable;

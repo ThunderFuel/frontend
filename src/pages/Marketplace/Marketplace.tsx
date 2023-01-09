@@ -10,7 +10,7 @@ const Marketplace = () => {
       <HotDrops />
       <MarketplaceProvider>
         <Filter />
-        <MarketplaceList itemCount={5} />
+        <MarketplaceList itemCount={20} />
       </MarketplaceProvider>
     </div>
   );

@@ -3,7 +3,7 @@
 }
 
 .table .thead {
-  @apply border-b border-solid border-gray;
+  @apply border-b border-solid border-gray bg-bg;
 }
 .table .thead .tr {
   @apply flex items-center;

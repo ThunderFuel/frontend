@@ -11,7 +11,7 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 import Search from "./components/Search/Search";
 
 import "./Header.css";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
 import { useWallet } from "hooks/useWallet";
@@ -39,7 +39,18 @@ const HeaderTop = React.memo(() => {
 });
 HeaderTop.displayName = "HeaderTop";
 
+const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
+  return (
+    <span className="font-spaceGrotesk font-normal font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">
+      {count}
+    </span>
+  );
+});
+
+HeaderCardBadge.displayName = "HeaderCardBadge";
+
 const HeaderIconButtonGroup = React.memo(() => {
+  const selectedCarts = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
   const { walletConnect, isWalletConnected } = useWallet();
 
@@ -51,8 +62,11 @@ const HeaderIconButtonGroup = React.memo(() => {
       <HeaderIconButton className="hidden lg:flex" onClick={walletConnect}>
         <IconWallet fill={isWalletConnected ? "white" : "grey"} />
       </HeaderIconButton>
-      <HeaderIconButton onClick={() => dispatch(toggleCartModal())}>
-        <IconCart height="30px" width="30px" />
+      <HeaderIconButton className="relative" onClick={() => dispatch(toggleCartModal())}>
+        <div className="relative">
+          <IconCart height="30px" width="30px" />
+          {selectedCarts.length > 0 && <HeaderCardBadge count={selectedCarts.length} />}
+        </div>
       </HeaderIconButton>
       <HeaderIconButton className="lg:hidden">
         <IconHamburger />

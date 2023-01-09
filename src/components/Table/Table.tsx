@@ -17,6 +17,7 @@ export interface ITable {
   footer?: any;
   className?: string;
   loading?: boolean;
+  theadClassName?: string;
 }
 
 const TableNotFound = React.memo(() => {
@@ -38,7 +39,7 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
   );
 };
 
-const Table = ({ headers = [], items = [], className = "", loading = false, ...props }: ITable) => {
+const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
     <div className="th" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
       {header.text}
@@ -75,9 +76,9 @@ const Table = ({ headers = [], items = [], className = "", loading = false, ...p
   ));
 
   return (
-    <div className={"overflow-hidden"}>
+    <div>
       <div className={clsx("table", className)} {...props}>
-        <div data-testid="tableHeader" className={clsx("thead")}>
+        <div data-testid="tableHeader" className={clsx("thead", theadClassName)}>
           <div className="container-fluid">
             <div className="tr">{_getHeaders}</div>
           </div>
