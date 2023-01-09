@@ -3,11 +3,11 @@ import Button from "components/Button";
 import { IconArrowRight, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
-import { toggleCheckoutModal } from "store/checkoutSlice";
+import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "../../../../hooks/useWallet";
 
 const CollectionFooter = () => {
-  const { getBalance } = useWallet();
+  const { hasEnoughFunds } = useWallet();
   const dispatch = useAppDispatch();
   const selectedCartItemCount = useAppSelector((state) => state.cart.itemCount);
   const selectedCartTotalAmount = useAppSelector((state) => state.cart.totalAmount);
@@ -17,8 +17,10 @@ const CollectionFooter = () => {
   }
 
   const onToggleCheckoutModal = async () => {
-    await getBalance();
-    dispatch(toggleCheckoutModal());
+    hasEnoughFunds().then((res) => {
+      dispatch(setIsInsufficientBalance(!res));
+      dispatch(toggleCheckoutModal());
+    });
   };
 
   return (

@@ -8,10 +8,11 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal } from "store/cartSlice";
 import { toggleCheckoutModal } from "store/checkoutSlice";
+import InsufficentFunds from "./InsufficentFund";
 
 const Checkout = () => {
   const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
-  const { show } = useAppSelector((state) => state.checkout);
+  const { show, isInsufficientBalance } = useAppSelector((state) => state.checkout);
 
   const dispatch = useAppDispatch();
 
@@ -98,7 +99,9 @@ const Checkout = () => {
     </div>
   );
 
-  return (
+  return isInsufficientBalance ? (
+    <InsufficentFunds />
+  ) : (
     <Modal className="checkout" title="Checkout" show={show} onClose={() => dispatch(toggleCheckoutModal())} footer={approved ? footer : undefined} checkoutProcess={checkoutProcess}>
       <div className="flex flex-col p-5">
         {items.length !== 0 ? (
