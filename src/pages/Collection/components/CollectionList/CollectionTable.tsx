@@ -80,7 +80,17 @@ const CollectionTable = () => {
     },
   ];
 
-  return <Table className="border-t border-t-gray" theadClassName={"sticky top-[178px]"} headers={headers} items={collectionItems} onClick={onSelect} isSelectedRow={(item) => item.isSelected} />;
+  return (
+    <Table
+      className="border-t border-t-gray"
+      theadClassName={"sticky top-[178px]"}
+      rowClassName={"cursor-pointer"}
+      headers={headers}
+      items={collectionItems}
+      onClick={onSelect}
+      isSelectedRow={(item) => item.isSelected}
+    />
+  );
 };
 
 export default CollectionTable;

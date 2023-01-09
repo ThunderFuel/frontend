@@ -18,6 +18,7 @@ export interface ITable {
   className?: string;
   loading?: boolean;
   theadClassName?: string;
+  rowClassName?: string;
   isSelectedRow?: (item: any) => any;
   onClick?: (item: any) => void;
 }
@@ -41,7 +42,7 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
   );
 };
 
-const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, onClick, ...props }: ITable) => {
+const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, rowClassName, onClick, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
       {header.text}
@@ -58,18 +59,17 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
       ) : (
         <></>
       )}
-      <div className={clsx("tr", isSelectedRow && isSelectedRow(item) ? "active" : "")} key={`row_${k.toString()}`}>
+      <div
+        className={clsx("tr", rowClassName, isSelectedRow && isSelectedRow(item) ? "active" : "")}
+        key={`row_${k.toString()}`}
+        onClick={() => {
+          if (onClick) {
+            onClick(item);
+          }
+        }}
+      >
         {headers.map((header) => (
-          <div
-            className="td"
-            onClick={() => {
-              if (onClick) {
-                onClick(item);
-              }
-            }}
-            style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }}
-            key={`td_${header.key}`}
-          >
+          <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}`}>
             {header.render ? header.render(item) : <div className="cell text-h6">{item[header.key]}</div>}
           </div>
         ))}
