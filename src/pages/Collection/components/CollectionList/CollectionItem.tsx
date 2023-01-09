@@ -4,9 +4,11 @@ import clsx from "clsx";
 import { useAppDispatch } from "store";
 import { add, remove } from "store/cartSlice";
 
+import "./CollectionItem.css";
+
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
-    <button className={clsx("button-animation w-full bg-white text-headline-02 flex-center py-1.5 gap-2", className)} onClick={onClick}>
+    <button className={clsx("button-buy-now", className)} onClick={onClick}>
       <span className="uppercase">buy now</span>
       <IconThunderSmall className="w-7 h-7" />
     </button>
@@ -16,7 +18,7 @@ ButtonBuyNow.displayName = "ButtonBuyNow";
 
 const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
   return (
-    <button className={clsx("button-animation w-full bg-bg border-t border-t-gray text-headline-02 text-white flex-center py-3 gap-2", className)} onClick={onClick}>
+    <button className={clsx("button-make-offer", className)} onClick={onClick}>
       <span className="uppercase">make offer</span>
       <IconHand className="fill-white" />
     </button>
@@ -25,9 +27,9 @@ const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
 ButtonMakeOffer.displayName = "ButtonMakeOffer";
 const CollectionItemCheckbox = (props: any) => {
   return (
-    <label className="absolute top-3 left-3 bg-bg bg-opacity-20 border border-white border-white rounded-full w-6 h-6 z-10 cursor-pointer">
-      <input type="checkbox" className="peer hidden" {...props} />
-      <span className="hidden peer-checked:block bg-white absolute top-1/2 left-1/2 w-4 h-4 border border-white rounded-full -translate-x-1/2 -translate-y-1/2"></span>
+    <label className="collection-item-checkbox">
+      <input type="checkbox" className="hidden" {...props} />
+      <span></span>
     </label>
   );
 };
@@ -44,7 +46,7 @@ const CollectionItem = ({ collection }: { collection: any }) => {
   return (
     <div className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light cursor-pointer", collection.isSelected ? "border-white" : "border-gray")}>
       <div className="overflow-hidden relative">
-        <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />
+        {collection.isActive && <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />}
         <img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
       </div>
       <div className="p-2.5 border-b border-b-gray">
