@@ -92,7 +92,7 @@ export interface HeaderProps {
 
 const Header = () => {
   return (
-    <header className="sticky top-0 bg-bg z-20">
+    <header className="sticky top-0 bg-bg z-30">
       <HeaderTop />
       <div className="border-y border-gray">
         <div className="header-container-fluid">

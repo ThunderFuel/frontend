@@ -38,8 +38,8 @@ const SidebarFilter = () => {
                   <Collapse.Header>112233</Collapse.Header>
                   <Collapse.Body>
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className="hover:bg-gray border border-gray rounded-md p-2.5 text-white">
-                        <Checkbox>
+                      <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", false && "bg-gray")}>
+                        <Checkbox checked={true}>
                           <span className="body-medium">Sky{i}</span>
                         </Checkbox>
                       </div>

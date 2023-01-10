@@ -32,7 +32,7 @@ const Index = () => {
             <Range />
             <div className="pl-5">asd</div>
           </div>
-          <div>
+          <div className="flex-center">
             <TabDisplayType />
           </div>
         </div>
