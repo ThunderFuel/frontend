@@ -2,20 +2,29 @@ import { AssetEmptyCart } from "assets";
 import Button from "components/Button";
 import CartItem from "components/CartItem";
 import Modal from "components/Modal";
+import { useWallet } from "hooks/useWallet";
 import { IconArrowRight, IconEthereum } from "icons";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, toggleCartModal } from "store/cartSlice";
-import { toggleCheckoutModal } from "store/checkoutSlice";
+import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 
 const MyCart = () => {
   const { totalAmount, itemCount, items, show } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
+  const { hasEnoughFunds } = useWallet();
 
   useEffect(() => {
     dispatch(getCartTotal());
   }, [items]);
 
+  const onToggleCheckoutModal = () => {
+    hasEnoughFunds().then((res) => {
+      dispatch(setIsInsufficientBalance(!res));
+      dispatch(toggleCartModal());
+      dispatch(toggleCheckoutModal());
+    });
+  };
   const footer = (
     <div className="flex flex-col w-full h-full items-center">
       <div className="flex w-full px-5 py-2 justify-between border-y border-gray">
@@ -28,8 +37,7 @@ const MyCart = () => {
         <Button
           className="w-full"
           onClick={() => {
-            dispatch(toggleCartModal());
-            dispatch(toggleCheckoutModal());
+            onToggleCheckoutModal();
           }}
         >
           PROCEED TO CHECKOUT <IconArrowRight />

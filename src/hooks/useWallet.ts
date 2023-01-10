@@ -1,4 +1,4 @@
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress } from "../store/walletSlice";
 import { ZeroBytes32 } from "fuels";
 import React from "react";
@@ -10,12 +10,25 @@ let _isWalletConnected = false;
 export const useWallet = () => {
   const [isWalletConnected, setIsWalletConnected] = React.useState(_isWalletConnected);
   const getWalletAddress = useSelector(getSerializeAddress);
+  const { totalAmount } = useAppSelector((state) => state.cart);
 
   const dispatch = useAppDispatch();
 
   if (!window.fuel) {
     useErrorModal("Fuel Wallet extension is not installed!");
   }
+
+  const hasEnoughFunds = async () => {
+    try {
+      const provider = await getProvider();
+      const balance = await provider.getBalance(getWalletAddress, ZeroBytes32);
+
+      return balance.toNumber() / 1000000000 >= totalAmount;
+    } catch {
+      return false;
+    }
+  };
+
   const getAccounts = async () => {
     try {
       const accounts = await window.fuel.accounts();
@@ -68,5 +81,6 @@ export const useWallet = () => {
     walletConnect,
     walletDisconnect,
     getBalance,
+    hasEnoughFunds,
   };
 };

@@ -1,13 +1,14 @@
+import React from "react";
 import Button from "components/Button";
 import Modal from "components/Modal";
 import { IconEthereum, IconWarning } from "icons";
-import React, { Dispatch, SetStateAction } from "react";
+import { useAppDispatch, useAppSelector } from "store";
+import { toggleCheckoutModal } from "store/checkoutSlice";
 
-export interface InsufficentFundsProps {
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-}
-const InsufficentFunds = ({ showModal, setShowModal }: InsufficentFundsProps) => {
+const InsufficentFunds = () => {
+  const { show } = useAppSelector((state) => state.checkout);
+  const dispatch = useAppDispatch();
+
   const footer = (
     <div className="flex flex-col w-full h-full items-center">
       <div className="flex w-full py-2 px-5 justify-between border-b border-gray ">
@@ -24,7 +25,7 @@ const InsufficentFunds = ({ showModal, setShowModal }: InsufficentFundsProps) =>
   );
 
   return (
-    <Modal show={showModal} className="checkout" title="Insufficent Funds" onClose={() => setShowModal(false)} footer={footer}>
+    <Modal className="checkout" title="Insufficent Funds" footer={footer} onClose={() => dispatch(toggleCheckoutModal())} show={show}>
       <div className="flex justify-center gap-x-5 py-8 px-6 border-y border-gray ">
         <div className="flex mt-[2px]">
           <IconWarning fill="red" />
