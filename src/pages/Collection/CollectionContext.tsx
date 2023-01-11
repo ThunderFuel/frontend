@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useMemo, useState } from "react";
-import collectionService from "api/collections";
+import collectionService from "api/collections/collections.service";
 import { useAppSelector } from "store";
 
 export enum DisplayType {
@@ -13,10 +13,14 @@ interface CollectionContext {
   displayType?: string;
   setDisplayType?: any;
   collections?: any;
-  getCollections?: any;
+  fetchCollections?: any;
   selectedCarts?: any;
   collectionItems: any;
   isDisplayTypeList: boolean;
+  filterParams: any;
+  onSetFilterParams: (filter: string, value: any) => void;
+  fetchFilters: any;
+  filters: any;
 }
 
 export const CollectionContext = createContext<CollectionContext>({} as any);
@@ -26,11 +30,27 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
 
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [collections, setCollections] = useState([]);
+  const [filterParams, setFilterParams] = useState<any>({});
+  const [filters, setFilters] = useState<any>({});
 
-  const getCollections = async () => {
+  const onSetFilterParams = (filter: string, value: any) => {
+    setFilterParams((prevState: any) => {
+      prevState[filter] = value;
+
+      return prevState;
+    });
+  };
+
+  const fetchCollections = async () => {
     const response = await collectionService.getCollections();
 
     return setCollections(response as any);
+  };
+  const fetchFilters = async () => {
+    const response = await collectionService.getFilters();
+    console.log(response);
+
+    return setFilters(response);
   };
 
   const collectionItems = React.useMemo(() => {
@@ -50,10 +70,14 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
     displayType,
     setDisplayType,
     collections,
-    getCollections,
+    fetchCollections,
     selectedCarts,
     collectionItems,
     isDisplayTypeList,
+    filterParams,
+    onSetFilterParams,
+    fetchFilters,
+    filters,
   };
 
   return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;

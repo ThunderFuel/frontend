@@ -6,10 +6,10 @@ import CollectionFooter from "./CollectionFooter";
 import clsx from "clsx";
 
 const Index = () => {
-  const { isDisplayTypeList, collectionItems, getCollections } = useCollectionContext();
+  const { isDisplayTypeList, collectionItems, fetchCollections } = useCollectionContext();
 
   useEffect(() => {
-    getCollections();
+    fetchCollections();
   }, []);
 
   return (

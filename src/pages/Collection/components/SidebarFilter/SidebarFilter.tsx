@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IconChevronDoubleLeft, IconFilter } from "icons";
 import Checkbox from "components/CheckBox";
 import Collapse from "components/Collapse";
@@ -6,8 +6,12 @@ import clsx from "clsx";
 import { DisplayType, useCollectionContext } from "../../CollectionContext";
 
 const SidebarFilter = () => {
-  const { displayType, setDisplayType } = useCollectionContext();
+  const { displayType, setDisplayType, fetchFilters } = useCollectionContext();
   const [show, setShow] = React.useState(false);
+
+  useEffect(() => {
+    fetchFilters();
+  }, []);
 
   const onToggle = () => {
     if (displayType !== DisplayType.LIST) {
