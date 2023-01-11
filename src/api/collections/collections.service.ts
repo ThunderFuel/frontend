@@ -1,5 +1,5 @@
-import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "../assets";
-
+import { ThunderURL } from "../index";
+import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "../../assets";
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
 export default {
@@ -16,5 +16,8 @@ export default {
       timeListed: "2 hours ago",
       isActive: item % 4 !== 0,
     }));
+  },
+  async getFilters<CollectionFilterResponse>() {
+    return await ThunderURL.get<CollectionFilterResponse>("v1/collection/getfilters?id=1");
   },
 };
