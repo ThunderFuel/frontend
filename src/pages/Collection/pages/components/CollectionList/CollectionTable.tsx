@@ -1,10 +1,10 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
-import { useCollectionContext } from "../../CollectionContext";
-import { IconEthereum } from "../../../../icons";
-import Checkbox from "../../../../components/CheckBox";
-import { add, remove } from "../../../../store/cartSlice";
-import { useAppDispatch } from "../../../../store";
+import { useCollectionContext } from "../../../CollectionContext";
+import { IconEthereum } from "../../../../../icons";
+import Checkbox from "../../../../../components/CheckBox";
+import { add, remove } from "../../../../../store/cartSlice";
+import { useAppDispatch } from "../../../../../store";
 
 const Collection = ({ item }: { item: any }) => {
   return (

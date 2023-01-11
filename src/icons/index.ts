@@ -40,3 +40,5 @@ export { ReactComponent as IconClear } from "./icon-clear.svg";
 export { ReactComponent as IconThunderSmall } from "./icon-thunder-small.svg";
 export { ReactComponent as IconHand } from "./icon-hand.svg";
 export { ReactComponent as IconFilter } from "./icon-filter.svg";
+export { ReactComponent as IconTag } from "./icon-tag.svg";
+export { ReactComponent as IconQuarry } from "./icon-quarry.svg";

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useCollectionContext } from "../../CollectionContext";
+import { useCollectionContext } from "../../../CollectionContext";
 import CollectionGrid from "./CollectionGrid";
 import CollectionTable from "./CollectionTable";
 import CollectionFooter from "./CollectionFooter";

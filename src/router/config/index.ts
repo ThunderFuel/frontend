@@ -5,8 +5,11 @@ import Layout from "pages/Layout/Layout";
 const Landing = React.lazy(() => import("pages/Landing"));
 const Login = React.lazy(() => import("pages/Login"));
 const Marketplace = React.lazy(() => import("pages/Marketplace"));
-const Collection = React.lazy(() => import("pages/Collection"));
 const Rankings = React.lazy(() => import("pages/Rankings"));
+
+const Collection = React.lazy(() => import("pages/Collection"));
+const CollectionItems = React.lazy(() => import("pages/Collection/pages/CollectionItems"));
+const CollectionActivity = React.lazy(() => import("pages/Collection/pages/CollectionActivity"));
 
 export interface RouteConfig {
   path: string;
@@ -14,6 +17,7 @@ export interface RouteConfig {
   layout?: React.ElementType;
   notLoggedIn?: boolean;
   requireLogin?: boolean;
+  children?: RouteConfig[];
 }
 
 export const ROUTES: RouteConfig[] = [
@@ -30,6 +34,16 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.COLLECTION,
     component: Collection,
     layout: Layout,
+    children: [
+      {
+        path: PATHS.COLLECTION_ITEMS,
+        component: CollectionItems,
+      },
+      {
+        path: PATHS.COLLECTION_ACTIVITY,
+        component: CollectionActivity,
+      },
+    ],
   },
   {
     path: PATHS.LOGIN,

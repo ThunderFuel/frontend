@@ -7,11 +7,12 @@ import CollectionContextProvider from "./CollectionContext";
 import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
-import SideBar from "./components/SidebarFilter/SidebarFilter";
 import Filter from "./components/Filter";
-import CollectionList from "./components/CollectionList";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const Collection = () => {
+  const navigate = useNavigate();
+
   return (
     <CollectionContextProvider>
       <div className="container-fluid pt-10 pb-14">
@@ -37,17 +38,22 @@ const Collection = () => {
       <div className="border-t border-t-gray">
         <div className="container-fluid">
           <div className="inline-flex">
-            <Tab initTab={1} className="secondary">
-              <Tab.Item id={1}>Items</Tab.Item>
-              <Tab.Item id={2}>Activity</Tab.Item>
+            <Tab
+              initTab={""}
+              className="secondary"
+              onChange={(item) => {
+                navigate(item);
+              }}
+            >
+              <Tab.Item id={""}>Items</Tab.Item>
+              <Tab.Item id={"activity"}>Activity</Tab.Item>
             </Tab>
           </div>
         </div>
       </div>
       <Filter />
       <div className="container-fluid flex">
-        <SideBar />
-        <CollectionList />
+        <Outlet />
       </div>
     </CollectionContextProvider>
   );

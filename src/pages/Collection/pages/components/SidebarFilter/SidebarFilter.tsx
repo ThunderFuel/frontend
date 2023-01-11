@@ -3,7 +3,7 @@ import { IconChevronDoubleLeft, IconFilter } from "icons";
 import Checkbox from "components/CheckBox";
 import Collapse from "components/Collapse";
 import clsx from "clsx";
-import { DisplayType, useCollectionContext } from "../../CollectionContext";
+import { DisplayType, useCollectionContext } from "../../../CollectionContext";
 
 const SidebarFilter = () => {
   const { displayType, setDisplayType, fetchFilters } = useCollectionContext();

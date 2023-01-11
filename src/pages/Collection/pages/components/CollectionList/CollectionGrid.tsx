@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import clsx from "clsx";
 import CollectionItem from "./CollectionItem";
-import { DisplayType, useCollectionContext } from "../../CollectionContext";
+import { DisplayType, useCollectionContext } from "../../../CollectionContext";
 
 const CollectionGrid = () => {
   const { displayType, collectionItems } = useCollectionContext();
