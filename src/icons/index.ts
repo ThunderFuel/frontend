@@ -42,3 +42,4 @@ export { ReactComponent as IconHand } from "./icon-hand.svg";
 export { ReactComponent as IconFilter } from "./icon-filter.svg";
 export { ReactComponent as IconTag } from "./icon-tag.svg";
 export { ReactComponent as IconQuarry } from "./icon-quarry.svg";
+export { ReactComponent as IconLink } from "./icon-link.svg";
