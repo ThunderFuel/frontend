@@ -8,8 +8,8 @@ const Marketplace = React.lazy(() => import("pages/Marketplace"));
 const Rankings = React.lazy(() => import("pages/Rankings"));
 
 const Collection = React.lazy(() => import("pages/Collection"));
-const CollectionItems = React.lazy(() => import("pages/Collection/pages/CollectionItems"));
-const CollectionActivity = React.lazy(() => import("pages/Collection/pages/CollectionActivity"));
+const CollectionItems = React.lazy(() => import("pages/Collection/pages/Items/index"));
+const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activity/index"));
 
 export interface RouteConfig {
   path: string;

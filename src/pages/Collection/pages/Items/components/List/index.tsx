@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import { useCollectionContext } from "../../../CollectionContext";
+import { useItemContext } from "../../ItemContext";
 import CollectionGrid from "./CollectionGrid";
 import CollectionTable from "./CollectionTable";
 import CollectionFooter from "./CollectionFooter";
 import clsx from "clsx";
 
 const Index = () => {
-  const { isDisplayTypeList, collectionItems, fetchCollections } = useCollectionContext();
+  const { isDisplayTypeList, collectionItems, fetchCollections } = useItemContext();
 
   useEffect(() => {
     fetchCollections();

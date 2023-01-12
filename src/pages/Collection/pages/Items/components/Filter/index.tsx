@@ -22,7 +22,7 @@ const Range = () => {
 };
 const Index = () => {
   return (
-    <div className="sticky top-[110px] border-y border-gray z-20 bg-bg">
+    <div className="sticky top-[109px] border-b border-gray z-20 bg-bg">
       <div className="container-fluid">
         <div className="flex items-center justify-between text-white gap-5">
           <div className="grid grid-cols-3 flex-1 items-center">

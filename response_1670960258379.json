@@ -1,0 +1,44 @@
+{
+  "data": {
+    "filters": [
+      {
+        "count": 0,
+        "filterData": [],
+        "name": "Price",
+        "type": 4
+      },
+      {
+        "count": 0,
+        "filterData": [
+          {
+            "text": "Buy Now",
+            "value": "1"
+          },
+          {
+            "text": "Live Auction",
+            "value": "2"
+          },
+          {
+            "text": "Show All",
+            "value": "3"
+          }
+        ],
+        "name": "Status",
+        "type": 1
+      },
+      {
+        "count": 1,
+        "filterData": [
+          {
+            "text": "Test Attr Value",
+            "value": "Test Attr Value"
+          }
+        ],
+        "name": null,
+        "type": 2
+      }
+    ]
+  },
+  "hasError": false,
+  "message": null
+}

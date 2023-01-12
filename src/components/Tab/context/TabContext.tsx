@@ -7,7 +7,7 @@ export const TabContext = React.createContext({} as TabContextState);
 
 const getInitial = (props: TabProps): TabState => {
   return {
-    activeTab: props.initTab || undefined,
+    activeTab: props.initTab ?? undefined,
   };
 };
 

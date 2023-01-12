@@ -155,6 +155,7 @@
   .tab li {
     @apply block flex-1;
   }
+
   .tab li:nth-of-type(2) {
     @apply border-x border-gray;
   }
@@ -209,7 +210,7 @@
   }
 
   .tab.icon li {
-    @apply border-l border-l-gray first:border-none text-gray-light last:border-none;
+    @apply border-l border-l-gray border-r-0 first:border-none text-gray-light;
   }
 
   .tab.icon li span {

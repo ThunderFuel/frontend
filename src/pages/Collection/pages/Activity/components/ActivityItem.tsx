@@ -21,7 +21,7 @@ const ActivityItem = ({ item }: { item: any }) => {
         <div className="flex-center h-8 w-8 rounded-full bg-gray">
           <IconHand />
         </div>
-        <h6 className="text-h6 text-overflow">Transfer</h6>
+        <h6 className="text-h6 text-overflow">{item.type}</h6>
       </div>
       <div className="flex items-center flex-1 gap-4">
         <a className="w-16 h-16 rounded-md overflow-hidden relative group">

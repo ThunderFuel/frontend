@@ -4,7 +4,7 @@ import { IconArrowRight, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
-import { useWallet } from "../../../../../hooks/useWallet";
+import { useWallet } from "../../../../../../hooks/useWallet";
 
 const CollectionFooter = () => {
   const { hasEnoughFunds } = useWallet();

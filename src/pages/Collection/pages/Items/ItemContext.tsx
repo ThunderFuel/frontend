@@ -5,11 +5,10 @@ import { useAppSelector } from "store";
 export enum DisplayType {
   GRID3 = "3",
   GRID4 = "4",
-  GRID5 = "5",
   LIST = "list",
 }
 
-interface CollectionContext {
+interface IItemContext {
   displayType?: string;
   setDisplayType?: any;
   collections?: any;
@@ -21,18 +20,15 @@ interface CollectionContext {
   onSetFilterParams: (filter: string, value: any) => void;
   fetchFilters: any;
   filters: any;
-  fetchActivity: any;
-  activities: any;
 }
 
-export const CollectionContext = createContext<CollectionContext>({} as any);
+export const ItemContext = createContext<IItemContext>({} as any);
 
-const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
+const ItemProvider = ({ children }: { children: ReactNode }) => {
   const selectedCarts = useAppSelector((state) => state.cart.items);
 
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [collections, setCollections] = useState([]);
-  const [activities, setActivities] = useState([]);
   const [filterParams, setFilterParams] = useState<any>({});
   const [filters, setFilters] = useState<any>({});
 
@@ -51,13 +47,8 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
   };
   const fetchFilters = async () => {
     const response = await collectionService.getFilters();
-    console.log(response);
 
     return setFilters(response);
-  };
-  const fetchActivity = async () => {
-    const response = await collectionService.getActivity();
-    setActivities(response as any);
   };
 
   const collectionItems = React.useMemo(() => {
@@ -85,13 +76,11 @@ const CollectionContextProvider = ({ children }: { children: ReactNode }) => {
     onSetFilterParams,
     fetchFilters,
     filters,
-    fetchActivity,
-    activities,
   };
 
-  return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;
+  return <ItemContext.Provider value={value}>{children}</ItemContext.Provider>;
 };
 
-export default CollectionContextProvider;
+export default ItemProvider;
 
-export const useCollectionContext = () => useContext(CollectionContext);
+export const useItemContext = () => useContext(ItemContext);

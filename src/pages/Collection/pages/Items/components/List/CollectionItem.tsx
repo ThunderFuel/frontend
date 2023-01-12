@@ -64,7 +64,7 @@ const CollectionItem = ({ collection }: { collection: any }) => {
       </div>
       <div className="p-2.5 flex items-center text-gray-light gap-1">
         <IconMarketBasket />
-        <span className="body-sm text-overflow">Last sale price 0.12 ETH</span>
+        <span className="body-small text-overflow">Last sale price 0.12 ETH</span>
       </div>
       <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.isActive ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
     </div>
