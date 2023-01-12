@@ -47,7 +47,6 @@ const ItemProvider = ({ children }: { children: ReactNode }) => {
   };
   const fetchFilters = async () => {
     const response = await collectionService.getFilters();
-    console.log(response);
 
     return setFilters(response);
   };

@@ -20,7 +20,6 @@ export interface ActionTypes {
 
 export const useTabContextProvider = (reducer: typeof tabReducer, initial: TabState, props: TabProps) => {
   const [state, dispatch] = useReducer(reducer, initial);
-  console.log(state.activeTab);
 
   const changeActiveTab = useCallback(
     (id: any) => {
