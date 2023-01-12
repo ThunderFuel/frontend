@@ -1,10 +1,10 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
-import { useCollectionContext } from "../../../CollectionContext";
-import { IconEthereum } from "../../../../../icons";
-import Checkbox from "../../../../../components/CheckBox";
-import { add, remove } from "../../../../../store/cartSlice";
-import { useAppDispatch } from "../../../../../store";
+import { IconEthereum } from "../../../../../../icons";
+import Checkbox from "../../../../../../components/CheckBox";
+import { add, remove } from "../../../../../../store/cartSlice";
+import { useAppDispatch } from "../../../../../../store";
+import { useItemContext } from "../../ItemContext";
 
 const Collection = ({ item }: { item: any }) => {
   return (
@@ -26,7 +26,7 @@ const Price = ({ price }: { price: any }) => {
 
 const CollectionTable = () => {
   const dispatch = useAppDispatch();
-  const { collectionItems } = useCollectionContext();
+  const { collectionItems } = useItemContext();
   const onSelect = (collection: any) => {
     if (!collection.isSelected) {
       dispatch(add(collection));

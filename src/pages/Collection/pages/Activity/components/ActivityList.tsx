@@ -1,13 +1,10 @@
 import React from "react";
 import ActivityItem from "./ActivityItem";
-import { useCollectionContext } from "../../../CollectionContext";
+import { useActivityContext } from "../ActivityContext";
 
 const ActivityList = () => {
-  const { fetchActivity, activities } = useCollectionContext();
-
-  React.useEffect(() => {
-    fetchActivity();
-  }, []);
+  const { activities } = useActivityContext();
+  console.log(activities);
 
   return (
     <div className="flex flex-col flex-1 p-5 gap-5">

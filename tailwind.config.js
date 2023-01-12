@@ -92,7 +92,7 @@ module.exports = {
       bodySm: [
         "13px",
         {
-          lineHeight: "15px",
+          lineHeight: "18px",
           fontWeight: "400",
         },
       ],

@@ -24,11 +24,11 @@ const staticFilters = [
     name: "Transfers",
   },
 ];
-const SidebarEvents = () => {
+const Sidebar = () => {
   return (
     <div className="flex justify-end">
       <div className={clsx("border-r border-r-gray transition-all duration-300", "w-72")}>
-        <div className="sticky top-[178px] overflow-hidden">
+        <div className="sticky top-[110px] overflow-hidden">
           <div className="w-72 pr-5 py-5 relative">
             <div className="flex items-center justify-between border-b border-b-gray pb-5">
               <h5 className="text-h5 text-white">Event Types</h5>
@@ -52,4 +52,4 @@ const SidebarEvents = () => {
   );
 };
 
-export default SidebarEvents;
+export default Sidebar;

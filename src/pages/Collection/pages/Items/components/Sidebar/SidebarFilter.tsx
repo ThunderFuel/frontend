@@ -3,10 +3,10 @@ import { IconChevronDoubleLeft, IconFilter } from "icons";
 import Checkbox from "components/CheckBox";
 import Collapse from "components/Collapse";
 import clsx from "clsx";
-import { DisplayType, useCollectionContext } from "../../../CollectionContext";
+import { DisplayType, useItemContext } from "../../ItemContext";
 
 const SidebarFilter = () => {
-  const { displayType, setDisplayType, fetchFilters } = useCollectionContext();
+  const { displayType, setDisplayType, fetchFilters } = useItemContext();
   const [show, setShow] = React.useState(false);
 
   useEffect(() => {

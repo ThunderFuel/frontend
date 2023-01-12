@@ -1,20 +1,15 @@
 import React from "react";
 import { AssetCollectionProfileImage } from "assets";
-import Tab from "components/Tab";
-
-import CollectionContextProvider from "./CollectionContext";
 
 import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
-import Filter from "./components/Filter";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Tab from "./components/Tab";
 
 const Collection = () => {
-  const navigate = useNavigate();
-
   return (
-    <CollectionContextProvider>
+    <>
       <div className="container-fluid pt-10 pb-14">
         <div className="flex flex-col gap-5">
           <CoverImage />
@@ -35,27 +30,9 @@ const Collection = () => {
           </div>
         </div>
       </div>
-      <div className="border-t border-t-gray">
-        <div className="container-fluid">
-          <div className="inline-flex">
-            <Tab
-              initTab={""}
-              className="secondary"
-              onChange={(item) => {
-                navigate(item);
-              }}
-            >
-              <Tab.Item id={""}>Items</Tab.Item>
-              <Tab.Item id={"activity"}>Activity</Tab.Item>
-            </Tab>
-          </div>
-        </div>
-      </div>
-      <Filter />
-      <div className="container-fluid flex">
-        <Outlet />
-      </div>
-    </CollectionContextProvider>
+      <Tab />
+      <Outlet />
+    </>
   );
 };
 
