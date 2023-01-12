@@ -5,7 +5,6 @@ import { useAppSelector } from "store";
 export enum DisplayType {
   GRID3 = "3",
   GRID4 = "4",
-  GRID5 = "5",
   LIST = "list",
 }
 

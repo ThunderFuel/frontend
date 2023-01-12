@@ -14,10 +14,15 @@ const SidebarFilter = () => {
   }, []);
 
   const onToggle = () => {
+    const tmpShow = !show;
     if (displayType !== DisplayType.LIST) {
-      setDisplayType(DisplayType.GRID5);
+      if (tmpShow) {
+        setDisplayType((prevState: string) => String(parseInt(prevState) + 1));
+      } else {
+        setDisplayType((prevState: string) => String(parseInt(prevState) - 1));
+      }
     }
-    setShow(!show);
+    setShow(tmpShow);
   };
 
   return (
