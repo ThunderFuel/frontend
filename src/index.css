@@ -96,8 +96,12 @@
     @apply text-white bg-bg border-gray;
   }
 
+  .btn.btn-secondary.no-bg {
+    background-color: transparent;
+  }
+
   .btn.btn-sm {
-    @apply py-3 px-5;
+    @apply py-[11.5px] px-4;
     @apply text-headlineMd;
   }
 
@@ -207,6 +211,9 @@
   .tab.icon {
     background: transparent;
     @apply inline-flex border border-gray rounded-sm;
+  }
+  .tab.icon.vertical {
+    @apply block;
   }
 
   .tab.icon li {
