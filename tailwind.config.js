@@ -22,6 +22,7 @@ module.exports = {
         DEFAULT: "#D6FF7E",
       },
       red: "#E64040",
+      orange: "#E69040",
     },
     extend: {
       backgroundImage: {

@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { IconEthereum, IconInfo, IconTrash, IconWarning } from "icons";
+import React from "react";
+import { IconInfo, IconTrash, IconWarning } from "icons";
 import clsx from "clsx";
 import { remove } from "store/cartSlice";
 import { useAppDispatch } from "store";
+import EthereumPrice from "../EthereumPrice";
 
 export interface CartItemProps {
   className?: string;
@@ -11,65 +12,83 @@ export interface CartItemProps {
   image: string;
   price: number;
   id: number;
-  checkoutMultipleImages?: string[];
-  showDetails?: boolean;
-  setShowDetails?: Dispatch<SetStateAction<boolean>>;
+  titleSlot?: any;
 }
-const CartItem = ({ text, name, image, price, id, checkoutMultipleImages, className, showDetails, setShowDetails }: CartItemProps) => {
-  const dispatch = useAppDispatch();
 
-  const warning = (text: string) => (
+const CartItemStatus = ({ text }: { text: string }) => {
+  const hasError = text === "Unavailable" || text === "Failed";
+
+  return (
     <div className="flex border justify-center items-center border-gray rounded-[5px] w-fit p-1 ">
-      {text === "Unavailable" || text === "Failed" ? <IconWarning height="15px" width="15px" fill="red" /> : <IconInfo height="15px" width="15px" fill="#E69040" />}
-      <span className={clsx("font-spaceGrotesk text-bodyMd ml-1", text === "Unavailable" || text === "Failed" ? "text-red" : "text-[#E69040]")}>{text}</span>
+      {hasError ? <IconWarning className="w-4 h-4 fill-red" /> : <IconInfo className="w-4 h-4 fill-orange" />}
+      <span className={clsx("body-medium ml-1", hasError ? "text-red" : "text-orange")}>{text}</span>
     </div>
   );
+};
+
+const CartItemImage = ({ image, onRemove, isUnavailable }: { image: any; isUnavailable: boolean; onRemove: () => void }) => {
+  const images = Array.isArray(image) ? image : [image];
+
+  const imagePosition: any = {
+    1: "absolute left-2.5",
+    2: "absolute left-5",
+  };
+
+  return (
+    <div className="relative">
+      <div className={clsx(images.length > 1 && "w-20")}>
+        {images.map((img: any, index) => {
+          return (
+            <div className={clsx("h-16 w-16 top-0", imagePosition[index] ?? "")} key={index}>
+              <img alt={`image_${index}`} src={img} className={clsx("w-full")} />
+            </div>
+          );
+        })}
+      </div>
+      {isUnavailable && (
+        <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <IconTrash className="cursor-pointer" onClick={onRemove} />
+        </div>
+      )}
+    </div>
+  );
+};
+const CartItem = ({ text, name, image, price, id, className, titleSlot }: CartItemProps) => {
+  const dispatch = useAppDispatch();
+  const onRemove = () => {
+    dispatch(remove(id));
+  };
+
+  const isUnavailable = id === 9;
+  const isPriceChange = id === 8;
+  const isFailed = id === 20;
+
+  const hasError = isUnavailable || isPriceChange || isFailed;
 
   return (
     <>
-      <div className={clsx("flex flex-col border border-gray p-[10px] rounded-md hover:bg-bg-light group", className ? className : "")}>
-        <div className="flex gap-[18px]">
-          <div className="relative flex">
-            {checkoutMultipleImages ? (
-              <div className="flex w-[84px]">
-                {checkoutMultipleImages.map((img, index) => {
-                  return <img key={index} src={img} className={clsx("max-h-[64px] max-w-[64px]", index === 1 ? "absolute left-[10px]" : index === 2 ? "absolute left-5" : "")}></img>;
-                })}
+      <div className={clsx("flex flex-col border border-gray p-2.5 rounded-md hover:bg-bg-light group", className)}>
+        <div className="flex items-start gap-[18px]">
+          <CartItemImage image={image} isUnavailable={isUnavailable} onRemove={onRemove} />
+          <div className={clsx("flex flex-col w-full", isUnavailable ? "text-gray-light" : "text-white")}>
+            <div className="flex w-full justify-between border-b border-b-gray pb-2">
+              <span className="text-h6 text-white">{name}</span>
+              {titleSlot}
+            </div>
+            <div className="flex w-full items-center justify-between mt-2">
+              <span className="text-h6 text-gray-light">{text}</span>
+              <EthereumPrice className="text-white" priceClassName="text-h6" price={price} />
+            </div>
+
+            {hasError && (
+              <div className="mt-2">
+                {isPriceChange && <CartItemStatus text={"Price Change"} />}
+                {isUnavailable && <CartItemStatus text={"Unavailable"} />}
+                {isFailed && <CartItemStatus text={"Failed"} />}
               </div>
-            ) : (
-              <>
-                <img src={image} className="max-h-[64px] max-w-[64px]"></img>
-                {id === 9 ? <div className="absolute h-[64px] w-[64px] bg-gray/80"></div> : <></>}
-                <div className="absolute h-[64px] w-[64px] bg-gray/80 flex items-center justify-center opacity-0  group-hover:opacity-100">
-                  <IconTrash className="cursor-pointer" onClick={() => dispatch(remove(id))} />
-                </div>
-              </>
             )}
           </div>
-          <div className={clsx("flex flex-col w-full justify-between", id === 9 ? "text-gray-light" : "text-white")}>
-            <div className="flex w-full justify-between font-spaceGrotesk ">
-              <span className="text-head6 text-white">{name}</span>
-              {checkoutMultipleImages && setShowDetails ? (
-                <div className="flex gap-x-[10px]">
-                  <button className="text-bodySm text-gray-light underline">View on Blockchain</button>
-                  <button className="text-bodySm text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
-                    {showDetails ? "Hide Details" : "Show Details"}
-                  </button>
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="flex h-[1px] bg-gray"></div>
-            <div className="flex w-full justify-between text-head6 font-spaceGrotesk">
-              <span className="text-gray-light">{text}</span>
-              <span className="flex items-center ">
-                {price} <IconEthereum color="rgb(131,131,131)" />
-              </span>
-            </div>
-          </div>
         </div>
-        {[8, 9, 20].includes(id) && <div className="mt-2 ml-[82px]">{id === 8 ? warning("Price Change") : id === 9 ? warning("Unavailable") : id === 20 ? warning("Failed") : <></>}</div>}
       </div>
     </>
   );
