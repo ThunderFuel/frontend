@@ -4,10 +4,13 @@ import { useIsMobile } from "hooks/useIsMobile";
 import EthereumPrice from "components/EthereumPrice";
 import { chunk } from "../../utils";
 import Carousel from "components/Carousel";
+import clsx from "clsx";
+import { useIsWideScreen } from "../../hooks/useIsWideScreen";
 
 const HotDrops = () => {
-  const chunkSize = useIsMobile() ? 1 : 4;
-  const imagesList = chunk([1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4], chunkSize);
+  const isWideScreen = useIsWideScreen();
+  const chunkSize = useIsMobile() ? 1 : isWideScreen ? 5 : 4;
+  const imagesList = chunk([1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6], chunkSize);
 
   return (
     <div className="container-fluid flex flex-col gap-5">
@@ -16,7 +19,7 @@ const HotDrops = () => {
         {imagesList.map((images, k) => {
           return (
             <Carousel.Item key={k}>
-              <div className="grid lg:grid-cols-4 gap-3">
+              <div className={clsx("grid gap-3", `lg:grid-cols-${isWideScreen ? 5 : 4}`)}>
                 {images.map((image: any) => {
                   return (
                     <div key={`${k}_${image}`} className="border border-gray bg-bg-light text-white cursor-pointer">
