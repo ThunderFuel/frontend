@@ -77,7 +77,7 @@ const CartItem = ({ text, name, image, price, id, className, titleSlot }: CartIt
             </div>
             <div className="flex w-full items-center justify-between mt-2">
               <span className="text-h6 text-gray-light">{text}</span>
-              <EthereumPrice className="text-white" priceClassName="text-h6" price={price} />
+              <EthereumPrice priceClassName="text-h6" price={price} />
             </div>
 
             {hasError && (
