@@ -4,3 +4,13 @@ export const openInNewTab = (url: string): void => {
     newWindow.opener = null;
   }
 };
+
+export const chunk = (arr: any = [], chunkSize = 4) => {
+  const tmpArray = [];
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    const chunk = arr.slice(i, i + chunkSize);
+    tmpArray.push(chunk);
+  }
+
+  return tmpArray;
+};
