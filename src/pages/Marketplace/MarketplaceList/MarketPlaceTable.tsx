@@ -1,12 +1,13 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
+import EthereumPrice from "components/EthereumPrice";
+
 import { IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
-import Price from "./components/Price";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   return (
@@ -47,7 +48,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: `VOLUME (${dayTabValue?.text})`,
       width: "10%",
       align: "flex-end",
-      render: (item) => <Price price={item.volume} />,
+      render: (item) => <EthereumPrice price={item.volume} />,
     },
     {
       key: "change",
@@ -61,7 +62,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "FLOOR",
       width: "10%",
       align: "flex-end",
-      render: (item) => <Price price={item.floor} />,
+      render: (item) => <EthereumPrice price={item.floor} />,
     },
     {
       key: "sales",

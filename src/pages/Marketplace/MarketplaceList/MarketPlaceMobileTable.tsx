@@ -3,14 +3,14 @@ import React from "react";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import { useMarketplace } from "../MarketplaceContext";
-import Price from "./components/Price";
+import EthereumPrice from "components/EthereumPrice";
 import Collection from "./components/Collection";
 
 const Cell = ({ title, value }: { title: string; value: any }) => {
   return (
     <div className="p-4 flex flex-col gap-2">
       <div className={"text-headline-01 text-gray-light uppercase"}>{title}</div>
-      <Price price={value} />
+      <EthereumPrice price={value} />
     </div>
   );
 };
