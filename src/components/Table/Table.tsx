@@ -69,7 +69,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
         }}
       >
         {headers.map((header) => (
-          <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}`}>
+          <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}_${k.toString()}`}>
             {header.render ? header.render(item) : <div className="cell text-h6">{item[header.key]}</div>}
           </div>
         ))}
