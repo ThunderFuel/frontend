@@ -14,8 +14,8 @@ const MobileFilter = () => {
     setTemplate(
       <Tab initTab={filterTabValue} className="third flex flex-col" onChange={(tab) => setFilterTabValue(tab)}>
         {filterValues.map((filterValue) => (
-          <Tab.Item key={filterValue} id={filterValue}>
-            {filterValue}
+          <Tab.Item key={filterValue.value} id={filterValue}>
+            {filterValue.text}
           </Tab.Item>
         ))}
       </Tab>
@@ -27,7 +27,7 @@ const MobileFilter = () => {
     setTemplate(
       <Tab initTab={dayTabValue} className="third flex flex-col" onChange={(tab) => setDayTabValue(tab)}>
         {dayValues.map((dayValue) => (
-          <Tab.Item key={dayValue.id} id={dayValue}>
+          <Tab.Item key={dayValue.value} id={dayValue}>
             {dayValue.text}
           </Tab.Item>
         ))}

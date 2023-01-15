@@ -1,6 +1,6 @@
 import React from "react";
 import { useIsMobile } from "hooks/useIsMobile";
-import marketplace from "api/marketplace";
+import marketplace from "api/marketplace/marketplace.service";
 
 import MarketPlaceTable from "./MarketPlaceTable";
 import MarketPlaceMobileTable from "./MarketPlaceMobileTable";
