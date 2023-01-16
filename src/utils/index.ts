@@ -5,6 +5,10 @@ export const openInNewTab = (url: string): void => {
   }
 };
 
+export const numberFormat = (number: number) => {
+  return String(number).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+};
+
 export const chunk = (arr: any = [], chunkSize = 4) => {
   const tmpArray = [];
   for (let i = 0; i < arr.length; i += chunkSize) {

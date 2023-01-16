@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { data, ICartData } from "../components/MyCart/data";
+import { CollectionItemResponse } from "api/collections/collections.type";
+
+type ISelectedCartItem = CollectionItemResponse;
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [] as ICartData[],
+    items: [] as ISelectedCartItem[],
     totalAmount: 0,
     itemCount: 0,
     show: false,
@@ -30,7 +32,7 @@ export const cartSlice = createSlice({
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
-      state.items = state.items.filter((item: any) => item.id !== action.payload);
+      state.items = state.items.filter((item: CollectionItemResponse) => item.tokenOrder !== action.payload);
     },
     removeAll: (state) => {
       state.items = [];
@@ -39,7 +41,7 @@ export const cartSlice = createSlice({
       state.items.push(action.payload);
     },
     getCartItems: (state) => {
-      state.items = data;
+      state.items = [];
     },
     toggleCartModal: (state) => {
       state.show = !state.show;

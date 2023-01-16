@@ -41,7 +41,7 @@ const Button = ({ className, value, onClick }: { className?: string; value: any;
 
   return (
     <button className={clsx("tab-button", className)} onClick={onClick}>
-      {value.text ?? value}
+      {value}
       <IconArrowDown className={clsx("w-4 h-4", isSecondary ? "fill-white" : "fill-black")} />
     </button>
   );

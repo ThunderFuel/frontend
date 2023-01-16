@@ -1,6 +1,7 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
+import Img from "components/Img";
 
 import { IconUpRight } from "icons";
 import clsx from "clsx";
@@ -8,13 +9,18 @@ import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
+import { AssetCollectionItem0 } from "assets";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "router/config/paths";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
+  const tmpImages = images.slice(0, 5);
+
   return (
     <ul className="py-2.5 px-4 flex gap-2">
-      {images.map((image, i) => (
-        <li key={i}>
-          <img src={image} alt={i.toString()} />
+      {tmpImages.map((image, i) => (
+        <li key={i} className="w-14 h-14">
+          <Img src={image} alt={i.toString()} defaultImage={AssetCollectionItem0} />
         </li>
       ))}
     </ul>
@@ -23,7 +29,7 @@ const NftImages = React.memo(({ images }: { images: any[] }) => {
 NftImages.displayName = "NftImages";
 
 const Change = ({ change }: { change: any }) => {
-  const className = change < 0 ? "text-red" : "text-green";
+  const className = change === 0 ? "text-white" : change < 0 ? "text-red" : "text-green";
 
   return (
     <div className="flex items-center">
@@ -35,6 +41,7 @@ const Change = ({ change }: { change: any }) => {
 Change.displayName = "Change";
 
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
+  const navigate = useNavigate();
   const { dayTabValue } = useMarketplace();
 
   const headers: ITableHeader[] = [
@@ -84,7 +91,11 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     },
   ];
 
-  return <Table theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
+  const onClick = (item: any) => {
+    navigate(PATHS.COLLECTION.replace(":collectionId", item.id));
+  };
+
+  return <Table onClick={onClick} theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
 };
 
 export default MarketPlaceTable;

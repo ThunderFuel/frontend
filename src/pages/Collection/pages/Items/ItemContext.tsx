@@ -1,6 +1,8 @@
 import React, { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import collectionService from "api/collections/collections.service";
 import { useAppSelector } from "store";
+import { CollectionItemsRequest } from "../../../../api/collections/collections.type";
+import { useParams } from "react-router-dom";
 
 export enum DisplayType {
   GRID3 = "3",
@@ -25,6 +27,7 @@ interface IItemContext {
 export const ItemContext = createContext<IItemContext>({} as any);
 
 const ItemProvider = ({ children }: { children: ReactNode }) => {
+  const { collectionId } = useParams();
   const selectedCarts = useAppSelector((state) => state.cart.items);
 
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
@@ -41,9 +44,15 @@ const ItemProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const fetchCollections = async () => {
-    const response = await collectionService.getCollections();
+    const data: CollectionItemsRequest = {
+      id: collectionId,
+      page: 1,
+      pageSize: 16,
+      sortingType: 1,
+    };
+    const response = await collectionService.getCollectionItems(data);
 
-    return setCollections(response as any);
+    return setCollections(response.data as any);
   };
   const fetchFilters = async () => {
     const response = await collectionService.getFilters();
@@ -52,11 +61,11 @@ const ItemProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const collectionItems = React.useMemo(() => {
-    const selectedCartsIds = selectedCarts.map((item: any) => item.id);
+    const selectedCartsIds = selectedCarts.map((item) => item.tokenOrder);
 
     return collections.map((item: any) => ({
       ...item,
-      isSelected: selectedCartsIds.includes(item.id),
+      isSelected: selectedCartsIds.includes(item.tokenOrder),
     }));
   }, [collections, selectedCarts]);
 
