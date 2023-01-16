@@ -61,11 +61,11 @@ const ItemProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const collectionItems = React.useMemo(() => {
-    const selectedCartsIds = selectedCarts.map((item: any) => item.id);
+    const selectedCartsIds = selectedCarts.map((item) => item.tokenOrder);
 
     return collections.map((item: any) => ({
       ...item,
-      isSelected: selectedCartsIds.includes(item.id),
+      isSelected: selectedCartsIds.includes(item.tokenOrder),
     }));
   }, [collections, selectedCarts]);
 
