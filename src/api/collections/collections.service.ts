@@ -1,8 +1,8 @@
 import { ThunderURL } from "../index";
-import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "../../assets";
-import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "../../icons";
 import { ApiResponse } from "../HttpClient";
-import { CollectionFilterResponse, CollectionItemResponse } from "./collections.type";
+import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
+import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
+import { CollectionFilterResponse, CollectionResponse, CollectionItemsRequest, CollectionItemResponse } from "./collections.type";
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
@@ -22,10 +22,13 @@ export default {
     }));
   },
   async getFilters(): Promise<ApiResponse<CollectionFilterResponse>> {
-    return await ThunderURL.get<CollectionFilterResponse>("v1/collection/getfilters?id=1");
+    return await ThunderURL.get("v1/collection/getfilters?id=1");
   },
-  async getCollectionHeader(collectionId: string): Promise<ApiResponse<CollectionItemResponse>> {
-    return await ThunderURL.get<CollectionItemResponse>(`v1/collection/getheader?id=${collectionId}`);
+  async getCollectionHeader(collectionId: string): Promise<ApiResponse<CollectionResponse>> {
+    return await ThunderURL.get(`v1/collection/getheader?id=${collectionId}`);
+  },
+  async getCollectionItems(data: CollectionItemsRequest): Promise<ApiResponse<CollectionItemResponse[]>> {
+    return await ThunderURL.post("v1/collection/items", data);
   },
 
   async getActivityFilters() {

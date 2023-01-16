@@ -1,4 +1,4 @@
-import { CollectionItemResponse } from "../collections/collections.type";
+import { CollectionResponse } from "../collections/collections.type";
 
 export enum MarketplaceListType {
   None = 0,
@@ -14,7 +14,7 @@ interface MarketplaceItemSold {
   };
 }
 
-export interface MarketplaceItemResponse extends Omit<CollectionItemResponse, "solds"> {
+export interface MarketplaceItemResponse extends Omit<CollectionResponse, "solds"> {
   solds: MarketplaceItemSold[];
 }
 

@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { AssetCollectionProfileImage } from "assets";
+import { Outlet, useParams } from "react-router-dom";
+
+import Img from "components/Img";
+import collectionsService from "api/collections/collections.service";
+import { CollectionResponse } from "api/collections/collections.type";
 
 import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
-import { Outlet, useParams } from "react-router-dom";
 import Tab from "./components/Tab";
-import collectionsService from "../../api/collections/collections.service";
-import { CollectionItemResponse } from "../../api/collections/collections.type";
 
 const Collection = () => {
   const { collectionId } = useParams();
-  const [collection, setCollection] = useState<CollectionItemResponse>({} as any);
+  const [collection, setCollection] = useState<CollectionResponse>({} as any);
 
   useEffect(() => {
     collectionsService.getCollectionHeader(collectionId as string).then((response) => {
       setCollection(response.data);
     });
-    console.log(collectionId);
   }, [collectionId]);
 
   return (
     <>
       <div className="container-fluid pt-10 pb-14">
         <div className="flex flex-col gap-5">
-          <CoverImage />
+          <CoverImage banner={collection.banner} />
           <div className="flex">
             <div className="flex gap-5 w-full">
               <div className="w-24">
-                <img src={AssetCollectionProfileImage} alt="profile-image" />
+                <Img className="w-20 h-20" src={collection.logo} alt="profile-image" />
               </div>
               <div className="flex flex-col w-full">
                 <h3 className="text-h3 text-white">{collection.name}</h3>

@@ -5,6 +5,7 @@ import { useAppDispatch } from "store";
 import { add, remove } from "store/cartSlice";
 
 import "./CollectionItem.css";
+import { CollectionItemResponse } from "api/collections/collections.type";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -33,29 +34,29 @@ const CollectionItemCheckbox = (props: any) => {
     </label>
   );
 };
-const CollectionItem = ({ collection }: { collection: any }) => {
+const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
   const dispatch = useAppDispatch();
   const onSelect = () => {
     if (!collection.isSelected) {
       dispatch(add(collection));
     } else {
-      dispatch(remove(collection.id));
+      dispatch(remove(collection.tokenOrder));
     }
   };
 
   return (
     <div className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light cursor-pointer", collection.isSelected ? "border-white" : "border-gray")}>
       <div className="overflow-hidden relative">
-        {collection.isActive && <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />}
+        {collection.salable && <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />}
         <img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
       </div>
       <div className="p-2.5 border-b border-b-gray">
         <h6 className="text-h6 text-white">{collection.name}</h6>
       </div>
       <div className="p-2.5 flex items-center">
-        {collection.isActive ? (
+        {collection.salable ? (
           <>
-            <h6 className="text-h5 text-white">{collection.floor}</h6>
+            <h6 className="text-h5 text-white">{collection.price}</h6>
             <IconEthereum className="text-gray-light" />
           </>
         ) : (
@@ -64,9 +65,9 @@ const CollectionItem = ({ collection }: { collection: any }) => {
       </div>
       <div className="p-2.5 flex items-center text-gray-light gap-1">
         <IconMarketBasket />
-        <span className="body-small text-overflow">Last sale price 0.12 ETH</span>
+        <span className="body-small text-overflow">Last sale price {collection.price} ETH</span>
       </div>
-      <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.isActive ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
+      <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
     </div>
   );
 };

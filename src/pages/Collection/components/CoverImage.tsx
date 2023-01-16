@@ -1,10 +1,11 @@
 import React from "react";
 import { AssetCollectionCoverImage } from "assets";
+import Img from "components/Img";
 
-const CoverImage = ({ className }: { className?: string }) => {
+const CoverImage = ({ banner, className }: { banner: string; className?: string }) => {
   return (
     <div className={className}>
-      <img className="w-full max-h-[280px]" src={AssetCollectionCoverImage} alt="cover-image" />
+      <Img className="w-full max-h-[280px]" src={banner} defaultImage={AssetCollectionCoverImage} alt="cover-image" />
     </div>
   );
 };

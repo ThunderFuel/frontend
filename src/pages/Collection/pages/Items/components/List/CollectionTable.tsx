@@ -1,9 +1,9 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
-import { IconEthereum } from "../../../../../../icons";
-import Checkbox from "../../../../../../components/CheckBox";
-import { add, remove } from "../../../../../../store/cartSlice";
-import { useAppDispatch } from "../../../../../../store";
+import { IconEthereum } from "icons";
+import Checkbox from "components/CheckBox";
+import { add, remove } from "store/cartSlice";
+import { useAppDispatch } from "store";
 import { useItemContext } from "../../ItemContext";
 
 const Collection = ({ item }: { item: any }) => {
@@ -31,7 +31,7 @@ const CollectionTable = () => {
     if (!collection.isSelected) {
       dispatch(add(collection));
     } else {
-      dispatch(remove(collection.id));
+      dispatch(remove(collection.tokenOrder));
     }
   };
 

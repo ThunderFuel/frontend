@@ -1,5 +1,6 @@
 import React from "react";
 import { IconEthereum } from "icons";
+import { numberFormat } from "../../../utils";
 
 interface ICollectionProperties {
   volume: number;
@@ -11,21 +12,21 @@ const CollectionProperties = ({ volume, floor, listedRate, ownerCount }: ICollec
   const items = [
     {
       name: "total volume",
-      value: volume,
+      value: numberFormat(volume ?? 0),
       icon: <IconEthereum />,
     },
     {
       name: "floor",
-      value: floor,
+      value: floor ?? 0,
       icon: <IconEthereum />,
     },
     {
       name: "lısted",
-      value: listedRate,
+      value: listedRate ?? 0,
     },
     {
       name: "owners",
-      value: ownerCount,
+      value: ownerCount ?? 0,
     },
   ];
 
