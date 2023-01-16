@@ -1,25 +1,31 @@
 import React from "react";
 import { IconEthereum } from "icons";
 
-const CollectionProperties = () => {
+interface ICollectionProperties {
+  volume: number;
+  floor: number;
+  listedRate: number;
+  ownerCount: number;
+}
+const CollectionProperties = ({ volume, floor, listedRate, ownerCount }: ICollectionProperties) => {
   const items = [
     {
       name: "total volume",
-      value: "28.33",
+      value: volume,
       icon: <IconEthereum />,
     },
     {
       name: "floor",
-      value: "0.423",
+      value: floor,
       icon: <IconEthereum />,
     },
     {
       name: "lısted",
-      value: "10%",
+      value: listedRate,
     },
     {
       name: "owners",
-      value: "2,123",
+      value: ownerCount,
     },
   ];
 

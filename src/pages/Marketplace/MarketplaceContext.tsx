@@ -1,6 +1,9 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import marketplaceService from "api/marketplace/marketplace.service";
 import { MarketplaceListType, MarketplaceTableItem } from "../../api/marketplace/marketplace.type";
+import dayjs from "dayjs";
+
+const UnitType = "hours";
 
 interface TextValue {
   text: string;
@@ -65,7 +68,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   const getMarketplaceItems = async () => {
     const response = await marketplaceService.getMarketplace({
       type: filterTabValue?.value,
-      dayValue: dayTabValue?.value,
+      dayValue: dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf(),
     });
     const items = response.data.map((responseItem) => {
       return {
