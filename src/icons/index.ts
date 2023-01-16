@@ -53,4 +53,7 @@ export { ReactComponent as IconToken } from "./icon-token.svg";
 export { ReactComponent as IconFee } from "./icon-fee.svg";
 export { ReactComponent as IconTag } from "./icon-tag.svg";
 export { ReactComponent as IconQuarry } from "./icon-quarry.svg";
-export { ReactComponent as IconLink } from "./icon-link.svg";
+export { ReactComponent as IconBack } from "./icon-back.svg";
+export { ReactComponent as IconClock } from "./icon-clock.svg";
+export { ReactComponent as IconCancel } from "./icon-cancel.svg";
+export { ReactComponent as IconTransfer } from "./icon-transfer.svg";
