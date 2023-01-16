@@ -42,6 +42,10 @@ const TableLoading = ({ colSpan }: { colSpan: number }) => {
   );
 };
 
+const TableCell = ({ children }: { children: React.ReactNode }) => {
+  return <div className="cell text-h6">{children}</div>;
+};
+
 const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, rowClassName, onClick, ...props }: ITable) => {
   const _getHeaders = headers.map((header) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
@@ -70,7 +74,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
       >
         {headers.map((header) => (
           <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}_${k.toString()}`}>
-            {header.render ? header.render(item) : <div className="cell text-h6">{item[header.key]}</div>}
+            {header.render ? header.render(item) : <TableCell>{item[header.key]}</TableCell>}
           </div>
         ))}
       </div>
@@ -103,4 +107,6 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
   );
 };
 
-export default React.memo(Table);
+export default Object.assign(Table, {
+  Cell: TableCell,
+});

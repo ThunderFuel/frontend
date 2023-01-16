@@ -5,6 +5,7 @@ import Checkbox from "components/CheckBox";
 import { add, remove } from "store/cartSlice";
 import { useAppDispatch } from "store";
 import { useItemContext } from "../../ItemContext";
+import dayjs from "dayjs";
 
 const Collection = ({ item }: { item: any }) => {
   return (
@@ -56,27 +57,32 @@ const CollectionTable = () => {
       text: "Price",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.price} />,
+      render: (item) => <Price price={item.price ?? 0} />,
     },
     {
       key: "lastSale",
       text: "Last Sale",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.lastSale} />,
+      render: (item) => <Price price={item.price ?? 0} />,
     },
     {
       key: "owner",
       text: "Owner",
       width: "20%",
       align: "flex-end",
-      render: (item) => <div className="cell text-h6 text-gray-light hover:text-white hover:underline">{item.owner}</div>,
+      render: (item) => <div className="cell text-h6 text-gray-light hover:text-white hover:underline">{item.owner ?? "-"}</div>,
     },
     {
-      key: "timeListed",
+      key: "listedTime",
       text: "Time Listed",
       width: "20%",
       align: "flex-end",
+      render: (item) => {
+        const listedTime = dayjs(item.listedTime).format("DD.MM.YYYY HH:mm");
+
+        return <Table.Cell>{listedTime}</Table.Cell>;
+      },
     },
   ];
 
