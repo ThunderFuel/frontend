@@ -1,16 +1,16 @@
 import React from "react";
 import { useIsMobile } from "hooks/useIsMobile";
-import marketplace from "api/marketplace/marketplace.service";
 
 import MarketPlaceTable from "./MarketPlaceTable";
 import MarketPlaceMobileTable from "./MarketPlaceMobileTable";
+import { useMarketplace } from "../MarketplaceContext";
 
 export interface MarketplaceListProps {
   itemCount: number;
 }
 
 const MarketplaceList = ({ itemCount }: MarketplaceListProps) => {
-  const items = marketplace.getMarketplace();
+  const { items } = useMarketplace();
 
   const slicedItems = items.slice(0, itemCount);
 

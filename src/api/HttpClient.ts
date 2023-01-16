@@ -57,7 +57,7 @@ export default class HttpClient {
     return response.data;
   }
 
-  async get<T>(path: string, options: AxiosRequestConfig = {}): Promise<ApiResponse<T>> {
+  async get<T>(path: string, options: AxiosRequestConfig = {}): Promise<T> {
     const response = await this.axios.get(path, options);
 
     return response.data;

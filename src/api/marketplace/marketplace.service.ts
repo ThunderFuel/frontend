@@ -99,7 +99,7 @@ export default {
       },
     ];
   },
-  async getMarketplace1(params: any = {}) {
+  async getMarketplace1(params: any = {}): Promise<MarketplacePaginationResponse> {
     return ThunderURL.get<MarketplacePaginationResponse>("v1/collection", { params });
   },
 };

@@ -5,6 +5,13 @@ export enum MarketplaceListType {
   Watchlist = 3,
 }
 
+interface MarketplaceItemSold {
+  token: {
+    name: "GENUINE UNDEAD #1";
+    image: "ipfs://QmVUgP9fnFh9R6HF3eMP3ro2fxvv76fQsrBud7yyPDAMdQ/1.png";
+  };
+}
+
 export interface MarketplaceItemResponse {
   name: string;
   description: string;
@@ -18,7 +25,7 @@ export interface MarketplaceItemResponse {
   floorType: number;
   sales: number;
   metadataUrl: any;
-  lastSolds: any;
+  solds: MarketplaceItemSold[];
   items: any;
   socialMedias: [];
 }
@@ -31,4 +38,15 @@ export interface MarketplacePaginationResponse {
   data: MarketplaceItemResponse[];
   hasError: boolean;
   message: any;
+}
+
+export interface MarketplaceTableItem {
+  collection: string;
+  volume: number;
+  change: number;
+  floor: number;
+  sales: number;
+  lastSold: number;
+  images: any[];
+  favorite: boolean;
 }

@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import marketplaceService from "api/marketplace/marketplace.service";
-import { MarketplaceListType } from "../../api/marketplace/marketplace.type";
+import { MarketplaceListType, MarketplaceTableItem } from "../../api/marketplace/marketplace.type";
 
 interface TextValue {
   text: string;
@@ -58,20 +58,29 @@ const filterValues = [
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
-  const [items, setItems] = useState([]);
-  const [dayTabValue, setDayTabValue] = useState<TextValue>({
-    text: "1H",
-    value: 1,
-  });
-  const [filterTabValue, setFilterTabValue] = useState<TextValue>();
+  const [items, setItems] = useState<MarketplaceTableItem[]>([]);
+  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
+  const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
 
   const getMarketplaceItems = async () => {
     const response = await marketplaceService.getMarketplace1({
       type: filterTabValue?.value,
       dayValue: dayTabValue?.value,
     });
+    const items = response.data.map((responseItem) => {
+      return {
+        collection: responseItem.name,
+        volume: responseItem.volume,
+        change: responseItem.change,
+        floor: responseItem.floor,
+        sales: responseItem.sales,
+        lastSold: responseItem.solds.length,
+        images: responseItem.solds.map((sold) => sold.token.image),
+        favorite: false,
+      } as MarketplaceTableItem;
+    });
 
-    return setItems(response as any);
+    return setItems(items);
   };
 
   React.useEffect(() => {
