@@ -10,6 +10,8 @@ import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
 import { AssetCollectionItem0 } from "assets";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "router/config/paths";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   const tmpImages = images.slice(0, 5);
@@ -39,6 +41,7 @@ const Change = ({ change }: { change: any }) => {
 Change.displayName = "Change";
 
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
+  const navigate = useNavigate();
   const { dayTabValue } = useMarketplace();
 
   const headers: ITableHeader[] = [
@@ -88,7 +91,11 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     },
   ];
 
-  return <Table theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
+  const onClick = (item: any) => {
+    navigate(PATHS.COLLECTION.replace(":collectionId", item.id));
+  };
+
+  return <Table onClick={onClick} theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
 };
 
 export default MarketPlaceTable;

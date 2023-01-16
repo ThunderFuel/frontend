@@ -72,6 +72,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     });
     const items = response.data.map((responseItem) => {
       return {
+        id: responseItem.id,
         collection: responseItem.name,
         volume: responseItem.volume,
         change: responseItem.change,

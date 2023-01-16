@@ -19,6 +19,7 @@ export interface MarketplaceItemResponse extends Omit<CollectionItemResponse, "s
 }
 
 export interface MarketplaceTableItem {
+  id: number;
   collection: string;
   volume: number;
   change: number;
