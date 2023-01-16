@@ -5,13 +5,13 @@ import Checkbox from "components/CheckBox";
 import { add, remove } from "store/cartSlice";
 import { useAppDispatch } from "store";
 import { useItemContext } from "../../ItemContext";
-import dayjs from "dayjs";
+import { dateFormat } from "utils";
 
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 p-3.5 pl-0">
       <img className="w-14 rounded-sm overflow-hidden" alt={item.image} src={item.image} loading="lazy" />
-      <h6 className="text-h6 text-white">{item.collection}</h6>
+      <h6 className="text-h6 text-white">{item.name}</h6>
     </div>
   );
 };
@@ -79,7 +79,7 @@ const CollectionTable = () => {
       width: "20%",
       align: "flex-end",
       render: (item) => {
-        const listedTime = dayjs(item.listedTime).format("DD.MM.YYYY HH:mm");
+        const listedTime = dateFormat(item.listedTime);
 
         return <Table.Cell>{listedTime}</Table.Cell>;
       },
