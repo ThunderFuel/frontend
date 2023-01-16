@@ -65,7 +65,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
       </div>
       <div className="p-2.5 flex items-center text-gray-light gap-1">
         <IconMarketBasket />
-        <span className="body-small text-overflow">Last sale price {collection.price} ETH</span>
+        <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
       </div>
       <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
     </div>
