@@ -64,7 +64,7 @@ const CollectionTable = () => {
       text: "Last Sale",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.price ?? 0} />,
+      render: (item) => <Price price={item.lastSalePrice ?? 0} />,
     },
     {
       key: "owner",
