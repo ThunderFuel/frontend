@@ -1,3 +1,13 @@
+export enum SocialTypes {
+  Website = 0,
+  Discord = 1,
+  Instagram = 2,
+  Youtube = 3,
+  Twitter = 4,
+  Medium = 5,
+  Telegram = 6,
+}
+
 interface CollectionFilterItem {
   name: string;
   count: number;
@@ -39,6 +49,10 @@ export interface CollectionResponse {
   status: number;
   banner: string;
   logo: string;
+  socialMedias: {
+    type: SocialTypes;
+    url: string;
+  }[];
 }
 
 export interface CollectionItemsRequest {

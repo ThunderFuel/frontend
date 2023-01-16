@@ -32,7 +32,7 @@ const Collection = () => {
               </div>
               <div className="flex flex-col w-full">
                 <h3 className="text-h3 text-white">{collection.name}</h3>
-                <SocialButtons />
+                <SocialButtons socialMedias={collection.socialMedias} />
                 <div className="body-medium text-white mt-2.5 w-10/12">{collection.description}</div>
               </div>
             </div>
