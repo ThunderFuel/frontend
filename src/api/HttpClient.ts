@@ -11,7 +11,13 @@ export interface HttpClientOptions extends AxiosRequestConfig {
 }
 
 export interface ApiResponse<T> extends AxiosResponse {
-  result: T;
+  itemsCount?: number;
+  pageCount?: number;
+  pageSize?: number;
+  pageNumber?: number;
+  data: T;
+  hasError: boolean;
+  message: any;
 }
 
 export default class HttpClient {
@@ -57,7 +63,7 @@ export default class HttpClient {
     return response.data;
   }
 
-  async get<T>(path: string, options: AxiosRequestConfig = {}): Promise<T> {
+  async get<T>(path: string, options: AxiosRequestConfig = {}): Promise<ApiResponse<T>> {
     const response = await this.axios.get(path, options);
 
     return response.data;

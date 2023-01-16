@@ -63,7 +63,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
 
   const getMarketplaceItems = async () => {
-    const response = await marketplaceService.getMarketplace1({
+    const response = await marketplaceService.getMarketplace({
       type: filterTabValue?.value,
       dayValue: dayTabValue?.value,
     });
@@ -75,7 +75,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
         floor: responseItem.floor,
         sales: responseItem.sales,
         lastSold: responseItem.solds.length,
-        images: responseItem.solds.map((sold) => sold.token.image),
+        images: responseItem.solds.map((sold: any) => sold.token.image),
         favorite: false,
       } as MarketplaceTableItem;
     });
