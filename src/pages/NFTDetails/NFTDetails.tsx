@@ -17,7 +17,7 @@ const NFTDetails = () => {
       <div className={clsx("absolute right-0 top-0 h-full bg-bg-light w-3/5 duration-300 transform", isActive && "-translate-x-2/3")}>
         <div className="sticky z-20 top-[112px]">
           <div className="flex gap-x-5 px-[100px] py-10">
-            <img src={AssetMockNFT1} />
+            <img src={AssetMockNFT1} className="w-full" />
             <ImageBar />
           </div>
         </div>
