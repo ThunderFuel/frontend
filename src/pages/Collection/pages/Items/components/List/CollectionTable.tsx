@@ -1,16 +1,17 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
-import { IconEthereum } from "../../../../../../icons";
-import Checkbox from "../../../../../../components/CheckBox";
-import { add, remove } from "../../../../../../store/cartSlice";
-import { useAppDispatch } from "../../../../../../store";
+import { IconEthereum } from "icons";
+import Checkbox from "components/CheckBox";
+import { add, remove } from "store/cartSlice";
+import { useAppDispatch } from "store";
 import { useItemContext } from "../../ItemContext";
+import { dateFormat } from "utils";
 
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 p-3.5 pl-0">
       <img className="w-14 rounded-sm overflow-hidden" alt={item.image} src={item.image} loading="lazy" />
-      <h6 className="text-h6 text-white">{item.collection}</h6>
+      <h6 className="text-h6 text-white">{item.name}</h6>
     </div>
   );
 };
@@ -31,7 +32,7 @@ const CollectionTable = () => {
     if (!collection.isSelected) {
       dispatch(add(collection));
     } else {
-      dispatch(remove(collection.id));
+      dispatch(remove(collection.tokenOrder));
     }
   };
 
@@ -56,27 +57,32 @@ const CollectionTable = () => {
       text: "Price",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.price} />,
+      render: (item) => <Price price={item.price ?? 0} />,
     },
     {
       key: "lastSale",
       text: "Last Sale",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.lastSale} />,
+      render: (item) => <Price price={item.lastSalePrice ?? 0} />,
     },
     {
       key: "owner",
       text: "Owner",
       width: "20%",
       align: "flex-end",
-      render: (item) => <div className="cell text-h6 text-gray-light hover:text-white hover:underline">{item.owner}</div>,
+      render: (item) => <div className="cell text-h6 text-gray-light hover:text-white hover:underline">{item.owner ?? "-"}</div>,
     },
     {
-      key: "timeListed",
+      key: "listedTime",
       text: "Time Listed",
       width: "20%",
       align: "flex-end",
+      render: (item) => {
+        const listedTime = dateFormat(item.listedTime);
+
+        return <Table.Cell>{listedTime}</Table.Cell>;
+      },
     },
   ];
 

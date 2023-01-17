@@ -2,9 +2,10 @@ import React from "react";
 import clsx from "clsx";
 
 import { IconDiscord, IconShare, IconSocial3Dots, IconTelegram, IconTwitter, IconWeblink } from "icons";
+import { SocialTypes } from "api/collections/collections.type";
 
 const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: string; [key: string]: any }) => {
-  const IconItem = icon;
+  const IconItem = icon ?? null;
 
   return (
     <li className={clsx("border-r border-r-gray last:border-r-0 text-gray-light", className)}>
@@ -14,14 +15,22 @@ const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: stri
     </li>
   );
 };
-const SocialButtons = () => {
-  const icons = [IconTwitter, IconDiscord, IconSocial3Dots, IconTelegram, IconWeblink];
+const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: SocialTypes }[] }) => {
+  const iconList: any = {
+    [SocialTypes.Website]: IconWeblink,
+    [SocialTypes.Discord]: IconDiscord,
+    [SocialTypes.Instagram]: IconDiscord,
+    [SocialTypes.Youtube]: IconDiscord,
+    [SocialTypes.Twitter]: IconTwitter,
+    [SocialTypes.Telegram]: IconTelegram,
+    [SocialTypes.Medium]: IconSocial3Dots,
+  };
 
   return (
     <div className="flex gap-5 mt-1">
       <ul className="inline-flex border border-gray rounded-[4px]">
-        {icons.map((icon, key) => {
-          return <SocialButton href="#" key={key} icon={icon} />;
+        {socialMedias?.map((media, key) => {
+          return <SocialButton href="#" key={key} icon={iconList?.[media.type] as React.ReactNode} />;
         })}
       </ul>
       <ul className="border border-gray rounded-[4px]">

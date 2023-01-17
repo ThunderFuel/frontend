@@ -11,8 +11,8 @@ const Filter = () => {
         <div className="flex flex-col lg:flex-row gap-7 items-center">
           <Tab initTab={filterTabValue} className="secondary -my-[1px]" onChange={(value) => setFilterTabValue(value)}>
             {filterValues.map((item) => (
-              <Tab.Item key={item} id={item}>
-                {item}
+              <Tab.Item key={item.value} id={item}>
+                {item.text}
               </Tab.Item>
             ))}
           </Tab>
