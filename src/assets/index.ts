@@ -23,3 +23,5 @@ export { default as AssetCollectionItem3 } from "./collection/item-3.png";
 export { default as AssetCollectionItem4 } from "./collection/item-4.png";
 
 export { default as AssetEmptyCart } from "./cart/cart-empty.svg";
+export { default as AssetProfileLogo } from "./profile/profile-logo.png";
+export { default as AssetProfileBg } from "./profile/profile-bg.png";
