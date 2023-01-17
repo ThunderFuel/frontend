@@ -22,9 +22,9 @@ const Box = () => {
   );
 };
 
-const Activity = () => {
+const Activity = ({ onBack }: { onBack: any }) => {
   return (
-    <RightMenu title="Activity">
+    <RightMenu title="Activity" onBack={onBack}>
       <Filter />
       <div className="flex flex-col mt-[10px] gap-y-[10px]">
         <Box></Box>

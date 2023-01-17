@@ -21,7 +21,7 @@ const HoverButton = ({ Icon, text }: { Icon: React.FC<SVGProps<SVGSVGElement>>; 
 };
 //TODO https://www.figma.com/file/Jrn6keHtX5nTW5CgvUnSgF/Thunder-NFT-Marketplace?node-id=1509%3A29574&t=xv3rtX27SzX4nBNv-4      ----> Satilik degilse ama offer varsa best offer gosterilir
 //TODO https://www.figma.com/file/Jrn6keHtX5nTW5CgvUnSgF/Thunder-NFT-Marketplace?node-id=1509%3A29868&t=xv3rtX27SzX4nBNv-4      ----> Satilik degil ve offer da yoksa make offer gosterilir
-const LeftMenu = () => {
+const LeftMenu = ({ onChange }: { onChange: any }) => {
   return (
     <div className="flex flex-col border-r border-gray">
       <div className="container-fluid flex flex-col pt-10 pb-5 pr-10 border-b border-gray">
@@ -61,8 +61,8 @@ const LeftMenu = () => {
           </div>
           <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
             <div className="flex gap-x-[10px] ">
-              <Button className="w-full text-button font-bigShoulderDisplay ">
-                Buy Now <IconThunder width="24px" height="11.58px" />
+              <Button className="w-full text-button font-bigShoulderDisplay" onClick={onChange}>
+                Buy Now <IconThunder className="w-7 h-7" />
               </Button>
               <Button>
                 <IconAddCart fill="black" />

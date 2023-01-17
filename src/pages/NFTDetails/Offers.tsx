@@ -38,9 +38,9 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
   );
 };
 
-const Offers = () => {
+const Offers = ({ onBack }: { onBack: any }) => {
   return (
-    <RightMenu title="Offers">
+    <RightMenu title="Offers" onBack={onBack}>
       <Button className="btn-secondary no-bg">
         MAKE OFFER <IconOffer />
       </Button>
