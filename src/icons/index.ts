@@ -43,3 +43,4 @@ export { ReactComponent as IconFilter } from "./icon-filter.svg";
 export { ReactComponent as IconTag } from "./icon-tag.svg";
 export { ReactComponent as IconQuarry } from "./icon-quarry.svg";
 export { ReactComponent as IconLink } from "./icon-link.svg";
+export { ReactComponent as IconCirclePlus } from "./icon-circle-plus.svg";

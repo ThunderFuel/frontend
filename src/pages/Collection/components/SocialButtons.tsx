@@ -15,7 +15,7 @@ const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: stri
     </li>
   );
 };
-const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: SocialTypes }[] }) => {
+const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: SocialTypes }[] | null }) => {
   const iconList: any = {
     [SocialTypes.Website]: IconWeblink,
     [SocialTypes.Discord]: IconDiscord,
