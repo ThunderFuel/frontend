@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "./components/Sidebar";
 import Tab from "components/Tab";
+import CollectionItems from "../Collection/pages/Items/index";
 
 const Profile = () => {
   return (
@@ -17,6 +18,9 @@ const Profile = () => {
               <Tab.Item id={5}>Activity</Tab.Item>
             </Tab>
           </div>
+        </div>
+        <div>
+          <CollectionItems />
         </div>
       </div>
     </div>
