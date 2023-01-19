@@ -1,17 +1,24 @@
-import React from "react";
-import { IconFullscreen, IconLike, IconRefresh, IconShare } from "icons";
+import React, { useState } from "react";
+import { IconFullscreen, IconLike, IconRefresh, IconShare, IconTransfer } from "icons";
 
-const icons = [IconFullscreen, IconRefresh, IconShare];
+const icons = [IconTransfer, IconFullscreen, IconRefresh, IconShare];
 
 const ImageBar = () => {
+  const [liked, setLiked] = useState(false);
+
+  const isOwner = (address: string) => {
+    return address === "1" ? true : false;
+  };
+
   return (
     <div className="flex w-fit flex-col gap-5 ">
-      <a className="border border-gray rounded-md p-2 text-gray-light group cursor-pointer">
-        <IconLike className="group-hover:stroke-white" stroke="#838383" />
-      </a>
+      <div className="border border-gray rounded-md p-2 text-gray-light group cursor-pointer" onClick={() => setLiked(!liked)}>
+        <IconLike className={`group-hover:stroke-white ${liked ? "stroke-white fill-white" : ""}`} stroke="#838383" />
+      </div>
       <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray ">
         {icons.map((icon, key) => {
           const IconItem = icon;
+          if (!isOwner("1") && icon === IconTransfer) return null;
 
           return (
             <a className="p-2 group cursor-pointer" key={key}>

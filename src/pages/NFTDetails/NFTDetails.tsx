@@ -7,7 +7,7 @@ const NFTDetails = () => {
   return (
     <div className="flex justify-center">
       <LeftMenu />
-      <div className="sticky z-20 w-fit top-[112px]">
+      <div className="sticky z-20 h-fit top-[112px]">
         <div className="flex gap-x-5 px-[100px] py-10 bg-bg-light ">
           <img src={AssetMockNFT1} />
           <ImageBar />
@@ -15,6 +15,7 @@ const NFTDetails = () => {
       </div>
       {/* <Activity /> */}
       {/* <Offers /> */}
+      {/* <MakeOffer /> */}
     </div>
   );
 };

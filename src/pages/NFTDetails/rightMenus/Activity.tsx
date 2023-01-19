@@ -1,7 +1,7 @@
 import React from "react";
 import { IconClock, IconOffer } from "icons";
-import Filter from "./components/Filter";
-import RightMenu from "./components/RightMenu";
+import Filter from "../components/Filter";
+import RightMenu from "../components/RightMenu";
 
 const Box = () => {
   return (

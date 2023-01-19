@@ -3,25 +3,7 @@ import { IconEthereum, IconListed } from "icons";
 import React from "react";
 import "./MetadataTable.css";
 
-const NFTMetadata = [
-  {
-    trait: "Background",
-    name: "Myth",
-    floor: "18",
-  },
-  {
-    trait: "Headwear",
-    name: "Survivor Pot",
-    floor: "1.21",
-  },
-  {
-    trait: "Tops",
-    name: "Archaeologist",
-    floor: "0.88",
-  },
-];
-
-const MetadataTable = () => {
+const MetadataTable = ({ metadata }: { metadata: any }) => {
   return (
     <div className="flex flex-col border border-gray rounded-[5px]">
       <h6 className="pl-5 pt-[15px] pb-[17px] border-b border-gray">Metadata</h6>
@@ -34,7 +16,7 @@ const MetadataTable = () => {
           </tr>
         </thead>
         <tbody>
-          {NFTMetadata.map((item) => (
+          {metadata.map((item: any) => (
             // eslint-disable-next-line react/jsx-key
             <div className="group overflow-hidden relative transition-[height] h-[58px] duration-1000 ease-in-out hover:bg-bg-light hover:h-[99px]">
               <tr>

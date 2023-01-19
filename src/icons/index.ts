@@ -57,3 +57,7 @@ export { ReactComponent as IconBack } from "./icon-back.svg";
 export { ReactComponent as IconClock } from "./icon-clock.svg";
 export { ReactComponent as IconCancel } from "./icon-cancel.svg";
 export { ReactComponent as IconTransfer } from "./icon-transfer.svg";
+export { ReactComponent as IconBid } from "./icon-bid.svg";
+export { ReactComponent as IconAuction } from "./icon-auction.svg";
+export { ReactComponent as IconAccept } from "./icon-accept.svg";
+export { ReactComponent as IconUpdateListing } from "./icon-update-listing.svg";

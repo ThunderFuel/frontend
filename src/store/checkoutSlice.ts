@@ -5,6 +5,7 @@ export const checkoutSlice = createSlice({
   initialState: {
     show: false,
     isInsufficientBalance: false,
+    checkoutType: "",
   },
 
   reducers: {
@@ -14,9 +15,12 @@ export const checkoutSlice = createSlice({
     setIsInsufficientBalance: (state, action) => {
       state.isInsufficientBalance = action.payload;
     },
+    setCheckoutType: (state, action) => {
+      state.checkoutType = action.payload;
+    },
   },
 });
 
-export const { toggleCheckoutModal, setIsInsufficientBalance } = checkoutSlice.actions;
+export const { toggleCheckoutModal, setIsInsufficientBalance, setCheckoutType } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

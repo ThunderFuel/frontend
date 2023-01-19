@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "components/Button";
 import { IconCancel, IconClock, IconEthereum, IconOffer } from "icons";
-import RightMenu from "./components/RightMenu";
+import RightMenu from "../components/RightMenu";
 import { AssetTableImageNft1 } from "assets";
 
 const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) => {
