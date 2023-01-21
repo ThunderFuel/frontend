@@ -3,6 +3,7 @@ import Button from "components/Button";
 import { IconArrowRight, IconAuction, IconBid, IconEthereum } from "icons";
 
 import { useAppSelector } from "store";
+import AuctionCountdown from "./AuctionCountdown";
 
 const Auction = () => {
   const { isOwner, hasBid } = useAppSelector((state) => state.nftdetails);
@@ -22,7 +23,7 @@ const Auction = () => {
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay">
             <IconAuction width="17px" /> AUCTION ENDS IN
           </span>
-          {/* TODO: countdown i hallet */}
+          <AuctionCountdown />
         </div>
         <div className="flex h-fit items-center gap-x-[5px]"></div>
       </div>

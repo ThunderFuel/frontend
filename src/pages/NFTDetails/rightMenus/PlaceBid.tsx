@@ -6,7 +6,7 @@ import { setCheckoutType, toggleCheckoutModal } from "store/checkoutSlice";
 import RightMenu from "../components/RightMenu";
 import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
-import BidInput from "../components/BidInput";
+import PriceInput from "../components/PriceInput";
 
 const bidDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
@@ -53,7 +53,8 @@ const PlaceBid = () => {
     <RightMenu title="Place a Bid" footer={footer} onBack={undefined}>
       <InfoBox title="Placing a Bid" description={bidDescription} />
       <CartItem selectedNFT={selectedNFT} />
-      <BidInput text="Bid" />
+      Your Bid
+      <PriceInput />
     </RightMenu>
   );
 };

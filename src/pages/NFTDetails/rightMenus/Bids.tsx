@@ -3,6 +3,7 @@ import { AssetTableImageNft1 } from "assets";
 import Button from "components/Button";
 import { IconAuction, IconBid, IconCancel, IconEthereum } from "icons";
 import RightMenu from "../components/RightMenu";
+import AuctionCountdown from "../components/AuctionCountdown";
 
 const Box = ({ children, ownBid }: { ownBid?: boolean; children: React.ReactNode }) => {
   return (
@@ -30,7 +31,7 @@ const Bids = () => {
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay text-gray-light">
             <IconAuction width="17px" /> AUCTION ENDS IN
           </span>
-          {/* TODO: countdown i hallet */}
+          <AuctionCountdown />
         </div>
         <Button className="btn-secondary w-full text-button font-bigShoulderDisplay ">
           PLACE A BID

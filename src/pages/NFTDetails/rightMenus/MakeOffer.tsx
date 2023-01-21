@@ -6,7 +6,7 @@ import { setCheckoutType, toggleCheckoutModal } from "store/checkoutSlice";
 import RightMenu from "../components/RightMenu";
 import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
-import BidInput from "../components/BidInput";
+import BidInput from "../components/PriceInput";
 import ExpirationDate from "../components/ExpirationDate";
 
 const offerDescription =
@@ -53,7 +53,8 @@ const MakeOffer = () => {
     <RightMenu title="Make Offer" footer={footer} onBack={undefined}>
       <InfoBox title="Making an Offer" description={offerDescription} />
       <CartItem selectedNFT={selectedNFT} />
-      <BidInput text="Offer" />
+      Your Offer
+      <BidInput />
       <ExpirationDate />
     </RightMenu>
   );
