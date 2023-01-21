@@ -1,11 +1,11 @@
 import { IconBack } from "icons";
 import React from "react";
 
-const RightMenu = ({ children, title, className, footer }: { children: React.ReactNode; title: string; className?: string; footer?: JSX.Element }) => {
+const RightMenu = ({ children, title, className, footer, onBack }: { children: React.ReactNode; title: string; className?: string; footer?: JSX.Element; onBack: any }) => {
   return (
     <div className={`flex flex-col border-l border-gray transition-all duration-1000 ease-in-out ${className}`}>
-      <div className="sticky z-20 h-fit top-[112px] flex border-b border-gray text-white p-5 text-head5 gap-x-5 bg-bg">
-        <IconBack width="32px" height="32px" />
+      <div className="flex border-b border-gray text-white p-5 text-head5 gap-x-5">
+        <IconBack width="32px" height="32px" onClick={onBack} />
         {title}
       </div>
       <div className="flex flex-col px-10 py-5 gap-y-[10px] overflow-y-scroll no-scrollbar">{children}</div>

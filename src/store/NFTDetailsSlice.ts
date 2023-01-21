@@ -6,7 +6,8 @@ export const NFTDetailsSlice = createSlice({
   initialState: {
     showActivityMenu: false,
     selectedNFT: { name: "Genuine Undead #1289", price: 3.5, image: AssetMockNFT1, startingPrice: 0.55, floorPrice: 1.2, highestBid: 0.55, liked: false },
-    isOwner: true,
+    isOwner: false,
+    hasBid: false,
   },
 
   reducers: {
@@ -15,9 +16,15 @@ export const NFTDetailsSlice = createSlice({
         state.showActivityMenu = !state.showActivityMenu;
       }
     },
+    toggleIsOwner: (state) => {
+      state.isOwner = !state.isOwner;
+    },
+    toggleHasBid: (state) => {
+      state.hasBid = !state.hasBid;
+    },
   },
 });
 
-export const { toggleMenu } = NFTDetailsSlice.actions;
+export const { toggleMenu, toggleIsOwner, toggleHasBid } = NFTDetailsSlice.actions;
 
 export default NFTDetailsSlice.reducer;

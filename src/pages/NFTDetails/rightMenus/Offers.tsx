@@ -40,7 +40,7 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
 
 const Offers = () => {
   return (
-    <RightMenu title="Offers">
+    <RightMenu title="Offers" onBack={undefined}>
       <Button className="btn-secondary no-bg">
         MAKE OFFER <IconOffer />
       </Button>

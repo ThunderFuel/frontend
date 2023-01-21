@@ -24,7 +24,7 @@ const Bids = () => {
   };
 
   return (
-    <RightMenu title="Bids">
+    <RightMenu title="Bids" onBack={undefined}>
       <div className="flex flex-col p-5 gap-y-5 border border-gray rounded-lg">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay text-gray-light">

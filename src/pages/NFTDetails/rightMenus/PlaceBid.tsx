@@ -50,7 +50,7 @@ const PlaceBid = () => {
   );
 
   return (
-    <RightMenu title="Place a Bid" footer={footer}>
+    <RightMenu title="Place a Bid" footer={footer} onBack={undefined}>
       <InfoBox title="Placing a Bid" description={bidDescription} />
       <CartItem selectedNFT={selectedNFT} />
       <BidInput text="Bid" />

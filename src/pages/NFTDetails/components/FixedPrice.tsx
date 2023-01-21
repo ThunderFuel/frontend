@@ -5,11 +5,9 @@ import { IconAddCart, IconCart, IconListed, IconOffer, IconThunder } from "icons
 import React, { useState } from "react";
 import { useAppSelector } from "store";
 
-const Component = () => {
+const FixedPrice = () => {
   const { isOwner } = useAppSelector((state) => state.nftdetails);
   const [isListed, setisListed] = useState(true);
-  const [hasOffer, sethasOffer] = useState(false);
-  const [onAuction, setonAuction] = useState(false);
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
@@ -32,24 +30,20 @@ const Component = () => {
         )}
       </div>
       <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
-        {!isOwner && isListed && (
-          <>
-            <div className="flex gap-x-[10px] ">
-              <Button className="w-full text-button font-bigShoulderDisplay ">
-                Buy Now <IconThunder width="24px" height="11.58px" />
-              </Button>
-              <Button>
-                <IconAddCart fill="black" />
-              </Button>
-            </div>
-            <Button className="btn-secondary no-bg ">
-              MAKE OFFER <IconOffer />
-            </Button>
-          </>
-        )}
+        <div className="flex gap-x-[10px] ">
+          <Button className="w-full text-button font-bigShoulderDisplay ">
+            Buy Now <IconThunder width="24px" height="11.58px" />
+          </Button>
+          <Button>
+            <IconAddCart fill="black" />
+          </Button>
+        </div>
+        <Button className="btn-secondary no-bg ">
+          MAKE OFFER <IconOffer />
+        </Button>
       </div>
     </div>
   );
 };
 
-export default Component;
+export default FixedPrice;

@@ -2,7 +2,6 @@ import { AssetCollectionProfileImage } from "assets";
 
 export const NFTData = {
   collection: "Genuine Undead",
-  listed: true,
   name: "Genuine Undead #1293",
   collectionDesc: "24*24 pixel PFP you have never seen. 5995 classic, 3996 cyberpunk and 8 legendaries, over 200 hand drawn traits with a rich variety.",
   ownerImage: AssetCollectionProfileImage,

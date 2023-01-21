@@ -50,7 +50,7 @@ const MakeOffer = () => {
   );
 
   return (
-    <RightMenu title="Make Offer" footer={footer}>
+    <RightMenu title="Make Offer" footer={footer} onBack={undefined}>
       <InfoBox title="Making an Offer" description={offerDescription} />
       <CartItem selectedNFT={selectedNFT} />
       <BidInput text="Offer" />

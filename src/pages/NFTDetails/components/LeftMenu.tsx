@@ -2,11 +2,13 @@ import { AssetMockCreator, AssetTableImageNft1 } from "assets";
 import clsx from "clsx";
 import Button from "components/Button";
 import { IconAccept, IconArrowRight, IconCancel, IconContract, IconDocument, IconFee, IconLink, IconListed, IconOffer, IconToken, IconTwitter, IconUpdateListing, IconWallet } from "icons";
-import React, { SVGProps } from "react";
-import { useAppSelector } from "store";
+import React, { SVGProps, useState } from "react";
+import { useAppDispatch, useAppSelector } from "store";
+import { toggleHasBid, toggleIsOwner } from "store/NFTDetailsSlice";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
-import Component from "./Component";
+import FixedPrice from "./FixedPrice";
+import MakeOffer from "./MakeOffer";
 import MetadataTable from "./MetadataTable";
 import { NFTData } from "./mockData";
 
@@ -25,12 +27,15 @@ const HoverButton = ({ Icon, text, btnClassName }: { Icon: React.FC<SVGProps<SVG
   );
 };
 
-//TODO https://www.figma.com/file/Jrn6keHtX5nTW5CgvUnSgF/Thunder-NFT-Marketplace?node-id=1509%3A29574&t=xv3rtX27SzX4nBNv-4      ----> Satilik degilse ama offer varsa best offer gosterilir
-//TODO https://www.figma.com/file/Jrn6keHtX5nTW5CgvUnSgF/Thunder-NFT-Marketplace?node-id=1509%3A29868&t=xv3rtX27SzX4nBNv-4      ----> Satilik degil ve offer da yoksa make offer gosterilir
-const LeftMenu = () => {
-  const { collection, name, ownerName, collectionDesc, ownerImage, listed, bestOffer, offerOwner, offerPicture, metadata, contractAddress, tokenId, creator, creatorsFee, lastActivity } = NFTData;
+const LeftMenu = ({ onChange }: { onChange: any }) => {
+  const { collection, name, ownerName, collectionDesc, ownerImage, bestOffer, offerOwner, offerPicture, metadata, contractAddress, tokenId, creator, creatorsFee, lastActivity } = NFTData;
 
-  const { isOwner } = useAppSelector((state) => state.nftdetails);
+  const dispatch = useAppDispatch();
+  const { isOwner, hasBid } = useAppSelector((state) => state.nftdetails);
+
+  const [isListed, setisListed] = useState(false);
+  const [hasOffer, sethasOffer] = useState(false);
+  const [onAuction, setonAuction] = useState(false);
 
   const footer = (
     <div className="flex justify-end px-5 py-5 text-head6 font-spaceGrotesk text-white">
@@ -52,6 +57,15 @@ const LeftMenu = () => {
     </div>
   );
 
+  const footerAuction = (
+    <div className="flex justify-end px-5 py-5 gap-x-3 text-head6 font-spaceGrotesk text-white">
+      <Button className="btn-secondary">
+        CANCEL AUCTION
+        <IconCancel />
+      </Button>
+    </div>
+  );
+
   return (
     <div className="flex flex-col border-r border-gray">
       <div className="flex flex-col overflow-y-scroll no-scrollbar">
@@ -69,13 +83,35 @@ const LeftMenu = () => {
             <img src={AssetTableImageNft1} className="w-8 rounded-full" alt="profile-image" />
             <h6 className="text-h6 text-gray-light">
               Owned by
-              <span className="text-white"> {ownerName}</span>
+              {isOwner ? <span className="text-green"> you</span> : <span className="text-white"> {ownerName}</span>}
             </h6>
           </div>
+
+          {/**********************/}
+          <div className="flex justify-center border border-gray gap-x-2">
+            <Button className={clsx("p-3 font-bold normal-case", isOwner ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleIsOwner())}>
+              isOwner
+            </Button>
+            <Button className={clsx("p-3 font-bold normal-case", hasOffer ? "bg-green" : "bg-red")} onClick={() => sethasOffer(!hasOffer)}>
+              hasOffer
+            </Button>
+            <Button className={clsx("p-3 font-bold normal-case", isListed ? "bg-green" : "bg-red")} onClick={() => setisListed(!isListed)}>
+              isListed
+            </Button>
+            <Button className={clsx("p-3 font-bold normal-case", onAuction ? "bg-green" : "bg-red")} onClick={() => setonAuction(!onAuction)}>
+              onAuction
+            </Button>
+            <Button className={clsx("p-3 font-bold normal-case", hasBid ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleHasBid())}>
+              hasBid
+            </Button>
+            <Button onClick={onChange}>DENEME</Button>
+          </div>
+          {/**********************/}
+
           <div className="text-bodyMd text-white">{collectionDesc}</div>
-          <Component />
-          <BestOffer />
-          <Auction />
+
+          {isListed ? <FixedPrice /> : onAuction ? <Auction /> : hasOffer ? <BestOffer /> : <MakeOffer />}
+
           <Box className="bg-bg-light justify-between pr-4">
             <div className="flex items-center gap-x-[10px]">
               <img src={offerPicture} className="w-8 rounded-full" alt="profile-image" />
@@ -179,8 +215,9 @@ const LeftMenu = () => {
           </div>
         </div>
       </div>
-      {isOwner && !listed && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footer}</div>}
-      {isOwner && listed && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footerListed}</div>}
+      {isOwner && !isListed && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footer}</div>}
+      {isOwner && isListed && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footerListed}</div>}
+      {isOwner && onAuction && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footerAuction}</div>}
     </div>
   );
 };
