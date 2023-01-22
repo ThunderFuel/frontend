@@ -7,7 +7,7 @@ interface Props {
   onSelect: (event: any) => void;
 }
 
-const Dropdown: React.FC<Props> = ({ options, onSelect }) => {
+const Dropdown: React.FC<Props> = ({ className, options, onSelect }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState(options[0]);
 
@@ -20,14 +20,14 @@ const Dropdown: React.FC<Props> = ({ options, onSelect }) => {
   const toggleIsOpen = () => setIsOpen(!isOpen);
 
   return (
-    <div className="flex flex-col w-full border border-gray rounded-lg">
+    <div className={`flex flex-col w-full border border-gray rounded-lg ${className}`}>
       <button className="flex justify-between w-full p-4" onClick={toggleIsOpen}>
         {selectedOption}
         <IconArrowDown />
       </button>
 
       {isOpen && (
-        <div className="relative ">
+        <div className="relative">
           <ul className="absolute flex flex-col w-full  bg-bg rounded-lg border border-gray">
             {options.map((option, index) => (
               <li key={index} className="pl-4 cursor-pointer border-b border-gray  hover:bg-gray first:rounded-t-lg last:rounded-b-lg last:border-none">

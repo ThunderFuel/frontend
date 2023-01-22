@@ -24,7 +24,7 @@ const PriceInput = (props: any) => {
   // };
 
   return (
-    <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">
+    <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk ">
       <Input {...props} reversed={true} icon={<IconEthereum color="gray" />}></Input>
     </div>
   );
