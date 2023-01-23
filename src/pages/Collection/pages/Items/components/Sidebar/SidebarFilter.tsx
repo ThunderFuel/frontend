@@ -5,6 +5,9 @@ import clsx from "clsx";
 import { DisplayType, useItemContext } from "../../ItemContext";
 import CheckboxList from "./components/CheckboxList";
 import RadioList from "./components/RadioList";
+import RangeBar from "./components/RangeBar";
+import InputPrice from "./components/Input";
+import RangeInput from "./components/RangeInput";
 
 enum FilterComponentType {
   Input = 0,
@@ -53,17 +56,19 @@ const SidebarFilter = () => {
               </div>
               <div className="flex flex-col gap-2.5 py-5">
                 {filters.map((filter: any, i: number) => {
-                  let filterComponent: any = "mm";
+                  console.log("aabbcc", filter.type);
+
+                  let filterComponent: any = "";
                   if (FilterComponentType.Input === filter.type) {
-                    filterComponent = null;
+                    filterComponent = <InputPrice />;
                   } else if (FilterComponentType.RadioList === filter.type) {
                     filterComponent = <RadioList filterData={filter.filterData} />;
                   } else if (FilterComponentType.CheckboxList === filter.type) {
                     filterComponent = <CheckboxList filterData={filter.filterData} />;
                   } else if (FilterComponentType.RangeBar === filter.type) {
-                    filterComponent = null;
+                    filterComponent = <RangeBar />;
                   } else if (FilterComponentType.RangeInput === filter.type) {
-                    filterComponent = null;
+                    filterComponent = <RangeInput />;
                   }
 
                   return (
