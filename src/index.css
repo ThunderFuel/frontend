@@ -289,7 +289,7 @@
   }
 
   .radio {
-    @apply flex gap-2 items-center;
+    @apply flex gap-2 items-center cursor-pointer;
   }
 
   .radio > input[type="radio"] {

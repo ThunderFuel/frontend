@@ -1,12 +1,21 @@
 import React, { useEffect } from "react";
 import { IconChevronDoubleLeft, IconFilter } from "icons";
-import Checkbox from "components/CheckBox";
 import Collapse from "components/Collapse";
 import clsx from "clsx";
 import { DisplayType, useItemContext } from "../../ItemContext";
+import CheckboxList from "./components/CheckboxList";
+import RadioList from "./components/RadioList";
+
+enum FilterComponentType {
+  Input = 0,
+  RadioList = 1,
+  CheckboxList = 2,
+  RangeBar = 3,
+  RangeInput = 4,
+}
 
 const SidebarFilter = () => {
-  const { displayType, setDisplayType, fetchFilters } = useItemContext();
+  const { displayType, setDisplayType, fetchFilters, filters } = useItemContext();
   const [show, setShow] = React.useState(false);
 
   useEffect(() => {
@@ -42,19 +51,28 @@ const SidebarFilter = () => {
                   <IconChevronDoubleLeft className="text-gray-light" />
                 </div>
               </div>
-              <div className="py-5">
-                <Collapse>
-                  <Collapse.Header>112233</Collapse.Header>
-                  <Collapse.Body>
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", false && "bg-gray")}>
-                        <Checkbox checked={true}>
-                          <span className="body-medium">Sky{i}</span>
-                        </Checkbox>
-                      </div>
-                    ))}
-                  </Collapse.Body>
-                </Collapse>
+              <div className="flex flex-col gap-2.5 py-5">
+                {filters.map((filter: any, i: number) => {
+                  let filterComponent: any = "mm";
+                  if (FilterComponentType.Input === filter.type) {
+                    filterComponent = null;
+                  } else if (FilterComponentType.RadioList === filter.type) {
+                    filterComponent = <RadioList filterData={filter.filterData} />;
+                  } else if (FilterComponentType.CheckboxList === filter.type) {
+                    filterComponent = <CheckboxList filterData={filter.filterData} />;
+                  } else if (FilterComponentType.RangeBar === filter.type) {
+                    filterComponent = null;
+                  } else if (FilterComponentType.RangeInput === filter.type) {
+                    filterComponent = null;
+                  }
+
+                  return (
+                    <Collapse key={i}>
+                      <Collapse.Header>{filter.name ?? "-"}</Collapse.Header>
+                      <Collapse.Body>{filterComponent}</Collapse.Body>
+                    </Collapse>
+                  );
+                })}
               </div>
             </div>
           </div>
