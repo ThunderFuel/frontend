@@ -2,12 +2,15 @@ import Button from "components/Button";
 import EthereumPrice from "components/EthereumPrice";
 import { IconAccept, IconOffer } from "icons";
 import React from "react";
-import { useAppSelector } from "store";
+import { useAppDispatch, useAppSelector } from "store";
+import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { setRightMenu } from "store/NFTDetailsSlice";
 
 const BestOffer = () => {
-  const bestOffer = 0.99;
-
+  const dispatch = useAppDispatch();
   const { isOwner } = useAppSelector((state) => state.nftdetails);
+
+  const bestOffer = 0.99;
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
@@ -22,12 +25,23 @@ const BestOffer = () => {
       </div>
       <div className="flex flex-col bg-bg-light rounded-b p-5">
         {isOwner ? (
-          <Button className="w-full gap-x-[6px] text-button font-bigShoulderDisplay ">
+          <Button
+            className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
+            onClick={() => {
+              dispatch(setCheckout({ type: "AcceptOffer", price: bestOffer }));
+              dispatch(toggleCheckoutModal());
+            }}
+          >
             ACCEPT OFFER
             <IconAccept />
           </Button>
         ) : (
-          <Button className="btn-secondary no-bg ">
+          <Button
+            className="btn-secondary no-bg "
+            onClick={() => {
+              dispatch(setRightMenu("makeoffer"));
+            }}
+          >
             MAKE OFFER <IconOffer />
           </Button>
         )}

@@ -3,8 +3,13 @@ import Button from "components/Button";
 import { IconCancel, IconClock, IconEthereum, IconOffer } from "icons";
 import RightMenu from "../components/RightMenu";
 import { AssetTableImageNft1 } from "assets";
+import { useAppDispatch } from "store";
+import { setRightMenu } from "store/NFTDetailsSlice";
+import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
       <div className={`flex w-full p-[15px]  gap-x-[15px]  ${expired ? "opacity-50" : ""}`}>
@@ -23,12 +28,23 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
       </div>
       {ownOffer && (
         <div className="flex border-t border-gray">
-          <Button className="btn w-full btn-sm no-bg border-none text-white">
+          <Button
+            className="btn w-full btn-sm no-bg border-none text-white"
+            onClick={() => {
+              dispatch(setCheckout({ type: "CancelOffer" }));
+              dispatch(toggleCheckoutModal());
+            }}
+          >
             CANCEL OFFER
             <IconCancel width="18px" />
           </Button>
           <div className="flex border-r border-gray"></div>
-          <Button className="btn w-full btn-sm no-bg border-none text-white ">
+          <Button
+            className="btn w-full btn-sm no-bg border-none text-white"
+            onClick={() => {
+              dispatch(setRightMenu("updateoffer"));
+            }}
+          >
             UPDATE OFFER
             <IconOffer width="18px" />
           </Button>
@@ -38,10 +54,17 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
   );
 };
 
-const Offers = () => {
+const Offers = ({ onBack }: { onBack: any }) => {
+  const dispatch = useAppDispatch();
+
   return (
-    <RightMenu title="Offers" onBack={undefined}>
-      <Button className="btn-secondary no-bg">
+    <RightMenu title="Offers" onBack={onBack}>
+      <Button
+        className="btn-secondary no-bg"
+        onClick={() => {
+          dispatch(setRightMenu("makeoffer"));
+        }}
+      >
         MAKE OFFER <IconOffer />
       </Button>
       <Box></Box>

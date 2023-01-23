@@ -5,7 +5,7 @@ import Button from "components/Button";
 import CartItem from "components/CartItem";
 import Modal from "components/Modal";
 
-import { IconDone, IconInfo, IconMilestone, IconSpinner, IconWarning } from "icons";
+import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppSelector } from "store";
 
 enum Status {
@@ -91,22 +91,20 @@ const CheckoutProcess = ({ onComplete }: { onComplete: () => void }) => {
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-col p-5 gap-y-[25px]  border-gray">
-        <CheckoutProcessItem status={transactionStatus.confirmTransaction} title="Confirm your bid" description="Proceed in your wallet and confirm the bid." />
+        <CheckoutProcessItem status={transactionStatus.confirmTransaction} title="Confirm your offer" description="Proceed in your wallet and confirm accepting offer." />
         <CheckoutProcessItem status={transactionStatus.waitingForApproval} title="Wait for approval" description="Waiting for transaction to be approved." />
-        <CheckoutProcessItem status={transactionStatus.purchaseConfirm} title="Your bid is placed!" description="Congrats, you offer successfully placed." />
+        <CheckoutProcessItem status={transactionStatus.purchaseConfirm} title="Your NFT sold!" description="Congrats, your NFT succesfully sold." />
       </div>
     </div>
   );
 };
 
-const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice } = useAppSelector((state) => state.checkout);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
@@ -138,23 +136,16 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     </div>
   );
 
+  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
+
   return (
-    <Modal className="checkout" title="Place a Bid" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal className="checkout" title="Accept Offer" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Your Bid"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0}></CartItem>
+        <CartItem text={"Offer"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
-      {bidBalanceUpdated && (
-        <div className="flex gap-x-2 p-[10px] m-5 rounded-[5px] bg-bg-light border border-gray">
-          <IconInfo color="orange" />
-          <div className="flex flex-col gap-y-[6px] text-head6 font-spaceGrotesk text-white">
-            1.2 ETH added to your balance.
-            <span className="flex text-bodySm text-gray-light">In order to place this bid 1.2 ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.</span>
-          </div>
-        </div>
-      )}
     </Modal>
   );
 };
 
-export default BidCheckout;
+export default AcceptOfferCheckout;

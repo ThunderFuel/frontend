@@ -5,7 +5,7 @@ const ExpirationDate = () => {
   return (
     <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">
       Set Expiration Date
-      <Input containerClassName="bg-gray"></Input>
+      <Input containerClassName="bg-bg-light"></Input>
     </div>
   );
 };

@@ -1,12 +1,13 @@
 import { AssetMockNFT1 } from "assets";
 import { IconEthereum } from "icons";
-import React, { useState } from "react";
+import React from "react";
+import { useAppSelector } from "store";
 // import { AssetMockNFT1 } from "assets";
 // import { IconEthereum } from "icons";
 
 const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [userHasOffer, setUserHasOffer] = useState(false);
+  const { isOwner } = useAppSelector((state) => state.nftdetails);
   const userOffer = 0.88;
 
   return (
@@ -30,13 +31,13 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
             </div>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-light">Highest Bid</span>
+            <span className="text-gray-light">{selectedNFT.onAuction ? "Highest Bid" : "Best Offer"}</span>
             <div className="flex items-center text-orange">
-              {selectedNFT.highestBid}
+              {selectedNFT.onAuction ? selectedNFT.highestBid : selectedNFT.highestOffer}
               <IconEthereum width="20px" />
             </div>
           </div>
-          {userHasOffer && (
+          {isOwner && (
             <div className="flex justify-between">
               <span className="text-gray-light">Your Current Offer</span>
               <div className="flex items-center text-green">

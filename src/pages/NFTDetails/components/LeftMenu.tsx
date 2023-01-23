@@ -4,7 +4,8 @@ import Button from "components/Button";
 import { IconAccept, IconArrowRight, IconCancel, IconContract, IconDocument, IconFee, IconLink, IconListed, IconOffer, IconToken, IconTwitter, IconUpdateListing, IconWallet } from "icons";
 import React, { SVGProps, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
-import { toggleHasBid, toggleIsOwner } from "store/NFTDetailsSlice";
+import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { setRightMenu, toggleHasBid, toggleIsOwner } from "store/NFTDetailsSlice";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -16,9 +17,9 @@ const Box = ({ children, className }: { children: React.ReactNode; className?: s
   return <div className={clsx("group flex items-center w-full py-4 pl-[10px] gap-x-[10px] rounded-[5px] border border-gray", className)}>{children}</div>;
 };
 
-const HoverButton = ({ Icon, text, btnClassName }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string }) => {
+const HoverButton = ({ Icon, text, btnClassName, onClick }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any }) => {
   return (
-    <div className="opacity-0 transition-opacity duration-300 group-hover:opacity-100 ">
+    <div className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" onClick={onClick}>
       <Button className={clsx("btn-sm", btnClassName)}>
         {text}
         <Icon width="18px" height="18px" />
@@ -27,7 +28,8 @@ const HoverButton = ({ Icon, text, btnClassName }: { Icon: React.FC<SVGProps<SVG
   );
 };
 
-const LeftMenu = ({ onChange }: { onChange: any }) => {
+// const LeftMenu = ({ onChange }: { onChange: any }) => {
+const LeftMenu = () => {
   const { collection, name, ownerName, collectionDesc, ownerImage, bestOffer, offerOwner, offerPicture, metadata, contractAddress, tokenId, creator, creatorsFee, lastActivity } = NFTData;
 
   const dispatch = useAppDispatch();
@@ -39,7 +41,11 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
 
   const footer = (
     <div className="flex justify-end px-5 py-5 text-head6 font-spaceGrotesk text-white">
-      <Button>
+      <Button
+        onClick={() => {
+          dispatch(setRightMenu("listnft"));
+        }}
+      >
         LIST YOUR NFT <IconListed />
       </Button>
     </div>
@@ -51,7 +57,11 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
         REMOVE FROM SALE
         <IconCancel />
       </Button>
-      <Button>
+      <Button
+        onClick={() => {
+          dispatch(setRightMenu("updatelisting"));
+        }}
+      >
         UPDATE LISTING <IconUpdateListing />
       </Button>
     </div>
@@ -59,7 +69,13 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
 
   const footerAuction = (
     <div className="flex justify-end px-5 py-5 gap-x-3 text-head6 font-spaceGrotesk text-white">
-      <Button className="btn-secondary">
+      <Button
+        className="btn-secondary"
+        onClick={() => {
+          dispatch(setCheckout({ type: "CancelAuction" }));
+          dispatch(toggleCheckoutModal());
+        }}
+      >
         CANCEL AUCTION
         <IconCancel />
       </Button>
@@ -88,7 +104,7 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
           </div>
 
           {/**********************/}
-          <div className="flex justify-center border border-gray gap-x-2">
+          <div className="flex  justify-center border-4 p-1 border-gray gap-2 rounded-lg">
             <Button className={clsx("p-3 font-bold normal-case", isOwner ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleIsOwner())}>
               isOwner
             </Button>
@@ -104,7 +120,6 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
             <Button className={clsx("p-3 font-bold normal-case", hasBid ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleHasBid())}>
               hasBid
             </Button>
-            <Button onClick={onChange}>DENEME</Button>
           </div>
           {/**********************/}
 
@@ -112,21 +127,32 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
 
           {isListed ? <FixedPrice /> : onAuction ? <Auction /> : hasOffer ? <BestOffer /> : <MakeOffer />}
 
-          <Box className="bg-bg-light justify-between pr-4">
-            <div className="flex items-center gap-x-[10px]">
-              <img src={offerPicture} className="w-8 rounded-full" alt="profile-image" />
-              <div className="flex flex-col gap-y-[5px]">
-                <span className="text-headlineSm font-bigShoulderDisplay text-gray-light">BEST OFFER</span>
-                <h6 className="text-h6 font-spaceGrotesk text-white">
-                  {bestOffer} ETH by {offerOwner}
-                </h6>
+          {hasOffer && (
+            <Box className="bg-bg-light justify-between pr-4">
+              <div className="flex items-center gap-x-[10px]">
+                <img src={offerPicture} className="w-8 rounded-full" alt="profile-image" />
+                <div className="flex flex-col gap-y-[5px]">
+                  <span className="text-headlineSm font-bigShoulderDisplay text-gray-light">BEST OFFER</span>
+                  <h6 className="text-h6 font-spaceGrotesk text-white">
+                    {bestOffer} ETH by {offerOwner}
+                  </h6>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-x-[10px]">
-              <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" />
-              {isOwner && <HoverButton Icon={IconAccept} text="ACCEPT" />}
-            </div>
-          </Box>
+              <div className="flex gap-x-[10px]">
+                <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu("offers"))} />
+                {isOwner && (
+                  <HoverButton
+                    Icon={IconAccept}
+                    text="ACCEPT"
+                    onClick={() => {
+                      dispatch(setCheckout({ type: "AcceptOffer", price: bestOffer }));
+                      dispatch(toggleCheckoutModal());
+                    }}
+                  />
+                )}
+              </div>
+            </Box>
+          )}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-head6 font-spaceGrotesk text-white">
           <MetadataTable metadata={metadata} />
@@ -182,7 +208,13 @@ const LeftMenu = ({ onChange }: { onChange: any }) => {
                   {lastActivity}
                 </div>
               </div>
-              <HoverButton Icon={IconArrowRight} text="SEE ALL" />
+              <HoverButton
+                Icon={IconArrowRight}
+                text="SEE ALL"
+                onClick={() => {
+                  dispatch(setRightMenu("activity"));
+                }}
+              />
             </Box>
           </div>
         </div>

@@ -1,5 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 
+export function remainingTime(futureDate: Date): { days: string; hours: string; minutes: string } {
+  const currentDate = new Date();
+  const diff = futureDate.getTime() - currentDate.getTime();
+  const remainingTime = {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24))
+      .toString()
+      .padStart(2, "0"),
+    hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      .toString()
+      .padStart(2, "0"),
+    minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      .toString()
+      .padStart(2, "0"),
+  };
+
+  return remainingTime;
+}
+
 const AuctionCountdown = () => {
   const futureDate = new Date("2023-01-31");
   const [remaining, setRemaining] = useState(remainingTime(new Date(futureDate)));
@@ -34,24 +52,6 @@ const AuctionCountdown = () => {
 
   //     return () => clearInterval(intervalId);
   //   }, [futureDate]);
-
-  function remainingTime(futureDate: Date): { days: string; hours: string; minutes: string } {
-    const currentDate = new Date();
-    const diff = futureDate.getTime() - currentDate.getTime();
-    const remainingTime = {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24))
-        .toString()
-        .padStart(2, "0"),
-      hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        .toString()
-        .padStart(2, "0"),
-      minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-        .toString()
-        .padStart(2, "0"),
-    };
-
-    return remainingTime;
-  }
 
   const CountdownItem = ({ value, text }: { text: string; value: string }) => (
     <div className="flex flex-col justify-center items-center w-[45px] py-[5px] gap-y-[6px] text-head4 font-spaceGrotesk text-white bg-gray rounded">
