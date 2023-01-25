@@ -40,7 +40,7 @@ const SidebarFilter = () => {
   return (
     <div className="flex justify-end">
       <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : "w-72")}>
-        <div className="sticky top-[178px] overflow-hidden">
+        <div className="sticky top-[178px] overflow-hidden h-fit">
           <div className="flex w-72 pr-5 py-5 relative">
             <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
               <div className="icon-btn bg-white fill-gray">
@@ -56,8 +56,6 @@ const SidebarFilter = () => {
               </div>
               <div className="flex flex-col gap-2.5 py-5">
                 {filters.map((filter: any, i: number) => {
-                  console.log("aabbcc", filter.type);
-
                   let filterComponent: any = "";
                   if (FilterComponentType.Input === filter.type) {
                     filterComponent = <InputPrice />;

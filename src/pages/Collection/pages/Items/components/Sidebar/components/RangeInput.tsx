@@ -12,8 +12,8 @@ const RangeInput = () => {
           </li>
         ))}
       </ul>
-      <InputEthereum />
-      <InputEthereum />
+      <InputEthereum placeholder="Min" />
+      <InputEthereum placeholder="Max" />
     </div>
   );
 };
