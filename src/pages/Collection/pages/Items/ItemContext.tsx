@@ -32,8 +32,8 @@ const ItemProvider = ({ children }: { children: ReactNode }) => {
 
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [collections, setCollections] = useState([]);
+  const [filters, setFilters] = useState<any>([]);
   const [filterParams, setFilterParams] = useState<any>({});
-  const [filters, setFilters] = useState<any>({});
 
   const onSetFilterParams = (filter: string, value: any) => {
     setFilterParams((prevState: any) => {
@@ -55,9 +55,11 @@ const ItemProvider = ({ children }: { children: ReactNode }) => {
     return setCollections(response.data as any);
   };
   const fetchFilters = async () => {
-    const response = await collectionService.getFilters();
+    const response = await collectionService.getFilters({
+      id: collectionId,
+    });
 
-    return setFilters(response);
+    setFilters(response.data.filters as any);
   };
 
   const collectionItems = React.useMemo(() => {

@@ -122,6 +122,9 @@
   .input:focus {
     background: transparent;
   }
+  .input-container:has(.input.input-filter-range:focus) {
+    @apply bg-gray;
+  }
 
   .header-btn {
     @apply p-[21px];
@@ -289,7 +292,7 @@
   }
 
   .radio {
-    @apply flex gap-2 items-center;
+    @apply flex gap-2 items-center cursor-pointer;
   }
 
   .radio > input[type="radio"] {
