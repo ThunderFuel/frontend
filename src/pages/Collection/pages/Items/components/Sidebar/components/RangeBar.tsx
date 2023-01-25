@@ -1,6 +1,8 @@
 import React from "react";
 import Input from "components/Input";
 import InputRangeBase from "components/InputRange";
+import Button from "components/Button";
+import { IconArrowRight } from "icons";
 
 const RangeBar = () => {
   const [value, setValue] = React.useState({
@@ -19,6 +21,9 @@ const RangeBar = () => {
         <Input value={value.min} />
         <Input value={value.max} />
       </div>
+      <Button className="btn-secondary btn-sm">
+        Apply <IconArrowRight />
+      </Button>
     </div>
   );
 };

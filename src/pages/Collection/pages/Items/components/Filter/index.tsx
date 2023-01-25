@@ -5,7 +5,7 @@ import InputRange from "components/InputRange";
 import Input from "components/Input";
 import { IconClear } from "icons";
 import clsx from "clsx";
-import Select from "components/Select/Select";
+import SelectOrderBy from "./SelectOrderBy";
 
 const Range = () => {
   const [rangeValue, setRangeValue] = React.useState(0);
@@ -45,9 +45,7 @@ const Index = () => {
             </div>
             <Range />
             <div className="pl-5 flex justify-end">
-              <div>
-                <Select />
-              </div>
+              <SelectOrderBy />
             </div>
           </div>
           <div className="flex-center">

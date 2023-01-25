@@ -1,23 +1,35 @@
 import React from "react";
 import { IconArrowDown } from "icons";
 import clsx from "clsx";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 export interface ISelectOption {
   value: any;
   text: any;
 }
-const Select = ({ options = [1, 2, 3, 4, 5] }: any) => {
+
+interface ISelect {
+  options: ISelectOption[];
+  value: ISelectOption;
+  onChange: (value: ISelectOption) => void;
+}
+const Select = ({ options, value, onChange }: ISelect) => {
   const [show, setShow] = React.useState(false);
   const listRef = React.useRef<HTMLUListElement>(null);
 
   const onToggle = () => {
     setShow(!show);
   };
+  const onSelect = (option: ISelectOption) => {
+    onChange(option);
+    onToggle();
+  };
+  useClickOutside(listRef, onToggle);
 
   return (
     <div className="relative">
       <div className="flex-center p-3 gap-3 border border-gray bg-bg rounded-md cursor-pointer" onClick={onToggle}>
-        <span className="body-medium text-white">Price Low to High</span>
+        <span className="body-medium text-white">{value?.text}</span>
         <IconArrowDown className={clsx("transition-all duration-300", show && "rotate-180")} />
       </div>
       <div
@@ -25,10 +37,10 @@ const Select = ({ options = [1, 2, 3, 4, 5] }: any) => {
         style={{ height: show ? `${listRef.current?.scrollHeight}px` : 0 }}
       >
         <ul className="border border-gray bg-bg rounded-md divide-y divide-gray" ref={listRef}>
-          {options.map((option: any) => {
+          {options.map((option, index) => {
             return (
-              <li key={option} className="body-medium p-3 hover:bg-bg-light cursor-pointer">
-                {option}
+              <li key={index} className="body-medium p-3 hover:bg-bg-light cursor-pointer" onClick={() => onSelect(option)}>
+                {option.text}
               </li>
             );
           })}

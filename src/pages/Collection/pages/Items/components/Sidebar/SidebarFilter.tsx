@@ -6,7 +6,7 @@ import { DisplayType, useItemContext } from "../../ItemContext";
 import CheckboxList from "./components/CheckboxList";
 import RadioList from "./components/RadioList";
 import RangeBar from "./components/RangeBar";
-import InputPrice from "./components/Input";
+import RangeInputOptions from "./components/RangeInputOptions";
 import RangeInput from "./components/RangeInput";
 
 enum FilterComponentType {
@@ -58,7 +58,7 @@ const SidebarFilter = () => {
                 {filters.map((filter: any, i: number) => {
                   let filterComponent: any = "";
                   if (FilterComponentType.Input === filter.type) {
-                    filterComponent = <InputPrice />;
+                    filterComponent = <RangeInputOptions />;
                   } else if (FilterComponentType.RadioList === filter.type) {
                     filterComponent = <RadioList filterData={filter.filterData} />;
                   } else if (FilterComponentType.CheckboxList === filter.type) {
