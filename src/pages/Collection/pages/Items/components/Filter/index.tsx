@@ -5,6 +5,7 @@ import InputRange from "components/InputRange";
 import Input from "components/Input";
 import { IconClear } from "icons";
 import clsx from "clsx";
+import SelectOrderBy from "./SelectOrderBy";
 
 const Range = () => {
   const [rangeValue, setRangeValue] = React.useState(0);
@@ -25,6 +26,7 @@ const Range = () => {
             setRangeValue(value < 0 ? 0 : value > 100 ? 100 : value);
           }}
           icon={<IconClear className="w-6 h-6 mr-2 cursor-pointer" />}
+          containerClassName="flex-row-reverse"
           className={clsx("w-10 border-l border-l-gray pl-4", rangeValue > 0 ? "text-white" : "text-gray")}
           placeholder={"0"}
         />
@@ -42,7 +44,9 @@ const Index = () => {
               <InputSearch placeholder="Search ID or name" />
             </div>
             <Range />
-            <div className="pl-5">asd</div>
+            <div className="pl-5 flex justify-end">
+              <SelectOrderBy />
+            </div>
           </div>
           <div className="flex-center">
             <TabDisplayType />

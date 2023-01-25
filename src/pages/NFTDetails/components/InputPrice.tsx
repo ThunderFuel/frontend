@@ -17,7 +17,7 @@ const InputPrice = (props: any) => {
 
   return (
     <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk bg-bg-light">
-      <Input maxLength="15" {...props} reversed={true} onChange={handleChange} icon={<IconEthereum color="gray" />}></Input>
+      <Input maxLength="15" {...props} onChange={handleChange} icon={<IconEthereum color="gray" />}></Input>
     </div>
   );
 };

@@ -21,8 +21,10 @@ export default {
       isActive: item % 4 !== 0,
     }));
   },
-  async getFilters(): Promise<ApiResponse<CollectionFilterResponse>> {
-    return await ThunderURL.get("v1/collection/getfilters?id=1");
+  async getFilters(params: any): Promise<ApiResponse<CollectionFilterResponse>> {
+    return await ThunderURL.get("v1/collection/getfilters", {
+      params,
+    });
   },
   async getCollectionHeader(collectionId: string): Promise<ApiResponse<CollectionResponse>> {
     return await ThunderURL.get(`v1/collection/getheader?id=${collectionId}`);
