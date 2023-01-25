@@ -4,8 +4,8 @@ import { IconArrowRight, IconAuction, IconBid, IconEthereum } from "icons";
 
 import { useAppDispatch, useAppSelector } from "store";
 import AuctionCountdown from "./AuctionCountdown";
-import { setRightMenu } from "store/NFTDetailsSlice";
-import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Auction = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ const Auction = () => {
             <Button
               className="w-full text-button font-bigShoulderDisplay"
               onClick={() => {
-                dispatch(setCheckout({ type: "AcceptOffer", price: selectedNFT.highestBid }));
+                dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.highestBid }));
                 dispatch(toggleCheckoutModal());
               }}
             >
@@ -48,7 +48,7 @@ const Auction = () => {
             <Button
               className="w-full text-button font-bigShoulderDisplay "
               onClick={() => {
-                dispatch(setRightMenu("placebid"));
+                dispatch(setRightMenu(RightMenuType.PlaceBid));
               }}
             >
               PLACE A BID
@@ -60,7 +60,7 @@ const Auction = () => {
           <Button
             className="btn-secondary no-bg "
             onClick={() => {
-              dispatch(setRightMenu("bids"));
+              dispatch(setRightMenu(RightMenuType.Bids));
             }}
           >
             SEE ALL BIDS <IconArrowRight />

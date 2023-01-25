@@ -34,7 +34,7 @@ const Footer = ({ approved }: { approved: boolean }) => {
   );
 };
 
-export const CheckoutProcessItem = ({ title, description, status = Status.notStarted }: { title: string; description: string; status: Status }) => {
+const CheckoutProcessItem = ({ title, description, status = Status.notStarted }: { title: string; description: string; status: Status }) => {
   const isPending = status === Status.pending;
   const icon: any = {
     [Status.notStarted]: <IconMilestone className="stroke-gray" />,

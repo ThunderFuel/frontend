@@ -1,26 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AssetMockNFT1 } from "assets";
 
+export enum RightMenuType {
+  None,
+  Activities,
+  Bids,
+  ListNFT,
+  MakeOffer,
+  Offers,
+  PlaceBid,
+  UpdateOffer,
+  UpdateListing,
+}
+
 export const NFTDetailsSlice = createSlice({
   name: "nftdetails",
   initialState: {
     selectedNFT: {
       onAuction: true,
       name: "Genuine Undead #1289",
-      price: 3.5,
+      price: 3500000000,
       image: AssetMockNFT1,
-      startingPrice: 0.55,
-      floorPrice: 0.12,
-      highestBid: 0.55,
-      highestOffer: 0.66,
+      startingPrice: 550000000,
+      floorPrice: 120000000,
+      highestBid: 550000000,
+      highestOffer: 660000000,
       liked: false,
-      topTraitPrice: 0.2,
+      topTraitPrice: 200000000,
     },
-    rightMenuType: "",
+    rightMenuType: RightMenuType.None,
     isOwner: false,
     hasBid: false,
-    bidBalance: 1.25,
-    currentUserOffer: 1.33,
+    bidBalance: 1250000000,
+    currentUserOffer: 1330000000,
   },
 
   reducers: {

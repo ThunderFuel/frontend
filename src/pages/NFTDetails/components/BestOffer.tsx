@@ -3,8 +3,8 @@ import EthereumPrice from "components/EthereumPrice";
 import { IconAccept, IconOffer } from "icons";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "store";
-import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
-import { setRightMenu } from "store/NFTDetailsSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 
 const BestOffer = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const BestOffer = () => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              dispatch(setCheckout({ type: "AcceptOffer", price: bestOffer }));
+              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: bestOffer }));
               dispatch(toggleCheckoutModal());
             }}
           >
@@ -39,7 +39,7 @@ const BestOffer = () => {
           <Button
             className="btn-secondary no-bg "
             onClick={() => {
-              dispatch(setRightMenu("makeoffer"));
+              dispatch(setRightMenu(RightMenuType.MakeOffer));
             }}
           >
             MAKE OFFER <IconOffer />

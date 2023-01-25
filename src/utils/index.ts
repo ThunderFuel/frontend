@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import BigNumber from "bignumber.js";
 
 export const openInNewTab = (url: string): void => {
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
@@ -54,10 +53,10 @@ export const getDateFromExpirationTime = (expirationTime: string) => {
   });
 };
 
-export function substract(num1: number, num2: number) {
-  const a = new BigNumber(num1);
-  const b = new BigNumber(num2);
-  const difference = a.minus(b);
+export function formatDisplayedNumber(num: number) {
+  return num / 1000000000;
+}
 
-  return difference.toString();
+export function toGwei(num: any) {
+  return num * 1000000000;
 }

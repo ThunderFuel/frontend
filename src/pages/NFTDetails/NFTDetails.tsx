@@ -11,7 +11,7 @@ import Activity from "./rightMenus/Activity";
 import Bids from "./rightMenus/Bids";
 import Offers from "./rightMenus/Offers";
 import { useAppDispatch, useAppSelector } from "store";
-import { setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 
 const NFTDetails = () => {
   const dispatch = useAppDispatch();
@@ -19,31 +19,31 @@ const NFTDetails = () => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    setIsActive(rightMenuType !== "");
+    setIsActive(rightMenuType !== RightMenuType.None);
   }, [rightMenuType]);
 
   const resetMenuState = () => {
     setIsActive(false);
-    dispatch(setRightMenu(""));
+    dispatch(setRightMenu(RightMenuType.None));
   };
 
   function handlePageNavigation() {
     switch (rightMenuType) {
-      case "activity":
+      case RightMenuType.Activities:
         return <Activity onBack={() => resetMenuState()} />;
-      case "bids":
+      case RightMenuType.Bids:
         return <Bids onBack={() => resetMenuState()} />;
-      case "listnft":
+      case RightMenuType.ListNFT:
         return <ListNFT onBack={() => resetMenuState()} />;
-      case "makeoffer":
+      case RightMenuType.MakeOffer:
         return <MakeOffer onBack={() => resetMenuState()} />;
-      case "offers":
+      case RightMenuType.Offers:
         return <Offers onBack={() => resetMenuState()} />;
-      case "placebid":
+      case RightMenuType.PlaceBid:
         return <PlaceBid onBack={() => resetMenuState()} />;
-      case "updateoffer":
+      case RightMenuType.UpdateOffer:
         return <UpdateOffer onBack={() => resetMenuState()} />;
-      case "updatelisting":
+      case RightMenuType.UpdateListing:
         return <ListNFT updateListing={true} onBack={() => resetMenuState()} />;
       default:
         return <></>;
@@ -52,6 +52,7 @@ const NFTDetails = () => {
 
   return (
     <div className="relative flex justify-between">
+      {/* <div className={clsx("w-2/5", isActive ? "h-0 overflow-hidden" : "block")}> */}
       <div className="w-2/5">
         {/* <LeftMenu onChange={() => setIsActive(true)} />
          */}

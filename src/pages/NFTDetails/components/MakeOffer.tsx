@@ -2,7 +2,7 @@ import React from "react";
 import Button from "components/Button";
 import { IconOffer } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
-import { setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 
 const MakeOffer = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const MakeOffer = () => {
       <Button
         className="btn-secondary no-bg"
         onClick={() => {
-          dispatch(setRightMenu("makeoffer"));
+          dispatch(setRightMenu(RightMenuType.MakeOffer));
         }}
       >
         MAKE OFFER <IconOffer />

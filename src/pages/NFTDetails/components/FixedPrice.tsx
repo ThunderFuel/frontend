@@ -6,7 +6,7 @@ import { IconAddCart, IconCart, IconListed, IconOffer, IconThunder } from "icons
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "store";
 import { add } from "store/cartSlice";
-import { setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { remainingTime } from "./AuctionCountdown";
 
 const FixedPrice = () => {
@@ -64,19 +64,19 @@ const FixedPrice = () => {
             <Button className="w-full text-button font-bigShoulderDisplay">
               Buy Now <IconThunder width="24px" height="11.58px" />
             </Button>
-            <Button>
-              <IconAddCart
-                fill="black"
-                onClick={() => {
-                  dispatch(add(selectedNFT));
-                }}
-              />
+            <Button
+              className="hover:px-8"
+              onClick={() => {
+                dispatch(add(selectedNFT));
+              }}
+            >
+              <IconAddCart className="fill-black" />
             </Button>
           </div>
           <Button
             className="btn-secondary no-bg"
             onClick={() => {
-              dispatch(setRightMenu("makeoffer"));
+              dispatch(setRightMenu(RightMenuType.MakeOffer));
             }}
           >
             MAKE OFFER <IconOffer />

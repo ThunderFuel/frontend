@@ -5,8 +5,8 @@ import { IconAuction, IconBid, IconCancel, IconEthereum } from "icons";
 import RightMenu from "../components/RightMenu";
 import AuctionCountdown from "../components/AuctionCountdown";
 import { useAppDispatch } from "store";
-import { setRightMenu } from "store/NFTDetailsSlice";
-import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Box = ({ children, ownBid }: { ownBid?: boolean; children: React.ReactNode }) => {
   return (
@@ -40,7 +40,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
         <Button
           className="btn-secondary w-full text-button font-bigShoulderDisplay"
           onClick={() => {
-            dispatch(setRightMenu("placebid"));
+            dispatch(setRightMenu(RightMenuType.PlaceBid));
           }}
         >
           PLACE A BID
@@ -68,7 +68,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
                 <Button
                   className="btn w-full btn-sm no-bg border-none text-white"
                   onClick={() => {
-                    dispatch(setCheckout({ type: "CancelBid" }));
+                    dispatch(setCheckout({ type: CheckoutType.CancelBid }));
                     dispatch(toggleCheckoutModal());
                   }}
                 >

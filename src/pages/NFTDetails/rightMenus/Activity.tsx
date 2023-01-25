@@ -1,8 +1,16 @@
-import React, { SVGProps } from "react";
-import { IconCart, IconListed, IconToken, IconTransfer } from "icons";
+import React, { SVGProps, useEffect, useState } from "react";
+import { IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
 import Filter from "../components/Filter";
 import RightMenu from "../components/RightMenu";
 import EthereumPrice from "components/EthereumPrice";
+
+const activities = [
+  { title: "Transfer", description: "Transferred from 919x919 to 21x812, 2 mins ago" },
+  { title: "Sale", description: "Sold by 919x919 to 21x812, 2 mins ago" },
+  { title: "List", description: "Listed by 919x919, 2 mins ago" },
+  { title: "Mint", description: "Minted by 919x919, 10 mins ago" },
+  { title: "Offer", description: "Offered by 919x919, 10 mins ago" },
+];
 
 const CustomBox = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: string }) => {
   return (
@@ -15,13 +23,7 @@ const CustomBox = ({ title, description, Icon, price }: { title: string; descrip
             </div>
             {title}
           </div>
-          <div className="text-bodyMd max-w-[240px]">
-            {description}
-            {/* <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
-            <IconClock width="15px" />
-            16 Oct 2022, 12:00 PM GMT+2
-          </div> */}
-          </div>
+          <div className="text-bodyMd max-w-[240px]">{description}</div>
         </div>
         {price && <EthereumPrice price={price} className="grow justify-end" />}
       </div>
@@ -30,20 +32,31 @@ const CustomBox = ({ title, description, Icon, price }: { title: string; descrip
 };
 
 const Activity = ({ onBack }: { onBack: any }) => {
+  const [notActiveFilters, setnotActiveFilters] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log(notActiveFilters);
+  }, [notActiveFilters]);
+
+  function renderItems() {
+    return activities.map((item, key) => {
+      if (notActiveFilters.includes(item.title)) return;
+
+      return (
+        <CustomBox
+          key={key}
+          title={item.title}
+          description={item.description}
+          Icon={item.title === "Transfer" ? IconTransfer : item.title === "Sale" ? IconCart : item.title === "List" ? IconListed : item.title === "Mint" ? IconToken : IconOffer}
+        ></CustomBox>
+      );
+    });
+  }
+
   return (
     <RightMenu title="Activity" onBack={onBack}>
-      <Filter />
-      <div className="flex flex-col mt-[10px] gap-y-[10px]">
-        <CustomBox title="Transfer" description="Transferred from 919x919 to 21x812, 2 mins ago" Icon={IconTransfer}></CustomBox>
-        <CustomBox title="Sale" description="Sold by 919x919 to 21x812, 2 mins ago" Icon={IconCart} price="1.55"></CustomBox>
-        <CustomBox title="List" description="Listed by 919x919, 2 mins ago" Icon={IconListed} price="1.55"></CustomBox>
-        <CustomBox title="Mint" description="Minted by 919x919, 10 mins ago" Icon={IconToken}></CustomBox>
-        <CustomBox title="Mint" description="Minted by 919x919, 10 mins ago" Icon={IconToken}></CustomBox>
-        <CustomBox title="Mint" description="Minted by 919x919, 10 mins ago" Icon={IconToken}></CustomBox>
-        <CustomBox title="Mint" description="Minted by 919x919, 10 mins ago" Icon={IconToken}></CustomBox>
-        <CustomBox title="Mint" description="Minted by 919x919, 10 mins ago" Icon={IconToken}></CustomBox>
-        <CustomBox title="Mint" description="Minted by 919x919, 10 mins ago" Icon={IconToken}></CustomBox>
-      </div>
+      <Filter setnotActiveFilters={setnotActiveFilters} />
+      <div className="flex flex-col mt-[10px] gap-y-[10px]">{renderItems()}</div>
     </RightMenu>
   );
 };

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import Button from "components/Button";
 import { IconArrowRight, IconBid, IconEthereum, IconInfo, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
-import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import RightMenu from "../components/RightMenu";
 import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
-import PriceInput from "../components/PriceInput";
+import InputPrice from "../components/InputPrice";
 import { useWallet } from "hooks/useWallet";
-import { substract } from "utils";
+import { formatDisplayedNumber, toGwei } from "utils";
 
 const bidDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
@@ -18,11 +18,11 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   const { getBalance } = useWallet();
   const { selectedNFT, bidBalance } = useAppSelector((state) => state.nftdetails);
 
-  const [bid, setbid] = useState<any>("");
-  const [balance, setbalance] = useState<number>(0);
+  const [bid, setBid] = useState<any>("");
+  const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
-    getBalance().then((res) => setbalance(res ? res / 1000000000 : 0));
+    getBalance().then((res) => setBalance(res ? res : 0));
   }, []);
 
   const isValidNumber = (price: any) => {
@@ -30,9 +30,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   };
 
   const bidBalanceControl = () => {
-    if (bid > balance) return;
-
-    return bid > bidBalance && substract(bid, bidBalance);
+    return toGwei(bid) - bidBalance;
   };
 
   const footer = (
@@ -41,14 +39,14 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
         <div className="flex justify-between">
           <span className="text-gray-light">Wallet Balance</span>
           <div className="flex items-center ">
-            {balance}
+            {formatDisplayedNumber(balance)}
             <IconEthereum width="20px" color="gray" />
           </div>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-light">Bid Balance </span>
           <div className="flex items-center">
-            {bidBalance}
+            {formatDisplayedNumber(bidBalance)}
             <IconEthereum width="20px" color="gray" />
           </div>
         </div>
@@ -60,7 +58,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={isValidNumber(bid) ? bid > balance : true}
           onClick={() => {
-            dispatch(setCheckout({ type: "PlaceBid", price: bid }));
+            dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: toGwei(bid) }));
             dispatch(toggleCheckoutModal());
           }}
         >
@@ -70,33 +68,23 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
     </div>
   );
 
-  const handleChange = (event: React.ChangeEvent<any>) => {
-    const newValue = event.target.value;
-    const lastChar = newValue.substring(newValue.length - 1);
-
-    if (newValue.match(/^(0*[1-9]\d*|0*[1-9]\d*\.\d+|0*\.\d+|0+)$/)) {
-      setbid(lastChar === "0" ? newValue : +newValue);
-    } else if (lastChar === "." && !newValue.substring(0, newValue.length - 1).includes(".")) setbid(newValue);
-    else if (newValue === "") setbid(newValue);
-  };
-
   return (
     <RightMenu title="Place a Bid" footer={footer} onBack={onBack}>
       <InfoBox title="Placing a Bid" description={bidDescription} />
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-y-2 ">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Bid</h6>
-        <PriceInput onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleChange(event)} value={bid} type="text" />
-        {balance < bid && (
+        <InputPrice onChange={setBid} value={bid} type="text" />
+        {balance < toGwei(bid) && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
           </div>
         )}
-        {bid !== "" && balance >= bid && bid >= bidBalance && (
+        {bid !== "" && balance >= toGwei(bid) && toGwei(bid) >= bidBalance && (
           <span className="flex items-center gap-x-[5px] text-bodySm text-orange">
             <IconInfo width="17px" />
-            {bidBalanceControl()} ETH will be automatically added your bid balance to place this bid.
+            {formatDisplayedNumber(bidBalanceControl())} ETH will be automatically added your bid balance to place this bid.
           </span>
         )}
       </div>

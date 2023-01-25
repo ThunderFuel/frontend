@@ -1,11 +1,12 @@
 import { AssetMockCreator, AssetTableImageNft1 } from "assets";
 import clsx from "clsx";
 import Button from "components/Button";
+import { useWallet } from "hooks/useWallet";
 import { IconAccept, IconArrowRight, IconCancel, IconContract, IconDocument, IconFee, IconLink, IconListed, IconOffer, IconToken, IconTwitter, IconUpdateListing, IconWallet } from "icons";
 import React, { SVGProps, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
-import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
-import { setRightMenu, toggleHasBid, toggleIsOwner } from "store/NFTDetailsSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { RightMenuType, setRightMenu, toggleHasBid, toggleIsOwner } from "store/NFTDetailsSlice";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -34,7 +35,7 @@ const LeftMenu = () => {
 
   const dispatch = useAppDispatch();
   const { isOwner, hasBid } = useAppSelector((state) => state.nftdetails);
-
+  const { walletConnect } = useWallet();
   const [isListed, setisListed] = useState(false);
   const [hasOffer, sethasOffer] = useState(false);
   const [onAuction, setonAuction] = useState(false);
@@ -43,7 +44,7 @@ const LeftMenu = () => {
     <div className="flex justify-end px-5 py-5 text-head6 font-spaceGrotesk text-white">
       <Button
         onClick={() => {
-          dispatch(setRightMenu("listnft"));
+          dispatch(setRightMenu(RightMenuType.ListNFT));
         }}
       >
         LIST YOUR NFT <IconListed />
@@ -59,7 +60,7 @@ const LeftMenu = () => {
       </Button>
       <Button
         onClick={() => {
-          dispatch(setRightMenu("updatelisting"));
+          dispatch(setRightMenu(RightMenuType.UpdateListing));
         }}
       >
         UPDATE LISTING <IconUpdateListing />
@@ -72,7 +73,7 @@ const LeftMenu = () => {
       <Button
         className="btn-secondary"
         onClick={() => {
-          dispatch(setCheckout({ type: "CancelAuction" }));
+          dispatch(setCheckout({ type: CheckoutType.CancelAuction }));
           dispatch(toggleCheckoutModal());
         }}
       >
@@ -104,7 +105,7 @@ const LeftMenu = () => {
           </div>
 
           {/**********************/}
-          <div className="flex  justify-center border-4 p-1 border-gray gap-2 rounded-lg">
+          <div className="flex flex-wrap min-w-fit justify-center border-4 p-1 border-gray gap-2 rounded-lg">
             <Button className={clsx("p-3 font-bold normal-case", isOwner ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleIsOwner())}>
               isOwner
             </Button>
@@ -139,13 +140,13 @@ const LeftMenu = () => {
                 </div>
               </div>
               <div className="flex gap-x-[10px]">
-                <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu("offers"))} />
+                <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Offers))} />
                 {isOwner && (
                   <HoverButton
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      dispatch(setCheckout({ type: "AcceptOffer", price: bestOffer }));
+                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: bestOffer }));
                       dispatch(toggleCheckoutModal());
                     }}
                   />
@@ -212,7 +213,7 @@ const LeftMenu = () => {
                 Icon={IconArrowRight}
                 text="SEE ALL"
                 onClick={() => {
-                  dispatch(setRightMenu("activity"));
+                  dispatch(setRightMenu(RightMenuType.Activities));
                 }}
               />
             </Box>
@@ -228,8 +229,11 @@ const LeftMenu = () => {
                 </div>
                 Copy 1% Link
               </div>
-              <div className="absolute left-0 opacity-0 h-full flex items-center justify-center pl-[10px] gap-x-[10px] rounded-[5px] w-2/3 transition-all duration-500 group-hover:bg-gray group-hover:opacity-100 group-hover:w-full">
-                <div className="bg-gray rounded-full p-[6px] ">
+              <div
+                className="absolute  cursor-pointer left-0 opacity-0 h-full flex items-center justify-center pl-[10px] gap-x-[10px] rounded-[5px] w-2/3 transition-all duration-300 group-hover:bg-gray group-hover:opacity-100 group-hover:w-full"
+                onClick={walletConnect}
+              >
+                <div className="bg-gray rounded-full p-[6px]">
                   <IconWallet width="20px" height="20px" />
                 </div>
                 Connect Your Wallet to Share
@@ -247,9 +251,7 @@ const LeftMenu = () => {
           </div>
         </div>
       </div>
-      {isOwner && !isListed && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footer}</div>}
-      {isOwner && isListed && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footerListed}</div>}
-      {isOwner && onAuction && <div className="sticky bottom-0 w-full mt-auto border-t border-gray bg-bg">{footerAuction}</div>}
+      <footer className={`sticky bottom-0 w-full mt-auto border-t border-gray bg-bg ${isOwner ? "block" : "hidden"}`}>{onAuction ? footerAuction : isListed ? footerListed : footer}</footer>
     </div>
   );
 };

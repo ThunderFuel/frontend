@@ -4,8 +4,8 @@ import { IconCancel, IconClock, IconEthereum, IconOffer } from "icons";
 import RightMenu from "../components/RightMenu";
 import { AssetTableImageNft1 } from "assets";
 import { useAppDispatch } from "store";
-import { setRightMenu } from "store/NFTDetailsSlice";
-import { setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) => {
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setCheckout({ type: "CancelOffer" }));
+              dispatch(setCheckout({ type: CheckoutType.CancelOffer }));
               dispatch(toggleCheckoutModal());
             }}
           >
@@ -42,7 +42,7 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setRightMenu("updateoffer"));
+              dispatch(setRightMenu(RightMenuType.UpdateOffer));
             }}
           >
             UPDATE OFFER
@@ -62,7 +62,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
       <Button
         className="btn-secondary no-bg"
         onClick={() => {
-          dispatch(setRightMenu("makeoffer"));
+          dispatch(setRightMenu(RightMenuType.MakeOffer));
         }}
       >
         MAKE OFFER <IconOffer />
