@@ -1,10 +1,10 @@
 import React from "react";
 import InputEthereum from "components/InputEthereum/InputEthereum";
 import Button from "components/Button";
-import { IconArrowRight } from "../../../../../../../icons";
+import { IconArrowRight } from "icons";
 
 const items = ["Top 1%", "Top 2%", "Top 3%"];
-const RangeInput = () => {
+const RangeInputOptions = () => {
   return (
     <div className="flex flex-col gap-2 text-white">
       <ul className="flex gap-2 w-full">
@@ -23,4 +23,4 @@ const RangeInput = () => {
   );
 };
 
-export default RangeInput;
+export default RangeInputOptions;
