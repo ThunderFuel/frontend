@@ -25,6 +25,7 @@ const Range = () => {
             setRangeValue(value < 0 ? 0 : value > 100 ? 100 : value);
           }}
           icon={<IconClear className="w-6 h-6 mr-2 cursor-pointer" />}
+          containerClassName="flex-row-reverse"
           className={clsx("w-10 border-l border-l-gray pl-4", rangeValue > 0 ? "text-white" : "text-gray")}
           placeholder={"0"}
         />
