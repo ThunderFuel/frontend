@@ -33,6 +33,7 @@ const Footer = ({ approved }: { approved: boolean }) => {
     </div>
   );
 };
+
 const CheckoutProcessItem = ({ title, description, status = Status.notStarted }: { title: string; description: string; status: Status }) => {
   const isPending = status === Status.pending;
   const icon: any = {

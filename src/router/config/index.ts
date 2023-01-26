@@ -6,6 +6,7 @@ const Landing = React.lazy(() => import("pages/Landing"));
 const Login = React.lazy(() => import("pages/Login"));
 const Marketplace = React.lazy(() => import("pages/Marketplace"));
 const Rankings = React.lazy(() => import("pages/Rankings"));
+const NFTDetails = React.lazy(() => import("pages/NFTDetails"));
 
 const Collection = React.lazy(() => import("pages/Collection"));
 const CollectionItems = React.lazy(() => import("pages/Collection/pages/Items/index"));
@@ -54,6 +55,11 @@ export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.RANKINGS,
     component: Rankings,
+    layout: Layout,
+  },
+  {
+    path: PATHS.NFTDETAILS,
+    component: NFTDetails,
     layout: Layout,
   },
 ];
