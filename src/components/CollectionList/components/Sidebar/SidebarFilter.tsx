@@ -18,7 +18,7 @@ enum FilterComponentType {
 }
 
 const SidebarFilter = () => {
-  const { displayType, setDisplayType, filters } = useCollectionListContext();
+  const { displayType, setDisplayType, filters, params, setParams } = useCollectionListContext();
   const [show, setShow] = React.useState(false);
 
   const onToggle = () => {
@@ -31,6 +31,10 @@ const SidebarFilter = () => {
       }
     }
     setShow(tmpShow);
+  };
+
+  const onChange = (name: any, value: any) => {
+    setParams({ [name]: value });
   };
 
   return (
@@ -52,23 +56,23 @@ const SidebarFilter = () => {
               </div>
               <div className="flex flex-col gap-2.5 py-5">
                 {filters.map((filter: any, i: number) => {
-                  let filterComponent: any = "";
-                  if (FilterComponentType.Input === filter.type) {
-                    filterComponent = <RangeInputOptions />;
-                  } else if (FilterComponentType.RadioList === filter.type) {
-                    filterComponent = <RadioList filterData={filter.filterData} />;
+                  let DynamicComponent: any = RangeInputOptions;
+                  if (FilterComponentType.RadioList === filter.type) {
+                    DynamicComponent = RadioList;
                   } else if (FilterComponentType.CheckboxList === filter.type) {
-                    filterComponent = <CheckboxList filterData={filter.filterData} />;
+                    DynamicComponent = CheckboxList;
                   } else if (FilterComponentType.RangeBar === filter.type) {
-                    filterComponent = <RangeBar />;
+                    DynamicComponent = RangeBar;
                   } else if (FilterComponentType.RangeInput === filter.type) {
-                    filterComponent = <RangeInput />;
+                    DynamicComponent = RangeInput;
                   }
 
                   return (
                     <Collapse key={i}>
                       <Collapse.Header>{filter.name ?? "-"}</Collapse.Header>
-                      <Collapse.Body>{filterComponent}</Collapse.Body>
+                      <Collapse.Body>
+                        <DynamicComponent filterData={filter.filterData} name={filter.name} value={params?.[filter.name]} onChange={onChange} />
+                      </Collapse.Body>
                     </Collapse>
                   );
                 })}
