@@ -10,7 +10,6 @@ const RangeBar = () => {
     max: 10,
   });
   const onChange = (v: any) => {
-    console.log(v);
     setValue(v);
   };
 

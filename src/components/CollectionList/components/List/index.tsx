@@ -1,16 +1,12 @@
-import React, { useEffect } from "react";
-import { useItemContext } from "../../ItemContext";
+import React from "react";
 import CollectionGrid from "./CollectionGrid";
 import CollectionTable from "./CollectionTable";
 import CollectionFooter from "./CollectionFooter";
 import clsx from "clsx";
+import { useCollectionListContext } from "../../CollectionListContext";
 
 const Index = () => {
-  const { isDisplayTypeList, collectionItems, fetchCollections } = useItemContext();
-
-  useEffect(() => {
-    fetchCollections();
-  }, []);
+  const { isDisplayTypeList, collectionItems } = useCollectionListContext();
 
   return (
     <div className={clsx("flex flex-col flex-1 pt-5 gap-5", isDisplayTypeList && "-mr-10")}>

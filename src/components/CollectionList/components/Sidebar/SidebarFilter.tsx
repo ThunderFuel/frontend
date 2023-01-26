@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IconChevronDoubleLeft, IconFilter } from "icons";
 import Collapse from "components/Collapse";
 import clsx from "clsx";
-import { DisplayType, useItemContext } from "../../ItemContext";
 import CheckboxList from "./components/CheckboxList";
 import RadioList from "./components/RadioList";
 import RangeBar from "./components/RangeBar";
 import RangeInputOptions from "./components/RangeInputOptions";
 import RangeInput from "./components/RangeInput";
+import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 
 enum FilterComponentType {
   Input = 0,
@@ -18,12 +18,8 @@ enum FilterComponentType {
 }
 
 const SidebarFilter = () => {
-  const { displayType, setDisplayType, fetchFilters, filters } = useItemContext();
+  const { displayType, setDisplayType, filters } = useCollectionListContext();
   const [show, setShow] = React.useState(false);
-
-  useEffect(() => {
-    fetchFilters();
-  }, []);
 
   const onToggle = () => {
     const tmpShow = !show;
