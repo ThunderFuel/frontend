@@ -24,19 +24,19 @@ const Collection = () => {
     <>
       <div className="container-fluid pt-10 pb-14">
         <div className="flex flex-col gap-5">
-          <CoverImage banner={collection.banner} />
+          <CoverImage banner={collection?.banner} />
           <div className="flex">
             <div className="flex gap-5 w-full">
               <div className="w-24">
-                <Img className="w-20 h-20" src={collection.logo} alt="profile-image" />
+                <Img className="w-20 h-20" src={collection?.logo} alt="profile-image" />
               </div>
               <div className="flex flex-col w-full">
-                <h3 className="text-h3 text-white">{collection.name}</h3>
-                <SocialButtons socialMedias={collection.socialMedias} />
-                <div className="body-medium text-white mt-2.5 w-10/12">{collection.description}</div>
+                <h3 className="text-h3 text-white">{collection?.name}</h3>
+                <SocialButtons socialMedias={collection?.socialMedias} />
+                <div className="body-medium text-white mt-2.5 w-10/12">{collection?.description}</div>
               </div>
             </div>
-            <CollectionProperties floor={collection.floor} volume={collection.volume} listedRate={collection.listedRate} ownerCount={collection.ownerCount} />
+            <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedRate={collection?.listedRate} ownerCount={collection?.ownerCount} />
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { cartSlice } from "./cartSlice";
 import { mobileSearchSlice } from "./mobileSearchSlice";
 import { walletSlice } from "./walletSlice";
 import { checkoutSlice } from "./checkoutSlice";
+import { NFTDetailsSlice } from "./NFTDetailsSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     mobileSearch: mobileSearchSlice.reducer,
     wallet: walletSlice.reducer,
     checkout: checkoutSlice.reducer,
+    nftdetails: NFTDetailsSlice.reducer,
   },
 });
 

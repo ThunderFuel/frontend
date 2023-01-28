@@ -40,11 +40,7 @@ const HeaderTop = React.memo(() => {
 HeaderTop.displayName = "HeaderTop";
 
 const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
-  return (
-    <span className="font-spaceGrotesk font-normal font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">
-      {count}
-    </span>
-  );
+  return <span className="font-spaceGrotesk font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">{count}</span>;
 });
 
 HeaderCardBadge.displayName = "HeaderCardBadge";

@@ -15,6 +15,7 @@ export interface TabItemProps {
   children: React.ReactNode;
   className?: string;
   id: any;
+  disabled?: boolean;
 }
 
 const Item = (props: TabItemProps) => {
@@ -22,7 +23,7 @@ const Item = (props: TabItemProps) => {
   const isActive = JSON.stringify(activeTab) === JSON.stringify(props.id);
 
   return (
-    <li onClick={() => changeActiveTab(props.id)} className={clsx(props.className)}>
+    <li onClick={() => changeActiveTab(props.id)} className={clsx(props.className, props.disabled && "pointer-events-none")}>
       <span className={isActive ? "active" : ""}>{props.children}</span>
     </li>
   );

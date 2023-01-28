@@ -6,5 +6,6 @@ export enum PATHS {
   COLLECTION_ITEMS = "",
   COLLECTION_ACTIVITY = "activity",
   RANKINGS = "/rankings",
+  NFTDETAILS = "/nftdetails",
   PROFILE = "/profile",
 }

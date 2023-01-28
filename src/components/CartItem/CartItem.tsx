@@ -10,7 +10,7 @@ export interface CartItemProps {
   text: string;
   name: string;
   image: string;
-  price: number;
+  price?: number;
   id: number;
   titleSlot?: any;
 }
@@ -75,10 +75,12 @@ const CartItem = ({ text, name, image, price, id, className, titleSlot }: CartIt
               <span className="text-h6 text-white">{name}</span>
               {titleSlot}
             </div>
-            <div className="flex w-full items-center justify-between mt-2">
-              <span className="text-h6 text-gray-light">{text}</span>
-              <EthereumPrice priceClassName="text-h6" price={price} />
-            </div>
+            {!Number.isNaN(price) && (
+              <div className="flex w-full items-center justify-between mt-2">
+                <span className="text-h6 text-gray-light">{text}</span>
+                <EthereumPrice priceClassName="text-h6" price={price} />
+              </div>
+            )}
 
             {hasError && (
               <div className="mt-2">
