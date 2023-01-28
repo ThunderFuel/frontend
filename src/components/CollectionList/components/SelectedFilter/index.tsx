@@ -10,7 +10,7 @@ const ClearFilterButton = () => {
 };
 const Index = () => {
   const { params } = useCollectionListContext();
-  console.log(Object.entries(params));
+  console.log(params);
 
   return (
     <div className="flex flex-col gap-2 px-5">
