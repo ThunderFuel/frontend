@@ -1,11 +1,11 @@
 import React from "react";
 import Tab from "components/Tab";
-import { DisplayType, useItemContext } from "../../ItemContext";
 
 import { IconGrid, IconGridExtend, IconList } from "icons";
+import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 
 const TabDisplayType = () => {
-  const { setDisplayType, displayType } = useItemContext();
+  const { setDisplayType, displayType } = useCollectionListContext();
 
   return (
     <Tab

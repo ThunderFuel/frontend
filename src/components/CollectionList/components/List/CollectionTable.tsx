@@ -4,8 +4,8 @@ import { IconEthereum } from "icons";
 import Checkbox from "components/CheckBox";
 import { add, remove } from "store/cartSlice";
 import { useAppDispatch } from "store";
-import { useItemContext } from "../../ItemContext";
 import { dateFormat } from "utils";
+import { useCollectionListContext } from "../../CollectionListContext";
 
 const Collection = ({ item }: { item: any }) => {
   return (
@@ -27,7 +27,7 @@ const Price = ({ price }: { price: any }) => {
 
 const CollectionTable = () => {
   const dispatch = useAppDispatch();
-  const { collectionItems } = useItemContext();
+  const { collectionItems } = useCollectionListContext();
   const onSelect = (collection: any) => {
     if (!collection.isSelected) {
       dispatch(add(collection));

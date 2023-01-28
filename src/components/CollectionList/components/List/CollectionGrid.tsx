@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import clsx from "clsx";
 import CollectionItem from "./CollectionItem";
-import { DisplayType, useItemContext } from "../../ItemContext";
+import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 
 const CollectionGrid = () => {
-  const { displayType, collectionItems } = useItemContext();
+  const { displayType, collectionItems } = useCollectionListContext();
 
   const displayClass = useMemo(() => {
     if (displayType === DisplayType.GRID4) {

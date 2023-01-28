@@ -24,7 +24,9 @@ const Select = ({ options, value, onChange }: ISelect) => {
     onChange(option);
     onToggle();
   };
-  useClickOutside(listRef, onToggle);
+  useClickOutside(listRef, () => {
+    setShow(false);
+  });
 
   return (
     <div className="relative">
