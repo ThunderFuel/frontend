@@ -24,7 +24,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
     <Modal className="checkout" title="Insufficient Funds" footer={footer} onClose={onClose} show={show}>
       <div className="flex justify-center gap-x-5 py-8 px-6">
         <div className="flex mt-0.5">
-          <IconWarning className="fill-red" />
+          <IconWarning className="text-red" />
         </div>
         <div className="flex flex-col">
           <h5 className="text-h5 text-white">

@@ -67,11 +67,13 @@ const SidebarFilter = () => {
                     DynamicComponent = RangeInput;
                   }
 
+                  const name = filter.name ?? i;
+
                   return (
                     <Collapse key={i}>
                       <Collapse.Header>{filter.name ?? "-"}</Collapse.Header>
                       <Collapse.Body>
-                        <DynamicComponent filterData={filter.filterData} name={filter.name} value={params?.[filter.name]} onChange={onChange} />
+                        <DynamicComponent filterData={filter.filterData} name={name} value={params?.[name]} onChange={onChange} />
                       </Collapse.Body>
                     </Collapse>
                   );

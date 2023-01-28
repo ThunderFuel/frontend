@@ -30,7 +30,7 @@ export default {
     return await ThunderURL.get(`v1/collection/getheader?id=${collectionId}`);
   },
   async getCollectionItems(data: CollectionItemsRequest): Promise<ApiResponse<CollectionItemResponse[]>> {
-    return await ThunderURL.post("v1/collection/items", data);
+    return await ThunderURL.post("v1/token/tokens", data);
   },
 
   async getActivityFilters() {
