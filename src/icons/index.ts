@@ -61,3 +61,4 @@ export { ReactComponent as IconBid } from "./icon-bid.svg";
 export { ReactComponent as IconAuction } from "./icon-auction.svg";
 export { ReactComponent as IconAccept } from "./icon-accept.svg";
 export { ReactComponent as IconUpdateListing } from "./icon-update-listing.svg";
+export { ReactComponent as IconCirclePlus } from "./icon-circle-plus.svg";

@@ -25,3 +25,5 @@ export { default as AssetCollectionItem4 } from "./collection/item-4.png";
 export { default as AssetEmptyCart } from "./cart/cart-empty.svg";
 export { default as AssetMockNFT1 } from "./mockNFT1.png";
 export { default as AssetMockCreator } from "./mockCreator.png";
+export { default as AssetProfileLogo } from "./profile/profile-logo.png";
+export { default as AssetProfileBg } from "./profile/profile-bg.png";

@@ -11,6 +11,7 @@ const NFTDetails = React.lazy(() => import("pages/NFTDetails"));
 const Collection = React.lazy(() => import("pages/Collection"));
 const CollectionItems = React.lazy(() => import("pages/Collection/pages/Items/index"));
 const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activity/index"));
+const Profile = React.lazy(() => import("pages/Profile"));
 
 export interface RouteConfig {
   path: string;
@@ -60,6 +61,11 @@ export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.NFTDETAILS,
     component: NFTDetails,
+    layout: Layout,
+  },
+  {
+    path: PATHS.PROFILE,
+    component: Profile,
     layout: Layout,
   },
 ];
