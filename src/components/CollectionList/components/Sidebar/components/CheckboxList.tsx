@@ -5,17 +5,30 @@ import InputSearch from "components/InputSearch";
 
 const CheckboxList = ({ filterData, name, onChange, value }: any) => {
   const [search, setSearch] = React.useState("");
+  const onSelect = (val: any) => {
+    const tmpValue = value ?? [];
+    console.log(tmpValue);
+
+    const index = tmpValue.indexOf(val);
+    if (index <= -1) {
+      tmpValue.push(val);
+    } else {
+      tmpValue.splice(index, 1);
+    }
+    console.log(tmpValue, index);
+    onChange(name, tmpValue);
+  };
 
   const getFilterData = React.useMemo(() => {
     return filterData.filter((item: any) => item.text.trim().toLowerCase().includes(search));
   }, [filterData, search]);
 
   const result: any = getFilterData.map((item: any, i: number) => {
-    const isChecked = item.value === value;
+    const isChecked = Object.values(value ?? {}).includes(item.value);
 
     return (
       <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", isChecked ? "bg-gray" : "")}>
-        <Checkbox defaultChecked={isChecked} value={item.value} name={name} onClick={() => onChange(name, item.value)}>
+        <Checkbox defaultChecked={isChecked} value={item.value} name={name} onClick={() => onSelect(item.value)}>
           <span className="body-medium">{item.text}</span>
         </Checkbox>
       </div>

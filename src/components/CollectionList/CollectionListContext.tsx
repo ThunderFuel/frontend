@@ -20,8 +20,16 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
+    if (nextState.type === "reset") {
+      return {};
+    }
+
     return { ...prevState, ...nextState };
   }, {});
+
+  const resetParams = () => {
+    setParams({ type: "reset" });
+  };
 
   const collectionItems = React.useMemo(() => {
     const selectedCartsIds = selectedCarts.map((item) => item.tokenOrder);
@@ -46,6 +54,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     filters,
     params,
     setParams,
+    resetParams,
     setDisplayType,
   };
 
