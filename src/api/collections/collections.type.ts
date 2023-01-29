@@ -16,14 +16,32 @@ interface CollectionFilterItem {
   filterData: any[];
 }
 
+interface CollectionUser {
+  banner: string;
+  contractAddress: string;
+  email: string;
+  firstName: string;
+  followers: any[];
+  follows: any[];
+  gender: string;
+  id: any;
+  image: string;
+  lastName: string;
+  phone: string;
+  socialMedias: any[];
+  tokens: any[];
+  userName: string;
+}
+
 export interface CollectionFilterResponse {
   filters: CollectionFilterItem[];
 }
 
 export interface CollectionItemResponse {
+  id: any;
   tokenOrder: any;
   isSelected: boolean;
-  attributes: any[];
+  tokenAttributes: any[];
   collectionId: number;
   image: string;
   name: string;
@@ -31,7 +49,9 @@ export interface CollectionItemResponse {
   rarity: number;
   salable: boolean;
   lastSalePrice: number;
+  user?: CollectionUser;
 }
+
 export interface CollectionResponse {
   id: number;
   name: string;

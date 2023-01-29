@@ -59,7 +59,7 @@ export const ROUTES: RouteConfig[] = [
     layout: Layout,
   },
   {
-    path: PATHS.NFTDETAILS,
+    path: PATHS.NFT_DETAILS,
     component: NFTDetails,
     layout: Layout,
   },

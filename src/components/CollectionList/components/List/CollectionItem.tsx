@@ -6,6 +6,7 @@ import { add, remove } from "store/cartSlice";
 
 import "./CollectionItem.css";
 import { CollectionItemResponse } from "api/collections/collections.type";
+import { PATHS } from "../../../../router/config/paths";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -44,8 +45,10 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
     }
   };
 
+  const collectionUrl = PATHS.NFT_DETAILS.replace(":nftId", collection.id);
+
   return (
-    <div className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light cursor-pointer", collection.isSelected ? "border-white" : "border-gray")}>
+    <a href={collectionUrl} className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}>
       <div className="overflow-hidden relative">
         {collection.salable && <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />}
         <img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
@@ -68,7 +71,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
       </div>
       <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
-    </div>
+    </a>
   );
 };
 
