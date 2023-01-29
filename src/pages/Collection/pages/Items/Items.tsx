@@ -9,19 +9,26 @@ const Items = () => {
   const { collectionId } = useParams();
   const [collections, setCollections] = useState([]);
   const [filters, setFilters] = useState<any>([]);
+  const [pagination, setPagination] = useState({});
 
   const fetchCollections = async (filter: any = null) => {
-    const data: CollectionItemsRequest = {
+    let data: CollectionItemsRequest = {
       id: collectionId,
       page: 1,
       pageSize: 16,
       sortingType: 1,
     };
     if (filter) {
-      data.items = filter;
+      data = { ...data, ...filter };
     }
     const response = await collectionService.getCollectionItems(data);
     setCollections(response.data as any);
+    setPagination({
+      itemsCount: response.itemsCount,
+      pageSize: response.pageSize,
+      pageCount: response.pageCount,
+      pageNumber: response.pageNumber,
+    });
   };
   const fetchFilters = async () => {
     const response = await collectionService.getFilters({
@@ -31,7 +38,9 @@ const Items = () => {
   };
 
   const onChangeFilter = async (params: any) => {
-    const selectedFilter = Object.keys(params).map((paramKey) => {
+    const { sortingType, pageSize = 16, ...etcParams } = params;
+
+    const selectedFilter = Object.keys(etcParams).map((paramKey) => {
       const name = paramKey;
       const selecteds = Array.isArray(params[paramKey]) ? params[paramKey] : [];
       const value = params[paramKey].min || params[paramKey].max ? `${params[paramKey].min ?? 0}-${params[paramKey].max ?? 0}` : !selecteds.length ? params[paramKey] : "";
@@ -43,7 +52,11 @@ const Items = () => {
         value,
       };
     });
-    await fetchCollections(selectedFilter);
+    await fetchCollections({
+      sortingType,
+      pageSize,
+      items: selectedFilter,
+    });
   };
 
   React.useEffect(() => {
@@ -51,7 +64,7 @@ const Items = () => {
     fetchFilters();
   }, []);
 
-  return <CollectionList collectionItems={collections} filterItems={filters} onChangeFilter={onChangeFilter} />;
+  return <CollectionList collectionItems={collections} filterItems={filters} onChangeFilter={onChangeFilter} pagination={pagination} />;
 };
 
 export default Items;

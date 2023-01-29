@@ -25,7 +25,6 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
-    console.log("nextState", nextState);
     switch (nextState.type) {
       case ParamsType.Reset: {
         return {};
