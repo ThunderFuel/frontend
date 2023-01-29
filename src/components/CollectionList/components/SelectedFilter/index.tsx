@@ -66,11 +66,13 @@ const Index = () => {
         });
       } else if (paramValue.min || paramValue.max) {
         Object.keys(paramValue).forEach((key) => {
-          tmpParamItems.push({
-            paramKey,
-            key: `${key}_${i}`,
-            text: `${paramValue[key]} ${key === "min" ? ">" : "<"}`,
-          });
+          if (paramValue[key]) {
+            tmpParamItems.push({
+              paramKey,
+              key: `${key}_${i}`,
+              text: `${paramValue[key]} ${key === "min" ? ">" : "<"}`,
+            });
+          }
         });
       }
     });

@@ -7,11 +7,13 @@ import CollectionList from "components/CollectionList";
 
 const Items = () => {
   const { collectionId } = useParams();
+  const [isLoading, setIsLoading] = React.useState(false);
   const [collections, setCollections] = useState([]);
   const [filters, setFilters] = useState<any>([]);
   const [pagination, setPagination] = useState({});
 
   const fetchCollections = async (filter: any = null) => {
+    setIsLoading(true);
     let data: CollectionItemsRequest = {
       id: collectionId,
       page: 1,
@@ -21,14 +23,18 @@ const Items = () => {
     if (filter) {
       data = { ...data, ...filter };
     }
-    const response = await collectionService.getCollectionItems(data);
-    setCollections(response.data as any);
-    setPagination({
-      itemsCount: response.itemsCount,
-      pageSize: response.pageSize,
-      pageCount: response.pageCount,
-      pageNumber: response.pageNumber,
-    });
+    try {
+      const response = await collectionService.getCollectionItems(data);
+      setCollections(response.data as any);
+      setPagination({
+        itemsCount: response.itemsCount,
+        pageSize: response.pageSize,
+        pageCount: response.pageCount,
+        pageNumber: response.pageNumber,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   const fetchFilters = async () => {
     const response = await collectionService.getFilters({
@@ -79,7 +85,7 @@ const Items = () => {
     fetchFilters();
   }, []);
 
-  return <CollectionList collectionItems={collections} filterItems={filters} onChangeFilter={onChangeFilter} pagination={pagination} />;
+  return <CollectionList collectionItems={collections} filterItems={filters} onChangeFilter={onChangeFilter} pagination={pagination} isLoading={isLoading} />;
 };
 
 export default Items;

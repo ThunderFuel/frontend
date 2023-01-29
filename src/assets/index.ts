@@ -38,3 +38,5 @@ export { default as AssetProfileAvatar7 } from "./profile/avatars/avatar-7.png";
 export { default as AssetProfileAvatar8 } from "./profile/avatars/avatar-8.png";
 export { default as AssetProfileAvatar9 } from "./profile/avatars/avatar-9.png";
 export { default as AssetProfileAvatar10 } from "./profile/avatars/avatar-10.png";
+
+export { default as AssetLoadingGrid } from "./collection/loading-grid.png";
