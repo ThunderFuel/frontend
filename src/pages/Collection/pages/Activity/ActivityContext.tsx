@@ -37,7 +37,7 @@ const filters = [
 ];
 const ActivityProvider = ({ children }: { children: ReactNode }) => {
   const { collectionId } = useParams();
-  const [selectedFilter, setSelectedFilter] = useState(filters[0]);
+  const [selectedFilter, setSelectedFilter] = useState(null);
   const [activities, setActivities] = useState([]);
   const [pagination, setPagination] = useState({});
   const fetchActivity = async () => {
@@ -60,7 +60,7 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const getActivities = React.useMemo(() => activities.filter((item: any) => item.type === selectedFilter), [selectedFilter, activities]);
+  const getActivities = React.useMemo(() => activities.filter((item: any) => (selectedFilter ? item.type === selectedFilter : true)), [selectedFilter, activities]);
 
   const value = {
     fetchActivity,

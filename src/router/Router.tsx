@@ -15,7 +15,7 @@ const getRoute = (route: RouteConfig) => {
       path={route.path}
       element={
         <ErrorBoundary>
-          <Layout>
+          <Layout {...route.layoutProps}>
             <React.Suspense fallback={null}>
               <Component />
             </React.Suspense>

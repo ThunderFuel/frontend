@@ -9,15 +9,17 @@ import CheckoutModal from "./CheckoutModal";
 
 interface Props {
   children: React.ReactNode;
+
+  [key: string]: any;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children, ...etc }: Props) => {
   return (
     <main className={"bg-bg min-h-screen flex flex-col"}>
       <Header />
       <MyCart />
       {children}
-      <Footer />
+      {etc?.hiddenFooter ? null : <Footer />}
 
       <ErrorModal />
       <CheckoutModal />

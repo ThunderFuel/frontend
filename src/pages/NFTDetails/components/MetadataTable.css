@@ -1,36 +1,7 @@
-table {
-  @apply w-full;
+.table-head {
+  @apply grid border-b border-gray px-5 py-4 text-gray-light;
 }
 
-table thead {
-  @apply border-b  border-gray bg-bg;
-}
-table thead tr {
-  @apply flex items-center px-5 py-[15px];
-}
-
-table thead tr th {
-  flex: 1;
-  @apply flex text-gray-light uppercase font-bigShoulderDisplay text-headlineSm;
-}
-
-table tbody {
-  @apply flex flex-col;
-}
-
-table tbody tr {
-  @apply flex flex-row items-center border-y border-gray px-5 py-[15px];
-}
-
-table tbody tr:last-child {
-  @apply border-none;
-}
-
-table tbody tr td {
-  flex: 1;
-  @apply flex text-white;
-}
-
-table tbody tr td:first-child {
-  @apply text-gray-light;
+.table-body {
+  @apply grid border-b border-gray px-5 py-4 text-gray-light;
 }
