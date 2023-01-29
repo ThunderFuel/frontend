@@ -7,7 +7,6 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
   const [search, setSearch] = React.useState("");
   const onSelect = (val: any) => {
     const tmpValue = value ?? [];
-    console.log(tmpValue);
 
     const index = tmpValue.indexOf(val);
     if (index <= -1) {
@@ -15,7 +14,6 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
     } else {
       tmpValue.splice(index, 1);
     }
-    console.log(tmpValue, index);
     onChange(name, tmpValue);
   };
 

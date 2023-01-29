@@ -27,3 +27,14 @@ export { default as AssetMockNFT1 } from "./mockNFT1.png";
 export { default as AssetMockCreator } from "./mockCreator.png";
 export { default as AssetProfileLogo } from "./profile/profile-logo.png";
 export { default as AssetProfileBg } from "./profile/profile-bg.png";
+
+export { default as AssetProfileAvatar1 } from "./profile/avatars/avatar-1.png";
+export { default as AssetProfileAvatar2 } from "./profile/avatars/avatar-2.png";
+export { default as AssetProfileAvatar3 } from "./profile/avatars/avatar-3.png";
+export { default as AssetProfileAvatar4 } from "./profile/avatars/avatar-4.png";
+export { default as AssetProfileAvatar5 } from "./profile/avatars/avatar-5.png";
+export { default as AssetProfileAvatar6 } from "./profile/avatars/avatar-6.png";
+export { default as AssetProfileAvatar7 } from "./profile/avatars/avatar-7.png";
+export { default as AssetProfileAvatar8 } from "./profile/avatars/avatar-8.png";
+export { default as AssetProfileAvatar9 } from "./profile/avatars/avatar-9.png";
+export { default as AssetProfileAvatar10 } from "./profile/avatars/avatar-10.png";

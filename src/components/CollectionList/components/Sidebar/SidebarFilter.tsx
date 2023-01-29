@@ -18,8 +18,8 @@ enum FilterComponentType {
 }
 
 const SidebarFilter = () => {
-  const { displayType, setDisplayType, filters, params, setParams } = useCollectionListContext();
-  const [show, setShow] = React.useState(false);
+  const { displayType, setDisplayType, filters, params, setParams, deleteParams, options } = useCollectionListContext();
+  const [show, setShow] = React.useState(options.hiddenFilter ?? false);
 
   const onToggle = () => {
     const tmpShow = !show;
@@ -34,8 +34,36 @@ const SidebarFilter = () => {
   };
 
   const onChange = (name: any, value: any) => {
-    setParams({ [name]: value });
+    if (Array.isArray(value) && !value.length) {
+      deleteParams(name);
+    } else {
+      setParams({ [name]: value });
+    }
   };
+
+  const getFilter = React.useMemo(() => {
+    return filters.map((filter: any, i: number) => {
+      let DynamicComponent: any = RangeInputOptions;
+      if (FilterComponentType.RadioList === filter.type) {
+        DynamicComponent = RadioList;
+      } else if (FilterComponentType.CheckboxList === filter.type) {
+        DynamicComponent = CheckboxList;
+      } else if (FilterComponentType.RangeBar === filter.type) {
+        DynamicComponent = RangeBar;
+      } else if (FilterComponentType.RangeInput === filter.type) {
+        DynamicComponent = RangeInput;
+      }
+
+      const name = filter.name ?? i;
+
+      return {
+        name,
+        filterData: filter.filterData,
+        value: params?.[name],
+        dynamicComponent: DynamicComponent,
+      };
+    });
+  }, [filters, params]);
 
   return (
     <div className="flex justify-end">
@@ -55,25 +83,14 @@ const SidebarFilter = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-2.5 py-5">
-                {filters.map((filter: any, i: number) => {
-                  let DynamicComponent: any = RangeInputOptions;
-                  if (FilterComponentType.RadioList === filter.type) {
-                    DynamicComponent = RadioList;
-                  } else if (FilterComponentType.CheckboxList === filter.type) {
-                    DynamicComponent = CheckboxList;
-                  } else if (FilterComponentType.RangeBar === filter.type) {
-                    DynamicComponent = RangeBar;
-                  } else if (FilterComponentType.RangeInput === filter.type) {
-                    DynamicComponent = RangeInput;
-                  }
-
-                  const name = filter.name ?? i;
+                {getFilter.map((item: any, i: number) => {
+                  const DynamicComponent = item.dynamicComponent;
 
                   return (
                     <Collapse key={i}>
-                      <Collapse.Header>{filter.name ?? "-"}</Collapse.Header>
+                      <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
                       <Collapse.Body>
-                        <DynamicComponent filterData={filter.filterData} name={name} value={params?.[name]} onChange={onChange} />
+                        <DynamicComponent filterData={item.filterData} name={item.name} value={item.value} onChange={onChange} />
                       </Collapse.Body>
                     </Collapse>
                   );

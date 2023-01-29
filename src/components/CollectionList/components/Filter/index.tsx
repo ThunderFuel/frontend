@@ -6,6 +6,7 @@ import Input from "components/Input";
 import { IconClear } from "icons";
 import clsx from "clsx";
 import SelectOrderBy from "./SelectOrderBy";
+import { useCollectionListContext } from "../../CollectionListContext";
 
 const Range = () => {
   const [rangeValue, setRangeValue] = React.useState(0);
@@ -35,6 +36,8 @@ const Range = () => {
   );
 };
 const Index = () => {
+  const { options } = useCollectionListContext();
+
   return (
     <div className="sticky top-[109px] border-b border-gray z-20 bg-bg">
       <div className="container-fluid">
@@ -43,7 +46,7 @@ const Index = () => {
             <div className="py-2.5 pr-5 flex-1 border-r border-r-gray">
               <InputSearch placeholder="Search ID or name" />
             </div>
-            <Range />
+            {options.hiddenSweep ? <div /> : <Range />}
             <div className="pl-5 flex justify-end">
               <SelectOrderBy />
             </div>

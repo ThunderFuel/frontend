@@ -60,3 +60,7 @@ export function formatDisplayedNumber(num: number) {
 export function toGwei(num: any) {
   return num * 1000000000;
 }
+
+export function randomIntFromInterval(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}

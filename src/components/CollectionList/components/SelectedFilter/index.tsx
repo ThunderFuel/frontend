@@ -25,6 +25,7 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
 const Index = () => {
   const { params, resetParams } = useCollectionListContext();
 
+  console.log(params);
   if (!Object.keys(params).length) {
     return null;
   }
