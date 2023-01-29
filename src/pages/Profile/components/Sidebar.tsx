@@ -16,10 +16,11 @@ import {
 import SocialButtons from "../../Collection/components/SocialButtons";
 
 import "./Sidebar.css";
-import { IconCirclePlus } from "icons";
+import { IconCirclePlus, IconPlus } from "icons";
 import userService from "api/user/user.service";
 import { IUserResponse } from "api/user/user.type";
-import { randomIntFromInterval } from "../../../utils";
+import { randomIntFromInterval } from "utils";
+import Button from "../../../components/Button";
 
 const avatars = [
   AssetProfileAvatar1,
@@ -38,6 +39,9 @@ const CoverImage = () => {
   return (
     <div className="profile-cover-image">
       <Img src={AssetProfileBg} className="w-full" />
+      <Button>
+        FOLLOW <IconPlus />
+      </Button>
     </div>
   );
 };

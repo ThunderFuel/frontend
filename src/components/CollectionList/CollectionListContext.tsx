@@ -25,6 +25,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
+    console.log("nextState", nextState);
     switch (nextState.type) {
       case ParamsType.Reset: {
         return {};
@@ -32,7 +33,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
       case ParamsType.Delete: {
         delete prevState[nextState.name];
 
-        return prevState;
+        return { ...prevState };
       }
       default:
         return { ...prevState, ...nextState };
@@ -60,6 +61,10 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const isDisplayTypeList = useMemo(() => {
     return displayType === DisplayType.LIST;
   }, [displayType]);
+
+  React.useEffect(() => {
+    value.onChangeFilter(params);
+  }, [params]);
 
   const contextValue = {
     ...value,

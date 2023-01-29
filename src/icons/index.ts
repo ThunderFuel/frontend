@@ -64,3 +64,4 @@ export { ReactComponent as IconUpdateListing } from "./icon-update-listing.svg";
 export { ReactComponent as IconCirclePlus } from "./icon-circle-plus.svg";
 export { ReactComponent as IconCircleRemove } from "./icon-circle-remove.svg";
 export { ReactComponent as IconCircleRemoveWhite } from "./icon-circle-remove-white.svg";
+export { ReactComponent as IconPlus } from "./icon-plus.svg";

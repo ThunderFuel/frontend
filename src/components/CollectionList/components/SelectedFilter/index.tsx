@@ -15,7 +15,7 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
   return (
     <div>
       <div className="inline-flex body-medium text-white p-2.5 gap-2 group rounded-md border border-gray hover:bg-bg-light">
-        {children}
+        <span className="text-overflow">{children}</span>
         <IconCircleRemove className="cursor-pointer text-gray group-hover:hidden" />
         <IconCircleRemoveWhite className="hidden cursor-pointer text-gray group-hover:flex" onClick={onClick} />
       </div>
@@ -23,38 +23,63 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
   );
 };
 const Index = () => {
-  const { params, resetParams } = useCollectionListContext();
+  const { params, setParams, deleteParams, resetParams } = useCollectionListContext();
 
-  console.log(params);
   if (!Object.keys(params).length) {
     return null;
   }
 
-  const onRemove = () => {
-    console.log("remove");
+  const onRemove = (paramKey: any, p: any) => {
+    if (Array.isArray(params[paramKey])) {
+      params[paramKey] = params[paramKey].filter((i: any) => i !== p);
+      if (!params[paramKey].length) {
+        deleteParams(paramKey);
+      } else {
+        setParams(params);
+      }
+    } else if (params[paramKey]?.min || params[paramKey]?.max) {
+      delete params[paramKey][p];
+      setParams(params);
+    }
   };
 
-  return (
-    <div className="flex flex-row gap-2 px-5">
-      <ClearFilterButton onClick={resetParams} />
-      {Object.keys(params).map((paramKey: any, i) => {
-        const param = params[paramKey];
-
-        if (Array.isArray(param)) {
-          return param.map((p) => (
-            <SelectedFilterItem key={i} onClick={onRemove}>
-              {p}
-            </SelectedFilterItem>
-          ));
-        } else if (param.min || params.max) {
-          return Object.keys(param).map((key) => {
-            return (
-              <SelectedFilterItem key={i} onClick={onRemove}>
-                {`${param[key]} ${key === "min" ? ">" : "<"}`}
-              </SelectedFilterItem>
-            );
+  const paramItems = React.useMemo(() => {
+    const tmpParamItems: any = [];
+    Object.keys(params).forEach((paramKey: any, i) => {
+      const param = params[paramKey];
+      if (Array.isArray(param)) {
+        param.forEach((p, key) => {
+          tmpParamItems.push({
+            paramKey,
+            key: `${key}_${i}`,
+            text: p,
           });
-        }
+        });
+      } else if (param.min || params.max) {
+        Object.keys(param).forEach((key) => {
+          tmpParamItems.push({
+            paramKey,
+            key: `${key}_${i}`,
+            text: `${param[key]} ${key === "min" ? ">" : "<"}`,
+          });
+        });
+      }
+    });
+
+    return tmpParamItems;
+  }, [params]);
+
+  console.log("musa", paramItems);
+
+  return (
+    <div className="flex flex-row flex-wrap gap-2 px-5">
+      <ClearFilterButton onClick={resetParams} />
+      {paramItems.map((item: any) => {
+        return (
+          <SelectedFilterItem key={item.key} onClick={() => onRemove(item.paramKey, item.text)}>
+            {item.text}
+          </SelectedFilterItem>
+        );
       })}
     </div>
   );
