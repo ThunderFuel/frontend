@@ -16,6 +16,19 @@ import MetadataTable from "./MetadataTable";
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
 };
+const BoxWithIcon = React.memo(({ children, className, icon }: { children: React.ReactNode; className?: string; icon: React.FC<SVGProps<SVGSVGElement>> }) => {
+  const Icon = icon;
+
+  return (
+    <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>
+      <div className="h-fit rounded-full bg-gray p-[6px]">
+        <Icon className="w-5 h-5" />
+      </div>
+      <div className="flex flex-col gap-y-[5px]">{children}</div>
+    </div>
+  );
+});
+BoxWithIcon.displayName = "BoxWithIcon";
 
 const HoverButton = ({ Icon, text, btnClassName, onClick }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any }) => {
   return (
@@ -86,7 +99,6 @@ const LeftMenu = (props: any) => {
   const dispatch = useAppDispatch();
   const { isOwner, hasBid } = useAppSelector((state) => state.nftdetails);
   const { walletConnect } = useWallet();
-  const [isListed, setisListed] = useState(false);
   const [hasOffer, sethasOffer] = useState(false);
   const [onAuction, setonAuction] = useState(false);
 
@@ -94,7 +106,7 @@ const LeftMenu = (props: any) => {
   const offerOwner = "09x910";
 
   return (
-    <div className="flex flex-col border-r border-gray h-screen	 overflow-hidden overflow-y-scroll">
+    <div className="flex flex-col border-r border-gray overflow-hidden overflow-y-scroll">
       <div className="flex flex-col">
         <div className="container-fluid flex flex-col pt-10 pb-5 pr-10 border-b border-gray">
           <div className="flex gap-2 mb-[5px]">
@@ -122,9 +134,6 @@ const LeftMenu = (props: any) => {
             <Button className={clsx("p-3 font-bold normal-case", hasOffer ? "bg-green" : "bg-red")} onClick={() => sethasOffer(!hasOffer)}>
               hasOffer
             </Button>
-            <Button className={clsx("p-3 font-bold normal-case", isListed ? "bg-green" : "bg-red")} onClick={() => setisListed(!isListed)}>
-              isListed
-            </Button>
             <Button className={clsx("p-3 font-bold normal-case", onAuction ? "bg-green" : "bg-red")} onClick={() => setonAuction(!onAuction)}>
               onAuction
             </Button>
@@ -136,7 +145,8 @@ const LeftMenu = (props: any) => {
 
           <div className="body-medium text-white">{nft?.collection?.description}</div>
 
-          {isListed ? <FixedPrice /> : onAuction ? <Auction /> : hasOffer ? <BestOffer /> : <MakeOffer />}
+          {nft.salable && <FixedPrice />}
+          {onAuction ? <Auction /> : hasOffer ? <BestOffer /> : <MakeOffer />}
 
           {hasOffer && (
             <Box className="bg-bg-light justify-between pr-4">
@@ -144,7 +154,7 @@ const LeftMenu = (props: any) => {
                 <img src={AssetCollectionProfileImage} className="w-8 rounded-full" alt="profile-image" />
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-02 text-gray-light">BEST OFFER</span>
-                  <h6 className="text-h6 font-spaceGrotesk text-white">
+                  <h6 className="text-h6 text-white">
                     {bestOffer} ETH by {offerOwner}
                   </h6>
                 </div>
@@ -169,7 +179,7 @@ const LeftMenu = (props: any) => {
           <MetadataTable metadata={nft.tokenAttributes ?? []} />
           <div className="flex flex-col gap-y-2.5">
             <div className="flex flex-row gap-x-2.5">
-              <Box className=" hover:bg-bg-light">
+              <Box className="hover:bg-bg-light">
                 <div className="flex h-fit rounded-full bg-gray p-[6px]">
                   <IconDocument className="opacity-1 group-hover:opacity-0 transition-opacity duration-500 h-5 w-5" />
                   <IconContract className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-500 h-5 w-5" />
@@ -179,15 +189,10 @@ const LeftMenu = (props: any) => {
                   {nft?.collection?.contractAddress}
                 </div>
               </Box>
-              <Box className="hover:bg-bg-light">
-                <div className="h-fit rounded-full bg-gray p-[6px]">
-                  <IconToken width="20px" height="20px" />
-                </div>
-                <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light"> TOKEN ID</div>
-                  {nft.id}
-                </div>
-              </Box>
+              <BoxWithIcon className="hover:bg-bg-light" icon={IconToken}>
+                <div className="text-headline-02 text-gray-light"> TOKEN ID</div>
+                {nft.id}
+              </BoxWithIcon>
             </div>
             <div className="flex flex-row gap-x-2.5">
               <Box className="hover:bg-bg-light">
@@ -201,7 +206,7 @@ const LeftMenu = (props: any) => {
               </Box>
               <Box>
                 <div className="h-fit rounded-full bg-gray p-[6px]">
-                  <IconFee width="20px" height="20px" />
+                  <IconFee className="w-5 h-5" />
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-02 text-gray-light">CREATOR FEE</div>
@@ -229,13 +234,13 @@ const LeftMenu = (props: any) => {
             </Box>
           </div>
         </div>
-        <div className="container-fluid flex flex-col pt-5 pb-[35px] pr-10 text-h6 text-white">
+        <div className="container-fluid flex flex-col pt-5 pb-9 pr-10 text-h6 text-white">
           <h6 className="mb-5">Share to Earn %1</h6>
           <div className="flex flex-col gap-y-2.5">
             <Box className="relative">
               <div className="flex opacity-100 gap-x-2.5 items-center transition-all duration-500 group-hover:translate-x-5 group-hover:opacity-0">
                 <div className="bg-gray rounded-full p-[6px] ">
-                  <IconLink width="20px" height="20px" />
+                  <IconLink className="w-5 h-5" />
                 </div>
                 Copy 1% Link
               </div>
@@ -243,8 +248,8 @@ const LeftMenu = (props: any) => {
                 className="absolute  cursor-pointer left-0 opacity-0 h-full flex items-center justify-center pl-2.5 gap-x-2.5 rounded-[5px] w-2/3 transition-all duration-300 group-hover:bg-gray group-hover:opacity-100 group-hover:w-full"
                 onClick={walletConnect}
               >
-                <div className="bg-gray rounded-full p-[6px]">
-                  <IconWallet width="20px" height="20px" />
+                <div className="bg-gray rounded-full p-2.5">
+                  <IconWallet className="w-5 h-5" />
                 </div>
                 Connect Your Wallet to Share
               </div>
@@ -262,7 +267,7 @@ const LeftMenu = (props: any) => {
         </div>
       </div>
       <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner ? "block" : "hidden")}>
-        {onAuction ? <FooterAuction /> : isListed ? <FooterListed /> : <Footer />}
+        {onAuction ? <FooterAuction /> : nft.sales ? <FooterListed /> : <Footer />}
       </footer>
     </div>
   );

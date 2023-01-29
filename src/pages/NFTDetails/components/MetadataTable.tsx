@@ -6,33 +6,33 @@ import "./MetadataTable.css";
 const MetadataTable = ({ metadata }: { metadata: any }) => {
   return (
     <div className="flex flex-col border border-gray rounded-[5px]">
-      <h6 className="pl-5 pt-[15px] pb-[17px] border-b border-gray">Metadata</h6>
-      <table className="table table-auto">
-        <thead>
-          <tr>
-            <th>TRAIT</th>
-            <th>NAME</th>
-            <th>TRAIT FLOOR</th>
-          </tr>
-        </thead>
-        <tbody>
-          {metadata.map((item: any) => (
-            // eslint-disable-next-line react/jsx-key
-            <div className="group overflow-hidden relative transition-[height] h-[58px] duration-1000 ease-in-out hover:bg-bg-light hover:h-[99px]">
-              <tr>
-                <td>{item.trait} </td>
-                <td>{item.name} </td>
-                <td className="flex items-center">
-                  {item.floor} <IconEthereum width="20px" color="#838383" />
-                </td>
-              </tr>
-              <Button className="btn-secondary  no-bg text-headlineMd text-white w-full delay-300 transition-opacity duration-1000  ease-in-out opacity-0 group-hover:opacity-100  border-none rounded-none py-[11.5px]">
-                LIST AT TRAIT FLOOR <IconListed height="18px" width="18px" />
+      <h6 className="pl-5 py-4 border-b border-gray">Metadata</h6>
+      <div className="table-head grid-cols-3">
+        <div className="text-headline-01">TRAIT</div>
+        <div className="text-headline-01">NAME</div>
+        <div className="text-headline-01">TRAIT FLOOR</div>
+      </div>
+
+      {metadata.map((item: any, i: number) => {
+        return (
+          <div className="group" key={i}>
+            <div className="table-body grid-cols-3 cursor-pointer">
+              <div>{item.traitType} </div>
+              <div className="text-white">{item.value}</div>
+              <div>
+                <div className="flex-center">
+                  {item.floor} <IconEthereum className="w-5 fill-gray" />
+                </div>
+              </div>
+            </div>
+            <div className="overflow-hidden flex justify-center delay-300 transition-all duration-1000 ease-in-out opacity-0 h-0 group-hover:opacity-100 group-hover:h-10">
+              <Button className="btn-secondary text-headline-02 border-none rounded-none py-3">
+                LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />
               </Button>
             </div>
-          ))}
-        </tbody>
-      </table>
+          </div>
+        );
+      })}
     </div>
   );
 };

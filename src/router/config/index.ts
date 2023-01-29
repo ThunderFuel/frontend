@@ -17,6 +17,9 @@ export interface RouteConfig {
   path: string;
   component: React.LazyExoticComponent<() => JSX.Element>;
   layout?: React.ElementType;
+  layoutProps?: {
+    hiddenFooter: boolean;
+  };
   notLoggedIn?: boolean;
   requireLogin?: boolean;
   children?: RouteConfig[];
@@ -62,6 +65,9 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.NFT_DETAILS,
     component: NFTDetails,
     layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
   {
     path: PATHS.PROFILE,
