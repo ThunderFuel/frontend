@@ -17,8 +17,6 @@ import SocialButtons from "../../Collection/components/SocialButtons";
 
 import "./Sidebar.css";
 import { IconCirclePlus, IconPlus } from "icons";
-import userService from "api/user/user.service";
-import { IUserResponse } from "api/user/user.type";
 import { randomIntFromInterval } from "utils";
 import Button from "../../../components/Button";
 
@@ -92,17 +90,7 @@ const Box1 = () => {
   );
 };
 
-const Sidebar = () => {
-  const [userInfo, setUserInfo] = React.useState<IUserResponse>({} as any);
-  const fetchUserProfile = async () => {
-    const response = await userService.getUser({ id: 1 });
-    setUserInfo(response.data);
-  };
-
-  React.useEffect(() => {
-    fetchUserProfile();
-  }, []);
-
+const Sidebar = ({ userInfo }: any) => {
   return (
     <div className="flex flex-col border-r border-gray w-[500px]">
       <CoverImage />

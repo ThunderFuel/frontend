@@ -55,10 +55,10 @@ const Index = () => {
       <div className="container-fluid">
         <div className="flex items-center justify-between text-white gap-5">
           <div className="grid grid-cols-3 flex-1 items-center">
-            <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "grid-cols-2")}>
+            <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "col-span-2")}>
               <InputSearch placeholder="Search ID or name" />
             </div>
-            {options?.hiddenSweep ? <div /> : <Range maxValue={pagination.itemsCount} onChange={onRangeChange} />}
+            {options?.hiddenSweep ? null : <Range maxValue={pagination.itemsCount} onChange={onRangeChange} />}
             <div className="pl-5 flex justify-end">
               <SelectOrderBy
                 onChange={(option: ISelectOption) => {

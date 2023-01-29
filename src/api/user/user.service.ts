@@ -4,7 +4,18 @@ import { ApiResponse } from "../HttpClient";
 
 export default {
   getUser(params: any): Promise<ApiResponse<IUserResponse>> {
-    return ThunderURL.get("v1/user", { params });
+    const urlParams = new URLSearchParams();
+    Object.keys(params).forEach((key: any) => {
+      if (Array.isArray(params[key])) {
+        params[key].forEach((val: any) => {
+          urlParams.append(key, val);
+        });
+      } else {
+        urlParams.append(key, params[key]);
+      }
+    });
+
+    return ThunderURL.get("v1/user", { params: urlParams });
   },
   createUser(body: ICreateUser) {
     return ThunderURL.post("v1/user", body);
