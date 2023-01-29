@@ -23,53 +23,60 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
   );
 };
 const Index = () => {
-  const { params, setParams, deleteParams, resetParams } = useCollectionListContext();
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    params: { sortingType, pageSize, search, ...etcParams },
+    setParams,
+    deleteParams,
+    resetParams,
+  } = useCollectionListContext();
 
-  if (!Object.keys(params).length) {
+  if (!Object.keys(etcParams).length) {
     return null;
   }
 
   const onRemove = (paramKey: any, p: any) => {
-    if (Array.isArray(params[paramKey])) {
-      params[paramKey] = params[paramKey].filter((i: any) => i !== p);
-      if (!params[paramKey].length) {
+    const paramValue = etcParams[paramKey]?.value;
+
+    if (Array.isArray(paramValue)) {
+      etcParams[paramKey].value = paramValue?.filter((i: any) => i !== p);
+      if (!etcParams[paramKey].value.length) {
         deleteParams(paramKey);
       } else {
-        setParams(params);
+        setParams({});
       }
-    } else if (params[paramKey]?.min || params[paramKey]?.max) {
-      delete params[paramKey][p];
-      setParams(params);
+    } else if (paramValue?.min || paramValue?.max) {
+      delete etcParams[paramKey][p];
+      setParams(etcParams);
     }
   };
 
   const paramItems = React.useMemo(() => {
     const tmpParamItems: any = [];
-    Object.keys(params).forEach((paramKey: any, i) => {
-      const param = params[paramKey];
-      if (Array.isArray(param)) {
-        param.forEach((p, key) => {
+    Object.keys(etcParams).forEach((paramKey: any, i) => {
+      const paramValue = etcParams[paramKey].value;
+
+      if (Array.isArray(paramValue)) {
+        paramValue.forEach((p, key) => {
           tmpParamItems.push({
             paramKey,
             key: `${key}_${i}`,
             text: p,
           });
         });
-      } else if (param.min || params.max) {
-        Object.keys(param).forEach((key) => {
+      } else if (paramValue.min || paramValue.max) {
+        Object.keys(paramValue).forEach((key) => {
           tmpParamItems.push({
             paramKey,
             key: `${key}_${i}`,
-            text: `${param[key]} ${key === "min" ? ">" : "<"}`,
+            text: `${paramValue[key]} ${key === "min" ? ">" : "<"}`,
           });
         });
       }
     });
 
     return tmpParamItems;
-  }, [params]);
-
-  console.log("musa", paramItems);
+  }, [etcParams]);
 
   return (
     <div className="flex flex-row flex-wrap gap-2 px-5">

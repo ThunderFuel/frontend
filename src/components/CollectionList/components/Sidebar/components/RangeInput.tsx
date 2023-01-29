@@ -19,6 +19,12 @@ const RangeInput = ({ value, name, onChange }: any) => {
       [Input.Max]: maxValue,
     });
   };
+  React.useEffect(() => {
+    if (!value) {
+      setMaxValue(0);
+      setMinValue(0);
+    }
+  }, [value]);
 
   return (
     <div className="flex flex-col gap-2 text-white">

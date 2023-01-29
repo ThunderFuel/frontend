@@ -38,20 +38,35 @@ const Items = () => {
   };
 
   const onChangeFilter = async (params: any) => {
-    const { sortingType, pageSize = 16, ...etcParams } = params;
+    const { sortingType, pageSize = 16, search, ...etcParams } = params;
 
     const selectedFilter = Object.keys(etcParams).map((paramKey) => {
       const name = paramKey;
-      const selecteds = Array.isArray(params[paramKey]) ? params[paramKey] : [];
-      const value = params[paramKey].min || params[paramKey].max ? `${params[paramKey].min ?? 0}-${params[paramKey].max ?? 0}` : !selecteds.length ? params[paramKey] : "";
+      const type = params[paramKey].type;
+      let value = params[paramKey].value;
+      const selecteds = Array.isArray(params[paramKey].value) ? params[paramKey].value : [];
+      if (params[paramKey].value.min || params[paramKey].value.max) {
+        value = `${params[paramKey].value.min ?? 0}-${params[paramKey].value.max ?? 0}`;
+      } else if (selecteds.length) {
+        value = "";
+      }
 
       return {
         name,
-        type: 0,
+        type,
         selecteds,
         value,
       };
     });
+    if (search?.length) {
+      selectedFilter.push({
+        name: "",
+        type: 0,
+        value: search,
+        selecteds: [],
+      });
+    }
+
     await fetchCollections({
       sortingType,
       pageSize,

@@ -40,6 +40,8 @@ const Range = (props: any) => {
   );
 };
 
+const KEY_ENTER = "Enter";
+
 const Index = () => {
   const { options, setParams, pagination } = useCollectionListContext();
   let rangeTimeout: any;
@@ -51,8 +53,8 @@ const Index = () => {
   };
 
   const onKeyPress = (e: any) => {
-    if (e.key === "Enter") {
-      setParams({ null: e.target.value });
+    if (e.key === KEY_ENTER) {
+      setParams({ search: e.target.value });
     }
   };
 
