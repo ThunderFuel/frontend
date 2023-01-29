@@ -1,5 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import collectionService from "api/collections/collections.service";
+import { useParams } from "react-router-dom";
+import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "../../../../icons";
 
 interface IActivityContext {
   fetchActivity: any;
@@ -7,23 +9,55 @@ interface IActivityContext {
   setSelectedFilter: any;
   selectedFilter: any;
   filters: any;
+  pagination: any;
 }
 
 export const ActivityContext = createContext<IActivityContext>({} as any);
-
+const filters = [
+  {
+    icon: IconHand,
+    name: "Offers",
+  },
+  {
+    icon: IconQuarry,
+    name: "Mints",
+  },
+  {
+    icon: IconMarketBasket,
+    name: "Sales",
+  },
+  {
+    icon: IconTelegram,
+    name: "Transfers",
+  },
+  {
+    icon: IconTag,
+    name: "Listings",
+  },
+];
 const ActivityProvider = ({ children }: { children: ReactNode }) => {
-  const [filters, setFilters] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState("Sales");
+  const { collectionId } = useParams();
+  const [selectedFilter, setSelectedFilter] = useState(filters[0]);
   const [activities, setActivities] = useState([]);
+  const [pagination, setPagination] = useState({});
   const fetchActivity = async () => {
-    const [responseActivity, responseFilters] = await Promise.all([collectionService.getActivity(), collectionService.getActivityFilters()]);
-    setActivities(
-      responseActivity.map((item: any, i) => ({
-        ...item,
-        type: responseFilters[i % responseFilters.length].name,
-      })) as any
-    );
-    setFilters(responseFilters as any);
+    const response = await collectionService.getActivity({
+      collectionId,
+    });
+    const data = response.data.map((item: any) => ({
+      name: item.token.name,
+      description: "",
+      image: item.token.image,
+      price: item.price,
+      type: filters[item.activityType].name,
+    })) as any;
+    setActivities(data);
+    setPagination({
+      itemsCount: response.itemsCount,
+      pageCount: response.pageCount,
+      pageSize: response.pageSize,
+      pageNumber: response.pageNumber,
+    });
   };
 
   const getActivities = React.useMemo(() => activities.filter((item: any) => item.type === selectedFilter), [selectedFilter, activities]);
@@ -34,6 +68,7 @@ const ActivityProvider = ({ children }: { children: ReactNode }) => {
     setSelectedFilter,
     selectedFilter,
     filters,
+    pagination,
   };
 
   return <ActivityContext.Provider value={value}>{children}</ActivityContext.Provider>;

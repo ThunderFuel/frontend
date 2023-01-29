@@ -1,3 +1,5 @@
+import { IUserResponse } from "../user/user.type";
+
 export enum SocialTypes {
   Website = 0,
   Discord = 1,
@@ -16,23 +18,6 @@ interface CollectionFilterItem {
   filterData: any[];
 }
 
-interface CollectionUser {
-  banner: string;
-  contractAddress: string;
-  email: string;
-  firstName: string;
-  followers: any[];
-  follows: any[];
-  gender: string;
-  id: any;
-  image: string;
-  lastName: string;
-  phone: string;
-  socialMedias: any[];
-  tokens: any[];
-  userName: string;
-}
-
 export interface CollectionFilterResponse {
   filters: CollectionFilterItem[];
 }
@@ -49,7 +34,7 @@ export interface CollectionItemResponse {
   rarity: number;
   salable: boolean;
   lastSalePrice: number;
-  user?: CollectionUser;
+  user?: IUserResponse;
 }
 
 export interface CollectionResponse {
@@ -86,4 +71,17 @@ export interface CollectionItemsRequest {
   pageSize: number;
   page: number;
   sortingType: number;
+}
+
+export interface ActivityItemResponse {
+  tokenId: number;
+  fromUserId: number;
+  toUserId: number;
+  description: string;
+  activityType: number;
+  price: number;
+  priceType: number;
+  token: CollectionItemResponse;
+  fromUser: IUserResponse;
+  toUser: IUserResponse;
 }
