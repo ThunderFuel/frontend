@@ -2,7 +2,7 @@ import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
 import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
 import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
-import { CollectionFilterResponse, CollectionResponse, CollectionItemsRequest, CollectionItemResponse } from "./collections.type";
+import { CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse } from "./collections.type";
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
@@ -33,6 +33,9 @@ export default {
     return await ThunderURL.post("v1/token/tokens", data);
   },
 
+  async getCollection(params: any): Promise<ApiResponse<CollectionItemResponse>> {
+    return ThunderURL.get("/v1/token", { params });
+  },
   async getActivityFilters() {
     return [
       {
