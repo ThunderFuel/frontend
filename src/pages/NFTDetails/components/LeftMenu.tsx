@@ -214,24 +214,21 @@ const LeftMenu = (props: any) => {
                 </div>
               </Box>
             </div>
-            <Box className="hover:bg-bg-light justify-between pr-4">
-              <div className="flex gap-x-2.5">
-                <div className="h-fit rounded-full bg-gray p-[6px]">
-                  <IconOffer className="w-5 h-5" />
-                </div>
+            <BoxWithIcon icon={IconOffer} className="hover:bg-bg-light pr-0">
+              <div className="flex w-full justify-between">
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-02 text-gray-light">LAST ACTIVITY</div>
                   {nft.listedTime}
                 </div>
+                <HoverButton
+                  Icon={IconArrowRight}
+                  text="SEE ALL"
+                  onClick={() => {
+                    dispatch(setRightMenu(RightMenuType.Activities));
+                  }}
+                />
               </div>
-              <HoverButton
-                Icon={IconArrowRight}
-                text="SEE ALL"
-                onClick={() => {
-                  dispatch(setRightMenu(RightMenuType.Activities));
-                }}
-              />
-            </Box>
+            </BoxWithIcon>
           </div>
         </div>
         <div className="container-fluid flex flex-col pt-5 pb-9 pr-10 text-h6 text-white">
