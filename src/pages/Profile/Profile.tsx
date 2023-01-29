@@ -1,8 +1,12 @@
 import React from "react";
 import Sidebar from "./components/Sidebar";
 import Tab from "components/Tab";
-import CollectionItems from "../Collection/pages/Items/index";
+import CollectionList from "components/CollectionList";
 
+const options = {
+  hiddenFilter: true,
+  hiddenSweep: true,
+};
 const Profile = () => {
   return (
     <div className="flex">
@@ -20,7 +24,7 @@ const Profile = () => {
           </div>
         </div>
         <div>
-          <CollectionItems />
+          <CollectionList collectionItems={[]} filterItems={[]} options={options} />
         </div>
       </div>
     </div>

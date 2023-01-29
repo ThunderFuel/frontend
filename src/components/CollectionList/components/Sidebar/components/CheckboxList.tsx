@@ -7,7 +7,6 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
   const [search, setSearch] = React.useState("");
   const onSelect = (val: any) => {
     const tmpValue = value ?? [];
-    console.log(tmpValue);
 
     const index = tmpValue.indexOf(val);
     if (index <= -1) {
@@ -15,7 +14,6 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
     } else {
       tmpValue.splice(index, 1);
     }
-    console.log(tmpValue, index);
     onChange(name, tmpValue);
   };
 
@@ -28,7 +26,7 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
 
     return (
       <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", isChecked ? "bg-gray" : "")}>
-        <Checkbox defaultChecked={isChecked} value={item.value} name={name} onClick={() => onSelect(item.value)}>
+        <Checkbox checked={isChecked} value={item.value} name={name} onClick={() => onSelect(item.value)}>
           <span className="body-medium">{item.text}</span>
         </Checkbox>
       </div>

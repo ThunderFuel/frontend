@@ -13,9 +13,11 @@ interface ISelect {
   value: ISelectOption;
   onChange: (value: ISelectOption) => void;
 }
+
 const Select = ({ options, value, onChange }: ISelect) => {
   const [show, setShow] = React.useState(false);
   const listRef = React.useRef<HTMLUListElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const onToggle = () => {
     setShow(!show);
@@ -24,14 +26,14 @@ const Select = ({ options, value, onChange }: ISelect) => {
     onChange(option);
     onToggle();
   };
-  useClickOutside(listRef, () => {
+  useClickOutside(containerRef, () => {
     setShow(false);
   });
 
   return (
-    <div className="relative">
+    <div className="relative" ref={containerRef}>
       <div className="flex-center p-3 gap-3 border border-gray bg-bg rounded-md cursor-pointer" onClick={onToggle}>
-        <span className="body-medium text-white">{value?.text}</span>
+        <span className="body-medium text-white text-overflow">{value?.text}</span>
         <IconArrowDown className={clsx("transition-all duration-300", show && "rotate-180")} />
       </div>
       <div

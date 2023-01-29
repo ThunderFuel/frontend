@@ -7,6 +7,11 @@ export enum DisplayType {
   LIST = "list",
 }
 
+enum ParamsType {
+  Reset = "reset",
+  Delete = "delete",
+}
+
 interface ICollectionListContext {
   collectionItems: any;
   filterItems: any;
@@ -20,15 +25,25 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
-    if (nextState.type === "reset") {
-      return {};
-    }
+    switch (nextState.type) {
+      case ParamsType.Reset: {
+        return {};
+      }
+      case ParamsType.Delete: {
+        delete prevState[nextState.name];
 
-    return { ...prevState, ...nextState };
+        return { ...prevState };
+      }
+      default:
+        return { ...prevState, ...nextState };
+    }
   }, {});
 
   const resetParams = () => {
-    setParams({ type: "reset" });
+    setParams({ type: ParamsType.Reset });
+  };
+  const deleteParams = (name: any) => {
+    setParams({ type: ParamsType.Delete, name });
   };
 
   const collectionItems = React.useMemo(() => {
@@ -46,6 +61,10 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     return displayType === DisplayType.LIST;
   }, [displayType]);
 
+  React.useEffect(() => {
+    value.onChangeFilter(params);
+  }, [params]);
+
   const contextValue = {
     ...value,
     displayType,
@@ -55,6 +74,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     params,
     setParams,
     resetParams,
+    deleteParams,
     setDisplayType,
   };
 
