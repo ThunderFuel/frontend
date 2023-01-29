@@ -37,7 +37,9 @@ const Index = () => {
   return (
     <div className="flex flex-row gap-2 px-5">
       <ClearFilterButton onClick={resetParams} />
-      {Object.values(params).map((param: any, i) => {
+      {Object.keys(params).map((paramKey: any, i) => {
+        const param = params[paramKey];
+
         if (Array.isArray(param)) {
           return param.map((p) => (
             <SelectedFilterItem key={i} onClick={onRemove}>
@@ -52,12 +54,6 @@ const Index = () => {
               </SelectedFilterItem>
             );
           });
-        } else {
-          return (
-            <SelectedFilterItem key={i} onClick={onRemove}>
-              {param}
-            </SelectedFilterItem>
-          );
         }
       })}
     </div>

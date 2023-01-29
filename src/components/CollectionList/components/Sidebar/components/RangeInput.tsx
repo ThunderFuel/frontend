@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import InputEthereum from "components/InputEthereum";
 import Button from "components/Button";
 import { IconArrowRight } from "icons";
@@ -9,11 +9,15 @@ enum Input {
   Max = "max",
 }
 
-const RangeInput = ({ value = {}, name, onChange }: any) => {
+const RangeInput = ({ value, name, onChange }: any) => {
   const [isFocus, setIsFocus] = React.useState<any>(null);
-  const [inputValue, setInputValue] = React.useState<any>({});
+  const [minValue, setMinValue] = React.useState<any>(value?.Min ?? 0);
+  const [maxValue, setMaxValue] = React.useState<any>(value?.Max ?? 0);
   const onSubmit = () => {
-    onChange(name, inputValue);
+    onChange(name, {
+      [Input.Min]: minValue,
+      [Input.Max]: maxValue,
+    });
   };
 
   return (
@@ -23,10 +27,9 @@ const RangeInput = ({ value = {}, name, onChange }: any) => {
         onFocus={() => setIsFocus(Input.Min)}
         onBlur={() => setIsFocus("")}
         placeholder="Min"
-        value={value?.[Input.Min]}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          inputValue[Input.Min] = e.target.value;
-          setInputValue(inputValue);
+        value={minValue}
+        onChange={(value: any) => {
+          setMinValue(value);
         }}
       />
       <InputEthereum
@@ -34,13 +37,12 @@ const RangeInput = ({ value = {}, name, onChange }: any) => {
         onFocus={() => setIsFocus(Input.Max)}
         onBlur={() => setIsFocus("")}
         placeholder="Max"
-        value={value?.[Input.Max]}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          inputValue[Input.Max] = e.target.value;
-          setInputValue(inputValue);
+        value={maxValue}
+        onChange={(value: any) => {
+          setMaxValue(value);
         }}
       />
-      <Button className="btn-secondary btn-sm" onClick={onSubmit}>
+      <Button className="btn-secondary btn-sm" onClick={onSubmit} disabled={!minValue && !maxValue}>
         Apply <IconArrowRight />
       </Button>
     </div>
