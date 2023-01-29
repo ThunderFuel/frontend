@@ -28,11 +28,13 @@ const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: So
 
   return (
     <div className="flex gap-5 mt-1">
-      <ul className="inline-flex border border-gray rounded-[4px]">
-        {socialMedias?.map((media, key) => {
-          return <SocialButton href="#" key={key} icon={iconList?.[media.type] as React.ReactNode} />;
-        })}
-      </ul>
+      {socialMedias?.length ? (
+        <ul className="inline-flex border border-gray rounded-[4px]">
+          {socialMedias?.map((media, key) => {
+            return <SocialButton href="#" key={key} icon={iconList?.[media.type] as React.ReactNode} />;
+          })}
+        </ul>
+      ) : null}
       <ul className="border border-gray rounded-[4px]">
         <SocialButton href="#" icon={IconShare} className={"border-r-0"} />
       </ul>
