@@ -1,8 +1,7 @@
 import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
 import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
-import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
-import { CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse } from "./collections.type";
+import { ActivityItemResponse, CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse } from "./collections.type";
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
@@ -36,38 +35,7 @@ export default {
   async getCollection(params: any): Promise<ApiResponse<CollectionItemResponse>> {
     return ThunderURL.get("/v1/token", { params });
   },
-  async getActivityFilters() {
-    return [
-      {
-        icon: IconMarketBasket,
-        name: "Sales",
-      },
-      {
-        icon: IconHand,
-        name: "Offers",
-      },
-      {
-        icon: IconTag,
-        name: "Listings",
-      },
-      {
-        icon: IconQuarry,
-        name: "Mints",
-      },
-      {
-        icon: IconTelegram,
-        name: "Transfers",
-      },
-    ];
-  },
-  async getActivity() {
-    return [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2].map((item) => ({
-      id: item,
-      name: `Genuine Undead #${item}`,
-      description: "Bid placed by 409x792 to you, 1 mins ago",
-      image: images[item],
-      price: 1.43,
-      type: item % 4 !== 0,
-    }));
+  async getActivity(data: any): Promise<ApiResponse<ActivityItemResponse[]>> {
+    return ThunderURL.post("v1/activity/activities", data);
   },
 };
