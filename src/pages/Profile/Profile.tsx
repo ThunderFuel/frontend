@@ -2,15 +2,27 @@ import React from "react";
 import Sidebar from "./components/Sidebar";
 import Tab from "components/Tab";
 import CollectionList from "components/CollectionList";
+import { IUserResponse } from "../../api/user/user.type";
+import userService from "../../api/user/user.service";
 
 const options = {
   hiddenFilter: true,
   hiddenSweep: true,
 };
 const Profile = () => {
+  const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [] } as any);
+  const fetchUserProfile = async () => {
+    const response = await userService.getUser({ id: 16, includes: [0, 1, 2, 3, 4] });
+    setUserInfo(response.data);
+  };
+
+  React.useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar userInfo={userInfo} />
       <div className="flex flex-col flex-1">
         <div className="border-b border-gray">
           <div className="inline-flex -my-[1px]">
@@ -24,7 +36,7 @@ const Profile = () => {
           </div>
         </div>
         <div>
-          <CollectionList collectionItems={[]} filterItems={[]} options={options} />
+          <CollectionList collectionItems={userInfo.tokens} filterItems={[]} options={options} onChangeFilter={console.log} />
         </div>
       </div>
     </div>
