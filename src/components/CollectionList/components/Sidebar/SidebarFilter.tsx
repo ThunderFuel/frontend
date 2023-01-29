@@ -35,11 +35,11 @@ const SidebarFilter = () => {
     setShow(tmpShow);
   };
 
-  const onChange = (name: any, value: any) => {
+  const onChange = (name: any, value: any, type: number) => {
     if (Array.isArray(value) && !value.length) {
       deleteParams(name);
     } else {
-      setParams({ [name]: value });
+      setParams({ [name]: { value, type } });
     }
   };
 
@@ -57,12 +57,15 @@ const SidebarFilter = () => {
       }
 
       const name = filter.name ?? i;
+      const type = filter.type ?? 0;
+      const value = params?.[name]?.value;
 
       return {
         name,
-        filterData: filter.filterData,
-        value: params?.[name],
+        type,
+        value,
         dynamicComponent: DynamicComponent,
+        filterData: filter.filterData,
       };
     });
   }, [filters, params]);
@@ -92,7 +95,14 @@ const SidebarFilter = () => {
                     <Collapse key={i}>
                       <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
                       <Collapse.Body>
-                        <DynamicComponent filterData={item.filterData} name={item.name} value={item.value} onChange={onChange} />
+                        <DynamicComponent
+                          filterData={item.filterData}
+                          name={item.name}
+                          value={item.value}
+                          onChange={(name: any, value: any) => {
+                            onChange(name, value, item.type);
+                          }}
+                        />
                       </Collapse.Body>
                     </Collapse>
                   );

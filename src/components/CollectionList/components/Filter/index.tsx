@@ -40,6 +40,8 @@ const Range = (props: any) => {
   );
 };
 
+const KEY_ENTER = "Enter";
+
 const Index = () => {
   const { options, setParams, pagination } = useCollectionListContext();
   let rangeTimeout: any;
@@ -50,13 +52,19 @@ const Index = () => {
     }, 1000);
   };
 
+  const onKeyPress = (e: any) => {
+    if (e.key === KEY_ENTER) {
+      setParams({ search: e.target.value });
+    }
+  };
+
   return (
     <div className="sticky top-[109px] border-b border-gray z-20 bg-bg">
       <div className="container-fluid">
         <div className="flex items-center justify-between text-white gap-5">
           <div className="grid grid-cols-3 flex-1 items-center">
             <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "col-span-2")}>
-              <InputSearch placeholder="Search ID or name" />
+              <InputSearch placeholder="Search ID or name" onKeyPress={onKeyPress} />
             </div>
             {options?.hiddenSweep ? null : <Range maxValue={pagination.itemsCount} onChange={onRangeChange} />}
             <div className="pl-5 flex justify-end">
