@@ -9,6 +9,8 @@ import RangeInputOptions from "./components/RangeInputOptions";
 import RangeInput from "./components/RangeInput";
 import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 
+import "./SideBarFilter.css";
+
 enum FilterComponentType {
   Input = 0,
   RadioList = 1,
@@ -69,7 +71,7 @@ const SidebarFilter = () => {
     <div className="flex justify-end">
       <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : "w-72")}>
         <div className="sticky top-[178px] overflow-hidden h-fit">
-          <div className="flex w-72 pr-5 py-5 relative">
+          <div className="flex w-72 pr-5 py-5 relative overflow-hidden overflow-y-auto sidebar-h-screen">
             <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
               <div className="icon-btn bg-white fill-gray">
                 <IconFilter />
