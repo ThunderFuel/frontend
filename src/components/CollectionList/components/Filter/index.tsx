@@ -46,7 +46,7 @@ const Index = () => {
             <div className="py-2.5 pr-5 flex-1 border-r border-r-gray">
               <InputSearch placeholder="Search ID or name" />
             </div>
-            {options.hiddenSweep ? <div /> : <Range />}
+            {options?.hiddenSweep ? <div /> : <Range />}
             <div className="pl-5 flex justify-end">
               <SelectOrderBy />
             </div>

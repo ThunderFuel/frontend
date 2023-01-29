@@ -9,4 +9,7 @@ export default {
   createUser(body: ICreateUser) {
     return ThunderURL.post("v1/user", body);
   },
+  followUser(body: ICreateUser) {
+    return ThunderURL.post("v1/user/follow", body);
+  },
 };
