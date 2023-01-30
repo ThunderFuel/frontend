@@ -6,6 +6,8 @@ import Footer from "./Footer";
 import Header from "./Header";
 import ErrorModal from "./ErrorModal";
 import CheckoutModal from "./CheckoutModal";
+import ManageFunds from "components/ManageFunds";
+import Wallet from "components/Wallet";
 
 interface Props {
   children: React.ReactNode;
@@ -18,6 +20,8 @@ const Layout = ({ children, ...etc }: Props) => {
     <main className={"bg-bg min-h-screen flex flex-col"}>
       <Header />
       <MyCart />
+      <Wallet />
+      <ManageFunds />
       {children}
       {etc?.hiddenFooter ? null : <Footer />}
 
