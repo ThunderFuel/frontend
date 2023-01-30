@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SVGProps } from "react";
 import Img from "components/Img";
 import {
   AssetProfileAvatar1,
@@ -16,9 +16,10 @@ import {
 import SocialButtons from "../../Collection/components/SocialButtons";
 
 import "./Sidebar.css";
-import { IconCirclePlus, IconPlus } from "icons";
+import { IconCirclePlus, IconPlus, IconQuarry } from "icons";
 import { randomIntFromInterval } from "utils";
-import Button from "../../../components/Button";
+import Button from "components/Button";
+import clsx from "clsx";
 
 const avatars = [
   AssetProfileAvatar1,
@@ -90,6 +91,20 @@ const Box1 = () => {
   );
 };
 
+const BoxWithIcon = React.memo(({ children, className, icon }: { children: React.ReactNode; className?: string; icon: React.FC<SVGProps<SVGSVGElement>> }) => {
+  const Icon = icon;
+
+  return (
+    <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>
+      <div className="h-fit rounded-full bg-gray p-[6px]">
+        <Icon className="w-5 h-5" />
+      </div>
+      <div className="flex flex-col gap-y-[5px]">{children}</div>
+    </div>
+  );
+});
+BoxWithIcon.displayName = "BoxWithIcon";
+
 const Sidebar = ({ userInfo }: any) => {
   return (
     <div className="flex flex-col border-r border-gray w-[500px]">
@@ -100,6 +115,14 @@ const Sidebar = ({ userInfo }: any) => {
           <div className="body-medium mt-5">Gm! I’m xero and I like to collect superb NFTs</div>
           <Box />
           <Box1 />
+          <BoxWithIcon icon={IconQuarry} className="mt-2">
+            <div className="text-headline-02 text-gray-light">LAST offer</div>
+            0.99 ETH Bid placed by 09x910
+          </BoxWithIcon>
+          <BoxWithIcon icon={IconQuarry} className="mt-2">
+            <div className="text-headline-02 text-gray-light">LAST ACTIVITY</div>
+            Minted CloneX #2750
+          </BoxWithIcon>
         </div>
       </div>
     </div>
