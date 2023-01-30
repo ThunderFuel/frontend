@@ -7,9 +7,9 @@ const options = {
   hiddenSweep: true,
 };
 const Collection = () => {
-  const [userInfo]: any = useOutletContext();
+  const [userInfo, filter]: any = useOutletContext();
 
-  return <CollectionList collectionItems={userInfo.tokens} filterItems={[]} options={options} onChangeFilter={console.log} />;
+  return <CollectionList collectionItems={userInfo.tokens} filterItems={filter} options={options} onChangeFilter={console.log} />;
 };
 
 export default Collection;

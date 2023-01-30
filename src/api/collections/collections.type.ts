@@ -53,7 +53,8 @@ export interface CollectionResponse {
   solds: null;
   status: number;
   banner: string;
-  logo: string;
+  logo?: string;
+  image?: string;
   socialMedias: {
     type: SocialTypes;
     url: string;
