@@ -17,6 +17,9 @@ export default {
 
     return ThunderURL.get("v1/user", { params: urlParams });
   },
+  getFilters(data: any): Promise<ApiResponse<{ filters: [] }>> {
+    return ThunderURL.post("v1/user/getfilters", data);
+  },
   createUser(body: ICreateUser) {
     return ThunderURL.post("v1/user", body);
   },
