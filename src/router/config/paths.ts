@@ -8,4 +8,6 @@ export enum PATHS {
   RANKINGS = "/rankings",
   NFT_DETAILS = "/nft-details/:nftId",
   PROFILE = "/profile",
+  PROFILE_OWNED = "",
+  PROFILE_ACTIVITY = "activity",
 }
