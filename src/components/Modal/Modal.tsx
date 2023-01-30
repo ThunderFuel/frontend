@@ -10,6 +10,8 @@ export interface ModalProps {
   title: string;
   onClose: () => void;
   show: boolean;
+  bodyClassName?: string;
+  modalTitle?: React.ReactNode;
 }
 
 const body = document.querySelector("body");
@@ -28,9 +30,9 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
 
   return (
     <div className={clsx("modalbase", className)}>
-      <div className="modal">
+      <div className={clsx("modal", etc.bodyClassName)}>
         <div className="mhead">
-          <h6 className="mtitle">{title}</h6>
+          {etc.modalTitle ? etc.modalTitle : <h6 className="mtitle">{title}</h6>}
           <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
             <IconClose />
           </button>

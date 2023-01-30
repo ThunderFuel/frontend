@@ -8,6 +8,10 @@ export const openInNewTab = (url: string): void => {
 };
 
 export const numberFormat = (number: number) => {
+  if (!number) {
+    return 0;
+  }
+
   return String(number).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 };
 
