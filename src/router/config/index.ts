@@ -12,6 +12,8 @@ const Collection = React.lazy(() => import("pages/Collection"));
 const CollectionItems = React.lazy(() => import("pages/Collection/pages/Items/index"));
 const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activity/index"));
 const Profile = React.lazy(() => import("pages/Profile"));
+const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collection"));
+const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity"));
 
 export interface RouteConfig {
   path: string;
@@ -73,5 +75,15 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.PROFILE,
     component: Profile,
     layout: Layout,
+    children: [
+      {
+        path: PATHS.PROFILE_OWNED,
+        component: ProfileCollection,
+      },
+      {
+        path: PATHS.PROFILE_ACTIVITY,
+        component: ProfileActivity,
+      },
+    ],
   },
 ];

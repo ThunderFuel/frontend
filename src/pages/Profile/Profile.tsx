@@ -1,15 +1,11 @@
 import React from "react";
 import Sidebar from "./components/Sidebar";
-import Tab from "components/Tab";
-import CollectionList from "components/CollectionList";
 import { IUserResponse } from "../../api/user/user.type";
 import userService from "../../api/user/user.service";
 import ModalSocial from "./Modal/ModalSocial";
+import { Outlet } from "react-router-dom";
+import Tab from "./components/Tab";
 
-const options = {
-  hiddenFilter: true,
-  hiddenSweep: true,
-};
 const Profile = () => {
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [] } as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
@@ -26,20 +22,8 @@ const Profile = () => {
     <div className="flex">
       <Sidebar userInfo={userInfo} openFollows={() => setSocialActiveTab(1)} openFollowers={() => setSocialActiveTab(0)} />
       <div className="flex flex-col flex-1">
-        <div className="border-b border-gray">
-          <div className="inline-flex -my-[1px]">
-            <Tab initTab={1} className="secondary">
-              <Tab.Item id={1}>Owned</Tab.Item>
-              <Tab.Item id={2}>Created</Tab.Item>
-              <Tab.Item id={3}>Liked</Tab.Item>
-              <Tab.Item id={4}>Offers</Tab.Item>
-              <Tab.Item id={5}>Activity</Tab.Item>
-            </Tab>
-          </div>
-        </div>
-        <div>
-          <CollectionList collectionItems={userInfo.tokens} filterItems={[]} options={options} onChangeFilter={console.log} />
-        </div>
+        <Tab />
+        <Outlet context={[userInfo]} />
       </div>
       <ModalSocial show={socialActiveTab !== null} initialTab={socialActiveTab} onClose={() => setSocialActiveTab(null)} followers={userInfo.followers} follows={userInfo.follows} />
     </div>
