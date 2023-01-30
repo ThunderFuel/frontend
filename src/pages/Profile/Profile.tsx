@@ -4,6 +4,7 @@ import Tab from "components/Tab";
 import CollectionList from "components/CollectionList";
 import { IUserResponse } from "../../api/user/user.type";
 import userService from "../../api/user/user.service";
+import ModalSocial from "./Modal/ModalSocial";
 
 const options = {
   hiddenFilter: true,
@@ -11,6 +12,7 @@ const options = {
 };
 const Profile = () => {
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [] } as any);
+  const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
   const fetchUserProfile = async () => {
     const response = await userService.getUser({ id: 16, includes: [0, 1, 2, 3, 4] });
     setUserInfo(response.data);
@@ -22,7 +24,7 @@ const Profile = () => {
 
   return (
     <div className="flex">
-      <Sidebar userInfo={userInfo} />
+      <Sidebar userInfo={userInfo} openFollows={() => setSocialActiveTab(1)} openFollowers={() => setSocialActiveTab(0)} />
       <div className="flex flex-col flex-1">
         <div className="border-b border-gray">
           <div className="inline-flex -my-[1px]">
@@ -39,6 +41,7 @@ const Profile = () => {
           <CollectionList collectionItems={userInfo.tokens} filterItems={[]} options={options} onChangeFilter={console.log} />
         </div>
       </div>
+      <ModalSocial show={socialActiveTab !== null} initialTab={socialActiveTab} onClose={() => setSocialActiveTab(null)} followers={userInfo.followers} follows={userInfo.follows} />
     </div>
   );
 };
