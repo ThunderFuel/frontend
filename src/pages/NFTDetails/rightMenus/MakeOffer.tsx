@@ -10,6 +10,8 @@ import InputPrice from "../components/InputPrice";
 import Dropdown from "components/Dropdown";
 import { useWallet } from "hooks/useWallet";
 import { formatDisplayedNumber, getDateFromExpirationTime, toGwei } from "utils";
+import nftDetailsService from "api/nftdetails/nftdetails.service";
+import { MakeOfferRequest } from "api/nftdetails/nftdetails.type";
 
 const offerDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
@@ -17,6 +19,7 @@ const offerDescription =
 const MakeOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT, bidBalance } = useAppSelector((state) => state.nftdetails);
+  const { address } = useAppSelector((state) => state.wallet);
 
   const { getBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
@@ -60,6 +63,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={isValidNumber(offer) ? offer > balance : true}
           onClick={() => {
+            nftDetailsService.makeOffer({ makerUserId: address, tokenId: selectedNFT.tokenId, price: offer, priceType: 0 } as MakeOfferRequest).then((res) => console.log(res));
             dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: toGwei(offer) }));
             dispatch(toggleCheckoutModal());
           }}

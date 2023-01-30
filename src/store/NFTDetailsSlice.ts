@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AssetMockNFT1 } from "assets";
 
 export enum RightMenuType {
   None,
@@ -16,22 +15,12 @@ export enum RightMenuType {
 export const NFTDetailsSlice = createSlice({
   name: "nftdetails",
   initialState: {
-    selectedNFT: {
-      onAuction: true,
-      name: "Genuine Undead #1289",
-      price: 3500000000,
-      image: AssetMockNFT1,
-      startingPrice: 550000000,
-      floorPrice: 120000000,
-      highestBid: 550000000,
-      highestOffer: 660000000,
-      liked: false,
-      topTraitPrice: 200000000,
-    },
+    selectedNFT: {} as any,
     rightMenuType: RightMenuType.None,
     isOwner: false,
     hasBid: false,
     bidBalance: 1250000000,
+
     currentUserOffer: 1330000000,
   },
 
@@ -45,9 +34,15 @@ export const NFTDetailsSlice = createSlice({
     toggleHasBid: (state) => {
       state.hasBid = !state.hasBid;
     },
+    setSelectedNFT: (state, action) => {
+      state.selectedNFT = action.payload;
+    },
+    setIsOwner: (state, action) => {
+      state.isOwner = action.payload;
+    },
   },
 });
 
-export const { setRightMenu, toggleIsOwner, toggleHasBid } = NFTDetailsSlice.actions;
+export const { setRightMenu, toggleIsOwner, toggleHasBid, setSelectedNFT, setIsOwner } = NFTDetailsSlice.actions;
 
 export default NFTDetailsSlice.reducer;
