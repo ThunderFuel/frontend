@@ -27,15 +27,11 @@ const NFTDetails = () => {
 
   console.log(nft);
 
-  const checkOwner = () => {
-    return nft.user?.contractAddress === address;
-  };
-
   const fetchCollection = async () => {
     const response = await collectionsService.getCollection({ id: nftId });
     setNft(response.data);
-    dispatch(setSelectedNFT(nft));
-    dispatch(setIsOwner(checkOwner()));
+    dispatch(setSelectedNFT(response.data));
+    dispatch(setIsOwner(response.data.user?.contractAddress === address));
   };
 
   useEffect(() => {

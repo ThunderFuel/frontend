@@ -10,22 +10,21 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 const Auction = () => {
   const dispatch = useAppDispatch();
   const { isOwner, hasBid, selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const startingPrice = 0.99;
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
       <div className="flex justify-between bg-bg-light mb-[1px] p-5">
         <div className="flex flex-col gap-y-[5px]">
-          <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">{hasBid ? "HIGHEST BID" : "STARTING PRICE"}</span>
+          <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">{selectedNFT.highestBid ? "HIGHEST BID" : "STARTING PRICE"}</span>
           <span className="flex text-h3 font-spaceGrotesk text-white items-center">
-            {hasBid ? selectedNFT.highestBid : startingPrice} <IconEthereum color="#838383" />
+            {hasBid ? selectedNFT.highestBid : selectedNFT.startingPrice} <IconEthereum color="#838383" />
           </span>
         </div>
         <div className="flex flex-col gap-y-5 text-gray-light">
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay">
             <IconAuction width="17px" height="17px" /> AUCTION ENDS IN
           </span>
-          <AuctionCountdown />
+          <AuctionCountdown expireTime={selectedNFT.expireTime} />
         </div>
         <div className="flex h-fit items-center gap-x-[5px]"></div>
       </div>

@@ -8,9 +8,7 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 
 const BestOffer = () => {
   const dispatch = useAppDispatch();
-  const { isOwner } = useAppSelector((state) => state.nftdetails);
-
-  const bestOffer = 0.99;
+  const { isOwner, selectedNFT } = useAppSelector((state) => state.nftdetails);
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
@@ -18,7 +16,7 @@ const BestOffer = () => {
         <div className="flex flex-col gap-y-[5px]">
           <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">BEST OFFER</span>
           <span className="flex font-spaceGrotesk text-white">
-            <EthereumPrice price={bestOffer} priceClassName="text-head3"></EthereumPrice>
+            <EthereumPrice price={selectedNFT.bestOffer} priceClassName="text-head3"></EthereumPrice>
           </span>
         </div>
         <div className="flex h-fit items-center gap-x-[5px]"></div>
@@ -28,7 +26,7 @@ const BestOffer = () => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: bestOffer }));
+              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer }));
               dispatch(toggleCheckoutModal());
             }}
           >

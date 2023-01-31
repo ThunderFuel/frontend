@@ -1,4 +1,4 @@
-import { AssetCollectionProfileImage, AssetMockCreator, AssetTableImageNft1 } from "assets";
+import { AssetCollectionProfileImage, AssetTableImageNft1 } from "assets";
 import clsx from "clsx";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
@@ -99,10 +99,10 @@ const LeftMenu = (props: any) => {
   const dispatch = useAppDispatch();
   const { isOwner, hasBid } = useAppSelector((state) => state.nftdetails);
   const { walletConnect } = useWallet();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hasOffer, sethasOffer] = useState(false);
   const [onAuction, setonAuction] = useState(false);
 
-  const bestOffer = "0.99";
   const offerOwner = "09x910";
 
   return (
@@ -121,8 +121,7 @@ const LeftMenu = (props: any) => {
           <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
             <img src={nft?.user?.image ?? AssetTableImageNft1} className="w-8 rounded-full" alt="profile-image" />
             <h6 className="text-h6 text-gray-light">
-              Owned by
-              <span className={clsx(isOwner ? "text-green" : "text-white")}>{isOwner ? "you" : nft?.user?.userName}</span>
+              Owned by <span className={clsx(isOwner ? "text-green" : "text-white")}>{isOwner ? "you" : nft?.user?.userName}</span>
             </h6>
           </div>
 
@@ -130,9 +129,6 @@ const LeftMenu = (props: any) => {
           <div className="flex flex-wrap min-w-fit justify-center border-4 p-1 border-gray gap-2 rounded-lg">
             <Button className={clsx("p-3 font-bold normal-case", isOwner ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleIsOwner())}>
               isOwner
-            </Button>
-            <Button className={clsx("p-3 font-bold normal-case", hasOffer ? "bg-green" : "bg-red")} onClick={() => sethasOffer(!hasOffer)}>
-              hasOffer
             </Button>
             <Button className={clsx("p-3 font-bold normal-case", onAuction ? "bg-green" : "bg-red")} onClick={() => setonAuction(!onAuction)}>
               onAuction
@@ -144,18 +140,17 @@ const LeftMenu = (props: any) => {
           {/**********************/}
 
           <div className="body-medium text-white">{nft?.collection?.description}</div>
-
           {nft.salable && <FixedPrice />}
           {onAuction ? <Auction /> : hasOffer ? <BestOffer /> : <MakeOffer />}
 
-          {hasOffer && (
+          {nft.bestOffer && (
             <Box className="bg-bg-light justify-between pr-4">
               <div className="flex items-center gap-x-2.5">
                 <img src={AssetCollectionProfileImage} className="w-8 rounded-full" alt="profile-image" />
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-02 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {bestOffer} ETH by {offerOwner}
+                    {nft.bestOffer.price} ETH by {offerOwner}
                   </h6>
                 </div>
               </div>
@@ -166,7 +161,7 @@ const LeftMenu = (props: any) => {
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: bestOffer }));
+                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: nft.bestOffer.price }));
                       dispatch(toggleCheckoutModal());
                     }}
                   />
@@ -197,11 +192,11 @@ const LeftMenu = (props: any) => {
             <div className="flex flex-row gap-x-2.5">
               <Box className="hover:bg-bg-light">
                 <div className="flex items-center justify-center rounded-full">
-                  <img src={AssetMockCreator} className="w-8" />
+                  <img src={nft.collection?.image} className="w-8" />
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light"> CREATOR</div>
-                  {nft?.user?.firstName}
+                  <div className="text-headline-02 text-gray-light">CREATOR</div>
+                  {nft?.collection?.name}
                 </div>
               </Box>
               <Box>
@@ -210,7 +205,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-02 text-gray-light">CREATOR FEE</div>
-                  {nft.rarity}%
+                  {nft.creatorsFee}%
                 </div>
               </Box>
             </div>

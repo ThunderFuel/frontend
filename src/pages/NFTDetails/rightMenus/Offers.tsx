@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "components/Button";
-import { IconCancel, IconClock, IconEthereum, IconOffer } from "icons";
+import { IconCancel, IconClock, IconOffer } from "icons";
 import RightMenu from "../components/RightMenu";
 import { AssetTableImageNft1 } from "assets";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { useParams } from "react-router";
+import EthereumPrice from "components/EthereumPrice";
 
-const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) => {
+const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOffer?: boolean }) => {
   const dispatch = useAppDispatch();
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const isOwner = () => {
+    //TODO userId lazim
+    return selectedNFT.userId === item.makerUserId;
+  };
 
   return (
     <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
@@ -16,14 +26,13 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
         <img src={AssetTableImageNft1} className="self-start w-8 rounded-full" alt="profile-image" />
         <div className="flex flex-col gap-y-[10px]">
           <span>09x910 on 12 Oct 2022</span>
-          <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
-            <IconClock width="15px" height="15px" />
+          <div className="flex  items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
+            <IconClock className="w-[15px] h-[15px] flex-shrink-0" />
             Expires on 16 Oct 2022, 12:00 PM GMT+2
           </div>
         </div>
         <div className="flex h-fit grow justify-end">
-          1.33
-          <IconEthereum height="21px" className="text-gray-light" />
+          <EthereumPrice price={item.price} priceClassName="text-head6 font-spaceGrotesk text-white" />
         </div>
       </div>
       {ownOffer && (
@@ -56,6 +65,22 @@ const Box = ({ expired, ownOffer }: { expired?: boolean; ownOffer?: boolean }) =
 
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { nftId } = useParams();
+  const [offers, setOffers] = useState([]);
+
+  const fetchOffers = async () => {
+    const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id });
+    setOffers(response.data);
+  };
+
+  useEffect(() => {
+    console.log({ offers });
+  }, [offers]);
+
+  useEffect(() => {
+    fetchOffers();
+  }, [nftId]);
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
@@ -67,9 +92,11 @@ const Offers = ({ onBack }: { onBack: any }) => {
       >
         MAKE OFFER <IconOffer />
       </Button>
-      <Box></Box>
-      <Box ownOffer={true}></Box>
-      <Box expired={true}></Box>
+      {offers.map((offer, index) => (
+        <Box item={offer} key={index}></Box>
+      ))}
+      {/* <Box ownOffer={true}></Box>
+      <Box expired={true}></Box> */}
     </RightMenu>
   );
 };

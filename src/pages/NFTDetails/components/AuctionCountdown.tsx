@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export function remainingTime(futureDate: Date): { days: string; hours: string; minutes: string } {
+export function remainingTime(expireTime: any): { days: string; hours: string; minutes: string } {
+  if (expireTime === null) return { days: "0", hours: "0", minutes: "0" };
+  const expireDate = new Date(expireTime);
   const currentDate = new Date();
-  const diff = futureDate.getTime() - currentDate.getTime();
+  const diff = expireDate.getTime() - currentDate.getTime();
   const remainingTime = {
     days: Math.floor(diff / (1000 * 60 * 60 * 24))
       .toString()
@@ -18,9 +20,8 @@ export function remainingTime(futureDate: Date): { days: string; hours: string; 
   return remainingTime;
 }
 
-const AuctionCountdown = () => {
-  const futureDate = new Date("2023-01-31");
-  const [remaining, setRemaining] = useState(remainingTime(new Date(futureDate)));
+const AuctionCountdown = ({ expireTime }: { expireTime: any }) => {
+  const [remaining, setRemaining] = useState(remainingTime(expireTime));
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const previousMinutes = useRef(remaining.minutes);
@@ -28,30 +29,31 @@ const AuctionCountdown = () => {
   //being called every second but only rerenders when remaning minutes is changed
   useEffect(() => {
     function scheduleNext() {
-      const newRemaining = remainingTime(new Date(futureDate));
+      const newRemaining = remainingTime(new Date(expireTime));
       if (previousMinutes.current !== newRemaining.minutes) {
         setRemaining(newRemaining);
         previousMinutes.current = newRemaining.minutes;
       }
       timeoutId.current = setTimeout(scheduleNext, 1000);
     }
-    scheduleNext();
+    if (expireTime === null) return;
+    else scheduleNext();
 
     return () => {
       if (timeoutId.current !== null) {
         clearTimeout(timeoutId.current);
       }
     };
-  }, [futureDate]);
+  }, [expireTime]);
 
   //being called every 60 seconds and rerenders every call
   //   useEffect(() => {
   //     const intervalId = setInterval(() => {
-  //       setRemaining(remainingTime(new Date(futureDate)));
+  //       setRemaining(remainingTime(new Date(expireTime)));
   //     }, 60000);
 
   //     return () => clearInterval(intervalId);
-  //   }, [futureDate]);
+  //   }, [expireTime]);
 
   const CountdownItem = ({ value, text }: { text: string; value: string }) => (
     <div className="flex flex-col justify-center items-center w-[45px] py-[5px] gap-y-[6px] text-head4 font-spaceGrotesk text-white bg-gray rounded">

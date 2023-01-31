@@ -6,8 +6,8 @@ export interface MakeOfferRequest {
 }
 
 export interface GetOffersRequest {
-  tokenId: number;
-  userId: number;
+  tokenId?: number;
+  userId?: number;
   pageSize?: number;
   page?: number;
 }

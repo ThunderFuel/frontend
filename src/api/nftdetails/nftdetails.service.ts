@@ -3,11 +3,14 @@ import { ApiResponse } from "api/HttpClient";
 import { GetOffersRequest, MakeOfferRequest } from "./nftdetails.type";
 
 export default {
+  async getOffer(id: string): Promise<ApiResponse<any>> {
+    return await ThunderURL.post(`v1/offer/`, { params: { id } });
+  },
   async getOffers(data: GetOffersRequest): Promise<ApiResponse<any>> {
     return await ThunderURL.post(`v1/offer/getoffers`, data);
   },
   async getBestOffer(id: string): Promise<ApiResponse<any>> {
-    return await ThunderURL.get("v1/collection/getheader", { params: { id } });
+    return await ThunderURL.get("v1/offer/bestoffer", { params: { id } });
   },
   async makeOffer(data: MakeOfferRequest): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/offer/makeoffer", data);
