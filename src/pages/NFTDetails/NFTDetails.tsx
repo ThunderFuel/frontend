@@ -11,7 +11,7 @@ import Activity from "./rightMenus/Activity";
 import Bids from "./rightMenus/Bids";
 import Offers from "./rightMenus/Offers";
 import { useAppDispatch, useAppSelector } from "store";
-import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setIsOwner, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 
@@ -20,12 +20,22 @@ const NFTDetails = () => {
 
   const dispatch = useAppDispatch();
   const { rightMenuType } = useAppSelector((state) => state.nftdetails);
+  const { address } = useAppSelector((state) => state.wallet);
+
   const [isActive, setIsActive] = useState(false);
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
+
+  console.log(nft);
+
+  const checkOwner = () => {
+    return nft.user?.contractAddress === address;
+  };
 
   const fetchCollection = async () => {
     const response = await collectionsService.getCollection({ id: nftId });
     setNft(response.data);
+    dispatch(setSelectedNFT(nft));
+    dispatch(setIsOwner(checkOwner()));
   };
 
   useEffect(() => {
@@ -78,7 +88,7 @@ const NFTDetails = () => {
         </div>
       </div>
       <div className="w-2/5 h-fit">
-        <Component updateListing={true} onBack={() => resetMenuState()} />
+        <Component updateListing={rightMenuType === RightMenuType.UpdateListing} onBack={() => resetMenuState()} />
       </div>
     </div>
   );
