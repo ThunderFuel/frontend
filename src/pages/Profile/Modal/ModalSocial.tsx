@@ -1,12 +1,25 @@
 import React, { useEffect } from "react";
 import Modal from "components/Modal";
-import Tab from "components/Tab";
+import TabBase from "components/Tab";
 import Button from "components/Button";
 import Avatar from "../components/Avatar";
 import { IconPlus } from "icons";
 
 const ModalTitle = () => {
   return <h6 className="text-h5 text-white">Social</h6>;
+};
+
+const Tab = ({ initTab, onChange }: any) => {
+  if (initTab === null) {
+    return null;
+  }
+
+  return (
+    <TabBase initTab={initTab} onChange={onChange}>
+      <TabBase.Item id={0}>FOLLOWERS</TabBase.Item>
+      <TabBase.Item id={1}>FOLLOWING</TabBase.Item>
+    </TabBase>
+  );
 };
 
 const ModalSocial = ({ show, onClose, followers, follows, initialTab = 0 }: any) => {
@@ -19,10 +32,7 @@ const ModalSocial = ({ show, onClose, followers, follows, initialTab = 0 }: any)
   return (
     <Modal show={show} onClose={onClose} title="Social" modalTitle={<ModalTitle />} bodyClassName="!w-[480px]">
       <div className="flex flex-col p-5 gap-5">
-        <Tab initTab={activeTab} onChange={setActiveTab}>
-          <Tab.Item id={0}>FOLLOWERS</Tab.Item>
-          <Tab.Item id={1}>FOLLOWING</Tab.Item>
-        </Tab>
+        <Tab initTab={activeTab} onChange={setActiveTab} />
         <div className="flex flex-col w-full gap-2">
           {activeItems?.[activeTab]?.map((item: any, k: number) => {
             return (

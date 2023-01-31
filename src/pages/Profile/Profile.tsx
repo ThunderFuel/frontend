@@ -8,7 +8,7 @@ import Tab from "./components/Tab";
 
 const Profile = () => {
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [] } as any);
-  const [filter, setFilter] = React.useState({} as any);
+  const [filter, setFilter] = React.useState([] as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
   const fetchUserProfile = async () => {
     const [response, responseFilter] = await Promise.all([
