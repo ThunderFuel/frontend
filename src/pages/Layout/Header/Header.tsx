@@ -14,8 +14,8 @@ import "./Header.css";
 import { useAppDispatch, useAppSelector } from "store";
 import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
-import { useWallet } from "hooks/useWallet";
 import { toggleCartModal } from "store/cartSlice";
+import { toggleWalletModal } from "store/walletSlice";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -48,15 +48,15 @@ HeaderCardBadge.displayName = "HeaderCardBadge";
 const HeaderIconButtonGroup = React.memo(() => {
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
-  const { walletConnect, isWalletConnected } = useWallet();
+  const { isConnected } = useAppSelector((state) => state.wallet);
 
   return (
     <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
-      <HeaderIconButton className="hidden lg:flex" onClick={walletConnect}>
-        <IconWallet fill={isWalletConnected ? "white" : "grey"} />
+      <HeaderIconButton className="hidden lg:flex" onClick={() => dispatch(toggleWalletModal())}>
+        <IconWallet className={clsx("h-[30px] w-[30px]", isConnected ? "text-white" : "text-gray-light")} />
       </HeaderIconButton>
       <HeaderIconButton className="relative" onClick={() => dispatch(toggleCartModal())}>
         <div className="relative">

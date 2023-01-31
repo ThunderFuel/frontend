@@ -37,7 +37,7 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
             <IconClose />
           </button>
         </div>
-        <div className="flex flex-col overflow-y-scroll no-scrollbar">{children}</div>
+        <div className="flex flex-col h-full overflow-y-scroll no-scrollbar">{children}</div>
 
         {footer && <div className="mt-auto w-full border-t border-gray">{footer}</div>}
       </div>

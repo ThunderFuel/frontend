@@ -22,8 +22,8 @@ const ImageBar = () => {
 
   return (
     <div className="flex w-fit flex-col gap-5 ">
-      <div className="border border-gray rounded-md p-2 text-gray-light group cursor-pointer" onClick={() => setLiked(!liked)}>
-        <IconLike className={`group-hover:stroke-white ${liked ? "stroke-white fill-white" : ""}`} stroke="#838383" />
+      <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => setLiked(!liked)}>
+        <IconLike stroke="gray" className={`group-hover:stroke-white ${liked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>
       <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray ">
         {icons.map((item, key) => {

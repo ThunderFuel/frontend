@@ -1,22 +1,17 @@
 import { useAppDispatch, useAppSelector } from "store";
-import { getSerializeAddress, setAddress } from "../store/walletSlice";
+import { getSerializeAddress, setAddress, setIsConnected, toggleWalletModal } from "../store/walletSlice";
 import { ZeroBytes32 } from "fuels";
 import React from "react";
 import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
-
-let _isWalletConnected = false;
+import { useFuel } from "./useFuel";
 
 export const useWallet = () => {
-  const [isWalletConnected, setIsWalletConnected] = React.useState(_isWalletConnected);
+  const [isWalletConnected, setIsWalletConnected] = React.useState(false);
   const getWalletAddress = useSelector(getSerializeAddress);
-  const { totalAmount } = useAppSelector((state) => state.cart);
-
   const dispatch = useAppDispatch();
-
-  if (!window.fuel) {
-    useErrorModal("Fuel Wallet extension is not installed!");
-  }
+  const { totalAmount } = useAppSelector((state) => state.cart);
+  const [fuel] = useFuel();
 
   const hasEnoughFunds = async () => {
     try {
@@ -29,9 +24,16 @@ export const useWallet = () => {
     }
   };
 
+  const getConnectionStatus = async () => {
+    fuel.isConnected().then((res) => {
+      console.log({ res });
+      dispatch(setIsConnected(res));
+    });
+  };
+
   const getAccounts = async () => {
     try {
-      const accounts = await window.fuel.accounts();
+      const accounts = await fuel.accounts();
 
       return accounts[0];
     } catch {
@@ -40,8 +42,9 @@ export const useWallet = () => {
   };
 
   const getProvider = async () => {
-    return window.fuel.getProvider();
+    return fuel.getProvider();
   };
+
   const getBalance = async () => {
     try {
       const provider = await getProvider();
@@ -52,24 +55,30 @@ export const useWallet = () => {
       useErrorModal(e);
     }
   };
+
   const walletConnect = async () => {
     if (!isWalletConnected) {
       try {
-        await window.fuel.connect();
-        _isWalletConnected = true;
-        setIsWalletConnected(true);
+        await fuel.connect().then((res: any) => {
+          dispatch(setIsConnected(res));
+          dispatch(toggleWalletModal());
+        });
 
+        // _isWalletConnected = true;
+        // setIsWalletConnected(true);
         const address = await getAccounts();
         dispatch(setAddress(address));
       } catch (e) {
+        console.log(e);
         useErrorModal(e);
       }
     }
   };
+
   const walletDisconnect = async () => {
     try {
-      await window.fuel.disconnect();
-      _isWalletConnected = false;
+      await fuel.disconnect();
+      // _isWalletConnected = false;
       setIsWalletConnected(false);
     } catch (e) {
       useErrorModal(e);
@@ -82,5 +91,6 @@ export const useWallet = () => {
     walletDisconnect,
     getBalance,
     hasEnoughFunds,
+    getConnectionStatus,
   };
 };

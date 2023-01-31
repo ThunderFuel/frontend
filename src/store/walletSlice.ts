@@ -7,6 +7,8 @@ export const walletSlice = createSlice({
     address: "" as any,
     provider: null as any,
     isConnected: false,
+    show: false,
+    manageFundsShow: false,
   },
 
   reducers: {
@@ -24,6 +26,12 @@ export const walletSlice = createSlice({
       state.address = "";
       state.provider = null;
     },
+    toggleWalletModal: (state) => {
+      state.show = !state.show;
+    },
+    toggleManageFundsModal: (state) => {
+      state.manageFundsShow = !state.manageFundsShow;
+    },
   },
 });
 
@@ -38,6 +46,6 @@ export const getSerializeAddress = createSelector(
   (address: any) => address
 );
 
-export const { setAddress } = walletSlice.actions;
+export const { setAddress, setIsConnected, toggleWalletModal, toggleManageFundsModal } = walletSlice.actions;
 
 export default walletSlice.reducer;
