@@ -1,4 +1,4 @@
-import { AssetCollectionProfileImage, AssetTableImageNft1 } from "assets";
+import { AssetTableImageNft1 } from "assets";
 import clsx from "clsx";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
@@ -103,8 +103,6 @@ const LeftMenu = (props: any) => {
   const [hasOffer, sethasOffer] = useState(false);
   const [onAuction, setonAuction] = useState(false);
 
-  const offerOwner = "09x910";
-
   return (
     <div className="flex flex-col border-r border-gray overflow-hidden overflow-y-scroll">
       <div className="flex flex-col">
@@ -146,11 +144,11 @@ const LeftMenu = (props: any) => {
           {nft.bestOffer && (
             <Box className="bg-bg-light justify-between pr-4">
               <div className="flex items-center gap-x-2.5">
-                <img src={AssetCollectionProfileImage} className="w-8 rounded-full" alt="profile-image" />
+                <img src={nft.bestOffer.image} className="w-8 rounded-full" alt="profile-image" />
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-02 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {nft.bestOffer.price} ETH by {offerOwner}
+                    {nft.bestOffer.price} ETH by {nft.bestOffer.name}
                   </h6>
                 </div>
               </div>
@@ -259,7 +257,7 @@ const LeftMenu = (props: any) => {
         </div>
       </div>
       <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner ? "block" : "hidden")}>
-        {onAuction ? <FooterAuction /> : nft.sales ? <FooterListed /> : <Footer />}
+        {onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
       </footer>
     </div>
   );

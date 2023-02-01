@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { IconFullscreen, IconLike, IconRefresh, IconShare, IconTransfer } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const ImageBar = () => {
-  const [liked, setLiked] = useState(false);
   const dispatch = useAppDispatch();
-  const { isOwner } = useAppSelector((state) => state.nftdetails);
+  const { isOwner, isLiked, selectedNFT } = useAppSelector((state) => state.nftdetails);
   const icons = [
     {
       icon: IconTransfer,
@@ -22,8 +22,8 @@ const ImageBar = () => {
 
   return (
     <div className="flex w-fit flex-col gap-5 ">
-      <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => setLiked(!liked)}>
-        <IconLike stroke="gray" className={`group-hover:stroke-white ${liked ? "text-white stroke-white" : "text-bg-light"}`} />
+      <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: selectedNFT.userId, like: !isLiked })}>
+        <IconLike stroke="gray" className={`group-hover:stroke-white ${isLiked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>
       <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray ">
         {icons.map((item, key) => {

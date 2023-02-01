@@ -20,7 +20,7 @@ export const NFTDetailsSlice = createSlice({
     isOwner: false,
     hasBid: false,
     bidBalance: 1250000000,
-
+    isLiked: false,
     currentUserOffer: 1330000000,
   },
 
@@ -40,9 +40,15 @@ export const NFTDetailsSlice = createSlice({
     setIsOwner: (state, action) => {
       state.isOwner = action.payload;
     },
+    setIsLiked: (state, action) => {
+      state.isLiked = action.payload;
+    },
+    toggleIsLiked: (state) => {
+      state.isLiked = !state.isLiked;
+    },
   },
 });
 
-export const { setRightMenu, toggleIsOwner, toggleHasBid, setSelectedNFT, setIsOwner } = NFTDetailsSlice.actions;
+export const { setRightMenu, toggleIsOwner, toggleHasBid, setSelectedNFT, setIsOwner, setIsLiked, toggleIsLiked } = NFTDetailsSlice.actions;
 
 export default NFTDetailsSlice.reducer;

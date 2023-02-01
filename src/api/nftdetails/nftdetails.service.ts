@@ -1,6 +1,6 @@
 import { ThunderURL } from "api";
 import { ApiResponse } from "api/HttpClient";
-import { GetOffersRequest, MakeOfferRequest } from "./nftdetails.type";
+import { GetOffersRequest, MakeOfferRequest, TokenLikeParams, TokenListRequest, TokenPlaceBidRequest } from "./nftdetails.type";
 
 export default {
   async getOffer(id: string): Promise<ApiResponse<any>> {
@@ -20,5 +20,26 @@ export default {
   },
   async cancelOffer(id: string): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/offer/canceloffer", {}, { params: { id } });
+  },
+  async tokenList(data: TokenListRequest): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/listing", data);
+  },
+  async tokenCancelList(tokenId: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.put("v1/token/cancellisting", {}, { params: { tokenId } });
+  },
+  async tokenLike(params: TokenLikeParams): Promise<ApiResponse<any>> {
+    return await ThunderURL.post(`v1/token/like`, {}, { params });
+  },
+  async tokenTransfer(tokenId: number, userId: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/transfer", {}, { params: { tokenId, userId } });
+  },
+  async tokenOnAuction(onAuction: boolean, tokenId: number, userId: number, expirationTime: string, startingPrice?: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/onauction", {}, { params: { onAuction, tokenId, userId, expirationTime, startingPrice } });
+  },
+  async tokenBuyNow(tokenIds: [], userId: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/buynow", { tokenIds, userId });
+  },
+  async tokenPlaceBid(data: TokenPlaceBidRequest): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/placeabid", data);
   },
 };

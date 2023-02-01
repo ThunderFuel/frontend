@@ -11,7 +11,7 @@ import Activity from "./rightMenus/Activity";
 import Bids from "./rightMenus/Bids";
 import Offers from "./rightMenus/Offers";
 import { useAppDispatch, useAppSelector } from "store";
-import { RightMenuType, setIsOwner, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
+import { RightMenuType, setIsLiked, setIsOwner, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 
@@ -26,12 +26,12 @@ const NFTDetails = () => {
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
 
   console.log(nft);
-
   const fetchCollection = async () => {
     const response = await collectionsService.getCollection({ id: nftId });
     setNft(response.data);
     dispatch(setSelectedNFT(response.data));
     dispatch(setIsOwner(response.data.user?.contractAddress === address));
+    dispatch(setIsLiked(response.data.user?.likedTokens?.includes(response.data.id) ?? false));
   };
 
   useEffect(() => {
