@@ -11,4 +11,5 @@ export enum PATHS {
   PROFILE_OWNED = "",
   PROFILE_ACTIVITY = "activity",
   PROFILE_OFFER = "offer",
+  BULK_LISTING = "bulk-listing",
 }
