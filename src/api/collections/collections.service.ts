@@ -2,6 +2,7 @@ import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
 import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
 import { ActivityItemResponse, CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse } from "./collections.type";
+import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "../../icons";
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
@@ -37,5 +38,29 @@ export default {
   },
   async getActivity(data: any): Promise<ApiResponse<ActivityItemResponse[]>> {
     return ThunderURL.post("v1/activity/activities", data);
+  },
+  getActivityFilters() {
+    return [
+      {
+        icon: IconHand,
+        name: "Offers",
+      },
+      {
+        icon: IconQuarry,
+        name: "Mints",
+      },
+      {
+        icon: IconMarketBasket,
+        name: "Sales",
+      },
+      {
+        icon: IconTelegram,
+        name: "Transfers",
+      },
+      {
+        icon: IconTag,
+        name: "Listings",
+      },
+    ];
   },
 };

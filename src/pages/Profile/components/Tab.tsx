@@ -25,7 +25,7 @@ const Tab = () => {
           <TabBase.Item id={PATHS.PROFILE_OWNED}>Owned</TabBase.Item>
           <TabBase.Item id={2}>Created</TabBase.Item>
           <TabBase.Item id={3}>Liked</TabBase.Item>
-          <TabBase.Item id={4}>Offers</TabBase.Item>
+          <TabBase.Item id={PATHS.PROFILE_OFFER}>Offers</TabBase.Item>
           <TabBase.Item id={PATHS.PROFILE_ACTIVITY}>Activity</TabBase.Item>
         </TabBase>
       </div>

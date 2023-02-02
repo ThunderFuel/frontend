@@ -25,7 +25,13 @@ const Sidebar = () => {
                       "inline-flex rounded-md gap-1 border border-gray p-2.5 text-gray-light items-center body-medium cursor-pointer hover:text-white",
                       isActive ? "text-white bg-gray" : "bg-bg"
                     )}
-                    onClick={() => setSelectedFilter(filter.name)}
+                    onClick={() => {
+                      if (selectedFilter === filter.name) {
+                        setSelectedFilter(null);
+                      } else {
+                        setSelectedFilter(filter.name);
+                      }
+                    }}
                   >
                     <Icon className="w-5 h-5" />
                     {filter.name}
