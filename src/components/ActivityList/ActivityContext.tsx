@@ -12,7 +12,6 @@ export const ActivityContext = createContext<IActivityContext>({} as any);
 const ActivityProvider = ({ value, children }: { value: any; children: ReactNode }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
 
-  console.log(value);
   const getActivities = React.useMemo(() => value.activities.filter((item: any) => (selectedFilter ? item.type === selectedFilter : true)), [selectedFilter, value.activities]);
 
   const contextValue = {

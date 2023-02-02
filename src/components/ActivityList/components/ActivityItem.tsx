@@ -4,11 +4,13 @@ import EthereumPrice from "components/EthereumPrice";
 import ActivityItemDescription from "components/ActivityDescription";
 
 const ActivityItem = ({ item }: { item: any }) => {
+  const Icon = item.typeIcon ?? IconHand;
+
   return (
     <div className="bg-bg hover:bg-bg-light border border-gray rounded-md flex p-5 text-white gap-5 cursor-pointer">
       <div className="flex items-center gap-2.5 w-32">
         <div className="flex-center h-8 w-8 rounded-full bg-gray">
-          <IconHand />
+          <Icon />
         </div>
         <h6 className="text-h6 text-overflow">{item.type}</h6>
       </div>

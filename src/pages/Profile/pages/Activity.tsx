@@ -18,6 +18,7 @@ const Activity = () => {
       image: item.token.image,
       price: item.price,
       type: filters[item.activityType].name,
+      typeIcon: filters[item.activityType].icon,
     })) as any;
     setActivities(data);
     setPagination({
