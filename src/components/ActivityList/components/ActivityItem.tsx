@@ -1,7 +1,7 @@
 import React from "react";
 import { IconHand, IconLink } from "icons";
-import EthereumPrice from "../../../../../components/EthereumPrice";
-import ActivityItemDescription from "../../../../../components/ActivityDescription";
+import EthereumPrice from "components/EthereumPrice";
+import ActivityItemDescription from "components/ActivityDescription";
 
 const ActivityItem = ({ item }: { item: any }) => {
   return (

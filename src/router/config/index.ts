@@ -14,6 +14,7 @@ const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activ
 const Profile = React.lazy(() => import("pages/Profile"));
 const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collection"));
 const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity"));
+const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer"));
 
 export interface RouteConfig {
   path: string;
@@ -83,6 +84,10 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.PROFILE_ACTIVITY,
         component: ProfileActivity,
+      },
+      {
+        path: PATHS.PROFILE_OFFER,
+        component: ProfileOffer,
       },
     ],
   },

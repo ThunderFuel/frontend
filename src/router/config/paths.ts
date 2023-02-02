@@ -10,4 +10,5 @@ export enum PATHS {
   PROFILE = "/profile",
   PROFILE_OWNED = "",
   PROFILE_ACTIVITY = "activity",
+  PROFILE_OFFER = "offer",
 }
