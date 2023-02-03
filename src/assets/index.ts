@@ -40,3 +40,5 @@ export { default as AssetProfileAvatar9 } from "./profile/avatars/avatar-9.png";
 export { default as AssetProfileAvatar10 } from "./profile/avatars/avatar-10.png";
 
 export { default as AssetLoadingGrid } from "./collection/loading-grid.png";
+export { default as AssetSettingsCoverImage } from "./settings/cover-image.png";
+export { default as AssetSettingsProfileImage } from "./settings/profile-image.png";
