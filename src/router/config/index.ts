@@ -16,6 +16,8 @@ const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collectio
 const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity"));
 const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer"));
 const BulkListing = React.lazy(() => import("pages/BulkListing"));
+const Settings = React.lazy(() => import("pages/Settings"));
+const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile"));
 
 export interface RouteConfig {
   path: string;
@@ -96,6 +98,24 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.BULK_LISTING,
     component: BulkListing,
     layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
+    path: PATHS.SETTINGS,
+    component: Settings,
+    layout: Layout,
+    children: [
+      {
+        path: PATHS.SETTINGS_PROFILE,
+        component: SettingsProfile,
+      },
+      {
+        path: PATHS.SETTINGS_NOTIFICATION,
+        component: ProfileOffer,
+      },
+    ],
     layoutProps: {
       hiddenFooter: true,
     },
