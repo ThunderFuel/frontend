@@ -2,7 +2,7 @@ import React from "react";
 import ActivityItem from "./ActivityItem";
 import { useActivityContext } from "../ActivityContext";
 
-const ActivityList = () => {
+const ActivityItems = () => {
   const { getActivities, pagination } = useActivityContext();
 
   return (
@@ -17,4 +17,4 @@ const ActivityList = () => {
   );
 };
 
-export default ActivityList;
+export default ActivityItems;

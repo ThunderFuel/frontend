@@ -21,6 +21,7 @@ export interface ITable {
   rowClassName?: string;
   isSelectedRow?: (item: any) => any;
   onClick?: (item: any) => void;
+  containerFluidClassName?: string;
 }
 
 const TableNotFound = React.memo(() => {
@@ -94,11 +95,11 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
     <div>
       <div className={clsx("table", className)} {...props}>
         <div data-testid="tableHeader" className={clsx("thead", theadClassName)}>
-          <div className="container-fluid">
+          <div className={clsx("container-fluid", props.containerFluidClassName)}>
             <div className="tr">{_getHeaders}</div>
           </div>
         </div>
-        <div data-testid="tableBody" className={"tbody container-fluid"}>
+        <div data-testid="tableBody" className={clsx("tbody container-fluid", props.containerFluidClassName)}>
           {loading ? <TableLoading colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
         </div>
         <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
