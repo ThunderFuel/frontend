@@ -45,7 +45,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
               <>
                 <span className="text-gray-light">Highest Bid</span>
                 <div className="flex items-center text-orange">
-                  {selectedNFT.highestBid}
+                  {selectedNFT.highestBid.price}
                   <IconEthereum width="20px" />
                 </div>
               </>
@@ -53,7 +53,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
               <>
                 <span className="text-gray-light">Best Offer</span>
                 <div className="flex items-center text-orange">
-                  {selectedNFT.bestOffer}
+                  {selectedNFT.bestOffer?.price}
                   <IconEthereum width="20px" />
                 </div>
               </>

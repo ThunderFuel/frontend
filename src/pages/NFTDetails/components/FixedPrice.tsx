@@ -49,7 +49,7 @@ const FixedPrice = () => {
         </div>
         <div className="flex h-fit items-center gap-x-[5px]">
           <IconCart width="18px" height="18px" color="#838383" />
-          <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {0.99} ETH</span>
+          <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {selectedNFT.lastSalePrice} ETH</span>
         </div>
       </div>
       {!isOwner && (

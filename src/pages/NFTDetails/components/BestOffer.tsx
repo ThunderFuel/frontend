@@ -16,7 +16,7 @@ const BestOffer = () => {
         <div className="flex flex-col gap-y-[5px]">
           <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">BEST OFFER</span>
           <span className="flex font-spaceGrotesk text-white">
-            <EthereumPrice price={selectedNFT.bestOffer} priceClassName="text-head3"></EthereumPrice>
+            <EthereumPrice price={selectedNFT.bestOffer?.price} priceClassName="text-head3"></EthereumPrice>
           </span>
         </div>
         <div className="flex h-fit items-center gap-x-[5px]"></div>
@@ -26,7 +26,7 @@ const BestOffer = () => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer }));
+              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer?.price }));
               dispatch(toggleCheckoutModal());
             }}
           >

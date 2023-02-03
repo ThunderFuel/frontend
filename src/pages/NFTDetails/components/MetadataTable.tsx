@@ -21,7 +21,7 @@ const MetadataTable = ({ metadata }: { metadata: any }) => {
               <div className="text-white">{item.value}</div>
               <div>
                 <div className="flex-center">
-                  {item.floor} <IconEthereum className="w-5 fill-gray" />
+                  {item.floor ?? "-"} <IconEthereum className="w-5 fill-gray" />
                 </div>
               </div>
             </div>

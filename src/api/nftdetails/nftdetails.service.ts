@@ -42,4 +42,7 @@ export default {
   async tokenPlaceBid(data: TokenPlaceBidRequest): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/placeabid", data);
   },
+  async tokenGetBids(data: any): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/getbids", data);
+  },
 };
