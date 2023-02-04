@@ -223,7 +223,7 @@ const LeftMenu = (props: any) => {
           )}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
-          <MetadataTable metadata={nft.tokenAttributes ?? []} />
+          <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />
           <div className="flex flex-col gap-y-2.5">
             <div className="flex flex-row gap-x-2.5">
               <Box className="hover:bg-bg-light">
