@@ -17,7 +17,7 @@ const CustomBox = ({ title, description, Icon, price }: { title: string; descrip
             </div>
             {title}
           </div>
-          <div className="text-bodyMd max-w-[240px]">{description}</div>
+          <div className="text-bodyMd w-full">{description}</div>
         </div>
         {price && <EthereumPrice price={price} className="grow justify-end" />}
       </div>
@@ -25,32 +25,44 @@ const CustomBox = ({ title, description, Icon, price }: { title: string; descrip
   );
 };
 
+function formatTimePassed(createdDate: string): string {
+  const date = new Date(createdDate);
+
+  const currentDate = new Date();
+  const timeDiff = currentDate.getTime() - date.getTime();
+  const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+  if (days) return `${days} day(s) ago`;
+  if (hours) return `${hours} hour(s) ago`;
+  if (minutes) return `${minutes} min(s) ago`;
+
+  return "just now";
+}
+
 function formatActivityData(data: any): { icon: any; title: string; description: string } {
   //TODO zamanlari ekle
   switch (data.activityType) {
     case 0:
-      return { icon: IconOffer, title: "Offer", description: `Offered by ${data.fromUser.userName}` };
+      return { icon: IconOffer, title: "Offer", description: `Offered by ${data.fromUser.userName}, ${formatTimePassed(data.createdAt)}` };
     case 1:
-      return { icon: IconToken, title: "Mint", description: `Minted by ${data.fromUser.userName}` };
+      return { icon: IconToken, title: "Mint", description: `Minted by ${data.fromUser.userName}, ${formatTimePassed(data.createdAt)}` };
     case 2:
-      return { icon: IconCart, title: "Sale", description: `Sold by ${data.fromUser.userName} to ${data.toUser.userName}` };
+      return { icon: IconCart, title: "Sale", description: `Sold by ${data.fromUser.userName}, to ${data.toUser.userName} ${formatTimePassed(data.createdAt)}` };
     case 3:
-      return { icon: IconTransfer, title: "Transfer", description: `Transferred from ${data.fromUser.userName} to ${data.toUser.userName}` };
+      return { icon: IconTransfer, title: "Transfer", description: `Transferred from ${data.fromUser.userName} to ${data.toUser.userName} ${formatTimePassed(data.createdAt)} ` };
     case 4:
-      return { icon: IconListed, title: "List", description: `Listed by ${data.fromUser.userName}` };
+      return { icon: IconListed, title: "List", description: `Listed by ${data.fromUser.userName} ${formatTimePassed(data.createdAt)}` };
     case 5:
-      return { icon: IconBid, title: "Bid", description: `Bid placed by ${data.fromUser.userName}` };
+      return { icon: IconBid, title: "Bid", description: `Bid placed by ${data.fromUser.userName} ${formatTimePassed(data.createdAt)}` };
     default:
       throw new Error(`Invalid activity type: ${data}`);
   }
 }
 
 const Activity = ({ onBack }: { onBack: any }) => {
-  const [notActiveFilters, setnotActiveFilters] = useState<string[]>([]);
-
-  useEffect(() => {
-    console.log(notActiveFilters);
-  }, [notActiveFilters]);
+  const [notActiveFilters, setnotActiveFilters] = useState<number[]>([]);
 
   const [activities, setActivities] = useState<any>([]);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
@@ -65,12 +77,12 @@ const Activity = ({ onBack }: { onBack: any }) => {
   }, [selectedNFT]);
 
   function renderItems() {
-    return activities.map((item: any, index: any) => {
-      if (notActiveFilters.includes(item.title)) return;
+    return activities.map((activity: any, index: any) => {
+      if (notActiveFilters.includes(activity.activityType)) return;
 
-      const { icon, title, description } = formatActivityData(item);
+      const { icon, title, description } = formatActivityData(activity);
 
-      return <CustomBox key={index} title={title} description={description} Icon={icon} price={item.price}></CustomBox>;
+      return <CustomBox key={index} title={title} description={description} Icon={icon} price={activity.price}></CustomBox>;
     });
   }
 
