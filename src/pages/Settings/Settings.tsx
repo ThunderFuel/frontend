@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
 
+export const EventSettingsSubmit = "EventSettingsSubmit";
 const Settings = () => {
   return (
     <div className="flex flex-col">

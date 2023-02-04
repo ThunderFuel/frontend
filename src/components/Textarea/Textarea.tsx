@@ -5,6 +5,7 @@ interface ITextarea {
   icon?: React.ReactNode;
   className?: string;
   containerClassName?: string;
+  children: string;
 
   [key: string]: any;
 }

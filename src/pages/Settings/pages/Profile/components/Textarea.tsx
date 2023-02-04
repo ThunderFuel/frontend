@@ -6,7 +6,7 @@ const Textarea = ({ label, ...etc }: any) => {
   return (
     <div className="flex flex-col gap-2">
       {label && <Label>{label}</Label>}
-      <TextareaBase {...etc} />
+      <TextareaBase {...etc}></TextareaBase>
     </div>
   );
 };

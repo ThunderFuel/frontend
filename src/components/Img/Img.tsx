@@ -1,12 +1,19 @@
 import React from "react";
 import { AssetTable1Image } from "assets";
 
-const Img = ({ src, defaultImage = AssetTable1Image, ...etc }: { src: string | undefined; defaultImage?: string; [key: string]: any }) => {
+interface IImage {
+  src: string | undefined;
+  defaultImage?: string;
+
+  [key: string]: any;
+}
+
+const Img = ({ src, defaultImage = AssetTable1Image, ...etc }: IImage, ref: any) => {
   const onError = (e: any) => {
     e.target.src = defaultImage;
   };
 
-  return <img src={src ?? defaultImage} loading="lazy" {...etc} onError={onError} />;
+  return <img ref={ref} src={src ?? defaultImage} loading="lazy" {...etc} onError={onError} />;
 };
 
-export default Img;
+export default React.forwardRef(Img);
