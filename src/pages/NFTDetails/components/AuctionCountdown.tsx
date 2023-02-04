@@ -58,7 +58,7 @@ const AuctionCountdown = ({ expireTime }: { expireTime: any }) => {
   const CountdownItem = ({ value, text }: { text: string; value: string }) => (
     <div className="flex flex-col justify-center items-center w-[45px] py-[5px] gap-y-[6px] text-head4 font-spaceGrotesk text-white bg-gray rounded">
       {value}
-      <h4 className="text-headlineSm font-bigShoulderDisplay text-gray-light">{text}</h4>
+      <h4 className="text-headlineSm font-bigShoulderDisplay text-gray-light pl-[2.5px]">{text}</h4>
     </div>
   );
 

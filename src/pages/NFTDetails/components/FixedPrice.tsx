@@ -59,7 +59,7 @@ const FixedPrice = () => {
               Buy Now <IconThunder width="24px" height="11.58px" />
             </Button>
             <Button
-              className="hover:px-8"
+              className="hover:px-8 px-4"
               onClick={() => {
                 dispatch(add(selectedNFT));
               }}
