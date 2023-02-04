@@ -10,7 +10,7 @@ const Rankings = () => {
       <div className="pb-10">
         <MarketplaceProvider>
           <Filter />
-          <MarketplaceList itemCount={10} />
+          <MarketplaceList itemCount={20} />
         </MarketplaceProvider>
       </div>
     </div>

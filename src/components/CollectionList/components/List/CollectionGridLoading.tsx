@@ -5,7 +5,7 @@ import { AssetLoadingGrid } from "assets";
 
 const CollectionGridLoading = () => {
   const { displayType } = useCollectionListContext();
-  const collectionItems = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const collectionItems = new Array(20).fill(1);
 
   const displayClass = useMemo(() => {
     if (displayType === DisplayType.GRID4) {
@@ -19,8 +19,8 @@ const CollectionGridLoading = () => {
 
   return (
     <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pl-5 pb-20", displayClass)}>
-      {collectionItems.map((i: number) => (
-        <div className="grid-skeleton" key={i}>
+      {collectionItems.map((i: number, k) => (
+        <div className="grid-skeleton" key={`${i}_${k}`}>
           <img alt="grid-skeleton-image" className="w-full" src={AssetLoadingGrid} />
         </div>
       ))}

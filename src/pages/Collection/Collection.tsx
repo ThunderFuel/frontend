@@ -28,8 +28,8 @@ const Collection = () => {
           <div className="flex">
             <div className="flex gap-5 w-full">
               <div className="w-24">
-                <div className=" overflow-hidden rounded-md aspect-square bg-gray">
-                  <Img className="w-20 h-20" src={collection?.image} alt="profile-image" />
+                <div className="w-20 h-20 overflow-hidden rounded-md aspect-square bg-gray">
+                  <Img className="w-full" src={collection?.image} alt="profile-image" />
                 </div>
               </div>
               <div className="flex flex-col w-full">
