@@ -1,9 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
 
 const Sidebar = () => {
+  const [activeMenu, setActiveMenu] = React.useState(PATHS.SETTINGS_PROFILE);
   const menus = [
     { name: "Profile", link: PATHS.SETTINGS_PROFILE },
     { name: "Notifications", link: PATHS.SETTINGS_NOTIFICATION },
@@ -13,13 +14,13 @@ const Sidebar = () => {
     <div className="w-[320px] border-r border-gray">
       <ul className="">
         {menus.map((menu) => {
-          const activeMenu = location.pathname === menu.link;
+          const isActive = activeMenu === menu.link;
 
           return (
-            <li key={menu.link} className={clsx("px-8 py-6 border-b border-b-gray hover:bg-bg-light", activeMenu ? "bg-bg-light" : "")}>
-              <NavLink to={menu.link} className={({ isActive }) => clsx("text-h6", isActive ? "text-white" : "text-gray-light")}>
+            <li key={menu.link} className={clsx("border-b border-b-gray hover:bg-bg-light", isActive ? "bg-bg-light" : "")}>
+              <Link to={menu.link} onClick={() => setActiveMenu(menu.link)} className={clsx("flex px-8 py-6 text-h6", isActive ? "text-white" : "text-gray-light")}>
                 {menu.name}
-              </NavLink>
+              </Link>
             </li>
           );
         })}
