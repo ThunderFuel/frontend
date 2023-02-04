@@ -7,14 +7,42 @@ import RightMenu from "../components/RightMenu";
 import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
 import InputPrice from "../components/InputPrice";
-import Dropdown from "components/Dropdown";
 import { useWallet } from "hooks/useWallet";
 import { formatDisplayedNumber, getDateFromExpirationTime, toGwei } from "utils";
 import nftDetailsService from "api/nftdetails/nftdetails.service";
 import { MakeOfferRequest } from "api/nftdetails/nftdetails.type";
+import Select, { ISelectOption } from "components/Select";
+
+export const selectExpirationDates: ISelectOption[] = [
+  {
+    text: "1 day",
+    value: "1 day",
+  },
+  {
+    text: "3 days",
+    value: "3 days",
+  },
+  {
+    text: "7 days",
+    value: "7 days",
+  },
+  {
+    text: "1 month",
+    value: "1 month",
+  },
+  {
+    text: "3 months",
+    value: "3 months",
+  },
+  {
+    text: "6 months",
+    value: "6 months",
+  },
+];
 
 const offerDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
+
 //TODO DISPLAY AMOUNT LA STATE AMOUNTU AYARLA
 const MakeOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
@@ -24,7 +52,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const { getBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [offer, setoffer] = useState<any>("");
-  const [expirationTime, setexpirationTime] = useState("1 day");
+  const [expirationTime, setexpirationTime] = useState(selectExpirationDates[0]);
 
   useEffect(() => {
     getBalance().then((res) => setbalance(res ? res : 0));
@@ -98,9 +126,9 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
       <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">
         Set Expiration Date
         <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
-          <IconInfo width="17px" /> <span>Expires on </span> {getDateFromExpirationTime(expirationTime)}
+          <IconInfo className="w-[17px] h-[17px]" /> <span>Expires on </span> {getDateFromExpirationTime(expirationTime.value)}
         </div>
-        <Dropdown options={["1 day", "3 days", "7 days", "1 month", "3 months", "6 months"]} onSelect={setexpirationTime} className="text-bodyMd text-white" />
+        <Select options={selectExpirationDates} onChange={setexpirationTime} value={expirationTime} />
       </div>
     </RightMenu>
   );

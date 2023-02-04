@@ -5,12 +5,13 @@ import { useAppDispatch, useAppSelector } from "store";
 import RightMenu from "../components/RightMenu";
 import Tab from "components/Tab";
 import InputPrice from "../components/InputPrice";
-import Dropdown from "components/Dropdown";
 import ToggleButton from "components/ToggleButton";
 import Input from "components/Input";
 import InfoBox from "../components/InfoBox";
 import { getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import Select from "components/Select";
+import { selectExpirationDates } from "./MakeOffer";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: any }) => {
@@ -23,7 +24,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
   const [privateSaleAddress, setprivateSaleAddress] = useState("");
   const [price, setprice] = useState<any>("");
   const [startingPrice, setstartingPrice] = useState<any>("");
-  const [duration, setDuration] = useState("1 day");
+  const [duration, setDuration] = useState(selectExpirationDates[0]);
 
   const serviceFee = 2.5;
   const creatorEarnings = 5.5;
@@ -83,13 +84,13 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
         <Tab initTab={0} onChange={(value) => setisTimedAuction(!!value)}>
           <Tab.Item id={0}>
             <div className="flex justify-center items-center gap-x-[10px] -my-2">
-              <IconListed width="17px" />
+              <IconListed className="w-[17px] h-[17px]" />
               FIXED PRICE
             </div>
           </Tab.Item>
           <Tab.Item id={1} disabled={updateListing ? true : false}>
             <div className="flex justify-center items-center gap-x-[10px] -my-2">
-              <IconAuction width="17px" />
+              <IconAuction className="w-[17px] h-[17px]" />
               TIMED AUCTION
             </div>
           </Tab.Item>
@@ -98,9 +99,9 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
         <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
           {isTimedAuction ? "Set Duration" : "Listing Duration"}
           <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
-            <IconInfo width="17px" /> <span>Expires on </span> {getDateFromExpirationTime(duration)}
+            <IconInfo className="w-[17px] h-[17px]" /> <span>Expires on </span> {getDateFromExpirationTime(duration.value)}
           </div>
-          <Dropdown options={["1 day", "3 days", "7 days", "1 month", "3 months", "6 months"]} onSelect={setDuration} className="bg-bg-light text-bodyMd" />
+          <Select options={selectExpirationDates} onChange={setDuration} value={duration} />
         </div>
         {!isTimedAuction && (
           <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
@@ -141,7 +142,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
             </div>
           </div>
           <div className="flex gap-x-[5px] items-center text-bodySm text-gray-light">
-            <IconInfo width="17px" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
+            <IconInfo className="w-[17px] h-[17px]" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
           </div>
           {isTimedAuction
             ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
