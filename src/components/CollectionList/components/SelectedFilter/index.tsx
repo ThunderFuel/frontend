@@ -25,7 +25,7 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
 const Index = () => {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    params: { sortingType, pageSize, search, sweep, ...etcParams },
+    params: { sortingType, pageSize, search, ...etcParams },
     setParams,
     deleteParams,
     resetParams,
@@ -35,18 +35,18 @@ const Index = () => {
     return null;
   }
 
-  const onRemove = (paramKey: any, p: any) => {
+  const onRemove = (paramKey: any, deleteKey: any) => {
     const paramValue = etcParams[paramKey]?.value;
 
     if (Array.isArray(paramValue)) {
-      etcParams[paramKey].value = paramValue?.filter((i: any) => i !== p);
+      etcParams[paramKey].value = paramValue?.filter((i: any) => i !== deleteKey);
       if (!etcParams[paramKey].value.length) {
         deleteParams(paramKey);
       } else {
         setParams({});
       }
     } else if (paramValue?.min || paramValue?.max) {
-      delete etcParams[paramKey][p];
+      delete etcParams[paramKey]?.value[deleteKey];
       setParams(etcParams);
     }
   };
@@ -62,6 +62,7 @@ const Index = () => {
             paramKey,
             key: `${key}_${i}`,
             text: p,
+            deleteKey: p,
           });
         });
       } else if (paramValue.min || paramValue.max) {
@@ -71,6 +72,7 @@ const Index = () => {
               paramKey,
               key: `${key}_${i}`,
               text: `${paramValue[key]} ${key === "min" ? ">" : "<"}`,
+              deleteKey: key,
             });
           }
         });
@@ -85,7 +87,7 @@ const Index = () => {
       <ClearFilterButton onClick={resetParams} />
       {paramItems.map((item: any) => {
         return (
-          <SelectedFilterItem key={item.key} onClick={() => onRemove(item.paramKey, item.text)}>
+          <SelectedFilterItem key={item.key} onClick={() => onRemove(item.paramKey, item.deleteKey)}>
             {item.text}
           </SelectedFilterItem>
         );

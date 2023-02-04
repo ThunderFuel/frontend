@@ -8,6 +8,7 @@ import "./CollectionItem.css";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import { PATHS } from "router/config/paths";
 import { useCollectionListContext } from "../../CollectionListContext";
+import Img from "../../../Img";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -55,7 +56,9 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
     <a href={collectionUrl} className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}>
       <div className="overflow-hidden relative">
         {collection.salable && <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />}
-        <img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+        <div className="w-full aspect-square bg-gray">
+          <Img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+        </div>
       </div>
       <div className="p-2.5 border-b border-b-gray">
         <h6 className="text-h6 text-white">{collection.name}</h6>
@@ -79,4 +82,4 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
   );
 };
 
-export default React.memo(CollectionItem);
+export default CollectionItem;

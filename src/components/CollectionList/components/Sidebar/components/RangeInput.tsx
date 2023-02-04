@@ -11,8 +11,8 @@ enum Input {
 
 const RangeInput = ({ value, name, onChange }: any) => {
   const [isFocus, setIsFocus] = React.useState<any>(null);
-  const [minValue, setMinValue] = React.useState<any>(value?.[Input.Min] ?? 0);
-  const [maxValue, setMaxValue] = React.useState<any>(value?.[Input.Max] ?? 0);
+  const [minValue, setMinValue] = React.useState<any>(value?.[Input.Min] ?? "");
+  const [maxValue, setMaxValue] = React.useState<any>(value?.[Input.Max] ?? "");
   const onSubmit = () => {
     onChange(name, {
       [Input.Min]: minValue,
@@ -21,8 +21,8 @@ const RangeInput = ({ value, name, onChange }: any) => {
   };
   React.useEffect(() => {
     if (!value) {
-      setMaxValue(0);
-      setMinValue(0);
+      setMaxValue("");
+      setMinValue("");
     }
   }, [value]);
 
