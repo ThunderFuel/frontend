@@ -32,7 +32,7 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
     <div className={clsx("modalbase", className)}>
       <div className={clsx("modal", etc.bodyClassName)}>
         <div className="mhead">
-          {etc.modalTitle ? etc.modalTitle : <h6 className="mtitle">{title}</h6>}
+          {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
           <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
             <IconClose />
           </button>

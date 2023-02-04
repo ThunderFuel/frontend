@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "components/Button";
 import { IconAuction, IconEthereum, IconInfo, IconListed } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
@@ -54,33 +54,6 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
     </div>
   );
 
-  const handleChange = (event: React.ChangeEvent<any>, name: string) => {
-    const newValue = event.target.value;
-    const lastChar = newValue.substring(newValue.length - 1);
-    switch (name) {
-      case "price":
-        if (newValue.match(/^(0*[1-9]\d*|0*[1-9]\d*\.\d+|0*\.\d+|0+)$/)) {
-          setprice(+newValue);
-        } else if (lastChar === "." && !newValue.substring(0, newValue.length - 1).includes(".")) setprice(newValue);
-        else if (newValue === "") setprice(newValue);
-        break;
-      case "startingPrice":
-        if (newValue.match(/^(0*[1-9]\d*|0*[1-9]\d*\.\d+|0*\.\d+|0+)$/)) {
-          setstartingPrice(+newValue);
-        } else if (lastChar === "." && !newValue.substring(0, newValue.length - 1).includes(".")) setstartingPrice(newValue);
-        else if (newValue === "") setstartingPrice(newValue);
-        break;
-      case "duration":
-        setDuration(newValue);
-        break;
-      case "privateSaleAddress":
-        setprivateSaleAddress(newValue);
-        break;
-      default:
-        break;
-    }
-  };
-
   const handleToggle = (isOn: boolean) => {
     if (isTimedAuction) sethasStartingPrice(isOn);
     else setisPrivateSale(isOn);
@@ -89,10 +62,6 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
   const calculateReceivingAmount = (price: any) => {
     return price - (price * serviceFee) / 100 - (price * creatorEarnings) / 100;
   };
-
-  useEffect(() => {
-    console.log({ price, isPrivateSale, hasStartingPrice, isTimedAuction, startingPrice, duration, privateSaleAddress });
-  }, [price, isPrivateSale, hasStartingPrice, isTimedAuction, startingPrice, privateSaleAddress]);
 
   return (
     <RightMenu title={updateListing ? "Update Listing" : "List Your NFT"} footer={footer} onBack={onBack}>
@@ -136,13 +105,13 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
         {!isTimedAuction && (
           <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
             Enter Price*
-            <InputPrice onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleChange(event, "price")} value={price} type="text" />
+            <InputPrice onChange={setprice} value={price} type="text" />
             {price !== "" && price < selectedNFT.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">
-              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.floorPrice)}>
+              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
                 {selectedNFT.floorPrice} ETH - Floor Price
               </div>
-              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.topTraitPrice)}>
+              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.traitHighest?.price)}>
                 {selectedNFT.topTraitPrice} ETH - Top Trait Price
               </div>
             </div>
@@ -153,7 +122,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">Creator Earnings</div>
-                <div className="">5.5%</div>
+                <div className="">{selectedNFT.collection?.royaltyFee}%</div>
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">You’ll Recieve</div>
@@ -175,8 +144,8 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
             <IconInfo width="17px" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
           </div>
           {isTimedAuction
-            ? hasStartingPrice && <InputPrice onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleChange(event, "startingPrice")} value={startingPrice} type="text" />
-            : isPrivateSale && <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleChange(event, "privateSaleAddress")} value={privateSaleAddress} type="text" />}
+            ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
+            : isPrivateSale && <Input onChange={setprivateSaleAddress} value={privateSaleAddress} type="text" />}
         </div>
         {isTimedAuction && (
           <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray text-head6 font-spaceGrotesk text-white">
@@ -186,7 +155,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">Creator Earnings</div>
-              <div className="">5.5%</div>
+              <div className="">{selectedNFT.collection?.royaltyFee}%</div>
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">You’ll Recieve</div>

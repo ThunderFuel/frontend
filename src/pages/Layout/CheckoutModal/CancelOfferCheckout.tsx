@@ -18,11 +18,13 @@ const checkoutProcessTexts = {
   description3: "Your offer succesfully canceled.",
 };
 
-const Footer = ({ approved }: { approved: boolean }) => {
+const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
     <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
       <div className={"flex w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest">DONE</Button>
+        <Button className="w-full tracking-widest" onClick={onClose}>
+          DONE
+        </Button>
       </div>
     </div>
   );
@@ -64,7 +66,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   );
 
   return (
-    <Modal className="checkout" title="Cancel Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal className="checkout" title="Cancel Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
         <CartItem text={"Your Offer"} name={selectedNFT.name} image={selectedNFT.image} price={+currentUserOffer} id={0}></CartItem>
       </div>

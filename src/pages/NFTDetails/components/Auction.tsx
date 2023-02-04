@@ -29,7 +29,7 @@ const Auction = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
-        {isOwner ? (
+        {isOwner && highestBid ? (
           <>
             <Button
               className="w-full text-button font-bigShoulderDisplay"
