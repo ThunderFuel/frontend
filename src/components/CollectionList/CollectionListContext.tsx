@@ -38,6 +38,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
         return { ...prevState, ...nextState };
     }
   }, {});
+  const [sweep, setSweep] = useState(0);
 
   const resetParams = () => {
     setParams({ type: ParamsType.Reset });
@@ -72,10 +73,12 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     collectionItems,
     filters,
     params,
+    sweep,
     setParams,
     resetParams,
     deleteParams,
     setDisplayType,
+    setSweep,
   };
 
   return <CollectionListContext.Provider value={contextValue}>{children}</CollectionListContext.Provider>;

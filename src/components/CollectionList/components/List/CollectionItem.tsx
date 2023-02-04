@@ -6,7 +6,8 @@ import { add, remove } from "store/cartSlice";
 
 import "./CollectionItem.css";
 import { CollectionItemResponse } from "api/collections/collections.type";
-import { PATHS } from "../../../../router/config/paths";
+import { PATHS } from "router/config/paths";
+import { useCollectionListContext } from "../../CollectionListContext";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -36,8 +37,11 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
+  const { setSweep } = useCollectionListContext();
   const dispatch = useAppDispatch();
   const onSelect = () => {
+    setSweep(0);
+
     if (!collection.isSelected) {
       dispatch(add(collection));
     } else {
