@@ -19,7 +19,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
 
   return (
     <div className="flex border border-gray gap-x-[18px] p-[10px] text-head6 font-spaceGrotesk text-white rounded-md">
-      <img src={selectedNFT.image} width="64px" className="rounded-[5px] h-fit"></img>
+      <img src={selectedNFT.image} className="rounded-[5px] w-16 h-16"></img>
       <div className="flex flex-col w-full">
         <div className="pb-[11px] border-b border-gray">{selectedNFT.name}</div>
         <div className="flex flex-col pt-2 gap-y-2">

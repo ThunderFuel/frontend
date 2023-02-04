@@ -9,6 +9,7 @@ import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import Input from "components/Input";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import { addressFormat } from "utils";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -19,14 +20,16 @@ const checkoutProcessTexts = {
   description3: "Your NFT is succesfully transferred.",
 };
 
-const Footer = ({ address, callback, animationStarted }: { address: string; callback: any; animationStarted: boolean }) => {
+const Footer = ({ address, callback, animationStarted, onClose }: { address: string; callback: any; animationStarted: boolean; onClose: any }) => {
   return (
     <div className={clsx("transition-all duration-300 overflow-hidden", !animationStarted ? "h-fit opacity-100" : "h-0 opacity-0")}>
       <div className={"flex flex-col gap-y-[10px] w-full items-center justify-center p-5"}>
         <Button className="w-full tracking-widest" disabled={address === ""} onClick={callback}>
           TRANSFER
         </Button>
-        <Button className="btn-secondary w-full tracking-widest">CLOSE</Button>
+        <Button className="btn-secondary w-full tracking-widest" onClick={onClose}>
+          CLOSE
+        </Button>
       </div>
     </div>
   );
@@ -79,11 +82,11 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
       title="Transfer Your NFT"
       show={show}
       onClose={onClose}
-      footer={<Footer address={address} animationStarted={showTransactionAnimation} callback={setshowTransactionAnimation} />}
+      footer={<Footer address={address} animationStarted={showTransactionAnimation} callback={setshowTransactionAnimation} onClose={onClose} />}
     >
       <div className="flex flex-col p-5">
         {/*TODO price yerine string yazilabilmeli */}
-        <CartItem text={"Address"} name={selectedNFT.name} image={selectedNFT.image} price={1010101001001} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        <CartItem text={"Address"} name={selectedNFT.name} image={selectedNFT.image} price={addressFormat(address)} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       {showTransactionAnimation ? (
         <div className="flex border-t border-gray">{checkoutProcess}</div>
@@ -94,7 +97,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
             <IconInfo className="w-[17px] h-[17px]" />
             Items sent to the wrong address cannot be recovered
           </span>
-          <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setaddress(event.target.value)} value={address} type="text" />
+          <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setaddress(event.target.value)} value={address} type="text" maxLength={42} />
         </div>
       )}
     </Modal>

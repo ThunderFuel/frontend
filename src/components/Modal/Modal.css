@@ -9,7 +9,7 @@
   @apply container flex justify-between items-center p-5 border-b border-gray;
 }
 .modalbase .modal .mhead .mtitle {
-  @apply text-headlineMd font-bigShoulderDisplay text-white;
+  @apply text-head5 font-bigShoulderDisplay text-white;
 }
 
 .cart {

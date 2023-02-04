@@ -8,7 +8,6 @@ import {
   IconBid,
   IconCancel,
   IconCart,
-  IconContract,
   IconDocument,
   IconFee,
   IconLink,
@@ -21,9 +20,12 @@ import {
   IconWallet,
 } from "icons";
 import React, { SVGProps } from "react";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu, toggleIsOwner } from "store/NFTDetailsSlice";
+import { addressFormat } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -113,7 +115,7 @@ const FooterAuction = () => {
 
 const LeftMenu = (props: any) => {
   const { nft } = props;
-
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isOwner } = useAppSelector((state) => state.nftdetails);
   const { walletConnect } = useWallet();
@@ -147,7 +149,7 @@ const LeftMenu = (props: any) => {
       <BoxWithIcon icon={icon} className="flex hover:bg-bg-light ">
         <div className="flex w-full justify-between pr-4">
           <div className="flex flex-col gap-y-[5px] ">
-            <div className="text-headline-02 text-gray-light">LAST ACTIVITY</div>
+            <div className="text-headline-01 text-gray-light">LAST ACTIVITY</div>
             {price} ETH {text} {fromUser?.userName}
           </div>
           <HoverButton
@@ -163,10 +165,10 @@ const LeftMenu = (props: any) => {
   }
 
   return (
-    <div className="flex flex-col border-r border-gray overflow-hidden overflow-y-scroll">
+    <div className="flex flex-col border-r border-gray overflow-hidden ">
       <div className="flex flex-col">
-        <div className="container-fluid flex flex-col pt-10 pb-5 pr-10 border-b border-gray">
-          <div className="flex gap-2 mb-[5px]">
+        <div className="container-fluid flex flex-col pt-5 pb-5 pr-10 border-b border-gray">
+          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION.replace(":collectionId", nft.collection.id))}>
             {nft?.collection?.image && <img src={nft.collection.image} className="w-6 rounded-[px]" alt="profile-image" />}
             <div className="flex flex-col w-full">
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
@@ -200,7 +202,7 @@ const LeftMenu = (props: any) => {
               <div className="flex items-center gap-x-2.5">
                 <img src={nft.bestOffer?.image} className="w-8 h-8 rounded-full" alt="profile-image" />
                 <div className="flex flex-col gap-y-[5px]">
-                  <span className="text-headline-02 text-gray-light">BEST OFFER</span>
+                  <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
                     {nft.bestOffer?.price} ETH by {nft.bestOffer?.user?.userName}
                   </h6>
@@ -228,17 +230,16 @@ const LeftMenu = (props: any) => {
             <div className="flex flex-row gap-x-2.5">
               <Box className="hover:bg-bg-light">
                 <div className="flex h-fit rounded-full bg-gray p-[6px]">
-                  <IconDocument className="opacity-1 group-hover:opacity-0 transition-opacity duration-500 h-5 w-5" />
-                  <IconContract className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-500 h-5 w-5" />
+                  <IconDocument className="h-5 w-5" />
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light">CONTRACT ADDRESS</div>
-                  {nft?.collection?.contractAddress}
+                  <div className="text-headline-01 text-gray-light">CONTRACT ADDRESS</div>
+                  {addressFormat(nft?.collection?.contractAddress ?? "")}
                 </div>
               </Box>
               <BoxWithIcon className="hover:bg-bg-light" icon={IconToken}>
-                <div className="text-headline-02 text-gray-light"> TOKEN ID</div>
-                {nft.id}
+                <div className="text-headline-01 text-gray-light"> TOKEN ID</div>
+                {nft.tokenOrder}
               </BoxWithIcon>
             </div>
             <div className="flex flex-row gap-x-2.5">
@@ -247,7 +248,7 @@ const LeftMenu = (props: any) => {
                   <img src={nft.collection?.image} className="w-8" />
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light">CREATOR</div>
+                  <div className="text-headline-01 text-gray-light">CREATOR</div>
                   {nft?.collection?.name}
                 </div>
               </Box>
@@ -256,7 +257,7 @@ const LeftMenu = (props: any) => {
                   <IconFee className="w-5 h-5" />
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light">CREATOR FEE</div>
+                  <div className="text-headline-01 text-gray-light">CREATOR FEE</div>
                   {nft.collection?.royaltyFee}%
                 </div>
               </Box>

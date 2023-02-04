@@ -1,5 +1,12 @@
 import dayjs from "dayjs";
 
+export const addressFormat = (address: string) => {
+  const first6 = address.substring(0, 6);
+  const last4 = address.substring(address.length - 4);
+
+  return first6 + "..." + last4;
+};
+
 export const openInNewTab = (url: string): void => {
   const newWindow = window.open(url, "_blank", "noopener,noreferrer");
   if (newWindow) {

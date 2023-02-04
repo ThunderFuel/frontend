@@ -26,7 +26,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                 </div>
               </div>
             </div>
-            <div className="overflow-hidden flex justify-center delay-300 transition-all duration-1000 ease-in-out opacity-0 h-0 group-hover:opacity-100 group-hover:h-10">
+            <div className="overflow-hidden border-b border-gray flex justify-center transition-all duration-300 ease-in-out opacity-0 h-0 group-hover:opacity-100 group-hover:h-10">
               <Button className="btn-secondary text-headline-02 border-none rounded-none py-3">
                 LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />
               </Button>
