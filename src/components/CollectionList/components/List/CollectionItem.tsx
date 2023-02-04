@@ -9,6 +9,7 @@ import { CollectionItemResponse } from "api/collections/collections.type";
 import { PATHS } from "router/config/paths";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "../../../Img";
+import { Link } from "react-router-dom";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -31,8 +32,8 @@ const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
 ButtonMakeOffer.displayName = "ButtonMakeOffer";
 const CollectionItemCheckbox = (props: any) => {
   return (
-    <label className="collection-item-checkbox">
-      <input type="checkbox" className="hidden" {...props} />
+    <label className="collection-item-checkbox" onClick={props.onClick}>
+      <button className={clsx("hidden absolute -z-50", props.checked ? "checked" : "")} />
       <span></span>
     </label>
   );
@@ -40,7 +41,7 @@ const CollectionItemCheckbox = (props: any) => {
 const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
   const { setSweep } = useCollectionListContext();
   const dispatch = useAppDispatch();
-  const onSelect = () => {
+  const onSelect = (e: any) => {
     setSweep(0);
 
     if (!collection.isSelected) {
@@ -48,14 +49,18 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
     } else {
       dispatch(remove(collection.tokenOrder));
     }
+
+    e.stopPropagation();
+    e.preventDefault();
   };
 
-  const collectionUrl = PATHS.NFT_DETAILS.replace(":nftId", collection.id);
-
   return (
-    <a href={collectionUrl} className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}>
+    <Link
+      to={PATHS.NFT_DETAILS.replace(":nftId", collection.id)}
+      className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
+    >
       <div className="overflow-hidden relative">
-        {collection.salable && <CollectionItemCheckbox checked={collection.isSelected} onChange={onSelect} />}
+        {collection.salable && <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />}
         <div className="w-full aspect-square bg-gray">
           <Img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
         </div>
@@ -78,7 +83,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
       </div>
       <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
-    </a>
+    </Link>
   );
 };
 

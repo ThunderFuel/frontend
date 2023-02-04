@@ -3,16 +3,20 @@
   @apply rounded-full w-6 h-6 z-10 cursor-pointer;
   @apply hover:bg-opacity-50 hover:border-opacity-100;
 }
-.collection-item-checkbox:has(input:checked) {
+
+.collection-item-checkbox:has(button.checked) {
   @apply bg-opacity-50 border-opacity-100;
 }
-.collection-item-checkbox input {
+
+.collection-item-checkbox button {
   @apply hidden;
 }
-.collection-item-checkbox input + span {
+
+.collection-item-checkbox button + span {
   @apply hidden bg-white absolute top-1/2 left-1/2 w-[14px] h-[14px] border border-white rounded-full -translate-x-1/2 -translate-y-1/2;
 }
-.collection-item-checkbox input:checked + span {
+
+.collection-item-checkbox button.checked + span {
   @apply block;
 }
 

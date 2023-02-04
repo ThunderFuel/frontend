@@ -40,6 +40,9 @@ export const cartSlice = createSlice({
     add: (state, action) => {
       state.items.push(action.payload);
     },
+    sweepAdd: (state, action) => {
+      state.items = action.payload;
+    },
     getCartItems: (state) => {
       state.items = [];
     },
@@ -49,6 +52,6 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal } = cartSlice.actions;
+export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd } = cartSlice.actions;
 
 export default cartSlice.reducer;

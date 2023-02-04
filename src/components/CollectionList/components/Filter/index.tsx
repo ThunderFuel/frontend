@@ -9,7 +9,7 @@ import SelectOrderBy from "./SelectOrderBy";
 import { useCollectionListContext } from "../../CollectionListContext";
 import { ISelectOption } from "components/Select";
 import { useAppDispatch } from "store";
-import { add, removeAll } from "store/cartSlice";
+import { sweepAdd } from "store/cartSlice";
 
 const Range = (props: any) => {
   return (
@@ -41,20 +41,10 @@ const KEY_ENTER = "Enter";
 const Index = () => {
   const dispatch = useAppDispatch();
   const { options, setParams, pagination, collectionItems, sweep, setSweep } = useCollectionListContext();
-  let rangeTimeout: any;
   const onRangeChange = (value: any) => {
     setSweep(value);
-    dispatch(removeAll());
-    clearTimeout(rangeTimeout);
-
-    rangeTimeout = setTimeout(() => {
-      const sweepItems = [...collectionItems].splice(0, value);
-      sweepItems.forEach((collection) => {
-        if (collection.salable) {
-          dispatch(add(collection));
-        }
-      });
-    }, 100);
+    const sweepCollectionItems = [...collectionItems].splice(0, value);
+    dispatch(sweepAdd(sweepCollectionItems));
   };
 
   const onKeyPress = (e: any) => {
