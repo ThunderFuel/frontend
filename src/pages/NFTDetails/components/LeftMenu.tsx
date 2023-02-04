@@ -1,12 +1,29 @@
-import { AssetCollectionProfileImage, AssetMockCreator, AssetTableImageNft1 } from "assets";
+import { AssetTableImageNft1 } from "assets";
 import clsx from "clsx";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
-import { IconAccept, IconArrowRight, IconCancel, IconContract, IconDocument, IconFee, IconLink, IconListed, IconOffer, IconToken, IconTwitter, IconUpdateListing, IconWallet } from "icons";
-import React, { SVGProps, useState } from "react";
+import {
+  IconAccept,
+  IconArrowRight,
+  IconBid,
+  IconCancel,
+  IconCart,
+  IconContract,
+  IconDocument,
+  IconFee,
+  IconLink,
+  IconListed,
+  IconOffer,
+  IconToken,
+  IconTransfer,
+  IconTwitter,
+  IconUpdateListing,
+  IconWallet,
+} from "icons";
+import React, { SVGProps } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
-import { RightMenuType, setRightMenu, toggleHasBid, toggleIsOwner } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu, toggleIsOwner } from "store/NFTDetailsSlice";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -24,7 +41,7 @@ const BoxWithIcon = React.memo(({ children, className, icon }: { children: React
       <div className="h-fit rounded-full bg-gray p-[6px]">
         <Icon className="w-5 h-5" />
       </div>
-      <div className="flex flex-col gap-y-[5px]">{children}</div>
+      <div className="flex flex-col w-full gap-y-[5px]">{children}</div>
     </div>
   );
 });
@@ -33,9 +50,9 @@ BoxWithIcon.displayName = "BoxWithIcon";
 const HoverButton = ({ Icon, text, btnClassName, onClick }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any }) => {
   return (
     <div className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" onClick={onClick}>
-      <Button className={clsx("btn-sm", btnClassName)}>
+      <Button className={clsx("btn-sm btn-secondary no-bg", btnClassName)}>
         {text}
-        <Icon width="18px" height="18px" />
+        <Icon className="w-[18px] h-[18px]" />
       </Button>
     </div>
   );
@@ -93,17 +110,57 @@ const FooterAuction = () => {
     </div>
   );
 };
+
 const LeftMenu = (props: any) => {
   const { nft } = props;
 
   const dispatch = useAppDispatch();
-  const { isOwner, hasBid } = useAppSelector((state) => state.nftdetails);
+  const { isOwner } = useAppSelector((state) => state.nftdetails);
   const { walletConnect } = useWallet();
-  const [hasOffer, sethasOffer] = useState(false);
-  const [onAuction, setonAuction] = useState(false);
 
-  const bestOffer = "0.99";
-  const offerOwner = "09x910";
+  function formatActivityData(data: number) {
+    switch (data) {
+      case 0:
+        return { icon: IconOffer, text: "Offered by" };
+      case 1:
+        return { icon: IconToken, text: "Minted by" };
+      case 2:
+        return { icon: IconCart, text: "Sold by" };
+      case 3:
+        return { icon: IconTransfer, text: "Transferred from" };
+      case 4:
+        return { icon: IconListed, text: "Listed by" };
+      case 5:
+        return { icon: IconBid, text: "Bid placed by" };
+      default:
+        throw new Error(`Invalid activity type: ${data}`);
+    }
+  }
+
+  function renderLastActivity(activity: any) {
+    if (activity === undefined || activity === null) return;
+
+    const { price, fromUser, activityType } = activity;
+    const { icon, text } = formatActivityData(activityType);
+
+    return (
+      <BoxWithIcon icon={icon} className="flex hover:bg-bg-light ">
+        <div className="flex w-full justify-between pr-4">
+          <div className="flex flex-col gap-y-[5px] ">
+            <div className="text-headline-02 text-gray-light">LAST ACTIVITY</div>
+            {price} ETH {text} {fromUser?.userName}
+          </div>
+          <HoverButton
+            Icon={IconArrowRight}
+            text="SEE ALL"
+            onClick={() => {
+              dispatch(setRightMenu(RightMenuType.Activities));
+            }}
+          />
+        </div>
+      </BoxWithIcon>
+    );
+  }
 
   return (
     <div className="flex flex-col border-r border-gray overflow-hidden overflow-y-scroll">
@@ -119,10 +176,9 @@ const LeftMenu = (props: any) => {
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray">
           <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
-            <img src={nft?.user?.image ?? AssetTableImageNft1} className="w-8 rounded-full" alt="profile-image" />
+            <img src={nft?.user?.image ?? AssetTableImageNft1} className="w-8 h-8 rounded-full" alt="profile-image" />
             <h6 className="text-h6 text-gray-light">
-              Owned by
-              <span className={clsx(isOwner ? "text-green" : "text-white")}>{isOwner ? "you" : nft?.user?.userName}</span>
+              Owned by <span className={clsx(isOwner ? "text-green" : "text-white")}>{isOwner ? "you" : nft?.user?.userName}</span>
             </h6>
           </div>
 
@@ -131,31 +187,22 @@ const LeftMenu = (props: any) => {
             <Button className={clsx("p-3 font-bold normal-case", isOwner ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleIsOwner())}>
               isOwner
             </Button>
-            <Button className={clsx("p-3 font-bold normal-case", hasOffer ? "bg-green" : "bg-red")} onClick={() => sethasOffer(!hasOffer)}>
-              hasOffer
-            </Button>
-            <Button className={clsx("p-3 font-bold normal-case", onAuction ? "bg-green" : "bg-red")} onClick={() => setonAuction(!onAuction)}>
-              onAuction
-            </Button>
-            <Button className={clsx("p-3 font-bold normal-case", hasBid ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleHasBid())}>
-              hasBid
-            </Button>
           </div>
           {/**********************/}
 
           <div className="body-medium text-white">{nft?.collection?.description}</div>
 
-          {nft.salable && <FixedPrice />}
-          {onAuction ? <Auction /> : hasOffer ? <BestOffer /> : <MakeOffer />}
+          {nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />}
+          {/* {nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />} */}
 
-          {hasOffer && (
+          {JSON.stringify(nft.bestOffer) !== "null" && (
             <Box className="bg-bg-light justify-between pr-4">
               <div className="flex items-center gap-x-2.5">
-                <img src={AssetCollectionProfileImage} className="w-8 rounded-full" alt="profile-image" />
+                <img src={nft.bestOffer?.image} className="w-8 h-8 rounded-full" alt="profile-image" />
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-02 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {bestOffer} ETH by {offerOwner}
+                    {nft.bestOffer?.price} ETH by {nft.bestOffer?.user?.userName}
                   </h6>
                 </div>
               </div>
@@ -166,7 +213,7 @@ const LeftMenu = (props: any) => {
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: bestOffer }));
+                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: nft.bestOffer?.price }));
                       dispatch(toggleCheckoutModal());
                     }}
                   />
@@ -176,7 +223,7 @@ const LeftMenu = (props: any) => {
           )}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
-          <MetadataTable metadata={nft.tokenAttributes ?? []} />
+          <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />
           <div className="flex flex-col gap-y-2.5">
             <div className="flex flex-row gap-x-2.5">
               <Box className="hover:bg-bg-light">
@@ -197,11 +244,11 @@ const LeftMenu = (props: any) => {
             <div className="flex flex-row gap-x-2.5">
               <Box className="hover:bg-bg-light">
                 <div className="flex items-center justify-center rounded-full">
-                  <img src={AssetMockCreator} className="w-8" />
+                  <img src={nft.collection?.image} className="w-8" />
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light"> CREATOR</div>
-                  {nft?.user?.firstName}
+                  <div className="text-headline-02 text-gray-light">CREATOR</div>
+                  {nft?.collection?.name}
                 </div>
               </Box>
               <Box>
@@ -210,25 +257,11 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-02 text-gray-light">CREATOR FEE</div>
-                  {nft.rarity}%
+                  {nft.collection?.royaltyFee}%
                 </div>
               </Box>
             </div>
-            <BoxWithIcon icon={IconOffer} className="hover:bg-bg-light pr-0">
-              <div className="flex w-full justify-between">
-                <div className="flex flex-col gap-y-[5px]">
-                  <div className="text-headline-02 text-gray-light">LAST ACTIVITY</div>
-                  {nft.listedTime}
-                </div>
-                <HoverButton
-                  Icon={IconArrowRight}
-                  text="SEE ALL"
-                  onClick={() => {
-                    dispatch(setRightMenu(RightMenuType.Activities));
-                  }}
-                />
-              </div>
-            </BoxWithIcon>
+            {renderLastActivity(nft.lastActivity)}
           </div>
         </div>
         <div className="container-fluid flex flex-col pt-5 pb-9 pr-10 text-h6 text-white">
@@ -264,7 +297,7 @@ const LeftMenu = (props: any) => {
         </div>
       </div>
       <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner ? "block" : "hidden")}>
-        {onAuction ? <FooterAuction /> : nft.sales ? <FooterListed /> : <Footer />}
+        {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
       </footer>
     </div>
   );

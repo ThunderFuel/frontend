@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
+import { IconBid, IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
 
 const filterItemsData = [
-  { icon: IconCart, text: "Sales", type: "Sale" },
-  { icon: IconListed, text: "Listings", type: "List" },
-  { icon: IconOffer, text: "Offers", type: "Offer" },
-  { icon: IconToken, text: "Minted", type: "Mint" },
-  { icon: IconTransfer, text: "Transfers", type: "Transfer" },
+  { icon: IconOffer, text: "Offers", type: 0 },
+  { icon: IconToken, text: "Minted", type: 1 },
+  { icon: IconCart, text: "Sales", type: 2 },
+  { icon: IconTransfer, text: "Transfers", type: 3 },
+  { icon: IconListed, text: "Listings", type: 4 },
+  { icon: IconBid, text: "Bids", type: 5 },
 ];
 
 interface OtherProps {
-  setnotActiveFilters: React.Dispatch<React.SetStateAction<string[]>>;
+  setnotActiveFilters: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 function renderFilterItems(onChange: any) {
@@ -23,7 +24,7 @@ function renderFilterItems(onChange: any) {
         className={`flex items-center cursor-pointer p-[10px] gap-x-1 border border-gray rounded-[5px] ${!active ? "bg-opacity-0 text-gray-light hover:text-white" : "bg-gray text-white"}`}
         onClick={() => {
           setActive(!active);
-          onChange((prevArray: string[]) => (prevArray.includes(i.type) ? prevArray.filter((item) => item !== i.type) : [...prevArray, i.type]));
+          onChange((prevArray: number[]) => (prevArray.includes(i.type) ? prevArray.filter((item) => item !== i.type) : [...prevArray, i.type]));
         }}
       >
         <i.icon className="w-5 h-5" />

@@ -34,4 +34,5 @@ export interface IUserResponse {
   followers: any[];
   follows: any[];
   id: number;
+  likedTokens: number[];
 }

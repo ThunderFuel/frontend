@@ -85,4 +85,5 @@ export interface ActivityItemResponse {
   token: CollectionItemResponse;
   fromUser: IUserResponse;
   toUser: IUserResponse;
+  data?: any[];
 }

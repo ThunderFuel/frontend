@@ -1,9 +1,10 @@
 import Button from "components/Button";
-import { IconEthereum, IconListed } from "icons";
+import EthereumPrice from "components/EthereumPrice";
+import { IconListed } from "icons";
 import React from "react";
 import "./MetadataTable.css";
 
-const MetadataTable = ({ metadata }: { metadata: any }) => {
+const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: any }) => {
   return (
     <div className="flex flex-col border border-gray rounded-[5px]">
       <h6 className="pl-5 py-4 border-b border-gray">Metadata</h6>
@@ -21,7 +22,7 @@ const MetadataTable = ({ metadata }: { metadata: any }) => {
               <div className="text-white">{item.value}</div>
               <div>
                 <div className="flex-center">
-                  {item.floor} <IconEthereum className="w-5 fill-gray" />
+                  <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price ?? "-"} />
                 </div>
               </div>
             </div>
