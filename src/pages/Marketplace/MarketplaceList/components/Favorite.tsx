@@ -6,7 +6,13 @@ const Favorite = ({ item, className }: { item: any; className?: string }) => {
   const [isFavorite, setIsFavorite] = useState<boolean>(item.favorite ?? false);
 
   return (
-    <div className={clsx("cursor-pointer", className)} onClick={() => setIsFavorite((value: boolean) => !value)}>
+    <div
+      className={clsx("cursor-pointer", className)}
+      onClick={(e) => {
+        setIsFavorite((value: boolean) => !value);
+        e.stopPropagation();
+      }}
+    >
       <IconStar className={clsx("hover:fill-gray", isFavorite ? "fill-white hover:fill-white" : "text-gray")} />
     </div>
   );

@@ -48,7 +48,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     {
       key: "collection",
       text: "COLLECTION",
-      render: (item) => <Collection image={item.image} title={item.collection} />,
+      render: (item) => <Collection image={item.images?.[0]} title={item.collection} />,
     },
     {
       key: "volume",
