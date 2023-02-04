@@ -17,7 +17,7 @@ const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity"))
 const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer"));
 const BulkListing = React.lazy(() => import("pages/BulkListing"));
 const Settings = React.lazy(() => import("pages/Settings"));
-const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile"));
+const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile/Profile"));
 
 export interface RouteConfig {
   path: string;
