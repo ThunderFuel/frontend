@@ -90,11 +90,12 @@
     @apply flex gap-2 py-4 px-6 items-center justify-center;
     @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
     @apply button-animation;
-    @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none disabled:opacity-50;
+    @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none;
   }
 
   .btn.btn-secondary {
     @apply text-white bg-bg border-gray;
+    @apply disabled:text-gray-light;
   }
 
   .btn.btn-secondary.no-bg {
