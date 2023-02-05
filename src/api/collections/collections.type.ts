@@ -43,6 +43,7 @@ export interface CollectionResponse {
   description: string;
   contractAddress: string;
   listedRate: number;
+  listedCount: number;
   metadataId: number;
   ownerCount: number;
   volume: number;

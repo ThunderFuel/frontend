@@ -38,7 +38,7 @@ const Collection = () => {
                 <div className="body-medium text-white mt-2.5 w-10/12">{collection?.description}</div>
               </div>
             </div>
-            <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedRate={collection?.listedRate} ownerCount={collection?.ownerCount} />
+            <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedCount={collection?.listedCount} ownerCount={collection?.ownerCount} />
           </div>
         </div>
       </div>
