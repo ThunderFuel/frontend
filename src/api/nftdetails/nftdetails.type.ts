@@ -3,6 +3,7 @@ export interface MakeOfferRequest {
   tokenId: number;
   price: number;
   priceType: number;
+  expireTime: number;
 }
 
 export interface GetOffersRequest {
@@ -14,9 +15,8 @@ export interface GetOffersRequest {
 
 export interface TokenListRequest {
   id: number;
-  userId: number;
   price: number;
-  expireTime: string;
+  expireTime: number;
 }
 
 export interface TokenPlaceBidRequest {
