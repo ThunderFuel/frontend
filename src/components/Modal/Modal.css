@@ -37,3 +37,16 @@
 .checkout .modal .mhead .mtitle {
   @apply text-head5 font-spaceGrotesk text-white;
 }
+
+.wallet {
+  @apply fixed flex w-screen h-screen justify-end items-start z-30 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+}
+.wallet .modal {
+  @apply flex flex-col h-full w-[400px] bg-bg rounded-none;
+}
+.wallet .modal .mhead {
+  @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
+}
+.wallet .modal .mhead .mtitle {
+  @apply text-head5 font-spaceGrotesk text-white;
+}

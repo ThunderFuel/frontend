@@ -68,3 +68,7 @@ export { ReactComponent as IconPlus } from "./icon-plus.svg";
 export { ReactComponent as IconSettings } from "./icon-settings.svg";
 export { ReactComponent as IconActivity } from "./icon-activity.svg";
 export { ReactComponent as IconPencil } from "./icon-pencil.svg";
+export { ReactComponent as IconBurner } from "./icon-burner.svg";
+export { ReactComponent as IconFuelet } from "./icon-fuelet.svg";
+export { ReactComponent as IconLogout } from "./icon-logout.svg";
+export { ReactComponent as IconFaucet } from "./icon-faucet.svg";
