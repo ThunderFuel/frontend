@@ -38,7 +38,7 @@ const Range = (props: any) => {
 
 const KEY_ENTER = "Enter";
 
-const Index = () => {
+const Index = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
   const { options, setParams, pagination, collectionItems, sweep, setSweep } = useCollectionListContext();
   const onRangeChange = (value: any) => {
@@ -55,15 +55,15 @@ const Index = () => {
 
   return (
     <div className="sticky top-[109px] border-b border-gray z-20 bg-bg">
-      <div className="container-fluid">
+      <div className={clsx(className ? className : "container-fluid")}>
         <div className="flex items-center justify-between text-white gap-5">
           <div className="flex items-center w-full">
             <div className="flex flex-1">
-              <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "col-span-1")}>
+              <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep ? "w-full" : "w-7/12")}>
                 <InputSearch placeholder="Search ID or name" onKeyPress={onKeyPress} />
               </div>
               {options?.hiddenSweep ? null : (
-                <div className="w-96">
+                <div className="w-5/12">
                   <Range maxValue={pagination.itemsCount} value={sweep} onChange={onRangeChange} />
                 </div>
               )}

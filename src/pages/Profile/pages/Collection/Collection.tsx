@@ -1,6 +1,6 @@
 import React from "react";
-import CollectionList from "components/CollectionList";
 import { useOutletContext } from "react-router-dom";
+import CollectionList from "./components/CollectionList";
 
 const options = {
   hiddenFilter: true,

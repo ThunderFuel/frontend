@@ -12,8 +12,8 @@ const Collection = React.lazy(() => import("pages/Collection"));
 const CollectionItems = React.lazy(() => import("pages/Collection/pages/Items/index"));
 const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activity/index"));
 const Profile = React.lazy(() => import("pages/Profile"));
-const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collection"));
-const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity"));
+const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collection/index"));
+const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity/Activity"));
 const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer"));
 const BulkListing = React.lazy(() => import("pages/BulkListing"));
 const Settings = React.lazy(() => import("pages/Settings"));
@@ -96,6 +96,9 @@ export const ROUTES: RouteConfig[] = [
         component: ProfileOffer,
       },
     ],
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
   {
     path: PATHS.BULK_LISTING,
