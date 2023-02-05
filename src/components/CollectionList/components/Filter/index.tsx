@@ -62,7 +62,11 @@ const Index = () => {
               <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "col-span-1")}>
                 <InputSearch placeholder="Search ID or name" onKeyPress={onKeyPress} />
               </div>
-              <div className="w-96">{options?.hiddenSweep ? null : <Range maxValue={pagination.itemsCount} value={sweep} onChange={onRangeChange} />}</div>
+              {options?.hiddenSweep ? null : (
+                <div className="w-96">
+                  <Range maxValue={pagination.itemsCount} value={sweep} onChange={onRangeChange} />
+                </div>
+              )}
             </div>
             <div className="pl-5 flex justify-end">
               <SelectOrderBy
