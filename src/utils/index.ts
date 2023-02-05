@@ -40,28 +40,20 @@ export const chunk = (arr: any = [], chunkSize = 4) => {
   return tmpArray;
 };
 
-export const getDateFromExpirationTime = (expirationTime: string) => {
-  const currentDate = new Date();
-  const [amount, unit] = expirationTime.split(" ");
-  let date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + parseInt(amount), currentDate.getHours(), currentDate.getMinutes());
-  if (unit.includes("day")) {
-    date = new Date(currentDate.getTime() + parseInt(amount) * 24 * 60 * 60 * 1000);
-  } else if (unit.includes("month")) {
-    date = new Date(currentDate);
-    date.setMonth(date.getMonth() + parseInt(amount), currentDate.getDate());
-    date.setHours(currentDate.getHours());
-    date.setMinutes(currentDate.getMinutes());
-    date.setSeconds(currentDate.getSeconds());
-  }
+export const getDateFromExpirationTime = (expireTime: number) => {
+  const futureTime = new Date().getTime() + expireTime * 86400000;
+  const date = new Date(futureTime);
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hour >= 12 ? "PM" : "AM";
 
-  return date?.toLocaleString("en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const hours = (hour % 12 || 12).toString().padStart(2, "0");
+  const formattedDate = `${month}/${day}/${year}, ${hours}:${minutes} ${ampm}`;
+
+  return formattedDate;
 };
 
 export function formatDisplayedNumber(num: number) {

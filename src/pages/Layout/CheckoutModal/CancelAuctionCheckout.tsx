@@ -8,6 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling auction",
@@ -32,13 +33,13 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice } = useAppSelector((state) => state.checkout);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
+    nftdetailsService.tokenOnAuction(false, selectedNFT.id, selectedNFT.user.id);
   };
 
   React.useEffect(() => {
@@ -72,7 +73,13 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   return (
     <Modal className="checkout" title="Cancel Auction" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Offer"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0}></CartItem>
+        <CartItem
+          text={selectedNFT.highestBid ? "Highest Bid" : ""}
+          name={selectedNFT.name}
+          image={selectedNFT.image}
+          price={selectedNFT.highestBid ? selectedNFT.highestBid.price : ""}
+          id={0}
+        ></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
