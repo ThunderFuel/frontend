@@ -68,6 +68,8 @@ const SidebarFilter = () => {
         value,
         dynamicComponent: DynamicComponent,
         filterData: filter.filterData,
+        order: name.toLowerCase() === "status" ? 1 : 0,
+        isOpen: name.toLowerCase() === "status",
       };
 
       if (["price", "status", "raking"].includes(name.toLowerCase())) {
@@ -77,7 +79,7 @@ const SidebarFilter = () => {
       }
     });
 
-    return [tmpAttributeFilter, tmpFilter];
+    return [tmpAttributeFilter, tmpFilter.sort((a, b) => a.order - b.order).reverse()];
   }, [filters, params]);
 
   return (
@@ -102,7 +104,7 @@ const SidebarFilter = () => {
                   const DynamicComponent = item.dynamicComponent;
 
                   return (
-                    <Collapse key={i}>
+                    <Collapse key={i} isOpen={item.isOpen}>
                       <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
                       <Collapse.Body>
                         <DynamicComponent

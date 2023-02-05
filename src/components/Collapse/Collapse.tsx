@@ -22,8 +22,8 @@ const Body = ({ children }: { children: any }) => {
 
   return <div className="flex flex-col gap-2 p-4 pt-1">{children}</div>;
 };
-const Collapse = ({ children }: { children: any }) => {
-  const [show, setShow] = React.useState<boolean>(false);
+const Collapse = ({ children, isOpen = false }: { children: any; isOpen?: boolean }) => {
+  const [show, setShow] = React.useState<boolean>(isOpen);
 
   return (
     <div className="border border-gray rounded-md">
