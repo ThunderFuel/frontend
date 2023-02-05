@@ -12,18 +12,18 @@ import { getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
+import dayjs from "dayjs";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const dispatch = useAppDispatch();
-  //todo stateleri duzenle onauction kullan
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
   const [hasStartingPrice, sethasStartingPrice] = useState(false);
   const [privateSaleAddress, setprivateSaleAddress] = useState("");
   const [price, setprice] = useState<any>("");
-  const [startingPrice, setstartingPrice] = useState<any>("");
+  const [startingPrice, setstartingPrice] = useState<any>(0);
   const [duration, setDuration] = useState(selectExpirationDates[0]);
 
   const serviceFee = 2.5;
@@ -36,9 +36,26 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
       <div className="flex justify-end p-5 ">
         <Button
-          disabled={!isValidNumber(price)}
+          disabled={!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.ConfirmListing, price: price }));
+            if (isTimedAuction)
+              dispatch(
+                setCheckout({
+                  type: CheckoutType.ConfirmListing,
+                  isAuction: isTimedAuction,
+                  expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  auctionStartingPrice: startingPrice,
+                })
+              );
+            else
+              dispatch(
+                setCheckout({
+                  type: CheckoutType.ConfirmListing,
+                  price: price,
+                  expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                })
+              );
+
             dispatch(toggleCheckoutModal());
           }}
         >

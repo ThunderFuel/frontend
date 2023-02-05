@@ -7,6 +7,7 @@ import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { formatDisplayedNumber } from "utils";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm transaction",
@@ -31,8 +32,8 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice } = useAppSelector((state) => state.checkout);
-
+  const { checkoutPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
+  const { address } = useAppSelector((state) => state.wallet);
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,6 +41,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
 
   const onComplete = () => {
     setApproved(true);
+    nftdetailsService.makeOffer({ makerUserId: address, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
   };
 
   React.useEffect(() => {

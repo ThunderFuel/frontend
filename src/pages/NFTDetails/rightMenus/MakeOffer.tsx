@@ -6,48 +6,45 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import RightMenu from "../components/RightMenu";
 import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
-import InputPrice from "../components/InputPrice";
 import { useWallet } from "hooks/useWallet";
 import { formatDisplayedNumber, getDateFromExpirationTime, toGwei } from "utils";
-import nftDetailsService from "api/nftdetails/nftdetails.service";
-import { MakeOfferRequest } from "api/nftdetails/nftdetails.type";
 import Select, { ISelectOption } from "components/Select";
+import dayjs from "dayjs";
+import InputEthereum from "components/InputEthereum";
 
 export const selectExpirationDates: ISelectOption[] = [
   {
     text: "1 day",
-    value: "1 day",
+    value: 1,
   },
   {
     text: "3 days",
-    value: "3 days",
+    value: 3,
   },
   {
     text: "7 days",
-    value: "7 days",
+    value: 7,
   },
   {
     text: "1 month",
-    value: "1 month",
+    value: 30,
   },
   {
     text: "3 months",
-    value: "3 months",
+    value: 90,
   },
   {
     text: "6 months",
-    value: "6 months",
+    value: 180,
   },
 ];
 
 const offerDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
 
-//TODO DISPLAY AMOUNT LA STATE AMOUNTU AYARLA
 const MakeOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT, bidBalance } = useAppSelector((state) => state.nftdetails);
-  const { address } = useAppSelector((state) => state.wallet);
 
   const { getBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
@@ -91,8 +88,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={isValidNumber(offer) ? offer > balance : true}
           onClick={() => {
-            nftDetailsService.makeOffer({ makerUserId: address, tokenId: selectedNFT.tokenId, price: offer, priceType: 0 } as MakeOfferRequest).then((res) => console.log(res));
-            dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: toGwei(offer) }));
+            dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: toGwei(offer), expireTime: dayjs().subtract(expirationTime?.value, "day").startOf("day").valueOf() / 1000 }));
             dispatch(toggleCheckoutModal());
           }}
         >
@@ -109,7 +105,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-y-2">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Offer</h6>
-        <InputPrice onChange={setoffer} value={offer} type="text" />
+        <InputEthereum onChange={setoffer} value={offer} type="text" />
         {balance < toGwei(offer) && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />

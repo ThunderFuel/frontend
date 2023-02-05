@@ -8,6 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -30,13 +31,16 @@ const Footer = ({ approved }: { approved: boolean }) => {
 
 const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice } = useAppSelector((state) => state.checkout);
+  const { checkoutPrice, checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
+  const { address } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
+    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, address, checkoutExpireTime, checkoutAuctionStartingPrice);
+    else nftdetailsService.tokenList({ id: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime });
   };
 
   React.useEffect(() => {
@@ -70,7 +74,15 @@ const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any
   return (
     <Modal className="checkout" title="Complete Listing" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Price"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        {checkoutIsAuction ? (
+          checkoutAuctionStartingPrice ? (
+            <CartItem text={"Starting Price"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutAuctionStartingPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+          ) : (
+            <CartItem text={""} name={selectedNFT.name} image={selectedNFT.image} price={""} id={0} titleSlot={viewOnBlockchain}></CartItem>
+          )
+        ) : (
+          <CartItem text={"Price"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        )}
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
