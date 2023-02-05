@@ -21,6 +21,7 @@ interface IMarketplaceContext {
   filterTabValue: any;
   setFilterTabValue: any;
   addWatchList: any;
+  isLoading: boolean;
 }
 
 const dayValues = [
@@ -63,32 +64,44 @@ const filterValues = [
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
   const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
 
   const getMarketplaceItems = async () => {
-    const response = await marketplaceService.getMarketplace({
-      type: filterTabValue?.value,
-      filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
-      userId: 16,
-    });
-    const items = response.data.map((responseItem) => {
-      return {
-        id: responseItem.id,
-        collection: responseItem.name,
-        volume: responseItem.volume,
-        change: responseItem.change,
-        floor: responseItem.floor,
-        sales: responseItem.sales,
-        lastSold: responseItem.solds.length,
-        image: responseItem.image,
-        images: responseItem.solds.map((sold: any) => sold.token.image),
-        watched: responseItem.watched,
-      } as MarketplaceTableItem;
-    });
+    if (isLoading) {
+      return false;
+    }
 
-    return setItems(items);
+    setIsLoading(true);
+    try {
+      const response = await marketplaceService.getMarketplace({
+        type: filterTabValue?.value,
+        filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
+        userId: 16,
+      });
+      const items = response.data.map((responseItem) => {
+        return {
+          id: responseItem.id,
+          collection: responseItem.name,
+          volume: responseItem.volume,
+          change: responseItem.change,
+          floor: responseItem.floor,
+          sales: responseItem.sales,
+          lastSold: responseItem.solds.length,
+          image: responseItem.image,
+          images: responseItem.solds.map((sold: any) => sold.token.image),
+          watched: responseItem.watched,
+        } as MarketplaceTableItem;
+      });
+
+      setItems(items);
+    } catch (e) {
+      setItems([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const addWatchList = async (data: any) => {
@@ -113,6 +126,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     filterTabValue,
     setFilterTabValue,
     addWatchList,
+    isLoading,
   };
 
   return (

@@ -9,7 +9,7 @@ import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
-import { AssetCollectionItem0 } from "assets";
+import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
 import { numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
@@ -43,8 +43,15 @@ const Change = ({ change }: { change: any }) => {
 };
 Change.displayName = "Change";
 
+const MarketPlaceTableLoading = () => {
+  return [1, 2, 3, 4, 5, 6].map((i, k) => (
+    <div className="table-row-skeleton" key={`${i}_${k}`}>
+      <img alt="grid-skeleton-image" className="w-full" src={AssetLoadingTable} />
+    </div>
+  ));
+};
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
-  const { dayTabValue, addWatchList } = useMarketplace();
+  const { dayTabValue, addWatchList, isLoading } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
@@ -101,7 +108,18 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     return { to: PATHS.COLLECTION.replace(":collectionId", item.id) };
   };
 
-  return <Table rowElementProps={rowElementProps} rowElement={Link} theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
+  return (
+    <Table
+      loading={isLoading}
+      loadingTemplate={MarketPlaceTableLoading}
+      rowElementProps={rowElementProps}
+      rowElement={Link}
+      theadClassName={"sticky top-[110px]"}
+      headers={headers}
+      items={items}
+      footer={<Footer />}
+    />
+  );
 };
 
 export default MarketPlaceTable;

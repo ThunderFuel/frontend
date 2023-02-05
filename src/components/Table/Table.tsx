@@ -24,6 +24,7 @@ export interface ITable {
   isSelectedRow?: (item: any) => any;
   onClick?: (item: any) => void;
   containerFluidClassName?: string;
+  loadingTemplate?: any;
 }
 
 const TableNotFound = React.memo(() => {
@@ -35,7 +36,11 @@ const TableNotFound = React.memo(() => {
 });
 TableNotFound.displayName = "TableNotFound";
 
-const TableLoading = ({ colSpan }: { colSpan: number }) => {
+const TableLoading = ({ colSpan, template: Template }: { colSpan: number; template?: any }) => {
+  if (Template) {
+    return <Template />;
+  }
+
   return (
     <tr>
       <td colSpan={colSpan} className="py-5 px-8 text-center">
@@ -49,7 +54,7 @@ const TableCell = ({ children }: { children: React.ReactNode }) => {
   return <div className="cell text-h6">{children}</div>;
 };
 
-const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, rowClassName, rowElementProps, rowElement, ...props }: ITable) => {
+const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, rowClassName, rowElementProps, rowElement, loadingTemplate, ...props }: ITable) => {
   const _getHeaders = headers.map((header, i) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
       {header.text}
@@ -102,7 +107,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
           </div>
         </div>
         <div data-testid="tableBody" className={clsx("tbody container-fluid", props.containerFluidClassName)}>
-          {loading ? <TableLoading colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
+          {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
         </div>
         <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
       </div>
