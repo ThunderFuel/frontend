@@ -68,3 +68,4 @@ export { ReactComponent as IconPlus } from "./icon-plus.svg";
 export { ReactComponent as IconSettings } from "./icon-settings.svg";
 export { ReactComponent as IconActivity } from "./icon-activity.svg";
 export { ReactComponent as IconPencil } from "./icon-pencil.svg";
+export { ReactComponent as IconInstagram } from "./icon-instagram.svg";
