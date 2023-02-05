@@ -6,7 +6,7 @@ import ActivityItems from "components/ActivityList/components/ActivityItems";
 const ActivityList = (props: any) => {
   return (
     <ActivityProvider value={props}>
-      <div className="container-fluid flex">
+      <div className="px-5 flex h-full">
         <Sidebar className="w-60" />
         <ActivityItems />
       </div>

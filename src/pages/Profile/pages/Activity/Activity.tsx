@@ -31,11 +31,7 @@ const Activity = () => {
     fetchActivity();
   }, []);
 
-  return (
-    <div className="-mx-5">
-      <ActivityList activities={activities} pagination={pagination} filters={filters} />
-    </div>
-  );
+  return <ActivityList activities={activities} pagination={pagination} filters={filters} />;
 };
 
 export default Activity;
