@@ -12,7 +12,6 @@ export interface MarketplaceListProps {
 const MarketplaceList = ({ itemCount }: MarketplaceListProps) => {
   const { items } = useMarketplace();
 
-  console.log(items);
   const slicedItems = items.slice(0, itemCount);
 
   return useIsMobile() ? <MarketPlaceMobileTable items={slicedItems} /> : <MarketPlaceTable items={slicedItems} />;

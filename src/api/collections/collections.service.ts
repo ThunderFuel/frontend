@@ -1,8 +1,8 @@
 import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
 import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
-import { ActivityItemResponse, CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse } from "./collections.type";
-import { IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "../../icons";
+import { ActivityItemResponse, CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse, WatchListRequest } from "./collections.type";
+import { IconBid, IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "../../icons";
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
@@ -61,6 +61,13 @@ export default {
         icon: IconTag,
         name: "Listings",
       },
+      {
+        icon: IconBid,
+        name: "Bids",
+      },
     ];
+  },
+  addWatchList(data: WatchListRequest) {
+    return ThunderURL.post("/v1/collection/watch", data);
   },
 };

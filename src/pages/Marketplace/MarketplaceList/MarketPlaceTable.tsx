@@ -44,7 +44,7 @@ Change.displayName = "Change";
 
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   const navigate = useNavigate();
-  const { dayTabValue } = useMarketplace();
+  const { dayTabValue, addWatchList } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
@@ -89,10 +89,14 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "",
       width: "5%",
       align: "center",
-      render: (item) => <Favorite item={item} />,
+      render: (item) => <Favorite item={item} onChange={(value: boolean) => onAddWatchList(item, value)} />,
     },
   ];
 
+  const onAddWatchList = async (item: any, value: any) => {
+    console.log(value);
+    await addWatchList({ collectionId: item.id, userId: 16 });
+  };
   const onClick = (item: any) => {
     navigate(PATHS.COLLECTION.replace(":collectionId", item.id));
   };

@@ -16,6 +16,7 @@ interface MarketplaceItemSold {
 
 export interface MarketplaceItemResponse extends Omit<CollectionResponse, "solds"> {
   solds: MarketplaceItemSold[];
+  watched: boolean;
 }
 
 export interface MarketplaceTableItem {
@@ -28,5 +29,5 @@ export interface MarketplaceTableItem {
   lastSold: number;
   images?: any[];
   image: string;
-  favorite: boolean;
+  watched: boolean;
 }

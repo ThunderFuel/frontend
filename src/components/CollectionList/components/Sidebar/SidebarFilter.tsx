@@ -118,7 +118,7 @@ const SidebarFilter = () => {
                     </Collapse>
                   );
                 })}
-                <div className="border-b border-gray" />
+                {getFilter.length && getAttributeFilter.length ? <div className="border-b border-gray" /> : <></>}
                 {getAttributeFilter.map((item: any, i: number) => {
                   const DynamicComponent = item.dynamicComponent;
 

@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 import marketplaceService from "api/marketplace/marketplace.service";
 import { MarketplaceListType, MarketplaceTableItem } from "../../api/marketplace/marketplace.type";
 import dayjs from "dayjs";
+import collectionsService from "../../api/collections/collections.service";
 
 const UnitType = "hours";
 
@@ -19,6 +20,7 @@ interface IMarketplaceContext {
   filterValues: TextValue[];
   filterTabValue: any;
   setFilterTabValue: any;
+  addWatchList: any;
 }
 
 const dayValues = [
@@ -68,7 +70,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   const getMarketplaceItems = async () => {
     const response = await marketplaceService.getMarketplace({
       type: filterTabValue?.value,
-      dayValue: dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf(),
+      filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
+      userId: 16,
     });
     const items = response.data.map((responseItem) => {
       return {
@@ -81,11 +84,19 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
         lastSold: responseItem.solds.length,
         image: responseItem.image,
         images: responseItem.solds.map((sold: any) => sold.token.image),
-        favorite: false,
+        watched: responseItem.watched,
       } as MarketplaceTableItem;
     });
 
     return setItems(items);
+  };
+
+  const addWatchList = async (data: any) => {
+    try {
+      await collectionsService.addWatchList(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   React.useEffect(() => {
@@ -101,6 +112,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     filterValues,
     filterTabValue,
     setFilterTabValue,
+    addWatchList,
   };
 
   return (

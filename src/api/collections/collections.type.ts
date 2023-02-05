@@ -87,3 +87,8 @@ export interface ActivityItemResponse {
   toUser: IUserResponse;
   data?: any[];
 }
+
+export interface WatchListRequest {
+  collectionId: number;
+  userId: number;
+}

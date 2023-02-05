@@ -48,8 +48,8 @@ const TableCell = ({ children }: { children: React.ReactNode }) => {
 };
 
 const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, rowClassName, onClick, ...props }: ITable) => {
-  const _getHeaders = headers.map((header) => (
-    <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}`}>
+  const _getHeaders = headers.map((header, i) => (
+    <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
       {header.text}
     </div>
   ));
@@ -73,11 +73,15 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
           }
         }}
       >
-        {headers.map((header) => (
-          <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`td_${header.key}_${k.toString()}`}>
-            {header.render ? header.render(item) : <TableCell>{item[header.key]}</TableCell>}
-          </div>
-        ))}
+        {headers.map((header) => {
+          const key = `cell_${header.key}_${k.toString()}`;
+
+          return (
+            <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={key}>
+              {header.render ? header.render(item) : <TableCell>{item[header.key]}</TableCell>}
+            </div>
+          );
+        })}
       </div>
       {item.afterRow ? (
         <div key={`afterRow_${k.toString()}`} className={"tr"}>
