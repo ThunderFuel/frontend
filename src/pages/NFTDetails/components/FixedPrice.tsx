@@ -17,6 +17,7 @@ const FixedPrice = () => {
   const [remaining, setRemaining] = useState(remainingTime(expireTime));
   const previousMinutes = useRef(remaining.minutes);
   const { days, hours, minutes } = remainingTime(expireTime);
+  const [addCartIsDisabled, setAddCartIsDisabled] = useState(false);
 
   useEffect(() => {
     function scheduleNext() {
@@ -60,11 +61,13 @@ const FixedPrice = () => {
             </Button>
             <Button
               className="hover:px-8 px-4"
+              disabled={addCartIsDisabled}
               onClick={() => {
                 dispatch(add(selectedNFT));
+                setAddCartIsDisabled(true);
               }}
             >
-              <IconAddCart className="fill-black" />
+              <IconAddCart className={`${addCartIsDisabled ? "fill-gray-light" : "fill-black"}`} />
             </Button>
           </div>
           <Button
