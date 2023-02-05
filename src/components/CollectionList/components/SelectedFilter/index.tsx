@@ -25,7 +25,7 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
 const Index = () => {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    params: { sortingType, pageSize, search, ...etcParams },
+    params: { sortingType, pageSize, search, Status, ...etcParams },
     setParams,
     deleteParams,
     resetParams,

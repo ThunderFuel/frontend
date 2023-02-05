@@ -12,14 +12,17 @@ const Items = () => {
   const [collections, setCollections] = useState<any[]>([]);
   const [filters, setFilters] = useState<any>([]);
   const [pagination, setPagination] = useState<any>({});
+  const initParams = {
+    Status: { type: 3, value: "1" },
+  };
 
-  const getCollectionItems = async (filter = {}) => {
+  const getCollectionItems = async (filterParam: any = {}) => {
     const data: CollectionItemsRequest = {
       id: collectionId,
       page: pagination.pageNumber,
       pageSize: 20,
       sortingType: 1,
-      ...filter,
+      ...filterParam,
     };
 
     const { data: collectionData, ...paginationData } = await collectionService.getCollectionItems(data);
@@ -103,7 +106,7 @@ const Items = () => {
 
   return (
     <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={onChangePagination}>
-      <CollectionList collectionItems={collections} filterItems={filters} onChangeFilter={onChangeFilter} pagination={pagination} isLoading={isLoading} />
+      <CollectionList collectionItems={collections} filterItems={filters} initParams={initParams} onChangeFilter={onChangeFilter} pagination={pagination} isLoading={isLoading} />
     </InfiniteScroll>
   );
 };

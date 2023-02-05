@@ -37,14 +37,13 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
       default:
         return { ...prevState, ...nextState };
     }
-  }, {});
+  }, value.initParams);
   const [sweep, setSweep] = useState(0);
 
   const resetParams = () => {
     setParams({ type: ParamsType.Reset });
   };
   const deleteParams = (name: any) => {
-    console.log(name);
     setParams({ type: ParamsType.Delete, name });
   };
 
