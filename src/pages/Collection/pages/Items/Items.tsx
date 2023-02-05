@@ -102,6 +102,7 @@ const Items = () => {
 
   React.useEffect(() => {
     fetchFilters();
+    // fetchCollections();
   }, [collectionId]);
 
   return (

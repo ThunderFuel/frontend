@@ -64,7 +64,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
 
   React.useEffect(() => {
     value.onChangeFilter(params);
-  }, [params]);
+  }, [params, filters]);
 
   const contextValue = {
     ...value,
