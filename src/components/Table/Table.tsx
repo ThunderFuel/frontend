@@ -54,14 +54,18 @@ const TableCell = ({ children }: { children: React.ReactNode }) => {
   return <div className="cell text-h6">{children}</div>;
 };
 
-const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, rowClassName, rowElementProps, rowElement, loadingTemplate, ...props }: ITable) => {
+const TableRow = ({ children, ...etc }: any) => {
+  return <div {...etc}>{children}</div>;
+};
+
+const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, onClick, rowClassName, rowElement, rowElementProps, loadingTemplate, ...props }: ITable) => {
   const _getHeaders = headers.map((header, i) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
       {header.text}
     </div>
   ));
   const _getItems = items.map((item, k) => {
-    const RowElement = rowElement ?? React.Fragment;
+    const RowElement = rowElement ?? TableRow;
 
     return (
       <>
@@ -74,7 +78,16 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
         ) : (
           <></>
         )}
-        <RowElement {...(rowElementProps ? rowElementProps(item) : {})} className={clsx("tr", rowClassName, isSelectedRow && isSelectedRow(item) ? "active" : "")} key={`row_${k.toString()}`}>
+        <RowElement
+          {...(rowElementProps ? rowElementProps(item) : {})}
+          onClick={() => {
+            if (onClick) {
+              onClick(item);
+            }
+          }}
+          className={clsx("tr", rowClassName, isSelectedRow && isSelectedRow(item) ? "active" : "")}
+          key={`row_${k.toString()}`}
+        >
           {headers.map((header) => {
             const key = `cell_${header.key}_${k.toString()}`;
 

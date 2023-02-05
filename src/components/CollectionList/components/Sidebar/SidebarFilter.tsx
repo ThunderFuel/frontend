@@ -10,6 +10,7 @@ import RangeInput from "./components/RangeInput";
 import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 
 import "./SideBarFilter.css";
+import CollectionCheckboxList from "./components/CollectionCheckboxList";
 
 enum FilterComponentType {
   Input = 0,
@@ -17,6 +18,7 @@ enum FilterComponentType {
   CheckboxList = 5,
   RangeBar = 3,
   RangeInput = 1,
+  CollectionCheckboxList = 6,
 }
 
 const SidebarFilter = ({ className }: { className?: string }) => {
@@ -57,6 +59,8 @@ const SidebarFilter = ({ className }: { className?: string }) => {
         DynamicComponent = RangeBar;
       } else if (FilterComponentType.RangeInput === filter.type) {
         DynamicComponent = RangeInput;
+      } else if (FilterComponentType.CollectionCheckboxList === filter.type) {
+        DynamicComponent = CollectionCheckboxList;
       }
 
       const name = filter.name ?? i;

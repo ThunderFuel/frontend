@@ -10,7 +10,9 @@ import { useCollectionListContext } from "../../CollectionListContext";
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 p-3.5 pl-0">
-      <img className="w-14 rounded-sm overflow-hidden" alt={item.image} src={item.image} loading="lazy" />
+      <div className="min-w-[56px] max-w-[56px] rounded-sm overflow-hidden">
+        <img className="w-full" alt={item.image} src={item.image} loading="lazy" />
+      </div>
       <h6 className="text-h6 text-white">{item.name}</h6>
     </div>
   );

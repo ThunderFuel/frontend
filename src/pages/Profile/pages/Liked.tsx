@@ -6,6 +6,7 @@ const options = {
   hiddenSidebar: true,
   hiddenSweep: true,
   hiddenFilter: true,
+  itemLabel: "LIKED ITEMS",
 };
 const Liked = () => {
   const [userInfo, filter]: any = useOutletContext();

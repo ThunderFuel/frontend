@@ -12,7 +12,9 @@ const Index = () => {
 
   return (
     <div className={clsx("flex flex-col flex-1 pt-5 gap-5", isDisplayTypeList && "-mr-10")}>
-      <div className={clsx("text-headline-02 text-gray-light", !options.hiddenSidebar && "pl-5")}>{pagination?.itemsCount ?? collectionItems.length} ITEMS</div>
+      <div className={clsx("text-headline-02 text-gray-light", !options?.hiddenSidebar && "pl-5")}>
+        {pagination?.itemsCount ?? collectionItems.length} {options?.itemLabel ?? "ITEMS"}
+      </div>
       <SelectedFilter />
 
       {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading /> : <CollectionGrid />}
