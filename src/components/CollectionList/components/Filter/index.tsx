@@ -43,7 +43,7 @@ const Index = () => {
   const { options, setParams, pagination, collectionItems, sweep, setSweep } = useCollectionListContext();
   const onRangeChange = (value: any) => {
     setSweep(value);
-    const sweepCollectionItems = [...collectionItems].splice(0, value);
+    const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable)].splice(0, value);
     dispatch(sweepAdd(sweepCollectionItems));
   };
 

@@ -14,6 +14,7 @@ const Items = () => {
   const [pagination, setPagination] = useState<any>({});
   const initParams = {
     Status: { type: 3, value: "1" },
+    sortingType: 1,
   };
 
   const getCollectionItems = async (filterParam: any = {}) => {
@@ -21,7 +22,6 @@ const Items = () => {
       id: collectionId,
       page: pagination.pageNumber,
       pageSize: 20,
-      sortingType: 1,
       ...filterParam,
     };
 

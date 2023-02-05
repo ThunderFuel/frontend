@@ -78,7 +78,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
           <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>
         )}
       </div>
-      <div className="p-2.5 flex items-center text-gray-light gap-1">
+      <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
         <IconMarketBasket />
         <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
       </div>
