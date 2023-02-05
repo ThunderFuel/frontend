@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import clsx from "clsx";
+
 import Button from "components/Button";
 import CartItem from "components/CartItem";
 import Modal from "components/Modal";
-import { IconInfo, IconWarning } from "icons";
+
+import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
-  title1: "Confirm transaction",
-  description1: "Proceed in your wallet and confirm transaction",
+  title1: "Confirm your canceling listing",
+  description1: "Proceed in your wallet and confirm canceling listing.",
   title2: "Wait for approval",
   description2: "Waiting for transaction to be approved",
-  title3: "Purchase completed!",
-  description3: "Congrats your purchase is completed.",
+  title3: "Your listing is canceled!",
+  description3: "Your listing succesfully canceled.",
 };
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
@@ -29,18 +31,15 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   );
 };
 
-const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
-  // const { address } = useAppSelector((state) => state.wallet);
+
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.makeOffer({ makerUserId: 16, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+    nftdetailsService.tokenCancelList(selectedNFT.id);
   };
 
   React.useEffect(() => {
@@ -69,23 +68,16 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
     </div>
   );
 
+  // const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
+
   return (
-    <Modal className="checkout" title="Make Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal className="checkout" title="Cancel Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Your Offer"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutPrice} id={0}></CartItem>
+        <CartItem text="Listed at" name={selectedNFT?.name} image={selectedNFT?.image} price={selectedNFT?.price} id={0}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
-      {bidBalanceUpdated && approved && (
-        <div className="flex gap-x-2 p-[10px] m-5 rounded-[5px] bg-bg-light border border-gray">
-          <IconInfo color="orange" />
-          <div className="flex w-full flex-col gap-y-[6px] text-head6 font-spaceGrotesk text-white">
-            1.2 ETH added to your balance.
-            <span className="text-bodySm text-gray-light">In order to make this offer 0.2 ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.</span>
-          </div>
-        </div>
-      )}
     </Modal>
   );
 };
 
-export default MakeOfferCheckout;
+export default CancelListingCheckout;

@@ -8,6 +8,7 @@ import Modal from "components/Modal";
 import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm your bid",
@@ -41,6 +42,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = () => {
     setApproved(true);
+    nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: 16, price: checkoutPrice });
   };
 
   React.useEffect(() => {

@@ -80,7 +80,17 @@ const FooterListed = () => {
 
   return (
     <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
-      <Button className="btn-secondary">
+      <Button
+        className="btn-secondary"
+        onClick={() => {
+          dispatch(
+            setCheckout({
+              type: CheckoutType.CancelListing,
+            })
+          );
+          dispatch(toggleCheckoutModal());
+        }}
+      >
         REMOVE FROM SALE
         <IconCancel />
       </Button>
@@ -194,7 +204,7 @@ const LeftMenu = (props: any) => {
 
           <div className="body-medium text-white">{nft?.collection?.description}</div>
 
-          {nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />}
+          {JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : <MakeOffer />}
           {/* {nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />} */}
 
           {JSON.stringify(nft.bestOffer) !== "null" && (

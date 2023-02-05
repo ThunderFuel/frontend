@@ -8,6 +8,7 @@ export enum CheckoutType {
   UpdateOffer,
   AcceptOffer,
   ConfirmListing,
+  CancelListing,
   Transfer,
   CancelAuction,
   CancelBid,
@@ -25,6 +26,7 @@ export const checkoutSlice = createSlice({
     checkoutAuctionStartingPrice: 0,
     checkoutExpireTime: 0,
     amountAddedBidBalance: 0,
+    currentItem: { id: 0, price: 0 },
   },
 
   reducers: {
@@ -36,6 +38,7 @@ export const checkoutSlice = createSlice({
         state.checkoutIsAuction = false;
         state.checkoutAuctionStartingPrice = 0;
         state.checkoutExpireTime = 0;
+        state.currentItem = { id: 0, price: 0 };
       }
       state.show = !state.show;
     },
@@ -43,11 +46,12 @@ export const checkoutSlice = createSlice({
       state.isInsufficientBalance = action.payload;
     },
     setCheckout: (state, action) => {
-      state.checkoutType = action.payload.type;
-      state.checkoutPrice = action.payload.price;
+      state.checkoutType = action.payload?.type;
+      state.checkoutPrice = action.payload?.price;
       state.checkoutIsAuction = action.payload?.isAuction;
       state.checkoutExpireTime = action.payload?.expireTime;
       state.checkoutAuctionStartingPrice = action.payload?.auctionStartingPrice;
+      state.currentItem = action.payload?.item;
     },
     //TODO checkoutlarda bidbalanceupdated yerine bunu kullan
     setAmountAddedBidBalance: (state, action) => {
