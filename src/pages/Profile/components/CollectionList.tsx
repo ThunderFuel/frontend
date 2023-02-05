@@ -7,9 +7,9 @@ import CollectionListProvider from "components/CollectionList/CollectionListCont
 const CollectionList = (props: any) => {
   return (
     <CollectionListProvider value={props}>
-      <Filter className="px-5" />
+      {props?.options.hiddenFilter ? null : <Filter className="px-5" />}
       <div className="flex px-5">
-        <SideBar className="w-60" />
+        {props?.options.hiddenSidebar ? null : <SideBar className="w-60" />}
         <List />
       </div>
     </CollectionListProvider>

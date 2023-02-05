@@ -21,7 +21,7 @@ enum FilterComponentType {
 
 const SidebarFilter = ({ className }: { className?: string }) => {
   const { displayType, setDisplayType, filters, params, setParams, deleteParams, options } = useCollectionListContext();
-  const [show, setShow] = React.useState(options?.hiddenFilter);
+  const [show, setShow] = React.useState(options?.hiddeSidebarFilter);
 
   const onToggle = () => {
     const tmpShow = !show;
