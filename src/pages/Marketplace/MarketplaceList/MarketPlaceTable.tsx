@@ -85,7 +85,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "SALES",
       width: "10%",
       align: "flex-end",
-      render: (item) => <div className="text-h5">{item.sales}</div>,
+      render: (item) => <div className="cell text-h5">{item.sales}</div>,
     },
     {
       key: "lastSold",
