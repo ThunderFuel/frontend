@@ -13,10 +13,10 @@ import "./SideBarFilter.css";
 
 enum FilterComponentType {
   Input = 0,
-  RadioList = 1,
-  CheckboxList = 2,
+  RadioList = 3,
+  CheckboxList = 5,
   RangeBar = 3,
-  RangeInput = 4,
+  RangeInput = 1,
 }
 
 const SidebarFilter = () => {
