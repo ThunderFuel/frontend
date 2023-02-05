@@ -47,7 +47,13 @@ const Index = () => {
       }
     } else if (paramValue?.min || paramValue?.max) {
       delete etcParams[paramKey]?.value[deleteKey];
-      setParams(etcParams);
+      if (deleteKey === "min" && etcParams[paramKey]?.value.max === "") {
+        deleteParams(paramKey);
+      } else if (deleteKey === "max" && etcParams[paramKey]?.value.min === "") {
+        deleteParams(paramKey);
+      } else {
+        setParams(etcParams);
+      }
     }
   };
 

@@ -44,6 +44,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     setParams({ type: ParamsType.Reset });
   };
   const deleteParams = (name: any) => {
+    console.log(name);
     setParams({ type: ParamsType.Delete, name });
   };
 

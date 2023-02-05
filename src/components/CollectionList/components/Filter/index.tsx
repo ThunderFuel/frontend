@@ -57,11 +57,13 @@ const Index = () => {
     <div className="sticky top-[109px] border-b border-gray z-20 bg-bg">
       <div className="container-fluid">
         <div className="flex items-center justify-between text-white gap-5">
-          <div className="grid grid-cols-3 flex-1 items-center">
-            <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "col-span-2")}>
-              <InputSearch placeholder="Search ID or name" onKeyPress={onKeyPress} />
+          <div className="flex items-center w-full">
+            <div className="flex flex-1">
+              <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep && "col-span-1")}>
+                <InputSearch placeholder="Search ID or name" onKeyPress={onKeyPress} />
+              </div>
+              <div className="w-96">{options?.hiddenSweep ? null : <Range maxValue={pagination.itemsCount} value={sweep} onChange={onRangeChange} />}</div>
             </div>
-            {options?.hiddenSweep ? null : <Range maxValue={pagination.itemsCount} value={sweep} onChange={onRangeChange} />}
             <div className="pl-5 flex justify-end">
               <SelectOrderBy
                 onChange={(option: ISelectOption) => {
