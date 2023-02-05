@@ -26,6 +26,7 @@ export interface MarketplaceTableItem {
   floor: number;
   sales: number;
   lastSold: number;
-  images: any[];
+  images?: any[];
+  image: string;
   favorite: boolean;
 }

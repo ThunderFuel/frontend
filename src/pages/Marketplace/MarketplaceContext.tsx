@@ -79,6 +79,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
         floor: responseItem.floor,
         sales: responseItem.sales,
         lastSold: responseItem.solds.length,
+        image: responseItem.image,
         images: responseItem.solds.map((sold: any) => sold.token.image),
         favorite: false,
       } as MarketplaceTableItem;
