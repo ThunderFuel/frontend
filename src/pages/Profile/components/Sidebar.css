@@ -1,6 +1,13 @@
-.profile-cover-image {
-  @apply relative pb-5 border-b border-gray;
+.sidebar-container {
+  @apply sticky;
+  top: 110px;
+  height: calc(100vh - 110px);
 }
+
+.profile-cover-image {
+  @apply absolute top-0 left-0 pb-5 border-b border-gray;
+}
+
 .profile-cover-image:after {
   @apply absolute bottom-0 left-0 w-full h-full;
   content: "";
