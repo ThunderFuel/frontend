@@ -88,7 +88,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={isValidNumber(offer) ? offer > balance : true}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: toGwei(offer), expireTime: dayjs().subtract(expirationTime?.value, "day").startOf("day").valueOf() / 1000 }));
+            dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: offer, expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed() }));
             dispatch(toggleCheckoutModal());
           }}
         >

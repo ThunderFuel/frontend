@@ -58,7 +58,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={isValidNumber(bid) ? bid > balance : true}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: toGwei(bid) }));
+            dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: bid }));
             dispatch(toggleCheckoutModal());
           }}
         >

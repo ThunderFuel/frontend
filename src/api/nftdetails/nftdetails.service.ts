@@ -15,10 +15,10 @@ export default {
   async makeOffer(data: MakeOfferRequest): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/offer/makeoffer", data);
   },
-  async acceptOffer(id: string): Promise<ApiResponse<any>> {
+  async acceptOffer(id: number): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/offer/acceptoffer", {}, { params: { id } });
   },
-  async cancelOffer(id: string): Promise<ApiResponse<any>> {
+  async cancelOffer(id: number): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/offer/canceloffer", {}, { params: { id } });
   },
   async tokenList(data: TokenListRequest): Promise<ApiResponse<any>> {

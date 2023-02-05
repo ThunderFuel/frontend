@@ -20,7 +20,6 @@ export const NFTDetailsSlice = createSlice({
     isOwner: false,
     bidBalance: 1250000000,
     isLiked: false,
-    currentUserOffer: 1330000000,
   },
 
   reducers: {

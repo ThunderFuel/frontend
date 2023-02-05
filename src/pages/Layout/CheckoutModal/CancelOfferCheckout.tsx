@@ -8,6 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -31,12 +32,15 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 };
 
 const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { selectedNFT, currentUserOffer } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { currentItem } = useAppSelector((state) => state.checkout);
+
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
+    nftdetailsService.cancelOffer(currentItem.id);
   };
 
   React.useEffect(() => {
@@ -68,7 +72,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   return (
     <Modal className="checkout" title="Cancel Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Your Offer"} name={selectedNFT.name} image={selectedNFT.image} price={+currentUserOffer} id={0}></CartItem>
+        <CartItem text={"Your Offer"} name={selectedNFT.name} image={selectedNFT.image} price={currentItem.price} id={0}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
