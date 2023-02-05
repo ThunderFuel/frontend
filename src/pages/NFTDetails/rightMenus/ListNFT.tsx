@@ -17,7 +17,7 @@ import { selectExpirationDates } from "./MakeOffer";
 const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const dispatch = useAppDispatch();
-
+  //todo stateleri duzenle onauction kullan
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
   const [hasStartingPrice, sethasStartingPrice] = useState(false);
@@ -27,10 +27,9 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
   const [duration, setDuration] = useState(selectExpirationDates[0]);
 
   const serviceFee = 2.5;
-  const creatorEarnings = 5.5;
 
   const isValidNumber = (price: any) => {
-    return !(isNaN(Number(price)) || price === "");
+    return !(isNaN(Number(price)) || price === "") && price > 0;
   };
 
   const footer = (
@@ -61,7 +60,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
   };
 
   const calculateReceivingAmount = (price: any) => {
-    return price - (price * serviceFee) / 100 - (price * creatorEarnings) / 100;
+    return price - (price * serviceFee) / 100 - (price * selectedNFT.collection?.royaltyFee) / 100;
   };
 
   return (

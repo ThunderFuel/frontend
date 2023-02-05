@@ -59,7 +59,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   }, []);
 
   const isValidNumber = (price: any) => {
-    return !(isNaN(Number(price)) || price === "");
+    return !(isNaN(Number(price)) || price === "") && price > 0;
   };
 
   const bidBalanceControl = () => {
