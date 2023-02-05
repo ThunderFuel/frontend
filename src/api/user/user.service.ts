@@ -23,6 +23,9 @@ export default {
   createUser(body: ICreateUser) {
     return ThunderURL.post("v1/user", body);
   },
+  userCreate(address: string) {
+    return ThunderURL.post("v1/user/create", {}, { params: { address } });
+  },
   followUser(body: ICreateUser) {
     return ThunderURL.post("v1/user/follow", body);
   },

@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 
 export const addressFormat = (address: string) => {
+  if (address === null || address === undefined) return "";
   const first6 = address.substring(0, 6);
   const last4 = address.substring(address.length - 4);
 
