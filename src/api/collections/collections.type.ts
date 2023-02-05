@@ -43,6 +43,7 @@ export interface CollectionResponse {
   description: string;
   contractAddress: string;
   listedRate: number;
+  listedCount: number;
   metadataId: number;
   ownerCount: number;
   volume: number;
@@ -86,4 +87,9 @@ export interface ActivityItemResponse {
   fromUser: IUserResponse;
   toUser: IUserResponse;
   data?: any[];
+}
+
+export interface WatchListRequest {
+  collectionId: number;
+  userId: number;
 }

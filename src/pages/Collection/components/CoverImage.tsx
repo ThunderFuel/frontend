@@ -1,14 +1,8 @@
 import React from "react";
-import { AssetCollectionCoverImage } from "assets";
-import Img from "components/Img";
 import clsx from "clsx";
 
-const CoverImage = ({ banner, className }: { banner: string; className?: string }) => {
-  return (
-    <div className={clsx("overflow-hidden rounded-md max-h-[280px] aspect-auto bg-gray", className)}>
-      <Img className="w-full" src={banner} defaultImage={AssetCollectionCoverImage} alt="cover-image" />
-    </div>
-  );
+const CoverImage = ({ banner = "", className }: { banner: string; className?: string }) => {
+  return <div style={{ backgroundImage: `url(${banner})` }} className={clsx("overflow-hidden rounded-md h-[280px] w-full aspect-auto bg-gray", "bg-cover bg-center bg-no-repeat", className)} />;
 };
 
 export default CoverImage;

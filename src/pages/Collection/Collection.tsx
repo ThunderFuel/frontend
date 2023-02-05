@@ -28,7 +28,7 @@ const Collection = () => {
           <div className="flex">
             <div className="flex gap-5 w-full">
               <div className="w-24">
-                <div className="w-20 h-20 overflow-hidden rounded-md aspect-square bg-gray">
+                <div className="w-[100px] h-[100px] overflow-hidden rounded-md aspect-square bg-gray">
                   <Img className="w-full" src={collection?.image} alt="profile-image" />
                 </div>
               </div>
@@ -38,7 +38,7 @@ const Collection = () => {
                 <div className="body-medium text-white mt-2.5 w-10/12">{collection?.description}</div>
               </div>
             </div>
-            <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedRate={collection?.listedRate} ownerCount={collection?.ownerCount} />
+            <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedCount={collection?.listedCount} ownerCount={collection?.ownerCount} />
           </div>
         </div>
       </div>

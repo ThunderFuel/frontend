@@ -25,7 +25,7 @@ const SelectedFilterItem = ({ children, onClick }: any) => {
 const Index = () => {
   const {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    params: { sortingType, pageSize, search, ...etcParams },
+    params: { sortingType, pageSize, search, Status, ...etcParams },
     setParams,
     deleteParams,
     resetParams,
@@ -47,7 +47,13 @@ const Index = () => {
       }
     } else if (paramValue?.min || paramValue?.max) {
       delete etcParams[paramKey]?.value[deleteKey];
-      setParams(etcParams);
+      if (deleteKey === "min" && etcParams[paramKey]?.value.max === "") {
+        deleteParams(paramKey);
+      } else if (deleteKey === "max" && etcParams[paramKey]?.value.min === "") {
+        deleteParams(paramKey);
+      } else {
+        setParams(etcParams);
+      }
     }
   };
 

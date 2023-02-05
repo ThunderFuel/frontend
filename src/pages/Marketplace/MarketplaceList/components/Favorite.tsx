@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { IconStar } from "icons";
 import clsx from "clsx";
 
-const Favorite = ({ item, className }: { item: any; className?: string }) => {
-  const [isFavorite, setIsFavorite] = useState<boolean>(item.favorite ?? false);
+const Favorite = ({ item, className, onChange }: { item: any; className?: string; onChange: any }) => {
+  const [isFavorite, setIsFavorite] = useState<boolean>(item.watched ?? false);
 
   return (
     <div
       className={clsx("cursor-pointer", className)}
       onClick={(e) => {
-        setIsFavorite((value: boolean) => !value);
+        const value = !isFavorite;
+        setIsFavorite(value);
+        onChange(value);
         e.stopPropagation();
       }}
     >

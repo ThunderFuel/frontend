@@ -31,7 +31,7 @@ const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: So
       {socialMedias?.length ? (
         <ul className="inline-flex border border-gray rounded-[4px]">
           {socialMedias?.map((media, key) => {
-            return <SocialButton href="#" key={key} icon={iconList?.[media.type] as React.ReactNode} />;
+            return <SocialButton href={media.url} target="_blank" key={key} icon={iconList?.[media.type] as React.ReactNode} />;
           })}
         </ul>
       ) : null}

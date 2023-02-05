@@ -5,8 +5,11 @@ import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
+import { useCollectionListContext } from "../../CollectionListContext";
 
 const CollectionFooter = () => {
+  const { setSweep } = useCollectionListContext();
+
   const { hasEnoughFunds } = useWallet();
   const dispatch = useAppDispatch();
   const selectedCartItemCount = useAppSelector((state) => state.cart.itemCount);
@@ -29,6 +32,7 @@ const CollectionFooter = () => {
         className="btn-secondary uppercase"
         onClick={() => {
           dispatch(removeAll());
+          setSweep(0);
         }}
       >
         Clear {selectedCartItemCount} ıtem

@@ -43,8 +43,11 @@ const SidebarFilter = () => {
     }
   };
 
-  const getFilter = React.useMemo(() => {
-    return filters.map((filter: any, i: number) => {
+  const [getAttributeFilter, getFilter] = React.useMemo(() => {
+    const tmpAttributeFilter: any[] = [];
+    const tmpFilter: any[] = [];
+
+    filters.forEach((filter: any, i: number) => {
       let DynamicComponent: any = RangeInputOptions;
       if (FilterComponentType.RadioList === filter.type) {
         DynamicComponent = RadioList;
@@ -59,15 +62,24 @@ const SidebarFilter = () => {
       const name = filter.name ?? i;
       const type = filter.type ?? 0;
       const value = params?.[name]?.value;
-
-      return {
+      const field = {
         name,
         type,
         value,
         dynamicComponent: DynamicComponent,
         filterData: filter.filterData,
+        order: name.toLowerCase() === "status" ? 1 : 0,
+        isOpen: name.toLowerCase() === "status",
       };
+
+      if (["price", "status", "raking"].includes(name.toLowerCase())) {
+        tmpFilter.push(field);
+      } else {
+        tmpAttributeFilter.push(field);
+      }
     });
+
+    return [tmpAttributeFilter, tmpFilter.sort((a, b) => a.order - b.order).reverse()];
   }, [filters, params]);
 
   return (
@@ -89,6 +101,27 @@ const SidebarFilter = () => {
               </div>
               <div className="flex flex-col gap-2.5 py-5">
                 {getFilter.map((item: any, i: number) => {
+                  const DynamicComponent = item.dynamicComponent;
+
+                  return (
+                    <Collapse key={i} isOpen={item.isOpen}>
+                      <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
+                      <Collapse.Body>
+                        <DynamicComponent
+                          filterData={item.filterData}
+                          name={item.name}
+                          checked={item.value === params[item.name]}
+                          value={item.value}
+                          onChange={(name: any, value: any) => {
+                            onChange(name, value, item.type);
+                          }}
+                        />
+                      </Collapse.Body>
+                    </Collapse>
+                  );
+                })}
+                {getFilter.length && getAttributeFilter.length ? <div className="border-b border-gray" /> : <></>}
+                {getAttributeFilter.map((item: any, i: number) => {
                   const DynamicComponent = item.dynamicComponent;
 
                   return (

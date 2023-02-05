@@ -40,11 +40,17 @@ const CollectionTable = () => {
     {
       key: "selection",
       text: "",
-      render: (collection) => (
-        <div className="p-6">
-          <Checkbox checked={collection.isSelected} onChange={() => onSelect(collection)} />
-        </div>
-      ),
+      render: (collection) =>
+        collection.salable && (
+          <div className="p-6">
+            <Checkbox
+              checked={collection.isSelected}
+              onClick={(e: any) => {
+                e.preventDefault();
+              }}
+            />
+          </div>
+        ),
       width: "64px",
     },
     {

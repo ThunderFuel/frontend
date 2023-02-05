@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "components/Button";
 import EthereumPrice from "components/EthereumPrice";
 import { IconAddCart, IconCart, IconListed, IconOffer, IconThunder } from "icons";
@@ -28,6 +28,7 @@ const FixedPrice = () => {
       }
       timeoutId.current = setTimeout(scheduleNext, 1000);
     }
+
     scheduleNext();
 
     return () => {

@@ -55,6 +55,9 @@ export const ROUTES: RouteConfig[] = [
         component: CollectionActivity,
       },
     ],
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
   {
     path: PATHS.LOGIN,

@@ -16,7 +16,11 @@ const Cell = ({ title, value }: { title: string; value: any }) => {
 };
 
 const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
-  const { dayTabValue } = useMarketplace();
+  const { dayTabValue, addWatchList } = useMarketplace();
+  const onAddWatchList = async (item: any, value: any) => {
+    console.log(value);
+    await addWatchList({ collectionId: item.id, userId: 16 });
+  };
 
   return (
     <div className="container-fluid">
@@ -26,7 +30,7 @@ const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
             <div className="border border-gray rounded-md" key={`row_${k.toString()}`}>
               <div className="flex items-center justify-between border-b border-b-gray">
                 <Collection image={item.image} title={item.collection} />
-                <Favorite className="p-5" item={item} />
+                <Favorite className="p-5" item={item} onChange={(value: boolean) => onAddWatchList(item, value)} />
               </div>
               <div className="grid grid-cols-2">
                 <Cell title={`VOLUME (${dayTabValue?.text})`} value={item.volume} />

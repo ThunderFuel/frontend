@@ -5,10 +5,11 @@ import { numberFormat } from "../../../utils";
 interface ICollectionProperties {
   volume: number;
   floor: number;
-  listedRate: number;
+  listedCount: number;
   ownerCount: number;
 }
-const CollectionProperties = ({ volume, floor, listedRate, ownerCount }: ICollectionProperties) => {
+
+const CollectionProperties = ({ volume, floor, listedCount, ownerCount }: ICollectionProperties) => {
   const items = [
     {
       name: "total volume",
@@ -22,7 +23,7 @@ const CollectionProperties = ({ volume, floor, listedRate, ownerCount }: ICollec
     },
     {
       name: "lısted",
-      value: listedRate ?? 0,
+      value: listedCount ?? 0,
     },
     {
       name: "owners",
