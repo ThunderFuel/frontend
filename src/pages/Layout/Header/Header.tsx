@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetThunderText } from "assets";
@@ -16,6 +16,7 @@ import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
+import { PATHS } from "../../../router/config/paths";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -87,6 +88,13 @@ export interface HeaderProps {
 }
 
 const Header = () => {
+  const navigate = useNavigate();
+  const onChange = (value: any) => {
+    if (value) {
+      navigate(value);
+    }
+  };
+
   return (
     <header className="sticky top-0 bg-bg z-30">
       <HeaderTop />
@@ -100,10 +108,10 @@ const Header = () => {
 
             <Search />
 
-            <Tab initTab={1} className="hidden lg:flex">
-              <Tab.Item id={1}>EXPLORE</Tab.Item>
-              <Tab.Item id={2}>COLLECTIONS</Tab.Item>
-              <Tab.Item id={3}>CREATE</Tab.Item>
+            <Tab initTab={1} className="hidden lg:flex" onChange={onChange}>
+              <Tab.Item id={PATHS.MARKETPLACE}>EXPLORE</Tab.Item>
+              <Tab.Item id={PATHS.RANKINGS}>COLLECTIONS</Tab.Item>
+              <Tab.Item id={null}>CREATE</Tab.Item>
             </Tab>
           </div>
           <HeaderIconButtonGroup />
