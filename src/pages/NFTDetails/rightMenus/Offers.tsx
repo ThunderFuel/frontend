@@ -66,7 +66,7 @@ const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOff
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.CancelOffer }));
+              dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item }));
               dispatch(toggleCheckoutModal());
             }}
           >
@@ -77,6 +77,7 @@ const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOff
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
+              dispatch(setCheckout({ item: item }));
               dispatch(setRightMenu(RightMenuType.UpdateOffer));
             }}
           >
@@ -91,12 +92,13 @@ const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOff
 
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT, isOwner } = useAppSelector((state) => state.nftdetails);
   const { nftId } = useParams();
   const [offers, setOffers] = useState([]);
 
   const fetchOffers = async () => {
-    const response = await nftdetailsService.getOffers({ page: 1, pageSize: 10, tokenId: selectedNFT.id });
+    const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, userId: 16, page: 1, pageSize: 10 });
+    console.log(response.data);
     setOffers(response.data);
   };
 
@@ -106,16 +108,18 @@ const Offers = ({ onBack }: { onBack: any }) => {
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
-      <Button
-        className="btn-secondary no-bg"
-        onClick={() => {
-          dispatch(setRightMenu(RightMenuType.MakeOffer));
-        }}
-      >
-        MAKE OFFER <IconOffer />
-      </Button>
+      {!isOwner && (
+        <Button
+          className="btn-secondary no-bg"
+          onClick={() => {
+            dispatch(setRightMenu(RightMenuType.MakeOffer));
+          }}
+        >
+          MAKE OFFER <IconOffer />
+        </Button>
+      )}
       {offers.map((offer, index) => (
-        <Box item={offer} key={index}></Box>
+        <Box item={offer} key={index} ownOffer={true}></Box>
       ))}
       {/* <Box ownOffer={true}></Box>
       <Box expired={true}></Box> */}

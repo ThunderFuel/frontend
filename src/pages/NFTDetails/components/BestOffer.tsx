@@ -26,7 +26,7 @@ const BestOffer = () => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer?.price }));
+              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer?.price, item: { id: selectedNFT.bestOffer?.id, price: selectedNFT.bestOffer?.price } }));
               dispatch(toggleCheckoutModal());
             }}
           >

@@ -20,10 +20,9 @@ export interface TokenListRequest {
 }
 
 export interface TokenPlaceBidRequest {
-  id: number;
+  tokenId: number;
   userId: number;
   price: number;
-  expireTime: string;
 }
 
 export interface TokenLikeParams {
