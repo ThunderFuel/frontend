@@ -1,10 +1,13 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import search from "api/search";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../../../../router/config/paths";
 
 const LocalStorageRecentSearchKey = "RecentSearchKey";
 
 export const useSearch = () => {
+  const navigate = useNavigate();
   const { setItem, getItem } = useLocalStorage();
 
   const [show, setShow] = useState(false);
@@ -27,13 +30,10 @@ export const useSearch = () => {
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value.trim().toLowerCase();
     if (text) {
-      const response = await search.getSearchResult();
-      const collections = response.collections.filter((item: any) => item.name.toLowerCase().search(text) > -1);
-      const accounts = response.accounts.filter((item: any) => item.name.toLowerCase().search(text) > -1);
-
+      const response = await search.getSearchResult(text);
       setResults({
-        collections,
-        accounts,
+        collections: response.data,
+        // accounts: [],
       });
     } else {
       getRecentItems();
@@ -45,8 +45,10 @@ export const useSearch = () => {
     if (!recentItems) {
       recentItems = [];
     }
-    recentItems.prepend(item);
+    recentItems.unshift(item);
     setItem(LocalStorageRecentSearchKey, recentItems);
+    navigate(PATHS.COLLECTION.replace(":collectionId", item.id));
+    setShow(false);
   };
 
   return {

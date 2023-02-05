@@ -3,16 +3,16 @@ import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
 import Img from "components/Img";
 
-import { IconUpRight } from "icons";
+import { IconDownRight, IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
 import { AssetCollectionItem0 } from "assets";
-import { useNavigate } from "react-router-dom";
-import { PATHS } from "router/config/paths";
+import { Link } from "react-router-dom";
 import { numberFormat } from "utils";
+import { PATHS } from "router/config/paths";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   const tmpImages = images.slice(0, 5);
@@ -31,19 +31,19 @@ NftImages.displayName = "NftImages";
 
 const Change = ({ change }: { change: any }) => {
   const isNull = change === 0 || change === null;
+  const text = !isNull ? `${change}%` : "-";
   const className = isNull ? "text-white" : change < 0 ? "text-red" : "text-green";
 
   return (
     <div className="flex items-center">
-      <h5 className={clsx("text-h5", className)}>{change ?? "-"}</h5>
-      {!isNull && <IconUpRight className={className} />}
+      <h5 className={clsx("text-h5", className)}>{text}</h5>
+      {!isNull ? change < 0 ? <IconDownRight className={className} /> : <IconUpRight className={className} /> : <></>}
     </div>
   );
 };
 Change.displayName = "Change";
 
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
-  const navigate = useNavigate();
   const { dayTabValue, addWatchList } = useMarketplace();
 
   const headers: ITableHeader[] = [
@@ -78,6 +78,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "SALES",
       width: "10%",
       align: "flex-end",
+      render: (item) => <div className="text-h5">{item.sales}</div>,
     },
     {
       key: "lastSold",
@@ -94,14 +95,13 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   ];
 
   const onAddWatchList = async (item: any, value: any) => {
-    console.log(value);
-    await addWatchList({ collectionId: item.id, userId: 16 });
+    await addWatchList({ collectionId: item.id, userId: 16, value });
   };
-  const onClick = (item: any) => {
-    navigate(PATHS.COLLECTION.replace(":collectionId", item.id));
+  const rowElementProps = (item: any) => {
+    return { to: PATHS.COLLECTION.replace(":collectionId", item.id) };
   };
 
-  return <Table onClick={onClick} theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
+  return <Table rowElementProps={rowElementProps} rowElement={Link} theadClassName={"sticky top-[110px]"} headers={headers} items={items} footer={<Footer />} />;
 };
 
 export default MarketPlaceTable;

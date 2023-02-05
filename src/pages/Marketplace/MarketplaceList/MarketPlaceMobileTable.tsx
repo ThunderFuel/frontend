@@ -18,8 +18,7 @@ const Cell = ({ title, value }: { title: string; value: any }) => {
 const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
   const { dayTabValue, addWatchList } = useMarketplace();
   const onAddWatchList = async (item: any, value: any) => {
-    console.log(value);
-    await addWatchList({ collectionId: item.id, userId: 16 });
+    await addWatchList({ collectionId: item.id, userId: 16, value });
   };
 
   return (

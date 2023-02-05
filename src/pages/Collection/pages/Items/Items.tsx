@@ -102,7 +102,7 @@ const Items = () => {
 
   React.useEffect(() => {
     fetchFilters();
-  }, []);
+  }, [collectionId]);
 
   return (
     <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={onChangePagination}>
