@@ -5,7 +5,7 @@ import { DisplayType, useCollectionListContext } from "../../CollectionListConte
 import NotFound from "../../../NotFound";
 
 const CollectionGrid = () => {
-  const { displayType, collectionItems } = useCollectionListContext();
+  const { displayType, collectionItems, options } = useCollectionListContext();
 
   const displayClass = useMemo(() => {
     if (displayType === DisplayType.GRID4) {
@@ -20,7 +20,7 @@ const CollectionGrid = () => {
   return (
     <>
       {collectionItems.length > 0 && (
-        <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pl-5 pb-20", displayClass)}>
+        <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pb-20", displayClass, !options?.hiddenSidebar && "pl-5")}>
           {collectionItems.map((collection: any, i: number) => (
             <CollectionItem key={i} collection={collection} />
           ))}

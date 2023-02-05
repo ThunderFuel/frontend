@@ -66,7 +66,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         </div>
       </div>
       <div className="p-2.5 border-b border-b-gray">
-        <h6 className="text-h6 text-white">{collection.name}</h6>
+        <h6 className="text-h6 text-white">{collection.name ?? "-"}</h6>
       </div>
       <div className="p-2.5 flex items-center">
         {collection.salable ? (

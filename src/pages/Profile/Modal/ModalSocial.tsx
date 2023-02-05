@@ -41,7 +41,7 @@ const ModalSocial = ({ show, onClose, followers, follows, initialTab = 0 }: any)
                   <Avatar image={item.image} className="w-8 h-8" />
                   <div>
                     <h6 className="text-h6 text-white">{item.userName}</h6>
-                    <div className="text-headline-01 text-gray-light mt-2">12 FOLLOWERS</div>
+                    <div className="text-headline-01 text-gray-light mt-2">{item.followerCount} FOLLOWERS</div>
                   </div>
                 </div>
                 <Button className="btn-secondary btn-sm !bg-white !text-black">

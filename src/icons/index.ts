@@ -72,3 +72,5 @@ export { ReactComponent as IconBurner } from "./icon-burner.svg";
 export { ReactComponent as IconFuelet } from "./icon-fuelet.svg";
 export { ReactComponent as IconLogout } from "./icon-logout.svg";
 export { ReactComponent as IconFaucet } from "./icon-faucet.svg";
+export { ReactComponent as IconInstagram } from "./icon-instagram.svg";
+export { ReactComponent as IconYoutube } from "./icon-youtube.svg";

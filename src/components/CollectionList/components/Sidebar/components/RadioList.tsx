@@ -9,7 +9,10 @@ const RadioList = ({ filterData, name, onChange, value }: { filterData: any; nam
     return (
       <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", isChecked ? "bg-gray" : "")}>
         <Radio value={item.value} defaultChecked={isChecked} name={name} onClick={() => onChange(name, item.value)}>
-          <span className="body-medium">{item.text}</span>
+          <span className="body-medium">
+            {item.text}
+            {item.count ? ` (${item.count})` : ""}
+          </span>
         </Radio>
       </div>
     );

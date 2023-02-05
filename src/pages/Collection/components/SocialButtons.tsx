@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-import { IconDiscord, IconShare, IconSocial3Dots, IconTelegram, IconTwitter, IconWeblink } from "icons";
+import { IconDiscord, IconInstagram, IconShare, IconSocial3Dots, IconTelegram, IconTwitter, IconWeblink, IconYoutube } from "icons";
 import { SocialTypes } from "api/collections/collections.type";
 
 const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: string; [key: string]: any }) => {
@@ -19,8 +19,8 @@ const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: So
   const iconList: any = {
     [SocialTypes.Website]: IconWeblink,
     [SocialTypes.Discord]: IconDiscord,
-    [SocialTypes.Instagram]: IconDiscord,
-    [SocialTypes.Youtube]: IconDiscord,
+    [SocialTypes.Instagram]: IconInstagram,
+    [SocialTypes.Youtube]: IconYoutube,
     [SocialTypes.Twitter]: IconTwitter,
     [SocialTypes.Telegram]: IconTelegram,
     [SocialTypes.Medium]: IconSocial3Dots,

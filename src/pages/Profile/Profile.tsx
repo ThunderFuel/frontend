@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 import Tab from "./components/Tab";
 
 const Profile = () => {
-  const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [] } as any);
+  const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
   const [filter, setFilter] = React.useState([] as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
   const fetchUserProfile = async () => {
