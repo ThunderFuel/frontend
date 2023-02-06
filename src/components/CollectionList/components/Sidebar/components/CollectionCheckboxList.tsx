@@ -27,7 +27,7 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
 
     return (
       <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", isChecked ? "bg-gray" : "")}>
-        <Checkbox checked={isChecked} value={item.value} name={name} onClick={() => onSelect(item.value)}>
+        <Checkbox defaultChecked={isChecked} value={item.value} name={name} onClick={() => onSelect(item.value)}>
           <div className="flex items-center gap-2">
             <div className="overflow-hidden rounded-sm w-7 h-7">
               <Img src={item.image} className="w-full" />

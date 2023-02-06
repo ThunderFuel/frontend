@@ -114,7 +114,7 @@ const SidebarFilter = ({ className }: { className?: string }) => {
                         <DynamicComponent
                           filterData={item.filterData}
                           name={item.name}
-                          checked={item.value === params[item.name]}
+                          defaultChecked={item.value === params[item.name]}
                           value={item.value}
                           onChange={(name: any, value: any) => {
                             onChange(name, value, item.type);

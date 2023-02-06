@@ -46,7 +46,7 @@ const CollectionTable = () => {
         collection.salable && (
           <div className="p-6">
             <Checkbox
-              checked={collection.isSelected}
+              defaultChecked={collection.isSelected}
               onClick={(e: any) => {
                 e.preventDefault();
               }}

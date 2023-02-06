@@ -31,10 +31,6 @@ const Index = () => {
     resetParams,
   } = useCollectionListContext();
 
-  if (!Object.keys(etcParams).length) {
-    return null;
-  }
-
   const onRemove = (paramKey: any, deleteKey: any) => {
     const paramValue = etcParams[paramKey]?.value;
 
@@ -87,6 +83,10 @@ const Index = () => {
 
     return tmpParamItems;
   }, [etcParams]);
+
+  if (!Object.keys(etcParams).length) {
+    return null;
+  }
 
   return (
     <div className="flex flex-row flex-wrap gap-2 px-5">

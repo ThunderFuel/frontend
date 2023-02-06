@@ -7,9 +7,14 @@ import Button from "components/Button";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../../router/config/paths";
+
 AOS.init({ duration: 600 });
 
 const Slider = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="slider-container">
       <div data-aos="fade-up" className="container-fluid relative z-10 flex flex-col">
@@ -22,8 +27,8 @@ const Slider = () => {
           <h1 className="text-h1 mt-7">The Superior NFT Experience</h1>
           <div className="body-large mt-7 lg:w-[400px]">No more multi step signings. Thunder enables bulk executions in a single transaction.</div>
           <div className="mt-10 flex flex-col lg:flex-row gap-2.5">
-            <Button className="" onClick={() => openInNewTab("https://forms.gle/d9sYqvXaF2PoHNvc7")}>
-              START CREATING WITH THUNDER
+            <Button className="" onClick={() => navigate(PATHS.MARKETPLACE)}>
+              GO TO MARKETPLACE
               <IconArrowRight />
             </Button>
             <Button className="btn-secondary" onClick={() => openInNewTab("https://discord.gg/thundernftmarket")}>

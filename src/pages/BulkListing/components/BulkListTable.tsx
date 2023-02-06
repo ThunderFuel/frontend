@@ -32,7 +32,7 @@ const BulkListTable = () => {
       text: "",
       render: (collection) => (
         <div className="p-6">
-          <Checkbox checked={collection.isSelected} onChange={() => onSelect(collection)} />
+          <Checkbox defaultChecked={collection.isSelected} onChange={() => onSelect(collection)} />
         </div>
       ),
       width: "64px",
