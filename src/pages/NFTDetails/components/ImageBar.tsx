@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconFullscreen, IconLike, IconRefresh, IconShare, IconTransfer } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import userService from "api/user/user.service";
 
 const ImageBar = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,18 @@ const ImageBar = () => {
   const isOwner = () => {
     return user?.id === selectedNFT?.user?.id;
   };
+
+  const fetchIsLiked = async () => {
+    const response = await userService.isLiked({ tokenId: selectedNFT.id, userId: user.id });
+    console.log(user.id);
+    console.log(user.id);
+
+    console.log(response.data);
+  };
+
+  useEffect(() => {
+    fetchIsLiked();
+  }, [user, isLiked]);
 
   const icons = [
     {
@@ -31,7 +44,7 @@ const ImageBar = () => {
     <div className="flex w-fit flex-col gap-5">
       <div
         className="border border-gray rounded-md p-2 group cursor-pointer"
-        onClick={() => nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: user.id, like: !isLiked }).then((res) => (res.data === true ? setIsliked(true) : setIsliked(false)))}
+        onClick={() => nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: user.id, like: !isLiked }).then((res) => res.data === true && setIsliked(!isLiked))}
       >
         <IconLike stroke="gray" className={`group-hover:stroke-white ${isLiked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>

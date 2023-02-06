@@ -29,4 +29,7 @@ export default {
   followUser(body: ICreateUser) {
     return ThunderURL.post("v1/user/follow", body);
   },
+  isLiked(data: any): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/user/isLiked", { params: data });
+  },
 };
