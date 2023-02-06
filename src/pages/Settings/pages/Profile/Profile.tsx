@@ -7,12 +7,15 @@ import Socials from "./components/Socials";
 import CoverImage from "./components/CoverImage";
 import ProfileImage from "./components/ProfileImage";
 import { EventSettingsSubmit } from "../../Settings";
+import { useAppSelector } from "store";
 
 const Profile = () => {
+  const { user } = useAppSelector((state) => state.wallet);
+
   const [userInfo, setUserInfo] = useState({} as any);
   const fetchUserProfile = async () => {
     const response = await userService.getUser({
-      id: 16,
+      id: user.id ?? 16,
       includes: [0],
     });
     setUserInfo(response.data);

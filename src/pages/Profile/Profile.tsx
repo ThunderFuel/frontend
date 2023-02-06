@@ -16,7 +16,7 @@ const Profile = () => {
   const fetchUserProfile = async () => {
     const [response, responseFilter] = await Promise.all([
       userService.getUser({
-        id: 16,
+        id: user.id,
         includes: [0, 1, 2, 3, 4],
       }),
       userService.getFilters({ userId: user.id }),
