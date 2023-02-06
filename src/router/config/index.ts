@@ -14,7 +14,7 @@ const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activ
 const Profile = React.lazy(() => import("pages/Profile"));
 const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collection"));
 const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity/Activity"));
-const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer"));
+const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer/Offer"));
 const ProfileLiked = React.lazy(() => import("pages/Profile/pages/Liked"));
 const BulkListing = React.lazy(() => import("pages/BulkListing"));
 const Settings = React.lazy(() => import("pages/Settings"));
