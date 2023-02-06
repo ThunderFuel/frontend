@@ -34,6 +34,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice } = useAppSelector((state) => state.checkout);
+  const { user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -42,7 +43,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: 16, price: checkoutPrice });
+    nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
   };
 
   React.useEffect(() => {
