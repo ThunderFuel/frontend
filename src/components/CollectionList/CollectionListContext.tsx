@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useMemo, useReducer, useState } from "react";
 import { useAppSelector } from "../../store";
+import { useLocation } from "react-router-dom";
 
 export enum DisplayType {
   GRID3 = "3",
@@ -22,6 +23,8 @@ interface ICollectionListContext {
 export const CollectionListContext = createContext<ICollectionListContext>({} as any);
 
 const CollectionListProvider = ({ value, children }: { value: ICollectionListContext; children: ReactNode }) => {
+  const location = useLocation();
+
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
@@ -65,6 +68,9 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   React.useEffect(() => {
     value.onChangeFilter(params);
   }, [params, filters]);
+  React.useEffect(() => {
+    setSweep(0);
+  }, [location.pathname]);
 
   const contextValue = {
     ...value,

@@ -8,6 +8,7 @@ import NotFound from "components/NotFound";
 import { dateFormat } from "utils";
 import Button from "components/Button";
 import { useOfferContext } from "../OfferContext";
+import clsx from "clsx";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
@@ -32,7 +33,7 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
 const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) => {
   return (
     <div>
-      <div className="flex items-start justify-between p-2.5 gap-5 border-t border-x border-gray rounded-t-md">
+      <div className={clsx("flex items-start justify-between p-2.5 gap-5 border-t border-x border-gray rounded-t-md", !item.isActiveOffer ? "border-b rounded-b-md" : "")}>
         <div className="overflow-hidden rounded-md w-16 h-16 bg-gray">
           <Img className="w-full" src={item?.tokenImage} />
         </div>
@@ -52,10 +53,14 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         </div>
         <EthereumPrice className="text-white" price={item.price} />
       </div>
-      {!item.isOfferMade && item.isActiveOffer ? (
-        <OfferItemAcceptButton onAcceptOffer={onAcceptOffer} item={item} />
+      {item.isActiveOffer ? (
+        !item.isOfferMade ? (
+          <OfferItemAcceptButton onAcceptOffer={onAcceptOffer} item={item} />
+        ) : (
+          <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />
+        )
       ) : (
-        <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />
+        <></>
       )}
     </div>
   );
@@ -65,12 +70,13 @@ const OfferList = () => {
 
   const isOffersMade = offers.length && offers?.[0].isOfferMade;
   const label = `${offers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
+  const hasActiveOffer = offers.some((offer) => offer.isActiveOffer);
 
   return (
     <div className="flex flex-col p-5 pr-7 gap-5 flex-1">
       <div className="flex items-center justify-between">
         <div className="text-headline-02 text-gray-light uppercase">{label}</div>
-        {isOffersMade ? (
+        {isOffersMade && hasActiveOffer ? (
           <Button className="btn-secondary btn-sm" onClick={onCancelAllOffer}>
             cancel all offers <IconCircleRemoveWhite />
           </Button>

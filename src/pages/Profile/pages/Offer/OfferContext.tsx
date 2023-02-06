@@ -25,7 +25,7 @@ const filterItems = [
 export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
   const [offers, setOffers] = React.useState([] as any);
-  const [filterValue, setFilterValue] = React.useState(true);
+  const [filterValue, setFilterValue] = React.useState(false);
 
   const getOffers = React.useMemo(() => {
     return offers.filter((item: any) => item.isOfferMade === filterValue);
@@ -76,7 +76,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     });
     const data = response.data.map((item: any) => ({
       ...item,
-      isOfferMade: item.takerUserId === value.userInfo.id,
+      isOfferMade: item.makerUserId === value.userInfo.id,
       isActiveOffer: item.status === OfferStatus.ActiveOffer,
     }));
     setOffers(data);
