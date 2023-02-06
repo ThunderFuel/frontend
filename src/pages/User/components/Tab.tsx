@@ -8,7 +8,7 @@ const Tab = ({ userId }: any) => {
   const navigate = UseNavigate();
   const routes = [
     { path: PATHS.USER_OWNED, name: "Owned" },
-    { path: null, name: "Created" },
+    // { path: null, name: "Created" },
     { path: PATHS.USER_LIKED, name: "Liked" },
     { path: PATHS.USER_OFFER, name: "Offers" },
     { path: PATHS.USER_ACTIVITY, name: "Activities" },
