@@ -9,8 +9,12 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 
 const Auction = () => {
   const dispatch = useAppDispatch();
-  const { isOwner, selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const highestBid = JSON.stringify(selectedNFT.highestBid) !== "null";
+  const { user } = useAppSelector((state) => state.wallet);
+  const isOwner = () => {
+    return user?.id === selectedNFT?.user?.id;
+  };
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
@@ -29,7 +33,7 @@ const Auction = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
-        {isOwner && highestBid ? (
+        {isOwner() && highestBid ? (
           <>
             <Button
               className="w-full text-button font-bigShoulderDisplay"

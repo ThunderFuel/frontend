@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
-import { RightMenuType, setRightMenu, toggleIsOwner } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { addressFormat } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
@@ -127,8 +127,8 @@ const LeftMenu = (props: any) => {
   const { nft } = props;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isOwner } = useAppSelector((state) => state.nftdetails);
   const { walletConnect } = useWallet();
+  const { user } = useAppSelector((state) => state.wallet);
 
   function formatActivityData(data: number) {
     switch (data) {
@@ -174,6 +174,10 @@ const LeftMenu = (props: any) => {
     );
   }
 
+  const isOwner = () => {
+    return user?.id === nft?.user?.id;
+  };
+
   return (
     <div className="flex flex-col border-r border-gray overflow-hidden ">
       <div className="flex flex-col">
@@ -190,17 +194,9 @@ const LeftMenu = (props: any) => {
           <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
             <img src={nft?.user?.image ?? AssetTableImageNft1} className="w-8 h-8 rounded-full" alt="profile-image" />
             <h6 className="text-h6 text-gray-light">
-              Owned by <span className={clsx(isOwner ? "text-green" : "text-white")}>{isOwner ? "you" : nft?.user?.userName}</span>
+              Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName}</span>
             </h6>
           </div>
-
-          {/**********************/}
-          <div className="flex flex-wrap min-w-fit justify-center border-4 p-1 border-gray gap-2 rounded-lg">
-            <Button className={clsx("p-3 font-bold normal-case", isOwner ? "bg-green" : "bg-red")} onClick={() => dispatch(toggleIsOwner())}>
-              isOwner
-            </Button>
-          </div>
-          {/**********************/}
 
           <div className="body-medium text-white">{nft?.collection?.description}</div>
 
@@ -220,7 +216,7 @@ const LeftMenu = (props: any) => {
               </div>
               <div className="flex gap-x-2.5">
                 <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Offers))} />
-                {isOwner && (
+                {isOwner() && (
                   <HoverButton
                     Icon={IconAccept}
                     text="ACCEPT"
@@ -307,7 +303,7 @@ const LeftMenu = (props: any) => {
           </div>
         </div>
       </div>
-      <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner ? "block" : "hidden")}>
+      <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
         {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
       </footer>
     </div>

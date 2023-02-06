@@ -6,9 +6,14 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 
 const MakeOffer = () => {
   const dispatch = useAppDispatch();
-  const { isOwner } = useAppSelector((state) => state.nftdetails);
+  const { user } = useAppSelector((state) => state.wallet);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
-  return isOwner ? (
+  const isOwner = () => {
+    return user?.id === selectedNFT?.user?.id;
+  };
+
+  return isOwner() ? (
     <></>
   ) : (
     <div className="flex flex-col p-5 rounded-md border border-gray bg-bg-light ">
