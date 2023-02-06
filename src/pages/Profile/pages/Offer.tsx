@@ -4,9 +4,22 @@ import Img from "components/Img";
 import ActivityItemDescription from "components/ActivityDescription";
 import EthereumPrice from "components/EthereumPrice";
 import { IconCircleRemoveWhite, IconClock, IconHand } from "icons";
-import { AssetCollectionItem1 } from "assets";
+import offerService from "../../../api/offer/offer.service";
+import { dateFormat } from "../../../utils";
 
-const Activity = () => {
+const Offer = () => {
+  const [offers, setOffers] = React.useState([] as any);
+  const fetchOffers = async () => {
+    const response = await offerService.getOffer({
+      userId: 16,
+      page: 1,
+    });
+    setOffers(response.data);
+  };
+  React.useEffect(() => {
+    fetchOffers();
+  }, []);
+
   return (
     <div className="flex flex-col px-5 py-6">
       <div className="flex items-center justify-between">
@@ -16,26 +29,28 @@ const Activity = () => {
         </Button>
       </div>
       <div className="flex flex-col gap-3 mt-6">
-        {[1, 2, 3, 4, 5].map((item) => {
+        {offers.map((item: any) => {
           return (
             <div key={item} className="">
               <div className="flex items-start justify-between p-2.5 gap-5 border-t border-x border-gray rounded-t-md">
                 <div className="overflow-hidden rounded-md w-16 h-16">
-                  <Img className="w-full" src={AssetCollectionItem1} />
+                  <Img className="w-full" src={item?.tokenImage} />
                 </div>
                 <div className="flex flex-col gap-5 text-white flex-1">
                   <div className="flex flex-col gap-2.5">
-                    <h6>Genuine Undead #1293</h6>
+                    <h6 className="text-h6">{item?.tokenName ?? "-"}</h6>
                     <ActivityItemDescription>Bid placed by 409x792 on 12 Oct 2022</ActivityItemDescription>
                   </div>
                   <div className="inline-flex">
-                    <div className="flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium">
-                      <IconClock className="w-4 h-5" />
-                      Expires on 16 Oct 2022, 12:00 PM GMT+2
-                    </div>
+                    {item.expireTime && (
+                      <div className="flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium">
+                        <IconClock className="w-4 h-5" />
+                        Expires on {dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z")}
+                      </div>
+                    )}
                   </div>
                 </div>
-                <EthereumPrice className="text-white" price={0.99} />
+                <EthereumPrice className="text-white" price={item.price} />
               </div>
               <div className="grid grid-cols-2">
                 <div className="flex border-y border-l border-gray rounded-b-md">
@@ -57,4 +72,4 @@ const Activity = () => {
   );
 };
 
-export default Activity;
+export default Offer;

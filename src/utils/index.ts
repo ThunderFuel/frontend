@@ -23,9 +23,12 @@ export const numberFormat = (number: number) => {
   return String(number).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 };
 
-export const dateFormat = (date: any, format = "MM/DD/YYYY HH:mm") => {
+export const dateFormat = (date: any, format = "MM/DD/YYYY HH:mm", convertFrom: any = null) => {
   if (!date) {
     return "-";
+  }
+  if (convertFrom) {
+    return dayjs(date, convertFrom).format(format);
   }
 
   return dayjs(date).format(format);
