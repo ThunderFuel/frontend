@@ -40,7 +40,7 @@ const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any
   const onComplete = () => {
     setApproved(true);
     if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, address, checkoutExpireTime, checkoutAuctionStartingPrice);
-    else nftdetailsService.tokenList({ id: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime });
+    else nftdetailsService.tokenList([{ id: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
   };
 
   React.useEffect(() => {

@@ -24,7 +24,7 @@ export const checkoutSlice = createSlice({
     checkoutPrice: 0,
     checkoutIsAuction: false,
     checkoutAuctionStartingPrice: 0,
-    checkoutExpireTime: 0,
+    checkoutExpireTime: 0 as number,
     amountAddedBidBalance: 0,
     currentItem: { id: 0, price: 0 },
   },

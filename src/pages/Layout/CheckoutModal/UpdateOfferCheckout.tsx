@@ -8,6 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm your offer",
@@ -31,13 +32,14 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice } = useAppSelector((state) => state.checkout);
+  const { checkoutPrice, currentItem, checkoutExpireTime } = useAppSelector((state) => state.checkout);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
+    nftdetailsService.tokenUpdateOffer({ id: currentItem?.id, price: checkoutPrice, expireTime: checkoutExpireTime });
   };
 
   React.useEffect(() => {
