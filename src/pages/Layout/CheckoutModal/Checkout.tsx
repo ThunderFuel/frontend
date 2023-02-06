@@ -187,7 +187,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
       <div className="flex flex-col p-5">
         {items.length > 0 ? (
           <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />

@@ -78,6 +78,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
 
   return (
     <Modal
+      backdropDisabled={true}
       className="checkout"
       title="Transfer Your NFT"
       show={show}
