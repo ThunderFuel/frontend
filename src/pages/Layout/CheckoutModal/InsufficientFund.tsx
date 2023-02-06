@@ -28,7 +28,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
         </div>
         <div className="flex flex-col">
           <h5 className="text-h5 text-white">
-            You need <span className="text-h6 text-red">4.2 ETH + gas fees.</span>
+            You need <span className="text-h5 text-red">4.2 ETH + gas fees.</span>
           </h5>
           <span className="body-medium text-gray-light">Transfer funds to your wallet or add funds with a card. It can take up to a minute for your balance to update.</span>
         </div>

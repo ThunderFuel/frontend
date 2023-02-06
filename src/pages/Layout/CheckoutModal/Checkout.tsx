@@ -9,6 +9,7 @@ import NotFound from "components/NotFound";
 import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal } from "store/cartSlice";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 enum Status {
   notStarted = "notStarted",
@@ -148,6 +149,7 @@ const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items:
 const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
   const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
+  const { user } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     dispatch(getCartTotal());
@@ -158,6 +160,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = () => {
     setApproved(true);
+    const tokenIds = items.map((item: any) => item.id);
+    nftdetailsService.tokenBuyNow(tokenIds, user.id);
   };
 
   React.useEffect(() => {

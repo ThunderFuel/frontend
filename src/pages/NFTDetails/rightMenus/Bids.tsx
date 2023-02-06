@@ -21,9 +21,12 @@ const Box = ({ children, ownBid }: { ownBid?: boolean; children: React.ReactNode
 const Bids = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isOwner, setisOwner] = useState(true);
+  const { user } = useAppSelector((state) => state.wallet);
   const [bids, setBids] = useState([]);
+
+  const isOwner = () => {
+    return user?.id === selectedNFT?.user?.id;
+  };
 
   const fetchBids = async () => {
     const response = await nftdetailsService.tokenGetBids({ page: 1, pageSize: 10, tokenId: selectedNFT.id });
@@ -60,7 +63,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
               <div className="flex items-center gap-x-[15px]">
                 <img src={bid.user?.image} className="self-start h-8 w-8 rounded-full" alt="profile-image" />
                 <div>
-                  {!isOwner ? <span className="inline-block text-green">you</span> : bid.user.userName} on {formatDate(bid.createdAt)}
+                  {!isOwner() ? <span className="inline-block text-green">you</span> : bid.user.userName} on {formatDate(bid.createdAt)}
                 </div>
               </div>
               <div className="flex">
@@ -68,7 +71,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
                 <IconEthereum height="21px" className="text-gray-light" />
               </div>
             </div>
-            {!isOwner && (
+            {!isOwner() && (
               <>
                 <div className="flex border-t border-gray"></div>
                 <Button

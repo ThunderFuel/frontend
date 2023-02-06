@@ -7,10 +7,14 @@ import { useAppSelector } from "store";
 import { add, remove } from "store/cartSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { remainingTime } from "./AuctionCountdown";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { toggleWalletModal } from "store/walletSlice";
 
 const FixedPrice = () => {
   const dispatch = useDispatch();
-  const { isOwner, selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { user } = useAppSelector((state) => state.wallet);
+  const { items } = useAppSelector((state) => state.cart);
 
   const expireTime = selectedNFT.expireTime;
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
@@ -18,6 +22,10 @@ const FixedPrice = () => {
   const previousMinutes = useRef(remaining.minutes);
   const { days, hours, minutes } = remainingTime(expireTime);
   const [addCartIsDisabled, setAddCartIsDisabled] = useState(false);
+
+  const isOwner = () => {
+    return user?.id === selectedNFT?.user?.id;
+  };
 
   useEffect(() => {
     function scheduleNext() {
@@ -54,10 +62,21 @@ const FixedPrice = () => {
           <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {selectedNFT.lastSalePrice} ETH</span>
         </div>
       </div>
-      {!isOwner && (
+      {!isOwner() && (
         <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
           <div className="flex gap-x-[10px] ">
-            <Button className="w-full text-button font-bigShoulderDisplay">
+            <Button
+              className="w-full text-button font-bigShoulderDisplay"
+              onClick={() => {
+                if (user?.id) {
+                  dispatch(setCheckout({ type: CheckoutType.None }));
+                  if (!items.includes(selectedNFT)) dispatch(add(selectedNFT));
+                  dispatch(toggleCheckoutModal());
+                } else {
+                  dispatch(toggleWalletModal());
+                }
+              }}
+            >
               Buy Now <IconThunder width="24px" height="11.58px" />
             </Button>
             <Button

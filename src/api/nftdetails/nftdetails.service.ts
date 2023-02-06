@@ -36,7 +36,7 @@ export default {
   async tokenOnAuction(onAuction: boolean, tokenId: number, expireTime?: number, startingPrice?: number): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/onauction", {}, { params: { onAuction, tokenId, expireTime, startingPrice } });
   },
-  async tokenBuyNow(tokenIds: [], userId: number): Promise<ApiResponse<any>> {
+  async tokenBuyNow(tokenIds: number[], userId: number): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/buynow", { tokenIds, userId });
   },
   async tokenPlaceBid(data: TokenPlaceBidRequest): Promise<ApiResponse<any>> {

@@ -8,7 +8,11 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 
 const BestOffer = () => {
   const dispatch = useAppDispatch();
-  const { isOwner, selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { user } = useAppSelector((state) => state.wallet);
+  const isOwner = () => {
+    return user?.id === selectedNFT?.user?.id;
+  };
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
@@ -22,7 +26,7 @@ const BestOffer = () => {
         <div className="flex h-fit items-center gap-x-[5px]"></div>
       </div>
       <div className="flex flex-col bg-bg-light rounded-b p-5">
-        {isOwner ? (
+        {isOwner() ? (
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {

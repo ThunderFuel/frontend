@@ -36,13 +36,6 @@ export function formatDateTime(dateString: string) {
 
 const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOffer?: boolean }) => {
   const dispatch = useAppDispatch();
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isOwner = () => {
-    //TODO userId lazim
-    return selectedNFT.userId === item.makerUserId;
-  };
 
   return (
     <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
@@ -92,8 +85,11 @@ const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOff
 
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
-  const { selectedNFT, isOwner } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user } = useAppSelector((state) => state.wallet);
+  const isOwner = () => {
+    return user.id === selectedNFT.user.id;
+  };
 
   const { nftId } = useParams();
   const [offers, setOffers] = useState([]);
@@ -110,7 +106,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
-      {!isOwner && (
+      {!isOwner() && (
         <Button
           className="btn-secondary no-bg"
           onClick={() => {
