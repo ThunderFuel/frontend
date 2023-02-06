@@ -21,7 +21,7 @@ export default {
   async cancelOffer(id: number): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/offer/canceloffer", {}, { params: { id } });
   },
-  async tokenList(data: TokenListRequest): Promise<ApiResponse<any>> {
+  async tokenList(data: TokenListRequest[]): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/listing", data);
   },
   async tokenCancelList(tokenId: number): Promise<ApiResponse<any>> {
@@ -44,5 +44,8 @@ export default {
   },
   async tokenGetBids(data: any): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/getbids", data);
+  },
+  async tokenUpdateOffer(data: any): Promise<ApiResponse<any>> {
+    return await ThunderURL.put("v1/offer/updateoffer", data, {});
   },
 };

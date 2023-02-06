@@ -12,7 +12,6 @@ const InputPrice = (props: any) => {
       onChange(lastChar === "0" ? newValue : +newValue);
     } else if (lastChar === "." && !newValue.substring(0, newValue.length - 1).includes(".")) onChange(newValue);
     else if (newValue === "") onChange(newValue);
-    console.log(newValue);
   };
 
   return (

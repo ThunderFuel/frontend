@@ -56,7 +56,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   }, []);
 
   const isValidNumber = (price: any) => {
-    return !(isNaN(Number(price)) || price === "") && price > 0;
+    return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
   const bidBalanceControl = () => {
@@ -86,7 +86,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={isValidNumber(offer) ? offer > balance : true}
+          disabled={!isValidNumber(offer)}
           onClick={() => {
             dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: offer, expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed() }));
             dispatch(toggleCheckoutModal());

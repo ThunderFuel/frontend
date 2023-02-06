@@ -11,6 +11,7 @@ import { useWallet } from "hooks/useWallet";
 import { getDateFromExpirationTime, toGwei } from "utils";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
+import dayjs from "dayjs";
 
 const offerDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
@@ -18,6 +19,7 @@ const offerDescription =
 const UpdateOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT, bidBalance } = useAppSelector((state) => state.nftdetails);
+  const { currentItem } = useAppSelector((state) => state.checkout);
 
   const { getBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
@@ -29,7 +31,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   }, []);
 
   const isValidNumber = (price: any) => {
-    return !(isNaN(Number(price)) || price === "");
+    return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
   const bidBalanceControl = () => {
@@ -59,9 +61,9 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={isValidNumber(offer) ? offer > balance : true}
+          disabled={!isValidNumber(offer)}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.UpdateOffer, price: offer }));
+            dispatch(setCheckout({ type: CheckoutType.UpdateOffer, item: currentItem, price: offer, expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed() }));
             dispatch(toggleCheckoutModal());
           }}
         >
