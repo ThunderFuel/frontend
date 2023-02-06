@@ -9,7 +9,7 @@ const Offer = () => {
 
   return (
     <OfferProvider value={{ userInfo, offers: [] }}>
-      <div className="flex w-full h-full">
+      <div className="flex w-full h-full px-5">
         <SidebarFilter />
         <OfferList />
       </div>
