@@ -9,24 +9,24 @@ import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
 import { addressFormat } from "utils";
 import { useFuel } from "hooks/useFuel";
-import { useNavigate } from "react-router-dom";
 import { PATHS } from "router/config/paths";
+import UseNavigate from "hooks/useNavigate";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
   const { user, isBurner } = useAppSelector((state) => state.wallet);
   const { walletDisconnect } = useWallet();
-  const navigate = useNavigate();
+  const navigate = UseNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, error, loading] = useFuel();
-
+  console.log(user.id);
   const MenuItems = [
     {
       title: "My Profile",
       icon: <IconWallet />,
       onClick: () => {
-        navigate(PATHS.PROFILE);
+        navigate(PATHS.USER, { userId: user?.id });
         onClose();
       },
     },
@@ -35,7 +35,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Offers",
       icon: <IconOffer />,
       onClick: () => {
-        navigate(PATHS.PROFILE_OFFER);
+        navigate(PATHS.USER_OFFER, { userId: user?.id });
         onClose();
       },
     },
@@ -43,7 +43,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Activity",
       icon: <IconActivity />,
       onClick: () => {
-        navigate(PATHS.PROFILE_ACTIVITY);
+        navigate(PATHS.USER_ACTIVITY, { userId: user?.id });
         onClose();
       },
     },
@@ -51,7 +51,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Liked",
       icon: <IconLike />,
       onClick: () => {
-        navigate(PATHS.PROFILE_LIKED);
+        navigate(PATHS.USER_LIKED, { userId: user?.id });
         onClose();
       },
     },
@@ -59,12 +59,11 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Settings",
       icon: <IconSettings />,
       onClick: () => {
-        navigate(PATHS.PROFILE);
+        navigate(PATHS.USER, { userId: user?.id });
         onClose();
       },
     },
   ];
-
   const WalletMenu = React.useMemo(() => {
     return MenuItems.map((item) => (
       <div
@@ -76,7 +75,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         {item.title}
       </div>
     ));
-  }, []);
+  }, [user]);
 
   return (
     <Modal className="cart" title="Wallet" onClose={onClose} show={show}>

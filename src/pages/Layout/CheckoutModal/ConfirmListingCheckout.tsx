@@ -32,14 +32,13 @@ const Footer = ({ approved }: { approved: boolean }) => {
 const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
-  const { address } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
-    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, address, checkoutExpireTime, checkoutAuctionStartingPrice);
+    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice);
     else nftdetailsService.tokenList([{ id: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
   };
 

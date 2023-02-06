@@ -10,6 +10,7 @@ import { useAppSelector } from "store";
 import Input from "components/Input";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { addressFormat } from "utils";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -37,6 +38,7 @@ const Footer = ({ address, callback, animationStarted, onClose }: { address: str
 
 const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [address, setaddress] = useState("");
@@ -45,6 +47,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
 
   const onComplete = () => {
     setApproved(true);
+    nftdetailsService.tokenTransfer(selectedNFT.id, user.id);
   };
 
   React.useEffect(() => {
