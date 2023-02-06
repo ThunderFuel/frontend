@@ -52,14 +52,18 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         </div>
         <EthereumPrice className="text-white" price={item.price} />
       </div>
-      {item.isOfferMade ? <OfferItemAcceptButton onAcceptOffer={onAcceptOffer} item={item} /> : <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />}
+      {!item.isOfferMade && item.isActiveOffer ? (
+        <OfferItemAcceptButton onAcceptOffer={onAcceptOffer} item={item} />
+      ) : (
+        <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />
+      )}
     </div>
   );
 };
 const OfferList = () => {
   const { offers, onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer } = useOfferContext();
 
-  const isOffersMade = offers.length && !offers?.[0].isOfferMade;
+  const isOffersMade = offers.length && offers?.[0].isOfferMade;
   const label = `${offers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
 
   return (
