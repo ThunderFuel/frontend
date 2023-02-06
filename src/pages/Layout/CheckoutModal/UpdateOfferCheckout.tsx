@@ -67,7 +67,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   );
 
   return (
-    <Modal className="checkout" title="Update Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Update Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
         <CartItem text={"Your Offer"} name={selectedNFT?.name} image={selectedNFT?.image} price={checkoutPrice} id={0}></CartItem>
       </div>
