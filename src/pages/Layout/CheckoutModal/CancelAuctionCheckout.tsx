@@ -71,7 +71,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   // const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
 
   return (
-    <Modal className="checkout" title="Cancel Auction" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Cancel Auction" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
         <CartItem
           text={selectedNFT.highestBid ? "Highest Bid" : ""}

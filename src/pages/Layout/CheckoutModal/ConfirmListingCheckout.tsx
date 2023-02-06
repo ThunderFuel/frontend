@@ -72,7 +72,7 @@ const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any
   const viewOnBlockchain = <button className="body-small text-gray-light underline">View on Blockchain</button>;
 
   return (
-    <Modal className="checkout" title="Complete Listing" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Complete Listing" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
       <div className="flex flex-col p-5">
         {checkoutIsAuction ? (
           checkoutAuctionStartingPrice ? (

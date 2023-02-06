@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { IconClose } from "icons";
 import "./Modal.css";
+import { useClickOutside } from "hooks/useClickOutside";
 
 export interface ModalProps {
   className?: string;
@@ -12,11 +13,13 @@ export interface ModalProps {
   show: boolean;
   bodyClassName?: string;
   modalTitle?: React.ReactNode;
+  backdropDisabled?: boolean;
 }
 
 const body = document.querySelector("body");
 
 const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps) => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     if (show && body) {
       body.style.overflow = "hidden";
@@ -24,13 +27,19 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
       body.style.overflow = "auto";
     }
   }, [show]);
+
+  useClickOutside(containerRef, () => {
+    if (etc.backdropDisabled) return;
+    etc.onClose();
+  });
+
   if (!show) {
     return null;
   }
 
   return (
     <div className={clsx("modalbase", className)}>
-      <div className={clsx("modal", etc.bodyClassName)}>
+      <div ref={containerRef} className={clsx("modal", etc.bodyClassName)}>
         <div className="mhead">
           {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
           <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
