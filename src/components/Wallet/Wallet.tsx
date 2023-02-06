@@ -9,21 +9,60 @@ import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
 import { addressFormat } from "utils";
 import { useFuel } from "hooks/useFuel";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "router/config/paths";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
   const { user, isBurner } = useAppSelector((state) => state.wallet);
   const { walletDisconnect } = useWallet();
+  const navigate = useNavigate();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, error, loading] = useFuel();
 
   const MenuItems = [
-    { title: "My Profile", icon: <IconWallet />, onClick: () => console.log("My Profile") },
-    { title: "Create", icon: <IconToken />, onClick: () => console.log("Create") },
-    { title: "Offers", icon: <IconOffer />, onClick: () => console.log("Offers") },
-    { title: "Activity", icon: <IconActivity />, onClick: () => console.log("Activity") },
-    { title: "Liked", icon: <IconLike />, onClick: () => console.log("Liked") },
-    { title: "Settings", icon: <IconSettings />, onClick: () => console.log("Settings") },
+    {
+      title: "My Profile",
+      icon: <IconWallet />,
+      onClick: () => {
+        navigate(PATHS.PROFILE);
+        onClose();
+      },
+    },
+    { title: "Create", icon: <IconToken />, onClick: () => "" },
+    {
+      title: "Offers",
+      icon: <IconOffer />,
+      onClick: () => {
+        navigate(PATHS.PROFILE_OFFER);
+        onClose();
+      },
+    },
+    {
+      title: "Activity",
+      icon: <IconActivity />,
+      onClick: () => {
+        navigate(PATHS.PROFILE_ACTIVITY);
+        onClose();
+      },
+    },
+    {
+      title: "Liked",
+      icon: <IconLike />,
+      onClick: () => {
+        navigate(PATHS.PROFILE_LIKED);
+        onClose();
+      },
+    },
+    {
+      title: "Settings",
+      icon: <IconSettings />,
+      onClick: () => {
+        navigate(PATHS.PROFILE);
+        onClose();
+      },
+    },
   ];
 
   const WalletMenu = React.useMemo(() => {
