@@ -1,4 +1,3 @@
-import { AssetTableImageNft1 } from "assets";
 import clsx from "clsx";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
@@ -20,7 +19,6 @@ import {
   IconWallet,
 } from "icons";
 import React, { SVGProps } from "react";
-import { useNavigate } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
@@ -31,6 +29,8 @@ import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
 import MakeOffer from "./MakeOffer";
 import MetadataTable from "./MetadataTable";
+import Avatar from "components/Avatar";
+import UseNavigate from "hooks/useNavigate";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -125,7 +125,7 @@ const FooterAuction = () => {
 
 const LeftMenu = (props: any) => {
   const { nft } = props;
-  const navigate = useNavigate();
+  const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { isOwner } = useAppSelector((state) => state.nftdetails);
   const { walletConnect } = useWallet();
@@ -178,7 +178,7 @@ const LeftMenu = (props: any) => {
     <div className="flex flex-col border-r border-gray overflow-hidden ">
       <div className="flex flex-col">
         <div className="container-fluid flex flex-col pt-5 pb-5 pr-10 border-b border-gray">
-          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION.replace(":collectionId", nft.collection.id))}>
+          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: nft.collection.id })}>
             {nft?.collection?.image && <img src={nft.collection.image} className="w-6 rounded-[px]" alt="profile-image" />}
             <div className="flex flex-col w-full">
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
@@ -187,8 +187,11 @@ const LeftMenu = (props: any) => {
           <h3 className="text-h3 text-white">{nft.name}</h3>
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray">
-          <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
-            <img src={nft?.user?.image ?? AssetTableImageNft1} className="w-8 h-8 rounded-full" alt="profile-image" />
+          <div
+            className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
+            onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
+          >
+            <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
             <h6 className="text-h6 text-gray-light">
               Owned by <span className={clsx(isOwner ? "text-green" : "text-white")}>{isOwner ? "you" : nft?.user?.userName}</span>
             </h6>

@@ -12,7 +12,6 @@ import {
   AssetProfileAvatar9,
 } from "assets";
 import Img from "components/Img";
-import { randomIntFromInterval } from "utils";
 import clsx from "clsx";
 
 const avatars = [
@@ -27,10 +26,15 @@ const avatars = [
   AssetProfileAvatar9,
   AssetProfileAvatar10,
 ];
-const Avatar = ({ image, className }: { image: string; className?: string }) => {
+
+export const getDefaultAvatarSrc = (userId: any) => {
+  return avatars[userId % avatars.length];
+};
+
+const Avatar = ({ image, className, userId }: { image: string; className?: string; userId: number }) => {
   return (
     <div className={clsx("rounded-full overflow-hidden", className)}>
-      <Img className="w-full" src={image ?? avatars[randomIntFromInterval(0, avatars.length)]} />
+      <Img className="w-full" src={image ?? getDefaultAvatarSrc(userId)} />
     </div>
   );
 };
