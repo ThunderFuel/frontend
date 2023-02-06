@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "components/Button";
 import EthereumPrice from "components/EthereumPrice";
-import { IconAddCart, IconCart, IconListed, IconOffer, IconThunder } from "icons";
+import { IconAddCart, IconCart, IconListed, IconOffer, IconRemove, IconThunder } from "icons";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "store";
-import { add } from "store/cartSlice";
+import { add, remove } from "store/cartSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { remainingTime } from "./AuctionCountdown";
 
@@ -61,14 +61,18 @@ const FixedPrice = () => {
               Buy Now <IconThunder width="24px" height="11.58px" />
             </Button>
             <Button
-              className="hover:px-8 px-4"
-              disabled={addCartIsDisabled}
+              className={`hover:px-8 px-4 ${addCartIsDisabled ? "btn-secondary" : ""}`}
               onClick={() => {
-                dispatch(add(selectedNFT));
-                setAddCartIsDisabled(true);
+                if (addCartIsDisabled) {
+                  dispatch(remove(selectedNFT.tokenOrder));
+                  setAddCartIsDisabled(false);
+                } else {
+                  dispatch(add(selectedNFT));
+                  setAddCartIsDisabled(true);
+                }
               }}
             >
-              <IconAddCart className={`${addCartIsDisabled ? "fill-gray-light" : "fill-black"}`} />
+              {addCartIsDisabled ? <IconRemove /> : <IconAddCart className="text-black" />}
             </Button>
           </div>
           <Button
