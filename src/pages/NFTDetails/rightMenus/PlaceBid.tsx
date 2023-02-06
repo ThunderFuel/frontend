@@ -26,7 +26,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   }, []);
 
   const isValidNumber = (price: any) => {
-    return !(isNaN(Number(price)) || price === "") && price > 0;
+    return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
   const bidBalanceControl = () => {
@@ -56,7 +56,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={isValidNumber(bid) ? bid > balance : true}
+          disabled={isValidNumber(bid)}
           onClick={() => {
             dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: bid }));
             dispatch(toggleCheckoutModal());
