@@ -11,7 +11,7 @@ const options = {
 const Liked = () => {
   const [userInfo, filter]: any = useOutletContext();
 
-  return <CollectionList collectionItems={userInfo.likedTokens} filterItems={filter} options={options} onChangeFilter={console.log} />;
+  return <CollectionList collectionItems={userInfo.likedTokens ?? []} filterItems={filter} options={options} onChangeFilter={console.log} />;
 };
 
 export default Liked;
