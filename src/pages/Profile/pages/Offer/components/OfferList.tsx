@@ -1,5 +1,5 @@
 import React from "react";
-import { IconCircleRemoveWhite, IconClock, IconHand } from "icons";
+import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand } from "icons";
 import Img from "components/Img/Img";
 import ActivityItemDescription from "components/ActivityDescription";
 import EthereumPrice from "components/EthereumPrice";
@@ -7,6 +7,26 @@ import NotFound from "components/NotFound";
 
 import { dateFormat } from "utils";
 import Button from "components/Button";
+
+const OfferItemAcceptButton = ({ onAcceptOffer }: any) => {
+  return (
+    <Button className="btn-secondary btn-sm rounded-t-none border-r-0" onClick={onAcceptOffer}>
+      accept offer <IconLikeHand />
+    </Button>
+  );
+};
+const OfferItemUpdateButtons = ({ onCancelOffer, onUpdateOffer }: any) => {
+  return (
+    <div className="grid grid-cols-2">
+      <Button className="btn-secondary btn-sm rounded-t-none border-r-0" onClick={onCancelOffer}>
+        cancel offer <IconCircleRemoveWhite />
+      </Button>
+      <Button className="btn-secondary btn-sm rounded-t-none" onClick={onUpdateOffer}>
+        update offer <IconHand />
+      </Button>
+    </div>
+  );
+};
 
 const OfferItem = ({ item }: any) => {
   return (
@@ -31,29 +51,24 @@ const OfferItem = ({ item }: any) => {
         </div>
         <EthereumPrice className="text-white" price={item.price} />
       </div>
-      <div className="grid grid-cols-2">
-        <div className="flex border-y border-l border-gray rounded-b-md">
-          <div className="flex-center w-full p-3 text-headline-02 uppercase text-white cursor-pointer hover:bg-bg-light">
-            cancel offer <IconCircleRemoveWhite />
-          </div>
-        </div>
-        <div className="flex border border-gray rounded-b-md">
-          <div className="flex-center w-full p-3 text-headline-02 uppercase text-white cursor-pointer hover:bg-bg-light">
-            update offer <IconHand />
-          </div>
-        </div>
-      </div>
+      {item.isOwn ? <OfferItemAcceptButton /> : <OfferItemUpdateButtons />}
     </div>
   );
 };
 const OfferList = ({ offers }: any) => {
+  const isOffersMade = offers.length && !offers?.[0].isOwn;
+
+  const label = `${offers.length} ${isOffersMade ? " offers receıved" : " offers made"}`;
+
   return (
     <div className="flex flex-col p-5 pr-7 gap-5 flex-1">
       <div className="flex items-center justify-between">
-        <div className="text-headline-02 text-gray-light uppercase">{offers.length} offers made</div>
-        <Button className="btn-secondary btn-sm">
-          cancel all offers <IconCircleRemoveWhite />
-        </Button>
+        <div className="text-headline-02 text-gray-light uppercase">{label}</div>
+        {isOffersMade && (
+          <Button className="btn-secondary btn-sm">
+            cancel all offers <IconCircleRemoveWhite />
+          </Button>
+        )}
       </div>
       <div className="flex flex-col gap-3">
         {offers.map((item: any, k: any) => (
@@ -61,7 +76,7 @@ const OfferList = ({ offers }: any) => {
         ))}
         {!offers.length && (
           <div className="flex-center">
-            <NotFound />
+            <NotFound>You didn’t make any offer yet.</NotFound>
           </div>
         )}
       </div>
