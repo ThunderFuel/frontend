@@ -59,7 +59,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Settings",
       icon: <IconSettings />,
       onClick: () => {
-        navigate(PATHS.USER, { userId: user?.id });
+        navigate(PATHS.SETTINGS_PROFILE, { userId: user?.id });
         onClose();
       },
     },
