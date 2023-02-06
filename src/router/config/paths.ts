@@ -16,4 +16,9 @@ export enum PATHS {
   SETTINGS = "/settings",
   SETTINGS_PROFILE = "profile",
   SETTINGS_NOTIFICATION = "notification",
+  USER = "/user/:userId",
+  USER_OWNED = "",
+  USER_ACTIVITY = "/user/:userId/activity",
+  USER_OFFER = "/user/:userId/offer",
+  USER_LIKED = "/user/:userId/liked",
 }

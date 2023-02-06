@@ -1,13 +1,13 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import search from "api/search";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../../../router/config/paths";
+import UseNavigate from "../../../../../hooks/useNavigate";
 
 const LocalStorageRecentSearchKey = "RecentSearchKey";
 
 export const useSearch = () => {
-  const navigate = useNavigate();
+  const navigate = UseNavigate();
   const { setItem, getItem } = useLocalStorage();
 
   const [show, setShow] = useState(false);
@@ -47,7 +47,7 @@ export const useSearch = () => {
     }
     recentItems.unshift(item);
     setItem(LocalStorageRecentSearchKey, recentItems);
-    navigate(PATHS.COLLECTION.replace(":collectionId", item.id));
+    navigate(PATHS.COLLECTION, { collectionId: item.id });
     setShow(false);
   };
 
