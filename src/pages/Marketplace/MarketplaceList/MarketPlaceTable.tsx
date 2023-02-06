@@ -13,6 +13,7 @@ import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
 import { numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
+import { getAbsolutePath } from "../../../hooks/useNavigate";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   const tmpImages = images.slice(0, 5);
@@ -105,7 +106,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     await addWatchList({ collectionId: item.id, userId: 16, value });
   };
   const rowElementProps = (item: any) => {
-    return { to: PATHS.COLLECTION.replace(":collectionId", item.id) };
+    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };
   };
 
   return (

@@ -12,6 +12,7 @@ const Collection = React.lazy(() => import("pages/Collection"));
 const CollectionItems = React.lazy(() => import("pages/Collection/pages/Items/index"));
 const CollectionActivity = React.lazy(() => import("pages/Collection/pages/Activity/index"));
 const Profile = React.lazy(() => import("pages/Profile"));
+const User = React.lazy(() => import("pages/User/User"));
 const ProfileCollection = React.lazy(() => import("pages/Profile/pages/Collection"));
 const ProfileActivity = React.lazy(() => import("pages/Profile/pages/Activity/Activity"));
 const ProfileOffer = React.lazy(() => import("pages/Profile/pages/Offer/Offer"));
@@ -125,6 +126,32 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.SETTINGS_NOTIFICATION,
         component: ProfileOffer,
+      },
+    ],
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
+    path: PATHS.USER,
+    component: User,
+    layout: Layout,
+    children: [
+      {
+        path: PATHS.USER_OWNED,
+        component: ProfileCollection,
+      },
+      {
+        path: PATHS.USER_ACTIVITY,
+        component: ProfileActivity,
+      },
+      {
+        path: PATHS.USER_OFFER,
+        component: ProfileOffer,
+      },
+      {
+        path: PATHS.USER_LIKED,
+        component: ProfileLiked,
       },
     ],
     layoutProps: {

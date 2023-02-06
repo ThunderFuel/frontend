@@ -2,6 +2,7 @@ import React from "react";
 import offerService from "api/offer/offer.service";
 import SidebarFilter from "./components/SidebarFilter";
 import OfferList from "./components/OfferList";
+import { useOutletContext } from "react-router-dom";
 
 const filterItems = [
   {
@@ -16,16 +17,17 @@ const filterItems = [
   },
 ];
 const Offer = () => {
+  const [userInfo]: any = useOutletContext();
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState(true);
   const fetchOffers = async () => {
     const response = await offerService.getOffer({
-      userId: 16,
+      userId: userInfo.id,
       page: 1,
     });
     const data = response.data.map((item: any) => ({
       ...item,
-      isOwn: item.takerUserId === 16,
+      isOwn: item.takerUserId === userInfo.id,
     }));
     setOffers(data);
   };
