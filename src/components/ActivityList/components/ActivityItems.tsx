@@ -1,6 +1,7 @@
 import React from "react";
 import ActivityItem from "./ActivityItem";
 import { useActivityContext } from "../ActivityContext";
+import NotFound from "../../NotFound";
 
 const ActivityItems = () => {
   const { getActivities, pagination } = useActivityContext();
@@ -12,6 +13,7 @@ const ActivityItems = () => {
         {getActivities.map((item: any, index: number) => (
           <ActivityItem key={index} item={item} />
         ))}
+        {!getActivities.length ? <NotFound /> : null}
       </div>
     </div>
   );

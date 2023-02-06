@@ -3,6 +3,7 @@ import marketplaceService from "api/marketplace/marketplace.service";
 import { MarketplaceListType, MarketplaceTableItem } from "../../api/marketplace/marketplace.type";
 import dayjs from "dayjs";
 import collectionsService from "../../api/collections/collections.service";
+import { useAppSelector } from "../../store";
 
 const UnitType = "hours";
 
@@ -64,6 +65,8 @@ const filterValues = [
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useAppSelector((state) => state.wallet);
+
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
   const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
@@ -79,7 +82,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
       const response = await marketplaceService.getMarketplace({
         type: filterTabValue?.value,
         filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
-        userId: 16,
+        userId: user.id ?? 16,
       });
       const items = response.data.map((responseItem) => {
         return {
@@ -106,6 +109,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
 
   const addWatchList = async (data: any) => {
     try {
+      data.userId = user.id ?? 16;
       await collectionsService.addWatchList(data);
     } catch (e) {
       console.log(e);

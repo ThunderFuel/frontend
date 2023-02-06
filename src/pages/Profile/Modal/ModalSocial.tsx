@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Modal from "components/Modal";
 import TabBase from "components/Tab";
 import Button from "components/Button";
-import Avatar from "../components/Avatar";
+import Avatar from "components/Avatar";
 import { IconPlus } from "icons";
 
 const ModalTitle = () => {
@@ -38,7 +38,7 @@ const ModalSocial = ({ show, onClose, followers, follows, initialTab = 0 }: any)
             return (
               <div key={k} className="flex w-full items-center justify-between border border-gray rounded-md py-3 px-2">
                 <div className="flex items-center gap-2">
-                  <Avatar image={item.image} className="w-8 h-8" />
+                  <Avatar image={item.image} userId={item.id} className="w-8 h-8" />
                   <div>
                     <h6 className="text-h6 text-white">{item.userName}</h6>
                     <div className="text-headline-01 text-gray-light mt-2">{item.followerCount} FOLLOWERS</div>

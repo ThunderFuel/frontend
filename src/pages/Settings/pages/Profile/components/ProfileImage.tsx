@@ -2,7 +2,7 @@ import React from "react";
 import { AssetSettingsProfileImage } from "assets";
 import UploadImage from "./UploadImage";
 
-const ProfileImage = ({ src = AssetSettingsProfileImage }: any) => {
+const ProfileImage = ({ src }: any) => {
   const onChange = (e: any) => {
     console.log(e);
   };

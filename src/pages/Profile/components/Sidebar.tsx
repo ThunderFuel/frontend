@@ -8,7 +8,7 @@ import { IconCirclePlus, IconPlus, IconQuarry } from "icons";
 import { numberFormat } from "utils";
 import Button from "components/Button";
 import clsx from "clsx";
-import Avatar from "./Avatar";
+import Avatar from "components/Avatar";
 
 const CoverImage = () => {
   return (
@@ -20,10 +20,10 @@ const CoverImage = () => {
     </div>
   );
 };
-const LogoContainer = ({ userName, image, socialMedias }: any) => {
+const LogoContainer = ({ userName, image, socialMedias, userId }: any) => {
   return (
     <div className="flex gap-5 w-full">
-      <Avatar image={image} className="w-[95px] h-[95px]" />
+      <Avatar image={image} userId={userId} className="w-[95px] h-[95px]" />
       <div className="flex flex-col gap-2.5 flex-1">
         <h3 className="text-h3">{userName}</h3>
         <SocialButtons socialMedias={socialMedias} />
@@ -57,7 +57,7 @@ const Sidebar = ({ userInfo, openFollowers, openFollows }: any) => {
         <CoverImage />
         <div className="p-10 relative pt-[150px] text-white w-full h-full flex">
           <div className="flex flex-col w-full">
-            <LogoContainer userName={userInfo?.userName} socialMedias={userInfo?.socialMedias} />
+            <LogoContainer userName={userInfo?.userName} socialMedias={userInfo?.socialMedias} userId={userInfo?.id} />
             <div className="body-medium mt-5">Gm! I’m xero and I like to collect superb NFTs</div>
             <div className="grid grid-cols-2 bg-bg border border-gray rounded-md mt-5">
               <div className="flex flex-col gap-2 px-4 py-3.5 text-gray-light border-r border-r-gray cursor-pointer" onClick={openFollowers}>

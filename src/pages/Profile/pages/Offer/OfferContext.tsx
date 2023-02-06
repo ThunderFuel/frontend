@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import offerService from "api/offer/offer.service";
+import { OfferStatus } from "../../../../api/offer/offer.type";
 
 interface IOfferContext {
   userInfo?: any;
@@ -10,12 +11,12 @@ interface IOfferContext {
 
 const filterItems = [
   {
-    value: true,
+    value: false,
     text: "Offers Received",
     count: 0,
   },
   {
-    value: false,
+    value: true,
     text: "Offers Made",
     count: 0,
   },
@@ -24,14 +25,14 @@ const filterItems = [
 export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
   const [offers, setOffers] = React.useState([] as any);
-  const [filterValue, setFilterValue] = React.useState(true);
+  const [filterValue, setFilterValue] = React.useState(false);
 
   const getOffers = React.useMemo(() => {
     return offers.filter((item: any) => item.isOfferMade === filterValue);
   }, [offers, filterValue]);
   const getFilterItems = React.useMemo(() => {
-    filterItems[0].count = offers.filter((item: any) => item.isOfferMade).length;
-    filterItems[1].count = offers.filter((item: any) => !item.isOfferMade).length;
+    filterItems[0].count = offers.filter((item: any) => !item.isOfferMade).length;
+    filterItems[1].count = offers.filter((item: any) => item.isOfferMade).length;
 
     return filterItems;
   }, [offers]);
@@ -43,14 +44,15 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   const onCancelAllOffer = async () => {
     try {
       await offerService.cancelAllOffer({ userId: value.userInfo.id });
-      setOffers(offers.filter((offer: any) => offer.isOfferMade));
+      await fetchOffers();
     } catch (e) {
       console.log(e);
     }
   };
   const onAcceptOffer = async (item: any) => {
     try {
-      await offerService.cancelOffer({ id: item.id });
+      await offerService.acceptOffer({ id: item.id });
+      await fetchOffers();
     } catch (e) {
       console.log(e);
     }
@@ -58,7 +60,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   const onCancelOffer = async (item: any) => {
     try {
       await offerService.cancelOffer({ id: item.id });
-      setOffers(offers.filter((offer: any) => offer.id !== item.id));
+      await fetchOffers();
     } catch (e) {
       console.log(e);
     }
@@ -74,7 +76,8 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     });
     const data = response.data.map((item: any) => ({
       ...item,
-      isOfferMade: item.takerUserId === value.userInfo.id,
+      isOfferMade: item.makerUserId === value.userInfo.id,
+      isActiveOffer: item.status === OfferStatus.ActiveOffer,
     }));
     setOffers(data);
   };

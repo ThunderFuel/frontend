@@ -7,7 +7,7 @@ const Sidebar = () => {
   const [activeMenu, setActiveMenu] = React.useState(PATHS.SETTINGS_PROFILE);
   const menus = [
     { name: "Profile", link: PATHS.SETTINGS_PROFILE },
-    { name: "Notifications", link: PATHS.SETTINGS_NOTIFICATION },
+    //  { name: "Notifications", link: PATHS.SETTINGS_NOTIFICATION },
   ];
 
   return (

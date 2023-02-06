@@ -2,7 +2,6 @@ import React from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
 import { setIsBurner, setIsConnected, toggleManageFundsModal } from "store/walletSlice";
-import { AssetProfileAvatar1 } from "assets";
 import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconToken, IconWallet } from "icons";
 import { Button } from "react-bootstrap";
 import Balances from "components/Balances";
@@ -11,6 +10,7 @@ import { addressFormat } from "utils";
 import { useFuel } from "hooks/useFuel";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
+import Avatar from "components/Avatar";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
@@ -20,13 +20,12 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, error, loading] = useFuel();
-  console.log(user.id);
   const MenuItems = [
     {
       title: "My Profile",
       icon: <IconWallet />,
       onClick: () => {
-        navigate(PATHS.USER, { userId: user?.id });
+        navigate(PATHS.PROFILE, {});
         onClose();
       },
     },
@@ -35,7 +34,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Offers",
       icon: <IconOffer />,
       onClick: () => {
-        navigate(PATHS.USER_OFFER, { userId: user?.id });
+        navigate(PATHS.PROFILE_OFFER, {});
         onClose();
       },
     },
@@ -43,7 +42,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Activity",
       icon: <IconActivity />,
       onClick: () => {
-        navigate(PATHS.USER_ACTIVITY, { userId: user?.id });
+        navigate(PATHS.PROFILE_ACTIVITY, {});
         onClose();
       },
     },
@@ -51,7 +50,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Liked",
       icon: <IconLike />,
       onClick: () => {
-        navigate(PATHS.USER_LIKED, { userId: user?.id });
+        navigate(PATHS.PROFILE_LIKED, {});
         onClose();
       },
     },
@@ -59,18 +58,14 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       title: "Settings",
       icon: <IconSettings />,
       onClick: () => {
-        navigate(PATHS.SETTINGS_PROFILE, { userId: user?.id });
+        navigate(PATHS.SETTINGS_PROFILE, {});
         onClose();
       },
     },
   ];
   const WalletMenu = React.useMemo(() => {
     return MenuItems.map((item) => (
-      <div
-        key={item.title}
-        onClick={item.onClick}
-        className="flex items-center p-5 gap-x-[25px] cursor-pointer font-spaceGrotesk text-head6 text-gray-light border-b border-gray hover:text-white hover:bg-bg-light"
-      >
+      <div key={item.title} onClick={item.onClick} className="flex items-center p-5 gap-x-[25px] cursor-pointer text-h6 text-gray-light border-b border-gray hover:text-white hover:bg-bg-light">
         {item.icon}
         {item.title}
       </div>
@@ -80,7 +75,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   return (
     <Modal className="cart" title="Wallet" onClose={onClose} show={show}>
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
-        <img src={user?.image ?? AssetProfileAvatar1} className="w-20 h-20 rounded-full" />
+        <Avatar image={user?.image} userId={user?.id} className="w-20 h-20" />
         <div className="flex flex-col gap-y-[11px] justify-end">
           <h4 className="text-head4 text-green">{user?.userName}</h4>
           <div className="flex gap-x-2.5">

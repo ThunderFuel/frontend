@@ -5,6 +5,7 @@ export interface ISocialMedia {
   type: number;
   url: string;
 }
+
 export interface ICreateUser {
   id: number;
   userName: string;
@@ -17,6 +18,7 @@ export interface ICreateUser {
   banner: string;
   image: string;
   socialMedias: ISocialMedia[];
+  bio: string;
 }
 
 export interface IUserResponse {

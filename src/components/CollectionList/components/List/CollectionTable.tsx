@@ -45,12 +45,7 @@ const CollectionTable = () => {
       render: (collection) =>
         collection.salable && (
           <div className="p-6">
-            <Checkbox
-              defaultChecked={collection.isSelected}
-              onClick={(e: any) => {
-                e.preventDefault();
-              }}
-            />
+            <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
           </div>
         ),
       width: "64px",

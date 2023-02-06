@@ -23,7 +23,7 @@ const BulkListing = () => {
                 <Button className="btn-secondary btn-sm uppercase w-[240px]">set top traıt price</Button>
               </div>
               <div className="w-32">
-                <InputEthereum />
+                <InputEthereum onChange={console.log} />
               </div>
             </div>
           </div>
