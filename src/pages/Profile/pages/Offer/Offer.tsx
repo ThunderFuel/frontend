@@ -1,6 +1,4 @@
 import React from "react";
-import Button from "components/Button";
-import { IconCircleRemoveWhite } from "icons";
 import offerService from "api/offer/offer.service";
 import SidebarFilter from "./components/SidebarFilter";
 import OfferList from "./components/OfferList";
@@ -51,25 +49,8 @@ const Offer = () => {
 
   return (
     <div className="flex w-full h-full">
-      <div className="p-5 border-r border-gray">
-        <SidebarFilter
-          filterItems={getFilterItems}
-          value={filterValue}
-          onChange={(value: any) => {
-            console.log(value);
-            setFilterValue(value);
-          }}
-        />
-      </div>
-      <div className="flex flex-col p-5 pr-7 gap-5 flex-1">
-        <div className="flex items-center justify-between">
-          <div className="text-headline-02 text-gray-light uppercase">{getOffers.length} offers made</div>
-          <Button className="btn-secondary btn-sm">
-            cancel all offers <IconCircleRemoveWhite />
-          </Button>
-        </div>
-        <OfferList offers={getOffers} />
-      </div>
+      <SidebarFilter filterItems={getFilterItems} value={filterValue} onChange={(value: any) => setFilterValue(value)} />
+      <OfferList offers={getOffers} />
     </div>
   );
 };
