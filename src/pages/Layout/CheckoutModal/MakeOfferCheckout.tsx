@@ -32,7 +32,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
-  // const { address } = useAppSelector((state) => state.wallet);
+  const { user } = useAppSelector((state) => state.wallet);
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,7 +40,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.makeOffer({ makerUserId: 16, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+    nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
   };
 
   React.useEffect(() => {

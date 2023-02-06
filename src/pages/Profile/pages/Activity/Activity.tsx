@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import collectionService from "api/collections/collections.service";
 import ActivityList from "./components/ActivityList";
+import { useAppSelector } from "store";
 
 const Activity = () => {
   const [activities, setActivities] = useState([]);
   const [pagination, setPagination] = useState({});
   const filters = collectionService.getActivityFilters();
+  const { user } = useAppSelector((state) => state.wallet);
+
   const fetchActivity = async () => {
     const response = await collectionService.getActivity({
-      userId: 16,
+      userId: user.id,
     });
     const data = response.data.map((item: any) => ({
       name: item.token.name,

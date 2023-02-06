@@ -93,11 +93,13 @@ const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOff
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT, isOwner } = useAppSelector((state) => state.nftdetails);
+  const { user } = useAppSelector((state) => state.wallet);
+
   const { nftId } = useParams();
   const [offers, setOffers] = useState([]);
 
   const fetchOffers = async () => {
-    const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, userId: 16, page: 1, pageSize: 10 });
+    const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, userId: user.id, page: 1, pageSize: 10 });
     console.log(response.data);
     setOffers(response.data);
   };
