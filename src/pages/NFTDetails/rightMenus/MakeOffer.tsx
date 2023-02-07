@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconEthereum, IconInfo, IconOffer, IconWarning } from "icons";
+import { IconArrowRight, IconEthereum, IconInfo, IconOffer, IconRefresh, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import RightMenu from "../components/RightMenu";
@@ -51,8 +51,12 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const [offer, setoffer] = useState<any>("");
   const [expirationTime, setexpirationTime] = useState(selectExpirationDates[0]);
 
-  useEffect(() => {
+  function fetchBalance() {
     getBalance().then((res) => setbalance(res ? res : 0));
+  }
+
+  useEffect(() => {
+    fetchBalance();
   }, []);
 
   const isValidNumber = (price: any) => {
@@ -67,7 +71,10 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
       <div className="flex flex-col gap-y-2 px-5 py-2 border-b border-gray">
         <div className="flex justify-between">
-          <span className="text-gray-light">Wallet Balance</span>
+          <div className="flex items-center gap-x-1">
+            <span className="text-gray-light">Wallet Balance</span>
+            <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => fetchBalance()} />
+          </div>
           <div className="flex items-center ">
             {formatDisplayedNumber(balance)}
             <IconEthereum width="20px" color="gray" />

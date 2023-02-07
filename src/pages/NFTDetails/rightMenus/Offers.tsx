@@ -34,12 +34,12 @@ export function formatDateTime(dateString: string) {
   });
 }
 
-const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOffer?: boolean }) => {
+const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ownOffer?: boolean }) => {
   const dispatch = useAppDispatch();
 
   return (
     <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
-      <div className={`flex w-full p-[15px]  gap-x-[15px]  ${expired ? "opacity-50" : ""}`}>
+      <div className={`flex w-full p-[15px]  gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
         <img src={item.user?.image} className="self-start w-8 h-8 rounded-full" alt="profile-image" />
         <div className="flex flex-col gap-y-[10px]">
           <span>
@@ -54,7 +54,7 @@ const Box = ({ item, expired, ownOffer }: { item: any; expired?: boolean; ownOff
           <EthereumPrice price={item.price} priceClassName="text-head6 font-spaceGrotesk text-white" />
         </div>
       </div>
-      {ownOffer && (
+      {ownOffer && !isExpired && (
         <div className="flex border-t border-gray">
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
@@ -92,11 +92,10 @@ const Offers = ({ onBack }: { onBack: any }) => {
   };
 
   const { nftId } = useParams();
-  const [offers, setOffers] = useState([]);
+  const [offers, setOffers] = useState<any>([]);
 
   const fetchOffers = async () => {
-    const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, userId: user.id, page: 1, pageSize: 10 });
-    console.log(response.data);
+    const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, page: 1, pageSize: 10 });
     setOffers(response.data);
   };
 
@@ -116,11 +115,12 @@ const Offers = ({ onBack }: { onBack: any }) => {
           MAKE OFFER <IconOffer />
         </Button>
       )}
-      {offers.map((offer, index) => (
-        <Box item={offer} key={index} ownOffer={true}></Box>
-      ))}
-      {/* <Box ownOffer={true}></Box>
-      <Box expired={true}></Box> */}
+      {offers.map((offer: any, index: any) => {
+        const expTime = new Date(offer.expireTime).getTime();
+        const currentTime = new Date().getTime();
+
+        return <Box item={offer} isExpired={currentTime > expTime} key={index} ownOffer={user.id === offer?.makerUserId && offer.status === 1}></Box>;
+      })}
     </RightMenu>
   );
 };

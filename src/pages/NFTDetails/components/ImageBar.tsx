@@ -17,8 +17,6 @@ const ImageBar = () => {
 
   const fetchIsLiked = async () => {
     const response = await userService.isLiked({ tokenId: selectedNFT.id, userId: user.id });
-    console.log(user.id);
-    console.log(user.id);
 
     console.log(response.data);
   };
