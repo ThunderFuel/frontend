@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export const getAbsolutePath = (path: string, params: any) => {
+export const getAbsolutePath = (path: string, params: any = {}) => {
   let tmpPath = path;
   for (const [param, value] of Object.entries(params)) {
     tmpPath = tmpPath.replace(`:${param}`, String(value));
@@ -11,7 +11,7 @@ export const getAbsolutePath = (path: string, params: any) => {
 const UseNavigate = () => {
   const navigate = useNavigate();
 
-  return (path: string, params: any) => {
+  return (path: string, params: any = {}) => {
     navigate(getAbsolutePath(path, params));
   };
 };

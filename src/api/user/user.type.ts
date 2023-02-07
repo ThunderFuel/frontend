@@ -38,3 +38,9 @@ export interface IUserResponse {
   id: number;
   likedTokens: number[];
 }
+
+export interface IFollowRequest {
+  followerId: number;
+  followId: number;
+  follow: boolean;
+}

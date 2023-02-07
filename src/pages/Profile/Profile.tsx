@@ -1,11 +1,16 @@
 import React from "react";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/Sidebar/Sidebar";
 import { IUserResponse } from "api/user/user.type";
 import userService from "api/user/user.service";
 import ModalSocial from "./Modal/ModalSocial";
 import { Outlet } from "react-router-dom";
 import Tab from "./components/Tab";
 import { useAppSelector } from "store";
+
+const enum FollowType {
+  Followers = 0,
+  Follows = 1,
+}
 
 const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
@@ -16,10 +21,10 @@ const Profile = () => {
   const fetchUserProfile = async () => {
     const [response, responseFilter] = await Promise.all([
       userService.getUser({
-        id: user.id,
+        id: user.id ?? 16,
         includes: [0, 1, 2, 3, 4],
       }),
-      userService.getFilters({ userId: user.id }),
+      userService.getFilters({ userId: user.id ?? 16 }),
     ]);
     setUserInfo(response.data);
     setFilter(responseFilter.data.filters ?? []);
@@ -31,7 +36,7 @@ const Profile = () => {
 
   return (
     <div className="flex">
-      <Sidebar userInfo={userInfo} openFollows={() => setSocialActiveTab(1)} openFollowers={() => setSocialActiveTab(0)} />
+      <Sidebar userInfo={userInfo} openFollows={() => setSocialActiveTab(FollowType.Follows)} openFollowers={() => setSocialActiveTab(FollowType.Followers)} isProfile={true} />
       <div className="flex flex-col flex-1">
         <Tab />
         <Outlet context={[userInfo, filter]} />

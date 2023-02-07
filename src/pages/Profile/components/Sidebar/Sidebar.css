@@ -13,3 +13,9 @@
   content: "";
   background: linear-gradient(180deg, rgba(25, 25, 25, 0.1) 0%, rgba(25, 25, 25, 0.5) 20%, rgba(25, 25, 25, 0.7) 30%, rgba(25, 25, 25, 0.8) 35%, rgba(25, 25, 25, 1) 65%);
 }
+
+.btn-edit {
+  background: transparent;
+  z-index: 1;
+  @apply border-white px-4 py-3 absolute top-5 right-5 text-white;
+}
