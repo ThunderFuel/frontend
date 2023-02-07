@@ -91,8 +91,10 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <div
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
               onClick={() => {
-                if (!isBurner) walletDisconnect();
-                else {
+                if (!isBurner) {
+                  walletDisconnect();
+                  dispatch(setIsConnected(false));
+                } else {
                   dispatch(setIsConnected(false));
                   dispatch(setIsBurner(false));
                 }

@@ -6,7 +6,7 @@ import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { Wallet } from "fuels";
 import { useDispatch } from "react-redux";
-import { setAddress, setIsBurner, setIsConnected, setUser } from "store/walletSlice";
+import { setAddress, setIsBurner, setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
 import userService from "api/user/user.service";
 
 const ConnectWallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
@@ -35,7 +35,7 @@ const ConnectWallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
               <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
             </div>
             {error === "" ? (
-              <Button className="btn-sm" onClick={() => walletConnect()}>
+              <Button className="btn-sm" onClick={() => walletConnect().then((res) => res ?? dispatch(toggleWalletModal()))}>
                 CONNECT <IconArrowRight />
               </Button>
             ) : (
