@@ -42,19 +42,17 @@ const User = () => {
     setFilter(responseFilter.data.filters ?? []);
   };
 
-  const onChangeUserInfo = (value: any) => {
-    setUserInfo(value);
+  const onChangeFollowers = async () => {
+    await fetchUserProfile();
   };
 
   React.useEffect(() => {
     fetchUserProfile();
   }, [userId]);
 
-  const getUserInfo = React.useMemo(() => userInfo, [userInfo]);
-
   return (
     <div className="flex">
-      <Sidebar userInfo={getUserInfo} openFollows={() => setSocialActiveTab(FollowType.Follows)} openFollowers={() => setSocialActiveTab(FollowType.Followers)} onChangeUserInfo={onChangeUserInfo} />
+      <Sidebar userInfo={userInfo} openFollows={() => setSocialActiveTab(FollowType.Follows)} openFollowers={() => setSocialActiveTab(FollowType.Followers)} onChangeFollowers={onChangeFollowers} />
       <div className="flex flex-col flex-1">
         <Tab userId={userId} />
         <Outlet context={[userInfo, filter]} />

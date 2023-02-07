@@ -6,7 +6,6 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
 import userService from "api/user/user.service";
-import { IFollowRequest } from "../../../../../api/user/user.type";
 
 const Button = ({ children, className, ...etc }: any) => {
   return (
@@ -16,39 +15,17 @@ const Button = ({ children, className, ...etc }: any) => {
   );
 };
 
-const ButtonFollow = ({ userInfo, onChangeUserInfo }: any) => {
-  console.log("ButtonFollow", JSON.stringify(userInfo));
-
+const ButtonFollow = ({ userInfo, onChangeFollowers }: any) => {
   const { user } = useAppSelector((state) => state.wallet) as any;
-  const isFollower = userInfo.followers?.find((follower: any) => follower.userId === user?.id);
+  const isFollower = !!userInfo.followers?.find((follower: any) => follower.userId === user?.id);
   const onFollow = async () => {
     try {
-      const data = {
+      await userService.followUser({
         followId: userInfo.id,
         followerId: user.id,
-        follow: true,
-      } as IFollowRequest;
-      if (isFollower) {
-        data.follow = false;
-      }
-
-      await userService.followUser(data);
-
-      if (data.follow) {
-        userInfo.followers.push({
-          firstName: user.firstName,
-          followerCount: user?.followers?.length,
-          lastName: user.lastName,
-          userId: user.id,
-          userName: user.userName,
-        });
-      } else {
-        const findIndex = userInfo.followers.findIndex((follower: any) => follower.userId === user.id);
-        if (findIndex > -1) {
-          userInfo.followers.splice(findIndex, 1);
-        }
-      }
-      onChangeUserInfo(userInfo);
+        follow: !isFollower,
+      });
+      onChangeFollowers();
     } catch (e) {
       console.log(e);
     }

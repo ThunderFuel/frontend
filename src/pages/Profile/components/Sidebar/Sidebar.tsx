@@ -8,13 +8,11 @@ import BoxWithIcon from "./components/BoxWithIcon";
 import CoverImage from "./components/CoverImage";
 import { ButtonEdit, ButtonFollow } from "./components/Buttons";
 
-const Sidebar = ({ userInfo, openFollowers, openFollows, onChangeUserInfo, isProfile = false }: any) => {
-  console.log("sidebar", JSON.stringify(userInfo));
-
+const Sidebar = ({ userInfo, openFollowers, openFollows, onChangeFollowers, isProfile = false }: any) => {
   return (
     <div className="flex flex-col border-r border-gray w-[500px]">
       <div className="sidebar-container">
-        {isProfile ? <ButtonEdit /> : <ButtonFollow userInfo={userInfo} onChangeUserInfo={onChangeUserInfo} />}
+        {isProfile ? <ButtonEdit /> : <ButtonFollow userInfo={userInfo} onChangeFollowers={onChangeFollowers} />}
         <CoverImage />
         <div className="p-10 relative pt-[150px] text-white w-full h-full flex">
           <div className="flex flex-col w-full">
