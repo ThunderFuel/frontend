@@ -41,7 +41,7 @@ const BoxWithIcon = React.memo(({ children, className, icon }: { children: React
   return (
     <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>
       <div className="h-fit rounded-full bg-gray p-[6px]">
-        <Icon className="w-5 h-5" />
+        <Icon className="w-5 h-5 text-white" />
       </div>
       <div className="flex flex-col w-full gap-y-[5px]">{children}</div>
     </div>
@@ -156,11 +156,13 @@ const LeftMenu = (props: any) => {
     const { icon, text } = formatActivityData(activityType);
 
     return (
-      <BoxWithIcon icon={icon} className="flex hover:bg-bg-light ">
+      <BoxWithIcon icon={icon} className="flex bg-bg-light hover:bg-bg-light ">
         <div className="flex w-full justify-between pr-4">
           <div className="flex flex-col gap-y-[5px] ">
             <div className="text-headline-01 text-gray-light">LAST ACTIVITY</div>
-            {price} ETH {text} {fromUser?.userName}
+            <span className="text-head6 text-white font-spaceGrotesk">
+              {price} ETH {text} {fromUser?.userName}
+            </span>
           </div>
           <HoverButton
             Icon={IconArrowRight}
@@ -232,6 +234,7 @@ const LeftMenu = (props: any) => {
               </div>
             </Box>
           )}
+          {renderLastActivity(nft.lastActivity)}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
           <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />
@@ -271,7 +274,6 @@ const LeftMenu = (props: any) => {
                 </div>
               </Box>
             </div>
-            {renderLastActivity(nft.lastActivity)}
           </div>
         </div>
         <div className="container-fluid flex flex-col pt-5 pb-9 pr-10 text-h6 text-white">
