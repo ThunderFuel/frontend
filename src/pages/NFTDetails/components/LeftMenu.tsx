@@ -205,7 +205,7 @@ const LeftMenu = (props: any) => {
 
           <div className="body-medium text-white">{nft?.collection?.description}</div>
 
-          {JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : <MakeOffer />}
+          {nft.salable ? <FixedPrice /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : nft.onAuction ? <Auction /> : <MakeOffer />}
           {/* {nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />} */}
 
           {JSON.stringify(nft.bestOffer) !== "null" && (
