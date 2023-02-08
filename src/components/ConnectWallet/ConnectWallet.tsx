@@ -70,7 +70,7 @@ const ConnectWallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         </div>
         <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md">
           <IconLightning className="text-white w-5 h-5" />
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-y-[5px]">
             <h6 className="text-head6 font-spaceGrotesk text-white">New to Fuel?</h6>
             <p className="text-bodyMd font-spaceGrotesk text-gray-light">Fuel is the fastest execution layer for the modular blockchain stack.</p>
             <a className="text-bodyMd font-spaceGrotesk text-white underline" href="https://www.fuel.network/" target="_blank" rel="noreferrer">
