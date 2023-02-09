@@ -2,21 +2,32 @@ import React from "react";
 import TabBase from "components/Tab";
 
 import { PATHS } from "router/config/paths";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+const routes = [
+  { path: PATHS.PROFILE_OWNED, name: "Owned" },
+  // { path: null, name: "Created" },
+  { path: PATHS.PROFILE_LIKED, name: "Liked" },
+  { path: PATHS.PROFILE_OFFER, name: "Offers" },
+  { path: PATHS.PROFILE_ACTIVITY, name: "Activities" },
+];
+
+const getInitTab = () => {
+  return routes.slice(1).find((route: any) => location.pathname.search(route.path) > -1)?.path;
+};
 
 const Tab = () => {
+  const [initTab, setInitTab] = React.useState(getInitTab());
+  const location = useLocation();
   const navigate = useNavigate();
-  const routes = [
-    { path: PATHS.PROFILE_OWNED, name: "Owned" },
-    // { path: null, name: "Created" },
-    { path: PATHS.PROFILE_LIKED, name: "Liked" },
-    { path: PATHS.PROFILE_OFFER, name: "Offers" },
-    { path: PATHS.PROFILE_ACTIVITY, name: "Activities" },
-  ];
-  let initTab = routes.slice(1).find((route: any) => location.pathname.search(route.path) > -1)?.path;
-  if (!initTab) {
-    initTab = PATHS.PROFILE_OWNED;
-  }
+
+  React.useEffect(() => {
+    let tmpInitTab = getInitTab();
+    if (!tmpInitTab) {
+      tmpInitTab = PATHS.PROFILE_OWNED;
+    }
+    setInitTab(tmpInitTab);
+  }, [location]);
 
   return (
     <div className="border-b border-gray">

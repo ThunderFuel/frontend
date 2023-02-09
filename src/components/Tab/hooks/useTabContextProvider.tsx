@@ -1,7 +1,7 @@
 import { tabReducer } from "../reducer/tabReducer";
 import { TabState } from "components/Tab/context/TabContext";
 import { TabProps } from "components/Tab/Tab";
-import { useCallback, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 
 export interface TabContextState {
   changeActiveTab: (id: any) => void;
@@ -31,6 +31,10 @@ export const useTabContextProvider = (reducer: typeof tabReducer, initial: TabSt
     },
     [props]
   );
+
+  useEffect(() => {
+    changeActiveTab(props.initTab);
+  }, [props.initTab]);
 
   return {
     changeActiveTab,
