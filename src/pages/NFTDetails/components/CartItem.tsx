@@ -13,7 +13,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
       <div className="flex flex-col w-full">
         <div className="pb-[11px] border-b border-gray">{selectedNFT?.name}</div>
         <div className="flex flex-col pt-2 gap-y-2">
-          {rightMenuType === RightMenuType.PlaceBid && (
+          {rightMenuType === RightMenuType.PlaceBid && selectedNFT.startingPrice && (
             <div className="flex justify-between">
               <span className="text-gray-light">Starting Price</span>
               <div className="flex items-center">
@@ -22,32 +22,36 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
               </div>
             </div>
           )}
-          <div className="flex justify-between">
-            <span className="text-gray-light">Floor Price</span>
-            <div className="flex items-center">
-              {selectedNFT?.collection?.floor}
-              <IconEthereum color="gray" width="20px" />
+          {selectedNFT.collection && (
+            <div className="flex justify-between">
+              <span className="text-gray-light">Floor Price</span>
+              <div className="flex items-center">
+                {selectedNFT?.collection?.floor}
+                <IconEthereum color="gray" width="20px" />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex justify-between">
-            {selectedNFT?.onAuction ? (
-              <>
-                <span className="text-gray-light">Highest Bid</span>
-                <div className="flex items-center text-orange">
-                  {selectedNFT?.highestBid?.price}
-                  <IconEthereum width="20px" />
-                </div>
-              </>
-            ) : (
-              <>
-                <span className="text-gray-light">Best Offer</span>
-                <div className="flex items-center text-orange">
-                  {selectedNFT?.bestOffer?.price}
-                  <IconEthereum width="20px" />
-                </div>
-              </>
-            )}
+            {selectedNFT?.onAuction
+              ? selectedNFT.highestBid && (
+                  <>
+                    <span className="text-gray-light">Highest Bid</span>
+                    <div className="flex items-center text-orange">
+                      {selectedNFT?.highestBid?.price}
+                      <IconEthereum width="20px" />
+                    </div>
+                  </>
+                )
+              : selectedNFT.bestOffer && (
+                  <>
+                    <span className="text-gray-light">Best Offer</span>
+                    <div className="flex items-center text-orange">
+                      {selectedNFT?.bestOffer?.price}
+                      <IconEthereum width="20px" />
+                    </div>
+                  </>
+                )}
           </div>
           {currentItem?.price !== 0 && (
             <div className="flex justify-between">

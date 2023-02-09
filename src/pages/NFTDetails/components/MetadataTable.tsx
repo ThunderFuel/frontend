@@ -26,8 +26,12 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                 </div>
               </div>
             </div>
-            <div className="overflow-hidden border-b border-gray flex justify-center transition-all duration-300 ease-in-out opacity-0 h-0 group-hover:opacity-100 group-hover:h-10">
-              <Button className="btn-secondary text-headline-02 border-none rounded-none py-3">
+            <div
+              className={`overflow-hidden ${
+                i === metadata.length - 1 ? "rounded-b-[4px]" : ""
+              } border-t border-gray flex justify-center transition-all duration-300 ease-in-out opacity-0 h-0 group-hover:opacity-100 group-hover:h-10 group-hover:bg-bg-light`}
+            >
+              <Button className="btn-secondary no-bg text-headline-02 border-none rounded-none py-3">
                 LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />
               </Button>
             </div>

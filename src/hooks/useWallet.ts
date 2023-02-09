@@ -48,11 +48,13 @@ export const useWallet = () => {
 
   const getBalance = async () => {
     try {
-      const provider = await getProvider();
-      const address = getWalletAddress;
-      const balance = await provider.getBalance(address === "" ? user.contractAddress : address, ZeroBytes32);
+      if (isWalletConnected) {
+        const provider = await getProvider();
+        const address = getWalletAddress;
+        const balance = await provider.getBalance(address === "" ? user.contractAddress : address, ZeroBytes32);
 
-      return balance.toNumber();
+        return balance.toNumber();
+      }
     } catch (e: any) {
       useErrorModal(e);
     }
