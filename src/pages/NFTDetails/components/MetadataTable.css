@@ -1,7 +1,7 @@
 .table-head {
-  @apply grid border-b border-gray px-5 py-4 text-gray-light;
+  @apply grid  border-gray px-5 py-4 text-gray-light;
 }
 
 .table-body {
-  @apply grid border-b border-gray px-5 py-4 text-gray-light;
+  @apply grid border-t border-gray px-5 py-4 text-gray-light group-hover:bg-bg-light;
 }
