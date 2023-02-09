@@ -15,16 +15,17 @@ const Search = () => {
   };
 
   return (
-    <AutoComplete ref={ref} onChange={onChange} onFocus={onFocus} show={show} className={"hidden lg:block w-[440px]"}>
-      {Object.keys(results).map((resultKey) => {
-        return (
-          <AutoComplete.Group key={resultKey} title={resultKey}>
-            {results[resultKey].map((item: any, i: number) => (
-              <AutoComplete.Item key={i} item={item} onClick={onClickItem} />
-            ))}
-          </AutoComplete.Group>
-        );
-      })}
+    <AutoComplete placeholder="Search items, collections and creators." ref={ref} onChange={onChange} onFocus={onFocus} show={show} className={"hidden lg:block w-[440px]"}>
+      {Object.keys(results).length > 0 &&
+        Object.keys(results).map((resultKey) => {
+          return (
+            <AutoComplete.Group key={resultKey} title={resultKey}>
+              {results[resultKey].map((item: any, i: number) => (
+                <AutoComplete.Item key={i} item={item} onClick={onClickItem} />
+              ))}
+            </AutoComplete.Group>
+          );
+        })}
     </AutoComplete>
   );
 };

@@ -1,5 +1,5 @@
 import { ThunderURL } from "../index";
-import { ICreateUser, IFollowRequest, IUserResponse } from "./user.type";
+import { ICreateUser, IFollowParams, IUserResponse } from "./user.type";
 import { ApiResponse } from "../HttpClient";
 
 export default {
@@ -26,8 +26,8 @@ export default {
   userCreate(address: string) {
     return ThunderURL.post("v1/user/create", {}, { params: { address } });
   },
-  followUser(body: IFollowRequest) {
-    return ThunderURL.post("v1/user/follow", body);
+  followUser(params: IFollowParams) {
+    return ThunderURL.post("v1/user/follow", {}, { params });
   },
   isLiked(data: any): Promise<ApiResponse<any>> {
     return ThunderURL.get("v1/user/isLiked", { params: data });

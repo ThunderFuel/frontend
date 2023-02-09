@@ -14,12 +14,12 @@ export const useSearch = () => {
   const [results, setResults] = useState<any>({});
 
   const getRecentItems = () => {
-    let recentItems = getItem(LocalStorageRecentSearchKey);
-    if (!recentItems) {
-      recentItems = [];
+    let recent = getItem(LocalStorageRecentSearchKey);
+    if (!recent) {
+      recent = [];
     }
     setResults({
-      recentItems,
+      recent,
     });
   };
 

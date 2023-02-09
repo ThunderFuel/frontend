@@ -39,7 +39,7 @@ export interface IUserResponse {
   likedTokens: number[];
 }
 
-export interface IFollowRequest {
+export interface IFollowParams {
   followerId: number;
   followId: number;
   follow: boolean;
