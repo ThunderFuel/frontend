@@ -15,42 +15,38 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(user);
 
   const onChange = (field: string, value: any) => {
-    setUserInfo((prevState: any) => {
-      console.log({ ...prevState, ...{ [field]: value } });
+    setUserInfo((prevState: any) => ({ ...prevState, ...{ [field]: value } }));
+  };
 
-      return { ...prevState, ...{ [field]: value } };
-    });
+  const onSubmit = async () => {
+    try {
+      const data = {
+        id: user.id,
+        bio: userInfo.bio,
+        userName: userInfo.userName,
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        email: userInfo.email,
+        phone: userInfo.phone,
+        gender: userInfo.gender,
+        contractAddress: user.contractAddress,
+        banner: userInfo.banner ?? null,
+        image: userInfo.image ?? null,
+        socialMedias: userInfo.socialMedias ?? [],
+      };
+      await userService.userUpdate(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   React.useEffect(() => {
-    const onSubmit = async () => {
-      try {
-        const data = {
-          id: user.id,
-          bio: userInfo.bio,
-          userName: userInfo.userName,
-          firstName: userInfo.firstName,
-          lastName: userInfo.lastName,
-          email: userInfo.email,
-          phone: userInfo.phone,
-          gender: userInfo.gender,
-          contractAddress: user.contractAddress,
-          banner: userInfo.banner ?? null,
-          image: userInfo.image ?? null,
-          socialMedias: userInfo.socialMedias ?? [],
-        };
-        await userService.createUser(data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     window.addEventListener(EventSettingsSubmit, onSubmit);
 
     return () => {
       window.removeEventListener(EventSettingsSubmit, onSubmit);
     };
-  }, []);
+  }, [userInfo]);
 
   return (
     <div className="flex flex-col gap-10 p-10 w-[500px]">

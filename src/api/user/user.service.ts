@@ -20,7 +20,7 @@ export default {
   getFilters(data: any): Promise<ApiResponse<{ filters: [] }>> {
     return ThunderURL.post("v1/user/getfilters", data);
   },
-  createUser(body: ICreateUser) {
+  userUpdate(body: ICreateUser) {
     return ThunderURL.post("v1/user", body);
   },
   userCreate(address: string) {
