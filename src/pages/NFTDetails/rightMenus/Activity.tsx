@@ -9,8 +9,8 @@ import collectionsService from "api/collections/collections.service";
 const CustomBox = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
     <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
-      <div className="flex items-center p-[15px] gap-x-[11px]">
-        <div className="flex gap-x-[10px]">
+      <div className="flex items-center justify-between p-[15px] gap-x-[11px]">
+        <div className="flex w-full gap-x-[10px]">
           <div className="flex w-full max-w-[120px] items-center gap-x-[10px]">
             <div className="h-fit w-fit rounded-full bg-gray p-[6px]">
               <Icon width="20px" height="20px" />
@@ -19,7 +19,7 @@ const CustomBox = ({ title, description, Icon, price }: { title: string; descrip
           </div>
           <div className="text-bodyMd w-full">{description}</div>
         </div>
-        {price && <EthereumPrice price={price} className="grow justify-end" />}
+        {price && <EthereumPrice price={price} />}
       </div>
     </div>
   );
@@ -34,9 +34,9 @@ function formatTimePassed(createdDate: string): string {
   const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 
-  if (days) return `${days} day(s) ago`;
-  if (hours) return `${hours} hour(s) ago`;
-  if (minutes) return `${minutes} min(s) ago`;
+  if (days) return `${days} ${days > 1 ? "days" : "day"} ago`;
+  if (hours) return `${hours} ${hours > 1 ? "hours" : "hour"} ago`;
+  if (minutes) return `${minutes} ${minutes > 1 ? "mins" : "min"} ago`;
 
   return "just now";
 }
