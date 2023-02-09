@@ -175,6 +175,10 @@
     @apply px-5 py-[11.5px];
   }
 
+  .tab li.sm span {
+    @apply py-2;
+  }
+
   .tab li span:hover {
     @apply bg-bg-light;
   }

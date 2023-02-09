@@ -39,6 +39,7 @@ const User = () => {
       userService.getFilters({ userId: userId }),
     ]);
     setUserInfo(response.data);
+    console.log(response.data);
     setFilter(responseFilter.data.filters ?? []);
   };
 

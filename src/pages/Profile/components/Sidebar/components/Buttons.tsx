@@ -17,24 +17,37 @@ const Button = ({ children, className, ...etc }: any) => {
 
 const ButtonFollow = ({ userInfo, onChangeFollowers }: any) => {
   const { user } = useAppSelector((state) => state.wallet) as any;
-  const isFollower = !!userInfo.followers?.find((follower: any) => follower.userId === user?.id);
+  const isFollow = !!userInfo.follows?.find((follower: any) => follower.userId === user?.id);
+  const [hoverText, setHoverText] = React.useState("FOLLOWING");
+
+  if (!user?.id) {
+    return <></>;
+  }
+
   const onFollow = async () => {
     try {
-      await userService.followUser({
+      const response = await userService.followUser({
         followId: userInfo.id,
         followerId: user.id,
-        follow: !isFollower,
+        follow: !isFollow,
       });
-      onChangeFollowers();
+      if (response.data) {
+        onChangeFollowers();
+      }
     } catch (e) {
       console.log(e);
     }
   };
 
-  if (isFollower) {
+  if (isFollow) {
     return (
-      <Button className="text-white border-white" onClick={onFollow}>
-        FOLLOWING
+      <Button
+        className="text-white border-white hover:border-red hover:text-red hover:bg-red/20"
+        onClick={onFollow}
+        onMouseEnter={() => setHoverText("UNFOLLOW")}
+        onMouseLeave={() => setHoverText("FOLLOWING")}
+      >
+        {hoverText}
       </Button>
     );
   }

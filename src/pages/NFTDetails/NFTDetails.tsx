@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setIsLiked, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
+import Img from "components/Img";
 
 const NFTDetails = () => {
   const { nftId } = useParams();
@@ -68,6 +69,13 @@ const NFTDetails = () => {
     }
   }, [rightMenuType]);
 
+  React.useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="relative flex justify-between">
       <div className="w-2/5">
@@ -77,7 +85,7 @@ const NFTDetails = () => {
         <div className="sticky z-20 top-[112px]">
           <div className="flex gap-x-5 px-[100px] py-10">
             <div className="relative w-full bg-gray pb-[100%] rounded-md">
-              <img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 max-h-full max-w-full" />
+              <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 max-h-full max-w-full" />
             </div>
             <ImageBar />
           </div>
