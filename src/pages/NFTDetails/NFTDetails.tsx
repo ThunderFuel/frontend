@@ -69,6 +69,13 @@ const NFTDetails = () => {
     }
   }, [rightMenuType]);
 
+  React.useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="relative flex justify-between">
       <div className="w-2/5">
