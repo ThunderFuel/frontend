@@ -16,9 +16,31 @@ const Tab = ({ initTab, onChange }: any) => {
 
   return (
     <TabBase initTab={initTab} onChange={onChange}>
-      <TabBase.Item id={0}>FOLLOWERS</TabBase.Item>
-      <TabBase.Item id={1}>FOLLOWING</TabBase.Item>
+      <TabBase.Item className="sm" id={0}>
+        FOLLOWERS
+      </TabBase.Item>
+      <TabBase.Item className="sm" id={1}>
+        FOLLOWING
+      </TabBase.Item>
     </TabBase>
+  );
+};
+const FollowItem = ({ item }: any) => {
+  // const { user } = useAppSelector((state) => state.wallet);
+
+  return (
+    <div className="flex w-full items-center justify-between border border-gray rounded-md py-3 px-2">
+      <div className="flex items-center gap-2">
+        <Avatar image={item.image} userId={item.id} className="w-8 h-8" />
+        <div>
+          <h6 className="text-h6 text-white">{item.userName}</h6>
+          <div className="text-headline-01 text-gray-light mt-2">{item.followerCount} FOLLOWERS</div>
+        </div>
+      </div>
+      <Button className="btn-secondary btn-sm !bg-white !text-black">
+        FOLLOW <IconPlus />
+      </Button>
+    </div>
   );
 };
 
@@ -35,20 +57,7 @@ const ModalSocial = ({ show, onClose, followers, follows, initialTab = 0 }: any)
         <Tab initTab={activeTab} onChange={setActiveTab} />
         <div className="flex flex-col w-full gap-2">
           {activeItems?.[activeTab]?.map((item: any, k: number) => {
-            return (
-              <div key={k} className="flex w-full items-center justify-between border border-gray rounded-md py-3 px-2">
-                <div className="flex items-center gap-2">
-                  <Avatar image={item.image} userId={item.id} className="w-8 h-8" />
-                  <div>
-                    <h6 className="text-h6 text-white">{item.userName}</h6>
-                    <div className="text-headline-01 text-gray-light mt-2">{item.followerCount} FOLLOWERS</div>
-                  </div>
-                </div>
-                <Button className="btn-secondary btn-sm !bg-white !text-black">
-                  FOLLOW <IconPlus />
-                </Button>
-              </div>
-            );
+            return <FollowItem item={item} key={k} />;
           })}
         </div>
       </div>
