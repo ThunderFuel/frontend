@@ -1,18 +1,16 @@
 import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setUser } from "../store/walletSlice";
 import { ZeroBytes32 } from "fuels";
-import React from "react";
 import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import { useFuel } from "./useFuel";
 import userService from "api/user/user.service";
 
 export const useWallet = () => {
-  const [isWalletConnected, setIsWalletConnected] = React.useState(false);
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
   const [fuel] = useFuel();
 
   const hasEnoughFunds = async () => {
@@ -48,7 +46,7 @@ export const useWallet = () => {
 
   const getBalance = async () => {
     try {
-      if (isWalletConnected) {
+      if (isConnected) {
         const provider = await getProvider();
         const address = getWalletAddress;
         const balance = await provider.getBalance(address === "" ? user.contractAddress : address, ZeroBytes32);
@@ -61,19 +59,18 @@ export const useWallet = () => {
   };
 
   const walletConnect = async () => {
-    if (!isWalletConnected) {
+    if (!isConnected) {
       try {
-        await fuel.connect().then((isConnected: any) => {
-          getAccounts().then((res) => {
-            dispatch(setAddress(res));
-            if (res !== null)
-              fuel.getWallet(res).then((res) => {
-                if (res !== null) userService.userCreate(res.address?.toB256()).then((res) => dispatch(setUser(res.data)));
+        await fuel.connect().then((connected: any) => {
+          getAccounts().then((fuelAddress) => {
+            dispatch(setAddress(fuelAddress));
+            if (fuelAddress !== null)
+              fuel.getWallet(fuelAddress).then((wallet) => {
+                if (wallet !== null) userService.userCreate(wallet.address?.toB256()).then((user) => dispatch(setUser(user.data)));
               });
-            dispatch(setIsConnected(isConnected));
-            setIsWalletConnected(isConnected);
+            dispatch(setIsConnected(connected));
 
-            return isConnected;
+            return connected;
           });
         });
       } catch (e) {
@@ -81,21 +78,19 @@ export const useWallet = () => {
       }
     }
 
-    return isWalletConnected;
+    return isConnected;
   };
 
   const walletDisconnect = async () => {
     try {
       await fuel.disconnect();
-      // _isWalletConnected = false;
-      setIsWalletConnected(false);
+      dispatch(setIsConnected(false));
     } catch (e) {
       useErrorModal(e);
     }
   };
 
   return {
-    isWalletConnected,
     walletConnect,
     walletDisconnect,
     getBalance,
