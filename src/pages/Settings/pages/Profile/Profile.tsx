@@ -6,11 +6,14 @@ import Socials from "./components/Socials";
 import CoverImage from "./components/CoverImage";
 import ProfileImage from "./components/ProfileImage";
 import { EventSettingsSubmit } from "../../Settings";
-import { useAppSelector } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { getDefaultAvatarSrc } from "components/Avatar/Avatar";
 import userService from "api/user/user.service";
+import { setUser } from "../../../../store/walletSlice";
 
 const Profile = () => {
+  const dispatch = useAppDispatch();
+
   const { user } = useAppSelector((state) => state.wallet);
   const [userInfo, setUserInfo] = useState(user);
 
@@ -34,7 +37,8 @@ const Profile = () => {
         image: userInfo.image ?? null,
         socialMedias: userInfo.socialMedias ?? [],
       };
-      await userService.userUpdate(data);
+      const response = await userService.userUpdate(data);
+      dispatch(setUser(response.data));
     } catch (e) {
       console.log(e);
     }
