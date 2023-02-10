@@ -14,7 +14,7 @@ const Sidebar = ({ className }: { className?: string }) => {
               <h5 className="text-h5 text-white">Event Types</h5>
             </div>
             <div className="mt-5 flex flex-wrap gap-2.5">
-              {filters.map((filter: any, i: number) => {
+              {Object.values(filters).map((filter: any, i: number) => {
                 const Icon = filter.icon;
                 const isActive = filter.name === selectedFilter;
 

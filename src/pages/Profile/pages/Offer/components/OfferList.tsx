@@ -40,7 +40,12 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         <div className="flex flex-col gap-5 text-white flex-1">
           <div className="flex flex-col gap-2.5">
             <h6 className="text-h6">{item?.tokenName ?? "-"}</h6>
-            <ActivityItemDescription>Bid placed by 409x792 on 12 Oct 2022</ActivityItemDescription>
+            <ActivityItemDescription
+              activityType={item.activityType}
+              fromUserContractAddress={item.fromUser?.contractAddress ?? "-"}
+              toUserContractAddress={item.toUser?.contractAddress ?? "-"}
+              createdTimeStamp={item.createdTimeStamp}
+            />
           </div>
           <div className="inline-flex">
             {item.expireTime && (

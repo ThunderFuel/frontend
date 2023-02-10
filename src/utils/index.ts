@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import * as timeago from "timeago.js";
 
 export const addressFormat = (address: string) => {
   if (address === null || address === undefined) return "";
@@ -71,3 +72,7 @@ export function toGwei(num: any) {
 export function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+export const timeagoFormat = (time: number | string) => {
+  return timeago.format(time);
+};

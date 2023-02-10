@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import collectionService from "api/collections/collections.service";
+import collectionService, { ActivityFilters } from "api/collections/collections.service";
 import ActivityList from "./components/ActivityList";
 import { useOutletContext } from "react-router-dom";
 
@@ -14,12 +14,13 @@ const Activity = () => {
       userId: userInfo.id,
     });
     const data = response.data.map((item: any) => ({
+      ...item,
       name: item.token.name,
       description: "",
       image: item.token.image,
       price: item.price,
-      type: filters[item.activityType].name,
-      typeIcon: filters[item.activityType].icon,
+      type: filters[item.activityType as ActivityFilters].name,
+      typeIcon: filters[item.activityType as ActivityFilters].icon,
     })) as any;
     setActivities(data);
     setPagination({

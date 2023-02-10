@@ -6,6 +6,15 @@ import { IconBid, IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram 
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
 
+export enum ActivityFilters {
+  Offers = 0,
+  Mints = 1,
+  Sales = 2,
+  Transfers = 3,
+  Listings = 4,
+  Bids = 5,
+}
+
 export default {
   async getCollections() {
     return [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4].map((item) => ({
@@ -40,32 +49,14 @@ export default {
     return ThunderURL.post("v1/activity/activities", data);
   },
   getActivityFilters() {
-    return [
-      {
-        icon: IconHand,
-        name: "Offers",
-      },
-      {
-        icon: IconQuarry,
-        name: "Mints",
-      },
-      {
-        icon: IconMarketBasket,
-        name: "Sales",
-      },
-      {
-        icon: IconTelegram,
-        name: "Transfers",
-      },
-      {
-        icon: IconTag,
-        name: "Listings",
-      },
-      {
-        icon: IconBid,
-        name: "Bids",
-      },
-    ];
+    return {
+      [ActivityFilters.Offers]: { icon: IconHand, name: "Offers" },
+      [ActivityFilters.Mints]: { icon: IconQuarry, name: "Mints" },
+      [ActivityFilters.Sales]: { icon: IconMarketBasket, name: "Sales" },
+      [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transfers" },
+      [ActivityFilters.Listings]: { icon: IconTag, name: "Listings" },
+      [ActivityFilters.Bids]: { icon: IconBid, name: "Bids" },
+    };
   },
   addWatchList(data: WatchListRequest) {
     return ThunderURL.post("/v1/collection/watch", data);
