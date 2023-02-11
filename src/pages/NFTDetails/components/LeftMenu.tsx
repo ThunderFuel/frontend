@@ -128,7 +128,7 @@ const LeftMenu = (props: any) => {
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { walletConnect } = useWallet();
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   function formatActivityData(data: number) {
     switch (data) {
@@ -177,7 +177,7 @@ const LeftMenu = (props: any) => {
   }
 
   const isOwner = () => {
-    return user?.id === nft?.user?.id;
+    return isConnected ? user?.id === nft?.user?.id : false;
   };
 
   return (
