@@ -21,6 +21,7 @@ const NFTDetails = () => {
 
   const dispatch = useAppDispatch();
   const { rightMenuType } = useAppSelector((state) => state.nftdetails);
+  const { isConnected } = useAppSelector((state) => state.wallet);
 
   const [isActive, setIsActive] = useState(false);
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
@@ -38,8 +39,9 @@ const NFTDetails = () => {
   }, [rightMenuType]);
 
   useEffect(() => {
+    console.log({ isConnected });
     fetchCollection();
-  }, [nftId]);
+  }, [nftId, isConnected]);
 
   const resetMenuState = () => {
     setIsActive(false);

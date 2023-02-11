@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
-import { setIsBurner, setIsConnected, toggleManageFundsModal } from "store/walletSlice";
+import { setIsBurner, setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
 import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconToken, IconWallet } from "icons";
 import { Button } from "react-bootstrap";
 import Balances from "components/Balances";
@@ -94,9 +94,11 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
                 if (!isBurner) {
                   walletDisconnect();
                   dispatch(setIsConnected(false));
+                  dispatch(setUser({}));
                 } else {
                   dispatch(setIsConnected(false));
                   dispatch(setIsBurner(false));
+                  dispatch(setUser({}));
                 }
                 onClose();
               }}
