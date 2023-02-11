@@ -4,21 +4,26 @@ import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import userService from "api/user/user.service";
+import { toggleWalletModal } from "store/walletSlice";
 
 const ImageBar = () => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const [isLiked, setIsliked] = useState(false);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const isOwner = () => {
     return user?.id === selectedNFT?.user?.id;
   };
 
+  const handleLike = () => {
+    if (isConnected) nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: user.id, like: !isLiked }).then((res) => res.data === true && setIsliked(!isLiked));
+    else dispatch(toggleWalletModal());
+  };
+
   const fetchIsLiked = async () => {
     const response = await userService.isLiked({ tokenId: selectedNFT.id, userId: user.id });
-
-    console.log(response.data);
+    setIsliked(response.data);
   };
 
   useEffect(() => {
@@ -40,10 +45,7 @@ const ImageBar = () => {
 
   return (
     <div className="flex w-fit flex-col gap-5">
-      <div
-        className="border border-gray rounded-md p-2 group cursor-pointer"
-        onClick={() => nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: user.id, like: !isLiked }).then((res) => res.data === true && setIsliked(!isLiked))}
-      >
+      <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => handleLike()}>
         <IconLike stroke="gray" className={`group-hover:stroke-white ${isLiked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>
       <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray ">
