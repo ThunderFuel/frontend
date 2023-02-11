@@ -16,7 +16,7 @@ const Sidebar = ({ userInfo, openFollowers, openFollows, onChangeFollowers, isPr
         <CoverImage />
         <div className="p-10 relative pt-[150px] text-white w-full h-full flex">
           <div className="flex flex-col w-full">
-            <LogoContainer userName={userInfo?.userName} socialMedias={userInfo?.socialMedias} userId={userInfo?.id} />
+            <LogoContainer userName={userInfo?.userName} socialMedias={userInfo?.socialMedias} userId={userInfo?.id} contractAddress={userInfo.contractAddress} />
             <div className="body-medium mt-5">Gm! I’m xero and I like to collect superb NFTs</div>
             <div className="grid grid-cols-2 bg-bg border border-gray rounded-md mt-5">
               <div className="flex flex-col gap-2 px-4 py-3.5 text-gray-light border-r border-r-gray cursor-pointer" onClick={openFollowers}>

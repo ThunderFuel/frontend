@@ -8,8 +8,8 @@ const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: stri
   const IconItem = icon ?? null;
 
   return (
-    <li className={clsx("border-r border-r-gray last:border-r-0 text-gray-light", className)}>
-      <a {...etc} className="block p-2 no-underline hover:text-white">
+    <li className={clsx("border-r border-r-gray last:border-r-0 text-gray-light flex-center", className)}>
+      <a {...etc} className="block px-2 py-2 no-underline hover:text-white">
         <IconItem />
       </a>
     </li>
@@ -27,7 +27,7 @@ const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: So
   };
 
   return (
-    <div className="flex gap-5 mt-1">
+    <div className="flex gap-5">
       {socialMedias?.length ? (
         <ul className="inline-flex border border-gray rounded-[4px]">
           {socialMedias?.map((media, key) => {
@@ -35,7 +35,7 @@ const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: So
           })}
         </ul>
       ) : null}
-      <ul className="border border-gray rounded-[4px]">
+      <ul className="inline-flex border border-gray rounded-[4px]">
         <SocialButton href="#" icon={IconShare} className={"border-r-0"} />
       </ul>
     </div>
