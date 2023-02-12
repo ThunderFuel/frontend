@@ -1,7 +1,22 @@
 import { IconBack } from "icons";
 import React from "react";
+import InfoBox from "./InfoBox";
 
-const RightMenu = ({ children, title, className, footer, onBack }: { children: React.ReactNode; title: string; className?: string; footer?: JSX.Element; onBack: any }) => {
+const RightMenu = ({
+  children,
+  title,
+  description,
+  className,
+  footer,
+  onBack,
+}: {
+  children: React.ReactNode;
+  title: string;
+  description?: string;
+  className?: string;
+  footer?: JSX.Element;
+  onBack: any;
+}) => {
   React.useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -15,6 +30,7 @@ const RightMenu = ({ children, title, className, footer, onBack }: { children: R
         <IconBack onClick={onBack} className="cursor-pointer w-8 h-8" />
         {title}
       </div>
+      {description ? <InfoBox description={description} /> : <></>}
       <div className="flex flex-col px-10 py-5 gap-y-5 overflow-y-scroll no-scrollbar">{children}</div>
 
       {footer && <div className="sticky bottom-0 mt-auto w-full border-t border-gray bg-bg">{footer}</div>}
