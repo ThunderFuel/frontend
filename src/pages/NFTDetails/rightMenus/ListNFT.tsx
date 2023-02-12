@@ -7,7 +7,6 @@ import Tab from "components/Tab";
 import InputPrice from "../components/InputPrice";
 import ToggleButton from "components/ToggleButton";
 import Input from "components/Input";
-import InfoBox from "../components/InfoBox";
 import { getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import Select from "components/Select";
@@ -71,6 +70,16 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
     </div>
   );
 
+  const infoBox = (
+    <div className="flex bg-gray gap-x-[15px] p-[15px] text-bodySm font-spaceGrotesk text-white rounded-md">
+      <IconInfo className="w-6 h-6" />
+      <div className="flex w-full flex-col gap-y-[5px]">
+        <h6 className="text-head6 font-spaceGrotesk">Timed Auction</h6>
+        <p className="w-full text-bodyMd text-gray-light">Lorem ipsum dolor sit amet.</p>
+      </div>
+    </div>
+  );
+
   const handleToggle = (isOn: boolean) => {
     if (isTimedAuction) sethasStartingPrice(isOn);
     else setisPrivateSale(isOn);
@@ -111,7 +120,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
             </div>
           </Tab.Item>
         </Tab>
-        {isTimedAuction && <InfoBox title="Timed Auction" description="Lorem ipsum dolor sit amet." />}
+        {isTimedAuction && infoBox}
         <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
           {isTimedAuction ? "Set Duration" : "Listing Duration"}
           <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">

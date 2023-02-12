@@ -4,7 +4,6 @@ import { IconArrowRight, IconBid, IconEthereum, IconInfo, IconRefresh, IconWarni
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import RightMenu from "../components/RightMenu";
-import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
 import InputPrice from "../components/InputPrice";
 import { useWallet } from "hooks/useWallet";
@@ -76,8 +75,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   );
 
   return (
-    <RightMenu title="Place a Bid" footer={footer} onBack={onBack}>
-      <InfoBox title="Placing a Bid" description={bidDescription} />
+    <RightMenu title="Place a Bid" description={bidDescription} footer={footer} onBack={onBack}>
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-y-2 ">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Bid</h6>

@@ -1,13 +1,13 @@
 import { IconInfo } from "icons";
 import React from "react";
 
-const InfoBox = ({ title, description }: { title: string; description: string }) => {
+const InfoBox = ({ title, description }: { title?: string; description: string }) => {
   return (
-    <div className="flex bg-gray gap-x-[15px] p-[15px] text-head6 font-spaceGrotesk text-white rounded-md">
-      <IconInfo />
+    <div className="flex bg-bg-light gap-x-[15px] p-[15px] text-bodySm font-spaceGrotesk text-white border-b border-gray">
+      <IconInfo className="w-6 h-6" />
       <div className="flex w-full flex-col gap-y-[5px]">
-        {title}
-        <span className="text-bodyMd text-gray-light">{description}</span>
+        {title ? <h6 className="text-head6 font-spaceGrotesk">{title}</h6> : <></>}
+        <p className="w-full text-bodyMd text-gray-light">{description}</p>
       </div>
     </div>
   );
