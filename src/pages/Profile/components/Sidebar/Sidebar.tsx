@@ -7,31 +7,34 @@ import LogoContainer from "./components/LogoContainer";
 import { Box, BoxWithIcon } from "./components/Box";
 import CoverImage from "./components/CoverImage";
 import { ButtonEdit, ButtonFollow } from "./components/Buttons";
+import { FollowType, useProfile } from "../../ProfileContext";
 
-const Sidebar = ({ userInfo, openFollowers, openFollows, onChangeFollowers, isProfile = false }: any) => {
+const Sidebar = ({ isProfile = false }: any) => {
+  const { userInfo, onSetSocialActiveTab } = useProfile();
+
   return (
     <div className="flex flex-col border-r border-gray min-w-[500px] max-w-[500px]">
       <div className="sidebar-container">
-        {isProfile ? <ButtonEdit /> : <ButtonFollow userInfo={userInfo} onChangeFollowers={onChangeFollowers} />}
+        {isProfile ? <ButtonEdit /> : <ButtonFollow />}
         <CoverImage />
         <div className="p-10 relative pt-[150px] text-white w-full h-full flex">
           <div className="flex flex-col w-full">
-            <LogoContainer userName={userInfo?.userName} socialMedias={userInfo?.socialMedias} userId={userInfo?.id} contractAddress={userInfo.contractAddress} />
+            <LogoContainer userInfo={userInfo} />
             <div className="body-medium mt-5">{userInfo?.bio}</div>
             <div className="grid grid-cols-2 gap-2 mt-5">
-              <Box header="followers" onClick={openFollowers}>
-                {numberFormat(userInfo.followers?.length)}
+              <Box header="followers" onClick={() => onSetSocialActiveTab(FollowType.Followers)}>
+                {numberFormat(userInfo?.followers?.length)}
               </Box>
-              <Box header="FOLLOWING" onClick={openFollows}>
-                {numberFormat(userInfo.follows?.length)}
+              <Box header="FOLLOWING" onClick={() => onSetSocialActiveTab(FollowType.Follows)}>
+                {numberFormat(userInfo?.follows?.length)}
               </Box>
             </div>
             <div className="grid flex-1 grid-cols-2 gap-2 mt-2">
               <Box header="lısted/owned" className="justify-between">
-                <div className="text-right">{numberFormat(userInfo.tokens?.length)}</div>
+                <div className="text-right">{numberFormat(userInfo?.tokens?.length)}</div>
               </Box>
               <Box header="created" className="justify-between">
-                <div className="text-right">{numberFormat(userInfo.tokens?.length)}</div>
+                <div className="text-right">{numberFormat(userInfo?.tokens?.length)}</div>
               </Box>
             </div>
             <BoxWithIcon icon={IconQuarry} className="mt-2">

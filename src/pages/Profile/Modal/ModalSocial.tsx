@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Modal from "components/Modal";
 import TabBase from "components/Tab";
 import Button from "components/Button";
 import Avatar from "components/Avatar";
 import { IconPlus } from "icons";
+import { useAppSelector } from "store";
+import useNavigate from "../../../hooks/useNavigate";
+import { PATHS } from "../../../router/config/paths";
+import { useProfile } from "../ProfileContext";
 
 const ModalTitle = () => {
   return <h6 className="text-h5 text-white">Social</h6>;
@@ -26,10 +30,21 @@ const Tab = ({ initTab, onChange }: any) => {
   );
 };
 const FollowItem = ({ item }: any) => {
-  // const { user } = useAppSelector((state) => state.wallet);
+  const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.wallet);
+  console.log(user);
+  const isFollow = !!user?.follows?.find((follow: any) => follow.userId === user.id);
+  const onFollow = (e: any) => {
+    e.stopPropagation();
+  };
 
   return (
-    <div className="flex w-full items-center justify-between border border-gray rounded-md py-3 px-2">
+    <div
+      className="flex w-full items-center justify-between border border-gray rounded-md py-3 px-2 cursor-pointer"
+      onClick={() => {
+        navigate(PATHS.USER, { userId: item.userId });
+      }}
+    >
       <div className="flex items-center gap-2">
         <Avatar image={item.image} userId={item.id} className="w-8 h-8" />
         <div>
@@ -37,26 +52,34 @@ const FollowItem = ({ item }: any) => {
           <div className="text-headline-01 text-gray-light mt-2">{item.followerCount} FOLLOWERS</div>
         </div>
       </div>
-      <Button className="btn-secondary btn-sm !bg-white !text-black">
-        FOLLOW <IconPlus />
-      </Button>
+      {!isFollow ? (
+        <Button className="btn-secondary btn-sm !bg-white !text-black" onClick={onFollow}>
+          FOLLOW <IconPlus />
+        </Button>
+      ) : null}
     </div>
   );
 };
 
-const ModalSocial = ({ show, onClose, followers, follows, initialTab = 0 }: any) => {
-  const [activeTab, setActiveTab] = React.useState(initialTab);
-  const activeItems = [followers, follows];
-  useEffect(() => {
-    setActiveTab(initialTab);
-  }, [initialTab]);
+const ModalSocial = () => {
+  const { socialActiveTab, onSetSocialActiveTab, userInfo } = useProfile();
+  const activeItems = React.useMemo(() => {
+    if (socialActiveTab === null) {
+      return [];
+    }
+
+    return [userInfo?.followers, userInfo?.follows];
+  }, [socialActiveTab]);
+  const onClose = () => {
+    onSetSocialActiveTab(null);
+  };
 
   return (
-    <Modal show={show} onClose={onClose} title="Social" modalTitle={<ModalTitle />} bodyClassName="!w-[480px]">
+    <Modal show={socialActiveTab !== null} onClose={onClose} title="Social" modalTitle={<ModalTitle />} bodyClassName="!w-[480px]">
       <div className="flex flex-col p-5 gap-5">
-        <Tab initTab={activeTab} onChange={setActiveTab} />
+        <Tab initTab={socialActiveTab} onChange={onSetSocialActiveTab} />
         <div className="flex flex-col w-full gap-2">
-          {activeItems?.[activeTab]?.map((item: any, k: number) => {
+          {activeItems?.[socialActiveTab]?.map((item: any, k: number) => {
             return <FollowItem item={item} key={k} />;
           })}
         </div>

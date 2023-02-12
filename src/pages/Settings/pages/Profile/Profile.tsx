@@ -15,7 +15,7 @@ const Profile = () => {
   const dispatch = useAppDispatch();
 
   const { user } = useAppSelector((state) => state.wallet);
-  const [userInfo, setUserInfo] = useState(user);
+  const [userInfo, setUserInfo] = useState(user as any);
 
   const onChange = (field: string, value: any) => {
     setUserInfo((prevState: any) => ({ ...prevState, ...{ [field]: value } }));

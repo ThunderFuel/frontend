@@ -8,17 +8,17 @@ export interface ISocialMedia {
 
 export interface ICreateUser {
   id: number;
+  bio: string;
   userName: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   gender: string;
-  contractAddress: string;
+  contractAddress: null | string;
   banner: string;
   image: string;
   socialMedias: ISocialMedia[];
-  bio: string;
 }
 
 export interface IUserResponse {

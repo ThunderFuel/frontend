@@ -1,5 +1,5 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { ICreateUser } from "api/user/user.type";
+import { IUserResponse } from "api/user/user.type";
 import { Address } from "fuels";
 
 export const walletSlice = createSlice({
@@ -10,7 +10,7 @@ export const walletSlice = createSlice({
     isConnected: false,
     show: false,
     manageFundsShow: false,
-    user: {} as ICreateUser,
+    user: {} as IUserResponse,
     isBurner: false,
   },
 

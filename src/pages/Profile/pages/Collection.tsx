@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import CollectionList from "../components/CollectionList";
+import userService from "api/user/user.service";
+import { useProfile } from "../ProfileContext";
 
 const options = {
   hiddeSidebarFilter: true,
   hiddenSweep: true,
 };
 const Collection = () => {
-  const [userInfo, filter]: any = useOutletContext();
-  const [collectionItems, setCollectionItems] = useState(userInfo.tokens);
+  const { userInfo } = useProfile();
+  const [filter, setFilter] = React.useState([] as any);
+  const [collectionItems, setCollectionItems] = useState(userInfo?.tokens);
   const initParams = {
     Status: { type: 3, value: "1" },
     sortingType: 1,
@@ -36,6 +38,15 @@ const Collection = () => {
     });
     setCollectionItems(tmpCollectionItems);
   };
+
+  const fetchFilters = async () => {
+    const response = await userService.getFilters({ userId: userInfo.id ?? 16 });
+    setFilter(response.data.filters ?? []);
+  };
+
+  React.useEffect(() => {
+    fetchFilters();
+  }, []);
 
   return <CollectionList collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={options} onChangeFilter={onChangeFilter} />;
 };

@@ -26,6 +26,9 @@ export default {
   userCreate(address: string) {
     return ThunderURL.post("v1/user/create", {}, { params: { address } });
   },
+  getFollowers(params: any = {}) {
+    return ThunderURL.get("v1/user/followers", { params });
+  },
   followUser(params: IFollowParams) {
     return ThunderURL.post("v1/user/follow", {}, { params });
   },

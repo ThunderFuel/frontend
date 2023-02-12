@@ -5,7 +5,7 @@ import { IconPencil, IconPlus } from "icons";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
-import userService from "api/user/user.service";
+import { useProfile } from "../../../ProfileContext";
 
 const Button = ({ children, className, ...etc }: any) => {
   return (
@@ -15,35 +15,26 @@ const Button = ({ children, className, ...etc }: any) => {
   );
 };
 
-const ButtonFollow = ({ userInfo, onChangeFollowers }: any) => {
+const ButtonFollow = () => {
+  const { userInfo, onFollow } = useProfile();
   const { user } = useAppSelector((state) => state.wallet) as any;
-  const isFollow = !!userInfo.follows?.find((follower: any) => follower.userId === user?.id);
+  const isFollow = !!userInfo?.follows?.find((follower: any) => follower.userId === user?.id);
+
   const [hoverText, setHoverText] = React.useState("FOLLOWING");
+
+  const onSetFollow = () => {
+    onFollow({ userId: userInfo.id, isFollow });
+  };
 
   if (!user?.id) {
     return <></>;
   }
 
-  const onFollow = async () => {
-    try {
-      const response = await userService.followUser({
-        followId: userInfo.id,
-        followerId: user.id,
-        follow: !isFollow,
-      });
-      if (response.data) {
-        onChangeFollowers();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   if (isFollow) {
     return (
       <Button
         className="text-white border-white hover:border-red hover:text-red hover:bg-red/20"
-        onClick={onFollow}
+        onClick={onSetFollow}
         onMouseEnter={() => setHoverText("UNFOLLOW")}
         onMouseLeave={() => setHoverText("FOLLOWING")}
       >
@@ -53,7 +44,7 @@ const ButtonFollow = ({ userInfo, onChangeFollowers }: any) => {
   }
 
   return (
-    <Button className="text-white border-white" onClick={onFollow}>
+    <Button className="text-white border-white" onClick={onSetFollow}>
       FOLLOW <IconPlus />
     </Button>
   );

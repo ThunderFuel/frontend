@@ -10,7 +10,6 @@ import { PATHS } from "router/config/paths";
 const ActivityItem = ({ item }: { item: any }) => {
   const Icon = item.typeIcon ?? IconHand;
   const path = getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item?.tokenId });
-  console.log(path, item);
 
   return (
     <div className="bg-bg hover:bg-bg-light border border-gray rounded-md flex p-5 text-white gap-5 cursor-pointer">
