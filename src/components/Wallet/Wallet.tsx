@@ -77,16 +77,16 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
         <Avatar image={user?.image} userId={user?.id} className="w-20 h-20" />
         <div className="flex flex-col gap-y-[11px] justify-end">
-          <h4 className="text-head4 text-green">{user?.userName ?? addressFormat(user?.contractAddress ?? "")}</h4>
+          <h4 className="text-head4 text-green">{user?.userName ?? addressFormat(user?.walletAddress ?? "")}</h4>
           <div className="flex gap-x-2.5">
             <a
               target="_blank"
               rel="noreferrer"
-              href={`https://fuellabs.github.io/block-explorer-v2/address/${user?.contractAddress}`}
+              href={`https://fuellabs.github.io/block-explorer-v2/address/${user?.walletAddress}`}
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
             >
               <IconLink className="w-[15px] h-[15px]" />
-              {addressFormat(user?.contractAddress ?? "")}
+              {addressFormat(user?.walletAddress)}
             </a>
             <div
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"

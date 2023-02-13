@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import * as timeago from "timeago.js";
 
-export const addressFormat = (address: string) => {
+export const addressFormat = (address: any) => {
   if (!address) {
     return "-";
   }

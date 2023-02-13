@@ -16,7 +16,7 @@ export const useWallet = () => {
   const hasEnoughFunds = async () => {
     try {
       const provider = await getProvider();
-      const balance = await provider.getBalance(getWalletAddress === "" ? user.contractAddress : getWalletAddress, ZeroBytes32);
+      const balance = await provider.getBalance(getWalletAddress === "" ? user.walletAddress : getWalletAddress, ZeroBytes32);
 
       return balance.toNumber() / 1000000000 >= totalAmount;
     } catch {
@@ -49,7 +49,7 @@ export const useWallet = () => {
       if (isConnected) {
         const provider = await getProvider();
         const address = getWalletAddress;
-        const balance = await provider.getBalance(address === "" ? user.contractAddress : address, ZeroBytes32);
+        const balance = await provider.getBalance(address === "" ? user.walletAddress : address, ZeroBytes32);
 
         return balance.toNumber();
       }

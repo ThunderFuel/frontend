@@ -24,7 +24,7 @@ const LogoContainer = ({ userInfo }: any) => {
         </div>
         <div className="flex gap-2">
           <div className="border border-gray rounded-[4px] px-2 py-1.5">
-            <span className="body-medium">{addressFormat(userInfo?.contractAddress ?? "")}</span>
+            <span className="body-medium">{addressFormat(userInfo?.walletAddress)}</span>
           </div>
           <SocialButtons socialMedias={userInfo?.socialMedias ?? []} />
         </div>

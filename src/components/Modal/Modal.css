@@ -1,5 +1,5 @@
 .modalbase {
-  @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+  @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)] z-50;
 }
 .modalbase .modal {
   @apply flex flex-col w-[335px] bg-bg rounded-lg;

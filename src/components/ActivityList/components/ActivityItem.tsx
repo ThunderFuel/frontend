@@ -30,8 +30,8 @@ const ActivityItem = ({ item }: { item: any }) => {
           <h5 className="text-h6">{item.name}</h5>
           <ActivityItemDescription
             activityType={item.activityType}
-            fromUserContractAddress={item.fromUser?.contractAddress ?? "-"}
-            toUserContractAddress={item.toUser?.contractAddress ?? "-"}
+            fromUserContractAddress={item.fromUser?.walletAddress ?? "-"}
+            toUserContractAddress={item.toUser?.walletAddress ?? "-"}
             createdTimeStamp={item.createdTimeStamp}
           />
         </div>

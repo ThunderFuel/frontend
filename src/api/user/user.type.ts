@@ -15,7 +15,8 @@ export interface ICreateUser {
   email: string;
   phone: string;
   gender: string;
-  contractAddress: null | string;
+  contractAddress?: null | string;
+  walletAddress: null | string;
   banner: string;
   image: string;
   socialMedias: ISocialMedia[];
@@ -28,7 +29,8 @@ export interface IUserResponse {
   lastName: string;
   phone: null | string;
   gender: null | string;
-  contractAddress: null | string;
+  contractAddress?: null | string;
+  walletAddress: null | string;
   image: null | string;
   banner: null | string;
   socialMedias: any[];

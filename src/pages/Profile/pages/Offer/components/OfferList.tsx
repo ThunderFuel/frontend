@@ -42,8 +42,8 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
             <h6 className="text-h6">{item?.tokenName ?? "-"}</h6>
             <ActivityItemDescription
               activityType={item.activityType}
-              fromUserContractAddress={item.fromUser?.contractAddress ?? "-"}
-              toUserContractAddress={item.toUser?.contractAddress ?? "-"}
+              fromUserContractAddress={item.fromUser?.walletAddress}
+              toUserContractAddress={item.toUser?.walletAddress}
               createdTimeStamp={item.createdTimeStamp}
             />
           </div>

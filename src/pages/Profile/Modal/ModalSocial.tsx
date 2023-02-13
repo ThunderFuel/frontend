@@ -36,7 +36,7 @@ const Tab = ({ initTab, onChange }: any) => {
 const ButtonFollow = ({ followerId }: any) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.wallet);
-  const isFollow = !!user?.follows?.find((follow: any) => follow.userId === user.id);
+  const isFollow = !!user?.follows?.find((follow: any) => follow.userId === followerId);
 
   const onFollow = async (e: any) => {
     e.stopPropagation();
@@ -84,7 +84,7 @@ const FollowItem = ({ item, onClose }: any) => {
       <div className="flex items-center gap-2">
         <Avatar image={item.image} userId={item.userId} className="w-8 h-8" />
         <div>
-          <h6 className="text-h6 text-white">{item.userName ?? addressFormat(item.contractAddress)}</h6>
+          <h6 className="text-h6 text-white">{item.userName ?? addressFormat(item.walletAddress)}</h6>
           <div className="text-headline-01 text-gray-light mt-2">{item.followerCount} FOLLOWERS</div>
         </div>
       </div>

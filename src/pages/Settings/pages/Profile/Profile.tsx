@@ -32,7 +32,7 @@ const Profile = () => {
         email: userInfo.email,
         phone: userInfo.phone,
         gender: userInfo.gender,
-        contractAddress: user.contractAddress,
+        walletAddress: user.walletAddress,
         banner: userInfo.banner ?? null,
         image: userInfo.image ?? null,
         socialMedias: userInfo.socialMedias ?? [],
