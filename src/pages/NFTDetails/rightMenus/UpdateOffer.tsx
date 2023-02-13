@@ -4,7 +4,6 @@ import { IconArrowRight, IconEthereum, IconInfo, IconOffer, IconRefresh, IconWar
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import RightMenu from "../components/RightMenu";
-import InfoBox from "../components/InfoBox";
 import CartItem from "../components/CartItem";
 import InputPrice from "../components/InputPrice";
 import { useWallet } from "hooks/useWallet";
@@ -82,8 +81,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   );
 
   return (
-    <RightMenu title="Update Offer" footer={footer} onBack={onBack}>
-      <InfoBox title="Updating an Offer" description={offerDescription} />
+    <RightMenu title="Update Offer" description={offerDescription} footer={footer} onBack={onBack}>
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-y-2">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Offer</h6>
