@@ -39,17 +39,16 @@ const CartItemImage = ({ image, onRemove, isUnavailable }: { image: any; isUnava
       <div className={clsx(images.length > 1 && "w-20")}>
         {images.map((img: any, index) => {
           return (
-            <div className={clsx("h-16 w-16 top-0", imagePosition[index] ?? "")} key={index}>
+            <div className={clsx("h-16 w-16 top-0 overflow-hidden rounded-md", imagePosition[index] ?? "")} key={index}>
               <img alt={`image_${index}`} src={img} className={clsx("w-full")} />
             </div>
           );
         })}
       </div>
-      {isUnavailable && (
-        <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <IconTrash className="cursor-pointer" onClick={onRemove} />
-        </div>
-      )}
+      {isUnavailable && <div className="absolute top-0 w-full h-full left-0 bg-gray/80" />}
+      <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <IconTrash className="cursor-pointer" onClick={onRemove} />
+      </div>
     </div>
   );
 };
