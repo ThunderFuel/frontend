@@ -1,6 +1,6 @@
 import React from "react";
-import { useOutletContext } from "react-router-dom";
 import CollectionList from "../components/CollectionList";
+import { useProfile } from "../ProfileContext";
 
 const options = {
   hiddenSidebar: true,
@@ -9,9 +9,9 @@ const options = {
   itemLabel: "LIKED ITEMS",
 };
 const Liked = () => {
-  const [userInfo, filter]: any = useOutletContext();
+  const { userInfo } = useProfile();
 
-  return <CollectionList collectionItems={userInfo.likedTokens ?? []} filterItems={filter} options={options} onChangeFilter={console.log} />;
+  return <CollectionList collectionItems={userInfo.likedTokens ?? []} filterItems={[]} options={options} onChangeFilter={console.log} />;
 };
 
 export default Liked;

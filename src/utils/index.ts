@@ -2,7 +2,9 @@ import dayjs from "dayjs";
 import * as timeago from "timeago.js";
 
 export const addressFormat = (address: string) => {
-  if (address === null || address === undefined) return "";
+  if (!address) {
+    return "-";
+  }
   const first6 = address.substring(0, 6);
   const last4 = address.substring(address.length - 4);
 

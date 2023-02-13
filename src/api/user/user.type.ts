@@ -41,6 +41,6 @@ export interface IUserResponse {
 
 export interface IFollowParams {
   followerId: number;
-  followId: number;
+  userId: number;
   follow: boolean;
 }

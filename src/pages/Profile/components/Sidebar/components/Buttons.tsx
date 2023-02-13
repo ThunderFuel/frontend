@@ -18,12 +18,12 @@ const Button = ({ children, className, ...etc }: any) => {
 const ButtonFollow = () => {
   const { userInfo, onFollow } = useProfile();
   const { user } = useAppSelector((state) => state.wallet) as any;
-  const isFollow = !!userInfo?.follows?.find((follower: any) => follower.userId === user?.id);
+  const isFollow = !!userInfo?.followers?.find((follower: any) => follower.userId === user?.id);
 
   const [hoverText, setHoverText] = React.useState("FOLLOWING");
 
   const onSetFollow = () => {
-    onFollow({ userId: userInfo.id, isFollow });
+    onFollow({ followUser: user, isFollow });
   };
 
   if (!user?.id) {
@@ -54,7 +54,7 @@ const ButtonEdit = () => {
   const navigate = useNavigate();
 
   return (
-    <Button onClick={() => navigate(PATHS.SETTINGS_PROFILE)}>
+    <Button className="text-white" onClick={() => navigate(PATHS.SETTINGS_PROFILE)}>
       EDIT YOUR PROFILE <IconPencil />
     </Button>
   );

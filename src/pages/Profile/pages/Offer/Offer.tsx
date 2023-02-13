@@ -1,11 +1,11 @@
 import React from "react";
 import SidebarFilter from "./components/SidebarFilter";
 import OfferList from "./components/OfferList";
-import { useOutletContext } from "react-router-dom";
 import OfferProvider from "./OfferContext";
+import { useProfile } from "../../ProfileContext";
 
 const Offer = () => {
-  const [userInfo]: any = useOutletContext();
+  const { userInfo } = useProfile();
 
   return (
     <OfferProvider value={{ userInfo, offers: [] }}>

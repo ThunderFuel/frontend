@@ -22,10 +22,20 @@ const Sidebar = ({ isProfile = false }: any) => {
             <LogoContainer userInfo={userInfo} />
             <div className="body-medium mt-5">{userInfo?.bio}</div>
             <div className="grid grid-cols-2 gap-2 mt-5">
-              <Box header="followers" onClick={() => onSetSocialActiveTab(FollowType.Followers)}>
+              <Box
+                header="followers"
+                onClick={() => {
+                  onSetSocialActiveTab(FollowType.Followers);
+                }}
+              >
                 {numberFormat(userInfo?.followers?.length)}
               </Box>
-              <Box header="FOLLOWING" onClick={() => onSetSocialActiveTab(FollowType.Follows)}>
+              <Box
+                header="FOLLOWING"
+                onClick={() => {
+                  onSetSocialActiveTab(FollowType.Follows);
+                }}
+              >
                 {numberFormat(userInfo?.follows?.length)}
               </Box>
             </div>

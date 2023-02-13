@@ -11,7 +11,7 @@ interface IProfileContext {
   userInfo: any;
   socialActiveTab: any;
   onSetSocialActiveTab: any;
-  onFollow: ({ isFollow, userId }: { isFollow: boolean; userId: number }) => void;
+  onFollow: ({ isFollow, followUser }: { isFollow: boolean; followUser: IUserResponse }) => void;
 }
 
 export const ProfileContext = createContext<IProfileContext>({} as any);
@@ -29,21 +29,21 @@ const ProfileProvider = ({ userId, children }: { userId: any; children: ReactNod
 
   React.useEffect(() => {
     fetchUserProfile();
-  }, []);
+  }, [userId]);
 
   const onSetSocialActiveTab = (value: any) => {
     setSocialActiveTab(value);
   };
 
-  const onFollow = async ({ isFollow, userId }: { isFollow: boolean; userId: number }) => {
+  const onFollow = async ({ isFollow, followUser }: { isFollow: boolean; followUser: IUserResponse }) => {
     try {
-      const response = await userService.followUser({
-        followId: userInfo.id,
-        followerId: userId,
+      const { data: isValid } = await userService.followUser({
+        userId: followUser.id,
+        followerId: userInfo.id,
         follow: !isFollow,
       });
-      if (response.data) {
-        console.log("ok");
+      if (isValid) {
+        await fetchUserProfile();
       }
     } catch (e) {
       console.log(e);

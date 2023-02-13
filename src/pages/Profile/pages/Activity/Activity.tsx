@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
 import ActivityList from "./components/ActivityList";
-import { useOutletContext } from "react-router-dom";
+import { useProfile } from "../../ProfileContext";
 
 const Activity = () => {
-  const [userInfo]: any = useOutletContext();
+  const { userInfo } = useProfile();
 
   const [activities, setActivities] = useState([]);
   const [pagination, setPagination] = useState({});
