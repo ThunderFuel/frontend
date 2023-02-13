@@ -71,6 +71,11 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   React.useEffect(() => {
     setSweep(0);
   }, [location.pathname]);
+  React.useEffect(() => {
+    if (selectedCarts.length === 0) {
+      setSweep(0);
+    }
+  }, [selectedCarts]);
 
   const contextValue = {
     ...value,

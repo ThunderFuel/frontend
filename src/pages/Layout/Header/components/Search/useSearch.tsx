@@ -33,7 +33,6 @@ export const useSearch = () => {
       const response = await search.getSearchResult(text);
       setResults({
         collections: response.data,
-        // accounts: [],
       });
     } else {
       getRecentItems();
