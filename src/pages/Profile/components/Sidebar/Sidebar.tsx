@@ -41,10 +41,10 @@ const Sidebar = ({ isProfile = false }: any) => {
             </div>
             <div className="grid flex-1 grid-cols-2 gap-2 mt-2">
               <Box header="lısted/owned" className="justify-between">
-                <div className="text-right">{numberFormat(userInfo?.tokens?.length)}</div>
+                {numberFormat(userInfo?.tokens?.length)}
               </Box>
               <Box header="created" className="justify-between">
-                <div className="text-right">{numberFormat(userInfo?.tokens?.length)}</div>
+                {numberFormat(userInfo?.tokens?.length)}
               </Box>
             </div>
             <BoxWithIcon icon={IconQuarry} className="mt-2">
