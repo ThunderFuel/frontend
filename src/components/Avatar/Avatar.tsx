@@ -34,7 +34,7 @@ export const getDefaultAvatarSrc = (userId: any) => {
 const Avatar = ({ image, className, userId }: { image: string | null; className?: string; userId: number }) => {
   return (
     <div className={clsx("rounded-full overflow-hidden", className)}>
-      <Img className="w-full" src={image ?? getDefaultAvatarSrc(userId)} />
+      <Img className="w-full" src={image} defaultImage={getDefaultAvatarSrc(userId)} />
     </div>
   );
 };

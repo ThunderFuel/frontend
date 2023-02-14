@@ -11,7 +11,7 @@ const LogoContainer = ({ userInfo }: any) => {
 
   return (
     <div className="flex gap-5 w-full">
-      <Avatar image={userInfo?.image} userId={userInfo?.userId} className="w-[84px] h-[84px]" />
+      <Avatar image={userInfo?.image} userId={user?.id} className="w-[84px] h-[84px]" />
       <div className="flex flex-col gap-2.5 flex-1 text-gray-light">
         <div className="flex items-center gap-2">
           <h3 className="text-h3 text-white">{userInfo?.userName}</h3>
