@@ -16,7 +16,7 @@ import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
-import { PATHS } from "../../../router/config/paths";
+import { PATHS } from "router/config/paths";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -101,7 +101,7 @@ const Header = () => {
       <div className="border-y border-gray">
         <div className="header-container-fluid">
           <div className="flex items-center gap-6 pr-6">
-            <Link className="flex text-white gap-1" to="/">
+            <Link className="flex text-white gap-1" to={PATHS.MARKETPLACE}>
               <IconThunder2 className="w-14" />
               <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
             </Link>

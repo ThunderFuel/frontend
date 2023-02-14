@@ -54,7 +54,7 @@ export const useWallet = () => {
         return balance.toNumber();
       }
     } catch (e: any) {
-      useErrorModal(e);
+      // useErrorModal(e);
     }
   };
 
