@@ -18,9 +18,12 @@ const ActivityItemDescription = React.memo(({ activityType, fromUserContractAddr
   }
 
   const fromUserContractAddressLabel = addressFormat(fromUserContractAddress);
-  const toUserContractAddressLabel = user.contractAddress === toUserContractAddress ? "you" : addressFormat(toUserContractAddress);
+  const toUserContractAddressLabel = user.walletAddress === toUserContractAddress ? "you" : addressFormat(toUserContractAddress);
 
   let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel} to ${toUserContractAddressLabel}</span>, ${timeagoFormat(createdTimeStamp)}`;
+  if ([ActivityFilters.Listings, ActivityFilters.Bids, ActivityFilters.Offers].includes(activityType)) {
+    text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel}</span>, ${timeagoFormat(createdTimeStamp)}`;
+  }
 
   text = text.replace(",", "<span class='text-gray-light'>,</span>");
   text = text.replace(/you/, "<span class='text-green'>you</span>");
