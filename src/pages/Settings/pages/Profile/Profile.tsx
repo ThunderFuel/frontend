@@ -9,7 +9,7 @@ import { EventSettingsSubmit } from "../../Settings";
 import { useAppDispatch, useAppSelector } from "store";
 import { getDefaultAvatarSrc } from "components/Avatar/Avatar";
 import userService from "api/user/user.service";
-import { setUser } from "../../../../store/walletSlice";
+import { setUser } from "store/walletSlice";
 
 const Profile = () => {
   const dispatch = useAppDispatch();

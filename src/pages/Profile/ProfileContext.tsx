@@ -21,7 +21,7 @@ const ProfileProvider = ({ userId, children }: { userId: any; children: ReactNod
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
   const fetchUserProfile = async () => {
     const response = await userService.getUser({
-      id: userId ?? 16,
+      id: userId,
       includes: [0, 1, 2, 3, 4],
     });
     setUserInfo(response.data);

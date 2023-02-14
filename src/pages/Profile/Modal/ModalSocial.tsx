@@ -9,11 +9,21 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { useProfile } from "../ProfileContext";
 import { addressFormat } from "utils";
-import userService from "../../../api/user/user.service";
-import { setUser } from "../../../store/walletSlice";
+import userService from "api/user/user.service";
+import { setUser } from "store/walletSlice";
+import NotFound from "components/NotFound";
 
 const ModalTitle = () => {
   return <h6 className="text-h5 text-white">Social</h6>;
+};
+const ModalFooter = ({ onClose }: any) => {
+  return (
+    <div className="p-5">
+      <Button className="btn-secondary w-full" onClick={onClose}>
+        Close
+      </Button>
+    </div>
+  );
 };
 
 const Tab = ({ initTab, onChange }: any) => {
@@ -107,7 +117,7 @@ const ModalSocial = () => {
   };
 
   return (
-    <Modal show={socialActiveTab !== null} onClose={onClose} title="Social" modalTitle={<ModalTitle />} bodyClassName="!w-[480px]">
+    <Modal show={socialActiveTab !== null} onClose={onClose} title="Social" modalTitle={<ModalTitle />} footer={<ModalFooter onClose={onClose} />} bodyClassName="!w-[480px]">
       <div className="flex flex-col p-5 gap-5">
         <Tab initTab={socialActiveTab} onChange={onSetSocialActiveTab} />
         <div className="flex flex-col w-full gap-2">
@@ -115,6 +125,7 @@ const ModalSocial = () => {
             return <FollowItem item={item} onClose={onClose} key={k} />;
           })}
         </div>
+        {!activeItems?.[socialActiveTab]?.length && <NotFound>No {["Followers", "Following"]?.[socialActiveTab]} Found</NotFound>}
       </div>
     </Modal>
   );
