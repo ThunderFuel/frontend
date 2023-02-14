@@ -210,7 +210,7 @@ const LeftMenu = (props: any) => {
           {JSON.stringify(nft.bestOffer) !== "null" && (
             <Box className="bg-bg-light justify-between pr-4">
               <div className="flex items-center gap-x-2.5">
-                <img src={nft.bestOffer?.image} className="w-8 h-8 rounded-full" alt="profile-image" />
+                <Avatar image={nft.bestOffer?.user?.image} userId={nft.bestOffer?.user?.id} className="w-8 h-8 rounded-full" />
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
