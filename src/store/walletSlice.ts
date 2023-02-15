@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { IUserResponse } from "api/user/user.type";
-import { Address } from "fuels";
+import { Address, WalletUnlocked } from "fuels";
 
 export const walletSlice = createSlice({
   name: "wallet",
@@ -12,6 +12,7 @@ export const walletSlice = createSlice({
     manageFundsShow: false,
     user: {} as IUserResponse,
     isBurner: false,
+    burnerWallet: {} as WalletUnlocked,
   },
 
   reducers: {
@@ -41,6 +42,9 @@ export const walletSlice = createSlice({
     setIsBurner: (state, action) => {
       state.isBurner = action.payload;
     },
+    setBurnerWallet: (state, action) => {
+      state.burnerWallet = action.payload;
+    },
   },
 });
 
@@ -55,6 +59,6 @@ export const getSerializeAddress = createSelector(
   (address: any) => address
 );
 
-export const { setAddress, setIsConnected, toggleWalletModal, toggleManageFundsModal, setUser, setIsBurner } = walletSlice.actions;
+export const { setAddress, setIsConnected, toggleWalletModal, toggleManageFundsModal, setUser, setIsBurner, setBurnerWallet } = walletSlice.actions;
 
 export default walletSlice.reducer;

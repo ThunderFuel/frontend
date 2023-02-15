@@ -10,7 +10,7 @@ export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
-  const { user, isConnected } = useAppSelector((state) => state.wallet);
+  const { user, isConnected, isBurner, burnerWallet } = useAppSelector((state) => state.wallet);
   const [fuel] = useFuel();
 
   const hasEnoughFunds = async () => {
@@ -47,7 +47,13 @@ export const useWallet = () => {
   const getBalance = async () => {
     try {
       if (isConnected) {
+        if (isBurner) {
+          const balance = await burnerWallet.getBalance();
+
+          return balance.toNumber();
+        }
         const provider = await getProvider();
+
         const address = getWalletAddress;
         const balance = await provider.getBalance(address === "" ? user.walletAddress : address, ZeroBytes32);
 

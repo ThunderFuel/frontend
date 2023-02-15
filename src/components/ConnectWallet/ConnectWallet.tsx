@@ -6,7 +6,7 @@ import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { Wallet } from "fuels";
 import { useDispatch } from "react-redux";
-import { setAddress, setIsBurner, setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
+import { setAddress, setBurnerWallet, setIsBurner, setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
 import userService from "api/user/user.service";
 
 const ConnectWallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
@@ -16,7 +16,9 @@ const ConnectWallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [fuel, error, loading] = useFuel();
 
   function generateBurnerUser() {
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({ provider: "https://node-beta-2.fuel.network/graphql" });
+    dispatch(setBurnerWallet(wallet));
+
     dispatch(setAddress(wallet.address.toB256()));
     userService.userCreate(wallet.address.toB256()).then((res) => dispatch(setUser(res.data)));
     dispatch(setIsBurner(true));
