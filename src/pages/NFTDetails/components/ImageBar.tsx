@@ -44,7 +44,7 @@ const ImageBar = () => {
   ];
 
   return (
-    <div className="flex w-fit flex-col gap-5">
+    <div className="flex absolute right-[38px] w-fit flex-col gap-5">
       <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => handleLike()}>
         <IconLike stroke="gray" className={`group-hover:stroke-white ${isLiked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>
