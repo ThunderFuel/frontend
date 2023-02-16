@@ -14,7 +14,7 @@ import Avatar from "components/Avatar";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
-  const { user, isBurner } = useAppSelector((state) => state.wallet);
+  const { user, isBurner, address } = useAppSelector((state) => state.wallet);
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
 
@@ -113,7 +113,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex mt-auto flex-col p-5 gap-y-2.5">
         <Balances />
         <div className="flex w-full gap-x-2.5">
-          <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-2.fuel.network/?address=${user?.contractAddress}`} className="w-full">
+          <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-2.fuel.network/?address=${user?.contractAddress ?? address}`} className="w-full">
             GET TEST ETH <IconFaucet />
           </Button>
           <Button disabled className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
