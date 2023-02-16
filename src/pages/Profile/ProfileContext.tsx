@@ -12,7 +12,7 @@ interface IProfileContext {
   socialActiveTab: any;
   onSetSocialActiveTab: any;
   onFollow: ({ isFollow, followUser }: { isFollow: boolean; followUser: IUserResponse }) => void;
-  options: object;
+  options?: object;
 }
 
 export const ProfileContext = createContext<IProfileContext>({} as any);
