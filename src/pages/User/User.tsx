@@ -9,6 +9,8 @@ import { useAppSelector } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import ProfileProvider from "../Profile/ProfileContext";
+import { useIsMobile } from "hooks/useIsMobile";
+import MobileWarning from "components/MobileWarning";
 
 const User = () => {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const User = () => {
     navigate(PATHS.PROFILE);
   }
 
-  return (
+  return !useIsMobile() ? (
     <ProfileProvider userId={userId}>
       <div className="flex">
         <Sidebar />
@@ -30,6 +32,10 @@ const User = () => {
         <ModalSocial />
       </div>
     </ProfileProvider>
+  ) : (
+    <div className="m-5">
+      <MobileWarning />
+    </div>
   );
 };
 

@@ -4,9 +4,11 @@ import InputEthereum from "components/InputEthereum";
 
 import BulkListTable from "./components/BulkListTable";
 import Footer from "./components/Footer";
+import { useIsMobile } from "hooks/useIsMobile";
+import MobileWarning from "components/MobileWarning";
 
 const BulkListing = () => {
-  return (
+  return !useIsMobile() ? (
     <div className="flex flex-col">
       <div className="px-32 border-b border-gray">
         <div className="border-x border-gray py-16 px-10">
@@ -33,6 +35,10 @@ const BulkListing = () => {
           <Footer />
         </div>
       </div>
+    </div>
+  ) : (
+    <div className="m-5">
+      <MobileWarning />
     </div>
   );
 };
