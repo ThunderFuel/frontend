@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
-import { AssetThunderText } from "assets";
+import { AssetLogo, AssetThunderText } from "assets";
 import { IconCart, IconEthereum, IconGas, IconHamburger, IconSearch, IconThunder2, IconWallet } from "icons";
 
 import Tab from "components/Tab";
@@ -17,6 +17,7 @@ import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const ethPrice = 1322.6;
 const gasPrice = 39;
@@ -97,27 +98,39 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 bg-bg z-30">
-      <HeaderTop />
-      <div className="border-y border-gray">
-        <div className="header-container-fluid">
-          <div className="flex items-center gap-6 pr-6">
-            <Link className="flex text-white gap-1" to={PATHS.MARKETPLACE}>
-              <IconThunder2 className="w-14" />
-              <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
-            </Link>
+      {!useIsMobile() ? (
+        <>
+          <HeaderTop />
+          <div className="border-y border-gray">
+            <div className="header-container-fluid">
+              <div className="flex items-center gap-6 pr-6">
+                <Link className="flex text-white gap-1" to={PATHS.MARKETPLACE}>
+                  <IconThunder2 className="w-14" />
+                  <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
+                </Link>
 
-            <Search />
+                <Search />
 
-            <Tab initTab={1} className="hidden lg:flex" onChange={onChange}>
-              <Tab.Item id={PATHS.MARKETPLACE}>EXPLORE</Tab.Item>
-              <Tab.Item id={PATHS.RANKINGS}>COLLECTIONS</Tab.Item>
-              <Tab.Item id={null}>CREATE</Tab.Item>
-            </Tab>
+                <Tab initTab={1} className="hidden lg:flex" onChange={onChange}>
+                  <Tab.Item id={PATHS.MARKETPLACE}>EXPLORE</Tab.Item>
+                  <Tab.Item id={PATHS.RANKINGS}>COLLECTIONS</Tab.Item>
+                  <Tab.Item id={null}>CREATE</Tab.Item>
+                </Tab>
+              </div>
+              <HeaderIconButtonGroup />
+            </div>
           </div>
-          <HeaderIconButtonGroup />
+          <MobileSearch />
+        </>
+      ) : (
+        <div className="border-y border-gray">
+          <div className="header-container-fluid">
+            <div className="flex items-center py-5">
+              <img src={AssetLogo} className="h-8" alt="logo" />
+            </div>
+          </div>
         </div>
-      </div>
-      <MobileSearch />
+      )}
     </header>
   );
 };

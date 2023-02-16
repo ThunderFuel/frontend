@@ -15,6 +15,8 @@ import { RightMenuType, setIsLiked, setRightMenu, setSelectedNFT } from "store/N
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
+import { useIsMobile } from "hooks/useIsMobile";
+import MobileWarning from "components/MobileWarning";
 
 const NFTDetails = () => {
   const { nftId } = useParams();
@@ -78,7 +80,7 @@ const NFTDetails = () => {
     });
   }, []);
 
-  return (
+  return !useIsMobile() ? (
     <div className="relative flex justify-between">
       <div className="w-2/5">
         <LeftMenu nft={nft} />
@@ -96,6 +98,10 @@ const NFTDetails = () => {
       <div className="w-2/5 h-fit">
         <Component updateListing={rightMenuType === RightMenuType.UpdateListing} onBack={() => resetMenuState()} />
       </div>
+    </div>
+  ) : (
+    <div className="m-5">
+      <MobileWarning />
     </div>
   );
 };
