@@ -1,15 +1,18 @@
 import React from "react";
-import { IconEthereum, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
+import { IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch } from "store";
-import { add, remove } from "store/cartSlice";
+import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
+import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 
 import "./CollectionItem.css";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import { PATHS } from "router/config/paths";
 import { useCollectionListContext } from "../../CollectionListContext";
-import Img from "../../../Img";
+import Img from "components/Img";
 import { Link } from "react-router-dom";
+import EthereumPrice from "components/EthereumPrice";
+import { getAbsolutePath } from "hooks/useNavigate";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -39,15 +42,30 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
-  const { setSweep } = useCollectionListContext();
+  const { setSweep, options } = useCollectionListContext();
   const dispatch = useAppDispatch();
+
+  const onToggleCart = () => {
+    if (!collection.isSelected) {
+      dispatch(cartAdd(collection));
+    } else {
+      dispatch(cartRemove(collection.uid));
+    }
+  };
+  const onToggleBulkListing = () => {
+    if (!collection.isSelected) {
+      dispatch(bulkListingAdd(collection));
+    } else {
+      dispatch(bulkListingRemove(collection.uid));
+    }
+  };
   const onSelect = (e: any) => {
     setSweep(0);
 
-    if (!collection.isSelected) {
-      dispatch(add(collection));
+    if (options?.isProfile) {
+      onToggleBulkListing();
     } else {
-      dispatch(remove(collection.tokenOrder));
+      onToggleCart();
     }
 
     e.stopPropagation();
@@ -55,35 +73,34 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
   };
 
   return (
-    <Link
-      to={PATHS.NFT_DETAILS.replace(":nftId", collection.id)}
-      className={clsx("group relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
-    >
-      <div className="overflow-hidden relative">
-        {collection.salable && <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />}
-        <div className="w-full aspect-square bg-gray">
-          <Img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+    <div>
+      <Link
+        to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: collection.id })}
+        className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
+      >
+        <div className="overflow-hidden relative">
+          {collection.salable || options?.isProfile ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
+          <div className="w-full aspect-square bg-gray">
+            <Img alt={collection.image} className="w-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+          </div>
         </div>
-      </div>
-      <div className="p-2.5 border-b border-b-gray">
-        <h6 className="text-h6 text-white">{collection.name ?? "-"}</h6>
-      </div>
-      <div className="p-2.5 flex items-center">
-        {collection.salable ? (
-          <>
-            <h6 className="text-h5 text-white">{collection.price}</h6>
-            <IconEthereum className="text-gray-light" />
-          </>
-        ) : (
-          <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>
-        )}
-      </div>
-      <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
-        <IconMarketBasket />
-        <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
-      </div>
-      <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
-    </Link>
+        <div className="p-2.5 border-b border-b-gray">
+          {options?.isProfile ? <div className="body-medium text-gray-light mb-1 text-overflow">{collection?.collectionName ?? "-"}</div> : null}
+
+          <h6 className="text-h6 text-white text-overflow">{collection.name ?? "-"}</h6>
+        </div>
+        <div className="p-2.5 flex items-center">
+          {collection.salable ? <EthereumPrice className="text-white" price={collection.price ?? "-"} /> : <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>}
+        </div>
+        <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
+          <IconMarketBasket />
+          <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
+        </div>
+        {!options?.isProfile ? (
+          <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
+        ) : null}
+      </Link>
+    </div>
   );
 };
 

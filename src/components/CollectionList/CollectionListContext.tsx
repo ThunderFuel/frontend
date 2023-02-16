@@ -1,6 +1,8 @@
 import React, { createContext, ReactNode, useContext, useMemo, useReducer, useState } from "react";
-import { useAppSelector } from "../../store";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getBulkListingSelectedTokenOrderList } from "store/bulkListingSlice";
+import { getCartSelectedTokenOrderList } from "store/cartSlice";
 
 export enum DisplayType {
   GRID3 = "3",
@@ -25,7 +27,9 @@ export const CollectionListContext = createContext<ICollectionListContext>({} as
 const CollectionListProvider = ({ value, children }: { value: ICollectionListContext; children: ReactNode }) => {
   const location = useLocation();
 
-  const selectedCarts = useAppSelector((state) => state.cart.items);
+  const bulkListingSelectedTokenOrderList = useSelector(getBulkListingSelectedTokenOrderList);
+  const cartSelectedTokenOrderList = useSelector(getCartSelectedTokenOrderList);
+
   const [displayType, setDisplayType] = useState(DisplayType.GRID4);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
     switch (nextState.type) {
@@ -51,13 +55,11 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   };
 
   const collectionItems = React.useMemo(() => {
-    const selectedCartsIds = selectedCarts.map((item) => item.tokenOrder);
-
     return value.collectionItems.map((item: any) => ({
       ...item,
-      isSelected: selectedCartsIds.includes(item.tokenOrder),
+      isSelected: cartSelectedTokenOrderList.includes(item.uid) || bulkListingSelectedTokenOrderList.includes(item.uid),
     }));
-  }, [value.collectionItems, selectedCarts]);
+  }, [value.collectionItems, cartSelectedTokenOrderList, bulkListingSelectedTokenOrderList]);
 
   const filters = value.filterItems;
 
@@ -72,10 +74,10 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     setSweep(0);
   }, [location.pathname]);
   React.useEffect(() => {
-    if (selectedCarts.length === 0) {
+    if (cartSelectedTokenOrderList.length === 0) {
       setSweep(0);
     }
-  }, [selectedCarts]);
+  }, [cartSelectedTokenOrderList]);
 
   const contextValue = {
     ...value,

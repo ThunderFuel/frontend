@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { CollectionItemResponse } from "api/collections/collections.type";
 
 type ISelectedCartItem = CollectionItemResponse;
@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
-      state.items = state.items.filter((item: CollectionItemResponse) => item.tokenOrder !== action.payload);
+      state.items = state.items.filter((item: CollectionItemResponse) => item.uid !== action.payload);
     },
     removeAll: (state) => {
       state.items = [];
@@ -51,6 +51,13 @@ export const cartSlice = createSlice({
     },
   },
 });
+
+export const getCartSelectedTokenOrderList = createSelector(
+  (state: any) => {
+    return state.cart.items.map((item: ISelectedCartItem) => item.uid);
+  },
+  (tokenOrderList: any[]) => tokenOrderList
+);
 
 export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd } = cartSlice.actions;
 

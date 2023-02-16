@@ -24,7 +24,7 @@ const Tab = ({ userId }: any) => {
   React.useEffect(() => {
     let tmpInitTab = getInitTab(userId);
     if (!tmpInitTab) {
-      tmpInitTab = PATHS.USER;
+      tmpInitTab = PATHS.USER_OWNED;
     }
     setInitTab(tmpInitTab);
   }, [location]);

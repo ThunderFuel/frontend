@@ -20,7 +20,7 @@ const User = () => {
   }
 
   return (
-    <ProfileProvider userId={userId}>
+    <ProfileProvider userId={userId} options={{}}>
       <div className="flex">
         <Sidebar />
         <div className="flex flex-col flex-1">

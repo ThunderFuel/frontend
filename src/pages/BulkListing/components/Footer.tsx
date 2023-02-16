@@ -2,10 +2,29 @@ import React from "react";
 import EthereumPrice from "components/EthereumPrice";
 import Button from "components/Button";
 import { IconCircleRemoveWhite, IconInfo, IconTag } from "icons";
+import dayjs from "dayjs";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
+import collectionsService from "api/collections/collections.service";
 
-const Footer = () => {
+const Footer = ({ items, prices }: any) => {
+  const navigate = useNavigate();
+  const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
+  const onUpdateBulkListing = async () => {
+    try {
+      const data = bulkItems.map((item: any) => ({
+        id: item.id,
+        price: prices?.[item.uid],
+        expireTime: Math.round(dayjs().add(3, "days").valueOf() / 1000),
+      }));
+      await collectionsService.updateBulkListing(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
-    <footer className="sticky bottom-0 border-t border-gray flex flex-col bg-bg">
+    <footer className="sticky bottom-0 border-y border-gray flex flex-col bg-bg">
       <div className="px-5 py-2 flex flex-col gap-2 w-full text-gray-light">
         <div className="flex items-center justify-between">
           <h6 className="text-h6">Service Fee</h6>
@@ -30,12 +49,17 @@ const Footer = () => {
         </div>
         <div></div>
         <div className="flex justify-end">
-          <Button className="btn-secondary">
+          <Button
+            className="btn-secondary"
+            onClick={() => {
+              navigate(PATHS.PROFILE);
+            }}
+          >
             CANCEL
             <IconCircleRemoveWhite />
           </Button>
-          <Button>
-            LIST 1 ITEM
+          <Button onClick={onUpdateBulkListing}>
+            LIST {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
             <IconTag />
           </Button>
         </div>

@@ -13,6 +13,7 @@ export interface CartItemProps {
   price?: number | string;
   id: number;
   titleSlot?: any;
+  uid?: any;
 }
 
 const CartItemStatus = ({ text }: { text: string }) => {

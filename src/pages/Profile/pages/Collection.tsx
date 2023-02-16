@@ -8,7 +8,7 @@ const options = {
   hiddenSweep: true,
 };
 const Collection = () => {
-  const { userInfo } = useProfile();
+  const { userInfo, options: profileOptions } = useProfile();
   const [filter, setFilter] = React.useState([] as any);
   const [collectionItems, setCollectionItems] = useState(userInfo?.tokens);
   const initParams = {
@@ -40,15 +40,16 @@ const Collection = () => {
   };
 
   const fetchFilters = async () => {
-    const response = await userService.getFilters({ userId: userInfo.id ?? 16 });
+    const response = await userService.getFilters({ userId: userInfo.id });
     setFilter(response.data.filters ?? []);
   };
 
   React.useEffect(() => {
     fetchFilters();
-  }, []);
+    setCollectionItems(userInfo?.tokens);
+  }, [userInfo]);
 
-  return <CollectionList collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={options} onChangeFilter={onChangeFilter} />;
+  return <CollectionList collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={{ ...options, ...profileOptions }} onChangeFilter={onChangeFilter} />;
 };
 
 export default Collection;

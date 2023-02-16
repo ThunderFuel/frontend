@@ -23,6 +23,7 @@ export interface CollectionFilterResponse {
 }
 
 export interface CollectionItemResponse {
+  collectionName?: any;
   id: any;
   tokenOrder: any;
   isSelected: boolean;
@@ -35,6 +36,8 @@ export interface CollectionItemResponse {
   salable: boolean;
   lastSalePrice: number;
   user?: IUserResponse;
+
+  uid?: string;
 }
 
 export interface CollectionResponse {
@@ -92,4 +95,10 @@ export interface ActivityItemResponse {
 export interface WatchListRequest {
   collectionId: number;
   userId: number;
+}
+
+export interface UpdateBulkListingRequestItem {
+  id: number;
+  price: any;
+  expireTime: number;
 }

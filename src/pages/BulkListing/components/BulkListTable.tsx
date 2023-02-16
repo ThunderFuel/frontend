@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Table, { ITableHeader } from "components/Table/Table";
 import EthereumPrice from "components/EthereumPrice";
 import Checkbox from "components/CheckBox/Checkbox";
 import InputEthereum from "components/InputEthereum";
 import Img from "components/Img";
 import { AssetCollectionProfileImage } from "assets";
+import { useAppDispatch } from "store";
+import { toggleSelectedUID } from "store/bulkListingSlice";
 
 const Collection = ({ image }: { image?: any; title: string }) => {
   return (
@@ -20,21 +22,28 @@ const Collection = ({ image }: { image?: any; title: string }) => {
   );
 };
 
-const BulkListTable = () => {
-  const [items, setItems] = useState<any[]>([]);
-  const onSelect = (a: any) => {
-    console.log(a);
+const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
+  const dispatch = useAppDispatch();
+  const onSelect = (selectedItem: any) => {
+    dispatch(toggleSelectedUID(selectedItem));
   };
 
   const headers: ITableHeader[] = [
     {
       key: "selection",
       text: "",
-      render: (collection) => (
-        <div className="p-6">
-          <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
-        </div>
-      ),
+      render: (collection) => {
+        return (
+          <div className="p-6">
+            <Checkbox
+              checked={collection.isChecked}
+              onClick={() => {
+                onSelect(collection);
+              }}
+            />
+          </div>
+        );
+      },
       width: "64px",
     },
     {
@@ -75,31 +84,21 @@ const BulkListTable = () => {
       key: "price",
       text: "your prıce",
       align: "flex-end",
-      render: () => (
-        <div className="px-3">
-          <InputEthereum placeholder="0" />
-        </div>
-      ),
+      render: (item) => {
+        return (
+          <div className="px-3">
+            <InputEthereum
+              placeholder="0"
+              value={prices?.[item.uid]}
+              onChange={(value: any) => {
+                onUpdatePrice(item.uid, value);
+              }}
+            />
+          </div>
+        );
+      },
     },
   ];
-
-  const fetchItems = async () => {
-    const items = [1, 2, 3].map((item) => {
-      return {
-        id: item,
-        listedAt: 5,
-        proceed: 13,
-        floor: 123.5,
-        topTrait: 4,
-      };
-    });
-
-    return setItems(items);
-  };
-
-  React.useEffect(() => {
-    fetchItems();
-  }, []);
 
   return <Table containerFluidClassName={"-mx-5 !w-auto"} headers={headers} items={items} />;
 };

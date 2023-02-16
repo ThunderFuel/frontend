@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { useCollectionListContext } from "../../CollectionListContext";
 import SelectedFilter from "../SelectedFilter";
 import CollectionGridLoading from "./CollectionGridLoading";
+import CollectionProfileFooter from "./CollectionProfileFooter";
 
 const Index = () => {
   const { isDisplayTypeList, pagination, isLoading, collectionItems, options } = useCollectionListContext();
@@ -19,7 +20,7 @@ const Index = () => {
 
       {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading /> : <CollectionGrid />}
 
-      <CollectionFooter />
+      {options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}
     </div>
   );
 };

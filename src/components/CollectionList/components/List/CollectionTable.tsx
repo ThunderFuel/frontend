@@ -34,7 +34,7 @@ const CollectionTable = () => {
     if (!collection.isSelected) {
       dispatch(add(collection));
     } else {
-      dispatch(remove(collection.tokenOrder));
+      dispatch(remove(collection.uid));
     }
   };
 

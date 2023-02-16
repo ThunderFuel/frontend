@@ -12,19 +12,25 @@ interface IProfileContext {
   socialActiveTab: any;
   onSetSocialActiveTab: any;
   onFollow: ({ isFollow, followUser }: { isFollow: boolean; followUser: IUserResponse }) => void;
+  options: object;
 }
 
 export const ProfileContext = createContext<IProfileContext>({} as any);
 
-const ProfileProvider = ({ userId, children }: { userId: any; children: ReactNode }) => {
+const ProfileProvider = ({ userId, options, children }: { userId: any; options: any; children: ReactNode }) => {
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
   const fetchUserProfile = async () => {
-    const response = await userService.getUser({
-      id: userId,
-      includes: [0, 1, 2, 3, 4],
-    });
-    setUserInfo(response.data);
+    setUserInfo({ tokens: [], likedTokens: [] } as any);
+    try {
+      const response = await userService.getUser({
+        id: userId,
+        includes: [0, 1, 2, 3, 4],
+      });
+      setUserInfo(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   React.useEffect(() => {
@@ -55,6 +61,7 @@ const ProfileProvider = ({ userId, children }: { userId: any; children: ReactNod
     socialActiveTab,
     onSetSocialActiveTab,
     onFollow,
+    options,
   };
 
   return !!userInfo && <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
