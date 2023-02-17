@@ -1,11 +1,13 @@
 import React from "react";
 import Button from "components/Button";
 import { IconTag } from "icons";
-import { useAppSelector } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import useNavigate from "hooks/useNavigate";
-import { PATHS } from "../../../../router/config/paths";
+import { PATHS } from "router/config/paths";
+import { removeAll } from "store/bulkListingSlice";
 
 const CollectionFooter = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const selectedBulkListingItemCount = useAppSelector((state) => state.bulkListing.items.length);
 
@@ -14,7 +16,7 @@ const CollectionFooter = () => {
   }
 
   const onClear = () => {
-    console.log(onClear);
+    dispatch(removeAll());
   };
   const onUpdateBulkListing = () => {
     navigate(PATHS.BULK_LISTING);
