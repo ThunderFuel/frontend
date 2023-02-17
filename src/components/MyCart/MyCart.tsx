@@ -59,7 +59,7 @@ const MyCart = () => {
             </div>
             <div className="flex flex-col h-[calc(100vh-265px)] gap-2 overflow-y-scroll no-scrollbar ">
               {items.map((i, index) => (
-                <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.tokenOrder} uid={i.uid}></CartItem>
+                <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.tokenOrder} uid={i.uid} isRemovable={true}></CartItem>
               ))}
             </div>
           </>

@@ -14,6 +14,7 @@ export interface CartItemProps {
   id: number;
   titleSlot?: any;
   uid?: any;
+  isRemovable?: boolean;
 }
 
 const CartItemStatus = ({ text }: { text: string }) => {
@@ -27,7 +28,7 @@ const CartItemStatus = ({ text }: { text: string }) => {
   );
 };
 
-const CartItemImage = ({ image, onRemove, isUnavailable }: { image: any; isUnavailable: boolean; onRemove: () => void }) => {
+const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image: any; isUnavailable: boolean; onRemove: () => void; isRemovable?: boolean }) => {
   const images = Array.isArray(image) ? image : [image];
 
   const imagePosition: any = {
@@ -47,13 +48,15 @@ const CartItemImage = ({ image, onRemove, isUnavailable }: { image: any; isUnava
         })}
       </div>
       {isUnavailable && <div className="absolute top-0 w-full h-full left-0 bg-gray/80" />}
-      <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <IconTrash className="cursor-pointer" onClick={onRemove} />
-      </div>
+      {isRemovable && (
+        <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <IconTrash className="cursor-pointer" onClick={onRemove} />
+        </div>
+      )}
     </div>
   );
 };
-const CartItem = ({ text, name, image, price, id, className, titleSlot }: CartItemProps) => {
+const CartItem = ({ text, name, image, price, id, className, titleSlot, isRemovable }: CartItemProps) => {
   const dispatch = useAppDispatch();
   const onRemove = () => {
     dispatch(remove(id));
@@ -69,7 +72,7 @@ const CartItem = ({ text, name, image, price, id, className, titleSlot }: CartIt
     <>
       <div className={clsx("flex flex-col border border-gray p-2.5 rounded-md hover:bg-bg-light group", className)}>
         <div className="flex items-start gap-[18px]">
-          <CartItemImage image={image} isUnavailable={isUnavailable} onRemove={onRemove} />
+          <CartItemImage image={image} isUnavailable={isUnavailable} onRemove={onRemove} isRemovable={isRemovable} />
           <div className={clsx("flex flex-col w-full", isUnavailable ? "text-gray-light" : "text-white")}>
             <div className="flex w-full justify-between border-b border-b-gray pb-2">
               <span className="text-h6 text-white">{name}</span>
