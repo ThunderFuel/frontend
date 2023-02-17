@@ -11,6 +11,7 @@ export interface HttpClientOptions extends AxiosRequestConfig {
 }
 
 export interface ApiResponse<T> extends AxiosResponse {
+  result?: any;
   itemsCount?: number;
   pageCount?: number;
   pageSize?: number;
