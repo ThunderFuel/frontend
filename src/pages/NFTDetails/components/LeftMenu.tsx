@@ -137,7 +137,7 @@ const LeftMenu = (props: any) => {
       case 1:
         return { icon: IconToken, text: "Minted by" };
       case 2:
-        return { icon: IconCart, text: "Sold by" };
+        return { icon: IconCart, text: "Purchased by" };
       case 3:
         return { icon: IconTransfer, text: "Transferred from" };
       case 4:
