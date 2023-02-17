@@ -21,6 +21,10 @@ const Collection = () => {
     collectionsService.getCollectionHeader(collectionId as string).then((response) => {
       setCollection(response.data);
     });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [collectionId]);
 
   return !useIsMobile() ? (
