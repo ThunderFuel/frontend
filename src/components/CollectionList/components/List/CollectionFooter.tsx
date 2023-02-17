@@ -35,7 +35,7 @@ const CollectionFooter = () => {
         <IconTrash />
       </Button>
       <Button className="uppercase" onClick={onToggleCheckoutModal}>
-        buy {selectedCartItemCount} ıtem - ${selectedCartTotalAmount} eth
+        buy {selectedCartItemCount} ıtem - {selectedCartTotalAmount} eth
         <IconArrowRight />
       </Button>
     </div>
