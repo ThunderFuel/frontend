@@ -5,6 +5,7 @@ import RightMenu from "../components/RightMenu";
 import EthereumPrice from "components/EthereumPrice";
 import { useAppSelector } from "store";
 import collectionsService from "api/collections/collections.service";
+import { addressFormat } from "utils";
 
 const CustomBox = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
@@ -41,21 +42,29 @@ function formatTimePassed(createdDate: string): string {
   return "just now";
 }
 
+function handleFromUsername(data: any) {
+  return data.fromUser.userName ?? addressFormat(data.fromUser.walletAddress);
+}
+
+function handleToUsername(data: any) {
+  return data.toUser.userName ?? addressFormat(data.toUser.walletAddress);
+}
+
 function formatActivityData(data: any): { icon: any; title: string; description: string } {
   //TODO zamanlari ekle
   switch (data.activityType) {
     case 0:
-      return { icon: IconOffer, title: "Offer", description: `Offered by ${data.fromUser.userName}, ${formatTimePassed(data.createdAt)}` };
+      return { icon: IconOffer, title: "Offer", description: `Offered by ${handleFromUsername(data)}, ${formatTimePassed(data.createdAt)}` };
     case 1:
-      return { icon: IconToken, title: "Mint", description: `Minted by ${data.fromUser.userName}, ${formatTimePassed(data.createdAt)}` };
+      return { icon: IconToken, title: "Mint", description: `Minted by ${handleFromUsername(data)}, ${formatTimePassed(data.createdAt)}` };
     case 2:
-      return { icon: IconCart, title: "Sale", description: `Sold by ${data.fromUser.userName}, to ${data.toUser.userName} ${formatTimePassed(data.createdAt)}` };
+      return { icon: IconCart, title: "Sale", description: `Sold by ${handleFromUsername(data)}, to ${handleToUsername(data)} ${formatTimePassed(data.createdAt)}` };
     case 3:
-      return { icon: IconTransfer, title: "Transfer", description: `Transferred from ${data.fromUser.userName} to ${data.toUser.userName} ${formatTimePassed(data.createdAt)} ` };
+      return { icon: IconTransfer, title: "Transfer", description: `Transferred from ${handleFromUsername(data)} to ${handleToUsername(data)} ${formatTimePassed(data.createdAt)} ` };
     case 4:
-      return { icon: IconListed, title: "List", description: `Listed by ${data.fromUser.userName} ${formatTimePassed(data.createdAt)}` };
+      return { icon: IconListed, title: "List", description: `Listed by ${handleFromUsername(data)} ${formatTimePassed(data.createdAt)}` };
     case 5:
-      return { icon: IconBid, title: "Bid", description: `Bid placed by ${data.fromUser.userName} ${formatTimePassed(data.createdAt)}` };
+      return { icon: IconBid, title: "Bid", description: `Bid placed by ${handleFromUsername(data)} ${formatTimePassed(data.createdAt)}` };
     default:
       throw new Error(`Invalid activity type: ${data}`);
   }
