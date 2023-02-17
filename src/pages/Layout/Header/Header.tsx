@@ -18,11 +18,31 @@ import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import { useIsMobile } from "hooks/useIsMobile";
+import { EtherscanURL } from "api";
 
-const ethPrice = 1322.6;
-const gasPrice = 39;
+const ETHERSCAN_API_KEY = "9HA67PGY65RQS9Z6TETRT3EC6KQ6IGAH9V";
 
 const HeaderTop = React.memo(() => {
+  const [gasFee, setGasFee] = React.useState<any>(0);
+  const [ethPrice, setEthPrice] = React.useState(0);
+
+  async function getGasFee() {
+    await EtherscanURL.get("api", { params: { module: "gastracker", action: "gasoracle", apikey: ETHERSCAN_API_KEY } }).then((res) => setGasFee(res.result.SafeGasPrice));
+  }
+  async function getEthPrice() {
+    await EtherscanURL.get("api", { params: { module: "stats", action: "ethprice", apikey: ETHERSCAN_API_KEY } }).then((res) => setEthPrice(res.result.ethusd));
+  }
+  React.useEffect(() => {
+    getGasFee();
+    getEthPrice();
+    const interval = setInterval(() => {
+      getGasFee();
+      getEthPrice();
+    }, 10 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="container-fluid flex pt-[5px] pb-[9px] items-center">
       <div className="flex items-center gap-5 w-full text-headlineSm font-bigShoulderDisplay uppercase">
@@ -32,7 +52,7 @@ const HeaderTop = React.memo(() => {
         </span>
         <span className="flex items-center">
           <IconGas className="mr-[6px]" />
-          <span className="text-white">{gasPrice} GWEI</span>
+          <span className="text-white">{gasFee} GWEI</span>
         </span>
       </div>
       <SocialMediaIcons />
