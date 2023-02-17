@@ -4,8 +4,9 @@ import { AssetLogo } from "assets";
 
 const Footer = () => {
   return (
-    <div className="container-fluid mt-auto flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full py-5 lg:py-10">
-      {/* <div className="border-b border-b-gray pb-10 mb-5">
+    <div className="mt-auto flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full py-5 lg:py-10">
+      <div className="container-fluid">
+        {/* <div className="border-b border-b-gray pb-10 mb-5">
         <div className="container">
           <div className="lg:flex lg:items-start lg:justify-between">
             <div className="flex flex-col items-start lg:justify-center justify-start text-white">
@@ -48,12 +49,12 @@ const Footer = () => {
         </div>
       </div> */}
 
-      <div className="container flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
-          <a href="/">
-            <img src={AssetLogo} style={{ height: "32px" }} />
-          </a>
-          {/* <div className="flex flex-col items-center lg:flex-row gap-6">
+        <div className="container flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
+            <a href="/">
+              <img src={AssetLogo} style={{ height: "32px" }} />
+            </a>
+            {/* <div className="flex flex-col items-center lg:flex-row gap-6">
             <h5 className="text-headline-01 text-gray-light">EXPLORE</h5>
             <h5 className="text-headline-01 text-gray-light">SELL</h5>
             <h5 className="text-headline-01 text-gray-light">CREATE</h5>
@@ -62,9 +63,10 @@ const Footer = () => {
             <h5 className="text-headline-01 text-gray-light">TERMS</h5>
             <h5 className="text-headline-01 text-gray-light">SERVICES</h5>
           </div> */}
-        </div>
-        <div className="flex justify-center">
-          <SocialMediaIcons />
+          </div>
+          <div className="flex justify-center">
+            <SocialMediaIcons />
+          </div>
         </div>
       </div>
     </div>
