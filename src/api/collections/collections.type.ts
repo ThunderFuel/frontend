@@ -98,7 +98,7 @@ export interface WatchListRequest {
 }
 
 export interface UpdateBulkListingRequestItem {
-  id: number;
+  tokenId: number;
   price: any;
   expireTime: number;
 }

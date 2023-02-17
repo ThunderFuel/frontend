@@ -12,12 +12,14 @@ interface ISelect {
   options: ISelectOption[];
   value: ISelectOption;
   onChange: (value: ISelectOption) => void;
+  direction?: string;
 }
 
-const Select = ({ options, value, onChange }: ISelect) => {
+const Select = ({ options, value, onChange, direction = "bottom" }: ISelect) => {
   const [show, setShow] = React.useState(false);
   const listRef = React.useRef<HTMLUListElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const isDirectionTop = direction === "top";
 
   const onToggle = () => {
     setShow(!show);
@@ -37,7 +39,11 @@ const Select = ({ options, value, onChange }: ISelect) => {
         <IconArrowDown className={clsx("transition-all duration-300", show && "rotate-180")} />
       </div>
       <div
-        className={clsx("absolute transition-all duration-300 translate-y-full text-white min-w-full overflow-hidden", show ? "-bottom-2" : "bottom-0")}
+        className={clsx(
+          "absolute transition-all duration-300 text-white min-w-full overflow-hidden",
+          isDirectionTop ? "-translate-y-full" : "translate-y-full",
+          show ? (isDirectionTop ? "-top-2" : "-bottom-2") : isDirectionTop ? "top-0" : "bottom-0"
+        )}
         style={{ height: show ? `${listRef.current?.scrollHeight}px` : 0 }}
       >
         <ul className="border border-gray bg-bg rounded-md divide-y divide-gray" ref={listRef}>
