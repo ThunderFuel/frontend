@@ -1,7 +1,6 @@
 import React from "react";
 import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand } from "icons";
 import Img from "components/Img/Img";
-import ActivityItemDescription from "components/ActivityDescription";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
 
@@ -9,6 +8,7 @@ import { dateFormat } from "utils";
 import Button from "components/Button";
 import { useOfferContext } from "../OfferContext";
 import clsx from "clsx";
+import { useProfile } from "../../../ProfileContext";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
@@ -31,6 +31,19 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
 };
 
 const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) => {
+  const { options, userInfo } = useProfile();
+
+  const getOfferMadeUserLabel = () => {
+    if (options?.isProfile && item.isOfferMade) {
+      return <span className="text-green"> you </span>;
+    }
+    if (item.isOfferMade) {
+      return <span className="text-white"> {userInfo.userName ?? item.makerAddress} </span>;
+    }
+
+    return <span className="text-white"> {item.makerAddress} </span>;
+  };
+
   return (
     <div>
       <div className={clsx("flex items-start justify-between p-2.5 gap-5 border-t border-x border-gray rounded-t-md", !item.isActiveOffer ? "border-b rounded-b-md" : "")}>
@@ -40,12 +53,11 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         <div className="flex flex-col gap-5 text-white flex-1">
           <div className="flex flex-col gap-2.5">
             <h6 className="text-h6">{item?.tokenName ?? "-"}</h6>
-            <ActivityItemDescription
-              activityType={item.activityType}
-              fromUserContractAddress={item.fromUser?.walletAddress}
-              toUserContractAddress={item.toUser?.walletAddress}
-              createdTimeStamp={item.createdTimeStamp}
-            />
+            <div className="w-full body-medium text-gray-light">
+              Bid placed by
+              {getOfferMadeUserLabel()}
+              on <span className="text-white">{dateFormat(item.createdAt, "DD MMM YYYY")}</span>
+            </div>
           </div>
           <div className="inline-flex">
             {item.expireTime && (
