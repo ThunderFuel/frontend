@@ -26,7 +26,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
 
   const getOffer = async () => {
     const response = await offerService.getOffer({
-      userId: userInfo.id,
+      userId: userId,
       page: 1,
     });
 
@@ -35,7 +35,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
   const getActivity = async () => {
     try {
       const response = await collectionService.getActivity({
-        userId: userInfo.id,
+        userId: userId,
       });
 
       const lastActivity = response?.data.filter((activity) => activity.activityType !== ActivityFilters.Offers).shift();

@@ -22,7 +22,6 @@ const Collection = () => {
         tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => String(collectionItem.name).toLowerCase().search(item) > -1);
       }
       if (key === "Status" && item?.type === 3) {
-        console.log(item.value);
         tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => {
           if (item.value === "1") {
             return collectionItem.salable;

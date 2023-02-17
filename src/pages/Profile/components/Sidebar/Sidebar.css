@@ -5,7 +5,9 @@
 }
 
 .profile-cover-image {
-  @apply absolute top-0 left-0 pb-5 border-b border-gray;
+  @apply absolute top-0 left-0 pb-5 border-b border-gray bg-gray;
+  width: 500px;
+  min-height: 315px;
 }
 
 .profile-cover-image:after {

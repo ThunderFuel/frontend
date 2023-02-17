@@ -33,7 +33,7 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
               <Img src={item.image} className="w-full" />
             </div>
             <div className="flex flex-col flex-1 gap-1">
-              <span className="body-medium text-overflow">{item.text}</span>
+              <span className="body-medium text-overflow max-w-[100px]">{item.text}</span>
               <span className="body-small text-gray-light">FLOOR: {item.count} ETH</span>
             </div>
           </div>

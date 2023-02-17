@@ -16,7 +16,7 @@ const Sidebar = ({ isProfile = false }: any) => {
     <div className="flex flex-col border-r border-gray min-w-[500px] max-w-[500px]">
       <div className="sidebar-container">
         {isProfile ? <ButtonEdit /> : <ButtonFollow />}
-        <CoverImage />
+        <CoverImage src={userInfo?.banner} />
         <div className="p-10 relative pt-[150px] text-white w-full h-full flex">
           <div className="flex flex-col w-full">
             <LogoContainer userInfo={userInfo} />
