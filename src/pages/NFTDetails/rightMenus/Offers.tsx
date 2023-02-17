@@ -8,6 +8,7 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
+import Avatar from "components/Avatar";
 
 export function formatDate(dateString: string) {
   if (dateString === null) return;
@@ -39,13 +40,13 @@ const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ow
 
   return (
     <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
-      <div className={`flex w-full p-[15px]  gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
-        <img src={item.user?.image} className="self-start w-8 h-8 rounded-full" alt="profile-image" />
+      <div className={`flex w-full p-[15px] gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
+        <Avatar image={item?.user?.image} userId={item?.user?.id} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
             {item.user?.userName} on {formatDate(item.createdAt)}
           </span>
-          <div className="flex  items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
+          <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
             <IconClock className="w-[15px] h-[15px] flex-shrink-0" />
             Expires on {formatDateTime(item.expireTime)}
           </div>
