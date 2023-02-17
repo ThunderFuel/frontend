@@ -130,39 +130,48 @@ const LeftMenu = (props: any) => {
   const { walletConnect } = useWallet();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
-  function formatActivityData(data: number) {
-    switch (data) {
+  function handleFromUsername(activity: any) {
+    return activity.fromUser?.userName ?? addressFormat(activity.fromUser?.walletAddress);
+  }
+
+  function handleToUsername(activity: any) {
+    return activity.toUser?.userName ?? addressFormat(activity.toUser?.walletAddress);
+  }
+
+  function formatActivityData(activity: any) {
+    switch (activity.activityType) {
       case 0:
-        return { icon: IconOffer, text: "Offered by" };
+        return { icon: IconOffer, title: "Offer", description: `${activity.price ? activity.price + " ETH" : ""} Offered by ${handleToUsername(activity)}` };
       case 1:
-        return { icon: IconToken, text: "Minted by" };
+        return { icon: IconToken, title: "Mint", description: `${activity.price ? activity.price + " ETH" : ""} Minted by ${handleFromUsername(activity)}` };
       case 2:
-        return { icon: IconCart, text: "Purchased by" };
+        return { icon: IconCart, title: "Sale", description: `${activity.price ? activity.price + " ETH" : ""} Purchased by ${handleToUsername(activity)}` };
       case 3:
-        return { icon: IconTransfer, text: "Transferred from" };
+        return {
+          icon: IconTransfer,
+          title: "Transfer",
+          description: `${activity.price ? activity.price + " ETH" : ""} Transferred from ${handleFromUsername(activity)} to ${handleToUsername(activity)} `,
+        };
       case 4:
-        return { icon: IconListed, text: "Listed by" };
+        return { icon: IconListed, title: "List", description: `${activity.price ? activity.price + " ETH" : ""} Listed by ${handleFromUsername(activity)}` };
       case 5:
-        return { icon: IconBid, text: "Bid placed by" };
+        return { icon: IconBid, title: "Bid", description: `${activity.price ? activity.price + " ETH" : ""} Bid placed by ${handleFromUsername(activity)}` };
       default:
-        throw new Error(`Invalid activity type: ${data}`);
+        throw new Error(`Invalid activity type: ${activity}`);
     }
   }
 
   function renderLastActivity(activity: any) {
     if (activity === undefined || activity === null) return;
 
-    const { price, fromUser, activityType } = activity;
-    const { icon, text } = formatActivityData(activityType);
+    const { icon, description } = formatActivityData(activity);
 
     return (
       <BoxWithIcon icon={icon} className="flex bg-bg-light hover:bg-bg-light ">
         <div className="flex w-full justify-between pr-4">
           <div className="flex flex-col gap-y-[5px] ">
             <div className="text-headline-01 text-gray-light">LAST ACTIVITY</div>
-            <span className="text-head6 text-white font-spaceGrotesk">
-              {price} ETH {text} {fromUser?.userName}
-            </span>
+            <span className="text-head6 text-white font-spaceGrotesk">{description}</span>
           </div>
           <HoverButton
             Icon={IconArrowRight}
@@ -214,7 +223,7 @@ const LeftMenu = (props: any) => {
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {nft.bestOffer?.price} ETH by {nft.bestOffer?.user?.userName}
+                    {nft.bestOffer?.price} ETH by {nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)}
                   </h6>
                 </div>
               </div>
