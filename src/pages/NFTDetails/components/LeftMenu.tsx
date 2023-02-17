@@ -150,7 +150,7 @@ const LeftMenu = (props: any) => {
         return {
           icon: IconTransfer,
           title: "Transfer",
-          description: `${activity.price ? activity.price + " ETH" : ""} Transferred from ${handleFromUsername(activity)} to ${handleToUsername(activity)} `,
+          description: `${activity.price ? activity.price + " ETH" : ""} Transferred to ${handleToUsername(activity)}`,
         };
       case 4:
         return { icon: IconListed, title: "List", description: `${activity.price ? activity.price + " ETH" : ""} Listed by ${handleFromUsername(activity)}` };
