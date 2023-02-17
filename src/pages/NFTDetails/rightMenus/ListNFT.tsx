@@ -75,7 +75,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
       <IconInfo className="w-6 h-6" />
       <div className="flex w-full flex-col gap-y-[5px]">
         <h6 className="text-head6 font-spaceGrotesk">Timed Auction</h6>
-        <p className="w-full text-bodyMd text-gray-light">Lorem ipsum dolor sit amet.</p>
+        <p className="w-full text-bodyMd text-gray-light">You can accept the highest bid at any time during or after the auction.</p>
       </div>
     </div>
   );
