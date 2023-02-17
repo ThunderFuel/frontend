@@ -30,6 +30,8 @@ const Collection = () => {
             return collectionItem.onAuction;
           } else if (item.value === "3") {
             return !collectionItem.salable;
+          } else if (item.value === "4") {
+            return collectionItem.hasOffer;
           }
         });
       }

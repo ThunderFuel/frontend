@@ -1,8 +1,8 @@
 import React from "react";
 
 import "./Sidebar.css";
-import { IconQuarry } from "icons";
-import { numberFormat } from "utils";
+import { IconHand, IconQuarry } from "icons";
+import { addressFormat, numberFormat } from "utils";
 import LogoContainer from "./components/LogoContainer";
 import { Box, BoxWithIcon } from "./components/Box";
 import CoverImage from "./components/CoverImage";
@@ -44,16 +44,21 @@ const Sidebar = ({ isProfile = false }: any) => {
                 {numberFormat(userInfo?.tokens?.length)}
               </Box>
               <Box header="created" className="justify-between">
-                {numberFormat(userInfo?.tokens?.length)}
+                0
               </Box>
             </div>
-            <BoxWithIcon icon={IconQuarry} className="mt-2">
+            <BoxWithIcon icon={IconHand} className="mt-2">
               <div className="text-headline-01 text-gray-light uppercase">LAST offer</div>
-              <h6 className="text-h6">0.99 ETH Bid placed by 09x910</h6>
+              <h6 className="text-h6">
+                {userInfo?.lastOffer?.price} ETH Bid placed by{" "}
+                {userInfo?.lastOffer?.makerUserId === userInfo.id ? <span className="text-green">you</span> : addressFormat(userInfo?.lastOffer?.makerAddress)}
+              </h6>
             </BoxWithIcon>
-            <BoxWithIcon icon={IconQuarry} className="mt-2">
+            <BoxWithIcon icon={userInfo?.lastActivity?.typeIcon ?? IconQuarry} className="mt-2">
               <div className="text-headline-01 text-gray-light uppercase">LAST ACTIVITY</div>
-              <h6 className="text-h6">Minted CloneX #2750</h6>
+              <h6 className="text-h6">
+                {userInfo?.lastActivity?.type} {userInfo?.lastActivity?.token?.name}
+              </h6>
             </BoxWithIcon>
           </div>
         </div>
