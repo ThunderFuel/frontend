@@ -7,7 +7,7 @@ const CoverImage = ({ src = AssetSettingsCoverImage }: any) => {
     console.log(e);
   };
 
-  return <UploadImage defaultImage={AssetSettingsCoverImage} src={src} onChange={onChange} />;
+  return <UploadImage defaultImage={AssetSettingsCoverImage} src={src ?? AssetSettingsCoverImage} onChange={onChange} />;
 };
 
 export default CoverImage;
