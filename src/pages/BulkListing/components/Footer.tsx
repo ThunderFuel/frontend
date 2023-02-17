@@ -6,16 +6,18 @@ import dayjs from "dayjs";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import collectionsService from "api/collections/collections.service";
+import SelectExpiredDate from "./SelectExpiredDate";
 
 const Footer = ({ items, prices }: any) => {
   const navigate = useNavigate();
+  const [expiredDate, setExpiredDate] = React.useState<any>(null);
   const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
   const onUpdateBulkListing = async () => {
     try {
       const data = bulkItems.map((item: any) => ({
-        id: item.id,
+        tokenId: item.id,
         price: prices?.[item.uid],
-        expireTime: Math.round(dayjs().add(3, "days").valueOf() / 1000),
+        expireTime: Math.round(dayjs().add(expiredDate?.value, "days").valueOf() / 1000),
       }));
       await collectionsService.updateBulkListing(data);
     } catch (e) {
@@ -47,7 +49,15 @@ const Footer = ({ items, prices }: any) => {
             Expiration at 12/12/2022, 8:41 PM
           </div>
         </div>
-        <div></div>
+        <div>
+          <SelectExpiredDate
+            value={expiredDate}
+            onChange={(value: any) => {
+              console.log(value);
+              setExpiredDate(value);
+            }}
+          />
+        </div>
         <div className="flex justify-end">
           <Button
             className="btn-secondary"
