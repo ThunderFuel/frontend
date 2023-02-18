@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import ConnectWallet from "components/ConnectWallet";
+import ConnectWallet from "components/ConnectWalletModal";
 import { useAppDispatch, useAppSelector } from "store";
 import { toggleWalletModal } from "store/walletSlice";
 import Wallet from "./Wallet";
