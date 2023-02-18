@@ -25,9 +25,7 @@ export const useWallet = () => {
   };
 
   const getConnectionStatus = async () => {
-    fuel.isConnected().then((res) => {
-      dispatch(setIsConnected(res));
-    });
+    return fuel.isConnected();
   };
 
   const getAccounts = async () => {
@@ -35,7 +33,7 @@ export const useWallet = () => {
       const accounts = await fuel.accounts();
 
       return accounts[0];
-    } catch {
+    } catch (e: any) {
       return null;
     }
   };
