@@ -1,25 +1,16 @@
 import React from "react";
 import Sidebar from "./components/Sidebar/Sidebar";
 import ModalSocial from "./Modal/ModalSocial";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Tab from "./components/Tab";
 import ProfileProvider from "./ProfileContext";
 import { useAppSelector } from "store";
-import { PATHS } from "router/config/paths";
+import ConnectWalletScreen from "components/ConnectWalletScreen";
 
 const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
 
-  //*
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (!user.id) {
-      navigate(PATHS.MARKETPLACE);
-    }
-  }, []);
-  //*/
-
-  return (
+  return user.id ? (
     <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true }}>
       <div className="flex">
         <Sidebar isProfile={true} />
@@ -30,6 +21,8 @@ const Profile = () => {
         <ModalSocial />
       </div>
     </ProfileProvider>
+  ) : (
+    <ConnectWalletScreen />
   );
 };
 
