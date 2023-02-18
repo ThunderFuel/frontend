@@ -1,21 +1,39 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import collectionService from "api/collections/collections.service";
 
 import CollectionList from "components/CollectionList";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
 import { CollectionItemsRequest } from "api/collections/collections.type";
 
+const getInitParams = () => {
+  const initParams = {
+    Status: { type: 3, value: "1" },
+    sortingType: 1,
+  };
+  try {
+    const queryString = new URLSearchParams(window.location.search);
+    const queryFilterArr = JSON.parse(decodeURIComponent(queryString.get("filter") as string));
+
+    return {
+      ...initParams,
+      ...queryFilterArr,
+    };
+  } catch (e) {
+    return initParams;
+  }
+};
 const Items = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { collectionId } = useParams();
   const [isLoading, setIsLoading] = React.useState(false);
   const [collections, setCollections] = useState<any[]>([]);
   const [filters, setFilters] = useState<any>([]);
   const [pagination, setPagination] = useState<any>({});
-  const initParams = {
-    Status: { type: 3, value: "1" },
-    sortingType: 1,
-  };
+
+  const initParams = getInitParams();
 
   const getCollectionItems = async (filterParam: any = {}) => {
     const data: CollectionItemsRequest = {
@@ -49,6 +67,19 @@ const Items = () => {
       id: collectionId,
     });
     setFilters(response.data.filters as any);
+  };
+
+  const filterHistoryPush = (params: any) => {
+    const stringParam = JSON.stringify(params);
+    const stringInitParam = JSON.stringify(initParams);
+    if (stringParam === stringInitParam) {
+      return false;
+    }
+
+    navigate({
+      pathname: location.pathname,
+      search: `filter=${encodeURIComponent(JSON.stringify(params))}`,
+    });
   };
   const onChangeFilter = async (params: any) => {
     const { sortingType, search, ...etcParams } = params;
@@ -85,6 +116,8 @@ const Items = () => {
       page: 1,
       items: selectedFilter,
     });
+
+    filterHistoryPush(params);
   };
 
   const onChangePagination = (params: any) => {
@@ -102,7 +135,6 @@ const Items = () => {
 
   React.useEffect(() => {
     fetchFilters();
-    // fetchCollections();
   }, [collectionId]);
 
   return (
