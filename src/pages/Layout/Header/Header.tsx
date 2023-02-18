@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetLogo, AssetThunderText } from "assets";
-import { IconCart, IconEthereum, IconGas, IconHamburger, IconSearch, IconThunder2, IconWallet } from "icons";
+import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconWallet } from "icons";
 
 import Tab from "components/Tab";
 import SocialMediaIcons from "components/SocialMediaIcons";
@@ -44,8 +44,8 @@ const HeaderTop = React.memo(() => {
   }, []);
 
   return (
-    <div className="container-fluid flex pt-[5px] pb-[9px] items-center">
-      <div className="flex items-center gap-5 w-full text-headlineSm font-bigShoulderDisplay uppercase">
+    <div className="container-fluid flex  items-center">
+      <div className="flex items-center  gap-5 shrink-0 text-headlineSm font-bigShoulderDisplay uppercase">
         <span className="flex items-center">
           <IconEthereum color="#838383" />
           <span className="text-white">${ethPrice}</span>
@@ -54,6 +54,10 @@ const HeaderTop = React.memo(() => {
           <IconGas className="mr-[6px]" />
           <span className="text-white">{gasFee} GWEI</span>
         </span>
+      </div>
+      <div className="flex w-full pt-[6px] pb-[6px] items-center gap-x-[10px] border-l ml-[27px] border-gray pl-[15px] text-white">
+        <IconInfo className="w-[18px] h-[18px]" />
+        <span className="text-headlineSm font-spaceGrotesk normal-case">Thunder is currently in beta phase. All data and transactions are being conducted on the testnet</span>
       </div>
       <SocialMediaIcons />
     </div>
