@@ -58,6 +58,9 @@
   .container-fluid {
     @apply w-full px-5 lg:px-10 3xl:m-auto 3xl:max-w-[1980px];
   }
+  .container-nftdetails {
+    @apply w-full 3xl:m-auto 3xl:max-w-[1980px] 3xl:border-x 3xl:border-gray;
+  }
 
   @variants responsive {
     /* Hide scrollbar for Chrome, Safari and Opera */

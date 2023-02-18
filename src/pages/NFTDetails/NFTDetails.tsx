@@ -81,7 +81,7 @@ const NFTDetails = () => {
   }, []);
 
   return !useIsMobile() ? (
-    <div className="relative flex justify-between">
+    <div className="relative flex justify-between container-nftdetails">
       <div className="w-2/5">
         <LeftMenu nft={nft} />
       </div>
