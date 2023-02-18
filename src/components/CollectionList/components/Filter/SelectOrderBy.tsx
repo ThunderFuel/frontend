@@ -25,7 +25,8 @@ const options: ISelectOption[] = [
 ];
 
 const SelectOrderBy = (props: any) => {
-  const [value, setValue] = React.useState(options[0]);
+  const defaultOption = options.find((option) => option.value === props.value) ?? options[0];
+  const [value, setValue] = React.useState(defaultOption);
 
   return (
     <div>

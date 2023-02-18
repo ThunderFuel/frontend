@@ -17,7 +17,7 @@ const Range = (props: any) => {
       <div className="flex flex-col justify-center flex-1 gap-2">
         <div className="text-headline-01 uppercase text-gray-light">Sweep</div>
         <div className="overflow-hidden px-1.5 -mx-1.5 rounded-full">
-          <InputRange value={props.value} minValue={0} maxValue={props.maxValue ?? 100} onChange={props.onChange} />
+          <InputRange value={props.value} minValue={0} maxValue={props.maxValue ?? 30} onChange={props.onChange} />
         </div>
       </div>
       <div>
@@ -40,7 +40,8 @@ const KEY_ENTER = "Enter";
 
 const Index = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
-  const { options, setParams, pagination, collectionItems, sweep, setSweep } = useCollectionListContext();
+  const { options, setParams, pagination, collectionItems, sweep, setSweep, params } = useCollectionListContext();
+  const [search, setSearch] = React.useState(params?.search ?? "");
   const onRangeChange = (value: any) => {
     setSweep(value);
     const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable)].splice(0, value);
@@ -60,7 +61,7 @@ const Index = ({ className }: { className?: string }) => {
           <div className="flex items-center w-full">
             <div className="flex flex-1">
               <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep ? "w-full" : "w-7/12")}>
-                <InputSearch placeholder="Search ID or name" onKeyPress={onKeyPress} />
+                <InputSearch placeholder="Search ID or name" value={search} onKeyPress={onKeyPress} onChange={(e: any) => setSearch(e.target.value)} />
               </div>
               {options?.hiddenSweep ? null : (
                 <div className="w-5/12">
@@ -70,6 +71,7 @@ const Index = ({ className }: { className?: string }) => {
             </div>
             <div className="pl-5 flex justify-end">
               <SelectOrderBy
+                value={params.sortingType}
                 onChange={(option: ISelectOption) => {
                   setParams({ sortingType: option.value });
                 }}
