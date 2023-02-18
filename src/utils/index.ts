@@ -78,3 +78,7 @@ export function randomIntFromInterval(min: number, max: number) {
 export const timeagoFormat = (time: number | string) => {
   return timeago.format(time);
 };
+
+export const uniqueArr = (array: any[]) => {
+  return Array.from(new Set(array.map((item) => JSON.stringify(item)))).map((item) => JSON.parse(item));
+};
