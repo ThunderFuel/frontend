@@ -36,7 +36,9 @@ const AutoCompleteRoot = (props: any, ref: any) => {
       <InputSearch {...etc} className={props.inputClassName} />
       {show && (
         <div className="relative">
-          <div className={clsx("absolute overflow-hidden z-10", "lg:no-scrollbar lg:overflow-y-auto lg:w-full lg:h-[430px] bg-bg-light lg:border border-gray lg:rounded-md lg:mt-2")}>{children}</div>
+          <div className={clsx("absolute overflow-hidden z-10", "lg:no-scrollbar lg:overflow-y-auto lg:w-full lg:max-h-[430px] bg-bg-light lg:border border-gray lg:rounded-md lg:mt-2")}>
+            {children}
+          </div>
         </div>
       )}
     </div>
