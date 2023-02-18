@@ -45,3 +45,12 @@ export { default as AssetSettingsCoverImage } from "./settings/cover-image.png";
 export { default as AssetSettingsProfileImage } from "./settings/profile-image.png";
 
 export { default as AssetLoadingCollectionLogo } from "./collection/loading-logo.png";
+
+export { default as AssetHotdrop1 } from "./marketplace/hotdrops/hotdrop-1.png";
+export { default as AssetHotdrop2 } from "./marketplace/hotdrops/hotdrop-2.png";
+export { default as AssetHotdrop3 } from "./marketplace/hotdrops/hotdrop-3.png";
+export { default as AssetHotdrop4 } from "./marketplace/hotdrops/hotdrop-4.png";
+export { default as AssetHotdrop5 } from "./marketplace/hotdrops/hotdrop-5.png";
+export { default as AssetHotdrop6 } from "./marketplace/hotdrops/hotdrop-6.png";
+export { default as AssetHotdrop7 } from "./marketplace/hotdrops/hotdrop-7.png";
+export { default as AssetHotdrop8 } from "./marketplace/hotdrops/hotdrop-8.png";
