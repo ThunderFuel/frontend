@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 
 const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
@@ -8,16 +9,15 @@ export function useFuel() {
   const [fuel, setFuel] = useState<Window["fuel"]>(globalWindow.fuel);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (globalWindow.fuel) {
-        setFuel(globalWindow.fuel);
-      } else {
-        setError("fuel not detected on the window!");
-      }
-      setLoading(false);
-    }, 1000);
+    const onFuelLoaded = () => {
+      setFuel(window.fuel);
+    };
+    if (window.fuel) {
+      onFuelLoaded();
+    }
+    document.addEventListener("FuelLoaded", onFuelLoaded);
 
-    return () => clearTimeout(timeout);
+    return () => document.removeEventListener("FuelLoaded", onFuelLoaded);
   }, []);
 
   return [fuel as NonNullable<Window["fuel"]>, error, isLoading] as const;
