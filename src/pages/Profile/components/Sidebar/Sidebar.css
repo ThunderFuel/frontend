@@ -1,7 +1,7 @@
 .sidebar-container {
   @apply sticky;
-  top: 112px;
-  height: calc(100vh - 112px);
+  top: 104px;
+  height: calc(100vh - 104px);
 }
 
 .profile-cover-image {

@@ -4,19 +4,18 @@ import EthereumPrice from "components/EthereumPrice";
 import Checkbox from "components/CheckBox/Checkbox";
 import InputEthereum from "components/InputEthereum";
 import Img from "components/Img";
-import { AssetCollectionProfileImage } from "assets";
 import { useAppDispatch } from "store";
 import { toggleSelectedUID } from "store/bulkListingSlice";
 
-const Collection = ({ image }: { image?: any; title: string }) => {
+const Collection = ({ item }: any) => {
   return (
     <div className="p-4 flex items-center gap-5">
       <div className="w-14 h-14 overflow-hidden rounded-md">
-        <Img src={image ?? AssetCollectionProfileImage} className="w-full" />
+        <Img src={item?.image} className="w-full" />
       </div>
       <div className="flex-1 w-full">
-        <div className="body-medium text-gray-light">CLONE X - X TAKASHI MCLONE X - X TAKASHI M</div>
-        <h6 className="text-h6 text-white">CloneX #2725</h6>
+        <div className="body-medium text-gray-light">{item?.collectionName}</div>
+        <h6 className="text-h6 text-white">{item?.name}</h6>
       </div>
     </div>
   );
@@ -49,8 +48,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     {
       key: "item",
       text: "ITEM",
-      width: "25%",
-      render: (item) => <Collection image={item.image} title={item.collection} />,
+      render: (item) => <Collection item={item} />,
     },
     {
       key: "floor",
@@ -71,19 +69,20 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       text: "lısted at",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.listedAt} />,
+      render: (item) => <EthereumPrice price={item.price} />,
     },
     {
       key: "proceed",
       text: "proceed",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.proceed} />,
+      render: (item) => <EthereumPrice price={parseFloat(item?.proceedPrice).toFixed(2)} />,
     },
     {
       key: "price",
       text: "your prıce",
       align: "flex-end",
+      width: "250px",
       render: (item) => {
         return (
           <div className="px-3">

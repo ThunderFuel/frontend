@@ -1,11 +1,11 @@
 import React from "react";
 import Img from "components/Img/Img";
-import { AssetProfileBg } from "assets";
+import { AssetDefaultImageBg } from "assets";
 
 const CoverImage = ({ src }: any) => {
   return (
     <div className="profile-cover-image">
-      <Img src={src} defaultImage={AssetProfileBg} className="w-full" />
+      <Img src={src} defaultImage={AssetDefaultImageBg} className="w-full" />
     </div>
   );
 };
