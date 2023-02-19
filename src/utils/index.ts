@@ -82,3 +82,9 @@ export const timeagoFormat = (time: number | string) => {
 export const uniqueArr = (array: any[]) => {
   return Array.from(new Set(array.map((item) => JSON.stringify(item)))).map((item) => JSON.parse(item));
 };
+
+export const getHeaderHeight = () => {
+  const header = document.getElementById("layout-header");
+  if (header) return header.offsetHeight;
+  else return 0;
+};

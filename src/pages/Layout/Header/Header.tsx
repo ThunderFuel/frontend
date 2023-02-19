@@ -121,7 +121,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 bg-bg z-30">
+    <header id="layout-header" className="sticky top-0 bg-bg z-30">
       {!useIsMobile() ? (
         <>
           <HeaderTop />
