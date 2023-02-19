@@ -7,5 +7,6 @@ export {};
 declare global {
   interface Window {
     fuel: FuelWeb3;
+    requestParams: any;
   }
 }

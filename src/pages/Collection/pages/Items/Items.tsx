@@ -28,11 +28,10 @@ const Items = () => {
   const location = useLocation();
 
   const { collectionId } = useParams();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [collections, setCollections] = useState<any[]>([]);
   const [filters, setFilters] = useState<any>([]);
   const [pagination, setPagination] = useState<any>({});
-  const [requestParams, setRequestParams] = useState<any>({});
 
   const initParams = getInitParams();
 
@@ -119,17 +118,17 @@ const Items = () => {
     });
 
     filterHistoryPush(params);
-    setRequestParams({
+    window.requestParams = {
       selectedFilter,
       sortingType,
-    });
+    };
   };
 
   const onChangePagination = async (params: any) => {
     if (params.page > 1) {
       setIsLoading(true);
       try {
-        const { selectedFilter, sortingType } = requestParams;
+        const { selectedFilter, sortingType } = window.requestParams;
         const collectionData = await getCollectionItems({ items: selectedFilter, page: params.page, sortingType });
 
         setCollections((prevState) => [...prevState, ...(collectionData as any)]);
