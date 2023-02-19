@@ -14,7 +14,7 @@ const ConnectWalletScreen = () => {
         </div>
       </div>
       <div className="border-t border-gray"></div>
-      <div className="flex h-full border-x border-gray pt-5 pl-5 pb-5 mx-40 ">
+      <div className="flex h-full border-x border-gray pt-5 pl-5 mx-40 ">
         <div className="max-w-[560px] h-full">
           <ConnectWallet />
         </div>
