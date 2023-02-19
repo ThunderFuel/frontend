@@ -65,4 +65,8 @@ export default {
   async updateBulkListing(data: UpdateBulkListingRequestItem[]) {
     return ThunderURL.post("v1/token/listing", data);
   },
+
+  async getCollectionFloor(ids: any): Promise<ApiResponse<any>> {
+    return ThunderURL.post(`v1/floor/collectionfloor`, ids);
+  },
 };
