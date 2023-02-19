@@ -11,7 +11,7 @@ import Footer from "./components/Footer";
 import Collection from "./components/Collection";
 import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
-import { numberFormat } from "utils";
+import { getHeaderHeight, numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
 
@@ -109,6 +109,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   const rowElementProps = (item: any) => {
     return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };
   };
+  const headerHeight = getHeaderHeight() - 1;
 
   return (
     <Table
@@ -116,7 +117,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       loadingTemplate={MarketPlaceTableLoading}
       rowElementProps={rowElementProps}
       rowElement={Link}
-      theadClassName={"sticky top-[103px]"}
+      theadClassName={`sticky top-[${headerHeight}px]`}
       headers={headers}
       items={items}
       footer={<Footer />}
