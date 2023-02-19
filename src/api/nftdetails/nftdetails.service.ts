@@ -24,6 +24,9 @@ export default {
   async tokenList(data: TokenListRequest[]): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/listing", data);
   },
+  async tokenUpdateListing(data: any): Promise<ApiResponse<any>> {
+    return await ThunderURL.put("v1/token/updatelisting", data, {});
+  },
   async tokenCancelList(tokenId: number): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/token/cancellisting", {}, { params: { tokenId } });
   },

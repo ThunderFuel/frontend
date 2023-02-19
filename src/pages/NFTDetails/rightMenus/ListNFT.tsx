@@ -12,10 +12,11 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
 import dayjs from "dayjs";
+import { RightMenuType } from "store/NFTDetailsSlice";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
-const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: any }) => {
-  const { selectedNFT, presetPrice } = useAppSelector((state) => state.nftdetails);
+const ListNFT = ({ onBack }: { onBack: any }) => {
+  const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
   const dispatch = useAppDispatch();
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
@@ -24,6 +25,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
   const [price, setprice] = useState<any>(presetPrice ?? "");
   const [startingPrice, setstartingPrice] = useState<any>(0);
   const [duration, setDuration] = useState(selectExpirationDates[0]);
+  const updateListing = rightMenuType === RightMenuType.UpdateListing;
 
   const serviceFee = 2.5;
 
@@ -49,7 +51,7 @@ const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: a
             else
               dispatch(
                 setCheckout({
-                  type: CheckoutType.ConfirmListing,
+                  type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
                   price: price,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
                 })

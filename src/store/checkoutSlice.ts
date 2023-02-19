@@ -13,6 +13,7 @@ export enum CheckoutType {
   CancelAuction,
   CancelBid,
   Standard,
+  UpdateListing,
 }
 
 export const checkoutSlice = createSlice({
