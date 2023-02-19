@@ -104,7 +104,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   ];
 
   const onAddWatchList = async (item: any, value: any) => {
-    await addWatchList({ collectionId: item.id, value });
+    await addWatchList({ collectionId: item.id, watch: value });
   };
   const rowElementProps = (item: any) => {
     return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };

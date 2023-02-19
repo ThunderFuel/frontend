@@ -82,7 +82,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
       const response = await marketplaceService.getMarketplace({
         type: filterTabValue?.value,
         filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
-        userId: user.id ?? 16,
+        userId: user?.id,
       });
       const items = response.data.map((responseItem) => {
         return {
@@ -109,7 +109,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
 
   const addWatchList = async (data: any) => {
     try {
-      data.userId = user.id ?? 16;
+      data.userId = user?.id;
       await collectionsService.addWatchList(data);
     } catch (e) {
       console.log(e);
@@ -118,7 +118,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
 
   React.useEffect(() => {
     getMarketplaceItems();
-  }, [filterTabValue, dayTabValue]);
+  }, [filterTabValue, dayTabValue, user]);
 
   const value = {
     items,
