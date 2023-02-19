@@ -11,8 +11,19 @@
 
 .table .thead .tr .th {
   flex: 1;
-  @apply flex p-4 text-gray-light uppercase;
+  @apply flex py-4 pl-4 text-gray-light uppercase;
 }
+.table .thead .tr .th:nth-child(2) {
+  @apply pr-[7px];
+}
+.table .thead .tr .th:nth-child(4) {
+  @apply pr-[7px];
+}
+
+.table .thead .tr .th:nth-child(5) {
+  @apply pr-[14px];
+}
+
 .table .thead .tr .th:first-child .cell {
   @apply -mx-4;
 }
