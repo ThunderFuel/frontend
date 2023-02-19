@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
+
+import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./store";
 import Router from "./router/Router";
@@ -22,6 +25,7 @@ ReactDOM.render(
     <Provider store={store}>
       <Router />
     </Provider>
+    <ToastContainer />
   </React.StrictMode>,
   document.getElementById("root")
 );

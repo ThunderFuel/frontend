@@ -76,3 +76,4 @@ export { ReactComponent as IconInstagram } from "./icon-instagram.svg";
 export { ReactComponent as IconYoutube } from "./icon-youtube.svg";
 export { ReactComponent as IconRemove } from "./icon-remove.svg";
 export { ReactComponent as IconLikeHand } from "./icon-like-hand.svg";
+export { ReactComponent as IconTriangleInfo } from "./icon-triangle-info.svg";

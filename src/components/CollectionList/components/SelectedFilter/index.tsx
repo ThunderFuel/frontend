@@ -29,6 +29,7 @@ const Index = () => {
     setParams,
     deleteParams,
     resetParams,
+    filters,
   } = useCollectionListContext();
 
   const onRemove = (paramKey: any, deleteKey: any) => {
@@ -53,6 +54,15 @@ const Index = () => {
     }
   };
 
+  const getValueNameFromFilter = (filterName: string, value: any) => {
+    const findFilter = filters.find((filter: any) => filter.name === filterName);
+    if (!findFilter) {
+      return value;
+    }
+
+    return findFilter.filterData.find((data: any) => data.value === value)?.text || value;
+  };
+
   const paramItems = React.useMemo(() => {
     const tmpParamItems: any = [];
     Object.keys(etcParams).forEach((paramKey: any, i) => {
@@ -63,7 +73,7 @@ const Index = () => {
           tmpParamItems.push({
             paramKey,
             key: `${key}_${i}`,
-            text: p,
+            text: getValueNameFromFilter(paramKey, p),
             deleteKey: p,
           });
         });

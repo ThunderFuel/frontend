@@ -21,7 +21,7 @@ const ActivityItem = ({ item }: { item: any }) => {
       </div>
       <div className="flex items-center flex-1 gap-4">
         <Link to={path} className="w-16 h-16 rounded-md overflow-hidden relative group">
-          <Img className="w-full" src={item.image} alt={item.name} />
+          <Img className="w-full" src={item.image ?? null} alt={item.name} />
           <div className="opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 absolute bg-gray bg-opacity-80 top-0 left-0 w-full h-full flex-center">
             <IconLink className="fill-white" />
           </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { AssetTable1Image } from "assets";
+import { AssetDefaultImageBg } from "assets";
 import clsx from "clsx";
 
 interface IImage {
@@ -10,7 +10,7 @@ interface IImage {
   [key: string]: any;
 }
 
-const Img = ({ src, defaultImage = AssetTable1Image, className, ...etc }: IImage, ref: any) => {
+const Img = ({ src, defaultImage = AssetDefaultImageBg, className, ...etc }: IImage, ref: any) => {
   const onError = (e: any) => {
     e.target.src = defaultImage;
   };
