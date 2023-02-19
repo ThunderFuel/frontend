@@ -35,6 +35,8 @@ const Index = () => {
       return <AcceptOfferCheckout show={show} onClose={onClose} />;
     case CheckoutType.ConfirmListing:
       return <ConfirmListingCheckout show={show} onClose={onClose} />;
+    case CheckoutType.UpdateListing:
+      return <ConfirmListingCheckout updateListing={true} show={show} onClose={onClose} />;
     //todo accept bid
     case CheckoutType.Transfer:
       return <TransferCheckout show={show} onClose={onClose} />;

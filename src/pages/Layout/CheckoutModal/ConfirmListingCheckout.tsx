@@ -19,17 +19,19 @@ const checkoutProcessTexts = {
   description3: "Congrats, your NFT succesfully listed.",
 };
 
-const Footer = ({ approved }: { approved: boolean }) => {
+const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
     <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
       <div className={"flex w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest">VIEW LISTING</Button>
+        <Button className="w-full tracking-widest" onClick={() => onClose()}>
+          DONE
+        </Button>
       </div>
     </div>
   );
 };
 
-const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolean; onClose: any; updateListing?: boolean }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
 
@@ -38,7 +40,9 @@ const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any
 
   const onComplete = () => {
     setApproved(true);
+
     if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice);
+    else if (updateListing) nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
     else nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
   };
 
@@ -71,7 +75,14 @@ const ConfirmListingCheckout = ({ show, onClose }: { show: boolean; onClose: any
   const viewOnBlockchain = <button className="body-small text-gray-light underline">View on Blockchain</button>;
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Complete Listing" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal
+      backdropDisabled={true}
+      className="checkout"
+      title={updateListing ? "Update Listing" : "Complete Listing"}
+      show={show}
+      onClose={onClose}
+      footer={<Footer approved={approved} onClose={onClose} />}
+    >
       <div className="flex flex-col p-5">
         {checkoutIsAuction ? (
           checkoutAuctionStartingPrice ? (

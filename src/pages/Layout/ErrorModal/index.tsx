@@ -24,7 +24,7 @@ const ErrorModal = () => {
   });
 
   return (
-    <Modal title={"hata"} onClose={() => setShow(false)} show={show}>
+    <Modal title={"Warning"} onClose={() => setShow(false)} show={show}>
       <div className="p-5">
         <h5 className="text-h5 text-white">{message}</h5>
       </div>
