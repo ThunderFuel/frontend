@@ -12,7 +12,7 @@ const Collection = () => {
   const [filter, setFilter] = React.useState([] as any);
   const [collectionItems, setCollectionItems] = useState(userInfo?.tokens);
   const initParams = {
-    Status: { type: 3, value: "1" },
+    Status: { type: 3, value: "6" },
     sortingType: 1,
   };
   const onChangeFilter = (params: any) => {
@@ -31,6 +31,8 @@ const Collection = () => {
             return !collectionItem.salable;
           } else if (item.value === "4") {
             return collectionItem.hasOffer;
+          } else if (item.value === "6") {
+            return true;
           }
         });
       }

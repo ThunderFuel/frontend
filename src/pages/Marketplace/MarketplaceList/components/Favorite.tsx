@@ -15,7 +15,7 @@ const Favorite = ({ item, className, onChange }: { item: any; className?: string
         e.preventDefault();
       }}
     >
-      <IconStar className={clsx("hover:fill-gray", isFavorite ? "fill-white hover:fill-white" : "text-gray")} />
+      <IconStar className={clsx(isFavorite ? "fill-white" : "text-gray-light hover:fill-gray-light")} />
     </div>
   );
 };

@@ -92,6 +92,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       key: "lastSold",
       text: "LAST SOLD",
       render: (item) => <NftImages images={item.images} />,
+      width: "350px",
     },
     {
       key: "favorite",
