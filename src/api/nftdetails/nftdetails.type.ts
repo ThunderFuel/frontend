@@ -14,7 +14,7 @@ export interface GetOffersRequest {
 }
 
 export interface TokenListRequest {
-  id: number;
+  tokenId: number;
   price: number;
   expireTime: number;
 }
