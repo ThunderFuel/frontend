@@ -55,7 +55,7 @@ const Index = ({ className }: { className?: string }) => {
   };
 
   return (
-    <div className="sticky top-[109px] border-b border-gray z-20 bg-bg">
+    <div className="sticky top-[104px] border-b border-gray z-20 bg-bg">
       <div className={clsx(className ? className : "container-fluid")}>
         <div className="flex items-center justify-between text-white gap-5">
           <div className="flex items-center w-full">
