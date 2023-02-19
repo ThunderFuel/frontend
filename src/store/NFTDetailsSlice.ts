@@ -19,6 +19,7 @@ export const NFTDetailsSlice = createSlice({
     rightMenuType: RightMenuType.None,
     bidBalance: 500000000,
     isLiked: false,
+    presetPrice: "",
   },
 
   reducers: {
@@ -34,9 +35,12 @@ export const NFTDetailsSlice = createSlice({
     toggleIsLiked: (state) => {
       state.isLiked = !state.isLiked;
     },
+    setPresetPrice: (state, action) => {
+      state.presetPrice = action.payload;
+    },
   },
 });
 
-export const { setRightMenu, setSelectedNFT, setIsLiked, toggleIsLiked } = NFTDetailsSlice.actions;
+export const { setRightMenu, setSelectedNFT, setIsLiked, toggleIsLiked, setPresetPrice } = NFTDetailsSlice.actions;
 
 export default NFTDetailsSlice.reducer;
