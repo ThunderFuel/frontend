@@ -15,13 +15,13 @@ import dayjs from "dayjs";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ updateListing, onBack }: { updateListing?: boolean; onBack: any }) => {
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { selectedNFT, presetPrice } = useAppSelector((state) => state.nftdetails);
   const dispatch = useAppDispatch();
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
   const [hasStartingPrice, sethasStartingPrice] = useState(false);
   const [privateSaleAddress, setprivateSaleAddress] = useState("");
-  const [price, setprice] = useState<any>("");
+  const [price, setprice] = useState<any>(presetPrice ?? "");
   const [startingPrice, setstartingPrice] = useState<any>(0);
   const [duration, setDuration] = useState(selectExpirationDates[0]);
 
