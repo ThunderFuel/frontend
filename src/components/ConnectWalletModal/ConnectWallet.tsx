@@ -25,9 +25,9 @@ export const ConnectWallet = ({ onClose }: { onClose?: any }) => {
   }
 
   return (
-    <div className="flex flex-col h-full p-5 justify-between">
+    <div className="flex flex-col h-full p-5 gap-y-5">
       <div className="flex flex-col gap-y-2.5">
-        <div className="flex items-center px-2.5 py-5 justify-between bg-bg-light border border-gray rounded-[5px]">
+        <div className="flex items-center px-2.5 py-4 justify-between bg-bg-light border border-gray rounded-[5px] group">
           <div className="flex items-center gap-x-2.5">
             <div className="flex p-1.5 bg-gray rounded-full">
               <IconLightning className="text-[#01FFC8] w-5 h-5" />
@@ -35,28 +35,28 @@ export const ConnectWallet = ({ onClose }: { onClose?: any }) => {
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
           {error === "" ? (
-            <Button className="btn-sm" onClick={() => walletConnect().then((res) => res ?? dispatch(toggleWalletModal()))}>
-              CONNECT <IconArrowRight />
+            <Button className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100" onClick={() => walletConnect().then((res) => res ?? dispatch(toggleWalletModal()))}>
+              CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
             <a href="https://wallet.fuel.network/" target="_blank" rel="noreferrer">
               <Button className="btn-sm btn-secondary">
-                INSTALL <IconArrowRight />
+                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
               </Button>
             </a>
           )}
         </div>
-        <div className="flex px-2.5 py-5 justify-between bg-bg-light border border-gray rounded-[5px]">
+        <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
           <div className="flex items-center gap-x-2.5">
             <IconFuelet className="w-8 h-8" />
             <h6 className="text-head6 font-spaceGrotesk text-gray-light">Fuelet</h6>
           </div>
-          <Button disabled className="btn-sm btn-secondary">
+          <Button disabled className="btn-sm btn-secondary opacity-0 ease-in-out transform duration-300 group-hover:opacity-100">
             SOON
           </Button>
         </div>
         <div
-          className="cursor-pointer flex items-center gap-x-2.5 px-2.5 py-5 bg-bg-light border border-gray rounded-[5px] hover:bg-gray"
+          className="cursor-pointer h-[77px] flex items-center gap-x-2.5 px-2.5 py-5 bg-bg-light border border-gray rounded-[5px] hover:bg-gray"
           onClick={() => {
             generateBurnerUser();
             onClose();
@@ -68,7 +68,7 @@ export const ConnectWallet = ({ onClose }: { onClose?: any }) => {
           <h6 className="text-head6 font-spaceGrotesk text-white">Generate Burner Wallet</h6>
         </div>
       </div>
-      <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md">
+      <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">
         <IconLightning className="text-white w-5 h-5" />
         <div className="flex flex-col gap-y-[5px]">
           <h6 className="text-head6 font-spaceGrotesk text-white">New to Fuel?</h6>
