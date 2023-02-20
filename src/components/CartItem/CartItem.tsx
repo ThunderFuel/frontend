@@ -61,7 +61,7 @@ const CartItem = ({ text, name, image, price, id, className, titleSlot, isRemova
   const onRemove = () => {
     dispatch(remove(id));
   };
-
+  //TODO
   const isUnavailable = id === 9;
   const isPriceChange = id === 8;
   const isFailed = id === 20;
