@@ -9,13 +9,8 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatDate } from "./Offers";
 
-const Box = ({ children, ownBid }: { ownBid?: boolean; children: React.ReactNode }) => {
-  return (
-    <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
-      {children}
-      {ownBid && <></>}
-    </div>
-  );
+const Box = ({ children }: { children: React.ReactNode }) => {
+  return <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">{children}</div>;
 };
 
 const Bids = ({ onBack }: { onBack: any }) => {
@@ -63,7 +58,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
               <div className="flex items-center gap-x-[15px]">
                 <img src={bid.user?.image} className="self-start h-8 w-8 rounded-full" alt="profile-image" />
                 <div>
-                  {!isOwner() ? <span className="inline-block text-green">you</span> : bid.user.userName} on {formatDate(bid.createdAt)}
+                  {isOwner() ? <span className="inline-block text-green">you</span> : bid.user.userName} on {formatDate(bid.createdAt)}
                 </div>
               </div>
               <div className="flex">
@@ -71,7 +66,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
                 <IconEthereum height="21px" className="text-gray-light" />
               </div>
             </div>
-            {!isOwner() && (
+            {isOwner() && (
               <>
                 <div className="flex border-t border-gray"></div>
                 <Button
