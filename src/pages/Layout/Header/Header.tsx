@@ -138,7 +138,9 @@ const Header = () => {
                 <Tab initTab={1} className="hidden lg:flex" onChange={onChange}>
                   <Tab.Item id={PATHS.MARKETPLACE}>EXPLORE</Tab.Item>
                   <Tab.Item id={PATHS.RANKINGS}>COLLECTIONS</Tab.Item>
-                  <Tab.Item id={null}>CREATE</Tab.Item>
+                  <Tab.Item id={null} disabled>
+                    CREATE
+                  </Tab.Item>
                 </Tab>
               </div>
               <HeaderIconButtonGroup />
