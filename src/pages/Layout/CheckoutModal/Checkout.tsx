@@ -40,7 +40,7 @@ const CheckoutProcessItem = ({ title, description, status = Status.notStarted }:
   const icon: any = {
     [Status.notStarted]: <IconMilestone className="stroke-gray" />,
     [Status.pending]: <IconSpinner className="animate-spin" />,
-    [Status.done]: <IconDone />,
+    [Status.done]: <IconDone className="text-white" />,
   };
 
   return (
