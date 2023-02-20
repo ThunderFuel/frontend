@@ -5,22 +5,27 @@ import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
+import { toggleWalletModal } from "store/walletSlice";
 
 const CollectionFooter = () => {
   const { hasEnoughFunds } = useWallet();
   const dispatch = useAppDispatch();
   const selectedCartItemCount = useAppSelector((state) => state.cart.itemCount);
   const selectedCartTotalAmount = useAppSelector((state) => state.cart.totalAmount);
+  const { isConnected } = useAppSelector((state) => state.wallet);
 
   if (selectedCartItemCount <= 0) {
     return null;
   }
 
   const onToggleCheckoutModal = async () => {
-    hasEnoughFunds().then((res: any) => {
-      dispatch(setIsInsufficientBalance(!res));
-      dispatch(toggleCheckoutModal());
-    });
+    if (!isConnected) {
+      dispatch(toggleWalletModal());
+    } else
+      hasEnoughFunds().then((res: any) => {
+        dispatch(setIsInsufficientBalance(!res));
+        dispatch(toggleCheckoutModal());
+      });
   };
 
   return (

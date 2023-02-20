@@ -43,7 +43,7 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
         <div className="mhead">
           {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
           <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
-            <IconClose />
+            <IconClose className="text-white" />
           </button>
         </div>
         <div className="flex flex-col h-full overflow-y-scroll no-scrollbar">{children}</div>

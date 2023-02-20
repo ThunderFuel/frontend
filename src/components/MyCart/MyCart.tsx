@@ -8,9 +8,12 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, toggleCartModal } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { toggleWalletModal } from "store/walletSlice";
 
 const MyCart = () => {
   const { totalAmount, itemCount, items, show } = useAppSelector((state) => state.cart);
+  const { isConnected } = useAppSelector((state) => state.wallet);
+
   const dispatch = useAppDispatch();
   const { hasEnoughFunds } = useWallet();
 
@@ -19,11 +22,15 @@ const MyCart = () => {
   }, [items]);
 
   const onToggleCheckoutModal = () => {
-    hasEnoughFunds().then((res) => {
-      dispatch(setIsInsufficientBalance(!res));
+    if (!isConnected) {
       dispatch(toggleCartModal());
-      dispatch(toggleCheckoutModal());
-    });
+      dispatch(toggleWalletModal());
+    } else
+      hasEnoughFunds().then((res) => {
+        dispatch(setIsInsufficientBalance(!res));
+        dispatch(toggleCartModal());
+        dispatch(toggleCheckoutModal());
+      });
   };
   const footer = (
     <div className="flex flex-col w-full h-full items-center">
