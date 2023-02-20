@@ -41,7 +41,7 @@ const KEY_ENTER = "Enter";
 
 const Index = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
-  const { options, setParams, pagination, collectionItems, sweep, setSweep, params } = useCollectionListContext();
+  const { options, setParams, collectionItems, sweep, setSweep, params } = useCollectionListContext();
   const [search, setSearch] = React.useState(params?.search ?? "");
   const onRangeChange = (value: any) => {
     setSweep(value);
@@ -66,7 +66,7 @@ const Index = ({ className }: { className?: string }) => {
               </div>
               {options?.hiddenSweep ? null : (
                 <div className="w-5/12">
-                  <Range maxValue={pagination.itemsCount} value={sweep} onChange={onRangeChange} />
+                  <Range maxValue={30} value={sweep} onChange={onRangeChange} />
                 </div>
               )}
             </div>
