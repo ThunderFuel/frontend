@@ -10,37 +10,62 @@ const options = {
 const Collection = () => {
   const { userInfo, options: profileOptions } = useProfile();
   const [filter, setFilter] = React.useState([] as any);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [collectionItems, setCollectionItems] = useState(userInfo?.tokens);
   const initParams = {
     Status: { type: 3, value: "6" },
     sortingType: 1,
   };
   const onChangeFilter = (params: any) => {
-    let tmpCollectionItems: any = userInfo.tokens;
-    Object.entries(params).forEach(([key, item]: any) => {
-      if (key === "search") {
-        tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => String(collectionItem.name).toLowerCase().search(item) > -1);
-      }
-      if (key === "Status" && item?.type === 3) {
-        tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => {
-          if (item.value === "1") {
-            return collectionItem.salable;
-          } else if (item.value === "2") {
-            return collectionItem.onAuction;
-          } else if (item.value === "3") {
-            return !collectionItem.salable;
-          } else if (item.value === "4") {
-            return collectionItem.hasOffer;
-          } else if (item.value === "6") {
-            return true;
-          }
-        });
-      }
-      if (key === "Collections" && item?.type === 6) {
-        tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => item.value.includes(collectionItem.collectionId.toString()));
-      }
-    });
-    setCollectionItems(tmpCollectionItems);
+    setIsLoading(true);
+    try {
+      setCollectionItems([]);
+
+      let tmpCollectionItems: any = userInfo.tokens;
+      Object.entries(params).forEach(([key, item]: any) => {
+        if (key === "search") {
+          tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => String(collectionItem.name).toLowerCase().search(item) > -1);
+        }
+        if (key === "Status" && item?.type === 3) {
+          tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => {
+            if (item.value === "1") {
+              return collectionItem.salable;
+            } else if (item.value === "2") {
+              return collectionItem.onAuction;
+            } else if (item.value === "3") {
+              return !collectionItem.salable;
+            } else if (item.value === "4") {
+              return collectionItem.hasOffer;
+            } else if (item.value === "6") {
+              return true;
+            }
+          });
+        }
+        if (key === "Collections" && item?.type === 6) {
+          tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => item.value.includes(collectionItem.collectionId.toString()));
+        }
+      });
+      tmpCollectionItems = tmpCollectionItems.sort((a: any, b: any) => {
+        if (params.sortingType === 1) {
+          return a.price - b.price;
+        } else if (params.sortingType === 2) {
+          return b.price - a.price;
+        } else if (params.sortingType === 3) {
+          return a.listedTimeUnix - b.listedTimeUnix;
+        } else if (params.sortingType === 4) {
+          return a.higeshtSalePrice - b.higeshtSalePrice;
+        }
+
+        return a.lowestSalePrice - b.lowestSalePrice;
+      });
+      setCollectionItems(tmpCollectionItems);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
   };
 
   const fetchFilters = async () => {
@@ -53,7 +78,9 @@ const Collection = () => {
     setCollectionItems(userInfo?.tokens);
   }, [userInfo]);
 
-  return <CollectionList collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={{ ...options, ...profileOptions }} onChangeFilter={onChangeFilter} />;
+  return (
+    <CollectionList isLoading={isLoading} collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={{ ...options, ...profileOptions }} onChangeFilter={onChangeFilter} />
+  );
 };
 
 export default Collection;
