@@ -12,7 +12,8 @@ import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
-import { getAbsolutePath } from "hooks/useNavigate";
+import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
+import { RightMenuType, setRightMenu } from "../../../../store/NFTDetailsSlice";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -42,8 +43,9 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
-  const { setSweep, options } = useCollectionListContext();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { setSweep, options } = useCollectionListContext();
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -68,6 +70,14 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
       onToggleCart();
     }
 
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const onMakeOffer = (e: any) => {
+    dispatch(setRightMenu(RightMenuType.MakeOffer));
+
+    navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
     e.stopPropagation();
     e.preventDefault();
   };
@@ -97,7 +107,9 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
           <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
         </div>
         {!options?.isProfile ? (
-          <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">{collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer />}</div>
+          <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
+            {collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer onClick={onMakeOffer} />}
+          </div>
         ) : null}
       </Link>
     </div>
