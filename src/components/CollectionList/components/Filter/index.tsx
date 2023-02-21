@@ -10,7 +10,6 @@ import { useCollectionListContext } from "../../CollectionListContext";
 import { ISelectOption } from "components/Select";
 import { useAppDispatch } from "store";
 import { sweepAdd } from "store/cartSlice";
-import { getHeaderHeight } from "utils";
 
 const Range = (props: any) => {
   return (
@@ -56,7 +55,7 @@ const Index = ({ className }: { className?: string }) => {
   };
 
   return (
-    <div className={`sticky top-[${getHeaderHeight()}px] border-b border-gray z-20 bg-bg`}>
+    <div className={`sticky border-b border-gray z-20 bg-bg`} style={{ top: "var(--headerHeight)" }}>
       <div className={clsx(className ? className : "container-fluid")}>
         <div className="flex items-center justify-between text-white gap-5">
           <div className="flex items-center w-full">

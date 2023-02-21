@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
@@ -18,27 +18,25 @@ import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import { useIsMobile } from "hooks/useIsMobile";
-import { EtherscanURL } from "api";
+import etherscanService from "api/etherscan/etherscan.service";
 
-const ETHERSCAN_API_KEY = "9HA67PGY65RQS9Z6TETRT3EC6KQ6IGAH9V";
-
+const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
   const [gasFee, setGasFee] = React.useState<any>(0);
   const [ethPrice, setEthPrice] = React.useState(0);
 
-  async function getGasFee() {
-    await EtherscanURL.get("api", { params: { module: "gastracker", action: "gasoracle", apikey: ETHERSCAN_API_KEY } }).then((res) => setGasFee(res.result.SafeGasPrice));
-  }
-  async function getEthPrice() {
-    await EtherscanURL.get("api", { params: { module: "stats", action: "ethprice", apikey: ETHERSCAN_API_KEY } }).then((res) => setEthPrice(res.result.ethusd));
-  }
+  const getData = async () => {
+    const response = await etherscanService.getData();
+
+    setEthPrice(response.result.ethusd);
+    setGasFee(response.result.SafeGasPrice);
+  };
+
   React.useEffect(() => {
-    getGasFee();
-    getEthPrice();
+    getData();
     const interval = setInterval(() => {
-      getGasFee();
-      getEthPrice();
-    }, 10 * 60 * 1000);
+      getData();
+    }, IntervalValue);
 
     return () => clearInterval(interval);
   }, []);
@@ -113,6 +111,7 @@ export interface HeaderProps {
 }
 
 const Header = () => {
+  const ref = useRef<any>(null);
   const navigate = useNavigate();
   const onChange = (value: any) => {
     if (value) {
@@ -120,8 +119,26 @@ const Header = () => {
     }
   };
 
+  const setHeaderHeight = () => {
+    const cssRoot = document.querySelector(":root");
+    if (cssRoot) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      cssRoot.style.setProperty("--headerHeight", `${ref.current.offsetHeight}px`);
+    }
+  };
+
+  React.useLayoutEffect(() => {
+    setHeaderHeight();
+    window.addEventListener("resize", () => setHeaderHeight());
+
+    return () => {
+      window.removeEventListener("resize", () => setHeaderHeight());
+    };
+  }, [ref.current]);
+
   return (
-    <header id="layout-header" className="sticky top-0 bg-bg z-30">
+    <header id="layout-header" className="sticky top-0 bg-bg z-30" ref={ref}>
       {!useIsMobile() ? (
         <>
           <HeaderTop />
