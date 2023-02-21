@@ -14,6 +14,8 @@ export function useFuel() {
     };
     if (window.fuel) {
       onFuelLoaded();
+    } else {
+      setError("Extension is not installed");
     }
     document.addEventListener("FuelLoaded", onFuelLoaded);
 
