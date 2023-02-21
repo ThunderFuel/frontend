@@ -31,6 +31,7 @@ import MakeOffer from "./MakeOffer";
 import MetadataTable from "./MetadataTable";
 import Avatar from "components/Avatar";
 import UseNavigate from "hooks/useNavigate";
+import ReadMore from "components/ReadMore";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -212,7 +213,9 @@ const LeftMenu = (props: any) => {
             </h6>
           </div>
 
-          <div className="body-medium text-white">{nft?.collection?.description}</div>
+          <div className="body-medium text-white">
+            <ReadMore text={nft?.collection?.description ?? ""} characterLimit={150} />
+          </div>
 
           {nft.salable ? <FixedPrice /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : nft.onAuction ? <Auction /> : <MakeOffer />}
 
