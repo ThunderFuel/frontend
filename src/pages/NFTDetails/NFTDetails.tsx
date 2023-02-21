@@ -18,6 +18,10 @@ import Img from "components/Img";
 import { useIsMobile } from "hooks/useIsMobile";
 import MobileWarning from "components/MobileWarning";
 
+const None = React.memo(() => {
+  return <div />;
+});
+None.displayName = "None";
 const NFTDetails = () => {
   const { nftId } = useParams();
 
@@ -28,7 +32,6 @@ const NFTDetails = () => {
   const [isActive, setIsActive] = useState(false);
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
 
-  console.log(nft);
   const fetchCollection = async () => {
     const response = await collectionsService.getCollection({ id: nftId });
     setNft(response.data);
@@ -41,7 +44,6 @@ const NFTDetails = () => {
   }, [rightMenuType]);
 
   useEffect(() => {
-    console.log({ isConnected });
     fetchCollection();
     if (!isConnected) resetMenuState();
   }, [nftId, isConnected]);
@@ -71,7 +73,7 @@ const NFTDetails = () => {
       case RightMenuType.UpdateListing:
         return ListNFT;
       default:
-        return React.Fragment;
+        return None;
     }
   }, [rightMenuType]);
 
