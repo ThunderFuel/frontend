@@ -12,6 +12,7 @@ import Tab from "./components/Tab";
 import { AssetLoadingCollectionLogo } from "assets";
 import { useIsMobile } from "hooks/useIsMobile";
 import MobileWarning from "components/MobileWarning";
+import ReadMore from "components/ReadMore";
 
 const Collection = () => {
   const { collectionId } = useParams();
@@ -42,7 +43,7 @@ const Collection = () => {
               <div className="flex flex-col w-full">
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
                 <SocialButtons socialMedias={collection?.socialMedias} />
-                <div className="body-medium text-white mt-2.5 w-10/12">{collection?.description}</div>
+                <ReadMore text={collection?.description} characterLimit={150} />
               </div>
             </div>
             <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedCount={collection?.listedCount} ownerCount={collection?.ownerCount} />
