@@ -83,7 +83,7 @@ const FixedPrice = () => {
               className={`hover:px-8 px-4 ${addCartIsDisabled ? "btn-secondary" : ""}`}
               onClick={() => {
                 if (addCartIsDisabled) {
-                  dispatch(remove(selectedNFT.uid));
+                  dispatch(remove(selectedNFT.id));
                   setAddCartIsDisabled(false);
                 } else {
                   dispatch(add(selectedNFT));
