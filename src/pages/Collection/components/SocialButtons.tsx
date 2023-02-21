@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 
-import { IconDiscord, IconInstagram, IconShare, IconSocial3Dots, IconTelegram, IconTwitter, IconWeblink, IconYoutube } from "icons";
+import { IconDiscord, IconInstagram, IconShare, IconSocial3Dots, IconStar, IconTelegram, IconTwitter, IconWeblink, IconYoutube } from "icons";
 import { SocialTypes } from "api/collections/collections.type";
+import collectionsService from "../../../api/collections/collections.service";
+import { useAppSelector } from "../../../store";
 
 const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: string; [key: string]: any }) => {
   const IconItem = icon ?? null;
@@ -15,7 +17,33 @@ const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: stri
     </li>
   );
 };
-const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: SocialTypes }[] | null }) => {
+const FavoriteButton = ({ collection }: { collection: any }) => {
+  const { user } = useAppSelector((state) => state.wallet);
+  const [isFavorite, setIsFavorite] = useState<boolean>(collection.watched ?? false);
+
+  const onAddWatchList = async () => {
+    const value = !isFavorite;
+    try {
+      await collectionsService.addWatchList({
+        userId: user?.id,
+        collectionId: collection.id,
+        watch: value,
+      });
+      setIsFavorite(value);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return (
+    <li className={clsx("border-r border-r-gray last:border-r-0 text-gray-light flex-center cursor-pointer")} onClick={onAddWatchList}>
+      <span className="block px-2.5 py-2.5 no-underline hover:text-white">
+        <IconStar className={clsx(isFavorite ? "fill-white text-white" : "text-gray-light hover:fill-gray-light")} />
+      </span>
+    </li>
+  );
+};
+const SocialButtons = ({ socialMedias, collection }: { socialMedias: { url: string; type: SocialTypes }[] | null; collection?: any }) => {
   const iconList: any = {
     [SocialTypes.Website]: IconWeblink,
     [SocialTypes.Discord]: IconDiscord,
@@ -36,6 +64,7 @@ const SocialButtons = ({ socialMedias }: { socialMedias: { url: string; type: So
         </ul>
       ) : null}
       <ul className="inline-flex border border-gray rounded-[4px]">
+        {collection ? <FavoriteButton collection={collection} /> : null}
         <SocialButton href="#" icon={IconShare} className={"border-r-0"} />
       </ul>
     </div>

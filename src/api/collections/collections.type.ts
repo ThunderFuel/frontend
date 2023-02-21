@@ -95,6 +95,7 @@ export interface ActivityItemResponse {
 export interface WatchListRequest {
   collectionId: number;
   userId: number;
+  watch: boolean;
 }
 
 export interface UpdateBulkListingRequestItem {
