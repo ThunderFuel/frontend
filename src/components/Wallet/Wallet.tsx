@@ -72,8 +72,22 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     ));
   }, [user]);
 
+  const footer = (
+    <div className="flex mt-auto flex-col p-5 gap-y-2.5">
+      <Balances />
+      <div className="flex w-full gap-x-2.5">
+        <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-2.fuel.network/?address=${user?.contractAddress ?? address}`} className="w-full">
+          GET TEST ETH <IconFaucet />
+        </Button>
+        <Button disabled className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
+          MANAGE FUNDS <IconArrowRight />
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
-    <Modal className="cart" title="Wallet" onClose={onClose} show={show}>
+    <Modal className="cart" title="Wallet" onClose={onClose} show={show} footer={footer}>
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
         <Avatar image={user?.image} userId={user?.id} className="w-20 h-20" />
         <div className="flex flex-col gap-y-[11px] justify-end">
@@ -110,17 +124,6 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         </div>
       </div>
       {WalletMenu}
-      <div className="flex mt-auto flex-col p-5 gap-y-2.5">
-        <Balances />
-        <div className="flex w-full gap-x-2.5">
-          <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-2.fuel.network/?address=${user?.contractAddress ?? address}`} className="w-full">
-            GET TEST ETH <IconFaucet />
-          </Button>
-          <Button disabled className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
-            MANAGE FUNDS <IconArrowRight />
-          </Button>
-        </div>
-      </div>
     </Modal>
   );
 };
