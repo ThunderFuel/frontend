@@ -13,12 +13,14 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [balance, setbalance] = useState<number>(0);
 
   function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
+    getBalance().then((res) => {
+      setbalance(res ? res : 0);
+    });
   }
 
   useEffect(() => {
     fetchBalance();
-  }, []);
+  }, [show]);
 
   const neededAmount = (totalAmount - balance / 1000000000).toFixed(2);
 

@@ -15,6 +15,11 @@ export const useWallet = () => {
 
   const hasEnoughFunds = async () => {
     try {
+      if (isBurner) {
+        const balance = await burnerWallet.getBalance();
+
+        return balance.toNumber() / 1000000000 >= totalAmount;
+      }
       const provider = await getProvider();
       const balance = await provider.getBalance(getWalletAddress === "" ? user.walletAddress : getWalletAddress, ZeroBytes32);
 
