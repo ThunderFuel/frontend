@@ -20,6 +20,7 @@ export interface ITable {
   className?: string;
   loading?: boolean;
   theadClassName?: string;
+  theadStyle?: any;
   rowClassName?: string;
   isSelectedRow?: (item: any) => any;
   onClick?: (item: any) => void;
@@ -58,7 +59,21 @@ const TableRow = ({ children, ...etc }: any) => {
   return <div {...etc}>{children}</div>;
 };
 
-const Table = ({ headers = [], items = [], className = "", loading = false, theadClassName, isSelectedRow, onClick, rowClassName, rowElement, rowElementProps, loadingTemplate, ...props }: ITable) => {
+const Table = ({
+  headers = [],
+  items = [],
+  className = "",
+  loading = false,
+  theadClassName,
+  theadStyle = {},
+  isSelectedRow,
+  onClick,
+  rowClassName,
+  rowElement,
+  rowElementProps,
+  loadingTemplate,
+  ...props
+}: ITable) => {
   const _getHeaders = headers.map((header, i) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
       {header.text}
@@ -114,7 +129,7 @@ const Table = ({ headers = [], items = [], className = "", loading = false, thea
   return (
     <div>
       <div className={clsx("table", className)} {...props}>
-        <div data-testid="tableHeader" className={clsx("thead", theadClassName)}>
+        <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
           <div className={clsx("container-fluid", props.containerFluidClassName)}>
             <div className="tr">{_getHeaders}</div>
           </div>

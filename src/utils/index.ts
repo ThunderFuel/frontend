@@ -90,9 +90,3 @@ export const clipboardCopy = (text: string) => {
     window.navigator["clipboard"].writeText(text);
   }
 };
-
-export const getHeaderHeight = () => {
-  const header = document.getElementById("layout-header");
-  if (header) return header.offsetHeight;
-  else return 0;
-};
