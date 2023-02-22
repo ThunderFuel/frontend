@@ -8,7 +8,7 @@ import { CollectionItemsRequest } from "api/collections/collections.type";
 
 const getInitParams = () => {
   const initParams = {
-    Status: { type: 3, value: "1" },
+    Status: { type: 3, value: "3" },
     sortingType: 1,
   };
   try {

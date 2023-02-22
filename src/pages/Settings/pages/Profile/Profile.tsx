@@ -10,8 +10,11 @@ import { useAppDispatch, useAppSelector } from "store";
 import { getDefaultAvatarSrc } from "components/Avatar/Avatar";
 import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
+import { PATHS } from "router/config/paths";
+import useNavigate from "hooks/useNavigate";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const { user } = useAppSelector((state) => state.wallet);
@@ -41,6 +44,8 @@ const Profile = () => {
       dispatch(setUser(response.data));
     } catch (e) {
       console.log(e);
+    } finally {
+      navigate(PATHS.PROFILE);
     }
   };
 
