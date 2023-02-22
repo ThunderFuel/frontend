@@ -47,9 +47,15 @@ const Collection = () => {
       });
       tmpCollectionItems = tmpCollectionItems.sort((a: any, b: any) => {
         if (params.sortingType === 1) {
-          return a.price - b.price;
+          const aPrice = a.price ?? 99;
+          const bPrice = b.price ?? 99;
+
+          return aPrice - bPrice;
         } else if (params.sortingType === 2) {
-          return b.price - a.price;
+          const aPrice = a.price ?? 0;
+          const bPrice = b.price ?? 0;
+
+          return bPrice - aPrice;
         } else if (params.sortingType === 3) {
           return a.listedTimeUnix - b.listedTimeUnix;
         } else if (params.sortingType === 4) {
