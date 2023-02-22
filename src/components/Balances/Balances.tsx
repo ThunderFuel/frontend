@@ -28,7 +28,7 @@ const Balances = () => {
       <div className="w-[1px] bg-gray"></div>
       <div className="flex w-full p-4 flex-col">
         <h1 className="flex text-headlineSm font-bigShoulderDisplay text-gray-light">BID BALANCE</h1>
-        <EthereumPrice price={0.5} priceClassName="text-head3 text-white" />
+        <EthereumPrice price={formatDisplayedNumber(balance)} priceClassName="text-head3 text-white" />
       </div>
     </div>
   );
