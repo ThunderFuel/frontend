@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setAddress, setBurnerWallet, setIsBurner, setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
 import userService from "api/user/user.service";
 
-export const ConnectWallet = ({ onClose }: { onClose?: any }) => {
+export const ConnectWallet = () => {
   const { walletConnect } = useWallet();
   const dispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,7 +59,6 @@ export const ConnectWallet = ({ onClose }: { onClose?: any }) => {
           className="cursor-pointer h-[77px] flex items-center gap-x-2.5 px-2.5 py-5 bg-bg-light border border-gray rounded-[5px] hover:bg-gray"
           onClick={() => {
             generateBurnerUser();
-            onClose();
           }}
         >
           <div className="flex p-1.5 bg-gray rounded-full">
