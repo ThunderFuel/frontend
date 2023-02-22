@@ -32,6 +32,10 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
     return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
+  const hasEnoughBalance = () => {
+    return balance / 1000000000 >= bid;
+  };
+
   const bidBalanceControl = () => {
     return toGwei(bid) - bidBalance;
   };
@@ -62,7 +66,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(bid)}
+          disabled={!isValidNumber(bid) || !hasEnoughBalance()}
           onClick={() => {
             dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: bid }));
             dispatch(toggleCheckoutModal());

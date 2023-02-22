@@ -37,6 +37,10 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
     return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
+  const hasEnoughBalance = () => {
+    return balance / 1000000000 >= offer;
+  };
+
   const bidBalanceControl = () => {
     return toGwei(offer) - bidBalance;
   };
@@ -67,7 +71,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(offer)}
+          disabled={!isValidNumber(offer) || !hasEnoughBalance()}
           onClick={() => {
             dispatch(setCheckout({ type: CheckoutType.UpdateOffer, item: currentItem, price: offer, expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed() }));
             dispatch(toggleCheckoutModal());
