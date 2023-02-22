@@ -11,7 +11,7 @@ const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
 
   return user.id ? (
-    <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true }}>
+    <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true, isUserPage: true }}>
       <div className="flex">
         <Sidebar isProfile={true} />
         <div className="flex flex-col flex-1">

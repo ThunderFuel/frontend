@@ -92,7 +92,8 @@ const CollectionTable = () => {
   return (
     <Table
       className="border-t border-t-gray"
-      theadClassName={"sticky top-[178px]"}
+      theadClassName={"sticky"}
+      theadStyle={{ top: "calc(var(--headerHeight) + 68px)" }}
       rowClassName={"cursor-pointer"}
       headers={headers}
       items={collectionItems}

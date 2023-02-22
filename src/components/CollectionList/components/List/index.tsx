@@ -12,13 +12,15 @@ const Index = () => {
   const { isDisplayTypeList, pagination, isLoading, collectionItems, options } = useCollectionListContext();
 
   return (
-    <div className={clsx("flex flex-col flex-1 pt-5 gap-5", isDisplayTypeList && "-mr-10")}>
+    <div className={clsx("flex flex-col flex-1 pt-5 gap-5")}>
       <div className={clsx("text-headline-02 text-gray-light", !options?.hiddenSidebar && "pl-5")}>
         {pagination?.itemsCount ?? collectionItems.length} {options?.itemLabel ?? "ITEMS"}
       </div>
       <SelectedFilter />
 
-      {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading /> : <CollectionGrid />}
+      <div className={clsx(options?.isUserPage ? "-mr-5" : isDisplayTypeList ? "-mr-10" : "")}>
+        {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading /> : <CollectionGrid />}
+      </div>
 
       {options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}
     </div>

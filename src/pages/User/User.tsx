@@ -22,7 +22,7 @@ const User = () => {
   }
 
   return !useIsMobile() ? (
-    <ProfileProvider userId={userId} options={{}}>
+    <ProfileProvider userId={userId} options={{ isUserPage: true }}>
       <div className="flex">
         <Sidebar />
         <div className="flex flex-col flex-1">
