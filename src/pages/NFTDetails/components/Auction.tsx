@@ -12,9 +12,10 @@ const Auction = () => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const highestBid = JSON.stringify(selectedNFT.highestBid) !== "null";
   const { user } = useAppSelector((state) => state.wallet);
-  const isOwner = () => {
-    return user?.id === selectedNFT?.user?.id;
-  };
+  const [isOwner, setIsOwner] = React.useState(false);
+  React.useEffect(() => {
+    setIsOwner(user?.id === selectedNFT?.user?.id);
+  }, [user]);
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
@@ -33,7 +34,7 @@ const Auction = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
-        {isOwner() && highestBid ? (
+        {(isOwner && highestBid) ?? (
           <>
             <Button
               className="w-full text-button font-bigShoulderDisplay"
@@ -46,7 +47,8 @@ const Auction = () => {
               <IconAuction />
             </Button>
           </>
-        ) : (
+        )}
+        {!isOwner && (
           <>
             <Button
               className="w-full text-button font-bigShoulderDisplay "
