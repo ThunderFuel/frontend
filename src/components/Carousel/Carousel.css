@@ -10,6 +10,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
+  padding: 0 40px;
 }
 
 .carousel-inner::after {
@@ -80,21 +81,20 @@
 
 .carousel-control-prev,
 .carousel-control-next {
-  display: none;
+  width: 40px;
   position: absolute;
   top: 0;
   bottom: 0;
   z-index: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 15%;
   padding: 0;
-  color: #fff;
+  color: #838383;
   text-align: center;
   background: none;
   border: 0;
-  opacity: 0.5;
-  transition: opacity 0.15s ease;
+  transition: all 0.15s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -111,7 +111,6 @@
   color: #fff;
   text-decoration: none;
   outline: 0;
-  opacity: 0.9;
 }
 
 .carousel-control-prev {
@@ -151,7 +150,7 @@
 .carousel-indicators [data-bs-target] {
   box-sizing: content-box;
   text-indent: -999px;
-  height: 3px;
+  height: 5px;
   @apply cursor-pointer w-6;
   @apply transition-all duration-500;
   @apply bg-gray;

@@ -9,6 +9,7 @@ import { useIsWideScreen } from "../../hooks/useIsWideScreen";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import collectionsService from "api/collections/collections.service";
+import { IconChevronLeft, IconChevronRight } from "../../icons";
 
 const HotDrops = () => {
   const isWideScreen = useIsWideScreen();
@@ -47,7 +48,7 @@ const HotDrops = () => {
   return (
     <div className="container-fluid flex flex-col gap-5">
       <h3 className="text-white text-h3">Hot Drops</h3>
-      <Carousel pause={"hover"}>
+      <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
         {hotdropList.map((items, k) => {
           return (
             <Carousel.Item key={k}>
