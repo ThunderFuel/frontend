@@ -1,6 +1,7 @@
 import { IconBack } from "icons";
 import React from "react";
 import InfoBox from "./InfoBox";
+import clsx from "clsx";
 
 const RightMenu = ({
   children,
@@ -9,11 +10,13 @@ const RightMenu = ({
   className,
   footer,
   onBack,
+  childrenHasOverflow = true,
 }: {
   children: React.ReactNode;
   title: string;
   description?: string;
   className?: string;
+  childrenHasOverflow?: boolean;
   footer?: JSX.Element;
   onBack: any;
 }) => {
@@ -31,7 +34,7 @@ const RightMenu = ({
         {title}
       </div>
       {description ? <InfoBox description={description} /> : <></>}
-      <div className="flex flex-col px-10 py-5 gap-y-5 overflow-y-scroll no-scrollbar">{children}</div>
+      <div className={clsx("flex flex-col px-10 py-5 gap-y-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "")}>{children}</div>
 
       {footer && <div className="sticky bottom-0 mt-auto w-full border-t border-gray bg-bg">{footer}</div>}
     </div>

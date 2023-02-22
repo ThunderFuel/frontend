@@ -98,7 +98,13 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={!isValidNumber(offer) || !hasEnoughBalance()}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.MakeOffer, price: offer, expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed() }));
+            dispatch(
+              setCheckout({
+                type: CheckoutType.MakeOffer,
+                price: offer,
+                expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed(),
+              })
+            );
             dispatch(toggleCheckoutModal());
           }}
         >
@@ -110,7 +116,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   );
 
   return (
-    <RightMenu title="Make Offer" description={offerDescription} footer={footer} onBack={onBack}>
+    <RightMenu title="Make Offer" description={offerDescription} footer={footer} onBack={onBack} childrenHasOverflow={false}>
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-y-2">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Offer</h6>
@@ -128,10 +134,11 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           </span>
         )}
       </div>
-      <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">
+      <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk relative z-10">
         Set Expiration Date
         <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
-          <IconInfo className="w-[17px] h-[17px]" /> <span>Expires on </span> {getDateFromExpirationTime(expirationTime.value)}
+          <IconInfo className="w-[17px] h-[17px]" />
+          <span>Expires on </span> {getDateFromExpirationTime(expirationTime.value)}
         </div>
         <Select options={selectExpirationDates} onChange={setexpirationTime} value={expirationTime} />
       </div>
