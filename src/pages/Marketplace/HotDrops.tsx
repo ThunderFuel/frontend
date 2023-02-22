@@ -30,7 +30,9 @@ const HotDrops = () => {
     collectionId?: number;
     price?: number;
   }
+
   const [floor, setfloor] = React.useState<floorData[]>([]);
+
   function fetchFloor() {
     const ids = hotdrops.map((item) => item.id);
     collectionsService.getCollectionFloor(ids).then((res) => {
@@ -45,7 +47,7 @@ const HotDrops = () => {
   return (
     <div className="container-fluid flex flex-col gap-5">
       <h3 className="text-white text-h3">Hot Drops</h3>
-      <Carousel>
+      <Carousel pause={"hover"}>
         {hotdropList.map((items, k) => {
           return (
             <Carousel.Item key={k}>
