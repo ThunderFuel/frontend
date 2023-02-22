@@ -217,7 +217,7 @@ const LeftMenu = (props: any) => {
             <ReadMore text={nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
-          {nft.salable ? <FixedPrice /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : nft.onAuction ? <Auction /> : <MakeOffer />}
+          {nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />}
 
           {JSON.stringify(nft.bestOffer) !== "null" && (
             <Box className="bg-bg-light justify-between pr-4">
