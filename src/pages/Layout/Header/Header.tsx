@@ -29,7 +29,7 @@ const HeaderTop = React.memo(() => {
     const response = await etherscanService.getData();
 
     setEthPrice(response.result.ethusd);
-    setGasFee(response.result.SafeGasPrice);
+    setGasFee(response.result.safeGasPrice);
   };
 
   React.useEffect(() => {
