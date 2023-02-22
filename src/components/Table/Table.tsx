@@ -7,8 +7,10 @@ export interface ITableHeader {
   key: string;
   text: React.ReactNode;
   render?: (any: any) => React.ReactNode;
+  renderHeader?: (any: any) => React.ReactNode;
   width?: string;
   align?: string;
+  sortValue?: any;
 }
 
 export interface ITable {
@@ -76,14 +78,14 @@ const Table = ({
 }: ITable) => {
   const _getHeaders = headers.map((header, i) => (
     <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
-      {header.text}
+      {header.renderHeader ? header.renderHeader(header) : header.text}
     </div>
   ));
   const _getItems = items.map((item, k) => {
     const RowElement = rowElement ?? TableRow;
 
     return (
-      <>
+      <React.Fragment key={`parentRow_${k.toString()}`}>
         {item.beforeRow ? (
           <div className="tr" key={`beforeRow_${k.toString()}`}>
             <td colSpan={headers.length} className="py-5 px-8 text-left">
@@ -122,7 +124,7 @@ const Table = ({
         ) : (
           <></>
         )}
-      </>
+      </React.Fragment>
     );
   });
 

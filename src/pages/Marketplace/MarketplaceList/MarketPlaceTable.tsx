@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import { numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
-import { useAppSelector } from "store";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   const tmpImages = images.slice(0, 5);
@@ -53,8 +52,7 @@ const MarketPlaceTableLoading = () => {
   ));
 };
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
-  const { dayTabValue, addWatchList, isLoading } = useMarketplace();
-  const { user } = useAppSelector((state) => state.wallet);
+  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
@@ -67,7 +65,13 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: `VOLUME (${dayTabValue?.text})`,
       width: "10%",
       align: "flex-end",
+      sortValue: 1,
       render: (item) => <EthereumPrice price={numberFormat(item.volume)} />,
+      renderHeader: (header) => (
+        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
+          {header.text}
+        </div>
+      ),
     },
     {
       key: "change",
@@ -81,14 +85,26 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "FLOOR",
       width: "10%",
       align: "flex-end",
+      sortValue: 2,
       render: (item) => <EthereumPrice price={item.floor} />,
+      renderHeader: (header) => (
+        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
+          {header.text}
+        </div>
+      ),
     },
     {
       key: "sales",
       text: "SALES",
       width: "10%",
       align: "flex-end",
+      sortValue: 3,
       render: (item) => <div className="cell text-h5">{item.sales}</div>,
+      renderHeader: (header) => (
+        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
+          {header.text}
+        </div>
+      ),
     },
     {
       key: "lastSold",
@@ -96,19 +112,17 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       render: (item) => <NftImages images={item.images} />,
       width: "350px",
     },
-  ];
-  if (user?.id) {
-    headers.push({
+    {
       key: "favorite",
       text: "",
       width: "5%",
       align: "center",
-      render: (item) => <Favorite item={item} onChange={(value: boolean) => onAddWatchList(item, value)} />,
-    });
-  }
+      render: (item) => <Favorite item={item} onChange={onAddWatchList} />,
+    },
+  ];
 
-  const onAddWatchList = async (item: any, value: any) => {
-    await addWatchList({ collectionId: item.id, watch: value });
+  const onAddWatchList = async (data: any) => {
+    await addWatchList(data);
   };
   const rowElementProps = (item: any) => {
     return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };

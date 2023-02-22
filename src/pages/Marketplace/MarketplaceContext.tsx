@@ -1,9 +1,10 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import marketplaceService from "api/marketplace/marketplace.service";
-import { MarketplaceListType, MarketplaceTableItem } from "../../api/marketplace/marketplace.type";
+import { MarketplaceListType, MarketplaceTableItem } from "api/marketplace/marketplace.type";
+import { WatchListRequest } from "api/collections/collections.type";
 import dayjs from "dayjs";
-import collectionsService from "../../api/collections/collections.service";
-import { useAppSelector } from "../../store";
+import collectionsService from "api/collections/collections.service";
+import { useAppSelector } from "store";
 
 const UnitType = "hours";
 
@@ -23,6 +24,8 @@ interface IMarketplaceContext {
   setFilterTabValue: any;
   addWatchList: any;
   isLoading: boolean;
+  onChangeSortValue: (value: any) => void;
+  sortingValue: any;
 }
 
 const dayValues = [
@@ -71,6 +74,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
   const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
+  const [sortingValue, setSortingValue] = useState(0);
+  const [sortingType, setSortingType] = useState("ASC");
 
   const getMarketplaceItems = async () => {
     if (isLoading) {
@@ -83,6 +88,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
         type: filterTabValue?.value,
         filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
         userId: user?.id,
+        sortingValue,
+        sortingType,
       });
       const items = response.data.map((responseItem) => {
         return {
@@ -107,18 +114,26 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const addWatchList = async (data: any) => {
+  const addWatchList = async (data: WatchListRequest) => {
     try {
-      data.userId = user?.id;
       await collectionsService.addWatchList(data);
     } catch (e) {
       console.log(e);
     }
   };
 
+  const onChangeSortValue = (value: any) => {
+    if (sortingValue === value) {
+      setSortingType(sortingType === "ASC" ? "DESC" : "ASC");
+    } else {
+      setSortingValue(value);
+      setSortingType("ASC");
+    }
+  };
+
   React.useEffect(() => {
     getMarketplaceItems();
-  }, [filterTabValue, dayTabValue, user]);
+  }, [filterTabValue, dayTabValue, user, sortingValue, sortingType]);
 
   const value = {
     items,
@@ -131,6 +146,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     setFilterTabValue,
     addWatchList,
     isLoading,
+    onChangeSortValue,
+    sortingValue,
   };
 
   return (
