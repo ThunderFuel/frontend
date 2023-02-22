@@ -11,6 +11,11 @@ interface IOfferContext {
 
 const filterItems = [
   {
+    value: null,
+    text: "Offers",
+    count: 0,
+  },
+  {
     value: false,
     text: "Offers Received",
     count: 0,
@@ -25,14 +30,19 @@ const filterItems = [
 export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
   const [offers, setOffers] = React.useState([] as any);
-  const [filterValue, setFilterValue] = React.useState(false);
+  const [filterValue, setFilterValue] = React.useState(null);
 
   const getOffers = React.useMemo(() => {
+    if (filterValue === null) {
+      return offers;
+    }
+
     return offers.filter((item: any) => item.isOfferMade === filterValue);
   }, [offers, filterValue]);
   const getFilterItems = React.useMemo(() => {
-    filterItems[0].count = offers.filter((item: any) => !item.isOfferMade).length;
-    filterItems[1].count = offers.filter((item: any) => item.isOfferMade).length;
+    filterItems[0].count = offers.length;
+    filterItems[1].count = offers.filter((item: any) => !item.isOfferMade).length;
+    filterItems[2].count = offers.filter((item: any) => item.isOfferMade).length;
 
     return filterItems;
   }, [offers]);

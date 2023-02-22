@@ -4,7 +4,7 @@ import Img from "components/Img/Img";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
 
-import { dateFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import Button from "components/Button";
 import { useOfferContext } from "../OfferContext";
 import clsx from "clsx";
@@ -38,15 +38,20 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
       return <span className="text-green"> you </span>;
     }
     if (item.isOfferMade) {
-      return <span className="text-white"> {userInfo.userName ?? item.makerAddress} </span>;
+      return <span className="text-white"> {userInfo.userName ?? addressFormat(item.makerAddress)} </span>;
     }
 
-    return <span className="text-white"> {item.makerAddress} </span>;
+    return <span className="text-white"> {addressFormat(item.makerAddress)} </span>;
   };
 
   return (
     <div>
-      <div className={clsx("flex items-start justify-between p-2.5 gap-5 border-t border-x border-gray rounded-t-md", !item.isActiveOffer ? "border-b rounded-b-md" : "")}>
+      <div
+        className={clsx(
+          "flex items-start justify-between p-2.5 gap-5 border-t border-x border-gray rounded-t-md",
+          !options?.isProfile ? "border-b rounded-b-md" : !item.isActiveOffer ? "border-b rounded-b-md" : ""
+        )}
+      >
         <div className="overflow-hidden rounded-md w-16 h-16 bg-gray">
           <Img className="w-full" src={item?.tokenImage} />
         </div>
@@ -70,7 +75,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         </div>
         <EthereumPrice className="text-white" price={item.price} />
       </div>
-      {item.isActiveOffer ? (
+      {options?.isProfile && item.isActiveOffer ? (
         !item.isOfferMade ? (
           <OfferItemAcceptButton onAcceptOffer={onAcceptOffer} item={item} />
         ) : (

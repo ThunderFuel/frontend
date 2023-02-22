@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
+import { useAppSelector } from "store";
 
 const NftImages = React.memo(({ images }: { images: any[] }) => {
   const tmpImages = images.slice(0, 5);
@@ -53,6 +54,7 @@ const MarketPlaceTableLoading = () => {
 };
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   const { dayTabValue, addWatchList, isLoading } = useMarketplace();
+  const { user } = useAppSelector((state) => state.wallet);
 
   const headers: ITableHeader[] = [
     {
@@ -94,14 +96,16 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       render: (item) => <NftImages images={item.images} />,
       width: "350px",
     },
-    {
+  ];
+  if (user?.id) {
+    headers.push({
       key: "favorite",
       text: "",
       width: "5%",
       align: "center",
       render: (item) => <Favorite item={item} onChange={(value: boolean) => onAddWatchList(item, value)} />,
-    },
-  ];
+    });
+  }
 
   const onAddWatchList = async (item: any, value: any) => {
     await addWatchList({ collectionId: item.id, watch: value });
