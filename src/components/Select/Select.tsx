@@ -44,12 +44,12 @@ const Select = ({ options, value, onChange, direction = "bottom" }: ISelect) => 
           isDirectionTop ? "-translate-y-full" : "translate-y-full",
           show ? (isDirectionTop ? "-top-2" : "-bottom-2") : isDirectionTop ? "top-0" : "bottom-0"
         )}
-        style={{ height: show ? `${listRef.current?.scrollHeight}px` : 0 }}
+        style={{ height: show ? `${(listRef.current?.scrollHeight as number) + 2}px` : 0 }}
       >
         <ul className="border border-gray bg-bg rounded-md divide-y divide-gray" ref={listRef}>
           {options.map((option, index) => {
             return (
-              <li key={index} className="body-medium p-3 hover:bg-bg-light cursor-pointer" onClick={() => onSelect(option)}>
+              <li key={index} className="body-medium p-3 hover:bg-bg-light cursor-pointer last:border-b last:border-b-gray" onClick={() => onSelect(option)}>
                 {option.text}
               </li>
             );
