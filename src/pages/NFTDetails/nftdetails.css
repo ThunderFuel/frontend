@@ -1,0 +1,7 @@
+.image-height {
+  height: calc(100vh - var(--headerHeight));
+}
+
+.image-width {
+  max-width: calc(100vh - var(--headerHeight) - 80px);
+}
