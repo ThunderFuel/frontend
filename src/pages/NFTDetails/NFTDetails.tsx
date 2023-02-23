@@ -94,7 +94,7 @@ const NFTDetails = () => {
       <div className="w-[42%]">
         <LeftMenu nft={nft} />
       </div>
-      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-2/3")}>
+      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
         <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
           <div className="flex justify-center image-height py-10">
             <div className="relative w-full image-width bg-gray rounded-md">
