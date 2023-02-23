@@ -36,7 +36,7 @@ const RightMenu = ({
       {description ? <InfoBox description={description} /> : <></>}
       <div className={clsx("flex flex-col px-10 py-5 gap-y-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "")}>{children}</div>
 
-      {footer && <div className="sticky bottom-0 mt-auto w-full border-t border-gray bg-bg">{footer}</div>}
+      {footer && <div className="sticky z-10 bottom-0 mt-auto w-full border-t border-gray bg-bg">{footer}</div>}
     </div>
   );
 };

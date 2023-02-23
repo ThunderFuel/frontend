@@ -125,7 +125,7 @@ const FooterAuction = () => {
 };
 
 const LeftMenu = (props: any) => {
-  const { nft } = props;
+  const { nft, isActive } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { walletConnect } = useWallet();
@@ -191,7 +191,7 @@ const LeftMenu = (props: any) => {
   };
 
   return (
-    <div className="flex flex-col border-r border-gray">
+    <div className="flex flex-col border-r border-gray" style={{ height: isActive ? "var(--leftMenuHeight)" : "auto" }}>
       <div className="flex flex-col overflow-hidden">
         <div className="container-fluid flex flex-col pt-5 pb-5 pr-10 border-b border-gray">
           <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: nft.collection.id })}>

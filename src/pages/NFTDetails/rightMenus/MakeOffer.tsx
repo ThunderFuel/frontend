@@ -140,7 +140,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           <IconInfo className="w-[17px] h-[17px]" />
           <span>Expires on </span> {getDateFromExpirationTime(expirationTime.value)}
         </div>
-        <Select options={selectExpirationDates} onChange={setexpirationTime} value={expirationTime} />
+        <Select direction="top" options={selectExpirationDates} onChange={setexpirationTime} value={expirationTime} />
       </div>
     </RightMenu>
   );

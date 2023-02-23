@@ -4,6 +4,7 @@
 
 :root {
   --headerHeight: 1px;
+  --leftMenuHeight: 1px;
 }
 
 @layer utilities {
