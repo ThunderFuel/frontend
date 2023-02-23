@@ -74,7 +74,11 @@ const InputContainer = ({ onChangeContainer }: any) => {
   };
 
   React.useEffect(() => {
-    onChangeContainer(Object.values(codes).filter((code) => !!code));
+    onChangeContainer(
+      Object.values(codes)
+        .filter((code) => !!code)
+        .join("")
+    );
   }, [codes]);
 
   return (

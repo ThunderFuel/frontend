@@ -14,3 +14,7 @@ export const useLocalStorage = () => {
     },
   };
 };
+
+export const getAuthTokenFromLocalStorage = () => {
+  return useLocalStorage().getItem("auth_token");
+};

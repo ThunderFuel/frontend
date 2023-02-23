@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenStatic } from "axios";
+import { getAuthTokenFromLocalStorage } from "../hooks/useLocalStorage";
 
 interface Interceptor {
   onFulfilled: (config: AxiosRequestConfig) => AxiosRequestConfig;
@@ -28,6 +29,10 @@ export default class HttpClient {
 
   constructor(baseURL: string, options: HttpClientOptions = {}) {
     const { requestInterceptors = [], responseInterceptors = [], headers = {}, ...rest } = options;
+    const authToken = getAuthTokenFromLocalStorage();
+    if (authToken) {
+      headers.Authorization = `Bearer ${authToken}`;
+    }
 
     this.CancelToken = axios.CancelToken;
 

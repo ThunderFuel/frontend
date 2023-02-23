@@ -7,13 +7,21 @@ import InputContainer from "./components/Input";
 import Header from "../Landing/Header";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import authService from "../../api/auth/auth.service";
+import useToast from "../../hooks/useToast";
 
 const Beta = () => {
   const navigate = useNavigate();
   const [code, setCode] = React.useState("");
-  const onSubmit = () => {
-    useLocalStorage().setItem("auth_token", code);
-    navigate(0);
+  const onSubmit = async () => {
+    try {
+      const response = await authService.generatetoken({ code });
+      useLocalStorage().setItem("auth_token", response.data);
+      navigate(0);
+    } catch (e: any) {
+      useToast().error(e.response.data.message);
+      console.log(e);
+    }
   };
 
   return (
