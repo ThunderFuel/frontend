@@ -13,7 +13,7 @@ const Beta = () => {
     <main className="bg-bg min-h-screen flex flex-col">
       <Header />
       <div className="flex flex-col text-white">
-        <div className="px-32">
+        <div className="max-w-[1118px] m-auto">
           <div className="border-x border-gray py-16 px-10" style={{ minHeight: "calc(100vh - 67px)" }}>
             <div className="grid grid-cols-2 gap-10">
               <div>
