@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
+import AuthorizationPage from "./AuthorizationPage";
 import { RouteConfig, ROUTES } from "./config";
 
 const NotFound = React.lazy(() => import("pages/NotFound"));
@@ -15,11 +16,13 @@ const getRoute = (route: RouteConfig) => {
       path={route.path}
       element={
         <ErrorBoundary>
-          <Layout {...route.layoutProps}>
-            <React.Suspense fallback={null}>
-              <Component />
-            </React.Suspense>
-          </Layout>
+          <AuthorizationPage>
+            <Layout {...route.layoutProps}>
+              <React.Suspense fallback={null}>
+                <Component />
+              </React.Suspense>
+            </Layout>
+          </AuthorizationPage>
         </ErrorBoundary>
       }
     >

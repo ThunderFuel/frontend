@@ -5,9 +5,16 @@ import { AssetBetaLogin } from "assets";
 import Button from "components/Button";
 import InputContainer from "./components/Input";
 import Header from "../Landing/Header";
+import { useLocalStorage } from "hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const Beta = () => {
+  const navigate = useNavigate();
   const [code, setCode] = React.useState("");
+  const onSubmit = () => {
+    useLocalStorage().setItem("auth_token", code);
+    navigate(0);
+  };
 
   return (
     <main className="bg-bg min-h-screen flex flex-col">
@@ -32,7 +39,7 @@ const Beta = () => {
                   </div>
                   <div className="flex flex-col gap-y-[25px]">
                     <InputContainer onChangeContainer={(value: any) => setCode(value)} />
-                    <Button className="btn-secondary w-full" disabled={code.length < 6}>
+                    <Button className="btn-secondary w-full" disabled={code.length < 6} onClick={onSubmit}>
                       Login <IconArrowRight />
                     </Button>
                   </div>
