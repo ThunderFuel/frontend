@@ -6,12 +6,13 @@ import { useAppDispatch, useAppSelector } from "store";
 import AuctionCountdown from "./AuctionCountdown";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { toggleWalletModal } from "store/walletSlice";
 
 const Auction = () => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const highestBid = JSON.stringify(selectedNFT.highestBid) !== "null";
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
   const [isOwner, setIsOwner] = React.useState(false);
   React.useEffect(() => {
     setIsOwner(user?.id === selectedNFT?.user?.id);
@@ -34,7 +35,7 @@ const Auction = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
-        {(isOwner && highestBid) ?? (
+        {isOwner && highestBid ? (
           <>
             <Button
               className="w-full text-button font-bigShoulderDisplay"
@@ -47,13 +48,13 @@ const Auction = () => {
               <IconAuction />
             </Button>
           </>
-        )}
-        {!isOwner && (
+        ) : (
           <>
             <Button
               className="w-full text-button font-bigShoulderDisplay "
               onClick={() => {
-                dispatch(setRightMenu(RightMenuType.PlaceBid));
+                if (!isConnected) dispatch(toggleWalletModal());
+                else dispatch(setRightMenu(RightMenuType.PlaceBid));
               }}
             >
               PLACE A BID
