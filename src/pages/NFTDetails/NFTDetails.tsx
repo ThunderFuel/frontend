@@ -90,12 +90,12 @@ const NFTDetails = () => {
 
   return !useIsMobile() ? (
     <div className="relative flex justify-between container-nftdetails">
-      <div className="w-2/5">
+      <div className="w-[42%]">
         <LeftMenu nft={nft} />
       </div>
-      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-3/5 duration-300 transform", isActive && "-translate-x-2/3")}>
+      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-2/3")}>
         <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
-          <div className="flex px-[100px] py-10">
+          <div className="flex justify-center image-height py-10">
             <div className="relative w-full bg-gray pb-[100%] rounded-md">
               <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 max-h-full max-w-full" />
             </div>
