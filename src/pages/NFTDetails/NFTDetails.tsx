@@ -17,6 +17,7 @@ import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
 import { useIsMobile } from "hooks/useIsMobile";
 import MobileWarning from "components/MobileWarning";
+import "./nftdetails.css";
 
 const None = React.memo(() => {
   return <div />;
@@ -96,14 +97,14 @@ const NFTDetails = () => {
       <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-2/3")}>
         <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
           <div className="flex justify-center image-height py-10">
-            <div className="relative w-full bg-gray pb-[100%] rounded-md">
+            <div className="relative w-full image-width bg-gray rounded-md">
               <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 max-h-full max-w-full" />
             </div>
             <ImageBar />
           </div>
         </div>
       </div>
-      <div className="w-2/5 h-fit">
+      <div className="w-[42%] h-fit">
         <Component onBack={() => resetMenuState()} />
       </div>
     </div>
