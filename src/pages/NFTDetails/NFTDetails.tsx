@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import clsx from "clsx";
 import ImageBar from "./components/ImageBar";
@@ -24,6 +24,7 @@ const None = React.memo(() => {
 });
 None.displayName = "None";
 const NFTDetails = () => {
+  const ref = useRef<any>(null);
   const { nftId } = useParams();
 
   const dispatch = useAppDispatch();
@@ -39,6 +40,19 @@ const NFTDetails = () => {
     dispatch(setSelectedNFT(response.data));
     dispatch(setIsLiked(response.data.user?.likedTokens?.includes(response.data.id) ?? false));
   };
+
+  const setLeftMenuHeight = () => {
+    const cssRoot = document.querySelector(":root");
+    if (cssRoot) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      cssRoot.style.setProperty("--leftMenuHeight", `${ref.current.offsetHeight}px`);
+    }
+  };
+
+  React.useLayoutEffect(() => {
+    setLeftMenuHeight();
+  }, [rightMenuType]);
 
   useEffect(() => {
     setIsActive(rightMenuType !== RightMenuType.None);
@@ -92,9 +106,9 @@ const NFTDetails = () => {
   return !useIsMobile() ? (
     <div className="relative flex justify-between container-nftdetails">
       <div className="w-[42%]">
-        <LeftMenu nft={nft} />
+        <LeftMenu nft={nft} isActive={isActive} />
       </div>
-      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-2/3")}>
+      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
         <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
           <div className="flex justify-center image-height py-10">
             <div className="relative w-full image-width bg-gray rounded-md">
@@ -104,7 +118,7 @@ const NFTDetails = () => {
           </div>
         </div>
       </div>
-      <div className="w-[42%] h-fit">
+      <div className="w-[42%] h-fit" ref={ref}>
         <Component onBack={() => resetMenuState()} />
       </div>
     </div>
