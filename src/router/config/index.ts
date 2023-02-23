@@ -20,6 +20,7 @@ const ProfileLiked = React.lazy(() => import("pages/Profile/pages/Liked"));
 const BulkListing = React.lazy(() => import("pages/BulkListing"));
 const Settings = React.lazy(() => import("pages/Settings"));
 const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile/Profile"));
+const Beta = React.lazy(() => import("pages/Beta"));
 
 export interface RouteConfig {
   path: string;
@@ -157,5 +158,9 @@ export const ROUTES: RouteConfig[] = [
     layoutProps: {
       hiddenFooter: true,
     },
+  },
+  {
+    path: PATHS.BETA,
+    component: Beta,
   },
 ];

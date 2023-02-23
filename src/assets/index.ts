@@ -56,3 +56,5 @@ export { default as AssetHotdrop7 } from "./marketplace/hotdrops/hotdrop-7.png";
 export { default as AssetHotdrop8 } from "./marketplace/hotdrops/hotdrop-8.png";
 
 export { default as AssetDefaultImageBg } from "./default-image-bg.svg";
+
+export { default as AssetBetaLogin } from "./beta/login.png";
