@@ -5,7 +5,7 @@ import { IconClose, IconDone, IconTriangleInfo } from "../icons";
 const toastOptions = {
   className: "toast",
   position: "bottom-right",
-  autoClose: 60000,
+  autoClose: 5000,
   hideProgressBar: false,
   closeOnClick: true,
   pauseOnHover: true,
