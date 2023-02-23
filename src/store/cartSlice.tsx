@@ -32,7 +32,7 @@ export const cartSlice = createSlice({
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
-      state.items = state.items.filter((item: CollectionItemResponse) => item.id !== action.payload);
+      state.items = state.items.filter((item: CollectionItemResponse) => item.uid !== action.payload);
     },
     removeAll: (state) => {
       state.items = [];
