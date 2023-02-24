@@ -73,10 +73,10 @@ const SidebarFilter = ({ className }: { className?: string }) => {
         dynamicComponent: DynamicComponent,
         filterData: filter.filterData,
         order: name.toLowerCase() === "status" ? 1 : 0,
-        isOpen: name.toLowerCase() === "status",
+        isOpen: ["status", "collections"].includes(name.toLowerCase()),
       };
 
-      if (["price", "status", "raking"].includes(name.toLowerCase())) {
+      if (["price", "status", "raking", "collections"].includes(name.toLowerCase())) {
         tmpFilter.push(field);
       } else {
         tmpAttributeFilter.push(field);
