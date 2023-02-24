@@ -55,9 +55,7 @@ const HeaderTop = React.memo(() => {
       </div>
       <div className="flex w-full pt-[6px] pb-[6px] items-center gap-x-[10px] border-l ml-[27px] border-gray pl-[15px] text-white">
         <IconInfo className="w-[18px] h-[18px]" />
-        <span className="text-headlineSm font-spaceGrotesk normal-case">
-          Thunder is currently in <span className="tracking-normal">beta</span> phase. All data and transactions are being conducted on the testnet
-        </span>
+        <span className="body-small !text-[12px] !font-medium	">Thunder is currently in beta phase. All data and transactions are being conducted on the testnet</span>
       </div>
       <SocialMediaIcons />
     </div>
