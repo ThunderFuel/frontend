@@ -3,7 +3,7 @@ import Table, { ITableHeader } from "components/Table";
 import { IconEthereum } from "icons";
 import Checkbox from "components/CheckBox";
 import { add, remove } from "store/cartSlice";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { dateFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 
@@ -30,9 +30,11 @@ const Price = ({ price }: { price: any }) => {
 const CollectionTable = () => {
   const dispatch = useAppDispatch();
   const { collectionItems } = useCollectionListContext();
+  const { items } = useAppSelector((state) => state.cart);
+
   const onSelect = (collection: any) => {
     if (!collection.isSelected) {
-      dispatch(add(collection));
+      if (items.find((item) => (item.uid = collection.uid)) === undefined) dispatch(add(collection));
     } else {
       dispatch(remove(collection.uid));
     }
