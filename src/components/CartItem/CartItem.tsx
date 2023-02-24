@@ -56,15 +56,15 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
     </div>
   );
 };
-const CartItem = ({ text, name, image, price, id, className, titleSlot, isRemovable }: CartItemProps) => {
+const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemovable }: CartItemProps) => {
   const dispatch = useAppDispatch();
   const onRemove = () => {
-    dispatch(remove(id));
+    dispatch(remove(uid));
   };
   //TODO
-  const isUnavailable = id === 9;
-  const isPriceChange = id === 8;
-  const isFailed = id === 20;
+  const isUnavailable = uid === 9;
+  const isPriceChange = uid === 8;
+  const isFailed = uid === 20;
 
   const hasError = isUnavailable || isPriceChange || isFailed;
 
