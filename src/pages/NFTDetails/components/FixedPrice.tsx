@@ -27,6 +27,8 @@ const FixedPrice = () => {
     return user?.id === selectedNFT?.user?.id;
   };
 
+  const isItemAlreadyAdded = () => items.find((item) => item.uid === selectedNFT.uid);
+
   useEffect(() => {
     function scheduleNext() {
       const newRemaining = remainingTime(expireTime);
@@ -80,18 +82,18 @@ const FixedPrice = () => {
               Buy Now <IconThunder width="24px" height="11.58px" />
             </Button>
             <Button
-              className={`hover:px-8 px-4 ${addCartIsDisabled ? "btn-secondary" : ""}`}
+              className={`hover:px-8 px-4 ${addCartIsDisabled || isItemAlreadyAdded() !== undefined ? "btn-secondary" : ""}`}
               onClick={() => {
-                if (addCartIsDisabled) {
-                  dispatch(remove(selectedNFT.id));
+                if (addCartIsDisabled || isItemAlreadyAdded() !== undefined) {
+                  dispatch(remove(selectedNFT.uid));
                   setAddCartIsDisabled(false);
                 } else {
-                  dispatch(add(selectedNFT));
+                  if (isItemAlreadyAdded() === undefined) dispatch(add(selectedNFT));
                   setAddCartIsDisabled(true);
                 }
               }}
             >
-              {addCartIsDisabled ? <IconRemove /> : <IconAddCart className="text-black" />}
+              {addCartIsDisabled || isItemAlreadyAdded() !== undefined ? <IconRemove /> : <IconAddCart className="text-black" />}
             </Button>
           </div>
           <Button
