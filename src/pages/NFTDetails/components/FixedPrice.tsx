@@ -59,10 +59,14 @@ const FixedPrice = () => {
           <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">PRICE</span>
           <EthereumPrice priceClassName="text-h3 text-white" price={selectedNFT.price} />
         </div>
-        <div className="flex h-fit items-center gap-x-[5px]">
-          <IconCart width="18px" height="18px" color="#838383" />
-          <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {selectedNFT.lastSalePrice} ETH</span>
-        </div>
+        {selectedNFT.lastSalePrice ? (
+          <div className="flex h-fit items-center gap-x-[5px]">
+            <IconCart width="18px" height="18px" color="#838383" />
+            <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {selectedNFT.lastSalePrice} ETH</span>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       {!isOwner() && (
         <div className="flex flex-col gap-y-[10px] bg-bg-light rounded-b p-5">
