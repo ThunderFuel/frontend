@@ -5,11 +5,12 @@ import { Outlet } from "react-router-dom";
 import Tab from "./components/Tab";
 import ProfileProvider from "./ProfileContext";
 import { useAppSelector } from "store";
+import ConnectWalletScreen from "components/ConnectWalletScreen";
 
 const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
 
-  return (
+  return user.id ? (
     <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true, isUserPage: true }}>
       <div className="flex">
         <Sidebar isProfile={true} />
@@ -20,6 +21,8 @@ const Profile = () => {
         <ModalSocial />
       </div>
     </ProfileProvider>
+  ) : (
+    <ConnectWalletScreen />
   );
 };
 
