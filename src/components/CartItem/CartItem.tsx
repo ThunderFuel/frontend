@@ -22,7 +22,7 @@ const CartItemStatus = ({ text }: { text: string }) => {
 
   return (
     <div className="flex border justify-center items-center border-gray rounded-[5px] w-fit p-1 ">
-      {hasError ? <IconWarning className="w-4 h-4 fill-red" /> : <IconInfo className="w-4 h-4 fill-orange" />}
+      {hasError ? <IconWarning className="w-4 h-4 fill-red" /> : <IconInfo className="w-4 h-4 text-orange" />}
       <span className={clsx("body-medium ml-1", hasError ? "text-red" : "text-orange")}>{text}</span>
     </div>
   );
@@ -89,7 +89,6 @@ const CartItem = ({ text, name, image, price, id, className, titleSlot, isRemova
                 {price}
               </div>
             )}
-
             {hasError && (
               <div className="mt-2">
                 {isPriceChange && <CartItemStatus text={"Price Change"} />}
