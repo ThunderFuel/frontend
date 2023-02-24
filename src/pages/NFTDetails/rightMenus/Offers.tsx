@@ -9,6 +9,7 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
+import { addressFormat } from "utils";
 
 export function formatDate(dateString: string) {
   if (dateString === null) return;
@@ -44,7 +45,7 @@ const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ow
         <Avatar image={item?.user?.image} userId={item?.user?.id} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
-            {item.user?.userName} on {formatDate(item.createdAt)}
+            {item.makerUsername ?? addressFormat(item.makerAddress)} on {formatDate(item.createdAt)}
           </span>
           <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
             <IconClock className="w-[15px] h-[15px] flex-shrink-0" />
@@ -120,7 +121,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
         const expTime = new Date(offer.expireTime).getTime();
         const currentTime = new Date().getTime();
 
-        return <Box item={offer} isExpired={currentTime > expTime} key={index} ownOffer={user.id === offer?.makerUserId && offer.status === 1}></Box>;
+        return offer.status !== 0 ? <Box item={offer} isExpired={currentTime > expTime} key={index} ownOffer={user.id === offer?.makerUserId && offer.status === 1}></Box> : <></>;
       })}
     </RightMenu>
   );
