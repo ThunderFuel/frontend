@@ -13,7 +13,7 @@ const Input = ({ value, onChange, ...etc }: any) => {
         if ([KeyBackspace].includes(e.key)) {
           return onChange(e.key);
         }
-        if (Number(e.key)) {
+        if (isNumber(e.key)) {
           onChange(e.key);
         }
       }}
@@ -22,7 +22,7 @@ const Input = ({ value, onChange, ...etc }: any) => {
 };
 
 const isNumber = function isNumber(value: any) {
-  if (typeof value === "number" && isFinite(value)) {
+  if (isFinite(value)) {
     return value;
   }
 
@@ -43,7 +43,7 @@ const InputContainer = ({ onChangeContainer }: any) => {
       try {
         const clipText = e.clipboardData.getData("Text").split("");
         codeArray.forEach((i) => {
-          setCodes({ [i]: isNumber(clipText[i]) });
+          setCodes({ [i]: isNumber(parseInt(clipText[i])) });
         });
       } catch (e) {
         console.log(e);
