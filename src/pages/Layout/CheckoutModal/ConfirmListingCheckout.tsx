@@ -40,8 +40,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
 
   const onComplete = () => {
     setApproved(true);
-
-    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice);
+    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
     else if (updateListing) nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
     else nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
   };

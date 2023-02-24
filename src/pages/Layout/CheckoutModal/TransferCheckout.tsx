@@ -38,7 +38,6 @@ const Footer = ({ address, callback, animationStarted, onClose }: { address: str
 
 const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [address, setaddress] = useState("");
@@ -47,7 +46,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenTransfer(selectedNFT.id, user.id);
+    nftdetailsService.tokenTransfer(selectedNFT.id, address);
   };
 
   React.useEffect(() => {
