@@ -6,6 +6,7 @@ import InputEthereum from "components/InputEthereum";
 import Img from "components/Img";
 import { useAppDispatch } from "store";
 import { toggleSelectedUID } from "store/bulkListingSlice";
+import clsx from "clsx";
 
 const Collection = ({ item }: any) => {
   return (
@@ -76,7 +77,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       text: "proceed",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={parseFloat(item?.proceedPrice).toFixed(2)} />,
+      render: (item) => <EthereumPrice className={clsx(item?.proceedPrice && "text-green")} price={item?.proceedPrice} />,
     },
     {
       key: "price",

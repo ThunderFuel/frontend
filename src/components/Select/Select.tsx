@@ -13,9 +13,10 @@ interface ISelect {
   value: ISelectOption;
   onChange: (value: ISelectOption) => void;
   direction?: string;
+  className?: string;
 }
 
-const Select = ({ options, value, onChange, direction = "bottom" }: ISelect) => {
+const Select = ({ options, value, onChange, direction = "bottom", className }: ISelect) => {
   const [show, setShow] = React.useState(false);
   const listRef = React.useRef<HTMLUListElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -33,7 +34,7 @@ const Select = ({ options, value, onChange, direction = "bottom" }: ISelect) => 
   });
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className={clsx("relative", className)} ref={containerRef}>
       <div className="flex-center p-3 gap-3 border border-gray bg-bg-light rounded-md cursor-pointer" onClick={onToggle}>
         <span className="body-medium text-white text-overflow">{value?.text}</span>
         <IconArrowDown className={clsx("transition-all duration-300", show && "rotate-180")} />

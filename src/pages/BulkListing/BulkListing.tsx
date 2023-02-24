@@ -64,7 +64,7 @@ const BulkListing = () => {
       topTrait: topTraitByToken?.[item.tokenOrder],
       proceedPrice: item.price * 0.0975,
     }));
-  }, [items, collectionFloor, topTraitByToken]);
+  }, [items, collectionFloor, topTraitByToken, prices]);
 
   React.useEffect(() => {
     fetchData();

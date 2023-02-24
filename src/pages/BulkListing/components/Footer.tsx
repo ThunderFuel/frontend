@@ -4,6 +4,7 @@ import Button from "components/Button";
 import { IconCircleRemoveWhite, IconInfo, IconTag } from "icons";
 import dayjs from "dayjs";
 import useNavigate from "hooks/useNavigate";
+import useToast from "hooks/useToast";
 import { PATHS } from "router/config/paths";
 import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
@@ -12,6 +13,8 @@ const Footer = ({ items, prices }: any) => {
   const navigate = useNavigate();
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
   const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
+  const hasUpdate = bulkItems.some((item: any) => item.salable);
+
   const onUpdateBulkListing = async () => {
     try {
       const data = bulkItems.map((item: any) => ({
@@ -20,7 +23,10 @@ const Footer = ({ items, prices }: any) => {
         expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
       }));
       await collectionsService.updateBulkListing(data);
-    } catch (e) {
+
+      navigate(PATHS.PROFILE);
+    } catch (e: any) {
+      useToast().error(e.response.data.message);
       console.log(e);
     }
   };
@@ -30,7 +36,9 @@ const Footer = ({ items, prices }: any) => {
   }, [expiredDateValue]);
 
   const getProceedPrice = React.useMemo(() => {
-    return bulkItems.reduce((total: any, item: any) => total + item.proceedPrice, 0);
+    const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * 0.0975, 0);
+
+    return totalProceedPrice.toFixed(5);
   }, [bulkItems]);
 
   return (
@@ -76,7 +84,7 @@ const Footer = ({ items, prices }: any) => {
             <IconCircleRemoveWhite />
           </Button>
           <Button onClick={onUpdateBulkListing}>
-            LIST {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
+            {`List${hasUpdate ? "/Update" : ""}`} {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
             <IconTag />
           </Button>
         </div>
