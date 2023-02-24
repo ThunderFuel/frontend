@@ -8,8 +8,11 @@ import useToast from "hooks/useToast";
 import { PATHS } from "router/config/paths";
 import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
+import { useAppDispatch } from "store";
+import { removeAll } from "store/bulkListingSlice";
 
 const Footer = ({ items, prices }: any) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
   const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
@@ -17,14 +20,31 @@ const Footer = ({ items, prices }: any) => {
 
   const onUpdateBulkListing = async () => {
     try {
-      const data = bulkItems.map((item: any) => ({
-        tokenId: item.id,
-        price: prices?.[item.uid],
-        expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
-      }));
-      await collectionsService.updateBulkListing(data);
+      const bulkListingRequest: any = [];
+      const updateBulkListingRequest: any = [];
+      bulkItems.forEach((item: any) => {
+        const data = {
+          tokenId: item.id,
+          price: prices?.[item.uid],
+          expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
+        };
+
+        if (item.salable) {
+          updateBulkListingRequest.push(data);
+        } else {
+          bulkListingRequest.push(data);
+        }
+      });
+
+      if (updateBulkListingRequest.length) {
+        await collectionsService.updateBulkListing(updateBulkListingRequest);
+      }
+      if (bulkListingRequest.length) {
+        await collectionsService.bulkListing(bulkListingRequest);
+      }
 
       navigate(PATHS.PROFILE);
+      dispatch(removeAll());
     } catch (e: any) {
       useToast().error(e.response.data.message);
       console.log(e);

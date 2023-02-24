@@ -62,8 +62,11 @@ export default {
     return ThunderURL.post("/v1/collection/watch", data);
   },
 
-  async updateBulkListing(data: UpdateBulkListingRequestItem[]) {
+  async bulkListing(data: UpdateBulkListingRequestItem[]) {
     return ThunderURL.post("v1/token/listing", data);
+  },
+  async updateBulkListing(data: UpdateBulkListingRequestItem[]) {
+    return ThunderURL.put("v1/token/updatelisting", data, {});
   },
 
   async getCollectionFloor(ids: any): Promise<ApiResponse<any>> {
