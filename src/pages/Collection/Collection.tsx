@@ -13,15 +13,22 @@ import { AssetLoadingCollectionLogo } from "assets";
 import { useIsMobile } from "hooks/useIsMobile";
 import MobileWarning from "components/MobileWarning";
 import ReadMore from "components/ReadMore";
+import { useAppSelector } from "store";
 
 const Collection = () => {
+  const { user } = useAppSelector((state) => state.wallet);
   const { collectionId } = useParams();
   const [collection, setCollection] = useState<CollectionResponse>({} as any);
 
   useEffect(() => {
-    collectionsService.getCollectionHeader(collectionId as string).then((response) => {
-      setCollection(response.data);
-    });
+    collectionsService
+      .getCollectionHeader({
+        id: collectionId,
+        userId: user?.id,
+      })
+      .then((response) => {
+        setCollection(response.data);
+      });
     window.scrollTo({
       top: 0,
       behavior: "smooth",

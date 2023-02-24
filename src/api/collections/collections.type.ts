@@ -63,6 +63,7 @@ export interface CollectionResponse {
     type: SocialTypes;
     url: string;
   }[];
+  watched: boolean;
 }
 
 export interface CollectionItemsRequest {

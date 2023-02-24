@@ -19,9 +19,13 @@ const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: stri
 };
 const FavoriteButton = ({ collection }: { collection: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
-  const [isFavorite, setIsFavorite] = useState<boolean>(collection.watched ?? false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   const onAddWatchList = async () => {
+    if (!user?.id) {
+      return false;
+    }
+
     const value = !isFavorite;
     try {
       await collectionsService.addWatchList({
@@ -34,6 +38,10 @@ const FavoriteButton = ({ collection }: { collection: any }) => {
       console.log(e);
     }
   };
+
+  React.useEffect(() => {
+    setIsFavorite(collection.watched);
+  }, [collection.watched]);
 
   return (
     <li className={clsx("border-r border-r-gray last:border-r-0 text-gray-light flex-center cursor-pointer")} onClick={onAddWatchList}>

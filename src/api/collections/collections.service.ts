@@ -35,8 +35,8 @@ export default {
       params,
     });
   },
-  async getCollectionHeader(collectionId: string): Promise<ApiResponse<CollectionResponse>> {
-    return await ThunderURL.get(`v1/collection/getheader?id=${collectionId}`);
+  async getCollectionHeader(params: any): Promise<ApiResponse<CollectionResponse>> {
+    return await ThunderURL.get("v1/collection/getheader", { params });
   },
   async getCollectionItems(data: CollectionItemsRequest): Promise<ApiResponse<CollectionItemResponse[]>> {
     return await ThunderURL.post("v1/token/tokens", data);
