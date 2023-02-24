@@ -18,7 +18,7 @@ const Index = () => {
       </div>
       <SelectedFilter />
 
-      <div className={clsx(options?.isUserPage ? "-mr-5" : isDisplayTypeList ? "-mr-10" : "")}>
+      <div className={clsx(isDisplayTypeList ? (options?.isUserPage ? "-mr-5" : "-mr-10") : "")}>
         {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading /> : <CollectionGrid />}
       </div>
 
