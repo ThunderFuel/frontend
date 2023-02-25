@@ -1,5 +1,10 @@
 import React, { SVGProps } from "react";
 import clsx from "clsx";
+import { IconHand, IconQuarry } from "icons";
+import collectionService, { ActivityFilters } from "api/collections/collections.service";
+import { useAppSelector } from "store";
+import { addressFormat } from "utils";
+import ActivityItemDescription from "../../../../../components/ActivityDescription";
 
 interface IBox {
   header: string;
@@ -32,4 +37,38 @@ const BoxWithIcon = React.memo(({ children, className, icon }: { children: React
 });
 BoxWithIcon.displayName = "BoxWithIcon";
 
-export { Box, BoxWithIcon };
+const BoxWithIconLastActivity = React.memo(({ lastActivity }: any) => {
+  const filters = collectionService.getActivityFilters();
+  const typeIcon = filters[lastActivity?.activityType as ActivityFilters]?.icon;
+
+  return (
+    <BoxWithIcon icon={typeIcon ?? IconQuarry} className="mt-2">
+      <div className="text-headline-01 text-gray-light uppercase">LAST ACTIVITY</div>
+      <h6 className="text-h6">
+        <ActivityItemDescription
+          activityType={lastActivity.activityType}
+          fromUserContractAddress={lastActivity.fromUser.walletAddress}
+          createdTimeStamp={lastActivity.createdTimeStamp}
+          toUserContractAddress={lastActivity.toUser.walletAddress}
+        />
+      </h6>
+    </BoxWithIcon>
+  );
+});
+BoxWithIconLastActivity.displayName = "BoxWithIconLastActivity";
+
+const BoxWithIconLastOffer = React.memo(({ lastOffer }: any) => {
+  const { user } = useAppSelector((state) => state.wallet);
+
+  return (
+    <BoxWithIcon icon={IconHand} className="mt-2">
+      <div className="text-headline-01 text-gray-light uppercase">LAST offer</div>
+      <h6 className="text-h6">
+        {lastOffer?.price} ETH Bid placed by {lastOffer?.makerUserId === user?.id ? <span className="text-green">you</span> : addressFormat(lastOffer?.makerAddress)}
+      </h6>
+    </BoxWithIcon>
+  );
+});
+BoxWithIconLastOffer.displayName = "BoxWithIconLastOffer";
+
+export { Box, BoxWithIcon, BoxWithIconLastActivity, BoxWithIconLastOffer };

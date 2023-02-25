@@ -4,15 +4,23 @@ import { IconEthereum } from "icons";
 
 const InputEthereum = (props: any) => {
   const { onChange, ...etc } = props;
+
+  const onInput = (value: any) => {
+    const [val, decimal] = String(value).split(".");
+    if (decimal && decimal.length > 9) {
+      onChange(`${val}.${decimal.substring(0, 9)}`);
+    }
+    onChange(value);
+  };
   const handleChange = (event: any) => {
     const newValue = event.target.value;
     const lastChar = newValue.substring(newValue.length - 1);
     if (newValue.match(/^(0*[1-9]\d*|0*[1-9]\d*\.\d+|0*\.\d+|0+)$/)) {
-      onChange(lastChar === "0" ? newValue : +newValue);
+      onInput(lastChar === "0" ? newValue : +newValue);
     } else if (lastChar === "." && !newValue.substring(0, newValue.length - 1).includes(".")) {
-      onChange(newValue);
+      onInput(newValue);
     } else if (newValue === "") {
-      onChange(newValue);
+      onInput(newValue);
     }
   };
 

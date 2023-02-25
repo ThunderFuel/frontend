@@ -1,10 +1,9 @@
 import React from "react";
 
 import "./Sidebar.css";
-import { IconHand, IconQuarry } from "icons";
-import { addressFormat, numberFormat } from "utils";
+import { numberFormat } from "utils";
 import LogoContainer from "./components/LogoContainer";
-import { Box, BoxWithIcon } from "./components/Box";
+import { Box, BoxWithIconLastActivity, BoxWithIconLastOffer } from "./components/Box";
 import CoverImage from "./components/CoverImage";
 import { ButtonEdit, ButtonFollow } from "./components/Buttons";
 import { FollowType, useProfile } from "../../ProfileContext";
@@ -47,19 +46,8 @@ const Sidebar = ({ isProfile = false }: any) => {
                 0
               </Box>
             </div>
-            <BoxWithIcon icon={IconHand} className="mt-2">
-              <div className="text-headline-01 text-gray-light uppercase">LAST offer</div>
-              <h6 className="text-h6">
-                {userInfo?.lastOffer?.price} ETH Bid placed by{" "}
-                {userInfo?.lastOffer?.makerUserId === userInfo.id ? <span className="text-green">you</span> : addressFormat(userInfo?.lastOffer?.makerAddress)}
-              </h6>
-            </BoxWithIcon>
-            <BoxWithIcon icon={userInfo?.lastActivity?.typeIcon ?? IconQuarry} className="mt-2">
-              <div className="text-headline-01 text-gray-light uppercase">LAST ACTIVITY</div>
-              <h6 className="text-h6">
-                {userInfo?.lastActivity?.type} {userInfo?.lastActivity?.token?.name}
-              </h6>
-            </BoxWithIcon>
+            {userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null}
+            {userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null}
           </div>
         </div>
       </div>
