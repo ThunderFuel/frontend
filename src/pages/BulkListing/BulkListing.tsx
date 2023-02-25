@@ -29,9 +29,9 @@ const BulkListing = () => {
 
   const fetchData = async () => {
     const collectionIds = items.map((item) => item.collectionId);
-    const tokenOrders = items.map((item) => item.id);
+    const collectionItemIds = items.map((item) => item.id);
     try {
-      const [responseFloor, responseTopTrait] = await Promise.all([floorService.getCollectionFloor(collectionIds), floorService.getTopTraitByTokenIds(tokenOrders)]);
+      const [responseFloor, responseTopTrait] = await Promise.all([floorService.getCollectionFloor(collectionIds), floorService.getTopTraitByTokenIds(collectionItemIds)]);
       setCollectionFloor(
         responseFloor.data.reduce((obj: any, item: any) => {
           obj[item.collectionId] = item.price;
@@ -61,7 +61,7 @@ const BulkListing = () => {
     return items.map((item: any) => ({
       ...item,
       floor: collectionFloor?.[item.collectionId],
-      topTrait: topTraitByToken?.[item.tokenOrder],
+      topTrait: topTraitByToken?.[item.id],
       proceedPrice: item.price * 0.0975,
     }));
   }, [items, collectionFloor, topTraitByToken, prices]);
