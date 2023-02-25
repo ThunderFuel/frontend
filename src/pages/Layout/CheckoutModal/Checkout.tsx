@@ -8,7 +8,7 @@ import NotFound from "components/NotFound";
 
 import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
-import { getCartTotal } from "store/cartSlice";
+import { getCartTotal, removeAll } from "store/cartSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 enum Status {
@@ -25,11 +25,13 @@ const mockTransaction = async () => {
   });
 };
 
-const Footer = ({ approved }: { approved: boolean }) => {
+const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
     <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
       <div className={"flex w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest">VIEW PURCHASE</Button>
+        <Button className="w-full tracking-widest" onClick={onClose}>
+          DONE
+        </Button>
       </div>
     </div>
   );
@@ -161,7 +163,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const onComplete = () => {
     setApproved(true);
     const tokenIds = items.map((item: any) => item.id);
-    nftdetailsService.tokenBuyNow(tokenIds, user.id);
+    nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+      if (res.data) dispatch(removeAll());
+    });
   };
 
   React.useEffect(() => {
@@ -191,7 +195,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
         {items.length > 0 ? (
           <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />
