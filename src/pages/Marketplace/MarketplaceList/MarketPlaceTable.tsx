@@ -3,7 +3,7 @@ import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
 import Img from "components/Img";
 
-import { IconDownRight, IconUpRight } from "icons";
+import { IconDownRight, IconSortDown, IconSortUp, IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
@@ -51,8 +51,31 @@ const MarketPlaceTableLoading = () => {
     </div>
   ));
 };
+
+const SortHeaderIcon = ({ sortingType }: any) => {
+  const isASC = sortingType === "ASC";
+  const isDESC = sortingType === "DESC";
+
+  return (
+    <div className="flex flex-col gap-0.5">
+      <IconSortUp className={isASC ? "text-white" : "text-gray-light"} />
+      <IconSortDown className={isDESC ? "text-white" : "text-gray-light"} />
+    </div>
+  );
+};
+
+const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: any) => {
+  const onClick = () => onChangeSortValue(header.sortValue);
+
+  return (
+    <div className={clsx("flex-center gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
+      {header.text}
+      <SortHeaderIcon sortingType={sortingValue === header.sortValue ? sortingType : null} />
+    </div>
+  );
+};
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
-  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue } = useMarketplace();
+  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue, sortingType } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
@@ -67,11 +90,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       sortValue: 1,
       render: (item) => <EthereumPrice price={numberFormat(item.volume)} />,
-      renderHeader: (header) => (
-        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
-          {header.text}
-        </div>
-      ),
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "change",
@@ -87,11 +106,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       sortValue: 2,
       render: (item) => <EthereumPrice price={item.floor} />,
-      renderHeader: (header) => (
-        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
-          {header.text}
-        </div>
-      ),
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "sales",
@@ -100,11 +115,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       sortValue: 3,
       render: (item) => <div className="cell text-h5">{item.sales}</div>,
-      renderHeader: (header) => (
-        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
-          {header.text}
-        </div>
-      ),
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "lastSold",

@@ -26,6 +26,7 @@ interface IMarketplaceContext {
   isLoading: boolean;
   onChangeSortValue: (value: any) => void;
   sortingValue: any;
+  sortingType: any;
 }
 
 const dayValues = [
@@ -148,6 +149,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     onChangeSortValue,
     sortingValue,
+    sortingType,
   };
 
   return (
