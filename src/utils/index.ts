@@ -92,6 +92,7 @@ export const clipboardCopy = (text: string) => {
 };
 
 export const formatPrice = (price: number) => {
+  if (price === undefined) return "-";
   if (typeof price === "string") return price;
   const formattedNum = price.toFixed(4).replace(/\.?0+$/, "");
 

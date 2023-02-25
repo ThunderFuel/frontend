@@ -11,6 +11,7 @@ import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
 import { addressFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
+import offerService from "api/offer/offer.service";
 
 export function formatDate(dateString: string) {
   if (dateString === null) return;
@@ -37,7 +38,7 @@ export function formatDateTime(dateString: string) {
   });
 }
 
-const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ownOffer?: boolean }) => {
+const Box = ({ item, isExpired, ownOffer, isOwner, fetchOffers }: { item: any; isExpired?: boolean; ownOffer?: boolean; isOwner: () => boolean; fetchOffers: any }) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -46,7 +47,7 @@ const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ow
         <Avatar image={item?.user?.image} userId={item?.user?.id} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
-            {item.makerUsername ?? addressFormat(item.makerAddress)} on {formatDate(item.createdAt)}
+            {item.makerUserName ?? addressFormat(item.makerAddress)} on {formatDate(item.createdAt)}
           </span>
           <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
             <IconClock className="w-[15px] h-[15px] flex-shrink-0" />
@@ -57,6 +58,20 @@ const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ow
           <EthereumPrice price={item.price} priceClassName="text-head6 font-spaceGrotesk text-white" />
         </div>
       </div>
+      {isOwner() && !isExpired && (
+        <div className="flex border-t border-gray">
+          <Button
+            className="btn w-full btn-sm no-bg border-none text-white"
+            onClick={() => {
+              offerService.acceptOffer({ id: item.id });
+              fetchOffers();
+            }}
+          >
+            ACCEPT OFFER
+            <IconOffer width="18px" />
+          </Button>
+        </div>
+      )}
       {ownOffer && !isExpired && (
         <div className="flex border-t border-gray">
           <Button
@@ -123,7 +138,11 @@ const Offers = ({ onBack }: { onBack: any }) => {
         const expTime = new Date(offer.expireTime).getTime();
         const currentTime = new Date().getTime();
 
-        return offer.status !== 0 ? <Box item={offer} isExpired={currentTime > expTime} key={index} ownOffer={user.id === offer?.makerUserId && offer.status === 1}></Box> : <></>;
+        return offer.status !== 0 ? (
+          <Box item={offer} isExpired={currentTime > expTime} key={index} isOwner={isOwner} ownOffer={user.id === offer?.makerUserId && offer.status === 1} fetchOffers={fetchOffers}></Box>
+        ) : (
+          <></>
+        );
       })}
     </RightMenu>
   );
