@@ -57,7 +57,7 @@ const HotDrops = () => {
                   return (
                     <div key={`${k}_${item.id}`} className="border border-gray bg-bg-light text-white cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: item.id })}>
                       <div className="overflow-hidden">
-                        <img src={item.image} className="w-full transition-all ease-in duration-300 hover:scale-[120%]" alt={"hot-drop-image"} />
+                        <img src={item.image} className="w-full transition-all duration-300 hover:scale-[110%]" alt={"hot-drop-image"} />
                       </div>
                       <div className="flex flex-col gap-3 px-4 py-3">
                         <h5 className="text-head5 font-spaceGrotesk text-overflow">{item.collectionName}</h5>
