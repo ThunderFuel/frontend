@@ -3,10 +3,11 @@ import Button from "components/Button";
 import { IconOffer } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { toggleWalletModal } from "store/walletSlice";
 
 const MakeOffer = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
   const isOwner = () => {
@@ -20,7 +21,8 @@ const MakeOffer = () => {
       <Button
         className="btn-secondary no-bg"
         onClick={() => {
-          dispatch(setRightMenu(RightMenuType.MakeOffer));
+          if (!isConnected) dispatch(toggleWalletModal());
+          else dispatch(setRightMenu(RightMenuType.MakeOffer));
         }}
       >
         MAKE OFFER <IconOffer />

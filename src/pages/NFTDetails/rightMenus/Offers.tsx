@@ -10,6 +10,7 @@ import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
 import { addressFormat } from "utils";
+import { toggleWalletModal } from "store/walletSlice";
 
 export function formatDate(dateString: string) {
   if (dateString === null) return;
@@ -88,7 +89,7 @@ const Box = ({ item, isExpired, ownOffer }: { item: any; isExpired?: boolean; ow
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
   const isOwner = () => {
     return user.id === selectedNFT.user.id;
   };
@@ -111,7 +112,8 @@ const Offers = ({ onBack }: { onBack: any }) => {
         <Button
           className="btn-secondary no-bg"
           onClick={() => {
-            dispatch(setRightMenu(RightMenuType.MakeOffer));
+            if (!isConnected) dispatch(toggleWalletModal());
+            else dispatch(setRightMenu(RightMenuType.MakeOffer));
           }}
         >
           MAKE OFFER <IconOffer />

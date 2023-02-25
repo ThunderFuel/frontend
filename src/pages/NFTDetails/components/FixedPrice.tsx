@@ -13,7 +13,7 @@ import { toggleWalletModal } from "store/walletSlice";
 const FixedPrice = () => {
   const dispatch = useDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { items } = useAppSelector((state) => state.cart);
 
   const expireTime = selectedNFT.expireTime;
@@ -103,7 +103,8 @@ const FixedPrice = () => {
           <Button
             className="btn-secondary no-bg"
             onClick={() => {
-              dispatch(setRightMenu(RightMenuType.MakeOffer));
+              if (!isConnected) dispatch(toggleWalletModal());
+              else dispatch(setRightMenu(RightMenuType.MakeOffer));
             }}
           >
             MAKE OFFER <IconOffer />
