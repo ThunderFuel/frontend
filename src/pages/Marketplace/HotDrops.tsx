@@ -2,14 +2,14 @@ import React from "react";
 import { AssetHotdrop1, AssetHotdrop2, AssetHotdrop3, AssetHotdrop4, AssetHotdrop5, AssetHotdrop6, AssetHotdrop7, AssetHotdrop8 } from "assets";
 import { useIsMobile } from "hooks/useIsMobile";
 import EthereumPrice from "components/EthereumPrice";
-import { chunk } from "../../utils";
+import { chunk } from "utils";
 import Carousel from "components/Carousel";
 import clsx from "clsx";
-import { useIsWideScreen } from "../../hooks/useIsWideScreen";
+import { useIsWideScreen } from "hooks/useIsWideScreen";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import collectionsService from "api/collections/collections.service";
-import { IconChevronLeft, IconChevronRight } from "../../icons";
+import { IconChevronLeft, IconChevronRight } from "icons";
 
 const HotDrops = () => {
   const isWideScreen = useIsWideScreen();

@@ -29,7 +29,7 @@ const BulkListing = () => {
 
   const fetchData = async () => {
     const collectionIds = items.map((item) => item.collectionId);
-    const tokenOrders = items.map((item) => item.tokenOrder);
+    const tokenOrders = items.map((item) => item.id);
     try {
       const [responseFloor, responseTopTrait] = await Promise.all([floorService.getCollectionFloor(collectionIds), floorService.getTopTraitByTokenIds(tokenOrders)]);
       setCollectionFloor(

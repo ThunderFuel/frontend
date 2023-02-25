@@ -10,7 +10,6 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 0 40px;
 }
 
 .carousel-inner::after {
@@ -105,20 +104,18 @@
 }
 
 .carousel-control-prev:hover,
-.carousel-control-prev:focus,
-.carousel-control-next:hover,
-.carousel-control-next:focus {
+.carousel-control-next:hover {
   color: #fff;
   text-decoration: none;
   outline: 0;
 }
 
 .carousel-control-prev {
-  left: 0;
+  left: -40px;
 }
 
 .carousel-control-next {
-  right: 0;
+  right: -40px;
 }
 
 .carousel-control-prev-icon,
