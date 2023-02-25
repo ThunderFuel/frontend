@@ -23,7 +23,7 @@ import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { addressFormat } from "utils";
+import { addressFormat, formatPrice } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -142,21 +142,21 @@ const LeftMenu = (props: any) => {
   function formatActivityData(activity: any) {
     switch (activity.activityType) {
       case 0:
-        return { icon: IconOffer, title: "Offer", description: `${activity.price ? activity.price + " ETH" : ""} Offered by ${handleToUsername(activity)}` };
+        return { icon: IconOffer, title: "Offer", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Offered by ${handleToUsername(activity)}` };
       case 1:
-        return { icon: IconToken, title: "Mint", description: `${activity.price ? activity.price + " ETH" : ""} Minted by ${handleFromUsername(activity)}` };
+        return { icon: IconToken, title: "Mint", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Minted by ${handleFromUsername(activity)}` };
       case 2:
-        return { icon: IconCart, title: "Sale", description: `${activity.price ? activity.price + " ETH" : ""} Purchased by ${handleToUsername(activity)}` };
+        return { icon: IconCart, title: "Sale", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Purchased by ${handleToUsername(activity)}` };
       case 3:
         return {
           icon: IconTransfer,
           title: "Transfer",
-          description: `${activity.price ? activity.price + " ETH" : ""} Transferred to ${handleToUsername(activity)}`,
+          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Transferred to ${handleToUsername(activity)}`,
         };
       case 4:
-        return { icon: IconListed, title: "List", description: `${activity.price ? activity.price + " ETH" : ""} Listed by ${handleFromUsername(activity)}` };
+        return { icon: IconListed, title: "List", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Listed by ${handleFromUsername(activity)}` };
       case 5:
-        return { icon: IconBid, title: "Bid", description: `${activity.price ? activity.price + " ETH" : ""} Bid placed by ${handleFromUsername(activity)}` };
+        return { icon: IconBid, title: "Bid", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Bid placed by ${handleFromUsername(activity)}` };
       default:
         throw new Error(`Invalid activity type: ${activity}`);
     }
