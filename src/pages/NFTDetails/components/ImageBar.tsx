@@ -17,7 +17,14 @@ const ImageBar = () => {
   };
 
   const handleLike = () => {
-    if (isConnected) nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: user.id, like: !isLiked }).then((res) => res.data === true && setIsliked(!isLiked));
+    if (isConnected)
+      nftdetailsService
+        .tokenLike({
+          tokenId: selectedNFT.id,
+          userId: user.id,
+          like: !isLiked,
+        })
+        .then((res) => res.data === true && setIsliked(!isLiked));
     else dispatch(toggleWalletModal());
   };
 
@@ -45,10 +52,10 @@ const ImageBar = () => {
 
   return (
     <div className="flex absolute right-[38px] w-fit flex-col gap-5">
-      <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => handleLike()}>
+      <div className="border border-gray rounded-md p-2 group cursor-pointer bg-bg-light" onClick={() => handleLike()}>
         <IconLike stroke="gray" className={`group-hover:stroke-white ${isLiked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>
-      <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray ">
+      <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray bg-bg-light">
         {icons.map((item, key) => {
           const IconItem = item.icon;
           if (!isOwner() && item.icon === IconTransfer) return null;
