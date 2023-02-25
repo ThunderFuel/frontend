@@ -1,12 +1,28 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { CollectionItemResponse } from "api/collections/collections.type";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type ISelectedCartItem = CollectionItemResponse;
+
+const LocalStorageCartsKey = "thunder_carts";
+
+export const getItemsFromLocalStorage = () => {
+  try {
+    const items = useLocalStorage().getItem(LocalStorageCartsKey);
+
+    return items ?? [];
+  } catch (e) {
+    return [];
+  }
+};
+export const setItemsFromLocalStorage = (items = []) => {
+  useLocalStorage().setItem(LocalStorageCartsKey, items);
+};
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [] as ISelectedCartItem[],
+    items: getItemsFromLocalStorage() as ISelectedCartItem[],
     totalAmount: 0,
     itemCount: 0,
     show: false,
@@ -39,9 +55,11 @@ export const cartSlice = createSlice({
     },
     add: (state, action) => {
       state.items.push(action.payload);
+      setItemsFromLocalStorage(state.items as any);
     },
     sweepAdd: (state, action) => {
       state.items = action.payload;
+      setItemsFromLocalStorage(state.items as any);
     },
     getCartItems: (state) => {
       state.items = [];
