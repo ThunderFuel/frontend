@@ -1,16 +1,10 @@
 import React from "react";
 import { IconEthereum } from "../../icons";
 import clsx from "clsx";
+import { formatPrice } from "utils";
 
 const EthereumPrice = ({ price, priceClassName, className }: { price: any; priceClassName?: string; className?: string }) => {
   const hasPrice = !!price;
-
-  const formatPrice = (price: number) => {
-    if (typeof price === "string") return price;
-    const formattedNum = price.toFixed(4).replace(/\.?0+$/, "");
-
-    return formattedNum;
-  };
 
   return (
     <div className={clsx("flex items-center", className)}>

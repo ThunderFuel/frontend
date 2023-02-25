@@ -90,3 +90,10 @@ export const clipboardCopy = (text: string) => {
     window.navigator["clipboard"].writeText(text);
   }
 };
+
+export const formatPrice = (price: number) => {
+  if (typeof price === "string") return price;
+  const formattedNum = price.toFixed(4).replace(/\.?0+$/, "");
+
+  return formattedNum;
+};

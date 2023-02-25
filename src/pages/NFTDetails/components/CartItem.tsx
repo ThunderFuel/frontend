@@ -2,6 +2,7 @@ import { IconEthereum } from "icons";
 import React from "react";
 import { useAppSelector } from "store";
 import { RightMenuType } from "store/NFTDetailsSlice";
+import { formatPrice } from "utils";
 
 const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
   const { rightMenuType } = useAppSelector((state) => state.nftdetails);
@@ -17,7 +18,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
             <div className="flex justify-between">
               <span className="text-gray-light">Starting Price</span>
               <div className="flex items-center text-white">
-                {selectedNFT?.startingPrice ?? "-"}
+                {formatPrice(selectedNFT?.startingPrice) ?? "-"}
                 <IconEthereum className="h-5 w-5 text-gray-light" />
               </div>
             </div>
@@ -26,7 +27,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
             <div className="flex justify-between">
               <span className="text-gray-light">Floor Price</span>
               <div className="flex items-center text-white">
-                {selectedNFT?.collection?.floor ?? "-"}
+                {formatPrice(selectedNFT?.collection?.floor) ?? "-"}
                 <IconEthereum className="h-5 w-5 text-gray-light" />
               </div>
             </div>
@@ -38,7 +39,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
                   <>
                     <span className="text-gray-light">Highest Bid</span>
                     <div className="flex items-center text-orange">
-                      {selectedNFT?.highestBid?.price ?? "-"}
+                      {formatPrice(selectedNFT?.highestBid?.price) ?? "-"}
                       <IconEthereum className="h-5 w-5" />
                     </div>
                   </>
@@ -47,7 +48,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
                   <>
                     <span className="text-gray-light">Best Offer</span>
                     <div className="flex items-center text-orange">
-                      {selectedNFT?.bestOffer?.price ?? "-"}
+                      {formatPrice(selectedNFT?.bestOffer?.price) ?? "-"}
                       <IconEthereum className="h-5 w-5" />
                     </div>
                   </>
@@ -57,7 +58,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
             <div className="flex justify-between">
               <span className="text-gray-light">Your Current Offer</span>
               <div className="flex items-center text-green">
-                {currentItem?.price ?? "-"}
+                {formatPrice(currentItem?.price) ?? "-"}
                 <IconEthereum className="h-5 w-5" />
               </div>
             </div>
