@@ -47,7 +47,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                   className="btn-secondary no-bg text-headline-02 border-none rounded-none py-3"
                   onClick={() => {
                     dispatch(setPresetPrice(getTraitFloor(item) === "-" ? "" : getTraitFloor(item)));
-                    dispatch(setRightMenu(RightMenuType.ListNFT));
+                    dispatch(setRightMenu(selectedNFT.salable ? RightMenuType.UpdateListing : RightMenuType.ListNFT));
                   }}
                 >
                   LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />
