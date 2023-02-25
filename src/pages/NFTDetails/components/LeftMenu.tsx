@@ -130,6 +130,7 @@ const LeftMenu = (props: any) => {
   const dispatch = useAppDispatch();
   const { walletConnect } = useWallet();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
   function handleFromUsername(activity: any) {
     return activity.fromUser?.userName ?? addressFormat(activity.fromUser?.walletAddress);
@@ -142,7 +143,7 @@ const LeftMenu = (props: any) => {
   function formatActivityData(activity: any) {
     switch (activity.activityType) {
       case 0:
-        return { icon: IconOffer, title: "Offer", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Offered by ${handleToUsername(activity)}` };
+        return { icon: IconOffer, title: "Offer", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Offered by ${handleFromUsername(activity)}` };
       case 1:
         return { icon: IconToken, title: "Mint", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Minted by ${handleFromUsername(activity)}` };
       case 2:
@@ -237,7 +238,8 @@ const LeftMenu = (props: any) => {
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: nft.bestOffer?.price }));
+                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer?.price, item: { id: selectedNFT.bestOffer?.id, price: selectedNFT.bestOffer?.price } }));
+
                       dispatch(toggleCheckoutModal());
                     }}
                   />

@@ -55,6 +55,10 @@ const NFTDetails = () => {
   }, [isActive]);
 
   useEffect(() => {
+    resetMenuState();
+  }, []);
+
+  useEffect(() => {
     if (!isActive) fetchCollection();
   }, [show]);
 
