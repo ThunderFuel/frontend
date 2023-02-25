@@ -1,9 +1,10 @@
 import { AssetEmptyCart } from "assets";
 import Button from "components/Button";
 import CartItem from "components/CartItem";
+import EthereumPrice from "components/EthereumPrice";
 import Modal from "components/Modal";
 import { useWallet } from "hooks/useWallet";
-import { IconArrowRight, IconEthereum } from "icons";
+import { IconArrowRight } from "icons";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, toggleCartModal } from "store/cartSlice";
@@ -37,7 +38,7 @@ const MyCart = () => {
       <div className="flex w-full px-5 py-2 justify-between border-y border-gray">
         <span className="text-head6 font-spaceGrotesk text-gray-light">Total</span>
         <span className="flex items-center text-white">
-          {totalAmount} <IconEthereum color="rgb(131,131,131)" />
+          <EthereumPrice price={totalAmount} priceClassName="text-head6 font-spaceGrotesk" />
         </span>
       </div>
       <div className="flex w-full p-5">
