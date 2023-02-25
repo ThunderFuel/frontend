@@ -32,6 +32,7 @@ import MetadataTable from "./MetadataTable";
 import Avatar from "components/Avatar";
 import UseNavigate from "hooks/useNavigate";
 import ReadMore from "components/ReadMore";
+import offerService from "api/offer/offer.service";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -125,7 +126,7 @@ const FooterAuction = () => {
 };
 
 const LeftMenu = (props: any) => {
-  const { nft } = props;
+  const { nft, fetchCollection } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { walletConnect } = useWallet();
@@ -218,7 +219,15 @@ const LeftMenu = (props: any) => {
             <ReadMore text={nft?.description ?? nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
-          {nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />}
+          {nft.salable ? (
+            <FixedPrice />
+          ) : nft.onAuction ? (
+            <Auction />
+          ) : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? (
+            <BestOffer fetchCollection={fetchCollection} />
+          ) : (
+            <MakeOffer />
+          )}
 
           {JSON.stringify(nft.bestOffer) !== "null" && (
             <Box className="bg-bg-light justify-between pr-4">
@@ -238,9 +247,7 @@ const LeftMenu = (props: any) => {
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer?.price, item: { id: selectedNFT.bestOffer?.id, price: selectedNFT.bestOffer?.price } }));
-
-                      dispatch(toggleCheckoutModal());
+                      offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => fetchCollection());
                     }}
                   />
                 )}

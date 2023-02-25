@@ -101,7 +101,7 @@ const NFTDetails = () => {
   return !useIsMobile() ? (
     <div className="relative flex justify-between container-nftdetails">
       <div className="w-[42%]">
-        <LeftMenu nft={nft} />
+        <LeftMenu nft={nft} fetchCollection={fetchCollection} />
       </div>
       <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
         <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>

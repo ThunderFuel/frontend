@@ -38,7 +38,23 @@ export function formatDateTime(dateString: string) {
   });
 }
 
-const Box = ({ item, isExpired, ownOffer, isOwner, fetchOffers }: { item: any; isExpired?: boolean; ownOffer?: boolean; isOwner: () => boolean; fetchOffers: any }) => {
+const Box = ({
+  item,
+  isExpired,
+  ownOffer,
+  isOwner,
+  fetchOffers,
+  onBack,
+  isAccepted,
+}: {
+  item: any;
+  isExpired?: boolean;
+  ownOffer?: boolean;
+  isOwner: () => boolean;
+  fetchOffers: any;
+  onBack: any;
+  isAccepted: boolean;
+}) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -58,13 +74,15 @@ const Box = ({ item, isExpired, ownOffer, isOwner, fetchOffers }: { item: any; i
           <EthereumPrice price={item.price} priceClassName="text-head6 font-spaceGrotesk text-white" />
         </div>
       </div>
-      {isOwner() && !isExpired && (
+      {isOwner() && !isExpired && !isAccepted && (
         <div className="flex border-t border-gray">
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              offerService.acceptOffer({ id: item.id });
-              fetchOffers();
+              offerService.acceptOffer({ id: item.id }).then(() => {
+                fetchOffers();
+                onBack();
+              });
             }}
           >
             ACCEPT OFFER
@@ -139,7 +157,16 @@ const Offers = ({ onBack }: { onBack: any }) => {
         const currentTime = new Date().getTime();
 
         return offer.status !== 0 ? (
-          <Box item={offer} isExpired={currentTime > expTime} key={index} isOwner={isOwner} ownOffer={user.id === offer?.makerUserId && offer.status === 1} fetchOffers={fetchOffers}></Box>
+          <Box
+            item={offer}
+            isExpired={currentTime > expTime}
+            key={index}
+            isOwner={isOwner}
+            ownOffer={user.id === offer?.makerUserId && offer.status === 1}
+            fetchOffers={fetchOffers}
+            onBack={onBack}
+            isAccepted={offer.status === 2}
+          ></Box>
         ) : (
           <></>
         );

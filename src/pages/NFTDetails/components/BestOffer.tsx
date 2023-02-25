@@ -1,13 +1,13 @@
+import offerService from "api/offer/offer.service";
 import Button from "components/Button";
 import EthereumPrice from "components/EthereumPrice";
 import { IconAccept, IconOffer } from "icons";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "store";
-import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
 
-const BestOffer = () => {
+const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
@@ -31,8 +31,7 @@ const BestOffer = () => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.bestOffer?.price, item: { id: selectedNFT.bestOffer?.id, price: selectedNFT.bestOffer?.price } }));
-              dispatch(toggleCheckoutModal());
+              offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => fetchCollection());
             }}
           >
             ACCEPT OFFER
