@@ -100,7 +100,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
             <IconInfo className="w-[17px] h-[17px]" />
             Items sent to the wrong address cannot be recovered
           </span>
-          <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setaddress(event.target.value)} value={address} type="text" maxLength={75} />
+          <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setaddress(event.target.value)} value={address} type="text" maxLength={66} />
         </div>
       )}
     </Modal>
