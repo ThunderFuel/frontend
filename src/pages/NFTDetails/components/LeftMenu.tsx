@@ -214,7 +214,7 @@ const LeftMenu = (props: any) => {
           </div>
 
           <div className="body-medium text-white">
-            <ReadMore text={nft?.collection?.description ?? ""} characterLimit={150} />
+            <ReadMore text={nft?.description ?? nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
           {nft.salable ? <FixedPrice /> : nft.onAuction ? <Auction /> : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? <BestOffer /> : <MakeOffer />}
