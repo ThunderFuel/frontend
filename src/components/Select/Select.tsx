@@ -41,7 +41,7 @@ const Select = ({ options, value, onChange, direction = "bottom", className }: I
       </div>
       <div
         className={clsx(
-          "absolute transition-all duration-300 text-white min-w-full overflow-hidden",
+          "absolute z-10 transition-all duration-300 text-white min-w-full overflow-hidden",
           isDirectionTop ? "-translate-y-full" : "translate-y-full",
           show ? (isDirectionTop ? "-top-2" : "-bottom-2") : isDirectionTop ? "top-0" : "bottom-0"
         )}
