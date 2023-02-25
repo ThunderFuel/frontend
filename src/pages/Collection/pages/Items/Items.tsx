@@ -90,7 +90,7 @@ const Items = () => {
       let value = params[paramKey].value;
       const selecteds = Array.isArray(params[paramKey].value) ? params[paramKey].value : [];
       if (params[paramKey]?.value?.min || params[paramKey]?.value?.max) {
-        value = `${params[paramKey].value.min ?? 0}-${params[paramKey].value.max ?? 0}`;
+        value = `${params[paramKey].value.min ?? ""}-${params[paramKey].value.max ?? ""}`;
       } else if (selecteds.length) {
         value = "";
       }
