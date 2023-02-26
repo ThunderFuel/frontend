@@ -38,6 +38,7 @@ export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.HOME,
     component: Landing,
+    notLoggedIn: true,
   },
   {
     path: PATHS.MARKETPLACE,
