@@ -49,9 +49,11 @@ export const cartSlice = createSlice({
     },
     remove: (state, action) => {
       state.items = state.items.filter((item: CollectionItemResponse) => item.uid !== action.payload);
+      setItemsFromLocalStorage(state.items as any);
     },
     removeAll: (state) => {
       state.items = [];
+      setItemsFromLocalStorage(state.items as any);
     },
     add: (state, action) => {
       state.items.push(action.payload);
