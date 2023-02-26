@@ -44,11 +44,11 @@ const dayValues = [
   },
   {
     text: "7D",
-    value: 24 * 7,
+    value: 168,
   },
   {
     text: "30D",
-    value: 24 * 7 * 30,
+    value: 5040,
   },
 ];
 const filterValues = [
@@ -73,7 +73,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
-  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
+  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[4]);
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
   const [sortingValue, setSortingValue] = useState(0);
   const [sortingType, setSortingType] = useState("ASC");
