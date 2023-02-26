@@ -45,7 +45,13 @@ const Index = ({ className }: { className?: string }) => {
   const onRangeChange = (value: any) => {
     setSweep(value);
     const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable)].splice(0, value);
-    dispatch(sweepAdd(sweepCollectionItems));
+    const collectionId = collectionItems?.[0].collectionId;
+    dispatch(
+      sweepAdd({
+        items: sweepCollectionItems,
+        collectionId,
+      })
+    );
   };
 
   const onKeyPress = (e: any) => {
