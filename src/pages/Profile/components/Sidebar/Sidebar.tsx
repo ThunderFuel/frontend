@@ -10,6 +10,8 @@ import { FollowType, useProfile } from "../../ProfileContext";
 
 const Sidebar = ({ isProfile = false }: any) => {
   const { userInfo, onSetSocialActiveTab } = useProfile();
+  const ownedTokens = userInfo?.tokens ?? [];
+  const listedTokens = ownedTokens.filter((item: any) => item.salable);
 
   return (
     <div className="flex flex-col border-r border-gray min-w-[500px] max-w-[500px]">
@@ -40,7 +42,7 @@ const Sidebar = ({ isProfile = false }: any) => {
             </div>
             <div className="grid flex-1 grid-cols-2 gap-2 mt-2">
               <Box header="lısted/owned" className="justify-between">
-                {numberFormat(userInfo?.tokens?.length)}
+                {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
               </Box>
               <Box header="created" className="justify-between">
                 0
