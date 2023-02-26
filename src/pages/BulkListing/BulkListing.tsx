@@ -9,6 +9,7 @@ import { getBulkListingTableItems } from "store/bulkListingSlice";
 import { useIsMobile } from "hooks/useIsMobile";
 import MobileWarning from "components/MobileWarning";
 import floorService from "api/floor/floor.service";
+import { formatPrice } from "utils";
 
 const BulkListing = () => {
   const items = useSelector(getBulkListingTableItems);
@@ -62,7 +63,7 @@ const BulkListing = () => {
       ...item,
       floor: collectionFloor?.[item.collectionId],
       topTrait: topTraitByToken?.[item.id],
-      proceedPrice: item.price * 0.0975,
+      proceedPrice: formatPrice((prices[item.uid] ?? 0) * 0.975),
     }));
   }, [items, collectionFloor, topTraitByToken, prices]);
 

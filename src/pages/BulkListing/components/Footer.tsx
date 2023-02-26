@@ -10,6 +10,7 @@ import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
 import { removeAll } from "store/bulkListingSlice";
+import { formatPrice } from "../../../utils";
 
 const Footer = ({ items, prices }: any) => {
   const dispatch = useAppDispatch();
@@ -58,7 +59,7 @@ const Footer = ({ items, prices }: any) => {
   const getProceedPrice = React.useMemo(() => {
     const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * 0.0975, 0);
 
-    return totalProceedPrice.toFixed(5);
+    return formatPrice(totalProceedPrice);
   }, [bulkItems]);
 
   return (

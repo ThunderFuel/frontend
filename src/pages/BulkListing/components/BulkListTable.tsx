@@ -49,6 +49,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     {
       key: "item",
       text: "ITEM",
+      width: "250px",
       render: (item) => <Collection item={item} />,
     },
     {
@@ -75,7 +76,6 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     {
       key: "proceed",
       text: "proceed",
-      width: "10%",
       align: "flex-end",
       render: (item) => <EthereumPrice className={clsx(item?.proceedPrice && "text-green")} price={item?.proceedPrice} />,
     },
