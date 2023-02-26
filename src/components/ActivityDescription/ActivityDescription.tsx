@@ -1,7 +1,7 @@
 import React from "react";
 import { ActivityFilters } from "api/collections/collections.service";
-import { addressFormat, timeagoFormat } from "../../utils";
-import { useAppSelector } from "../../store";
+import { addressFormat, timeagoFormat } from "utils";
+import { useAppSelector } from "store";
 
 interface IActivityItemDescription {
   activityType: number;

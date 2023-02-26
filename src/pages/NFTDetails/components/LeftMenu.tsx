@@ -1,29 +1,13 @@
 import clsx from "clsx";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
-import {
-  IconAccept,
-  IconArrowRight,
-  IconBid,
-  IconCancel,
-  IconCart,
-  IconDocument,
-  IconFee,
-  IconLink,
-  IconListed,
-  IconOffer,
-  IconToken,
-  IconTransfer,
-  IconTwitter,
-  IconUpdateListing,
-  IconWallet,
-} from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconLink, IconListed, IconToken, IconTwitter, IconUpdateListing, IconWallet } from "icons";
 import React, { SVGProps } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { addressFormat, formatPrice } from "utils";
+import { addressFormat } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -33,6 +17,8 @@ import Avatar from "components/Avatar";
 import UseNavigate from "hooks/useNavigate";
 import ReadMore from "components/ReadMore";
 import offerService from "api/offer/offer.service";
+import ActivityItemDescription from "components/ActivityDescription";
+import collectionService, { ActivityFilters } from "api/collections/collections.service";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -133,68 +119,24 @@ const LeftMenu = (props: any) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
-  function handleFromUsername(activity: any) {
-    return activity.fromUser?.userName ?? addressFormat(activity.fromUser?.walletAddress);
-  }
-
-  function handleToUsername(activity: any) {
-    return activity.toUser?.userName ?? addressFormat(activity.toUser?.walletAddress);
-  }
-
   function formatActivityData(activity: any) {
-    switch (activity.activityType) {
-      case 0:
-        return {
-          icon: IconOffer,
-          title: "Offer",
-          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Offered by ${handleFromUsername(activity)}`,
-        };
-      case 1:
-        return {
-          icon: IconToken,
-          title: "Mint",
-          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Minted by ${handleFromUsername(activity)}`,
-        };
-      case 2:
-        return {
-          icon: IconCart,
-          title: "Sale",
-          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Purchased by ${handleToUsername(activity)}`,
-        };
-      case 3:
-        return {
-          icon: IconTransfer,
-          title: "Transfer",
-          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Transferred to ${handleToUsername(activity)}`,
-        };
-      case 4:
-        return {
-          icon: IconListed,
-          title: "List",
-          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Listed by ${handleFromUsername(activity)}`,
-        };
-      case 5:
-        return {
-          icon: IconBid,
-          title: "Bid",
-          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Bid placed by ${handleFromUsername(activity)}`,
-        };
-      default:
-        throw new Error(`Invalid activity type: ${activity}`);
-    }
+    const { activityType, toUser, fromUser, createdTimeStamp } = activity;
+
+    return <ActivityItemDescription activityType={activityType} fromUserContractAddress={fromUser.walletAddress} createdTimeStamp={createdTimeStamp} toUserContractAddress={toUser.walletAddress} />;
   }
 
   function renderLastActivity(activity: any) {
     if (activity === undefined || activity === null) return;
 
-    const { icon, description } = formatActivityData(activity);
+    const filters = collectionService.getActivityFilters();
+    const typeIcon = filters[activity?.activityType as ActivityFilters]?.icon;
 
     return (
-      <BoxWithIcon icon={icon} className="flex bg-bg-light hover:bg-bg-light ">
+      <BoxWithIcon icon={typeIcon} className="flex bg-bg-light hover:bg-bg-light ">
         <div className="flex w-full items-center justify-between pr-4">
           <div className="flex flex-col gap-y-[5px] flex-1">
             <div className="text-headline-01 text-gray-light">LAST ACTIVITY</div>
-            <span className="text-head6 text-white font-spaceGrotesk">{description}</span>
+            <span className="text-white">{formatActivityData(activity)}</span>
           </div>
           <HoverButton
             Icon={IconArrowRight}
