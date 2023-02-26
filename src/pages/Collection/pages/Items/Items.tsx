@@ -140,6 +140,12 @@ const Items = () => {
 
   React.useEffect(() => {
     fetchFilters();
+
+    window.addEventListener("CompleteCheckout", fetchFilters);
+
+    return () => {
+      window.addEventListener("CompleteCheckout", fetchFilters);
+    };
   }, [collectionId]);
 
   return (

@@ -72,6 +72,9 @@ export const cartSlice = createSlice({
     toggleCartModal: (state) => {
       state.show = !state.show;
     },
+    addBuyNow: (state, action) => {
+      state.items = [action.payload];
+    },
   },
 });
 
@@ -82,6 +85,6 @@ export const getCartSelectedTokenOrderList = createSelector(
   (tokenOrderList: any[]) => tokenOrderList
 );
 
-export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd } = cartSlice.actions;
+export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd, addBuyNow } = cartSlice.actions;
 
 export default cartSlice.reducer;

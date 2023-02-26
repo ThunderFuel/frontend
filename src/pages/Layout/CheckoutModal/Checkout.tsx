@@ -149,6 +149,7 @@ const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items:
   );
 };
 const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+  const [successCheckout, onSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
   const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
   const { user } = useAppSelector((state) => state.wallet);
@@ -164,8 +165,18 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     setApproved(true);
     const tokenIds = items.map((item: any) => item.id);
     nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-      if (res.data) dispatch(removeAll());
+      if (res.data) {
+        onSuccessCheckout(res.data);
+        window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+      }
     });
+  };
+
+  const onCloseModal = () => {
+    onClose();
+    if (successCheckout) {
+      dispatch(removeAll());
+    }
   };
 
   React.useEffect(() => {
@@ -186,7 +197,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <IconWarning className="fill-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
-          <Button className="btn-secondary m-5" onClick={onClose}>
+          <Button className="btn-secondary m-5" onClick={onCloseModal}>
             CLOSE
           </Button>
         </div>
@@ -195,7 +206,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onCloseModal} footer={<Footer approved={approved} onClose={onCloseModal} />}>
       <div className="flex flex-col p-5">
         {items.length > 0 ? (
           <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />
