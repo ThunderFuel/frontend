@@ -48,7 +48,7 @@ const dayValues = [
   },
   {
     text: "30D",
-    value: 5040,
+    value: 720,
   },
 ];
 const filterValues = [
