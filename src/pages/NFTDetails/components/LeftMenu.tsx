@@ -144,11 +144,23 @@ const LeftMenu = (props: any) => {
   function formatActivityData(activity: any) {
     switch (activity.activityType) {
       case 0:
-        return { icon: IconOffer, title: "Offer", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Offered by ${handleFromUsername(activity)}` };
+        return {
+          icon: IconOffer,
+          title: "Offer",
+          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Offered by ${handleFromUsername(activity)}`,
+        };
       case 1:
-        return { icon: IconToken, title: "Mint", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Minted by ${handleFromUsername(activity)}` };
+        return {
+          icon: IconToken,
+          title: "Mint",
+          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Minted by ${handleFromUsername(activity)}`,
+        };
       case 2:
-        return { icon: IconCart, title: "Sale", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Purchased by ${handleToUsername(activity)}` };
+        return {
+          icon: IconCart,
+          title: "Sale",
+          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Purchased by ${handleToUsername(activity)}`,
+        };
       case 3:
         return {
           icon: IconTransfer,
@@ -156,9 +168,17 @@ const LeftMenu = (props: any) => {
           description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Transferred to ${handleToUsername(activity)}`,
         };
       case 4:
-        return { icon: IconListed, title: "List", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Listed by ${handleFromUsername(activity)}` };
+        return {
+          icon: IconListed,
+          title: "List",
+          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Listed by ${handleFromUsername(activity)}`,
+        };
       case 5:
-        return { icon: IconBid, title: "Bid", description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Bid placed by ${handleFromUsername(activity)}` };
+        return {
+          icon: IconBid,
+          title: "Bid",
+          description: `${activity.price ? formatPrice(activity.price) + " ETH" : ""} Bid placed by ${handleFromUsername(activity)}`,
+        };
       default:
         throw new Error(`Invalid activity type: ${activity}`);
     }
@@ -171,8 +191,8 @@ const LeftMenu = (props: any) => {
 
     return (
       <BoxWithIcon icon={icon} className="flex bg-bg-light hover:bg-bg-light ">
-        <div className="flex w-full justify-between pr-4">
-          <div className="flex flex-col gap-y-[5px] ">
+        <div className="flex w-full items-center justify-between pr-4">
+          <div className="flex flex-col gap-y-[5px] flex-1">
             <div className="text-headline-01 text-gray-light">LAST ACTIVITY</div>
             <span className="text-head6 text-white font-spaceGrotesk">{description}</span>
           </div>
