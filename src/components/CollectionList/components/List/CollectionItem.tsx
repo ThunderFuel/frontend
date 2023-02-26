@@ -100,9 +100,13 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
   };
 
   const onMakeOffer = (e: any) => {
-    dispatch(setRightMenu(RightMenuType.MakeOffer));
-
-    navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+    if (!isConnected) {
+      dispatch(toggleCartModal());
+      dispatch(toggleWalletModal());
+    } else {
+      dispatch(setRightMenu(RightMenuType.MakeOffer));
+      navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+    }
     e.stopPropagation();
     e.preventDefault();
   };
