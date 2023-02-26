@@ -152,7 +152,11 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     sortingType,
   };
 
-  return <MarketplaceContext.Provider value={value}>{children}</MarketplaceContext.Provider>;
+  return (
+    <MarketplaceContext.Provider value={value}>
+      <div>{children}</div>
+    </MarketplaceContext.Provider>
+  );
 };
 
 export default MarketplaceProvider;
