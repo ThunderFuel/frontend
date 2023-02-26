@@ -21,7 +21,7 @@ const NftImages = React.memo(({ images }: { images: any[] }) => {
   return (
     <ul className="py-2.5 px-4 flex gap-2">
       {tmpImages.map((image, i) => (
-        <li key={i} className="w-14 h-14">
+        <li key={i} className="w-14 h-14 overflow-hidden">
           <Img src={image} alt={i.toString()} defaultImage={AssetCollectionItem0} />
         </li>
       ))}
