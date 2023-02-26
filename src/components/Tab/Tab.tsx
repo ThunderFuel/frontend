@@ -21,9 +21,15 @@ export interface TabItemProps {
 const Item = (props: TabItemProps) => {
   const { changeActiveTab, activeTab } = useTabContext();
   const isActive = JSON.stringify(activeTab) === JSON.stringify(props.id);
+  const onClick = () => {
+    if (props.disabled) {
+      return false;
+    }
+    changeActiveTab(props.id);
+  };
 
   return (
-    <li onClick={() => changeActiveTab(props.id)} className={clsx(props.className, props.disabled && "pointer-events-none")}>
+    <li onClick={onClick} className={clsx(props.className)}>
       <span className={isActive ? "active" : ""}>{props.children}</span>
     </li>
   );
