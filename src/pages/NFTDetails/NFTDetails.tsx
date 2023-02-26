@@ -58,10 +58,6 @@ const NFTDetails = () => {
     return () => resetMenuState();
   }, []);
 
-  useEffect(() => {
-    if (!isActive) fetchCollection();
-  }, [show]);
-
   const resetMenuState = () => {
     setIsActive(false);
     dispatch(setRightMenu(RightMenuType.None));
