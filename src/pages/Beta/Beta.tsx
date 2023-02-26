@@ -5,10 +5,10 @@ import { AssetBetaLogin } from "assets";
 import Button from "components/Button";
 import InputContainer from "./components/Input";
 import Header from "../Landing/Header";
-import { useLocalStorage } from "hooks/useLocalStorage";
+import useAuthToken from "hooks/useAuthToken";
 import { useNavigate } from "react-router-dom";
-import authService from "../../api/auth/auth.service";
-import useToast from "../../hooks/useToast";
+import authService from "api/auth/auth.service";
+import useToast from "hooks/useToast";
 
 const Beta = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Beta = () => {
   const onSubmit = async () => {
     try {
       const response = await authService.generatetoken({ code });
-      useLocalStorage().setItem("auth_token", response.data);
+      useAuthToken.setAuthTokenFromLocalStorage(response.data);
       navigate(0);
     } catch (e: any) {
       useToast().error(e.response.data.message);

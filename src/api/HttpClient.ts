@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenStatic } from "axios";
-import { getAuthTokenFromLocalStorage } from "../hooks/useLocalStorage";
+import useAuthToken from "hooks/useAuthToken";
+import { EventDispatchLogout } from "router/Router";
 
 interface Interceptor {
   onFulfilled: (config: AxiosRequestConfig) => AxiosRequestConfig;
@@ -29,7 +30,7 @@ export default class HttpClient {
 
   constructor(baseURL: string, options: HttpClientOptions = {}) {
     const { requestInterceptors = [], responseInterceptors = [], headers = {}, ...rest } = options;
-    const authToken = getAuthTokenFromLocalStorage();
+    const authToken = useAuthToken.getAuthTokenFromLocalStorage();
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`;
     }
@@ -42,6 +43,18 @@ export default class HttpClient {
       ...rest,
     });
 
+    this.axios.interceptors.response.use(
+      (conf) => conf,
+      (error) => {
+        if (error.response.status === 401) {
+          useAuthToken.clearAuthTokenFromLocalStorage();
+          window.dispatchEvent(new CustomEvent(EventDispatchLogout));
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
     requestInterceptors.forEach((interceptorConfig) => {
       this.axios.interceptors.request.use(
         (conf) => interceptorConfig.onFulfilled(conf),
@@ -52,13 +65,7 @@ export default class HttpClient {
     responseInterceptors.forEach((interceptorConfig) => {
       this.axios.interceptors.response.use(
         (conf) => interceptorConfig.onFulfilled(conf),
-        (error) => {
-          if (error.message === "Retried request") {
-            return Promise.reject(error);
-          }
-
-          return interceptorConfig.onRejected(error);
-        }
+        (error) => interceptorConfig.onRejected(error)
       );
     });
   }

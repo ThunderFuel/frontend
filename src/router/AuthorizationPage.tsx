@@ -1,9 +1,9 @@
 import React from "react";
 import Beta from "../pages/Beta";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import useAuthToken from "hooks/useAuthToken";
 
 const AuthorizationPage = ({ children }: any) => {
-  const hasAuthToken = useLocalStorage().getItem("auth_token");
+  const hasAuthToken = useAuthToken.getAuthTokenFromLocalStorage();
   if (!hasAuthToken) {
     return <Beta />;
   }

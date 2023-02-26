@@ -31,7 +31,21 @@ const getRoute = (route: RouteConfig) => {
     </Route>
   );
 };
+
+export const EventDispatchLogout = "ThunderFuelDispatchLogout";
+
 const Router = () => {
+  React.useEffect(() => {
+    const detectPermissionDenied = () => {
+      window.location.reload();
+    };
+    window.addEventListener(EventDispatchLogout, detectPermissionDenied);
+
+    return () => {
+      window.removeEventListener(EventDispatchLogout, detectPermissionDenied);
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

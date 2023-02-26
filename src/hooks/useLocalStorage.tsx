@@ -1,20 +1,19 @@
 export const useLocalStorage = () => {
   return {
-    setItem: (name: string, data: any) => {
-      localStorage.setItem(name, JSON.stringify(data));
+    setItem: (key: string, data: any) => {
+      localStorage.setItem(key, JSON.stringify(data));
     },
-    getItem: (name: string) => {
+    getItem: (key: string) => {
       try {
-        const data = localStorage.getItem(name);
+        const data = localStorage.getItem(key);
 
         return JSON.parse(data as string);
       } catch {
         return null;
       }
     },
+    removeItem: (key: string) => {
+      localStorage.removeItem(key);
+    },
   };
-};
-
-export const getAuthTokenFromLocalStorage = () => {
-  return useLocalStorage().getItem("auth_token");
 };
