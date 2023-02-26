@@ -122,7 +122,7 @@ const LeftMenu = (props: any) => {
   function formatActivityData(activity: any) {
     const { activityType, toUser, fromUser, createdTimeStamp } = activity;
 
-    return <ActivityItemDescription activityType={activityType} fromUserContractAddress={fromUser.walletAddress} createdTimeStamp={createdTimeStamp} toUserContractAddress={toUser.walletAddress} />;
+    return <ActivityItemDescription activityType={activityType} fromUserContractAddress={fromUser?.walletAddress} createdTimeStamp={createdTimeStamp} toUserContractAddress={toUser?.walletAddress} />;
   }
 
   function renderLastActivity(activity: any) {

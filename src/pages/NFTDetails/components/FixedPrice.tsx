@@ -7,8 +7,9 @@ import { useAppSelector } from "store";
 import { add, remove } from "store/cartSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { remainingTime } from "./AuctionCountdown";
-import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { toggleWalletModal } from "store/walletSlice";
+import { useWallet } from "hooks/useWallet";
 
 const FixedPrice = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const FixedPrice = () => {
   const previousMinutes = useRef(remaining.minutes);
   const { days, hours, minutes } = remainingTime(expireTime);
   const [addCartIsDisabled, setAddCartIsDisabled] = useState(false);
+  const { hasEnoughFunds } = useWallet();
 
   const isOwner = () => {
     return user?.id === selectedNFT?.user?.id;
@@ -77,7 +79,10 @@ const FixedPrice = () => {
                 if (user?.id) {
                   dispatch(setCheckout({ type: CheckoutType.None }));
                   if (!items.includes(selectedNFT)) dispatch(add(selectedNFT));
-                  dispatch(toggleCheckoutModal());
+                  hasEnoughFunds().then((res) => {
+                    dispatch(setIsInsufficientBalance(!res));
+                    dispatch(toggleCheckoutModal());
+                  });
                 } else {
                   dispatch(toggleWalletModal());
                 }
