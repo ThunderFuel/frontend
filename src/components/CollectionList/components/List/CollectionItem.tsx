@@ -1,8 +1,8 @@
 import React from "react";
 import { IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
-import { useAppDispatch } from "store";
-import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
+import { useAppDispatch, useAppSelector } from "store";
+import { add as cartAdd, addBuyNow, remove as cartRemove, toggleCartModal } from "store/cartSlice";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 
 import "./CollectionItem.css";
@@ -13,7 +13,10 @@ import Img from "components/Img";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
 import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
-import { RightMenuType, setRightMenu } from "../../../../store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { toggleWalletModal } from "store/walletSlice";
+import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { useWallet } from "hooks/useWallet";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -46,6 +49,8 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setSweep, options } = useCollectionListContext();
+  const { isConnected } = useAppSelector((state) => state.wallet);
+  const { hasEnoughFunds } = useWallet();
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -72,6 +77,26 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
 
     e.stopPropagation();
     e.preventDefault();
+  };
+
+  const onBuyNow = async (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!isConnected) {
+      dispatch(toggleCartModal());
+      dispatch(toggleWalletModal());
+    } else {
+      dispatch(addBuyNow(collection));
+
+      try {
+        const res = await hasEnoughFunds();
+        dispatch(setIsInsufficientBalance(!res));
+        dispatch(toggleCheckoutModal());
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   const onMakeOffer = (e: any) => {
@@ -108,7 +133,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         </div>
         {!options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer onClick={onMakeOffer} />}
+            {collection.salable ? <ButtonBuyNow onClick={onBuyNow} /> : <ButtonMakeOffer onClick={onMakeOffer} />}
           </div>
         ) : null}
       </Link>
