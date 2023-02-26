@@ -11,7 +11,6 @@ import Footer from "./components/Footer";
 import Collection from "./components/Collection";
 import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
-import { numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
 
@@ -89,7 +88,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       width: "10%",
       align: "flex-end",
       sortValue: 1,
-      render: (item) => <EthereumPrice price={numberFormat(item.volume)} />,
+      render: (item) => <EthereumPrice price={item.volume} />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
