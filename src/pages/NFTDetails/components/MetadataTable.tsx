@@ -37,7 +37,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                 <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price ?? "-"} />
               </div>
             </div>
-            {isOwner() ? (
+            {isOwner() && getTraitFloor(item) !== "-" ? (
               <div
                 className={`overflow-hidden ${
                   i === metadata.length - 1 ? "rounded-b-[4px]" : ""

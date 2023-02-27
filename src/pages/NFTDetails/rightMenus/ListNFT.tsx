@@ -110,13 +110,13 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           </div>
         </div>
         <Tab initTab={0} onChange={(value) => setisTimedAuction(!!value)}>
-          <Tab.Item id={0}>
+          <Tab.Item id={0} className="w-full">
             <div className="flex justify-center items-center gap-x-[10px] -my-2">
               <IconListed className="w-[17px] h-[17px]" />
               FIXED PRICE
             </div>
           </Tab.Item>
-          <Tab.Item id={1} disabled={updateListing ? true : false}>
+          <Tab.Item id={1} disabled={updateListing ? true : false} className="w-full">
             <div className="flex justify-center items-center gap-x-[10px] -my-2">
               <IconAuction className="w-[17px] h-[17px]" />
               TIMED AUCTION
