@@ -58,7 +58,7 @@ const Beta = () => {
                 </div>
               </div>
               <div>
-                <Img src={AssetBetaLogin} className="w-full" />
+                <Img src={AssetBetaLogin} className="w-[85%]" />
               </div>
             </div>
           </div>
