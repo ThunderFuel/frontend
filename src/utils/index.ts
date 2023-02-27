@@ -91,7 +91,6 @@ export const clipboardCopy = (text: string) => {
 };
 
 export const formatPrice = (price: any) => {
-  console.log(price);
   if (!price || price === "-") {
     return "-";
   }

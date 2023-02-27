@@ -17,7 +17,6 @@ export const NFTDetailsSlice = createSlice({
   initialState: {
     selectedNFT: {} as any,
     rightMenuType: RightMenuType.None,
-    bidBalance: 500000000,
     isLiked: false,
     presetPrice: "",
   },
