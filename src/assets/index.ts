@@ -58,3 +58,7 @@ export { default as AssetHotdrop8 } from "./marketplace/hotdrops/hotdrop-8.png";
 export { default as AssetDefaultImageBg } from "./default-image-bg.svg";
 
 export { default as AssetBetaLogin } from "./beta/login.png";
+export { default as AssetBetaSingleCheckout } from "./beta/single-checkout.png";
+export { default as AssetBetaBulkListing } from "./beta/bulk-listing.png";
+export { default as AssetBetaWallet } from "./beta/wallet.png";
+export { default as AssetBetaSweep } from "./beta/sweep.png";

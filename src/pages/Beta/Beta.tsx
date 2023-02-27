@@ -9,15 +9,19 @@ import useAuthToken from "hooks/useAuthToken";
 import { useNavigate } from "react-router-dom";
 import authService from "api/auth/auth.service";
 import useToast from "hooks/useToast";
+import { useDispatch } from "react-redux";
+import { toggleClosedBetaModal } from "store/commonSlice";
 
 const Beta = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [code, setCode] = React.useState("");
   const onSubmit = async () => {
     try {
       const response = await authService.generatetoken({ code });
       useAuthToken.setAuthTokenFromLocalStorage(response.data);
       navigate(0);
+      dispatch(toggleClosedBetaModal());
     } catch (e: any) {
       useToast().error(e.response.data.message);
       console.log(e);
