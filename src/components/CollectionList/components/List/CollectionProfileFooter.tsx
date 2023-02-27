@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "components/Button";
-import { IconTag } from "icons";
+import { IconTag, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
@@ -26,7 +26,7 @@ const CollectionFooter = () => {
     <div className="sticky bottom-0 py-3 flex gap-3 items-center justify-end border-t border-t-gray bg-bg z-20">
       <Button className="btn-secondary uppercase" onClick={onClear}>
         Clear {selectedBulkListingItemCount} {selectedBulkListingItemCount > 1 ? "items" : "item"}
-        <IconTag />
+        <IconTrash />
       </Button>
       <Button className="uppercase" onClick={onUpdateBulkListing}>
         LIST/ UPDATE {selectedBulkListingItemCount} {selectedBulkListingItemCount > 1 ? "items" : "item"}
