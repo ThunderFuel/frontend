@@ -3,7 +3,7 @@ import React from "react";
 import "./Sidebar.css";
 import { numberFormat } from "utils";
 import LogoContainer from "./components/LogoContainer";
-import { Box, BoxWithIconLastActivity, BoxWithIconLastOffer } from "./components/Box";
+import { Box, BoxWithIconLastActivity } from "./components/Box";
 import CoverImage from "./components/CoverImage";
 import { ButtonEdit, ButtonFollow } from "./components/Buttons";
 import { FollowType, useProfile } from "../../ProfileContext";
@@ -21,7 +21,7 @@ const Sidebar = ({ isProfile = false }: any) => {
         <div className="p-10 relative pt-[115px] text-white w-full h-full flex">
           <div className="flex flex-col w-full">
             <LogoContainer userInfo={userInfo} />
-            <div className="body-medium mt-5">{userInfo?.bio}</div>
+            <div className="body-medium mt-5 min-h-[21px]">{userInfo?.bio}</div>
             <div className="grid grid-cols-2 gap-2 mt-5">
               <Box
                 header="followers"
@@ -48,7 +48,7 @@ const Sidebar = ({ isProfile = false }: any) => {
                 0
               </Box>
             </div>
-            {userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null}
+            {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
             {userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null}
           </div>
         </div>
