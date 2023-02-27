@@ -61,10 +61,9 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
   const onRemove = () => {
     dispatch(remove(uid));
   };
-  //TODO
-  const isUnavailable = uid === 9;
-  const isPriceChange = uid === 8;
-  const isFailed = uid === 20;
+  const isUnavailable = false;
+  const isPriceChange = false;
+  const isFailed = false;
 
   const hasError = isUnavailable || isPriceChange || isFailed;
 
