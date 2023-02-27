@@ -22,7 +22,7 @@ const Index = () => {
         {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading /> : <CollectionGrid />}
       </div>
 
-      {options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}
+      {options?.hideFooter ? null : options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}
     </div>
   );
 };

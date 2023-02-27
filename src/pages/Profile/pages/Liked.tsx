@@ -7,6 +7,7 @@ const options = {
   hiddenSweep: true,
   hiddenFilter: true,
   itemLabel: "LIKED ITEMS",
+  hideFooter: true,
 };
 const Liked = () => {
   const { userInfo } = useProfile();
