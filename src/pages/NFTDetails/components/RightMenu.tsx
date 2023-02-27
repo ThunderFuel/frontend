@@ -25,6 +25,12 @@ const RightMenu = ({
       top: 0,
       behavior: "smooth",
     });
+
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, []);
 
   return (
@@ -34,7 +40,7 @@ const RightMenu = ({
         {title}
       </div>
       {description ? <InfoBox description={description} /> : <></>}
-      <div className={clsx("flex flex-col px-10 py-5 gap-y-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "")}>{children}</div>
+      <div className={clsx("flex flex-1 flex-col px-10 py-5 gap-y-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "")}>{children}</div>
 
       {footer && <div className="sticky z-10 bottom-0 mt-auto w-full border-t border-gray bg-bg">{footer}</div>}
     </div>
