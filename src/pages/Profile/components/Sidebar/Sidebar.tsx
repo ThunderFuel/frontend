@@ -41,7 +41,7 @@ const Sidebar = ({ isProfile = false }: any) => {
               </Box>
             </div>
             <div className="grid flex-1 grid-cols-2 gap-2 mt-2">
-              <Box header="lısted/owned" className="justify-between">
+              <Box header="listed/owned" className="justify-between">
                 {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
               </Box>
               <Box header="created" className="justify-between">
