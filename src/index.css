@@ -175,7 +175,7 @@
   }
 
   .tab li {
-    @apply block flex-1 border-r border-r-gray last:border-r-0;
+    @apply block  border-r border-r-gray last:border-r-0;
   }
 
   .tab li span {
@@ -202,7 +202,7 @@
   }
 
   .tab.secondary li {
-    @apply border-r border-gray flex-1 last:border-r-0;
+    @apply border-r border-gray  last:border-r-0;
   }
 
   .tab.secondary li span {
