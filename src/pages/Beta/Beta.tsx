@@ -51,7 +51,7 @@ const Beta = () => {
                   </div>
                   <div className="flex flex-col gap-y-[25px]">
                     <InputContainer onChangeContainer={(value: any) => setCode(value)} />
-                    <Button className="btn-secondary w-full" disabled={code.length < 6} onClick={onSubmit}>
+                    <Button className="btn" disabled={code.length < 6} onClick={onSubmit}>
                       Login <IconArrowRight />
                     </Button>
                   </div>
