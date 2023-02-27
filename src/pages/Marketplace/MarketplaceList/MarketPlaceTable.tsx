@@ -148,7 +148,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
       headers={headers}
       items={items}
-      footer={!options.hideFooter ? <Footer /> : null}
+      footer={!options.hideFooter ? items.length > 10 ? <Footer /> : null : null}
     />
   );
 };
