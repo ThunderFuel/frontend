@@ -74,7 +74,7 @@ const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: an
   );
 };
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
-  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue, sortingType } = useMarketplace();
+  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue, sortingType, options } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
@@ -148,7 +148,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
       headers={headers}
       items={items}
-      footer={<Footer />}
+      footer={!options.hideFooter ? <Footer /> : null}
     />
   );
 };

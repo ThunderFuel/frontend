@@ -27,6 +27,7 @@ interface IMarketplaceContext {
   onChangeSortValue: (value: any) => void;
   sortingValue: any;
   sortingType: any;
+  options: any;
 }
 
 const dayValues = [
@@ -68,7 +69,7 @@ const filterValues = [
 
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
-const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
+const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; options?: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -91,6 +92,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
         userId: user?.id,
         sortingValue,
         sortingType,
+        page: 1,
+        pageSize: 10,
       });
       const items = response.data.map((responseItem) => {
         return {
@@ -136,7 +139,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     getMarketplaceItems();
   }, [filterTabValue, dayTabValue, user, sortingValue, sortingType]);
 
-  const value = {
+  const contextValue = {
+    options,
     items,
     getMarketplaceItems,
     dayValues,
@@ -153,7 +157,7 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <MarketplaceContext.Provider value={value}>
+    <MarketplaceContext.Provider value={contextValue}>
       <div>{children}</div>
     </MarketplaceContext.Provider>
   );

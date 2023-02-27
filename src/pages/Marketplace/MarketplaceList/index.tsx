@@ -6,13 +6,15 @@ import MarketPlaceMobileTable from "./MarketPlaceMobileTable";
 import { useMarketplace } from "../MarketplaceContext";
 
 export interface MarketplaceListProps {
-  itemCount: number;
+  itemCount?: number;
 }
 
 const MarketplaceList = ({ itemCount }: MarketplaceListProps) => {
   const { items } = useMarketplace();
-
-  const slicedItems = items.slice(0, itemCount);
+  let slicedItems = items;
+  if (itemCount) {
+    slicedItems = items.slice(0, itemCount);
+  }
 
   return useIsMobile() ? <MarketPlaceMobileTable items={slicedItems} /> : <MarketPlaceTable items={slicedItems} />;
 };
