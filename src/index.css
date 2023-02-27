@@ -175,12 +175,13 @@
   }
 
   .tab li {
-    @apply block  border-r border-r-gray last:border-r-0;
+    @apply block flex-1 border-r border-r-gray last:border-r-0;
   }
 
   .tab li span {
     @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-gray-light uppercase text-center;
     @apply px-5 py-[11.5px];
+    @apply whitespace-nowrap;
   }
 
   .tab li.sm span {
