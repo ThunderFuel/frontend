@@ -126,17 +126,27 @@ const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items:
   const getImages = items.slice(0, itemCount > 3 ? 3 : itemCount).map((i: any) => i.image);
   const titleSlot = approved && (
     <div className="flex gap-x-2.5">
-      <button className="body-small text-gray-light underline">View on Blockchain</button>
-      <button className="body-small text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
-        {showDetails ? "Hide Details" : "Show Details"}
-      </button>
+      {/* <button className="body-small text-gray-light underline">View on Blockchain</button> */}
+      {itemCount !== 1 && (
+        <button className="body-small text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
+          {showDetails ? "Hide Details" : "Show Details"}
+        </button>
+      )}
     </div>
   );
 
   return (
     <>
       <div className="flex flex-col gap-2">
-        <CartItem text="Total" name={`${itemCount} Items`} price={totalAmount} image={getImages} id={1} className={clsx(showDetails && "rounded-b-none")} titleSlot={titleSlot} />
+        <CartItem
+          text="Total"
+          name={`${itemCount === 1 ? items[0].name : itemCount + " Items"}`}
+          price={totalAmount}
+          image={getImages}
+          id={1}
+          className={clsx(showDetails && "rounded-b-none")}
+          titleSlot={titleSlot}
+        />
       </div>
       <div className="overflow-hidden transition-all" style={{ height: showDetails ? `${ref.current?.scrollHeight}px` : 0 }} ref={ref}>
         <div className={clsx("p-2.5 gap-y-2.5 border-x border-b rounded-b-md border-gray")}>
