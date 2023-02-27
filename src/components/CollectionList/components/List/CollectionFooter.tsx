@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconTrash } from "icons";
+import { IconArrowRight, IconShoppingCart, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
@@ -29,20 +29,28 @@ const CollectionFooter = () => {
   };
 
   return (
-    <div className="sticky bottom-0 py-3 flex gap-3 items-center justify-end border-t border-t-gray bg-bg z-20">
-      <Button
-        className="btn-secondary uppercase"
-        onClick={() => {
-          dispatch(removeAll());
-        }}
-      >
-        Clear {selectedCartItemCount} ıtem
-        <IconTrash />
-      </Button>
-      <Button className="uppercase" onClick={onToggleCheckoutModal}>
-        buy {selectedCartItemCount} ıtem - {selectedCartTotalAmount} eth
-        <IconArrowRight />
-      </Button>
+    <div className="sticky bottom-0 border-t border-t-gray bg-bg z-20">
+      <div className="flex items-center justify-between py-3">
+        <div className="flex gap-2 text-headline-02 text-gray-light pl-5">
+          <IconShoppingCart />
+          <span>YOUR CART</span>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            className="btn-secondary uppercase"
+            onClick={() => {
+              dispatch(removeAll());
+            }}
+          >
+            Clear {selectedCartItemCount} ıtem
+            <IconTrash />
+          </Button>
+          <Button className="uppercase" onClick={onToggleCheckoutModal}>
+            buy {selectedCartItemCount} ıtem - {selectedCartTotalAmount} eth
+            <IconArrowRight />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
