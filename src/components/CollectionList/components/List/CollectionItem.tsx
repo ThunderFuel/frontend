@@ -120,7 +120,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         <div className="overflow-hidden relative">
           {collection.salable || options?.isProfile ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
-            <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+            {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
           </div>
         </div>
         <div className="p-2.5 border-b border-b-gray">
