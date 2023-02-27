@@ -1,14 +1,13 @@
 import React from "react";
 import Modal from "components/Modal";
-import { useAppSelector } from "store";
-import { useDispatch } from "react-redux";
-import { toggleClosedBetaModal } from "store/commonSlice";
 import { AssetBetaBulkListing, AssetBetaSingleCheckout, AssetBetaSweep, AssetBetaWallet } from "assets";
 import Button from "components/Button";
+import { useLocalStorage } from "hooks/useLocalStorage";
 
 const ClosedBetaModal = () => {
-  const { showCloseBetaModal } = useAppSelector((state) => state.common);
-  const dispatch = useDispatch();
+  const { getItem, setItem } = useLocalStorage();
+  const firstLogin = getItem("firstLogin");
+  const [show, setShow] = React.useState(firstLogin);
 
   const features = [
     { title: "Single Checkout", descriptiom: "Purchase NFTs from different collections with one transaction.", image: AssetBetaSingleCheckout },
@@ -29,7 +28,7 @@ const ClosedBetaModal = () => {
 
   const footer = (
     <div className="flex w-full justify-center items-center p-5">
-      <Button className="btn btn-secondary w-full" onClick={() => dispatch(toggleClosedBetaModal())}>
+      <Button className="btn btn-secondary w-full" onClick={onClose}>
         CLOSE
       </Button>
     </div>
@@ -39,8 +38,13 @@ const ClosedBetaModal = () => {
     return features.map((feature, index) => <Box key={index} imgPosition={index % 2 === 0 ? 0 : 1} image={feature.image} title={feature.title} description={feature.descriptiom} />);
   }
 
+  function onClose() {
+    setShow(false);
+    setItem("firstLogin", false);
+  }
+
   return (
-    <Modal title={"Welcome to Closed Beta!"} onClose={() => dispatch(toggleClosedBetaModal())} className="closedBeta" show={showCloseBetaModal} footer={footer}>
+    <Modal title={"Welcome to Closed Beta!"} onClose={onClose} className="closedBeta" show={show} footer={footer}>
       <div className="flex flex-col h-full px-5 pt-[18px] pb-[15px]">
         <p className="text-bodyMd text-white font-spaceGrotesk mb-5">
           Thunder is currently in closed beta phase. All data and transactions are being conducted on the testnet and the focus of the closed beta will be on UI/UX features.

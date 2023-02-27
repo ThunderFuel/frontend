@@ -51,7 +51,7 @@
 }
 
 .closedBeta {
-  @apply fixed flex w-screen h-screen items-center justify-center z-5FRO-0 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+  @apply fixed flex w-screen h-screen items-center justify-center z-50 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
 .closedBeta .modal {
   @apply flex flex-col h-full w-1/3 bg-bg rounded-[10px];
