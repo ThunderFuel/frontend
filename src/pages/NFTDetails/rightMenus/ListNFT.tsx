@@ -17,6 +17,7 @@ import { RightMenuType } from "store/NFTDetailsSlice";
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ onBack }: { onBack: any }) => {
   const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
+  console.log(selectedNFT);
   const dispatch = useAppDispatch();
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
@@ -137,10 +138,10 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             {price !== "" && price < selectedNFT.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
-                {selectedNFT.floorPrice} ETH - Floor Price
+                {selectedNFT.collection.floor} ETH - Floor Price
               </div>
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.traitHighest?.price)}>
-                {selectedNFT.topTraitPrice} ETH - Top Trait Price
+                {selectedNFT.traitHighest.price} ETH - Top Trait Price
               </div>
             </div>
             <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray">
