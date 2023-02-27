@@ -15,7 +15,7 @@ const Range = (props: any) => {
   return (
     <div className="flex gap-5 px-5 py-2.5 border-r border-r-gray">
       <div className="flex flex-col justify-center flex-1 gap-2">
-        <div className="text-headline-01 uppercase text-gray-light">Sweep</div>
+        <div className="text-headline-01 uppercase text-gray-light -ml-1.5">Sweep</div>
         <div className="overflow-hidden px-1.5 -mx-1.5 rounded-full">
           <InputRange value={props.value} minValue={0} maxValue={props.maxValue ?? 30} onChange={props.onChange} />
         </div>
