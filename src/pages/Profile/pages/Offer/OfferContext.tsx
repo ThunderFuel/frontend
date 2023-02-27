@@ -12,7 +12,7 @@ interface IOfferContext {
 const filterItems = [
   {
     value: null,
-    text: "Offers",
+    text: "All Offers",
     count: 0,
   },
   {
