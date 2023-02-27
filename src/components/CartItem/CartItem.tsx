@@ -77,17 +77,10 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
               <span className="text-h6 text-white">{name}</span>
               {titleSlot}
             </div>
-            {typeof price === "number" ? (
-              <div className="flex w-full items-center justify-between mt-2">
-                <span className="text-h6 text-gray-light">{text}</span>
-                <EthereumPrice priceClassName="text-h6" price={price} />
-              </div>
-            ) : (
-              <div className="flex w-full items-center justify-between mt-2">
-                <span className="text-h6 text-gray-light">{text}</span>
-                {price}
-              </div>
-            )}
+            <div className="flex w-full items-center justify-between mt-2">
+              <span className="text-h6 text-gray-light">{text}</span>
+              <EthereumPrice priceClassName="text-h6" price={price} />
+            </div>
             {hasError && (
               <div className="mt-2">
                 {isPriceChange && <CartItemStatus text={"Price Change"} />}
