@@ -103,7 +103,7 @@ const NFTDetails = () => {
         <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
           <div className="flex justify-center image-height py-10">
             <div className="relative w-full image-width bg-gray rounded-md">
-              <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 max-h-full max-w-full" />
+              <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
             </div>
             <ImageBar />
           </div>
