@@ -34,7 +34,11 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
               <div>{item.traitType} </div>
               <div className="text-white">{item.value}</div>
               <div>
-                <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price ?? "-"} />
+                {traitfloors.find((trait: any) => trait.traitType === item.traitType) ? (
+                  <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price} />
+                ) : (
+                  <span className="text-headline-01">NO LISTINGS</span>
+                )}
               </div>
             </div>
             {isOwner() && getTraitFloor(item) !== "-" ? (
