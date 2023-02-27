@@ -5,6 +5,8 @@ import { WatchListRequest } from "api/collections/collections.type";
 import dayjs from "dayjs";
 import collectionsService from "api/collections/collections.service";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
+import { toggleWalletModal } from "store/walletSlice";
 
 const UnitType = "hours";
 
@@ -71,6 +73,7 @@ export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; options?: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
+  const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
@@ -119,6 +122,11 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
   };
 
   const addWatchList = async (data: WatchListRequest) => {
+    if (!user?.id) {
+      dispatch(toggleWalletModal());
+
+      return false;
+    }
     try {
       await collectionsService.addWatchList(data);
     } catch (e) {
