@@ -5,6 +5,8 @@ import { IconDiscord, IconInstagram, IconShare, IconSocial3Dots, IconStar, IconT
 import { SocialTypes } from "api/collections/collections.type";
 import collectionsService from "../../../api/collections/collections.service";
 import { useAppSelector } from "../../../store";
+import { useDispatch } from "react-redux";
+import { toggleWalletModal } from "store/walletSlice";
 
 const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: string; [key: string]: any }) => {
   const IconItem = icon ?? null;
@@ -20,9 +22,12 @@ const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: stri
 const FavoriteButton = ({ collection }: { collection: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const onAddWatchList = async () => {
     if (!user?.id) {
+      dispatch(toggleWalletModal());
+
       return false;
     }
 
