@@ -7,7 +7,7 @@ import Tab from "components/Tab";
 import InputPrice from "../components/InputPrice";
 import ToggleButton from "components/ToggleButton";
 import Input from "components/Input";
-import { getDateFromExpirationTime } from "utils";
+import { formatPrice, getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
@@ -155,10 +155,10 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             {price !== "" && price < selectedNFT.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
-                {selectedNFT.collection.floor} ETH - Floor Price
+                {formatPrice(selectedNFT.collection.floor)} ETH - Floor Price
               </div>
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
-                {topTrait} ETH - Top Trait Price
+                {formatPrice(topTrait)} ETH - Top Trait Price
               </div>
             </div>
             <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray">
