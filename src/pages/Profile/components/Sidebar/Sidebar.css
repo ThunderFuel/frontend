@@ -2,7 +2,7 @@
   @apply sticky;
   top: var(--headerHeight);
   height: calc(100vh - var(--headerHeight));
-  min-height: 670px;
+  min-height: 585px;
 }
 
 .profile-cover-image {
