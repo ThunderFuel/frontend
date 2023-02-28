@@ -79,7 +79,7 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
             </div>
             <div className="flex w-full items-center justify-between mt-2">
               <span className="text-h6 text-gray-light">{text}</span>
-              <EthereumPrice priceClassName="text-h6" price={price} />
+              {typeof price === "string" ? price : <EthereumPrice priceClassName="text-h6" price={price} />}
             </div>
             {hasError && (
               <div className="mt-2">
