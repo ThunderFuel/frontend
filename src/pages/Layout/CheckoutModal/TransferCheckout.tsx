@@ -11,6 +11,7 @@ import Input from "components/Input";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { addressFormat } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { toB256 } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -46,7 +47,9 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenTransfer(selectedNFT.id, address);
+    let tempAddress = "";
+    if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
+    nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
   };
 
   React.useEffect(() => {
