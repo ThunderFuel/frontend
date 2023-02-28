@@ -28,6 +28,8 @@ export const checkoutSlice = createSlice({
     checkoutExpireTime: 0 as number,
     amountAddedBidBalance: 0,
     currentItem: { id: 0, price: 0 },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onCheckoutComplete: () => {},
   },
 
   reducers: {
@@ -53,6 +55,7 @@ export const checkoutSlice = createSlice({
       state.checkoutExpireTime = action.payload?.expireTime;
       state.checkoutAuctionStartingPrice = action.payload?.auctionStartingPrice;
       state.currentItem = action.payload?.item;
+      state.onCheckoutComplete = action.payload?.onCheckoutComplete;
     },
     //TODO checkoutlarda bidbalanceupdated yerine bunu kullan
     setAmountAddedBidBalance: (state, action) => {

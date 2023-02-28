@@ -51,7 +51,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={!isValidNumber(bid) || !hasEnoughBalance()}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: bid }));
+            dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: bid, onCheckoutComplete: onBack }));
             dispatch(toggleCheckoutModal());
           }}
         >

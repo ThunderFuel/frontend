@@ -16,9 +16,10 @@ import CancelListingCheckout from "./CancelListingCheckout";
 
 const Index = () => {
   const dispatch = useAppDispatch();
-  const { show, isInsufficientBalance, checkoutType } = useAppSelector((state) => state.checkout);
+  const { show, isInsufficientBalance, checkoutType, onCheckoutComplete } = useAppSelector((state) => state.checkout);
   const onClose = () => {
     dispatch(toggleCheckoutModal());
+    if ([CheckoutType.MakeOffer, CheckoutType.PlaceBid, CheckoutType.UpdateOffer, CheckoutType.ConfirmListing, CheckoutType.UpdateListing].includes(checkoutType)) onCheckoutComplete();
   };
 
   switch (checkoutType) {

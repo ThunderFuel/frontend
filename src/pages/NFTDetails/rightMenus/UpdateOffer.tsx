@@ -56,7 +56,15 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={!isValidNumber(offer) || !hasEnoughBalance()}
           onClick={() => {
-            dispatch(setCheckout({ type: CheckoutType.UpdateOffer, item: currentItem, price: offer, expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed() }));
+            dispatch(
+              setCheckout({
+                type: CheckoutType.UpdateOffer,
+                item: currentItem,
+                price: offer,
+                expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed(),
+                onCheckoutComplete: onBack,
+              })
+            );
             dispatch(toggleCheckoutModal());
           }}
         >

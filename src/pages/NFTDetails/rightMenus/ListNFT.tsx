@@ -48,6 +48,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                   isAuction: isTimedAuction,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
                   auctionStartingPrice: startingPrice,
+                  onCheckoutComplete: onBack,
                 })
               );
             else
@@ -56,6 +57,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                   type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
                   price: price,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  onCheckoutComplete: onBack,
                 })
               );
 

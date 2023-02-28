@@ -86,6 +86,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
                 type: CheckoutType.MakeOffer,
                 price: offer,
                 expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed(),
+                onCheckoutComplete: onBack,
               })
             );
             dispatch(toggleCheckoutModal());
