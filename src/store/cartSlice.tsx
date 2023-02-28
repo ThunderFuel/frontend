@@ -33,7 +33,6 @@ export const cartSlice = createSlice({
       const { totalAmount, itemCount } = state.items.reduce(
         (cartTotal: any, cartItem: any) => {
           const { price } = cartItem;
-
           cartTotal.totalAmount += price;
           cartTotal.itemCount += 1;
 
@@ -44,7 +43,7 @@ export const cartSlice = createSlice({
           itemCount: 0,
         }
       );
-      state.totalAmount = totalAmount.toFixed(2);
+      state.totalAmount = totalAmount.toFixed(4);
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
