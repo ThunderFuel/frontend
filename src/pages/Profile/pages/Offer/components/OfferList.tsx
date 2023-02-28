@@ -1,5 +1,5 @@
 import React from "react";
-import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconLink } from "icons";
+import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconLink, IconWarning } from "icons";
 import Img from "components/Img/Img";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
@@ -33,20 +33,43 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
   );
 };
 
+const OfferItemExpireLabel = ({ item }: any) => {
+  if (!item.expireTime) {
+    return null;
+  }
+  const isExpired = item.status === 3;
+  const isCanceled = item.status === 0;
+
+  const Icon = isExpired ? IconClock : IconWarning;
+
+  const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
+
+  return (
+    <div className="flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium">
+      <Icon className="w-4 h-5" />
+      {isCanceled ? "Canceled" : isExpired ? "Expired" : `Expires on ${formattedDate}`}
+    </div>
+  );
+};
 const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) => {
   const { options, userInfo } = useProfile();
   const path = getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item?.tokenId });
 
-  const getOfferMadeUserLabel = () => {
+  const getOfferMadeUserLabel = (isDisabled: boolean) => {
     if (options?.isProfile && item.isOfferMade) {
-      return <span className="text-green"> you </span>;
+      return <span className={isDisabled ? "text-gray-light" : "text-green"}> you </span>;
     }
     if (item.isOfferMade) {
-      return <span className="text-white"> {userInfo.userName ?? addressFormat(item.makerAddress)} </span>;
+      return <span className={isDisabled ? "text-gray-light" : "text-white"}> {userInfo.userName ?? addressFormat(item.makerAddress)} </span>;
     }
 
-    return <span className="text-white"> {addressFormat(item.makerAddress)} </span>;
+    return <span className={isDisabled ? "text-gray-light" : "text-white"}> {addressFormat(item.makerAddress)} </span>;
   };
+
+  const isExpired = item.status === 3;
+  const isCanceled = item.status === 0;
+
+  const isDisabled = isExpired || isCanceled;
 
   return (
     <div>
@@ -57,30 +80,25 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         )}
       >
         <Link to={path} className="w-16 h-16 rounded-md overflow-hidden relative group">
-          <Img className="w-full" src={item.tokenImage ?? null} alt={item.tokenName} />
+          <Img className={clsx("w-full", isDisabled ? "opacity-50" : "")} src={item.tokenImage ?? null} alt={item.tokenName} />
           <div className="opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 absolute bg-gray bg-opacity-80 top-0 left-0 w-full h-full flex-center">
             <IconLink className="text-white" />
           </div>
         </Link>
-        <div className="flex flex-col gap-5 text-white flex-1">
+        <div className={clsx("flex flex-col gap-5 flex-1", isDisabled ? "text-gray-light" : "text-white")}>
           <div className="flex flex-col gap-2.5">
             <h6 className="text-h6">{item?.tokenName ?? "-"}</h6>
             <div className="w-full body-medium text-gray-light">
-              Bid placed by
-              {getOfferMadeUserLabel()}
-              on <span className="text-white">{dateFormat(item.createdAt, "DD MMM YYYY")}</span>
+              {!isDisabled ? "Bid placed by" : ""}
+              {getOfferMadeUserLabel(isDisabled)}
+              on <span className={isDisabled ? "text-gray-light" : "text-white"}>{dateFormat(item.createdAt, "DD MMM YYYY")}</span>
             </div>
           </div>
           <div className="inline-flex">
-            {item.expireTime && (
-              <div className="flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium">
-                <IconClock className="w-4 h-5" />
-                Expires on {dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z")}
-              </div>
-            )}
+            <OfferItemExpireLabel item={item} />
           </div>
         </div>
-        <EthereumPrice className="text-white" price={item.price} />
+        <EthereumPrice className={isDisabled ? "text-gray-light" : "text-white"} price={item.price} />
       </div>
       {options?.isProfile && item.isActiveOffer ? (
         !item.isOfferMade ? (
