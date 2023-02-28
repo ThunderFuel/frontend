@@ -38,6 +38,7 @@ export interface CollectionItemResponse {
   user?: IUserResponse;
 
   uid?: string;
+  userId?: any;
 }
 
 export interface CollectionResponse {

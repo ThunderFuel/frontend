@@ -55,9 +55,13 @@ export const cartSlice = createSlice({
       setItemsFromLocalStorage(state.items as any);
     },
     add: (state, action) => {
-      state.items.push(action.payload);
-      setItemsFromLocalStorage(state.items as any);
-      getCartTotal();
+      const isItemExists = Array.from(state.items).some((item) => item.uid === action.payload.uid);
+      if (!isItemExists) {
+        state.items.push(action.payload);
+
+        setItemsFromLocalStorage(state.items as any);
+        getCartTotal();
+      }
     },
     sweepAdd: (state, action) => {
       const { collectionId, items } = action.payload;

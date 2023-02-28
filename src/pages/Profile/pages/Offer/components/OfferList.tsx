@@ -97,7 +97,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
 const OfferList = () => {
   const { offers, onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue } = useOfferContext();
   const isOffersMade = filterValue;
-  const label = `${offers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
+  const label = `${offers.length} ${isOffersMade === null ? "offers" : isOffersMade ? " offers made" : " offers receıved"}`;
   const hasActiveOffer = offers.some((offer) => offer.isActiveOffer);
 
   return (

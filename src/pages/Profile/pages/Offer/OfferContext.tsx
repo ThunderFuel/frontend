@@ -1,6 +1,10 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import offerService from "api/offer/offer.service";
 import { OfferStatus } from "../../../../api/offer/offer.type";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { useAppDispatch } from "store";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
 
 interface IOfferContext {
   userInfo?: any;
@@ -29,6 +33,8 @@ const filterItems = [
 
 export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState(null);
 
@@ -75,8 +81,9 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
       console.log(e);
     }
   };
-  const onUpdateOffer = () => {
-    console.log("onUpdateOffer");
+  const onUpdateOffer = (item: any) => {
+    dispatch(setRightMenu(RightMenuType.UpdateOffer));
+    navigate(PATHS.NFT_DETAILS, { nftId: item.id });
   };
 
   const fetchOffers = async () => {

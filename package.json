@@ -45,7 +45,8 @@
     "eject": "react-scripts eject",
     "prepare": "husky install",
     "lint:check": "eslint src --max-warnings=0",
-    "lint:fix": "eslint --fix src"
+    "lint:fix": "eslint --fix src",
+    "deploy": "GENERATE_SOURCEMAP=false && node_modules/react-scripts/bin/react-scripts.js build"
   },
   "eslintConfig": {
     "extends": [

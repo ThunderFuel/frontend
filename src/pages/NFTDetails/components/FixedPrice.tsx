@@ -78,7 +78,7 @@ const FixedPrice = () => {
               onClick={() => {
                 if (user?.id) {
                   dispatch(setCheckout({ type: CheckoutType.None }));
-                  if (!items.includes(selectedNFT)) dispatch(add(selectedNFT));
+                  dispatch(add(selectedNFT));
                   hasEnoughFunds().then((res) => {
                     dispatch(setIsInsufficientBalance(!res));
                     dispatch(toggleCheckoutModal());

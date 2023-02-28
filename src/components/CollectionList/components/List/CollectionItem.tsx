@@ -46,11 +46,13 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
+  const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setSweep, options } = useCollectionListContext();
   const { isConnected } = useAppSelector((state) => state.wallet);
   const { hasEnoughFunds } = useWallet();
+  const isOwnCollectionItem = collection?.userId === user.id;
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -118,7 +120,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {collection.salable || options?.isProfile ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
+          {!isOwnCollectionItem && (collection.salable || options?.isProfile) ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
             {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
           </div>
@@ -137,7 +139,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         </div>
         {!options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {collection.salable ? <ButtonBuyNow onClick={onBuyNow} /> : <ButtonMakeOffer onClick={onMakeOffer} />}
+            {collection.salable ? !isOwnCollectionItem ? <ButtonBuyNow onClick={onBuyNow} /> : null : <ButtonMakeOffer onClick={onMakeOffer} />}
           </div>
         ) : null}
       </Link>
