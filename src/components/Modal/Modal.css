@@ -4,7 +4,6 @@
 
 .modalbase .modal {
   @apply flex flex-col w-[335px] bg-bg rounded-lg;
-  max-height: 90%;
 }
 
 .modalbase .modal .mhead {
@@ -37,6 +36,7 @@
 
 .checkout .modal {
   @apply flex flex-col h-fit w-[480px] bg-bg rounded-lg;
+  max-height: 90%;
 }
 
 .checkout .modal .mhead {
@@ -69,6 +69,7 @@
 
 .closedBeta .modal {
   @apply flex flex-col h-full w-1/3 bg-bg rounded-[10px];
+  max-height: 90%;
 }
 
 .closedBeta .modal .mhead {

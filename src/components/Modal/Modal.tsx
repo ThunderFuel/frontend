@@ -38,7 +38,7 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
   }
 
   return (
-    <div className={clsx("modalbase", className)}>
+    <div className={clsx(className, "modalbase")}>
       <div ref={containerRef} className={clsx("modal", etc.bodyClassName)}>
         <div className="mhead">
           {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}

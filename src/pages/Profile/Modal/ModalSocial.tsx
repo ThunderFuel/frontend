@@ -117,7 +117,7 @@ const ModalSocial = () => {
   };
 
   return (
-    <Modal show={socialActiveTab !== null} onClose={onClose} title="Social" modalTitle={<ModalTitle />} footer={<ModalFooter onClose={onClose} />} bodyClassName="!w-[480px]">
+    <Modal show={socialActiveTab !== null} onClose={onClose} title="Social" modalTitle={<ModalTitle />} footer={<ModalFooter onClose={onClose} />} bodyClassName="!w-[480px] max-h-[90%]">
       <div className="flex flex-col p-5 gap-5">
         <Tab initTab={socialActiveTab} onChange={onSetSocialActiveTab} />
         <div className="flex flex-col w-full gap-2">
