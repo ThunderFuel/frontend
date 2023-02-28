@@ -165,7 +165,7 @@ const LeftMenu = (props: any) => {
           </div>
           <h3 className="text-h3 text-white">{nft.name}</h3>
         </div>
-        <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray">
+        <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
           <div
             className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
             onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
@@ -176,8 +176,8 @@ const LeftMenu = (props: any) => {
             </h6>
           </div>
 
-          <div className="body-medium text-white">
-            <ReadMore text={nft?.description ?? nft?.collection?.description ?? ""} characterLimit={150} />
+          <div className="body-medium text-white mb-2.5">
+            <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
           {nft.salable ? (
