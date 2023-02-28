@@ -104,7 +104,7 @@ const Footer = ({ items, prices }: any) => {
             CANCEL
             <IconCircleRemoveWhite />
           </Button>
-          <Button onClick={onUpdateBulkListing}>
+          <Button onClick={onUpdateBulkListing} disabled={!bulkItems.length}>
             {`List${hasUpdate ? "/Update" : ""}`} {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
             <IconTag />
           </Button>
