@@ -8,7 +8,7 @@ const routes = [
   { path: PATHS.PROFILE_OWNED, name: "Owned" },
   // { path: null, name: "Created" },
   { path: PATHS.PROFILE_LIKED, name: "Liked" },
-  { path: PATHS.PROFILE_OFFER, name: "All Offers" },
+  { path: PATHS.PROFILE_OFFER, name: "Offers" },
   { path: PATHS.PROFILE_ACTIVITY, name: "Activities" },
 ];
 

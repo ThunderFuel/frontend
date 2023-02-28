@@ -8,7 +8,7 @@ import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
 const routes = [
   { path: PATHS.USER_OWNED, name: "Owned" },
   { path: PATHS.USER_LIKED, name: "Liked" },
-  { path: PATHS.USER_OFFER, name: "All Offers" },
+  { path: PATHS.USER_OFFER, name: "Offers" },
   { path: PATHS.USER_ACTIVITY, name: "Activities" },
 ];
 
