@@ -3,11 +3,17 @@ import Modal from "components/Modal";
 import { AssetBetaBulkListing, AssetBetaSingleCheckout, AssetBetaSweep, AssetBetaWallet } from "assets";
 import Button from "components/Button";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
+import { toggleClosedBetaModal } from "store/commonSlice";
 
 const ClosedBetaModal = () => {
+  const dispatch = useDispatch();
   const { getItem, setItem } = useLocalStorage();
-  const firstLogin = getItem("firstLogin");
-  const [show, setShow] = React.useState(firstLogin);
+  // const firstLogin = getItem("firstLogin");
+  const [firstToggle, setfirstToggle] = React.useState(false);
+  const { showClosedBetaModal } = useAppSelector((state) => state.common);
+  const [show, setShow] = React.useState(showClosedBetaModal);
 
   const features = [
     { title: "Single Checkout", descriptiom: "Purchase NFTs from different collections with one transaction.", image: AssetBetaSingleCheckout },
@@ -43,7 +49,19 @@ const ClosedBetaModal = () => {
   function onClose() {
     setShow(false);
     setItem("firstLogin", false);
+    dispatch(toggleClosedBetaModal());
+    setfirstToggle(true);
   }
+  React.useEffect(() => {
+    if (firstToggle) {
+      setfirstToggle(false);
+
+      return;
+    }
+    if (!getItem("firstLogin")) {
+      setShow(showClosedBetaModal);
+    }
+  }, [showClosedBetaModal]);
 
   return (
     <Modal title={"Welcome to Closed Beta!"} onClose={onClose} className="closedBeta" show={show} footer={footer}>

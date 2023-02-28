@@ -1,13 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useLocalStorage } from "hooks/useLocalStorage";
+
+const { getItem } = useLocalStorage();
+const firstLogin = getItem("firstLogin");
 
 export const commonSlice = createSlice({
   name: "common",
   initialState: {
-    showCloseBetaModal: false,
+    showClosedBetaModal: firstLogin ? true : false,
   },
   reducers: {
     toggleClosedBetaModal: (state) => {
-      state.showCloseBetaModal = !state.showCloseBetaModal;
+      state.showClosedBetaModal = !state.showClosedBetaModal;
     },
   },
   extraReducers: {},
