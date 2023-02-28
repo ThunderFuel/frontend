@@ -4,7 +4,6 @@ import userService from "api/user/user.service";
 import { useProfile } from "../ProfileContext";
 
 const options = {
-  hiddeSidebarFilter: true,
   hiddenSweep: true,
 };
 const Collection = () => {
