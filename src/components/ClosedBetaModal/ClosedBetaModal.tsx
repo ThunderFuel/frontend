@@ -47,7 +47,8 @@ const ClosedBetaModal = () => {
     <Modal title={"Welcome to Closed Beta!"} onClose={onClose} className="closedBeta" show={show} footer={footer}>
       <div className="flex flex-col h-full px-5 pt-[18px] pb-[15px]">
         <p className="text-bodyMd text-white font-spaceGrotesk mb-5">
-          Thunder is currently in closed beta phase. All data and transactions are being conducted on the testnet and the focus of the closed beta will be on UI/UX features.
+          Please beware the platform is running on testnet. Smart contracts are ready but have not been connected on purpose given there will be a clean-up deployment after testnet to fix bugs and
+          improve features.
         </p>
         <div className="flex flex-col gap-y-2.5 pb-[10px]">
           <h6 className="text-h6 text-white font-spaceGrotesk">Beta Features</h6>
