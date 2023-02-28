@@ -14,6 +14,7 @@ import { selectExpirationDates } from "./MakeOffer";
 import dayjs from "dayjs";
 import { RightMenuType } from "store/NFTDetailsSlice";
 import floorService from "api/floor/floor.service";
+import { removeAll } from "../../../store/bulkListingSlice";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ onBack }: { onBack: any }) => {
@@ -34,6 +35,10 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const isValidNumber = (price: any) => {
     return !(isNaN(Number(price)) || price === "") && price > 0;
   };
+  const onCheckoutComplete = () => {
+    dispatch(removeAll());
+    onBack();
+  };
 
   const footer = (
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
@@ -48,7 +53,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                   isAuction: isTimedAuction,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
                   auctionStartingPrice: startingPrice,
-                  onCheckoutComplete: onBack,
+                  onCheckoutComplete,
                 })
               );
             else
@@ -57,7 +62,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                   type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
                   price: price,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
-                  onCheckoutComplete: onBack,
+                  onCheckoutComplete,
                 })
               );
 
@@ -133,7 +138,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               FIXED PRICE
             </div>
           </Tab.Item>
-          <Tab.Item id={1} disabled={updateListing ? true : false} className="w-full">
+          <Tab.Item id={1} disabled={updateListing} className="w-full">
             <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
               <IconAuction className="w-[17px] h-[17px]" />
               TIMED AUCTION
@@ -144,7 +149,8 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
         <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
           {isTimedAuction ? "Set Duration" : "Listing Duration"}
           <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
-            <IconInfo className="w-[17px] h-[17px]" /> <span>Expires on </span> {getDateFromExpirationTime(duration.value)}
+            <IconInfo className="w-[17px] h-[17px]" />
+            <span>Expires on </span> {getDateFromExpirationTime(duration.value)}
           </div>
           <Select options={selectExpirationDates} onChange={setDuration} value={duration} />
         </div>
