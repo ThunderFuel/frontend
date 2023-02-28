@@ -215,7 +215,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       )}
     </div>
   );
-  console.log(totalAmount);
 
   return (
     <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onCloseModal} footer={<Footer approved={approved} onClose={onCloseModal} />}>

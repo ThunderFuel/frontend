@@ -149,7 +149,6 @@ const LeftMenu = (props: any) => {
       </BoxWithIcon>
     );
   }
-
   const isOwner = () => {
     return isConnected ? user?.id === nft?.user?.id : false;
   };
@@ -173,7 +172,7 @@ const LeftMenu = (props: any) => {
           >
             <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
             <h6 className="text-h6 text-gray-light">
-              Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName}</span>
+              Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
             </h6>
           </div>
 
