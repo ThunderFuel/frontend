@@ -83,7 +83,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   const onUpdateOffer = (item: any) => {
     dispatch(setRightMenu(RightMenuType.UpdateOffer));
-    navigate(PATHS.NFT_DETAILS, { nftId: item.id });
+    navigate(PATHS.NFT_DETAILS, { nftId: item.tokenId });
   };
 
   const fetchOffers = async () => {
