@@ -99,7 +99,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   );
 
   return (
-    <RightMenu title="Make Offer" description={offerDescription} footer={footer} onBack={onBack} childrenHasOverflow={false}>
+    <RightMenu title="Make Offer" description={offerDescription} footer={footer} onBack={onBack}>
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-y-2">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Offer</h6>
