@@ -120,7 +120,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {!isOwnCollectionItem && (collection.salable || options?.isProfile) ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
+          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
             {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
           </div>

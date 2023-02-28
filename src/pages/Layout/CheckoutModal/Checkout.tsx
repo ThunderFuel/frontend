@@ -171,23 +171,25 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
-  const onComplete = () => {
-    setApproved(true);
+  const onComplete = async () => {
     const tokenIds = items.map((item: any) => item.id);
-    nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+    try {
+      const res = await nftdetailsService.tokenBuyNow(tokenIds, user.id);
+      setApproved(true);
       if (res.data) {
         setSuccessCheckout(res.data);
         window.dispatchEvent(new CustomEvent("CompleteCheckout"));
       }
-    });
-  };
-
-  const onCloseModal = () => {
-    onClose();
-    if (successCheckout) {
-      dispatch(removeAll());
+    } catch (e) {
+      console.log(e);
     }
   };
+
+  React.useEffect(() => {
+    if (!show && successCheckout) {
+      dispatch(removeAll());
+    }
+  }, [show, successCheckout]);
 
   React.useEffect(() => {
     setApproved(false);
@@ -208,7 +210,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <IconWarning className="fill-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
-          <Button className="btn-secondary m-5" onClick={onCloseModal}>
+          <Button className="btn-secondary m-5" onClick={onClose}>
             CLOSE
           </Button>
         </div>
@@ -217,7 +219,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onCloseModal} footer={<Footer approved={approved} onClose={onCloseModal} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
         {items.length > 0 ? (
           <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />

@@ -5,6 +5,8 @@ import collectionService from "api/collections/collections.service";
 import CollectionList from "components/CollectionList";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
 import { CollectionItemsRequest } from "api/collections/collections.type";
+import { useAppDispatch } from "store";
+import { removeAll } from "store/bulkListingSlice";
 
 const getInitParams = () => {
   const initParams = {
@@ -24,6 +26,7 @@ const getInitParams = () => {
   }
 };
 const Items = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -139,6 +142,8 @@ const Items = () => {
   };
 
   React.useEffect(() => {
+    dispatch(removeAll());
+
     fetchFilters();
 
     window.addEventListener("CompleteCheckout", fetchFilters);

@@ -1,8 +1,6 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import { IUserResponse } from "api/user/user.type";
 import userService from "api/user/user.service";
-import { useAppDispatch } from "store";
-import { removeAll } from "store/bulkListingSlice";
 
 export const enum FollowType {
   Followers = 0,
@@ -20,7 +18,6 @@ interface IProfileContext {
 export const ProfileContext = createContext<IProfileContext>({} as any);
 
 const ProfileProvider = ({ userId, options, children }: { userId: any; options: any; children: ReactNode }) => {
-  const dispatch = useAppDispatch();
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
 
@@ -44,7 +41,6 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
 
     return () => {
       window.addEventListener("CompleteCheckout", fetchUserProfile);
-      dispatch(removeAll());
     };
   }, [userId]);
 
