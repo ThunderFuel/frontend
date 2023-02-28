@@ -7,7 +7,7 @@ const Input = ({ value, onChange, ...etc }: any) => {
   return (
     <input
       {...etc}
-      className={clsx("beta-input", value && "entered")}
+      className={clsx("beta-input", value !== "" && "entered")}
       value={value}
       onKeyDown={(e) => {
         if ([KeyBackspace].includes(e.key)) {
@@ -76,7 +76,7 @@ const InputContainer = ({ onChangeContainer }: any) => {
   React.useEffect(() => {
     onChangeContainer(
       Object.values(codes)
-        .filter((code) => !!code)
+        .filter((code) => code !== "")
         .join("")
     );
   }, [codes]);
