@@ -12,11 +12,11 @@ const Activity = () => {
 
   const filters = collectionService.getActivityFilters();
 
-  const getActivityItems = async ({ page }: any) => {
+  const getActivityItems = async (params = {}) => {
     const response = await collectionService.getActivity({
       collectionId,
-      page,
       pageSize: 10,
+      ...params,
     });
     const data = response.data.map((item: any) => ({
       ...item,
@@ -37,8 +37,8 @@ const Activity = () => {
       data,
     };
   };
-  const fetchActivity = async () => {
-    const response = await getActivityItems({ page: 1 });
+  const fetchActivity = async (params: any = {}) => {
+    const response = await getActivityItems({ page: 1, ...params });
     setActivities(response.data);
   };
 
@@ -55,13 +55,17 @@ const Activity = () => {
     }
   };
 
+  const onChangeFilterValue = (params: any) => {
+    fetchActivity(params);
+  };
+
   React.useEffect(() => {
     fetchActivity();
   }, []);
 
   return (
     <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={onChangePagination}>
-      <ActivityList activities={activities} pagination={pagination} filters={filters} />;
+      <ActivityList activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
     </InfiniteScroll>
   );
 };

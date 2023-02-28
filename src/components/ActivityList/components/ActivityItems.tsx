@@ -4,11 +4,11 @@ import { useActivityContext } from "../ActivityContext";
 import NotFound from "../../NotFound";
 
 const ActivityItems = () => {
-  const { getActivities } = useActivityContext();
+  const { getActivities, pagination } = useActivityContext();
 
   return (
     <div className="flex flex-col flex-1 p-5 gap-5">
-      <div className="text-headline-02 text-gray-light">{getActivities.length} ACTIVITIES</div>
+      <div className="text-headline-02 text-gray-light">{pagination.itemsCount} ACTIVITIES</div>
       <div className="flex flex-col gap-4">
         {getActivities.map((item: any, index: number) => (
           <ActivityItem key={index} item={item} />
