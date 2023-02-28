@@ -14,6 +14,7 @@ import { selectExpirationDates } from "./MakeOffer";
 import dayjs from "dayjs";
 import { RightMenuType } from "store/NFTDetailsSlice";
 import floorService from "api/floor/floor.service";
+import EthereumPrice from "components/EthereumPrice";
 import { removeAll } from "../../../store/bulkListingSlice";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
@@ -126,6 +127,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                 Current Price
                 <div className={`flex  items-center text-white`}>
                   {selectedNFT.price} <IconEthereum color="gray" />
+                  <EthereumPrice price={selectedNFT.price} priceClassName="text-head6 font-spaceGrotesk" />
                 </div>
               </span>
             )}
