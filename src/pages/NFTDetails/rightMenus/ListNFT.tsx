@@ -13,11 +13,12 @@ import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
 import dayjs from "dayjs";
 import { RightMenuType } from "store/NFTDetailsSlice";
+import floorService from "api/floor/floor.service";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ onBack }: { onBack: any }) => {
   const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
-  console.log(selectedNFT);
+  const [topTrait, setTopTrait] = useState(0);
   const dispatch = useAppDispatch();
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
@@ -92,6 +93,20 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     return price - (price * serviceFee) / 100 - (price * selectedNFT.collection?.royaltyFee) / 100;
   };
 
+  const fetchTopTrait = async () => {
+    const tokenIds = [selectedNFT.id];
+    try {
+      const [responseTopTrait] = await Promise.all([floorService.getTopTraitByTokenIds(tokenIds)]);
+      setTopTrait(responseTopTrait.data[selectedNFT.id]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchTopTrait();
+  }, [selectedNFT]);
+
   return (
     <RightMenu title={updateListing ? "Update Listing" : "List Your NFT"} footer={footer} onBack={onBack}>
       <div className="flex flex-col gap-y-5">
@@ -140,8 +155,8 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
                 {selectedNFT.collection.floor} ETH - Floor Price
               </div>
-              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.traitHighest?.price)}>
-                {selectedNFT.traitHighest.price} ETH - Top Trait Price
+              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
+                {topTrait} ETH - Top Trait Price
               </div>
             </div>
             <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray">
