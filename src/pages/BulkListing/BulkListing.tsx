@@ -85,7 +85,7 @@ const BulkListing = () => {
             <div className="flex items-center gap-5">
               <div className="flex gap-3">
                 <Button className="btn-secondary btn-sm uppercase w-[240px]" onClick={onSetTopFloorPrice}>
-                  set top floor price
+                  Set Floor Price
                 </Button>
                 <Button className="btn-secondary btn-sm uppercase w-[240px]" onClick={onTopTraitPrice}>
                   set top traıt price
