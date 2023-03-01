@@ -109,7 +109,7 @@ const NFTDetails = () => {
           </div>
         </div>
       </div>
-      <div className="w-[42%]">
+      <div className="w-[42%]" id="rightMenuWrapper">
         <Component onBack={() => resetMenuState()} />
       </div>
     </div>
