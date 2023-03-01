@@ -126,7 +126,6 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               <span className="flex justify-between text-gray-light mt-2">
                 Current Price
                 <div className={`flex  items-center text-white`}>
-                  {selectedNFT.price} <IconEthereum color="gray" />
                   <EthereumPrice price={selectedNFT.price} priceClassName="text-head6 font-spaceGrotesk" />
                 </div>
               </span>
