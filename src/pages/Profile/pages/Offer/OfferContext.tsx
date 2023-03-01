@@ -95,6 +95,8 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
       ...item,
       isOfferMade: item.makerUserId === value.userInfo.id,
       isActiveOffer: item.status === OfferStatus.ActiveOffer,
+      isExpired: item.status === OfferStatus.ExpiredOffer,
+      isCanceled: item.status === OfferStatus.Cancelled,
     }));
     setOffers(data);
   };

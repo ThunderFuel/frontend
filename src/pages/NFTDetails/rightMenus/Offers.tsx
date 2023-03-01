@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "components/Button";
-import { IconCancel, IconClock, IconOffer } from "icons";
+import { IconCancel, IconClock, IconOffer, IconWarning } from "icons";
 import RightMenu from "../components/RightMenu";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
@@ -9,34 +9,11 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
-import { addressFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
 import offerService from "api/offer/offer.service";
-
-export function formatDate(dateString: string) {
-  if (dateString === null) return;
-
-  const dateObject = new Date(dateString);
-
-  return dateObject.toLocaleString("en-US", { day: "numeric", month: "short", year: "numeric" });
-}
-
-export function formatDateTime(dateString: string) {
-  if (dateString === null) return;
-
-  const dateObject = new Date(dateString);
-
-  return dateObject.toLocaleString("en-US", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-    timeZone: "UTC",
-    timeZoneName: "short",
-  });
-}
+import { OfferStatus } from "api/offer/offer.type";
+import clsx from "clsx";
 
 const Box = ({
   item,
@@ -57,21 +34,28 @@ const Box = ({
 }) => {
   const dispatch = useAppDispatch();
 
+  const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
+
+  const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
+  const description = item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
+
+  const isDisabled = item.isExpired || item.isCanceled;
+
   return (
-    <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
+    <div className={clsx("flex flex-col border border-gray rounded-lg text-h6", isDisabled ? "text-gray-light" : "text-white")}>
       <div className={`flex w-full p-[15px] gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
         <Avatar image={item?.user?.image} userId={item?.user?.id} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
-            {item.makerUserName ?? addressFormat(item.makerAddress)} on {formatDate(item.createdAt)}
+            {item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
           </span>
           <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
-            <IconClock className="w-[15px] h-[15px] flex-shrink-0" />
-            Expires on {formatDateTime(item.expireTime)}
+            <Icon className="w-[15px] h-[15px] flex-shrink-0" />
+            {description}
           </div>
         </div>
         <div className="flex h-fit grow justify-end">
-          <EthereumPrice price={item.price} priceClassName="text-head6 font-spaceGrotesk text-white" />
+          <EthereumPrice price={item.price} priceClassName="text-h6" />
         </div>
       </div>
       {isOwner() && !isExpired && !isAccepted && (
@@ -132,7 +116,14 @@ const Offers = ({ onBack }: { onBack: any }) => {
 
   const fetchOffers = async () => {
     const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, page: 1, pageSize: 10 });
-    setOffers(response.data);
+    const data = response.data.map((item: any) => ({
+      ...item,
+      isActiveOffer: item.status === OfferStatus.ActiveOffer,
+      isExpired: item.status === OfferStatus.ExpiredOffer,
+      isCanceled: item.status === OfferStatus.Cancelled,
+      isAccepted: item.status === OfferStatus.AcceptedOffer,
+    }));
+    setOffers(data);
   };
 
   useEffect(() => {
@@ -153,22 +144,21 @@ const Offers = ({ onBack }: { onBack: any }) => {
         </Button>
       )}
       {offers.map((offer: any, index: any) => {
-        const expTime = new Date(offer.expireTime).getTime();
-        const currentTime = new Date().getTime();
+        if (offer.isCanceled) {
+          return <></>;
+        }
 
-        return offer.status !== 0 ? (
+        return (
           <Box
             item={offer}
-            isExpired={currentTime > expTime}
             key={index}
             isOwner={isOwner}
-            ownOffer={user.id === offer?.makerUserId && offer.status === 1}
+            ownOffer={user.id === offer?.makerUserId && offer.isActiveOffer}
             fetchOffers={fetchOffers}
             onBack={onBack}
-            isAccepted={offer.status === 2}
-          ></Box>
-        ) : (
-          <></>
+            isExpired={offer.isExpired}
+            isAccepted={offer.isAccepted}
+          />
         );
       })}
     </RightMenu>

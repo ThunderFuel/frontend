@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { formatDate } from "./Offers";
 import { toggleWalletModal } from "store/walletSlice";
+import { dateFormat } from "utils";
 
 const Box = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">{children}</div>;
@@ -62,7 +62,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
               <div className="flex items-center gap-x-[15px]">
                 <img src={bid.user?.image} className="self-start h-8 w-8 rounded-full" alt="profile-image" />
                 <div>
-                  {isOwner ? <span className="inline-block text-green">you</span> : bid.user.userName} on {formatDate(bid.createdAt)}
+                  {isOwner ? <span className="inline-block text-green">you</span> : bid.user.userName} on {dateFormat(bid.createdAt, "MMM DD, YYYY")}
                 </div>
               </div>
               <div className="flex">

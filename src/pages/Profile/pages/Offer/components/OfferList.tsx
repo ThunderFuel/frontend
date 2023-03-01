@@ -37,25 +37,25 @@ const OfferItemExpireLabel = ({ item }: any) => {
   if (!item.expireTime) {
     return null;
   }
-  const isExpired = item.status === 3;
-  const isCanceled = item.status === 0;
-
-  const Icon = isExpired ? IconClock : IconWarning;
 
   const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
+
+  const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
+  const description = item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
 
   return (
     <div className="flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium">
       <Icon className="w-4 h-5" />
-      {isCanceled ? "Canceled" : isExpired ? "Expired" : `Expires on ${formattedDate}`}
+      {description}
     </div>
   );
 };
 const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) => {
   const { options, userInfo } = useProfile();
   const path = getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item?.tokenId });
+  const isDisabled = item.isExpired || item.isCanceled;
 
-  const getOfferMadeUserLabel = (isDisabled: boolean) => {
+  const getOfferMadeUserLabel = () => {
     if (options?.isProfile && item.isOfferMade) {
       return <span className={isDisabled ? "text-gray-light" : "text-green"}> you </span>;
     }
@@ -65,11 +65,6 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
 
     return <span className={isDisabled ? "text-gray-light" : "text-white"}> {addressFormat(item.makerAddress)} </span>;
   };
-
-  const isExpired = item.status === 3;
-  const isCanceled = item.status === 0;
-
-  const isDisabled = isExpired || isCanceled;
 
   return (
     <div>
@@ -90,7 +85,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
             <h6 className="text-h6">{item?.tokenName ?? "-"}</h6>
             <div className="w-full body-medium text-gray-light">
               {!isDisabled ? "Bid placed by" : ""}
-              {getOfferMadeUserLabel(isDisabled)}
+              {getOfferMadeUserLabel()}
               on <span className={isDisabled ? "text-gray-light" : "text-white"}>{dateFormat(item.createdAt, "DD MMM YYYY")}</span>
             </div>
           </div>
