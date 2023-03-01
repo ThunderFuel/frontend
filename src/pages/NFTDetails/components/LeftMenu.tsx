@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import Button from "components/Button";
-import { useWallet } from "hooks/useWallet";
-import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconLink, IconListed, IconToken, IconTwitter, IconUpdateListing, IconWallet } from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconListed, IconToken, IconUpdateListing } from "icons";
 import React, { SVGProps } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
@@ -115,7 +114,7 @@ const LeftMenu = (props: any) => {
   const { nft, fetchCollection } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
-  const { walletConnect } = useWallet();
+  // const { walletConnect } = useWallet();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
@@ -257,7 +256,7 @@ const LeftMenu = (props: any) => {
             </div>
           </div>
         </div>
-        <div className="container-fluid flex flex-col pt-5 pb-9 pr-10 text-h6 text-white">
+        {/* <div className="container-fluid flex flex-col pt-5 pb-9 pr-10 text-h6 text-white">
           <h6 className="mb-5">Share to Earn %1</h6>
           <div className="flex flex-col gap-y-2.5">
             <Box className="relative">
@@ -287,7 +286,7 @@ const LeftMenu = (props: any) => {
               <HoverButton Icon={IconLink} text="COPY LINK" />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
         {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
