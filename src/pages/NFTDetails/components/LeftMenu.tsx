@@ -78,7 +78,7 @@ const FooterListed = () => {
           dispatch(toggleCheckoutModal());
         }}
       >
-        REMOVE FROM SALE
+        CANCEL LISTING
         <IconCancel />
       </Button>
       <Button
