@@ -91,13 +91,15 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
       userId: value.userInfo.id,
       page: 1,
     });
-    const data = response.data.map((item: any) => ({
-      ...item,
-      isOfferMade: item.makerUserId === value.userInfo.id,
-      isActiveOffer: item.status === OfferStatus.ActiveOffer,
-      isExpired: item.status === OfferStatus.ExpiredOffer,
-      isCanceled: item.status === OfferStatus.Cancelled,
-    }));
+    const data = response.data
+      .map((item: any) => ({
+        ...item,
+        isOfferMade: item.makerUserId === value.userInfo.id,
+        isActiveOffer: item.status === OfferStatus.ActiveOffer,
+        isExpired: item.status === OfferStatus.ExpiredOffer,
+        isCanceled: item.status === OfferStatus.Cancelled,
+      }))
+      .sort((a: any, b: any) => b.isActiveOffer - a.isActiveOffer);
     setOffers(data);
   };
   React.useEffect(() => {
