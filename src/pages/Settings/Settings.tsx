@@ -3,12 +3,10 @@ import { Outlet } from "react-router-dom";
 
 import Sidebar from "./components/Sidebar";
 import Footer from "./components/Footer";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileWarning from "components/MobileWarning";
 
 export const EventSettingsSubmit = "EventSettingsSubmit";
 const Settings = () => {
-  return !useIsMobile() ? (
+  return (
     <div className="flex flex-col">
       <div className="px-32 border-b border-gray">
         <div className="border-x border-gray py-16 px-10">
@@ -24,10 +22,6 @@ const Settings = () => {
         </div>
       </div>
       <Footer />
-    </div>
-  ) : (
-    <div className="m-5">
-      <MobileWarning />
     </div>
   );
 };

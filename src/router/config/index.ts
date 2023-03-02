@@ -32,6 +32,7 @@ export interface RouteConfig {
   notLoggedIn?: boolean;
   requireLogin?: boolean;
   children?: RouteConfig[];
+  isResponsive?: boolean;
 }
 
 export const ROUTES: RouteConfig[] = [
@@ -39,6 +40,7 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.HOME,
     component: Landing,
     notLoggedIn: true,
+    isResponsive: true,
   },
   {
     path: PATHS.MARKETPLACE,

@@ -10,8 +10,6 @@ import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
 import Tab from "./components/Tab";
 import { AssetLoadingCollectionLogo } from "assets";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileWarning from "components/MobileWarning";
 import ReadMore from "components/ReadMore";
 import { useAppSelector } from "store";
 
@@ -35,7 +33,7 @@ const Collection = () => {
     });
   }, [collectionId]);
 
-  return !useIsMobile() ? (
+  return (
     <>
       <div className="container-fluid pt-10 pb-14">
         <div className="flex flex-col gap-5">
@@ -60,10 +58,6 @@ const Collection = () => {
       <Tab />
       <Outlet />
     </>
-  ) : (
-    <div className="m-5">
-      <MobileWarning />
-    </div>
   );
 };
 

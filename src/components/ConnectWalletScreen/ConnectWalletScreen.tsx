@@ -4,7 +4,7 @@ import "./connectwalletscreen.css";
 
 const ConnectWalletScreen = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-1">
       <div className="border-x border-gray pt-[60px] pl-10 pb-10 mx-40">
         <div className="flex flex-col max-w-[560px] gap-y-[15px]">
           <h2 className="text-head2 font-spaceGrotesk text-white">Connect a wallet</h2>
@@ -14,7 +14,7 @@ const ConnectWalletScreen = () => {
         </div>
       </div>
       <div className="border-t border-gray"></div>
-      <div className="flex h-full border-x border-gray pt-5 pl-5 mx-40 ">
+      <div className="flex h-full border-x border-gray pt-5 pl-5 mx-40 flex-1">
         <div className="max-w-[560px] h-full">
           <ConnectWallet />
         </div>

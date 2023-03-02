@@ -15,8 +15,6 @@ import { RightMenuType, setIsLiked, setPresetPrice, setRightMenu, setSelectedNFT
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileWarning from "components/MobileWarning";
 import "./nftdetails.css";
 
 const None = React.memo(() => {
@@ -94,7 +92,7 @@ const NFTDetails = () => {
     });
   }, []);
 
-  return !useIsMobile() ? (
+  return (
     <div className="relative flex justify-between container-nftdetails">
       <div className="w-[42%]">
         <LeftMenu nft={nft} fetchCollection={fetchCollection} />
@@ -112,10 +110,6 @@ const NFTDetails = () => {
       <div className="w-[42%]" id="rightMenuWrapper">
         <Component onBack={() => resetMenuState()} />
       </div>
-    </div>
-  ) : (
-    <div className="m-5">
-      <MobileWarning />
     </div>
   );
 };

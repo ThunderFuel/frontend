@@ -10,7 +10,11 @@ import ConnectWalletScreen from "components/ConnectWalletScreen";
 const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
 
-  return user.id ? (
+  if (!user.id) {
+    return <ConnectWalletScreen />;
+  }
+
+  return (
     <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true, isUserPage: true }}>
       <div className="flex">
         <Sidebar isProfile={true} />
@@ -21,8 +25,6 @@ const Profile = () => {
         <ModalSocial />
       </div>
     </ProfileProvider>
-  ) : (
-    <ConnectWalletScreen />
   );
 };
 

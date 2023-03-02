@@ -6,8 +6,6 @@ import BulkListTable from "./components/BulkListTable";
 import Footer from "./components/Footer";
 import { useSelector } from "react-redux";
 import { getBulkListingTableItems } from "store/bulkListingSlice";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileWarning from "components/MobileWarning";
 import floorService from "api/floor/floor.service";
 import { formatPrice } from "utils";
 
@@ -71,7 +69,7 @@ const BulkListing = () => {
     fetchData();
   }, [items]);
 
-  return !useIsMobile() ? (
+  return (
     <div className="flex flex-col">
       <div className="px-32 border-b border-gray">
         <div className="border-x border-gray py-16 px-10">
@@ -102,10 +100,6 @@ const BulkListing = () => {
           <Footer items={getItems} prices={prices} />
         </div>
       </div>
-    </div>
-  ) : (
-    <div className="m-5">
-      <MobileWarning />
     </div>
   );
 };
