@@ -92,7 +92,7 @@ export const clipboardCopy = (text: string) => {
 
 export const formatPrice = (price: any) => {
   if (!price || price === "-") {
-    return "-";
+    return price;
   }
 
   return parseFloat(price)

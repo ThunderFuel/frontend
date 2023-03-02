@@ -102,9 +102,8 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   };
 
   const fetchTopTrait = async () => {
-    const tokenIds = [selectedNFT.id];
     try {
-      const [responseTopTrait] = await Promise.all([floorService.getTopTraitByTokenIds(tokenIds)]);
+      const responseTopTrait = await floorService.getTopTraitByTokenIds([selectedNFT.id]);
       setTopTrait(responseTopTrait.data[selectedNFT.id]);
     } catch (e) {
       console.log(e);
@@ -162,7 +161,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             {price !== "" && price < selectedNFT?.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
-                {formatPrice(selectedNFT?.collection?.floor)} ETH - Floor Price
+                {selectedNFT?.collection ? formatPrice(selectedNFT?.collection?.floor) : "-"} ETH - Floor Price
               </div>
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
                 {formatPrice(topTrait)} ETH - Top Trait Price

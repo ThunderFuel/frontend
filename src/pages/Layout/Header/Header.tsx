@@ -132,7 +132,7 @@ const Header = () => {
     if (cssRoot) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      cssRoot.style.setProperty("--headerHeight", `${ref.current.offsetHeight}px`);
+      cssRoot.style.setProperty("--headerHeight", `${ref.current?.offsetHeight || 0}px`);
     }
   };
 
