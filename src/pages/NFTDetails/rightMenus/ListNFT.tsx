@@ -159,10 +159,10 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
             Enter Price*
             <InputPrice onChange={setprice} value={price} type="text" />
-            {price !== "" && price < selectedNFT.floorPrice && warning}
+            {price !== "" && price < selectedNFT?.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
-                {formatPrice(selectedNFT.collection.floor)} ETH - Floor Price
+                {formatPrice(selectedNFT?.collection?.floor)} ETH - Floor Price
               </div>
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
                 {formatPrice(topTrait)} ETH - Top Trait Price
