@@ -108,10 +108,10 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
   );
 };
 const OfferList = () => {
-  const { offers, onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue } = useOfferContext();
-  const isOffersMade = filterValue;
-  const label = `${offers.length} ${isOffersMade === null ? "offers" : isOffersMade ? " offers made" : " offers receıved"}`;
-  const hasActiveOffer = offers.some((offer) => offer.isActiveOffer);
+  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers } = useOfferContext();
+  const isOffersMade = filterValue.offerType === 1;
+  const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
+  const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
 
   return (
     <div className="flex flex-col p-5 pr-7 gap-5 flex-1">
@@ -124,10 +124,10 @@ const OfferList = () => {
         ) : null}
       </div>
       <div className="flex flex-col gap-3">
-        {offers.map((item: any, k: any) => (
+        {getOffers.map((item: any, k: any) => (
           <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />
         ))}
-        {!offers.length && (
+        {!getOffers.length && (
           <div className="flex-center">
             <NotFound>You didn’t make any offer yet.</NotFound>
           </div>

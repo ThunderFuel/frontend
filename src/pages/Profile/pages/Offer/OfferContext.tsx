@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import offerService from "api/offer/offer.service";
-import { OfferStatus } from "../../../../api/offer/offer.type";
+import { OfferStatus } from "api/offer/offer.type";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
@@ -13,48 +13,30 @@ interface IOfferContext {
   [key: string]: any;
 }
 
-const filterItems = [
-  {
-    value: null,
-    text: "All Offers",
-    count: 0,
-  },
-  {
-    value: false,
-    text: "Offers Received",
-    count: 0,
-  },
-  {
-    value: true,
-    text: "Offers Made",
-    count: 0,
-  },
-];
-
 export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [offers, setOffers] = React.useState([] as any);
-  const [filterValue, setFilterValue] = React.useState(null);
+  const [filterValue, setFilterValue] = React.useState({
+    offerType: 0,
+    offerStatus: [1] as any,
+  });
 
   const getOffers = React.useMemo(() => {
-    if (filterValue === null) {
-      return offers;
-    }
-
-    return offers.filter((item: any) => item.isOfferMade === filterValue);
+    return offers
+      .filter((item: any) => item.isOfferMade === !!filterValue.offerType)
+      .filter((item: any) => {
+        return (
+          (filterValue.offerStatus.includes(1) && item.isActiveOffer) ||
+          (filterValue.offerStatus.includes(3) && item.isExpired) ||
+          (filterValue.offerStatus.includes(0) && item.isCanceled) ||
+          (filterValue.offerStatus.includes(2) && item.isAccepted)
+        );
+      });
   }, [offers, filterValue]);
-  const getFilterItems = React.useMemo(() => {
-    filterItems[0].count = offers.length;
-    filterItems[1].count = offers.filter((item: any) => !item.isOfferMade).length;
-    filterItems[2].count = offers.filter((item: any) => item.isOfferMade).length;
-
-    return filterItems;
-  }, [offers]);
-
   const onChangeFilterValue = (value: any) => {
-    setFilterValue(value);
+    setFilterValue((prevState: any) => ({ ...prevState, ...value }));
   };
 
   const onCancelAllOffer = async () => {
@@ -96,6 +78,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
         ...item,
         isOfferMade: item.makerUserId === value.userInfo.id,
         isActiveOffer: item.status === OfferStatus.ActiveOffer,
+        isAccepted: item.status === OfferStatus.AcceptedOffer,
         isExpired: item.status === OfferStatus.ExpiredOffer,
         isCanceled: item.status === OfferStatus.Cancelled,
       }))
@@ -109,8 +92,8 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   }, [value.userInfo]);
 
   const contextValue = {
-    offers: getOffers,
-    filterItems: getFilterItems,
+    offers,
+    getOffers,
     filterValue,
     onChangeFilterValue,
     onCancelAllOffer,
