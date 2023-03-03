@@ -108,8 +108,8 @@ const SidebarFilter = () => {
   }, [offers, filterValue]);
 
   return (
-    <div className="py-5 pr-5 border-r border-gray w-60">
-      <div className="sticky h-fit" style={{ top: "calc(var(--headerHeight) + 20px)" }}>
+    <div className="sticky h-fit" style={{ top: "var(--headerHeight)" }}>
+      <div className="py-5 pr-5 border-r border-gray w-60 flex flex-col gap-2.5">
         {getFilterItems.map((filterItem: any, index: number) => {
           const Component = filterItem.component;
 
