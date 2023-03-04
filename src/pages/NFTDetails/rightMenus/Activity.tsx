@@ -36,7 +36,6 @@ function formatActivityData(data: any): { icon: any; title: string; description:
     />
   );
 
-  //TODO zamanlari ekle
   switch (data.activityType) {
     case 0:
       return { icon: IconOffer, title: "Offer", description: description };

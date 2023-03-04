@@ -11,13 +11,24 @@ const ActivityItem = ({ item }: { item: any }) => {
   const Icon = item.typeIcon ?? IconHand;
   const path = getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item?.tokenId });
 
+  function formatType(type: any) {
+    if (type === "Sales") return "Sale";
+    if (type === "Offers") return "Offer";
+    if (type === "Listings") return "Listing";
+    if (type === "Bids") return "Bid";
+    if (type === "Mints") return "Mint";
+    if (type === "Transfers") return "Transfer";
+
+    return type;
+  }
+
   return (
     <div className="bg-bg hover:bg-bg-light border border-gray rounded-md flex p-5 text-white gap-5 cursor-pointer">
       <div className="flex items-center gap-2.5 w-32">
         <div className="flex-center h-8 w-8 rounded-full bg-gray">
           <Icon />
         </div>
-        <h6 className="text-h6 text-overflow">{item.type}</h6>
+        <h6 className="text-h6 text-overflow">{formatType(item.type)}</h6>
       </div>
       <div className="flex items-center flex-1 gap-4">
         <Link to={path} className="w-16 h-16 rounded-md overflow-hidden relative group">

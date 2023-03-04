@@ -46,6 +46,7 @@ const BoxWithIconLastActivity = React.memo(({ lastActivity }: any) => {
       <div className="text-headline-01 text-gray-light uppercase">LAST ACTIVITY</div>
       <h6 className="text-h6">
         <ActivityItemDescription
+          price={lastActivity.price}
           activityType={lastActivity.activityType}
           fromUserContractAddress={lastActivity.fromUser.walletAddress}
           createdTimeStamp={lastActivity.createdTimeStamp}
