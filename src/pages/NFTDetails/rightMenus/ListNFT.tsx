@@ -177,9 +177,9 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                 <div className="">{selectedNFT.collection?.royaltyFee}%</div>
               </div>
               <div className="flex w-full justify-between">
-                <div className="text-gray-light">You’ll Recieve</div>
+                <div className="text-gray-light">You’ll Receive</div>
                 <div className={`flex items-center ${isValidNumber(price) ? "text-green" : "text-gray-light"}`}>
-                  {isValidNumber(price) ? calculateReceivingAmount(price) : "-"} <IconEthereum />
+                  {isValidNumber(price) ? formatPrice(calculateReceivingAmount(price)) : "-"} <IconEthereum />
                 </div>
               </div>
             </div>
@@ -210,9 +210,9 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               <div className="">{selectedNFT.collection?.royaltyFee}%</div>
             </div>
             <div className="flex w-full justify-between">
-              <div className="text-gray-light">You’ll Recieve</div>
+              <div className="text-gray-light">You’ll Receive</div>
               <div className={`flex items-center ${isValidNumber(startingPrice) ? "text-green" : "text-gray-light"}`}>
-                {isValidNumber(startingPrice) ? calculateReceivingAmount(startingPrice) : "-"} <IconEthereum />
+                {isValidNumber(startingPrice) ? formatPrice(calculateReceivingAmount(startingPrice)) : "-"} <IconEthereum />
               </div>
             </div>
           </div>

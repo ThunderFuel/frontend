@@ -74,7 +74,7 @@ const Footer = ({ items, prices }: any) => {
           <h6 className="text-h6 text-white">10%</h6>
         </div>
         <div className="flex items-center justify-between">
-          <h6 className="text-h6">You’ll Recieve</h6>
+          <h6 className="text-h6">You’ll Receive</h6>
           <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
         </div>
       </div>
