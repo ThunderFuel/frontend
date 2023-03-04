@@ -20,7 +20,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState({
     offerType: 0,
-    offerStatus: [1] as any,
+    offerStatus: [0, 1, 2, 3, 4] as any,
   });
 
   const getOffers = React.useMemo(() => {

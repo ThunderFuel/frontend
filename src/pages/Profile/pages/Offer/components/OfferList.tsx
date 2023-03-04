@@ -12,7 +12,7 @@ import { useProfile } from "../../../ProfileContext";
 import { Link } from "react-router-dom";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
-import { OfferStatus } from "../../../../../api/offer/offer.type";
+import { OfferStatus } from "api/offer/offer.type";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
