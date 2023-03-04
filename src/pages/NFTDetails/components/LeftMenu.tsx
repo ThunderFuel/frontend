@@ -119,9 +119,17 @@ const LeftMenu = (props: any) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
   function formatActivityData(activity: any) {
-    const { activityType, toUser, fromUser, createdTimeStamp } = activity;
+    const { activityType, toUser, fromUser, createdTimeStamp, price } = activity;
 
-    return <ActivityItemDescription activityType={activityType} fromUserContractAddress={fromUser?.walletAddress} createdTimeStamp={createdTimeStamp} toUserContractAddress={toUser?.walletAddress} />;
+    return (
+      <ActivityItemDescription
+        price={price}
+        activityType={activityType}
+        fromUserContractAddress={fromUser?.walletAddress}
+        createdTimeStamp={createdTimeStamp}
+        toUserContractAddress={toUser?.walletAddress}
+      />
+    );
   }
 
   function renderLastActivity(activity: any) {
