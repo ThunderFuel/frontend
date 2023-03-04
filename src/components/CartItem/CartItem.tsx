@@ -74,7 +74,7 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
           <CartItemImage image={image} isUnavailable={isUnavailable} onRemove={onRemove} isRemovable={isRemovable} />
           <div className={clsx("flex flex-col w-full", isUnavailable ? "text-gray-light" : "text-white")}>
             <div className="flex w-full justify-between border-b border-b-gray pb-2">
-              <span className="text-h6 text-white">{name}</span>
+              <span className="text-h6 text-white text-overflow">{name}</span>
               {titleSlot}
             </div>
             <div className="flex w-full items-center justify-between mt-2">

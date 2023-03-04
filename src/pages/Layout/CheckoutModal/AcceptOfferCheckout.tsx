@@ -69,7 +69,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     </div>
   );
 
-  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
+  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline"></button>;
 
   return (
     <Modal backdropDisabled={true} className="checkout" title="Accept Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>

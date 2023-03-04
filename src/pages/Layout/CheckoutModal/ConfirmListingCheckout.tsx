@@ -71,7 +71,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
     </div>
   );
 
-  const viewOnBlockchain = <button className="body-small text-gray-light underline">View on Blockchain</button>;
+  const viewOnBlockchain = <button className="body-small text-gray-light underline"></button>;
 
   return (
     <Modal
