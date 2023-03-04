@@ -10,6 +10,7 @@ import { remainingTime } from "./AuctionCountdown";
 import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { useWallet } from "hooks/useWallet";
+import { formatPrice } from "utils";
 
 const FixedPrice = () => {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ const FixedPrice = () => {
         {selectedNFT.lastSalePrice ? (
           <div className="flex h-fit items-center gap-x-[5px]">
             <IconCart width="18px" height="18px" color="#838383" />
-            <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {selectedNFT.lastSalePrice} ETH</span>
+            <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {formatPrice(selectedNFT.lastSalePrice)} ETH</span>
           </div>
         ) : (
           <></>
