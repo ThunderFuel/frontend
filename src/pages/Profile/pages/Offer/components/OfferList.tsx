@@ -1,5 +1,5 @@
 import React from "react";
-import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconLink, IconWarning } from "icons";
+import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconLink, IconWarning } from "icons";
 import Img from "components/Img/Img";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
@@ -12,6 +12,7 @@ import { useProfile } from "../../../ProfileContext";
 import { Link } from "react-router-dom";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import { OfferStatus } from "../../../../../api/offer/offer.type";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
@@ -33,18 +34,25 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
   );
 };
 
+const iconList = {
+  [OfferStatus.AcceptedOffer]: IconCircleCheck,
+  [OfferStatus.ExpiredOffer]: IconWarning,
+  [OfferStatus.Cancelled]: IconWarning,
+  [OfferStatus.ActiveOffer]: IconClock,
+};
+
 const OfferItemExpireLabel = ({ item }: any) => {
   if (!item.expireTime) {
     return null;
   }
 
-  const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
+  const Icon = iconList[item.status as OfferStatus] ?? IconClock;
 
-  const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
-  const description = item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
+  const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
+  const description = item.isAccepted ? "Accepted" : item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
 
   return (
-    <div className="flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium">
+    <div className={clsx("flex items-center border border-gray rounded-md gap-1 p-2.5 body-medium", item.isAccepted ? "text-green" : item.isCanceled ? "text-red" : "")}>
       <Icon className="w-4 h-5" />
       {description}
     </div>
