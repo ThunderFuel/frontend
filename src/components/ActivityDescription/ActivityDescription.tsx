@@ -60,7 +60,7 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
       activeTypeLabel = `Minted by`;
     }
 
-    const fromUserContractAddressLabel = addressFormat(fromUserContractAddress);
+    const fromUserContractAddressLabel = user.walletAddress === fromUserContractAddress ? "you" : addressFormat(fromUserContractAddress);
     const toUserContractAddressLabel = user.walletAddress === toUserContractAddress ? "you" : addressFormat(toUserContractAddress);
 
     let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel} to ${toUserContractAddressLabel}</span>, ${timeagoFormat(createdTimeStamp)}`;
