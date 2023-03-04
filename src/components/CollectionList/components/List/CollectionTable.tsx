@@ -4,7 +4,7 @@ import { IconEthereum } from "icons";
 import Checkbox from "components/CheckBox";
 import { add, remove } from "store/cartSlice";
 import { useAppDispatch, useAppSelector } from "store";
-import { dateFormat } from "utils";
+import { dateFormat, formatPrice } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 
 const Collection = ({ item }: { item: any }) => {
@@ -62,7 +62,7 @@ const CollectionTable = () => {
       text: "Price",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.price ?? 0} />,
+      render: (item) => <Price price={formatPrice(item.price) ?? 0} />,
     },
     {
       key: "lastSale",
