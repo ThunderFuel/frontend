@@ -5,6 +5,9 @@
 :root {
   --headerHeight: 1px;
 }
+body {
+  @apply bg-bg;
+}
 
 @layer utilities {
   .text-h1 {
