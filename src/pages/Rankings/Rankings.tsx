@@ -8,6 +8,13 @@ const Rankings = () => {
     hideFooter: true,
   };
 
+  React.useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="flex flex-col">
       <span className="container-fluid justify-start text-h2 text-white my-10">Collection Stats</span>

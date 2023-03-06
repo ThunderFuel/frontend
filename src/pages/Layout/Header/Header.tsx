@@ -1,11 +1,10 @@
 import React, { Dispatch, SetStateAction, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetLogo, AssetThunderText } from "assets";
 import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconWallet } from "icons";
 
-import Tab from "components/Tab";
 import SocialMediaIcons from "components/SocialMediaIcons";
 
 import Search from "./components/Search/Search";
@@ -21,6 +20,7 @@ import { useIsMobile } from "hooks/useIsMobile";
 import etherscanService from "api/etherscan/etherscan.service";
 import { useDispatch } from "react-redux";
 import { toggleClosedBetaModal } from "store/commonSlice";
+import Tab from "./components/Tab";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -120,12 +120,6 @@ export interface HeaderProps {
 
 const Header = () => {
   const ref = useRef<any>(null);
-  const navigate = useNavigate();
-  const onChange = (value: any) => {
-    if (value) {
-      navigate(value);
-    }
-  };
 
   const setHeaderHeight = () => {
     const cssRoot = document.querySelector(":root");
@@ -159,23 +153,7 @@ const Header = () => {
                 </Link>
 
                 <Search />
-
-                <Tab initTab={1} className="hidden lg:flex" onChange={onChange}>
-                  <Tab.Item id={PATHS.MARKETPLACE}>EXPLORE</Tab.Item>
-                  <Tab.Item id={PATHS.RANKINGS}>COLLECTIONS</Tab.Item>
-                  <Tab.Item id={5} className="group relative" disabled>
-                    DROP
-                    <div className="group-hover:opacity-100 transition-opacity duration-500 ease-out opacity-0 absolute top-[45px] -left-5 w-28 tracking-[0.2em] text-headline-01 text-white bg-gray rounded-full text-center px-2 py-2.5">
-                      COMING SOON
-                    </div>
-                  </Tab.Item>
-                  <Tab.Item id={null} className="group relative" disabled>
-                    CREATE
-                    <div className="group-hover:opacity-100 transition-opacity duration-500 ease-out opacity-0 absolute top-[45px] -left-3 w-28 tracking-[0.2em] text-headline-01 text-white bg-gray rounded-full text-center px-2 py-2.5">
-                      COMING SOON
-                    </div>
-                  </Tab.Item>
-                </Tab>
+                <Tab />
               </div>
               <HeaderIconButtonGroup />
             </div>
