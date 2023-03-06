@@ -114,6 +114,8 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     fetchTopTrait();
   }, [selectedNFT]);
 
+  console.log(privateSaleAddress);
+
   return (
     <RightMenu title={updateListing ? "Update Listing" : "List Your NFT"} footer={footer} onBack={onBack}>
       <div className="flex flex-col gap-y-5">
@@ -197,7 +199,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           </div>
           {isTimedAuction
             ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
-            : isPrivateSale && <Input onChange={setprivateSaleAddress} value={privateSaleAddress} type="text" />}
+            : isPrivateSale && <Input onChange={(event: any) => setprivateSaleAddress(event.target.value)} type="text" />}
         </div>
         {isTimedAuction && (
           <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray text-head6 font-spaceGrotesk text-white">
