@@ -42,11 +42,11 @@ const CollectionFooter = () => {
               dispatch(removeAll());
             }}
           >
-            Clear {selectedCartItemCount} ıtem
+            Clear {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"}
             <IconTrash />
           </Button>
           <Button className="uppercase" onClick={onToggleCheckoutModal}>
-            buy {selectedCartItemCount} ıtem - {selectedCartTotalAmount} eth
+            buy {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"} - {selectedCartTotalAmount} eth
             <IconArrowRight />
           </Button>
         </div>
