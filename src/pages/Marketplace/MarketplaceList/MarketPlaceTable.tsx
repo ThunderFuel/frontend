@@ -14,14 +14,16 @@ import { Link } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
 
-const NftImages = React.memo(({ images }: { images: any[] }) => {
-  const tmpImages = images.slice(0, 5);
+const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) => {
+  const items = collectionItems.slice(0, 5);
 
   return (
     <ul className="py-2.5 px-4 flex gap-2">
-      {tmpImages.map((image, i) => (
+      {items.map((item, i) => (
         <li key={i} className="w-14 h-14 overflow-hidden">
-          <Img src={image} alt={i.toString()} defaultImage={AssetCollectionItem0} />
+          <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
+            <Img src={item.image} alt={i.toString()} defaultImage={AssetCollectionItem0} />
+          </Link>
         </li>
       ))}
     </ul>
@@ -119,7 +121,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     {
       key: "lastSold",
       text: "LAST SOLD",
-      render: (item) => <NftImages images={item.images} />,
+      render: (item) => <NftImages collectionItems={item.collectionItems} />,
       width: "350px",
     },
     {

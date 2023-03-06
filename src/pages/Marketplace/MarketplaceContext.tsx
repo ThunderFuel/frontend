@@ -108,7 +108,10 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
           sales: responseItem.sales,
           lastSold: responseItem.solds.length,
           image: responseItem.image,
-          images: responseItem.solds.map((sold: any) => sold.token.image),
+          collectionItems: responseItem.solds.map((sold: any) => ({
+            image: sold.token.image,
+            tokenId: sold.tokenId,
+          })),
           watched: responseItem.watched,
         } as MarketplaceTableItem;
       });
