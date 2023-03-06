@@ -1,21 +1,24 @@
+import React, { useEffect } from "react";
 import { AssetEmptyCart } from "assets";
 import Button from "components/Button";
 import CartItem from "components/CartItem";
 import EthereumPrice from "components/EthereumPrice";
 import Modal from "components/Modal";
+import useNavigate from "hooks/useNavigate";
 import { useWallet } from "hooks/useWallet";
 import { IconArrowRight } from "icons";
-import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, toggleCartModal } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { toggleWalletModal } from "store/walletSlice";
+import { PATHS } from "router/config/paths";
 
 const MyCart = () => {
   const { totalAmount, itemCount, items, show } = useAppSelector((state) => state.cart);
   const { isConnected } = useAppSelector((state) => state.wallet);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { hasEnoughFunds } = useWallet();
 
   useEffect(() => {
@@ -67,7 +70,20 @@ const MyCart = () => {
             </div>
             <div className="flex flex-col h-[calc(100vh-265px)] gap-2 overflow-y-scroll no-scrollbar ">
               {items.map((i, index) => (
-                <CartItem key={index} text="Price" name={i.name} price={i.price} image={i.image} id={i.id} uid={i.uid} isRemovable={true}></CartItem>
+                <CartItem
+                  key={index}
+                  text="Price"
+                  name={i.name}
+                  price={i.price}
+                  image={i.image}
+                  id={i.id}
+                  uid={i.uid}
+                  isRemovable={true}
+                  onClick={() => {
+                    navigate(PATHS.NFT_DETAILS, { nftId: i.id });
+                    dispatch(toggleCartModal());
+                  }}
+                ></CartItem>
               ))}
             </div>
           </>

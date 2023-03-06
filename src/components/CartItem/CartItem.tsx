@@ -15,6 +15,7 @@ export interface CartItemProps {
   titleSlot?: any;
   uid?: any;
   isRemovable?: boolean;
+  onClick?: any;
 }
 
 const CartItemStatus = ({ text }: { text: string }) => {
@@ -56,7 +57,7 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
     </div>
   );
 };
-const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemovable }: CartItemProps) => {
+const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemovable, onClick }: CartItemProps) => {
   const dispatch = useAppDispatch();
   const onRemove = () => {
     dispatch(remove(uid));
@@ -74,7 +75,9 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
           <CartItemImage image={image} isUnavailable={isUnavailable} onRemove={onRemove} isRemovable={isRemovable} />
           <div className={clsx("flex flex-col w-full", isUnavailable ? "text-gray-light" : "text-white")}>
             <div className="flex w-full justify-between border-b border-b-gray pb-2">
-              <span className="text-h6 text-white text-overflow">{name}</span>
+              <span className={`text-h6 text-white text-overflow ${onClick ? "cursor-pointer" : ""}`} onClick={onClick ?? ""}>
+                {name}
+              </span>
               {titleSlot}
             </div>
             <div className="flex w-full items-center justify-between mt-2">
