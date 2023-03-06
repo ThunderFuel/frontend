@@ -26,7 +26,7 @@ const Range = (props: any) => {
           onChange={(e: any) => {
             props.onChange(e.target.value);
           }}
-          icon={<IconClear className="w-6 h-6 mr-2 cursor-pointer" />}
+          icon={<IconClear className="w-6 h-6 mr-2" />}
           containerClassName="flex-row-reverse"
           className={clsx("w-10 border-l border-l-gray pl-4", props.value > 0 ? "text-white" : "text-gray")}
           placeholder={"0"}
