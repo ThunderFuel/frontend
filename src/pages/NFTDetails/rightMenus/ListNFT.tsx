@@ -187,20 +187,22 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             </div>
           </div>
         )}
-        <div className="flex flex-col gap-y-2 text-head6 font-spaceGrotesk text-white">
-          <div className="flex w-full justify-between">
-            {isTimedAuction ? "Starting Price" : "Private Sale"}
-            <div className="w-fit">
-              <ToggleButton isOn={isTimedAuction ? hasStartingPrice : isPrivateSale} onToggle={handleToggle} />
+        {isTimedAuction && (
+          <div className="flex flex-col gap-y-2 text-head6 font-spaceGrotesk text-white">
+            <div className="flex w-full justify-between">
+              {isTimedAuction ? "Starting Price" : "Private Sale"}
+              <div className="w-fit">
+                <ToggleButton isOn={isTimedAuction ? hasStartingPrice : isPrivateSale} onToggle={handleToggle} />
+              </div>
             </div>
+            <div className="flex gap-x-[5px] items-center text-bodySm text-gray-light">
+              <IconInfo className="w-[17px] h-[17px]" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
+            </div>
+            {isTimedAuction
+              ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
+              : isPrivateSale && <Input onChange={(event: any) => setprivateSaleAddress(event.target.value)} type="text" />}
           </div>
-          <div className="flex gap-x-[5px] items-center text-bodySm text-gray-light">
-            <IconInfo className="w-[17px] h-[17px]" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
-          </div>
-          {isTimedAuction
-            ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
-            : isPrivateSale && <Input onChange={(event: any) => setprivateSaleAddress(event.target.value)} type="text" />}
-        </div>
+        )}
         {isTimedAuction && (
           <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray text-head6 font-spaceGrotesk text-white">
             <div className="flex w-full justify-between">
