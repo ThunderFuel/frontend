@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
 import { setIsBurner, setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
-import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconToken, IconWallet } from "icons";
+import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
 import { Button } from "react-bootstrap";
 import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
@@ -29,7 +29,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         onClose();
       },
     },
-    { title: "Create", icon: <IconToken />, onClick: () => "" },
+    // { title: "Create", icon: <IconToken />, onClick: () => "" },
     {
       title: "Offers",
       icon: <IconOffer />,
