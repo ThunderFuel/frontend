@@ -32,7 +32,7 @@ function formatActivityData(data: any): { icon: any; title: string; description:
       activityType={data.activityType}
       fromUserContractAddress={data.fromUser.walletAddress}
       createdTimeStamp={data.createdTimeStamp}
-      toUserContractAddress={data.fromUser.walletAddress}
+      toUserContractAddress={data?.toUser?.walletAddress}
     />
   );
 
