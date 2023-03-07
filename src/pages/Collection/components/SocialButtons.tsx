@@ -8,8 +8,9 @@ import { useAppSelector } from "store";
 import { useDispatch } from "react-redux";
 import { toggleWalletModal } from "store/walletSlice";
 import { useClickOutside } from "hooks/useClickOutside";
-import { clipboardCopy, openInNewTab } from "utils";
+import { clipboardCopy } from "utils";
 import useToast from "hooks/useToast";
+import { useShareTwitter } from "hooks/useShareTwitter";
 
 const SocialButton = ({ icon, className, ...etc }: { icon: any; className?: string; [key: string]: any }) => {
   const IconItem = icon ?? null;
@@ -60,9 +61,11 @@ const FavoriteButton = ({ collection }: { collection: any }) => {
   );
 };
 
-const SocialShareButton = () => {
+const SocialShareButton = ({ collection, user }: any) => {
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLLIElement>(null);
+  const shareTwitter = useShareTwitter();
+
   const items = [
     {
       text: "Copy Link",
@@ -77,7 +80,11 @@ const SocialShareButton = () => {
       text: "Share on Twitter",
       icon: IconTwitter,
       onClick: () => {
-        openInNewTab("https://twitter.com/intent/tweet?text=Hello%20world");
+        if (collection) {
+          shareTwitter.shareCollection(collection.name);
+        } else if (user) {
+          shareTwitter.shareProfile(user.userName);
+        }
         setShow(false);
       },
     },
@@ -108,7 +115,7 @@ const SocialShareButton = () => {
     </li>
   );
 };
-const SocialButtons = ({ socialMedias, collection }: { socialMedias: { url: string; type: SocialTypes }[] | null; collection?: any }) => {
+const SocialButtons = ({ socialMedias, collection, user }: { socialMedias: { url: string; type: SocialTypes }[] | null; collection?: any; user?: any }) => {
   const iconList: any = {
     [SocialTypes.Website]: IconWeblink,
     [SocialTypes.Discord]: IconDiscord,
@@ -130,7 +137,7 @@ const SocialButtons = ({ socialMedias, collection }: { socialMedias: { url: stri
       ) : null}
       <ul className="inline-flex border border-gray rounded-[4px]">
         {collection ? <FavoriteButton collection={collection} /> : null}
-        <SocialShareButton />
+        <SocialShareButton collection={collection} user={user} />
       </ul>
     </div>
   );

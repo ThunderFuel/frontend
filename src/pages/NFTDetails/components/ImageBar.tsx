@@ -5,9 +5,11 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import userService from "api/user/user.service";
 import { toggleWalletModal } from "store/walletSlice";
+import { useShareTwitter } from "hooks/useShareTwitter";
 
 const ImageBar = () => {
   const dispatch = useAppDispatch();
+  const shareTwitter = useShareTwitter();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const [isLiked, setIsliked] = useState(false);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
@@ -37,6 +39,9 @@ const ImageBar = () => {
     fetchIsLiked();
   }, [user, isLiked]);
 
+  const onShare = () => {
+    shareTwitter.shareNft(selectedNFT.name, selectedNFT.collection.name);
+  };
   const icons = [
     {
       icon: IconTransfer,
@@ -47,7 +52,10 @@ const ImageBar = () => {
     },
     { icon: IconFullscreen, onClick: () => console.log("IconFullscreen") },
     { icon: IconRefresh, onClick: () => console.log("IconRefresh") },
-    { icon: IconShare, onClick: () => console.log("IconShare") },
+    {
+      icon: IconShare,
+      onClick: onShare,
+    },
   ];
 
   return (
