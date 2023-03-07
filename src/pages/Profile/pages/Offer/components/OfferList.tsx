@@ -116,6 +116,8 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
   );
 };
 const OfferList = () => {
+  const { options } = useProfile();
+
   const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers } = useOfferContext();
   const isOffersMade = filterValue.offerType === 1;
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
@@ -125,7 +127,7 @@ const OfferList = () => {
     <div className="flex flex-col p-5 pr-7 gap-5 flex-1">
       <div className="flex items-center justify-between">
         <div className="text-headline-02 text-gray-light uppercase">{label}</div>
-        {isOffersMade && hasActiveOffer ? (
+        {isOffersMade && hasActiveOffer && options.isProfile ? (
           <Button className="btn-secondary btn-sm" onClick={onCancelAllOffer}>
             cancel all offers <IconCircleRemoveWhite />
           </Button>

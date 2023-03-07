@@ -47,7 +47,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false}
           onClick={() => {
-            if (isTimedAuction)
+            if (isTimedAuction) {
               dispatch(
                 setCheckout({
                   type: CheckoutType.ConfirmListing,
@@ -57,7 +57,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                   onCheckoutComplete,
                 })
               );
-            else
+            } else if (price > 0) {
               dispatch(
                 setCheckout({
                   type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
@@ -66,6 +66,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                   onCheckoutComplete,
                 })
               );
+            }
 
             dispatch(toggleCheckoutModal());
           }}
@@ -216,7 +217,8 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             <div className="flex w-full justify-between">
               <div className="text-gray-light">You’ll Receive</div>
               <div className={`flex items-center ${isValidNumber(startingPrice) ? "text-green" : "text-gray-light"}`}>
-                {isValidNumber(startingPrice) ? formatPrice(calculateReceivingAmount(startingPrice)) : "-"} <IconEthereum />
+                {isValidNumber(startingPrice) ? formatPrice(calculateReceivingAmount(startingPrice)) : "-"}
+                <IconEthereum />
               </div>
             </div>
           </div>
