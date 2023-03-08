@@ -10,7 +10,6 @@ import UpdateOfferCheckout from "./UpdateOfferCheckout";
 import ConfirmListingCheckout from "./ConfirmListingCheckout";
 import AcceptOfferCheckout from "./AcceptOfferCheckout";
 import CancelAuctionCheckout from "./CancelAuctionCheckout";
-import CancelBid from "./CancelBid";
 import TransferCheckout from "./TransferCheckout";
 import CancelListingCheckout from "./CancelListingCheckout";
 
@@ -38,14 +37,10 @@ const Index = () => {
       return <ConfirmListingCheckout show={show} onClose={onClose} />;
     case CheckoutType.UpdateListing:
       return <ConfirmListingCheckout updateListing={true} show={show} onClose={onClose} />;
-    //todo accept bid
     case CheckoutType.Transfer:
       return <TransferCheckout show={show} onClose={onClose} />;
-    //
     case CheckoutType.CancelAuction:
       return <CancelAuctionCheckout show={show} onClose={onClose} />; //DESIGNDA YOK!
-    case CheckoutType.CancelBid:
-      return <CancelBid show={show} onClose={onClose} />; //DESIGNDA YOK!
     case CheckoutType.CancelListing:
       return <CancelListingCheckout show={show} onClose={onClose} />; //DESIGNDA YOK!
     default:

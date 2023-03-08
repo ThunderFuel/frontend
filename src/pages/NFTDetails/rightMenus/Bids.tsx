@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Button from "components/Button";
-import { IconAuction, IconBid, IconCancel, IconEthereum } from "icons";
+import { IconAuction, IconBid, IconEthereum } from "icons";
 import RightMenu from "../components/RightMenu";
 import AuctionCountdown from "../components/AuctionCountdown";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toggleWalletModal } from "store/walletSlice";
 import { dateFormat } from "utils";
@@ -75,21 +74,6 @@ const Bids = ({ onBack }: { onBack: any }) => {
                 <IconEthereum height="21px" className="text-gray-light" />
               </div>
             </div>
-            {isBidOwner(bid?.user?.id) && (
-              <>
-                <div className="flex border-t border-gray"></div>
-                <Button
-                  className="btn w-full btn-sm no-bg border-none text-white"
-                  onClick={() => {
-                    dispatch(setCheckout({ type: CheckoutType.CancelBid }));
-                    dispatch(toggleCheckoutModal());
-                  }}
-                >
-                  CANCEL YOUR BID
-                  <IconCancel width="18px" />
-                </Button>
-              </>
-            )}
           </>
         </Box>
       ))}
