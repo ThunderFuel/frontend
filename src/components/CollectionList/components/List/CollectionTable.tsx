@@ -11,7 +11,7 @@ import Img from "components/Img";
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 p-3.5 pl-0">
-      <div className="min-w-[56px] max-w-[56px] rounded-sm overflow-hidden aspect-square">
+      <div className="min-w-[56px] max-w-[56px] rounded-sm overflow-hidden">
         <Img className="w-full" alt={item.image} src={item.image} loading="lazy" />
       </div>
       <h6 className="text-h6 text-white">{item.name}</h6>
