@@ -8,6 +8,7 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toggleWalletModal } from "store/walletSlice";
 import { dateFormat } from "utils";
+import Avatar from "components/Avatar/Avatar";
 
 const Box = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">{children}</div>;
@@ -64,7 +65,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
           <>
             <div className="flex items-center justify-between p-[15px]">
               <div className="flex items-center gap-x-[15px]">
-                <img src={bid.user?.image} className="self-start h-8 w-8 rounded-full" alt="profile-image" />
+                <Avatar image={bid?.user?.image} userId={bid?.user?.id} className={"w-8 h-8"} />
                 <div>
                   {isBidOwner(bid?.user?.id) ? <span className="inline-block text-green">you</span> : bid.user.userName} on {dateFormat(bid.createdAt, "MMM DD, YYYY")}
                 </div>
