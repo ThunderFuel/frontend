@@ -91,7 +91,7 @@ export const clipboardCopy = (text: string) => {
 };
 
 export const formatPrice = (price: any) => {
-  if (!price || price === "-") {
+  if (price === null || price === "-") {
     return price;
   }
 
