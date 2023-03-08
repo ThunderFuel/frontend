@@ -1,17 +1,18 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
-import { IconEthereum } from "icons";
 import Checkbox from "components/CheckBox";
 import { add, remove } from "store/cartSlice";
 import { useAppDispatch, useAppSelector } from "store";
 import { dateFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
+import EthereumPrice from "components/EthereumPrice";
+import clsx from "clsx";
 
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 p-3.5 pl-0">
-      <div className="min-w-[56px] max-w-[56px] rounded-sm overflow-hidden">
+      <div className={clsx("min-w-[56px] max-w-[56px] rounded-sm overflow-hidden", item.isSelected ? "border border-white" : "")}>
         <Img className="w-full" alt={item.image} src={item.image} loading="lazy" />
       </div>
       <h6 className="text-h6 text-white">{item.name}</h6>
@@ -19,13 +20,8 @@ const Collection = ({ item }: { item: any }) => {
   );
 };
 
-const Price = ({ price }: { price: any }) => {
-  return (
-    <div className="flex items-center">
-      <h4 className="text-h5 text-white">{price}</h4>
-      <IconEthereum className="text-gray-light" />
-    </div>
-  );
+const UnSalableLabel = ({ children }: any) => {
+  return <span className="text-headline-01 uppercase text-gray-light">{children}</span>;
 };
 
 const CollectionTable = () => {
@@ -63,14 +59,14 @@ const CollectionTable = () => {
       text: "Price",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.price ?? 0} />,
+      render: (item) => (item.price === null ? <UnSalableLabel>No Listing</UnSalableLabel> : <EthereumPrice price={item.price} />),
     },
     {
       key: "lastSale",
       text: "Last Sale",
       width: "15%",
       align: "flex-end",
-      render: (item) => <Price price={item.lastSalePrice ?? 0} />,
+      render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>NO sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
     },
     {
       key: "owner",
