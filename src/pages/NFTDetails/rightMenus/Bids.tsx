@@ -20,6 +20,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const [bids, setBids] = useState([]);
   const [isOwner, setIsOwner] = React.useState(false);
+
   React.useEffect(() => {
     setIsOwner(user?.id === selectedNFT?.user?.id);
   }, [user]);
@@ -32,6 +33,10 @@ const Bids = ({ onBack }: { onBack: any }) => {
   useEffect(() => {
     fetchBids();
   }, [selectedNFT]);
+
+  function isBidOwner(bidUserId: any) {
+    return user?.id === bidUserId;
+  }
 
   return (
     <RightMenu title="Bids" onBack={onBack}>
@@ -62,7 +67,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
               <div className="flex items-center gap-x-[15px]">
                 <img src={bid.user?.image} className="self-start h-8 w-8 rounded-full" alt="profile-image" />
                 <div>
-                  {isOwner ? <span className="inline-block text-green">you</span> : bid.user.userName} on {dateFormat(bid.createdAt, "MMM DD, YYYY")}
+                  {isBidOwner(bid?.user?.id) ? <span className="inline-block text-green">you</span> : bid.user.userName} on {dateFormat(bid.createdAt, "MMM DD, YYYY")}
                 </div>
               </div>
               <div className="flex">
@@ -70,7 +75,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
                 <IconEthereum height="21px" className="text-gray-light" />
               </div>
             </div>
-            {isOwner && (
+            {isBidOwner(bid?.user?.id) && (
               <>
                 <div className="flex border-t border-gray"></div>
                 <Button
