@@ -91,9 +91,11 @@ export const clipboardCopy = (text: string) => {
 };
 
 export const formatPrice = (price: any) => {
-  if (price === null || price === "-") {
+  if (price === null || price === "-" || price === 0) {
     return price;
   }
+
+  if (price < 0.0001) return "<0.0001";
 
   return parseFloat(price)
     .toFixed(4)
