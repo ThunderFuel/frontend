@@ -7,7 +7,7 @@ import Tooltip from "../Tooltip";
 const MIN_LIMIT = 0.0001;
 const EthereumPrice = ({ price, priceClassName, className }: { price: any; priceClassName?: string; className?: string }) => {
   const lthMinLimit = price < MIN_LIMIT;
-  const priceText = lthMinLimit ? "<0.0001" : formatPrice(price);
+  const priceText = price === 0 ? 0 : lthMinLimit ? "<0.0001" : formatPrice(price);
 
   const Component = lthMinLimit ? Tooltip : React.Fragment;
 
