@@ -9,7 +9,7 @@ const EthereumPrice = ({ price, priceClassName, className, fullPrice }: { price:
   const lthMinLimit = price < MIN_LIMIT;
   const priceText = price === 0 ? 0 : lthMinLimit ? "<0.0001" : formatPrice(price);
 
-  const Component = lthMinLimit ? Tooltip : React.Fragment;
+  const Component = lthMinLimit && !fullPrice ? Tooltip : React.Fragment;
 
   return (
     <Component content={`${price} ETH`}>
