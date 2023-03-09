@@ -60,7 +60,7 @@ const FixedPrice = () => {
       <div className="flex justify-between bg-bg-light mb-[1px] p-5 last:rounded-b last:mb-0">
         <div className="flex flex-col">
           <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">PRICE</span>
-          <EthereumPrice priceClassName="text-h3 text-white" price={selectedNFT.price} />
+          <EthereumPrice priceClassName="text-h3 text-white" price={selectedNFT.price} fullPrice={true} />
         </div>
         {selectedNFT.lastSalePrice ? (
           <div className="flex h-fit items-center gap-x-[5px]">

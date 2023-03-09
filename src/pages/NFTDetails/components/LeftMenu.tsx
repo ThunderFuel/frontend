@@ -6,7 +6,7 @@ import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { addressFormat } from "utils";
+import { addressFormat, formatPrice } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -159,6 +159,9 @@ const LeftMenu = (props: any) => {
   const isOwner = () => {
     return isConnected ? user?.id === nft?.user?.id : false;
   };
+  const isBestOfferOwner = () => {
+    return isConnected ? (nft.bestOffer?.user?.walletAddress === user.walletAddress ? true : false) : false;
+  };
 
   return (
     <div className="flex flex-col border-r border-gray">
@@ -204,7 +207,11 @@ const LeftMenu = (props: any) => {
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {nft.bestOffer?.price} ETH by {nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)}
+                    {formatPrice(nft.bestOffer?.price)} ETH by{" "}
+                    <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>
+                      {isBestOfferOwner() ? "you" : nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)}
+                    </span>
+                    {/* {nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)} */}
                   </h6>
                 </div>
               </div>
