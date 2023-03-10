@@ -32,7 +32,7 @@ const Collection = () => {
             } else if (item.value === "2") {
               return collectionItem.onAuction;
             } else if (item.value === "3") {
-              return !collectionItem.salable;
+              return !collectionItem.salable && !collectionItem.onAuction;
             } else if (item.value === "4") {
               return collectionItem.hasOffer;
             } else if (item.value === "6") {
