@@ -36,6 +36,7 @@ export interface CollectionItemResponse {
   salable: boolean;
   lastSalePrice: number;
   user?: IUserResponse;
+  onAuction?: boolean;
 
   uid?: string;
   userId?: any;
