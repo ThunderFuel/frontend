@@ -7,7 +7,7 @@ import userService from "api/user/user.service";
 import { toggleWalletModal } from "store/walletSlice";
 import { useShareTwitter } from "hooks/useShareTwitter";
 
-const ImageBar = () => {
+const ImageBar = ({ toggleFullscreen }: any) => {
   const dispatch = useAppDispatch();
   const shareTwitter = useShareTwitter();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
@@ -50,7 +50,7 @@ const ImageBar = () => {
         dispatch(toggleCheckoutModal());
       },
     },
-    { icon: IconFullscreen, onClick: () => console.log("IconFullscreen") },
+    { icon: IconFullscreen, onClick: () => toggleFullscreen() },
     { icon: IconRefresh, onClick: () => console.log("IconRefresh") },
     {
       icon: IconShare,

@@ -83,3 +83,4 @@ export { ReactComponent as IconChevronRight } from "./icon-chevron-right.svg";
 export { ReactComponent as IconSortUp } from "./icon-sort-up.svg";
 export { ReactComponent as IconSortDown } from "./icon-sort-down.svg";
 export { ReactComponent as IconCircleCheck } from "./icon-circle-check.svg";
+export { ReactComponent as IconExitFullscreen } from "./icon-exit-fullscreen.svg";

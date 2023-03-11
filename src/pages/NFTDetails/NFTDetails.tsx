@@ -16,6 +16,7 @@ import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
 import "./nftdetails.css";
+import FullScreenImage from "components/FullScreenImage";
 
 const None = React.memo(() => {
   return <div />;
@@ -31,6 +32,7 @@ const NFTDetails = () => {
 
   const [isActive, setIsActive] = useState(false);
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
+  const [showFullscreenImage, setshowFullscreenImage] = useState(false);
 
   const fetchCollection = async () => {
     const response = await collectionsService.getCollection({ id: nftId });
@@ -93,24 +95,27 @@ const NFTDetails = () => {
   }, []);
 
   return (
-    <div className="relative flex justify-between container-nftdetails">
-      <div className="w-[42%]">
-        <LeftMenu nft={nft} fetchCollection={fetchCollection} />
-      </div>
-      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
-        <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
-          <div className="flex justify-center image-height py-10">
-            <div className="relative w-full image-width bg-gray rounded-md">
-              <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
+    <>
+      <div className="relative flex justify-between container-nftdetails">
+        <div className="w-[42%]">
+          <LeftMenu nft={nft} fetchCollection={fetchCollection} />
+        </div>
+        <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
+          <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
+            <div className="flex justify-center image-height py-10">
+              <div className="relative w-full image-width bg-gray rounded-md">
+                <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
+              </div>
+              <ImageBar toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
             </div>
-            <ImageBar />
           </div>
         </div>
+        <div className="w-[42%]" id="rightMenuWrapper">
+          <Component onBack={() => resetMenuState()} />
+        </div>
+        <FullScreenImage image={nft.image} onClose={() => setshowFullscreenImage(false)} show={showFullscreenImage} />
       </div>
-      <div className="w-[42%]" id="rightMenuWrapper">
-        <Component onBack={() => resetMenuState()} />
-      </div>
-    </div>
+    </>
   );
 };
 
