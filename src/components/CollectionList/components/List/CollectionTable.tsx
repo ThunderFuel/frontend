@@ -1,19 +1,20 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
 import Checkbox from "components/CheckBox";
-import { add, remove } from "store/cartSlice";
-import { useAppDispatch, useAppSelector } from "store";
+import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
+import { useAppDispatch } from "store";
 import { dateFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
 import EthereumPrice from "components/EthereumPrice";
 import clsx from "clsx";
+import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 p-3.5 pl-0">
-      <div className={clsx("min-w-[56px] max-w-[56px] rounded-sm overflow-hidden", item.isSelected ? "border border-white" : "")}>
-        <Img className="w-full" alt={item.image} src={item.image} loading="lazy" />
+      <div className={clsx("min-w-[56px] max-w-[56px] aspect-square rounded-sm overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}>
+        <Img className="h-full" alt={item.image} src={item.image} loading="lazy" />
       </div>
       <h6 className="text-h6 text-white">{item.name}</h6>
     </div>
@@ -26,14 +27,29 @@ const UnSalableLabel = ({ children }: any) => {
 
 const CollectionTable = () => {
   const dispatch = useAppDispatch();
-  const { collectionItems } = useCollectionListContext();
-  const { items } = useAppSelector((state) => state.cart);
+  const { collectionItems, setSweep, options } = useCollectionListContext();
 
-  const onSelect = (collection: any) => {
+  const onToggleCart = (collection: any) => {
     if (!collection.isSelected) {
-      if (items.find((item) => (item.uid = collection.uid)) === undefined) dispatch(add(collection));
+      dispatch(cartAdd(collection));
     } else {
-      dispatch(remove(collection.uid));
+      dispatch(cartRemove(collection.uid));
+    }
+  };
+  const onToggleBulkListing = (collection: any) => {
+    if (!collection.isSelected) {
+      dispatch(bulkListingAdd(collection));
+    } else {
+      dispatch(bulkListingRemove(collection.uid));
+    }
+  };
+  const onSelect = (collection: any) => {
+    setSweep(0);
+
+    if (options?.isProfile) {
+      onToggleBulkListing(collection);
+    } else {
+      onToggleCart(collection);
     }
   };
 
