@@ -1,6 +1,5 @@
 import React from "react";
-import { IconEthereum } from "icons";
-import { formatPrice } from "../../../utils";
+import EthereumPrice from "../../../components/EthereumPrice";
 
 interface ICollectionProperties {
   volume: number;
@@ -13,21 +12,19 @@ const CollectionProperties = ({ volume, floor, listedCount, ownerCount }: IColle
   const items = [
     {
       name: "total volume",
-      value: formatPrice(volume) ?? 0,
-      icon: <IconEthereum />,
+      component: <EthereumPrice priceClassName={"text-h4 text-white"} price={volume} />,
     },
     {
       name: "floor",
-      value: formatPrice(floor) ?? 0,
-      icon: <IconEthereum />,
+      component: <EthereumPrice priceClassName={"text-h4 text-white"} price={floor} />,
     },
     {
       name: "lısted",
-      value: listedCount ?? 0,
+      component: <h4 className="text-h4 text-white">{listedCount}</h4>,
     },
     {
       name: "owners",
-      value: ownerCount ?? 0,
+      component: <h4 className="text-h4 text-white">{ownerCount}</h4>,
     },
   ];
 
@@ -37,10 +34,7 @@ const CollectionProperties = ({ volume, floor, listedCount, ownerCount }: IColle
         {items.map((item) => (
           <li key={item.name} className="flex flex-col gap-2 px-4 pt-3 pb-1 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
             <div className="text-headline-01 uppercase whitespace-nowrap">{item.name}</div>
-            <div className="flex items-center">
-              <h4 className="text-h4 text-white">{item.value}</h4>
-              {item.icon ?? <></>}
-            </div>
+            {item.component}
           </li>
         ))}
       </ul>
