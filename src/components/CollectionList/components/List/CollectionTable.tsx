@@ -22,7 +22,7 @@ const Collection = ({ item }: { item: any }) => {
 };
 
 const UnSalableLabel = ({ children }: any) => {
-  return <span className="text-headline-01 uppercase text-gray-light">{children}</span>;
+  return <span className="text-headline-01 uppercase text-gray-light pr-[7px]">{children}</span>;
 };
 
 const CollectionTable = () => {
