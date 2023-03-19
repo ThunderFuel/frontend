@@ -37,6 +37,9 @@ export interface CollectionItemResponse {
   lastSalePrice: number;
   user?: IUserResponse;
   onAuction?: boolean;
+  startingPrice?: number;
+  highestBidPrice?: number;
+  onAuctionExpireTime?: string;
 
   uid?: string;
   userId?: any;

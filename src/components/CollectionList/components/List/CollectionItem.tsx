@@ -1,5 +1,5 @@
 import React from "react";
-import { IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
+import { IconAuction, IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "store";
 import { add as cartAdd, addBuyNow, remove as cartRemove, toggleCartModal } from "store/cartSlice";
@@ -17,6 +17,7 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
+import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -46,8 +47,28 @@ const ButtonPlaceBid = React.memo(({ className, onClick }: any) => {
     </button>
   );
 });
-
 ButtonPlaceBid.displayName = "ButtonPlaceaBid";
+
+const HighestBid = React.memo(({ highestBid }: any) => {
+  return (
+    <div className="flex w-full justify-between items-center">
+      <span className="uppercase text-headline-01 text-gray-light">highest bid</span>
+      <EthereumPrice className="text-white" price={highestBid ?? "-"} />
+    </div>
+  );
+});
+HighestBid.displayName = "HighestBid";
+
+const StartingPrice = React.memo(({ startingPrice }: any) => {
+  return (
+    <div className="flex w-full justify-between items-center">
+      <span className="uppercase text-headline-01 text-gray-light">starting price</span>
+      <EthereumPrice className="text-white" price={startingPrice ?? 0} />
+    </div>
+  );
+});
+StartingPrice.displayName = "StartingPrice";
+
 const CollectionItemCheckbox = (props: any) => {
   return (
     <label className="collection-item-checkbox" onClick={props.onClick}>
@@ -64,6 +85,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
   const { isConnected } = useAppSelector((state) => state.wallet);
   const { hasEnoughFunds } = useWallet();
   const isOwnCollectionItem = collection?.userId === user.id;
+  const { days, hours, minutes } = remainingTime(collection.onAuctionExpireTime);
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -154,23 +176,40 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
           <h6 className="text-h6 text-white text-overflow">{collection.name ?? "-"}</h6>
         </div>
         <div className="p-2.5 flex items-center">
-          {collection.salable ? <EthereumPrice className="text-white" price={collection.price ?? "-"} /> : <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>}
+          {collection.salable ? (
+            <EthereumPrice className="text-white" price={collection.price ?? "-"} />
+          ) : collection.onAuction ? (
+            collection.highestBidPrice ? (
+              <HighestBid highestBid={collection.highestBidPrice} />
+            ) : (
+              <StartingPrice startingPrice={collection.startingPrice} />
+            )
+          ) : (
+            <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>
+          )}
         </div>
-        <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
-          <IconMarketBasket />
-          <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
-        </div>
+        {collection.onAuction ? (
+          <div className="flex text-bodySm text-gray-light font-spaceGrotesk gap-[5px] p-2.5">
+            <IconAuction />
+            Auction ends in {days}:{hours}:{minutes}
+          </div>
+        ) : (
+          <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
+            <IconMarketBasket />
+            <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
+          </div>
+        )}
         {!options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {collection.salable ? (
-              !isOwnCollectionItem ? (
+            {!isOwnCollectionItem ? (
+              collection.salable ? (
                 <ButtonBuyNow onClick={onBuyNow} />
-              ) : null
-            ) : collection.onAuction ? (
-              <ButtonPlaceBid onClick={onPlaceBid} />
-            ) : (
-              <ButtonMakeOffer onClick={onMakeOffer} />
-            )}
+              ) : collection.onAuction ? (
+                <ButtonPlaceBid onClick={onPlaceBid} />
+              ) : (
+                <ButtonMakeOffer onClick={onMakeOffer} />
+              )
+            ) : null}
           </div>
         ) : null}
       </Link>
