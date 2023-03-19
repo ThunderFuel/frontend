@@ -1,5 +1,5 @@
 import React from "react";
-import { IconHand, IconMarketBasket, IconThunderSmall } from "icons";
+import { IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "store";
 import { add as cartAdd, addBuyNow, remove as cartRemove, toggleCartModal } from "store/cartSlice";
@@ -37,6 +37,17 @@ const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
   );
 });
 ButtonMakeOffer.displayName = "ButtonMakeOffer";
+
+const ButtonPlaceBid = React.memo(({ className, onClick }: any) => {
+  return (
+    <button className={clsx("button-buy-now", className)} onClick={onClick}>
+      <span className="uppercase">place a bid</span>
+      <IconBid />
+    </button>
+  );
+});
+
+ButtonPlaceBid.displayName = "ButtonPlaceaBid";
 const CollectionItemCheckbox = (props: any) => {
   return (
     <label className="collection-item-checkbox" onClick={props.onClick}>
@@ -113,6 +124,18 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
     e.preventDefault();
   };
 
+  const onPlaceBid = (e: any) => {
+    if (!isConnected) {
+      dispatch(toggleCartModal());
+      dispatch(toggleWalletModal());
+    } else {
+      dispatch(setRightMenu(RightMenuType.PlaceBid));
+      navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+    }
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
   return (
     <div>
       <Link
@@ -139,7 +162,15 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
         </div>
         {!options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {collection.salable ? !isOwnCollectionItem ? <ButtonBuyNow onClick={onBuyNow} /> : null : <ButtonMakeOffer onClick={onMakeOffer} />}
+            {collection.salable ? (
+              !isOwnCollectionItem ? (
+                <ButtonBuyNow onClick={onBuyNow} />
+              ) : null
+            ) : collection.onAuction ? (
+              <ButtonPlaceBid onClick={onPlaceBid} />
+            ) : (
+              <ButtonMakeOffer onClick={onMakeOffer} />
+            )}
           </div>
         ) : null}
       </Link>
