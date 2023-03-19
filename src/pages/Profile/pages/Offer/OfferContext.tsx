@@ -5,6 +5,7 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import { setCheckout } from "store/checkoutSlice";
 
 interface IOfferContext {
   userInfo?: any;
@@ -65,6 +66,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   const onUpdateOffer = (item: any) => {
     dispatch(setRightMenu(RightMenuType.UpdateOffer));
+    dispatch(setCheckout({ item: item }));
     navigate(PATHS.NFT_DETAILS, { nftId: item.tokenId });
   };
 
