@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { OfferStatus } from "api/offer/offer.type";
+import { useAppSelector } from "store";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
@@ -117,7 +118,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
 };
 const OfferList = () => {
   const { options } = useProfile();
-
+  const { user } = useAppSelector((state) => state.wallet);
   const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers } = useOfferContext();
   const isOffersMade = filterValue.offerType === 1;
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
@@ -134,9 +135,10 @@ const OfferList = () => {
         ) : null}
       </div>
       <div className="flex flex-col gap-3">
-        {getOffers.map((item: any, k: any) => (
-          <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />
-        ))}
+        {getOffers.map((item: any, k: any) => {
+          if (isOffersMade) return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />;
+          else return item.ownerId === user.id ? <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} /> : null;
+        })}
         {!getOffers.length && (
           <div className="flex-center">
             <NotFound>You didn’t make any offer yet.</NotFound>

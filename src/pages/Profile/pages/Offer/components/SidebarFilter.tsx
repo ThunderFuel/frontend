@@ -4,6 +4,7 @@ import Collapse from "components/Collapse";
 import { useOfferContext } from "../OfferContext";
 import Checkbox from "components/CheckBox";
 import Radio from "components/Radio";
+import { useAppSelector } from "store";
 
 const CheckboxList = ({ filterItem, value = [], onChange }: any) => {
   const onClick = (checkedValue: any) => {
@@ -51,6 +52,7 @@ const RadioList = ({ filterItem, value, onChange }: any) => {
 
 const SidebarFilter = () => {
   const { onChangeFilterValue, filterValue, offers } = useOfferContext();
+  const { user } = useAppSelector((state) => state.wallet);
 
   const filterItems: any = [
     {
@@ -101,7 +103,7 @@ const SidebarFilter = () => {
   };
 
   const getFilterItems = React.useMemo(() => {
-    filterItems[0].values[0].count = offers.filter((item: any) => !item.isOfferMade).length;
+    filterItems[0].values[0].count = offers.filter((item: any) => !item.isOfferMade && item.ownerId === user.id).length;
     filterItems[0].values[1].count = offers.filter((item: any) => item.isOfferMade).length;
 
     return filterItems;
