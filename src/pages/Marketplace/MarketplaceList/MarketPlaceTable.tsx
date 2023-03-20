@@ -22,7 +22,7 @@ const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) =
       {items.map((item, i) => (
         <li key={i} className="w-14 h-14 overflow-hidden">
           <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
-            <Img src={item.image} alt={i.toString()} defaultImage={AssetCollectionItem0} />
+            {item.image ? <Img src={item.image} alt={i.toString()} defaultImage={AssetCollectionItem0} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
           </Link>
         </li>
       ))}
