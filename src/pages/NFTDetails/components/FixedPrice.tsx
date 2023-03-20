@@ -4,7 +4,7 @@ import EthereumPrice from "components/EthereumPrice";
 import { IconAddCart, IconCart, IconListed, IconOffer, IconRemove, IconThunder } from "icons";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "store";
-import { add, remove } from "store/cartSlice";
+import { add, addBuyNowItem, remove } from "store/cartSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { remainingTime } from "./AuctionCountdown";
 import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
@@ -79,7 +79,7 @@ const FixedPrice = () => {
               onClick={() => {
                 if (user?.id) {
                   dispatch(setCheckout({ type: CheckoutType.None }));
-                  dispatch(add(selectedNFT));
+                  dispatch(addBuyNowItem(selectedNFT));
                   hasEnoughFunds().then((res) => {
                     dispatch(setIsInsufficientBalance(!res));
                     dispatch(toggleCheckoutModal());

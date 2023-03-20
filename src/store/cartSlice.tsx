@@ -23,6 +23,7 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState: {
     items: getItemsFromLocalStorage() as ISelectedCartItem[],
+    buyNowItem: {} as ISelectedCartItem,
     totalAmount: 0,
     itemCount: 0,
     show: false,
@@ -76,8 +77,11 @@ export const cartSlice = createSlice({
     toggleCartModal: (state) => {
       state.show = !state.show;
     },
-    addBuyNow: (state, action) => {
-      state.items = [action.payload];
+    addBuyNowItem: (state, action) => {
+      state.buyNowItem = action.payload;
+    },
+    removeBuyNowItem: (state) => {
+      state.buyNowItem = {} as ISelectedCartItem;
     },
   },
 });
@@ -89,6 +93,6 @@ export const getCartSelectedTokenOrderList = createSelector(
   (tokenOrderList: any[]) => tokenOrderList
 );
 
-export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd, addBuyNow } = cartSlice.actions;
+export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd, addBuyNowItem, removeBuyNowItem } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -2,7 +2,7 @@ import React from "react";
 import { IconAuction, IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "store";
-import { add as cartAdd, addBuyNow, remove as cartRemove, toggleCartModal } from "store/cartSlice";
+import { add as cartAdd, addBuyNowItem, remove as cartRemove, toggleCartModal } from "store/cartSlice";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 
 import "./CollectionItem.css";
@@ -122,7 +122,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
       dispatch(toggleCartModal());
       dispatch(toggleWalletModal());
     } else {
-      dispatch(addBuyNow(collection));
+      dispatch(addBuyNowItem(collection));
 
       try {
         const res = await hasEnoughFunds();

@@ -8,8 +8,9 @@ import NotFound from "components/NotFound";
 
 import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
-import { getCartTotal, removeAll } from "store/cartSlice";
+import { getCartTotal, removeAll, removeBuyNowItem } from "store/cartSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { isObjectEmpty } from "utils";
 
 enum Status {
   notStarted = "notStarted",
@@ -161,7 +162,7 @@ const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items:
 const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
-  const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
+  const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
   const { user } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
@@ -172,7 +173,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = async () => {
-    const tokenIds = items.map((item: any) => item.id);
+    const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
     try {
       const res = await nftdetailsService.tokenBuyNow(tokenIds, user.id);
       setApproved(true);
@@ -187,7 +188,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   React.useEffect(() => {
     if (!show && successCheckout) {
-      dispatch(removeAll());
+      if (!isObjectEmpty(buyNowItem)) dispatch(removeBuyNowItem());
+      else dispatch(removeAll());
     }
   }, [show, successCheckout]);
 
@@ -221,7 +223,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   return (
     <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        {items.length > 0 ? (
+        {!isObjectEmpty(buyNowItem) ? (
+          <CheckoutCartItems items={[buyNowItem]} itemCount={1} totalAmount={buyNowItem.price} approved={approved} />
+        ) : items.length > 0 ? (
           <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />
         ) : (
           <NotFound>Your cart is empty. Start adding NFTs to your cart to collect.</NotFound>

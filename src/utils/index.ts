@@ -101,3 +101,5 @@ export const formatPrice = (price: any) => {
     .toFixed(4)
     .replace(/\.?0+$/, "");
 };
+
+export const isObjectEmpty = (object: any) => (Object.keys(object).length === 0 ? true : false);

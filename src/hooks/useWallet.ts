@@ -5,11 +5,12 @@ import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import { useFuel } from "./useFuel";
 import userService from "api/user/user.service";
+import { isObjectEmpty } from "utils";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
-  const { totalAmount } = useAppSelector((state) => state.cart);
+  const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, isConnected, isBurner, burnerWallet } = useAppSelector((state) => state.wallet);
   const [fuel] = useFuel();
 
@@ -18,12 +19,12 @@ export const useWallet = () => {
       if (isBurner) {
         const balance = await burnerWallet.getBalance();
 
-        return balance.toNumber() / 1000000000 >= totalAmount;
+        return balance.toNumber() === 0 ? false : balance.toNumber() / 1000000000 >= (!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount);
       }
       const provider = await getProvider();
       const balance = await provider.getBalance(getWalletAddress === "" ? user.walletAddress : getWalletAddress, ZeroBytes32);
 
-      return balance.toNumber() / 1000000000 >= totalAmount;
+      return balance.toNumber() === 0 ? false : balance.toNumber() / 1000000000 >= (!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount);
     } catch {
       return false;
     }

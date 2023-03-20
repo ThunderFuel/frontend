@@ -4,13 +4,13 @@ import Modal from "components/Modal";
 import EthereumPrice from "components/EthereumPrice";
 import { IconWarning } from "icons";
 import { useWallet } from "hooks/useWallet";
-import { formatDisplayedNumber } from "utils";
+import { formatDisplayedNumber, isObjectEmpty, formatPrice } from "utils";
 import { useAppSelector } from "store";
 import { Button as BSButton } from "react-bootstrap";
 
 const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { getBalance } = useWallet();
-  const { totalAmount } = useAppSelector((state) => state.cart);
+  const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, address } = useAppSelector((state) => state.wallet);
 
   const [balance, setbalance] = useState<number>(0);
@@ -25,7 +25,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
     fetchBalance();
   }, [show]);
 
-  const neededAmount = (totalAmount - balance / 1000000000).toFixed(2);
+  const neededAmount = ((!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount) - balance / 1000000000).toFixed(2);
 
   const footer = (
     <div className="flex flex-col w-full h-full items-center">
@@ -52,7 +52,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
         </div>
         <div className="flex flex-col">
           <h5 className="text-h5 text-white">
-            You need <span className="text-h5 text-red">{neededAmount} ETH + gas fees.</span>
+            You need <span className="text-h5 text-red">{formatPrice(neededAmount)} ETH + gas fees.</span>
           </h5>
           <span className="body-medium text-gray-light">Transfer funds to your wallet or add funds with a card. It can take up to a minute for your balance to update.</span>
         </div>
