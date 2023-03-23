@@ -1,6 +1,7 @@
 import React from "react";
 import { PATHS } from "./paths";
 import Layout from "pages/Layout/Layout";
+import DropLayout from "pages/Layout/DropLayout";
 
 const Landing = React.lazy(() => import("pages/Landing"));
 const Login = React.lazy(() => import("pages/Login"));
@@ -21,6 +22,7 @@ const BulkListing = React.lazy(() => import("pages/BulkListing"));
 const Settings = React.lazy(() => import("pages/Settings"));
 const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile/Profile"));
 const Beta = React.lazy(() => import("pages/Beta"));
+const Drop = React.lazy(() => import("pages/Drop"));
 
 export interface RouteConfig {
   path: string;
@@ -165,5 +167,10 @@ export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.BETA,
     component: Beta,
+  },
+  {
+    path: PATHS.DROP,
+    component: Drop,
+    layout: DropLayout,
   },
 ];

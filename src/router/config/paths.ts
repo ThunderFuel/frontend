@@ -22,4 +22,5 @@ export enum PATHS {
   USER_OFFER = "/user/:userId/offer",
   USER_LIKED = "/user/:userId/liked",
   BETA = "/beta",
+  DROP = "/drop",
 }
