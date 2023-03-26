@@ -176,6 +176,33 @@ export const ROUTES: RouteConfig[] = [
     component: Beta,
   },
   {
+    path: PATHS.CREATE,
+    layout: Layout,
+    component: Create,
+    children: [
+      {
+        path: PATHS.CREATE_OVERVIEW,
+        component: CreateOverview,
+      },
+      {
+        path: PATHS.CREATE_COLLECTIONS,
+        component: CreateCollections,
+      },
+      {
+        path: PATHS.CREATE_COLLECTORS,
+        component: CreateCollectors,
+      },
+    ],
+  },
+  {
+    path: PATHS.COLLECTION_EDIT,
+    layout: Layout,
+    component: EditCollection,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
     path: PATHS.DROP,
     component: Drop,
     layout: DropLayout,
