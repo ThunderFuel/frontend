@@ -12,8 +12,14 @@ import Tab from "./components/Tab";
 import { AssetLoadingCollectionLogo } from "assets";
 import ReadMore from "components/ReadMore";
 import { useAppSelector } from "store";
+import UseNavigate from "hooks/useNavigate";
+import Button from "components/Button";
+import { IconPencil } from "icons";
+import { PATHS } from "router/config/paths";
 
 const Collection = () => {
+  const navigate = UseNavigate();
+
   const { user } = useAppSelector((state) => state.wallet);
   const { collectionId } = useParams();
   const [collection, setCollection] = useState<CollectionResponse>({} as any);
@@ -47,7 +53,13 @@ const Collection = () => {
               </div>
               <div className="flex flex-col w-full">
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
-                <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
+                <div className="flex gap-5">
+                  <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
+                  <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
+                    EDIT COLLECTION <IconPencil />
+                  </Button>
+                </div>
+
                 <ReadMore text={collection?.description ?? ""} characterLimit={150} />
               </div>
             </div>

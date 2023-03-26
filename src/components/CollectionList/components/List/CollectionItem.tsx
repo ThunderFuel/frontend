@@ -77,7 +77,7 @@ const CollectionItemCheckbox = (props: any) => {
     </label>
   );
 };
-const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
+const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
   const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -159,13 +159,17 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
   };
 
   return (
-    <div>
+    <div className={clsx(selectionDisabled ? "collection-item-create-page" : "")}>
       <Link
         to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: collection.id })}
-        className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
+        className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? collection.onAuction ? null : <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
+          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
+            collection.onAuction ? null : !selectionDisabled ? (
+              <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
+            ) : null
+          ) : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
             {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
           </div>
@@ -199,7 +203,7 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
             <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
           </div>
         )}
-        {!options?.isProfile ? (
+        {!selectionDisabled && !options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
             {!isOwnCollectionItem ? (
               collection.salable ? (

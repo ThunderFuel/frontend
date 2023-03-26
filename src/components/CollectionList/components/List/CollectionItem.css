@@ -27,3 +27,7 @@
 .button-buy-now {
   @apply button-animation w-full bg-white text-headline-02 flex-center py-1.5 gap-2;
 }
+
+.collection-item-create-page {
+  width: calc(25% - 9px);
+}
