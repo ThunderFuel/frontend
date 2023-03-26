@@ -84,3 +84,9 @@ export { ReactComponent as IconSortUp } from "./icon-sort-up.svg";
 export { ReactComponent as IconSortDown } from "./icon-sort-down.svg";
 export { ReactComponent as IconCircleCheck } from "./icon-circle-check.svg";
 export { ReactComponent as IconExitFullscreen } from "./icon-exit-fullscreen.svg";
+
+export { ReactComponent as IconCrop } from "./icon-crop.svg";
+export { ReactComponent as IconCalendar } from "./icon-calendar.svg";
+export { ReactComponent as IconPaperCode } from "./icon-paper-code.svg";
+export { ReactComponent as IconPencilRuler } from "./icon-pencil-ruler.svg";
+export { ReactComponent as IconPercent } from "./icon-percent.svg";

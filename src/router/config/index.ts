@@ -23,6 +23,7 @@ const Settings = React.lazy(() => import("pages/Settings"));
 const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile/Profile"));
 const Beta = React.lazy(() => import("pages/Beta"));
 const Drop = React.lazy(() => import("pages/Drop"));
+const DropEdit = React.lazy(() => import("pages/Drop/Edit/Edit"));
 
 export interface RouteConfig {
   path: string;
@@ -172,5 +173,13 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.DROP,
     component: Drop,
     layout: DropLayout,
+  },
+  {
+    path: PATHS.DROP_EDIT,
+    component: DropEdit,
+    layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
 ];

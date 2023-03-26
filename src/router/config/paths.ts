@@ -23,4 +23,5 @@ export enum PATHS {
   USER_LIKED = "/user/:userId/liked",
   BETA = "/beta",
   DROP = "/drop",
+  DROP_EDIT = "/drop-edit",
 }
