@@ -1,0 +1,17 @@
+.header {
+  @apply grid justify-between divide-x divide-gray;
+}
+
+.header li {
+  @apply p-6 flex items-center gap-4 relative;
+  @apply text-gray-light;
+}
+
+.header li.active {
+  @apply after:content-[""] after:absolute after:bottom-[-1px] after:left-0 after:w-full after:border-b after:border-b-white;
+  @apply text-white;
+}
+
+.header li.success {
+  @apply cursor-pointer;
+}

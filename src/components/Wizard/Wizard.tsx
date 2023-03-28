@@ -1,8 +1,9 @@
 import React from "react";
 import clsx from "clsx";
 import Button from "../Button";
-import { IconArrowRight } from "icons";
+import { IconArrowRight, IconCircleCheck } from "icons";
 import WizardProvider, { useWizard } from "./WizardContext";
+import "./Wizard.css";
 
 interface IStep {
   children: any;
@@ -14,13 +15,24 @@ const Step = ({ children }: IStep) => {
   return <div className="p-10">{children}</div>;
 };
 
-const Header = ({ headerProps, activeStepNumber }: any) => {
+const Header = () => {
+  const { activeStepNumber, setActiveStepNumber, headerProps } = useWizard();
+  const iconCheck = <IconCircleCheck className="text-green w-6 h-6" />;
+
+  const onClick = (index: number) => {
+    if (index < activeStepNumber) {
+      setActiveStepNumber(index);
+    }
+  };
+
   return (
-    <ul className={clsx("grid justify-between divide-x divide-gray", `grid-cols-${headerProps.length}`)}>
+    <ul className={clsx("header", `grid-cols-${headerProps.length}`)}>
       {headerProps.map((header: any, index: number) => {
+        const headerIcon = index < activeStepNumber ? iconCheck : header.icon;
+
         return (
-          <li key={index} className={clsx("p-6 flex gap-4", activeStepNumber === index ? "text-white" : "text-gray-light")}>
-            {header.icon}
+          <li key={index} className={clsx(activeStepNumber === index && "active", activeStepNumber > index && "success")} onClick={() => onClick(index)}>
+            {headerIcon}
             <div className={clsx("text-h6")}>{header.title}</div>
           </li>
         );
@@ -49,17 +61,15 @@ const Wizard = ({ children }: any) => {
     icon: child.props.icon,
   }));
   const getActiveStep = React.useMemo(() => {
-    console.log(activeStepNumber);
-
     return children[activeStepNumber];
   }, [activeStepNumber]);
 
   return (
-    <WizardProvider options={{ activeStepNumber, setActiveStepNumber }}>
+    <WizardProvider options={{ activeStepNumber, setActiveStepNumber, headerProps }}>
       <div className="flex flex-col flex-1">
         <div className="px-32 border-b border-gray">
           <div className="border-x border-gray">
-            <Header headerProps={headerProps} activeStepNumber={activeStepNumber} />
+            <Header />
           </div>
         </div>
         <div className="px-32 flex flex-1">
