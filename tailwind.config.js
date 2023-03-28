@@ -15,6 +15,7 @@ module.exports = {
       },
       gray: {
         light: "#838383",
+        dark: "#494650",
         DEFAULT: "#252525",
       },
       green: {

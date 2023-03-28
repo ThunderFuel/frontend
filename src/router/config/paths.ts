@@ -27,4 +27,6 @@ export enum PATHS {
   CREATE_OVERVIEW = "",
   CREATE_COLLECTIONS = "collections",
   CREATE_COLLECTORS = "collectors",
+  DROP = "/drop",
+  DROP_EDIT = "/drop-edit",
 }
