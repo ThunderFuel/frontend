@@ -2,7 +2,7 @@ import React from "react";
 import Wizard from "components/Wizard";
 import { IconCalendar, IconCrop, IconPaperCode, IconPencilRuler } from "icons";
 import Details from "./Steps/Details";
-import Schedule from "./Steps/Schedule";
+import Schedule from "./Steps/Schedule/Schedule";
 
 const Edit = () => {
   return (
