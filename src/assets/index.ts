@@ -63,3 +63,6 @@ export { default as AssetBetaBulkListing } from "./beta/bulk-listing.png";
 export { default as AssetBetaWallet } from "./beta/wallet.png";
 export { default as AssetBetaSweep } from "./beta/sweep.png";
 export { default as AssetDropImage } from "./drop/image.png";
+
+export { default as AssetCreateImage1 } from "./create/create-image1.png";
+export { default as AssetCollectionCoverImage1 } from "./create/mock-collection-cover-image1.png";

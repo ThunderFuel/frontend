@@ -24,6 +24,11 @@ const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile/Pr
 const Beta = React.lazy(() => import("pages/Beta"));
 const Drop = React.lazy(() => import("pages/Drop"));
 const DropEdit = React.lazy(() => import("pages/Drop/Edit/Edit"));
+const Create = React.lazy(() => import("pages/Create"));
+const CreateCollections = React.lazy(() => import("pages/Create/pages/Collections"));
+const CreateOverview = React.lazy(() => import("pages/Create/pages/Overview"));
+const CreateCollectors = React.lazy(() => import("pages/Create/pages/Collectors"));
+const EditCollection = React.lazy(() => import("pages/EditCollection"));
 
 export interface RouteConfig {
   path: string;
@@ -178,6 +183,33 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.DROP_EDIT,
     component: DropEdit,
     layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
+    path: PATHS.CREATE,
+    layout: Layout,
+    component: Create,
+    children: [
+      {
+        path: PATHS.CREATE_OVERVIEW,
+        component: CreateOverview,
+      },
+      {
+        path: PATHS.CREATE_COLLECTIONS,
+        component: CreateCollections,
+      },
+      {
+        path: PATHS.CREATE_COLLECTORS,
+        component: CreateCollectors,
+      },
+    ],
+  },
+  {
+    path: PATHS.COLLECTION_EDIT,
+    layout: Layout,
+    component: EditCollection,
     layoutProps: {
       hiddenFooter: true,
     },

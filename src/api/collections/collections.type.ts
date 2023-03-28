@@ -34,7 +34,7 @@ export interface CollectionItemResponse {
   price: number;
   rarity: number;
   salable: boolean;
-  lastSalePrice: number;
+  lastSalePrice?: number;
   user?: IUserResponse;
   onAuction?: boolean;
   startingPrice?: number;

@@ -25,6 +25,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
   const [hasStartingPrice, sethasStartingPrice] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [privateSaleAddress, setprivateSaleAddress] = useState("");
   const [price, setprice] = useState<any>(presetPrice ?? "");
   const [startingPrice, setstartingPrice] = useState<any>(0);
@@ -93,9 +94,9 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     </div>
   );
 
-  const handleToggle = (isOn: boolean) => {
-    if (isTimedAuction) sethasStartingPrice(isOn);
-    else setisPrivateSale(isOn);
+  const handleToggle = () => {
+    if (isTimedAuction) sethasStartingPrice((prev) => !prev);
+    else setisPrivateSale((prev) => !prev);
   };
 
   const calculateReceivingAmount = (price: any) => {
@@ -114,8 +115,6 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   React.useEffect(() => {
     fetchTopTrait();
   }, [selectedNFT]);
-
-  console.log(privateSaleAddress);
 
   return (
     <RightMenu title={updateListing ? "Update Listing" : "List Your NFT"} footer={footer} onBack={onBack}>
