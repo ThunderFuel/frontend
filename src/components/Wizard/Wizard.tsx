@@ -54,8 +54,8 @@ const Footer = () => {
   );
 };
 
-const Wizard = ({ children }: any) => {
-  const [activeStepNumber, setActiveStepNumber] = React.useState(0);
+const Wizard = ({ children, number = 0 }: any) => {
+  const [activeStepNumber, setActiveStepNumber] = React.useState(number);
   const headerProps = children.map((child: any) => ({
     title: child.props.title,
     icon: child.props.icon,

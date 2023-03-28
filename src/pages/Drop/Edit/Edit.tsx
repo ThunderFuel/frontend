@@ -1,16 +1,17 @@
 import React from "react";
 import Wizard from "components/Wizard";
 import { IconCalendar, IconCrop, IconPaperCode, IconPencilRuler } from "icons";
-import Details from "./Steps/Details/Details";
+import Details from "./Steps/Details";
+import Schedule from "./Steps/Schedule";
 
 const Edit = () => {
   return (
-    <Wizard>
+    <Wizard number={1}>
       <Wizard.Step title={"Drop Details"} icon={<IconCrop />}>
         <Details />
       </Wizard.Step>
       <Wizard.Step title={"Drop Schedule"} icon={<IconCalendar />}>
-        2
+        <Schedule />
       </Wizard.Step>
       <Wizard.Step title={"Metadata"} icon={<IconPaperCode />}>
         3
