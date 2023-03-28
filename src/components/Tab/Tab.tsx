@@ -8,7 +8,7 @@ export interface TabProps {
   className?: string;
   children: React.ReactNode;
   initTab: any;
-  onChange?: (tabId: number) => void;
+  onChange?: (tabId: any) => void;
 }
 
 export interface TabItemProps {

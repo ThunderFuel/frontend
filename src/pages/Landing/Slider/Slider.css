@@ -4,7 +4,18 @@
   min-height: 400px;
   position: relative;
 }
+
 .slider-container:before {
+  @apply block absolute top-0 left-0 w-full h-full;
+  background: linear-gradient(90deg, rgba(20, 20, 20, 1) 50%, rgba(0, 0, 0, 0) 100%);
+  content: "";
+}
+.slider-container-create {
+  @apply bg-landing-slider-bg bg-no-repeat bg-right-top lg:bg-right w-full py-14 text-white;
+  min-height: 240px;
+  position: relative;
+}
+.slider-container-create:before {
   @apply block absolute top-0 left-0 w-full h-full;
   background: linear-gradient(90deg, rgba(20, 20, 20, 1) 50%, rgba(0, 0, 0, 0) 100%);
   content: "";

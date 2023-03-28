@@ -5,6 +5,7 @@ export enum PATHS {
   COLLECTION = "/collection/:collectionId",
   COLLECTION_ITEMS = "",
   COLLECTION_ACTIVITY = "activity",
+  COLLECTION_EDIT = "/collection/:collectionId/edit",
   RANKINGS = "/rankings",
   NFT_DETAILS = "/nft-details/:nftId",
   PROFILE = "/profile",
@@ -22,4 +23,8 @@ export enum PATHS {
   USER_OFFER = "/user/:userId/offer",
   USER_LIKED = "/user/:userId/liked",
   BETA = "/beta",
+  CREATE = "/create",
+  CREATE_OVERVIEW = "",
+  CREATE_COLLECTIONS = "collections",
+  CREATE_COLLECTORS = "collectors",
 }

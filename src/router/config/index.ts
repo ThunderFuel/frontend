@@ -21,6 +21,11 @@ const BulkListing = React.lazy(() => import("pages/BulkListing"));
 const Settings = React.lazy(() => import("pages/Settings"));
 const SettingsProfile = React.lazy(() => import("pages/Settings/pages/Profile/Profile"));
 const Beta = React.lazy(() => import("pages/Beta"));
+const Create = React.lazy(() => import("pages/Create"));
+const CreateCollections = React.lazy(() => import("pages/Create/pages/Collections"));
+const CreateOverview = React.lazy(() => import("pages/Create/pages/Overview"));
+const CreateCollectors = React.lazy(() => import("pages/Create/pages/Collectors"));
+const EditCollection = React.lazy(() => import("pages/EditCollection"));
 
 export interface RouteConfig {
   path: string;
@@ -165,5 +170,32 @@ export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.BETA,
     component: Beta,
+  },
+  {
+    path: PATHS.CREATE,
+    layout: Layout,
+    component: Create,
+    children: [
+      {
+        path: PATHS.CREATE_OVERVIEW,
+        component: CreateOverview,
+      },
+      {
+        path: PATHS.CREATE_COLLECTIONS,
+        component: CreateCollections,
+      },
+      {
+        path: PATHS.CREATE_COLLECTORS,
+        component: CreateCollectors,
+      },
+    ],
+  },
+  {
+    path: PATHS.COLLECTION_EDIT,
+    layout: Layout,
+    component: EditCollection,
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
 ];
