@@ -25,9 +25,9 @@ export enum PATHS {
   BETA = "/beta",
   DROP = "/drop",
   DROP_EDIT = "/drop-edit",
-  UPLOAD_ARTWORK = "/upload-artwork",
   CREATE = "/create",
   CREATE_OVERVIEW = "",
   CREATE_COLLECTIONS = "collections",
   CREATE_COLLECTORS = "collectors",
+  UPLOAD_ARTWORK = "/upload-artwork",
 }
