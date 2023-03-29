@@ -203,6 +203,14 @@ export const ROUTES: RouteConfig[] = [
     },
   },
   {
+    path: PATHS.UPLOAD_ARTWORK,
+    layout: Layout,
+    component: UploadArtwork,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
     path: PATHS.DROP,
     component: Drop,
     layout: DropLayout,
