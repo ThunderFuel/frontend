@@ -57,7 +57,7 @@ const Overview = () => {
             <Button className="btn-secondary btn-sm" onClick={() => navigate(PATHS.PROFILE, {})}>
               SEE ALL <IconArrowRight />
             </Button>
-            <Button className="btn-sm">
+            <Button className="btn-sm" onClick={() => navigate(PATHS.UPLOAD_ARTWORK, {})}>
               MINT AN NFT
               <IconToken />
             </Button>

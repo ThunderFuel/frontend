@@ -29,4 +29,5 @@ export enum PATHS {
   CREATE_COLLECTORS = "collectors",
   DROP = "/drop",
   DROP_EDIT = "/drop-edit",
+  UPLOAD_ARTWORK = "/upload-artwork",
 }

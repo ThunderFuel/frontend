@@ -90,3 +90,4 @@ export { ReactComponent as IconCalendar } from "./icon-calendar.svg";
 export { ReactComponent as IconPaperCode } from "./icon-paper-code.svg";
 export { ReactComponent as IconPencilRuler } from "./icon-pencil-ruler.svg";
 export { ReactComponent as IconPercent } from "./icon-percent.svg";
+export { ReactComponent as IconUpload } from "./icon-upload.svg";

@@ -29,6 +29,7 @@ const CreateCollections = React.lazy(() => import("pages/Create/pages/Collection
 const CreateOverview = React.lazy(() => import("pages/Create/pages/Overview"));
 const CreateCollectors = React.lazy(() => import("pages/Create/pages/Collectors"));
 const EditCollection = React.lazy(() => import("pages/EditCollection"));
+const UploadArtwork = React.lazy(() => import("pages/UploadArtwork"));
 
 export interface RouteConfig {
   path: string;
@@ -210,6 +211,14 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.COLLECTION_EDIT,
     layout: Layout,
     component: EditCollection,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
+    path: PATHS.UPLOAD_ARTWORK,
+    layout: Layout,
+    component: UploadArtwork,
     layoutProps: {
       hiddenFooter: true,
     },
