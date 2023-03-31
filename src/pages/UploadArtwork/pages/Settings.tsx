@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputLabel from "components/InputLabel";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import { EventWizardSubmit, useWizard } from "components/Wizard/WizardContext";
 import { IconWeblink } from "icons";
-import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import LabelWithToggle from "components/LabelWithToggle";
+import Input from "components/Input";
 
 const schema = yup
   .object({
@@ -16,7 +19,7 @@ const schema = yup
   })
   .required();
 
-const Artwork = () => {
+const Settings = () => {
   const { onNextStep } = useWizard();
   const {
     watch,
@@ -41,22 +44,23 @@ const Artwork = () => {
     return () => window.removeEventListener(EventWizardSubmit, onHandleSubmit);
   });
 
+  const InputFieldUnlockable = <Input placeHolder="Digital key, redeem code, link to a file, etc." />;
+
   return (
     <div className="flex flex-col gap-10 text-white max-w-[500px]">
       <div className="flex flex-col gap-4">
-        <h3 className="text-h3">Artwork</h3>
+        <h3 className="text-h3">Additional Settings</h3>
         <div className="body-medium text-gray-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
       </div>
       <div className="flex flex-col gap-6">
-        <Label helperText="PNG, GIF, WEBP, MP4 or MP3. Max 100mb.">Upload Your Artwork*</Label>
-        <UploadFile {...register("artworkUpload")} error={errors.artworkUpload?.message} />
-        {watch("artworkUpload") ? watch("artworkUpload")[0].name : "NULL"}
-        <InputLabel label={"Artwork Title*"} {...register("artworkTitle")} error={errors.artworkTitle?.message} />
-        <InputLabel label={"Description"} placeholder="Tell me your artwork!" containerClassName="lg:h-[140px]" {...register("description")} error={errors.description?.message} />
-        <InputLabel label={"External URL"} icon={<IconWeblink className="text-gray-light" />} />
+        <LabelWithToggle inputField={InputFieldUnlockable} helperText="Add content that can only be revealed by the owner of the item.">
+          Add Unlockable Content
+        </LabelWithToggle>
+        <LabelWithToggle helperText="Textual traits that show up as rectangles">Add Properties</LabelWithToggle>
+        <LabelWithToggle helperText="Numerical traits that show as a progress bar">Add Level</LabelWithToggle>
       </div>
     </div>
   );
 };
 
-export default Artwork;
+export default Settings;
