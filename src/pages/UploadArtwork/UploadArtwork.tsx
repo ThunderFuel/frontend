@@ -2,12 +2,13 @@ import React from "react";
 import Wizard from "components/Wizard";
 import { IconSettings, IconToken, IconUpload } from "icons";
 import Settings from "./pages/Settings";
+import Artwork from "./pages/Artwork";
 
 const UploadArtwork = () => {
   return (
     <Wizard>
       <Wizard.Step title={"Artwork"} icon={<IconUpload />}>
-        <Settings />
+        <Artwork />
       </Wizard.Step>
       <Wizard.Step title={"Additional Settings"} icon={<IconSettings />}>
         <Settings />
