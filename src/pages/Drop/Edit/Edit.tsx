@@ -3,6 +3,7 @@ import Wizard from "components/Wizard";
 import { IconCalendar, IconCrop, IconPaperCode, IconPencilRuler } from "icons";
 import Details from "./Steps/Details";
 import Schedule from "./Steps/Schedule/Schedule";
+import Metadata from "./Steps/Metadata";
 
 const Edit = () => {
   return (
@@ -14,7 +15,7 @@ const Edit = () => {
         <Schedule />
       </Wizard.Step>
       <Wizard.Step title={"Metadata"} icon={<IconPaperCode />}>
-        3
+        <Metadata />
       </Wizard.Step>
       <Wizard.Step title={"Drop Page"} icon={<IconPencilRuler />}>
         4
