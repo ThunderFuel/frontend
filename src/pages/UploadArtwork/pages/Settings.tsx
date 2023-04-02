@@ -6,7 +6,7 @@ import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import { EventWizardSubmit, useWizard } from "components/Wizard/WizardContext";
 import { IconTrash, IconWeblink } from "icons";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import * as yup from "yup";
 import LabelWithToggle from "components/LabelWithToggle";
 import Input from "components/Input";
@@ -23,12 +23,30 @@ const schema = yup
 const Settings = () => {
   const { onNextStep } = useWizard();
   const {
-    watch,
+    control,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+  });
+
+  const {
+    fields: propertyFields,
+    append: appendProperty,
+    remove: removeProperty,
+  } = useFieldArray({
+    control,
+    name: "properties",
+  });
+
+  const {
+    fields: levelFields,
+    append: appendLevel,
+    remove: removeLevel,
+  } = useFieldArray({
+    control,
+    name: "levels",
   });
 
   const onValid = (data: any) => {
@@ -46,16 +64,72 @@ const Settings = () => {
   });
 
   const InputFieldUnlockable = <Input {...register("unlockable")} placeHolder="Digital key, redeem code, link to a file, etc." />;
+
   const InputFieldProperties = (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
-        <Input {...register("propertiesName")} placeHolder="Name" />
-        <Input {...register("propertiesType")} placeHolder="Type" />
-        <div className="flex p-3 border border-gray rounded cursor-pointer">
-          <IconTrash className="text-gray-light" />
+    <div>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
+          {propertyFields.map((field, index) => (
+            <div className="flex gap-2" key={field.id}>
+              <Input placeHolder="Name" />
+              <Input placeHolder="Type" />
+              <div
+                className="flex p-3 border border-gray rounded cursor-pointer"
+                onClick={() => {
+                  removeProperty(index);
+                }}
+              >
+                <IconTrash className="text-gray-light" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <div className="w-fit cursor-pointer bg-gray rounded p-2.5">Add More</div>
+      <div className="mt-4">
+        <span
+          className="body-medium text-white rounded-md p-2.5 bg-gray cursor-pointer"
+          onClick={() => {
+            appendProperty({ name: "", type: "" });
+          }}
+        >
+          Add More
+        </span>
+      </div>
+    </div>
+  );
+
+  const InputFieldLevels = (
+    <div>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
+          {levelFields.map((field, index) => (
+            <div className="flex items-center gap-2" key={field.id}>
+              <Input placeHolder="Type" />
+              <Input defaultValue="1" />
+              <span className="text-headlineMd text-gray-light font-bigShoulderDisplay">OF</span>
+              <Input defaultValue="100" />
+              <div
+                className="flex p-3 border border-gray rounded cursor-pointer"
+                onClick={() => {
+                  removeLevel(index);
+                }}
+              >
+                <IconTrash className="text-gray-light" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4">
+        <span
+          className="body-medium text-white rounded-md p-2.5 bg-gray cursor-pointer"
+          onClick={() => {
+            appendLevel({ name: "", type: "" });
+          }}
+        >
+          Add More
+        </span>
+      </div>
     </div>
   );
 
@@ -72,7 +146,7 @@ const Settings = () => {
         <LabelWithToggle inputField={InputFieldProperties} helperText="Textual traits that show up as rectangles.">
           Add Properties
         </LabelWithToggle>
-        <LabelWithToggle inputField={InputFieldUnlockable} helperText="Numerical traits that show as a progress bar.">
+        <LabelWithToggle inputField={InputFieldLevels} helperText="Numerical traits that show as a progress bar.">
           Add Level
         </LabelWithToggle>
       </div>
@@ -81,37 +155,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
-// const inputFields = useRef([{ value: "" }]);
-
-// const handleAddFields = () => {
-//   inputFields.current.push({ value: "" });
-// };
-
-// const handleSubmit = (event) => {
-//   event.preventDefault();
-//   console.log("Input fields:", inputFields.current);
-// };
-
-// return (
-//   <div>
-//     <form onSubmit={handleSubmit}>
-//       {inputFields.current.map((inputField, index) => (
-//         <div key={index}>
-//           <input
-//             type="text"
-//             placeholder="Enter a value"
-//             value={inputField.value}
-//             onChange={(event) => {
-//               inputFields.current[index].value = event.target.value;
-//             }}
-//           />
-//         </div>
-//       ))}
-//       <button type="button" onClick={handleAddFields}>
-//         Add Field
-//       </button>
-//       <button type="submit">Submit</button>
-//     </form>
-//   </div>
-// );

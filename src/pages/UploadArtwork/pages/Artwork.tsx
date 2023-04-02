@@ -19,7 +19,6 @@ const schema = yup
 const Artwork = () => {
   const { onNextStep } = useWizard();
   const {
-    watch,
     register,
     handleSubmit,
     formState: { errors },
@@ -50,7 +49,6 @@ const Artwork = () => {
       <div className="flex flex-col gap-6">
         <Label helperText="PNG, GIF, WEBP, MP4 or MP3. Max 100mb.">Upload Your Artwork*</Label>
         <UploadFile {...register("artworkUpload")} error={errors.artworkUpload?.message} />
-        {watch("artworkUpload") ? watch("artworkUpload")[0].name : "NULL"}
         <InputLabel label={"Artwork Title*"} {...register("artworkTitle")} error={errors.artworkTitle?.message} />
         <InputLabel label={"Description"} placeholder="Tell me your artwork!" containerClassName="lg:h-[140px]" {...register("description")} error={errors.description?.message} />
         <InputLabel label={"External URL"} icon={<IconWeblink className="text-gray-light" />} />
