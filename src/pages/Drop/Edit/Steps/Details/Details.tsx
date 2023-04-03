@@ -6,6 +6,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { EventWizardSubmit, useWizard } from "components/Wizard/WizardContext";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import PageTitle from "../components/PageTitle";
 
 const schema = yup
   .object({
@@ -45,10 +46,7 @@ const Details = () => {
 
   return (
     <div className="flex flex-col gap-10 text-white max-w-[500px]">
-      <div className="flex flex-col gap-4">
-        <h3 className="text-h3">Drop Details</h3>
-        <div className="body-medium text-gray-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
-      </div>
+      <PageTitle title="Drop Details" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
       <div className="flex flex-col gap-6">
         <InputLabel label={"Collection Name*"} {...register("collectionName")} error={errors.collectionName?.message} />
         <InputLabel label={"Token Symbol*"} helperText={"A shorthand abbreviation for your collection name. Examples: BAYC, PUNKS"} {...register("tokenSymbol")} error={errors.tokenSymbol?.message} />

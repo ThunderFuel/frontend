@@ -7,7 +7,7 @@ import Metadata from "./Steps/Metadata";
 
 const Edit = () => {
   return (
-    <Wizard number={1}>
+    <Wizard number={2}>
       <Wizard.Step title={"Drop Details"} icon={<IconCrop />}>
         <Details />
       </Wizard.Step>
