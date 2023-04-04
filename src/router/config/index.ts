@@ -29,6 +29,7 @@ const CreateCollections = React.lazy(() => import("pages/Create/pages/Collection
 const CreateOverview = React.lazy(() => import("pages/Create/pages/Overview"));
 const CreateCollectors = React.lazy(() => import("pages/Create/pages/Collectors"));
 const EditCollection = React.lazy(() => import("pages/EditCollection"));
+const UploadArtwork = React.lazy(() => import("pages/UploadArtwork"));
 
 export interface RouteConfig {
   path: string;
@@ -175,6 +176,41 @@ export const ROUTES: RouteConfig[] = [
     component: Beta,
   },
   {
+    path: PATHS.CREATE,
+    layout: Layout,
+    component: Create,
+    children: [
+      {
+        path: PATHS.CREATE_OVERVIEW,
+        component: CreateOverview,
+      },
+      {
+        path: PATHS.CREATE_COLLECTIONS,
+        component: CreateCollections,
+      },
+      {
+        path: PATHS.CREATE_COLLECTORS,
+        component: CreateCollectors,
+      },
+    ],
+  },
+  {
+    path: PATHS.COLLECTION_EDIT,
+    layout: Layout,
+    component: EditCollection,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
+    path: PATHS.UPLOAD_ARTWORK,
+    layout: Layout,
+    component: UploadArtwork,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
     path: PATHS.DROP,
     component: Drop,
     layout: DropLayout,
@@ -210,6 +246,14 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.COLLECTION_EDIT,
     layout: Layout,
     component: EditCollection,
+    layoutProps: {
+      hiddenFooter: true,
+    },
+  },
+  {
+    path: PATHS.UPLOAD_ARTWORK,
+    layout: Layout,
+    component: UploadArtwork,
     layoutProps: {
       hiddenFooter: true,
     },

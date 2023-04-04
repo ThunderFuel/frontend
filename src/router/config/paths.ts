@@ -23,10 +23,11 @@ export enum PATHS {
   USER_OFFER = "/user/:userId/offer",
   USER_LIKED = "/user/:userId/liked",
   BETA = "/beta",
+  DROP = "/drop",
+  DROP_EDIT = "/drop-edit",
   CREATE = "/create",
   CREATE_OVERVIEW = "",
   CREATE_COLLECTIONS = "collections",
   CREATE_COLLECTORS = "collectors",
-  DROP = "/drop",
-  DROP_EDIT = "/drop-edit",
+  UPLOAD_ARTWORK = "/upload-artwork",
 }
