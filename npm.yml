@@ -4,7 +4,8 @@ pool:
 
 steps:
 - task: Npm@0
-  inputs: '9.5.0'
+  inputs: 
+    version: '9.5.0'
   displayName: 'npm install'
 
 - task: Npm@1
