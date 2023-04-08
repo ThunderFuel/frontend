@@ -1,8 +1,9 @@
 import React from "react";
 import PageTitle from "./components/PageTitle";
-import InputLabel from "../../../../components/InputLabel";
-import Label from "../../../../components/Label";
-import ToggleButton from "../../../../components/ToggleButton";
+import InputLabel from "components/InputLabel";
+import Label from "components/Label";
+import UploadFile from "components/UploadFile";
+import InputSwitch from "../../../../components/InputSwitch";
 
 const Metadata = () => {
   return (
@@ -13,8 +14,9 @@ const Metadata = () => {
         <div className="flex flex-col gap-2">
           <div className="flex items-start justify-between">
             <Label helperText="Upload the image you want to have be the pre-reveal placeholder.">Set Pre-reveal Image</Label>
-            <ToggleButton onToggle={console.log} />
+            <InputSwitch onChange={console.log} />
           </div>
+          <UploadFile />
         </div>
       </div>
     </div>
