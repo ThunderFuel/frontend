@@ -3,7 +3,7 @@ import PageTitle from "./components/PageTitle";
 import InputLabel from "components/InputLabel";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
-import InputSwitch from "../../../../components/InputSwitch";
+import InputSwitch from "components/InputSwitch";
 
 const Metadata = () => {
   return (

@@ -4,10 +4,11 @@ import { IconCalendar, IconCrop, IconPaperCode, IconPencilRuler } from "icons";
 import Details from "./Steps/Details";
 import Schedule from "./Steps/Schedule/Schedule";
 import Metadata from "./Steps/Metadata";
+import DropPage from "./Steps/DropPage";
 
 const Edit = () => {
   return (
-    <Wizard number={2}>
+    <Wizard number={3}>
       <Wizard.Step title={"Drop Details"} icon={<IconCrop />}>
         <Details />
       </Wizard.Step>
@@ -18,7 +19,7 @@ const Edit = () => {
         <Metadata />
       </Wizard.Step>
       <Wizard.Step title={"Drop Page"} icon={<IconPencilRuler />}>
-        4
+        <DropPage />
       </Wizard.Step>
     </Wizard>
   );
