@@ -13,4 +13,4 @@ yup.addMethod(yup.mixed, "fileRequired", function fileRequired() {
   });
 });
 
-export default Object;
+export default yup;
