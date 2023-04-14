@@ -1,10 +1,11 @@
 import React from "react";
 import Button from "components/Button";
-import { IconPencil } from "icons";
+import { IconCirclePlusWhite, IconPencil } from "icons";
+import Textarea from "components/Textarea";
 
 const Container = () => {
   return (
-    <div className="flex flex-col rounded-5 border border-gray bg-gray p-8 gap-8">
+    <div className="flex flex-col rounded-lg border border-gray bg-gray p-8 gap-8">
       <div className="flex items-center justify-between">
         <div className="flex-center gap-4">
           <h2 className="text-white text-h2">Chungos</h2>
@@ -13,7 +14,21 @@ const Container = () => {
           </Button>
         </div>
       </div>
-      <div>asdasd</div>
+      <div className="px-5">
+        <h3 className="text-h3 text-white">About</h3>
+        <Textarea className="min-h-[400px]" containerClassName="mt-5 !border-white !border-opacity-10 max-w-[680px]">
+          Welcome to the Chungos collection by Chungos on Thunder Marketplace
+        </Textarea>
+      </div>
+      <div className="h-32 flex-center border border-dashed border-white text-white bg-white bg-opacity-10 rounded-lg">
+        <div className="flex-center gap-2">
+          <div className="text-headline-02">ADD NEW BLOCK</div>
+          <IconCirclePlusWhite />
+        </div>
+      </div>
+      <div>
+        <ul></ul>
+      </div>
     </div>
   );
 };

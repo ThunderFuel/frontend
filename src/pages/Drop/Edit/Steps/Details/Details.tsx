@@ -5,13 +5,14 @@ import InputGroup from "./components/InputGroup";
 import { useFieldArray, useForm } from "react-hook-form";
 import { EventWizardSubmit, useWizard } from "components/Wizard/WizardContext";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import PageTitle from "../components/PageTitle";
+import yup from "schema";
 
 const schema = yup
   .object({
     collectionName: yup.string().required(),
     tokenSymbol: yup.string().required(),
+    abc: yup.mixed1().required().fileRequired(),
   })
   .required();
 
