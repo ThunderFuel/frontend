@@ -1,7 +1,7 @@
 FROM node:16-alpine as build
 WORKDIR /app
 COPY . .
-RUN npm ci --legacy-peer-deps
+RUN npm i --legacy-peer-deps
 RUN npm run build:prod
 
 FROM nginx:1.15
