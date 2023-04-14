@@ -34,10 +34,14 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
               <div>{item.traitType} </div>
               <div className="text-white">{item.value}</div>
               <div>
-                <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price ?? "-"} />
+                {traitfloors.find((trait: any) => trait.traitType === item.traitType) ? (
+                  <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price} />
+                ) : (
+                  <span className="text-headline-01">NO LISTINGS</span>
+                )}
               </div>
             </div>
-            {isOwner() ? (
+            {isOwner() && getTraitFloor(item) !== "-" ? (
               <div
                 className={`overflow-hidden ${
                   i === metadata.length - 1 ? "rounded-b-[4px]" : ""
@@ -47,7 +51,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                   className="btn-secondary no-bg text-headline-02 border-none rounded-none py-3"
                   onClick={() => {
                     dispatch(setPresetPrice(getTraitFloor(item) === "-" ? "" : getTraitFloor(item)));
-                    dispatch(setRightMenu(RightMenuType.ListNFT));
+                    dispatch(setRightMenu(selectedNFT.salable ? RightMenuType.UpdateListing : RightMenuType.ListNFT));
                   }}
                 >
                   LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />

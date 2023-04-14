@@ -73,10 +73,10 @@ const SidebarFilter = ({ className }: { className?: string }) => {
         dynamicComponent: DynamicComponent,
         filterData: filter.filterData,
         order: name.toLowerCase() === "status" ? 1 : 0,
-        isOpen: name.toLowerCase() === "status",
+        isOpen: ["status", "collections"].includes(name.toLowerCase()),
       };
 
-      if (["price", "status", "raking"].includes(name.toLowerCase())) {
+      if (["price", "status", "raking", "collections"].includes(name.toLowerCase())) {
         tmpFilter.push(field);
       } else {
         tmpAttributeFilter.push(field);
@@ -89,8 +89,8 @@ const SidebarFilter = ({ className }: { className?: string }) => {
   return (
     <div className="flex justify-end">
       <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : className ? className : "w-72")}>
-        <div className="sticky overflow-hidden h-fit" style={{ top: "calc(var(--headerHeight) + 68px)" }}>
-          <div className={clsx("flex pr-5 py-5 relative overflow-hidden overflow-y-auto sidebar-h-screen", "w-72", className)}>
+        <div className={`sticky h-fit ${show ? "overflow-hidden" : ""}`} style={{ top: "calc(var(--headerHeight) + 68px)" }}>
+          <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", "w-72", className, !show ? "overflow-hidden overflow-y-auto" : "")}>
             <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
               <div className="icon-btn bg-white fill-gray">
                 <IconFilter />

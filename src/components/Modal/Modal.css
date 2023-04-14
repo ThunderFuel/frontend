@@ -1,6 +1,7 @@
 .modalbase {
   @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)] z-50;
 }
+
 .modalbase .modal {
   @apply flex flex-col w-[335px] bg-bg rounded-lg;
 }
@@ -8,6 +9,7 @@
 .modalbase .modal .mhead {
   @apply container flex justify-between items-center p-5 border-b border-gray;
 }
+
 .modalbase .modal .mhead .mtitle {
   @apply text-head5 font-bigShoulderDisplay text-white;
 }
@@ -15,12 +17,15 @@
 .cart {
   @apply fixed flex w-screen h-screen justify-end items-start z-30 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
+
 .cart .modal {
   @apply flex flex-col h-full w-[480px] bg-bg rounded-none;
 }
+
 .cart .modal .mhead {
   @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
 }
+
 .cart .modal .mhead .mtitle {
   @apply text-head5 font-spaceGrotesk text-white;
 }
@@ -28,12 +33,16 @@
 .checkout {
   @apply fixed flex w-screen h-screen items-center justify-center z-30 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
+
 .checkout .modal {
-  @apply flex flex-col h-fit max-h-[100%] w-[480px] bg-bg rounded-lg;
+  @apply flex flex-col h-fit w-[480px] bg-bg rounded-lg;
+  max-height: 90%;
 }
+
 .checkout .modal .mhead {
   @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
 }
+
 .checkout .modal .mhead .mtitle {
   @apply text-head5 font-spaceGrotesk text-white;
 }
@@ -41,12 +50,32 @@
 .wallet {
   @apply fixed flex w-screen h-screen justify-end items-start z-30 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
+
 .wallet .modal {
   @apply flex flex-col h-full w-[400px] bg-bg rounded-none;
 }
+
 .wallet .modal .mhead {
   @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
 }
+
 .wallet .modal .mhead .mtitle {
+  @apply text-head5 font-spaceGrotesk text-white;
+}
+
+.closedBeta {
+  @apply fixed flex w-screen h-screen items-center justify-center z-50 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+}
+
+.closedBeta .modal {
+  @apply flex flex-col h-full w-1/3 bg-bg rounded-[10px];
+  max-height: 90%;
+}
+
+.closedBeta .modal .mhead {
+  @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
+}
+
+.closedBeta .modal .mhead .mtitle {
   @apply text-head5 font-spaceGrotesk text-white;
 }

@@ -15,6 +15,7 @@ export interface CartItemProps {
   titleSlot?: any;
   uid?: any;
   isRemovable?: boolean;
+  onClick?: any;
 }
 
 const CartItemStatus = ({ text }: { text: string }) => {
@@ -22,7 +23,7 @@ const CartItemStatus = ({ text }: { text: string }) => {
 
   return (
     <div className="flex border justify-center items-center border-gray rounded-[5px] w-fit p-1 ">
-      {hasError ? <IconWarning className="w-4 h-4 fill-red" /> : <IconInfo className="w-4 h-4 fill-orange" />}
+      {hasError ? <IconWarning className="w-4 h-4 fill-red" /> : <IconInfo className="w-4 h-4 text-orange" />}
       <span className={clsx("body-medium ml-1", hasError ? "text-red" : "text-orange")}>{text}</span>
     </div>
   );
@@ -56,15 +57,14 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
     </div>
   );
 };
-const CartItem = ({ text, name, image, price, id, className, titleSlot, isRemovable }: CartItemProps) => {
+const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemovable, onClick }: CartItemProps) => {
   const dispatch = useAppDispatch();
   const onRemove = () => {
-    dispatch(remove(id));
+    dispatch(remove(uid));
   };
-  //TODO
-  const isUnavailable = id === 9;
-  const isPriceChange = id === 8;
-  const isFailed = id === 20;
+  const isUnavailable = false;
+  const isPriceChange = false;
+  const isFailed = false;
 
   const hasError = isUnavailable || isPriceChange || isFailed;
 
@@ -75,21 +75,15 @@ const CartItem = ({ text, name, image, price, id, className, titleSlot, isRemova
           <CartItemImage image={image} isUnavailable={isUnavailable} onRemove={onRemove} isRemovable={isRemovable} />
           <div className={clsx("flex flex-col w-full", isUnavailable ? "text-gray-light" : "text-white")}>
             <div className="flex w-full justify-between border-b border-b-gray pb-2">
-              <span className="text-h6 text-white">{name}</span>
+              <span className={`text-h6 text-white text-overflow ${onClick ? "cursor-pointer" : ""}`} onClick={onClick ?? ""}>
+                {name}
+              </span>
               {titleSlot}
             </div>
-            {typeof price === "number" ? (
-              <div className="flex w-full items-center justify-between mt-2">
-                <span className="text-h6 text-gray-light">{text}</span>
-                <EthereumPrice priceClassName="text-h6" price={price} />
-              </div>
-            ) : (
-              <div className="flex w-full items-center justify-between mt-2">
-                <span className="text-h6 text-gray-light">{text}</span>
-                {price}
-              </div>
-            )}
-
+            <div className="flex w-full items-center justify-between mt-2">
+              <span className="text-h6 text-gray-light">{text}</span>
+              {price !== "" && <EthereumPrice priceClassName="text-h6" price={price} />}
+            </div>
             {hasError && (
               <div className="mt-2">
                 {isPriceChange && <CartItemStatus text={"Price Change"} />}

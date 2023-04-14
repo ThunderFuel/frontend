@@ -44,7 +44,7 @@ const ButtonFollow = () => {
   }
 
   return (
-    <Button className="text-white border-white" onClick={onSetFollow}>
+    <Button className="!bg-white text-bg border-white" onClick={onSetFollow}>
       FOLLOW <IconPlus />
     </Button>
   );

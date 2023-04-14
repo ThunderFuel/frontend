@@ -1,6 +1,11 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import offerService from "api/offer/offer.service";
-import { OfferStatus } from "../../../../api/offer/offer.type";
+import { OfferStatus } from "api/offer/offer.type";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { useAppDispatch } from "store";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
+import { setCheckout } from "store/checkoutSlice";
 
 interface IOfferContext {
   userInfo?: any;
@@ -9,46 +14,30 @@ interface IOfferContext {
   [key: string]: any;
 }
 
-const filterItems = [
-  {
-    value: null,
-    text: "Offers",
-    count: 0,
-  },
-  {
-    value: false,
-    text: "Offers Received",
-    count: 0,
-  },
-  {
-    value: true,
-    text: "Offers Made",
-    count: 0,
-  },
-];
-
 export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [offers, setOffers] = React.useState([] as any);
-  const [filterValue, setFilterValue] = React.useState(null);
+  const [filterValue, setFilterValue] = React.useState({
+    offerType: 0,
+    offerStatus: [0, 1, 2, 3, 4] as any,
+  });
 
   const getOffers = React.useMemo(() => {
-    if (filterValue === null) {
-      return offers;
-    }
-
-    return offers.filter((item: any) => item.isOfferMade === filterValue);
+    return offers
+      .filter((item: any) => item.isOfferMade === !!filterValue.offerType)
+      .filter((item: any) => {
+        return (
+          (filterValue.offerStatus.includes(1) && item.isActiveOffer) ||
+          (filterValue.offerStatus.includes(3) && item.isExpired) ||
+          (filterValue.offerStatus.includes(0) && item.isCanceled) ||
+          (filterValue.offerStatus.includes(2) && item.isAccepted)
+        );
+      });
   }, [offers, filterValue]);
-  const getFilterItems = React.useMemo(() => {
-    filterItems[0].count = offers.length;
-    filterItems[1].count = offers.filter((item: any) => !item.isOfferMade).length;
-    filterItems[2].count = offers.filter((item: any) => item.isOfferMade).length;
-
-    return filterItems;
-  }, [offers]);
-
   const onChangeFilterValue = (value: any) => {
-    setFilterValue(value);
+    setFilterValue((prevState: any) => ({ ...prevState, ...value }));
   };
 
   const onCancelAllOffer = async () => {
@@ -75,20 +64,28 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
       console.log(e);
     }
   };
-  const onUpdateOffer = () => {
-    console.log("onUpdateOffer");
+  const onUpdateOffer = (item: any) => {
+    dispatch(setRightMenu(RightMenuType.UpdateOffer));
+    dispatch(setCheckout({ item: item }));
+    navigate(PATHS.NFT_DETAILS, { nftId: item.tokenId });
   };
 
   const fetchOffers = async () => {
     const response = await offerService.getOffer({
       userId: value.userInfo.id,
       page: 1,
+      types: [0, 1],
     });
-    const data = response.data.map((item: any) => ({
-      ...item,
-      isOfferMade: item.makerUserId === value.userInfo.id,
-      isActiveOffer: item.status === OfferStatus.ActiveOffer,
-    }));
+    const data = response.data
+      .map((item: any) => ({
+        ...item,
+        isOfferMade: item.makerUserId === value.userInfo.id,
+        isActiveOffer: item.status === OfferStatus.ActiveOffer,
+        isAccepted: item.status === OfferStatus.AcceptedOffer,
+        isExpired: item.status === OfferStatus.ExpiredOffer,
+        isCanceled: item.status === OfferStatus.Cancelled,
+      }))
+      .sort((a: any, b: any) => b.isActiveOffer - a.isActiveOffer);
     setOffers(data);
   };
   React.useEffect(() => {
@@ -98,8 +95,8 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   }, [value.userInfo]);
 
   const contextValue = {
-    offers: getOffers,
-    filterItems: getFilterItems,
+    offers,
+    getOffers,
     filterValue,
     onChangeFilterValue,
     onCancelAllOffer,

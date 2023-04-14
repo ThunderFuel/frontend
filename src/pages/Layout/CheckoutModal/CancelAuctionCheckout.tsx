@@ -39,7 +39,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenOnAuction(false, selectedNFT.id);
+    nftdetailsService.tokenCancelAuction(selectedNFT.id);
   };
 
   React.useEffect(() => {

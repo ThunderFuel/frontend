@@ -5,7 +5,7 @@ import RightMenu from "../components/RightMenu";
 import EthereumPrice from "components/EthereumPrice";
 import { useAppSelector } from "store";
 import collectionsService from "api/collections/collections.service";
-import { addressFormat } from "utils";
+import ActivityItemDescription from "components/ActivityDescription";
 
 const CustomBox = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
@@ -26,45 +26,49 @@ const CustomBox = ({ title, description, Icon, price }: { title: string; descrip
   );
 };
 
-function formatTimePassed(createdDate: string): string {
-  const date = new Date(createdDate);
+function formatActivityData(data: any): { icon: any; title: string; description: any } {
+  const description = (
+    <ActivityItemDescription
+      activityType={data.activityType}
+      fromUserContractAddress={data.fromUser.walletAddress}
+      createdTimeStamp={data.createdTimeStamp}
+      toUserContractAddress={data?.toUser?.walletAddress}
+    />
+  );
 
-  const currentDate = new Date();
-  const timeDiff = currentDate.getTime() - date.getTime();
-  const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-  if (days) return `${days} ${days > 1 ? "days" : "day"} ago`;
-  if (hours) return `${hours} ${hours > 1 ? "hours" : "hour"} ago`;
-  if (minutes) return `${minutes} ${minutes > 1 ? "mins" : "min"} ago`;
-
-  return "just now";
-}
-
-function handleFromUsername(data: any) {
-  return data.fromUser.userName ?? addressFormat(data.fromUser.walletAddress);
-}
-
-function handleToUsername(data: any) {
-  return data.toUser.userName ?? addressFormat(data.toUser.walletAddress);
-}
-
-function formatActivityData(data: any): { icon: any; title: string; description: string } {
-  //TODO zamanlari ekle
   switch (data.activityType) {
     case 0:
-      return { icon: IconOffer, title: "Offer", description: `Offered by ${handleFromUsername(data)}, ${formatTimePassed(data.createdAt)}` };
+      return { icon: IconOffer, title: "Offer", description: description };
     case 1:
-      return { icon: IconToken, title: "Mint", description: `Minted by ${handleFromUsername(data)}, ${formatTimePassed(data.createdAt)}` };
+      return {
+        icon: IconToken,
+        title: "Mint",
+        description: description,
+      };
     case 2:
-      return { icon: IconCart, title: "Sale", description: `Sold by ${handleFromUsername(data)}, to ${handleToUsername(data)} ${formatTimePassed(data.createdAt)}` };
+      return {
+        icon: IconCart,
+        title: "Sale",
+        description: description,
+      };
     case 3:
-      return { icon: IconTransfer, title: "Transfer", description: `Transferred from ${handleFromUsername(data)} to ${handleToUsername(data)} ${formatTimePassed(data.createdAt)} ` };
+      return {
+        icon: IconTransfer,
+        title: "Transfer",
+        description: description,
+      };
     case 4:
-      return { icon: IconListed, title: "List", description: `Listed by ${handleFromUsername(data)} ${formatTimePassed(data.createdAt)}` };
+      return {
+        icon: IconListed,
+        title: "List",
+        description: description,
+      };
     case 5:
-      return { icon: IconBid, title: "Bid", description: `Bid placed by ${handleFromUsername(data)} ${formatTimePassed(data.createdAt)}` };
+      return {
+        icon: IconBid,
+        title: "Bid",
+        description: description,
+      };
     default:
       throw new Error(`Invalid activity type: ${data}`);
   }
@@ -91,7 +95,7 @@ const Activity = ({ onBack }: { onBack: any }) => {
 
       const { icon, title, description } = formatActivityData(activity);
 
-      return <CustomBox key={index} title={title} description={description} Icon={icon} price={activity.price}></CustomBox>;
+      return <CustomBox key={index} title={title} description={description} Icon={icon} price={activity.price} />;
     });
   }
 

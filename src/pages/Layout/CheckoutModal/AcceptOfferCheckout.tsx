@@ -8,7 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
+import offerService from "api/offer/offer.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm offer",
@@ -40,7 +40,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.acceptOffer(currentItem?.id);
+    offerService.acceptOffer({ id: currentItem?.id });
   };
 
   React.useEffect(() => {
@@ -69,7 +69,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     </div>
   );
 
-  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
+  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline"></button>;
 
   return (
     <Modal backdropDisabled={true} className="checkout" title="Accept Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>

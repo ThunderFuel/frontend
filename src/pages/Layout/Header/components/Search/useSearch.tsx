@@ -3,9 +3,9 @@ import search from "api/search";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
-import { uniqueArr } from "../../../../../utils";
+import { uniqueArr } from "utils";
 
-const LocalStorageRecentSearchKey = "RecentSearchKey";
+const LocalStorageRecentSearchKey = "thunder_recent_searches";
 
 export const useSearch = () => {
   const navigate = UseNavigate();

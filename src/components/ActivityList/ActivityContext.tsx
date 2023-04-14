@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 
 interface IActivityContext {
   getActivities: any;
-  setSelectedFilter: any;
+  onChangeSelectedFilter: any;
   selectedFilter: any;
   filters: any;
   pagination: any;
@@ -11,14 +11,18 @@ interface IActivityContext {
 export const ActivityContext = createContext<IActivityContext>({} as any);
 const ActivityProvider = ({ value, children }: { value: any; children: ReactNode }) => {
   const [selectedFilter, setSelectedFilter] = useState(null);
+  const onChangeSelectedFilter = (filterType: any) => {
+    setSelectedFilter(filterType);
 
-  const getActivities = React.useMemo(() => value.activities.filter((item: any) => (selectedFilter ? item.type === selectedFilter : true)), [selectedFilter, value.activities]);
+    const params = filterType !== null ? { types: [parseInt(filterType)] } : {};
+    value.onChangeFilterValue(params);
+  };
 
   const contextValue = {
     ...value,
-    getActivities,
-    setSelectedFilter,
+    getActivities: value.activities,
     selectedFilter,
+    onChangeSelectedFilter,
   };
 
   return <ActivityContext.Provider value={contextValue}>{children}</ActivityContext.Provider>;

@@ -8,7 +8,7 @@ export interface ModalProps {
   className?: string;
   footer?: JSX.Element;
   children: React.ReactNode;
-  title: string;
+  title?: string;
   onClose: () => void;
   show: boolean;
   bodyClassName?: string;
@@ -38,14 +38,16 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
   }
 
   return (
-    <div className={clsx("modalbase", className)}>
+    <div className={clsx(className, "modalbase")}>
       <div ref={containerRef} className={clsx("modal", etc.bodyClassName)}>
-        <div className="mhead">
-          {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
-          <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
-            <IconClose className="text-white" />
-          </button>
-        </div>
+        {(title || etc.modalTitle) && (
+          <div className="mhead">
+            {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
+            <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
+              <IconClose className="text-white" />
+            </button>
+          </div>
+        )}
         <div className="flex flex-col h-full overflow-y-scroll no-scrollbar">{children}</div>
 
         {footer && <div className="mt-auto w-full border-t border-gray">{footer}</div>}

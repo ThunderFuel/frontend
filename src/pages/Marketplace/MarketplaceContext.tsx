@@ -5,6 +5,8 @@ import { WatchListRequest } from "api/collections/collections.type";
 import dayjs from "dayjs";
 import collectionsService from "api/collections/collections.service";
 import { useAppSelector } from "store";
+import { useDispatch } from "react-redux";
+import { toggleWalletModal } from "store/walletSlice";
 
 const UnitType = "hours";
 
@@ -26,6 +28,8 @@ interface IMarketplaceContext {
   isLoading: boolean;
   onChangeSortValue: (value: any) => void;
   sortingValue: any;
+  sortingType: any;
+  options: any;
 }
 
 const dayValues = [
@@ -43,11 +47,11 @@ const dayValues = [
   },
   {
     text: "7D",
-    value: 24 * 7,
+    value: 168,
   },
   {
     text: "30D",
-    value: 24 * 7 * 30,
+    value: 720,
   },
 ];
 const filterValues = [
@@ -67,12 +71,13 @@ const filterValues = [
 
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
-const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
+const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; options?: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
+  const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
-  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
+  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[4]);
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
   const [sortingValue, setSortingValue] = useState(0);
   const [sortingType, setSortingType] = useState("ASC");
@@ -90,6 +95,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
         userId: user?.id,
         sortingValue,
         sortingType,
+        page: 1,
+        pageSize: 10,
       });
       const items = response.data.map((responseItem) => {
         return {
@@ -101,7 +108,10 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
           sales: responseItem.sales,
           lastSold: responseItem.solds.length,
           image: responseItem.image,
-          images: responseItem.solds.map((sold: any) => sold.token.image),
+          collectionItems: responseItem.solds.map((sold: any) => ({
+            image: sold.token.image,
+            tokenId: sold.tokenId,
+          })),
           watched: responseItem.watched,
         } as MarketplaceTableItem;
       });
@@ -115,6 +125,11 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addWatchList = async (data: WatchListRequest) => {
+    if (!user?.id) {
+      dispatch(toggleWalletModal());
+
+      return false;
+    }
     try {
       await collectionsService.addWatchList(data);
     } catch (e) {
@@ -135,7 +150,8 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     getMarketplaceItems();
   }, [filterTabValue, dayTabValue, user, sortingValue, sortingType]);
 
-  const value = {
+  const contextValue = {
+    options,
     items,
     getMarketplaceItems,
     dayValues,
@@ -148,10 +164,11 @@ const MarketplaceProvider = ({ children }: { children: ReactNode }) => {
     isLoading,
     onChangeSortValue,
     sortingValue,
+    sortingType,
   };
 
   return (
-    <MarketplaceContext.Provider value={value}>
+    <MarketplaceContext.Provider value={contextValue}>
       <div>{children}</div>
     </MarketplaceContext.Provider>
   );

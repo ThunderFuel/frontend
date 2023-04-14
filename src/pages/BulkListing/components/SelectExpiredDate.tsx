@@ -29,7 +29,11 @@ export const selectExpirationDates: ISelectOption[] = [
 ];
 
 const SelectExpiredDate = ({ value, onChange }: any) => {
-  return <Select options={selectExpirationDates} onChange={onChange} value={value ?? selectExpirationDates[0]} direction={"top"} />;
+  if (!value) {
+    onChange(selectExpirationDates[0]);
+  }
+
+  return <Select className="w-72" options={selectExpirationDates} onChange={onChange} value={value ?? selectExpirationDates[0]} direction={"top"} />;
 };
 
 export default SelectExpiredDate;

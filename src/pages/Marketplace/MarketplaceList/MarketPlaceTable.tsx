@@ -3,7 +3,7 @@ import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
 import Img from "components/Img";
 
-import { IconDownRight, IconUpRight } from "icons";
+import { IconDownRight, IconSortDown, IconSortUp, IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
@@ -11,18 +11,19 @@ import Footer from "./components/Footer";
 import Collection from "./components/Collection";
 import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
-import { numberFormat } from "utils";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
 
-const NftImages = React.memo(({ images }: { images: any[] }) => {
-  const tmpImages = images.slice(0, 5);
+const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) => {
+  const items = collectionItems.slice(0, 5);
 
   return (
     <ul className="py-2.5 px-4 flex gap-2">
-      {tmpImages.map((image, i) => (
-        <li key={i} className="w-14 h-14">
-          <Img src={image} alt={i.toString()} defaultImage={AssetCollectionItem0} />
+      {items.map((item, i) => (
+        <li key={i} className="w-14 h-14 overflow-hidden">
+          <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
+            {item.image ? <Img src={item.image} alt={i.toString()} defaultImage={AssetCollectionItem0} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
+          </Link>
         </li>
       ))}
     </ul>
@@ -51,8 +52,31 @@ const MarketPlaceTableLoading = () => {
     </div>
   ));
 };
+
+const SortHeaderIcon = ({ sortingType }: any) => {
+  const isASC = sortingType === "ASC";
+  const isDESC = sortingType === "DESC";
+
+  return (
+    <div className="flex flex-col gap-0.5">
+      <IconSortUp className={isASC ? "text-white" : "text-gray-light"} />
+      <IconSortDown className={isDESC ? "text-white" : "text-gray-light"} />
+    </div>
+  );
+};
+
+const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: any) => {
+  const onClick = () => onChangeSortValue(header.sortValue);
+
+  return (
+    <div className={clsx("flex-center gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
+      {header.text}
+      <SortHeaderIcon sortingType={sortingValue === header.sortValue ? sortingType : null} />
+    </div>
+  );
+};
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
-  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue } = useMarketplace();
+  const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue, sortingType, options } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
@@ -66,12 +90,8 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       width: "10%",
       align: "flex-end",
       sortValue: 1,
-      render: (item) => <EthereumPrice price={numberFormat(item.volume)} />,
-      renderHeader: (header) => (
-        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
-          {header.text}
-        </div>
-      ),
+      render: (item) => <EthereumPrice price={item.volume} />,
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "change",
@@ -87,11 +107,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       sortValue: 2,
       render: (item) => <EthereumPrice price={item.floor} />,
-      renderHeader: (header) => (
-        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
-          {header.text}
-        </div>
-      ),
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "sales",
@@ -100,16 +116,12 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       sortValue: 3,
       render: (item) => <div className="cell text-h5">{item.sales}</div>,
-      renderHeader: (header) => (
-        <div className={clsx("cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={() => onChangeSortValue(header.sortValue)}>
-          {header.text}
-        </div>
-      ),
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "lastSold",
       text: "LAST SOLD",
-      render: (item) => <NftImages images={item.images} />,
+      render: (item) => <NftImages collectionItems={item.collectionItems} />,
       width: "350px",
     },
     {
@@ -138,7 +150,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
       headers={headers}
       items={items}
-      footer={<Footer />}
+      footer={!options.hideFooter ? items.length >= 10 ? <Footer /> : null : null}
     />
   );
 };

@@ -3,10 +3,13 @@ import { IconStar } from "icons";
 import clsx from "clsx";
 import { useAppSelector } from "store";
 import { WatchListRequest } from "api/collections/collections.type";
+import { useDispatch } from "react-redux";
+import { toggleWalletModal } from "store/walletSlice";
 
 const Favorite = ({ item, className, onChange }: { item: any; className?: string; onChange: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
   const [isFavorite, setIsFavorite] = useState<boolean>(item.watched ?? false);
+  const dispatch = useDispatch();
 
   return (
     <div
@@ -15,6 +18,8 @@ const Favorite = ({ item, className, onChange }: { item: any; className?: string
         e.preventDefault();
 
         if (!user?.id) {
+          dispatch(toggleWalletModal());
+
           return false;
         }
 

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Button from "components/Button";
-import { IconAuction, IconBid, IconCancel, IconEthereum } from "icons";
+import { IconAuction, IconBid, IconEthereum } from "icons";
 import RightMenu from "../components/RightMenu";
 import AuctionCountdown from "../components/AuctionCountdown";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { formatDate } from "./Offers";
 import { toggleWalletModal } from "store/walletSlice";
+import { addressFormat, dateFormat } from "utils";
+import Avatar from "components/Avatar/Avatar";
 
 const Box = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">{children}</div>;
@@ -20,6 +20,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const [bids, setBids] = useState([]);
   const [isOwner, setIsOwner] = React.useState(false);
+
   React.useEffect(() => {
     setIsOwner(user?.id === selectedNFT?.user?.id);
   }, [user]);
@@ -32,6 +33,10 @@ const Bids = ({ onBack }: { onBack: any }) => {
   useEffect(() => {
     fetchBids();
   }, [selectedNFT]);
+
+  function isBidOwner(bidUserId: any) {
+    return user?.id === bidUserId;
+  }
 
   return (
     <RightMenu title="Bids" onBack={onBack}>
@@ -60,9 +65,10 @@ const Bids = ({ onBack }: { onBack: any }) => {
           <>
             <div className="flex items-center justify-between p-[15px]">
               <div className="flex items-center gap-x-[15px]">
-                <img src={bid.user?.image} className="self-start h-8 w-8 rounded-full" alt="profile-image" />
+                <Avatar image={bid?.user?.image} userId={bid?.user?.id} className={"w-8 h-8"} />
                 <div>
-                  {isOwner ? <span className="inline-block text-green">you</span> : bid.user.userName} on {formatDate(bid.createdAt)}
+                  {isBidOwner(bid?.user?.id) ? <span className="inline-block text-green">you</span> : bid.user.userName ?? addressFormat(bid.user.walletAddress)} on{" "}
+                  {dateFormat(bid.createdAt, "MMM DD, YYYY")}
                 </div>
               </div>
               <div className="flex">
@@ -70,21 +76,6 @@ const Bids = ({ onBack }: { onBack: any }) => {
                 <IconEthereum height="21px" className="text-gray-light" />
               </div>
             </div>
-            {isOwner && (
-              <>
-                <div className="flex border-t border-gray"></div>
-                <Button
-                  className="btn w-full btn-sm no-bg border-none text-white"
-                  onClick={() => {
-                    dispatch(setCheckout({ type: CheckoutType.CancelBid }));
-                    dispatch(toggleCheckoutModal());
-                  }}
-                >
-                  CANCEL YOUR BID
-                  <IconCancel width="18px" />
-                </Button>
-              </>
-            )}
           </>
         </Box>
       ))}

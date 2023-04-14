@@ -4,7 +4,7 @@ import { AssetDefaultImageBg } from "assets";
 
 const CoverImage = ({ src }: any) => {
   return (
-    <div className="profile-cover-image">
+    <div className="profile-cover-image border-r">
       <Img src={src} defaultImage={AssetDefaultImageBg} className="w-full" />
     </div>
   );

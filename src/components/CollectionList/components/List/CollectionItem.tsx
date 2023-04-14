@@ -1,8 +1,8 @@
 import React from "react";
-import { IconHand, IconMarketBasket, IconThunderSmall } from "icons";
+import { IconAuction, IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
-import { useAppDispatch } from "store";
-import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
+import { useAppDispatch, useAppSelector } from "store";
+import { add as cartAdd, addBuyNowItem, remove as cartRemove, toggleCartModal } from "store/cartSlice";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 
 import "./CollectionItem.css";
@@ -13,7 +13,11 @@ import Img from "components/Img";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
 import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
-import { RightMenuType, setRightMenu } from "../../../../store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { toggleWalletModal } from "store/walletSlice";
+import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { useWallet } from "hooks/useWallet";
+import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -34,6 +38,37 @@ const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
   );
 });
 ButtonMakeOffer.displayName = "ButtonMakeOffer";
+
+const ButtonPlaceBid = React.memo(({ className, onClick }: any) => {
+  return (
+    <button className={clsx("button-buy-now", className)} onClick={onClick}>
+      <span className="uppercase">place a bid</span>
+      <IconBid />
+    </button>
+  );
+});
+ButtonPlaceBid.displayName = "ButtonPlaceaBid";
+
+const HighestBid = React.memo(({ highestBid }: any) => {
+  return (
+    <div className="flex w-full justify-between items-center">
+      <span className="uppercase text-headline-01 text-gray-light">highest bid</span>
+      <EthereumPrice className="text-white" price={highestBid ?? "-"} />
+    </div>
+  );
+});
+HighestBid.displayName = "HighestBid";
+
+const StartingPrice = React.memo(({ startingPrice }: any) => {
+  return (
+    <div className="flex w-full justify-between items-center">
+      <span className="uppercase text-headline-01 text-gray-light">starting price</span>
+      <EthereumPrice className="text-white" price={startingPrice ?? 0} />
+    </div>
+  );
+});
+StartingPrice.displayName = "StartingPrice";
+
 const CollectionItemCheckbox = (props: any) => {
   return (
     <label className="collection-item-checkbox" onClick={props.onClick}>
@@ -42,10 +77,15 @@ const CollectionItemCheckbox = (props: any) => {
     </label>
   );
 };
-const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) => {
+const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
+  const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setSweep, options } = useCollectionListContext();
+  const { isConnected } = useAppSelector((state) => state.wallet);
+  const { hasEnoughFunds } = useWallet();
+  const isOwnCollectionItem = collection?.userId === user.id;
+  const { days, hours, minutes } = remainingTime(collection.onAuctionExpireTime);
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -74,24 +114,64 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
     e.preventDefault();
   };
 
-  const onMakeOffer = (e: any) => {
-    dispatch(setRightMenu(RightMenuType.MakeOffer));
+  const onBuyNow = async (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
 
-    navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+    if (!isConnected) {
+      dispatch(toggleCartModal());
+      dispatch(toggleWalletModal());
+    } else {
+      dispatch(addBuyNowItem(collection));
+
+      try {
+        const res = await hasEnoughFunds();
+        dispatch(setIsInsufficientBalance(!res));
+        dispatch(toggleCheckoutModal());
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  const onMakeOffer = (e: any) => {
+    if (!isConnected) {
+      dispatch(toggleCartModal());
+      dispatch(toggleWalletModal());
+    } else {
+      dispatch(setRightMenu(RightMenuType.MakeOffer));
+      navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+    }
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  const onPlaceBid = (e: any) => {
+    if (!isConnected) {
+      dispatch(toggleCartModal());
+      dispatch(toggleWalletModal());
+    } else {
+      dispatch(setRightMenu(RightMenuType.PlaceBid));
+      navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+    }
     e.stopPropagation();
     e.preventDefault();
   };
 
   return (
-    <div>
+    <div className={clsx(selectionDisabled ? "collection-item-create-page" : "")}>
       <Link
         to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: collection.id })}
-        className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
+        className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {collection.salable || options?.isProfile ? <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} /> : null}
+          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
+            collection.onAuction ? null : !selectionDisabled ? (
+              <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
+            ) : null
+          ) : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
-            <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+            {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
           </div>
         </div>
         <div className="p-2.5 border-b border-b-gray">
@@ -100,15 +180,40 @@ const CollectionItem = ({ collection }: { collection: CollectionItemResponse }) 
           <h6 className="text-h6 text-white text-overflow">{collection.name ?? "-"}</h6>
         </div>
         <div className="p-2.5 flex items-center">
-          {collection.salable ? <EthereumPrice className="text-white" price={collection.price ?? "-"} /> : <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>}
+          {collection.salable ? (
+            <EthereumPrice className="text-white" price={collection.price ?? "-"} />
+          ) : collection.onAuction ? (
+            collection.highestBidPrice ? (
+              <HighestBid highestBid={collection.highestBidPrice} />
+            ) : (
+              <StartingPrice startingPrice={collection.startingPrice} />
+            )
+          ) : (
+            <div className="flex-center h-7 text-headline-01 text-gray-light uppercase">not lısted</div>
+          )}
         </div>
-        <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
-          <IconMarketBasket />
-          <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
-        </div>
-        {!options?.isProfile ? (
+        {collection.onAuction ? (
+          <div className="flex text-bodySm text-gray-light font-spaceGrotesk gap-[5px] p-2.5">
+            <IconAuction />
+            Auction ends in {days}:{hours}:{minutes}
+          </div>
+        ) : (
+          <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
+            <IconMarketBasket />
+            <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
+          </div>
+        )}
+        {!selectionDisabled && !options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {collection.salable ? <ButtonBuyNow onClick={onSelect} /> : <ButtonMakeOffer onClick={onMakeOffer} />}
+            {!isOwnCollectionItem ? (
+              collection.salable ? (
+                <ButtonBuyNow onClick={onBuyNow} />
+              ) : collection.onAuction ? (
+                <ButtonPlaceBid onClick={onPlaceBid} />
+              ) : (
+                <ButtonMakeOffer onClick={onMakeOffer} />
+              )
+            ) : null}
           </div>
         ) : null}
       </Link>

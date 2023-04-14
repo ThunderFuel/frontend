@@ -1,3 +1,3 @@
-import SocialButtonsBase from "../../../../Collection/components/SocialButtons";
+import SocialButtonsBase from "pages/Collection/components/SocialButtons";
 
 export default SocialButtonsBase;

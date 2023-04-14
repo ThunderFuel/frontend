@@ -34,10 +34,15 @@ export interface CollectionItemResponse {
   price: number;
   rarity: number;
   salable: boolean;
-  lastSalePrice: number;
+  lastSalePrice?: number;
   user?: IUserResponse;
+  onAuction?: boolean;
+  startingPrice?: number;
+  highestBidPrice?: number;
+  onAuctionExpireTime?: string;
 
   uid?: string;
+  userId?: any;
 }
 
 export interface CollectionResponse {
@@ -63,6 +68,7 @@ export interface CollectionResponse {
     type: SocialTypes;
     url: string;
   }[];
+  watched: boolean;
 }
 
 export interface CollectionItemsRequest {

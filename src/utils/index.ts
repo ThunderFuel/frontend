@@ -58,9 +58,8 @@ export const getDateFromExpirationTime = (expireTime: number) => {
   const ampm = hour >= 12 ? "PM" : "AM";
 
   const hours = (hour % 12 || 12).toString().padStart(2, "0");
-  const formattedDate = `${month}/${day}/${year}, ${hours}:${minutes} ${ampm}`;
 
-  return formattedDate;
+  return `${month}/${day}/${year}, ${hours}:${minutes} ${ampm}`;
 };
 
 export function formatDisplayedNumber(num: number) {
@@ -90,3 +89,17 @@ export const clipboardCopy = (text: string) => {
     window.navigator["clipboard"].writeText(text);
   }
 };
+
+export const formatPrice = (price: any) => {
+  if (price === null || price === "-" || price === 0) {
+    return price;
+  }
+
+  if (price < 0.0001) return "<0.0001";
+
+  return parseFloat(price)
+    .toFixed(4)
+    .replace(/\.?0+$/, "");
+};
+
+export const isObjectEmpty = (object: any) => (Object.keys(object).length === 0 ? true : false);

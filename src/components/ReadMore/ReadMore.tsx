@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const ReadMore = ({ text, characterLimit }: { text: string; characterLimit: number }) => {
+  if (text === "" || text === undefined || text === null) return <></>;
   const [expanded, setExpanded] = useState(false);
   const textIsLonger = text.length > characterLimit;
 

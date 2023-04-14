@@ -2,7 +2,7 @@ import React from "react";
 import { IconCirclePlus } from "icons";
 import Avatar from "components/Avatar";
 import SocialButtons from "./SocialButtons";
-import { addressFormat, openInNewTab, clipboardCopy } from "utils";
+import { addressFormat, clipboardCopy, openInNewTab } from "utils";
 import { useAppSelector } from "store";
 import { useClickOutside } from "hooks/useClickOutside";
 import clsx from "clsx";
@@ -73,7 +73,7 @@ const LogoContainer = ({ userInfo }: any) => {
         </div>
         <div className="flex gap-2">
           <WalletDropdown walletAddress={userInfo?.walletAddress} />
-          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} />
+          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} />
         </div>
       </div>
     </div>

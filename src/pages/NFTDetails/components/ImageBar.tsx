@@ -5,9 +5,11 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import userService from "api/user/user.service";
 import { toggleWalletModal } from "store/walletSlice";
+import { useShareTwitter } from "hooks/useShareTwitter";
 
-const ImageBar = () => {
+const ImageBar = ({ toggleFullscreen }: any) => {
   const dispatch = useAppDispatch();
+  const shareTwitter = useShareTwitter();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const [isLiked, setIsliked] = useState(false);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
@@ -17,7 +19,14 @@ const ImageBar = () => {
   };
 
   const handleLike = () => {
-    if (isConnected) nftdetailsService.tokenLike({ tokenId: selectedNFT.id, userId: user.id, like: !isLiked }).then((res) => res.data === true && setIsliked(!isLiked));
+    if (isConnected)
+      nftdetailsService
+        .tokenLike({
+          tokenId: selectedNFT.id,
+          userId: user.id,
+          like: !isLiked,
+        })
+        .then((res) => res.data === true && setIsliked(!isLiked));
     else dispatch(toggleWalletModal());
   };
 
@@ -30,6 +39,9 @@ const ImageBar = () => {
     fetchIsLiked();
   }, [user, isLiked]);
 
+  const onShare = () => {
+    shareTwitter.shareNft(selectedNFT.name, selectedNFT.collection.name);
+  };
   const icons = [
     {
       icon: IconTransfer,
@@ -38,17 +50,20 @@ const ImageBar = () => {
         dispatch(toggleCheckoutModal());
       },
     },
-    { icon: IconFullscreen, onClick: () => console.log("IconFullscreen") },
+    { icon: IconFullscreen, onClick: () => toggleFullscreen() },
     { icon: IconRefresh, onClick: () => console.log("IconRefresh") },
-    { icon: IconShare, onClick: () => console.log("IconShare") },
+    {
+      icon: IconShare,
+      onClick: onShare,
+    },
   ];
 
   return (
     <div className="flex absolute right-[38px] w-fit flex-col gap-5">
-      <div className="border border-gray rounded-md p-2 group cursor-pointer" onClick={() => handleLike()}>
+      <div className="border border-gray rounded-md p-2 group cursor-pointer bg-bg-light" onClick={() => handleLike()}>
         <IconLike stroke="gray" className={`group-hover:stroke-white ${isLiked ? "text-white stroke-white" : "text-bg-light"}`} />
       </div>
-      <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray ">
+      <div className="flex flex-col border border-gray rounded-md [&>*:nth-child(2)]:border-y [&>*:nth-child(2)]:border-gray bg-bg-light">
         {icons.map((item, key) => {
           const IconItem = item.icon;
           if (!isOwner() && item.icon === IconTransfer) return null;

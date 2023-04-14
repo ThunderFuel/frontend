@@ -34,7 +34,12 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
     switch (nextState.type) {
       case ParamsType.Reset: {
-        return {};
+        const { Status, sortingType } = prevState;
+
+        return {
+          Status,
+          sortingType,
+        };
       }
       case ParamsType.Delete: {
         delete prevState[nextState.name];

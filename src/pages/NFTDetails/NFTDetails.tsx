@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import clsx from "clsx";
 import ImageBar from "./components/ImageBar";
@@ -15,24 +15,24 @@ import { RightMenuType, setIsLiked, setPresetPrice, setRightMenu, setSelectedNFT
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileWarning from "components/MobileWarning";
 import "./nftdetails.css";
+import FullScreenImage from "components/FullScreenImage";
 
 const None = React.memo(() => {
   return <div />;
 });
 None.displayName = "None";
 const NFTDetails = () => {
-  const ref = useRef<any>(null);
   const { nftId } = useParams();
 
   const dispatch = useAppDispatch();
   const { rightMenuType } = useAppSelector((state) => state.nftdetails);
   const { isConnected } = useAppSelector((state) => state.wallet);
+  const { show } = useAppSelector((state) => state.checkout);
 
   const [isActive, setIsActive] = useState(false);
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
+  const [showFullscreenImage, setshowFullscreenImage] = useState(false);
 
   const fetchCollection = async () => {
     const response = await collectionsService.getCollection({ id: nftId });
@@ -40,19 +40,6 @@ const NFTDetails = () => {
     dispatch(setSelectedNFT(response.data));
     dispatch(setIsLiked(response.data.user?.likedTokens?.includes(response.data.id) ?? false));
   };
-
-  const setLeftMenuHeight = () => {
-    const cssRoot = document.querySelector(":root");
-    if (cssRoot) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      cssRoot.style.setProperty("--leftMenuHeight", `${ref.current.offsetHeight}px`);
-    }
-  };
-
-  React.useLayoutEffect(() => {
-    setLeftMenuHeight();
-  }, [rightMenuType]);
 
   useEffect(() => {
     setIsActive(rightMenuType !== RightMenuType.None);
@@ -65,7 +52,11 @@ const NFTDetails = () => {
 
   useEffect(() => {
     if (!isActive) fetchCollection();
-  }, [isActive]);
+  }, [isActive, show]);
+
+  useEffect(() => {
+    return () => resetMenuState();
+  }, []);
 
   const resetMenuState = () => {
     setIsActive(false);
@@ -103,29 +94,28 @@ const NFTDetails = () => {
     });
   }, []);
 
-  return !useIsMobile() ? (
-    <div className="relative flex justify-between container-nftdetails">
-      <div className="w-[42%]">
-        <LeftMenu nft={nft} isActive={isActive} />
-      </div>
-      <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
-        <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
-          <div className="flex justify-center image-height py-10">
-            <div className="relative w-full image-width bg-gray rounded-md">
-              <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 max-h-full max-w-full" />
+  return (
+    <>
+      <div className="relative flex justify-between container-nftdetails">
+        <div className="w-[42%]">
+          <LeftMenu nft={nft} fetchCollection={fetchCollection} />
+        </div>
+        <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
+          <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
+            <div className="flex justify-center image-height py-10">
+              <div className="relative w-full image-width bg-gray rounded-md">
+                <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
+              </div>
+              <ImageBar toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
             </div>
-            <ImageBar />
           </div>
         </div>
+        <div className="w-[42%]" id="rightMenuWrapper">
+          <Component onBack={() => resetMenuState()} />
+        </div>
+        <FullScreenImage image={nft.image} onClose={() => setshowFullscreenImage(false)} show={showFullscreenImage} />
       </div>
-      <div className="w-[42%] h-fit" ref={ref}>
-        <Component onBack={() => resetMenuState()} />
-      </div>
-    </div>
-  ) : (
-    <div className="m-5">
-      <MobileWarning />
-    </div>
+    </>
   );
 };
 

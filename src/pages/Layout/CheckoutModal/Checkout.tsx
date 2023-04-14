@@ -8,8 +8,9 @@ import NotFound from "components/NotFound";
 
 import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
-import { getCartTotal } from "store/cartSlice";
+import { getCartTotal, removeAll, removeBuyNowItem } from "store/cartSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { isObjectEmpty } from "utils";
 
 enum Status {
   notStarted = "notStarted",
@@ -25,11 +26,13 @@ const mockTransaction = async () => {
   });
 };
 
-const Footer = ({ approved }: { approved: boolean }) => {
+const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
     <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
       <div className={"flex w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest">VIEW PURCHASE</Button>
+        <Button className="w-full tracking-widest" onClick={onClose}>
+          DONE
+        </Button>
       </div>
     </div>
   );
@@ -124,17 +127,27 @@ const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items:
   const getImages = items.slice(0, itemCount > 3 ? 3 : itemCount).map((i: any) => i.image);
   const titleSlot = approved && (
     <div className="flex gap-x-2.5">
-      <button className="body-small text-gray-light underline">View on Blockchain</button>
-      <button className="body-small text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
-        {showDetails ? "Hide Details" : "Show Details"}
-      </button>
+      {/* <button className="body-small text-gray-light underline">View on Blockchain</button> */}
+      {itemCount !== 1 && (
+        <button className="body-small text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
+          {showDetails ? "Hide Details" : "Show Details"}
+        </button>
+      )}
     </div>
   );
 
   return (
     <>
       <div className="flex flex-col gap-2">
-        <CartItem text="Total" name={`${itemCount} Items`} price={totalAmount} image={getImages} id={1} className={clsx(showDetails && "rounded-b-none")} titleSlot={titleSlot} />
+        <CartItem
+          text="Total"
+          name={`${itemCount === 1 ? items[0].name : itemCount + " Items"}`}
+          price={totalAmount}
+          image={getImages}
+          id={1}
+          className={clsx(showDetails && "rounded-b-none")}
+          titleSlot={titleSlot}
+        />
       </div>
       <div className="overflow-hidden transition-all" style={{ height: showDetails ? `${ref.current?.scrollHeight}px` : 0 }} ref={ref}>
         <div className={clsx("p-2.5 gap-y-2.5 border-x border-b rounded-b-md border-gray")}>
@@ -147,8 +160,9 @@ const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items:
   );
 };
 const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+  const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
-  const { totalAmount, itemCount, items } = useAppSelector((state) => state.cart);
+  const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
   const { user } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
@@ -158,15 +172,31 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
-  const onComplete = () => {
-    setApproved(true);
-    const tokenIds = items.map((item: any) => item.id);
-    nftdetailsService.tokenBuyNow(tokenIds, user.id);
+  const onComplete = async () => {
+    const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
+    try {
+      const res = await nftdetailsService.tokenBuyNow(tokenIds, user.id);
+      setApproved(true);
+      if (res.data) {
+        setSuccessCheckout(res.data);
+        window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
+
+  React.useEffect(() => {
+    if (!show && successCheckout) {
+      if (!isObjectEmpty(buyNowItem)) dispatch(removeBuyNowItem());
+      else dispatch(removeAll());
+    }
+  }, [show, successCheckout]);
 
   React.useEffect(() => {
     setApproved(false);
     setStartTransaction(false);
+    setSuccessCheckout(false);
     if (show) {
       setStartTransaction(true);
     }
@@ -191,9 +221,11 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Checkout" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        {items.length > 0 ? (
+        {!isObjectEmpty(buyNowItem) ? (
+          <CheckoutCartItems items={[buyNowItem]} itemCount={1} totalAmount={buyNowItem.price} approved={approved} />
+        ) : items.length > 0 ? (
           <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />
         ) : (
           <NotFound>Your cart is empty. Start adding NFTs to your cart to collect.</NotFound>

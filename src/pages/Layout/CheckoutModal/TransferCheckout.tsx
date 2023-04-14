@@ -11,6 +11,7 @@ import Input from "components/Input";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { addressFormat } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { toB256 } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -38,7 +39,6 @@ const Footer = ({ address, callback, animationStarted, onClose }: { address: str
 
 const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [address, setaddress] = useState("");
@@ -47,7 +47,9 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenTransfer(selectedNFT.id, user.id);
+    let tempAddress = "";
+    if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
+    nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
   };
 
   React.useEffect(() => {
@@ -77,7 +79,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
     </div>
   );
 
-  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
+  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline"></button>;
 
   return (
     <Modal
@@ -101,7 +103,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
             <IconInfo className="w-[17px] h-[17px]" />
             Items sent to the wrong address cannot be recovered
           </span>
-          <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setaddress(event.target.value)} value={address} type="text" maxLength={42} />
+          <Input onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setaddress(event.target.value)} value={address} type="text" maxLength={66} />
         </div>
       )}
     </Modal>

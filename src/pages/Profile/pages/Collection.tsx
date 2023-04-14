@@ -4,7 +4,6 @@ import userService from "api/user/user.service";
 import { useProfile } from "../ProfileContext";
 
 const options = {
-  hiddeSidebarFilter: true,
   hiddenSweep: true,
 };
 const Collection = () => {
@@ -33,7 +32,7 @@ const Collection = () => {
             } else if (item.value === "2") {
               return collectionItem.onAuction;
             } else if (item.value === "3") {
-              return !collectionItem.salable;
+              return !collectionItem.salable && !collectionItem.onAuction;
             } else if (item.value === "4") {
               return collectionItem.hasOffer;
             } else if (item.value === "6") {
@@ -75,13 +74,21 @@ const Collection = () => {
   };
 
   const fetchFilters = async () => {
-    const response = await userService.getFilters({ userId: userInfo.id });
-    setFilter(response.data.filters ?? []);
+    setIsLoading(true);
+    try {
+      const response = await userService.getFilters({ userId: userInfo.id });
+      setFilter(response.data.filters ?? []);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   React.useEffect(() => {
-    fetchFilters();
-    setCollectionItems(userInfo?.tokens);
+    if (userInfo.id) {
+      fetchFilters();
+    }
   }, [userInfo]);
 
   return (

@@ -1,0 +1,57 @@
+.tooltip {
+  @apply relative;
+}
+
+.tooltip:hover .content {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip .content {
+  visibility: hidden;
+  @apply opacity-0;
+  @apply transform ease-in duration-75;
+  @apply mt-1;
+  @apply absolute top-full left-1/2 -translate-x-1/2;
+  @apply text-head6 font-spaceGrotesk text-white;
+  @apply bg-bg-light border border-gray rounded-md;
+  @apply whitespace-nowrap;
+  @apply p-2.5;
+}
+
+.tooltip .content .arrow {
+  content: "";
+  height: 11px;
+  width: 11px;
+  @apply absolute top-0 left-1/2 -translate-y-1/2 -translate-x-1/2 rotate-45;
+  @apply bg-bg-light border border-gray;
+  z-index: 0;
+}
+
+.tooltip .content .arrow:after {
+  content: "";
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  top: -1px;
+  left: -1px;
+  border-color: transparent;
+  @apply absolute;
+  @apply border;
+  @apply border-r-bg-light border-b-bg-light;
+}
+
+.tooltip.top .content {
+  top: initial;
+  margin-top: initial;
+  @apply bottom-full mb-1.5;
+}
+
+.tooltip.top .content .arrow {
+  @apply top-full;
+}
+
+.tooltip.top .content .arrow:after {
+  border-color: transparent;
+  @apply border-l-bg-light border-t-bg-light;
+}

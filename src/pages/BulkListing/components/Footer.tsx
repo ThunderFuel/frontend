@@ -4,23 +4,50 @@ import Button from "components/Button";
 import { IconCircleRemoveWhite, IconInfo, IconTag } from "icons";
 import dayjs from "dayjs";
 import useNavigate from "hooks/useNavigate";
+import useToast from "hooks/useToast";
 import { PATHS } from "router/config/paths";
 import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
+import { useAppDispatch } from "store";
+import { removeAll } from "store/bulkListingSlice";
+import { formatPrice } from "../../../utils";
 
 const Footer = ({ items, prices }: any) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
   const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
+  const hasUpdate = bulkItems.some((item: any) => item.salable);
+
   const onUpdateBulkListing = async () => {
     try {
-      const data = bulkItems.map((item: any) => ({
-        tokenId: item.id,
-        price: prices?.[item.uid],
-        expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
-      }));
-      await collectionsService.updateBulkListing(data);
-    } catch (e) {
+      const bulkListingRequest: any = [];
+      const updateBulkListingRequest: any = [];
+      bulkItems.forEach((item: any) => {
+        const data = {
+          tokenId: item.id,
+          price: prices?.[item.uid],
+          expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
+        };
+
+        if (item.salable) {
+          updateBulkListingRequest.push(data);
+        } else {
+          bulkListingRequest.push(data);
+        }
+      });
+
+      if (updateBulkListingRequest.length) {
+        await collectionsService.updateBulkListing(updateBulkListingRequest);
+      }
+      if (bulkListingRequest.length) {
+        await collectionsService.bulkListing(bulkListingRequest);
+      }
+
+      navigate(PATHS.PROFILE);
+      dispatch(removeAll());
+    } catch (e: any) {
+      useToast().error(e.response.data.message);
       console.log(e);
     }
   };
@@ -30,7 +57,9 @@ const Footer = ({ items, prices }: any) => {
   }, [expiredDateValue]);
 
   const getProceedPrice = React.useMemo(() => {
-    return bulkItems.reduce((total: any, item: any) => total + item.proceedPrice, 0);
+    const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * 0.975, 0);
+
+    return formatPrice(totalProceedPrice);
   }, [bulkItems]);
 
   return (
@@ -45,7 +74,7 @@ const Footer = ({ items, prices }: any) => {
           <h6 className="text-h6 text-white">10%</h6>
         </div>
         <div className="flex items-center justify-between">
-          <h6 className="text-h6">You’ll Recieve</h6>
+          <h6 className="text-h6">You’ll Receive</h6>
           <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
         </div>
       </div>
@@ -75,8 +104,8 @@ const Footer = ({ items, prices }: any) => {
             CANCEL
             <IconCircleRemoveWhite />
           </Button>
-          <Button onClick={onUpdateBulkListing}>
-            LIST {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
+          <Button onClick={onUpdateBulkListing} disabled={!bulkItems.length}>
+            {`List${hasUpdate ? "/Update" : ""}`} {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
             <IconTag />
           </Button>
         </div>

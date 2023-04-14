@@ -5,6 +5,8 @@ import collectionService from "api/collections/collections.service";
 import CollectionList from "components/CollectionList";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
 import { CollectionItemsRequest } from "api/collections/collections.type";
+import { useAppDispatch } from "store";
+import { removeAll } from "store/bulkListingSlice";
 
 const getInitParams = () => {
   const initParams = {
@@ -24,6 +26,7 @@ const getInitParams = () => {
   }
 };
 const Items = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -90,7 +93,7 @@ const Items = () => {
       let value = params[paramKey].value;
       const selecteds = Array.isArray(params[paramKey].value) ? params[paramKey].value : [];
       if (params[paramKey]?.value?.min || params[paramKey]?.value?.max) {
-        value = `${params[paramKey].value.min ?? 0}-${params[paramKey].value.max ?? 0}`;
+        value = `${params[paramKey].value.min ?? ""}-${params[paramKey].value.max ?? ""}`;
       } else if (selecteds.length) {
         value = "";
       }
@@ -139,7 +142,15 @@ const Items = () => {
   };
 
   React.useEffect(() => {
+    dispatch(removeAll());
+
     fetchFilters();
+
+    window.addEventListener("CompleteCheckout", fetchFilters);
+
+    return () => {
+      window.addEventListener("CompleteCheckout", fetchFilters);
+    };
   }, [collectionId]);
 
   return (

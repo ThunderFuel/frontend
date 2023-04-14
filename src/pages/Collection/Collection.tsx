@@ -10,25 +10,36 @@ import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
 import Tab from "./components/Tab";
 import { AssetLoadingCollectionLogo } from "assets";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileWarning from "components/MobileWarning";
 import ReadMore from "components/ReadMore";
+import { useAppSelector } from "store";
+import UseNavigate from "hooks/useNavigate";
+import Button from "components/Button";
+import { IconPencil } from "icons";
+import { PATHS } from "router/config/paths";
 
 const Collection = () => {
+  const navigate = UseNavigate();
+
+  const { user } = useAppSelector((state) => state.wallet);
   const { collectionId } = useParams();
   const [collection, setCollection] = useState<CollectionResponse>({} as any);
 
   useEffect(() => {
-    collectionsService.getCollectionHeader(collectionId as string).then((response) => {
-      setCollection(response.data);
-    });
+    collectionsService
+      .getCollectionHeader({
+        id: collectionId,
+        userId: user?.id,
+      })
+      .then((response) => {
+        setCollection(response.data);
+      });
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   }, [collectionId]);
 
-  return !useIsMobile() ? (
+  return (
     <>
       <div className="container-fluid pt-10 pb-14">
         <div className="flex flex-col gap-5">
@@ -42,7 +53,13 @@ const Collection = () => {
               </div>
               <div className="flex flex-col w-full">
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
-                <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
+                <div className="flex gap-5">
+                  <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
+                  <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
+                    EDIT COLLECTION <IconPencil />
+                  </Button>
+                </div>
+
                 <ReadMore text={collection?.description ?? ""} characterLimit={150} />
               </div>
             </div>
@@ -53,10 +70,6 @@ const Collection = () => {
       <Tab />
       <Outlet />
     </>
-  ) : (
-    <div className="m-5">
-      <MobileWarning />
-    </div>
   );
 };
 

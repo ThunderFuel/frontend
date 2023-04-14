@@ -2,14 +2,14 @@ import React from "react";
 import { AssetHotdrop1, AssetHotdrop2, AssetHotdrop3, AssetHotdrop4, AssetHotdrop5, AssetHotdrop6, AssetHotdrop7, AssetHotdrop8 } from "assets";
 import { useIsMobile } from "hooks/useIsMobile";
 import EthereumPrice from "components/EthereumPrice";
-import { chunk } from "../../utils";
+import { chunk } from "utils";
 import Carousel from "components/Carousel";
 import clsx from "clsx";
-import { useIsWideScreen } from "../../hooks/useIsWideScreen";
+import { useIsWideScreen } from "hooks/useIsWideScreen";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import collectionsService from "api/collections/collections.service";
-import { IconChevronLeft, IconChevronRight } from "../../icons";
+import { IconChevronLeft, IconChevronRight } from "icons";
 
 const HotDrops = () => {
   const isWideScreen = useIsWideScreen();
@@ -57,7 +57,7 @@ const HotDrops = () => {
                   return (
                     <div key={`${k}_${item.id}`} className="border border-gray bg-bg-light text-white cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: item.id })}>
                       <div className="overflow-hidden">
-                        <img src={item.image} className="w-full transition-all ease-in duration-300 hover:scale-[120%]" alt={"hot-drop-image"} />
+                        <img src={item.image} className="w-full transition-all duration-300 hover:scale-[110%]" alt={"hot-drop-image"} />
                       </div>
                       <div className="flex flex-col gap-3 px-4 py-3">
                         <h5 className="text-head5 font-spaceGrotesk text-overflow">{item.collectionName}</h5>

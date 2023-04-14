@@ -1,13 +1,12 @@
 import React from "react";
-import { AssetSettingsCoverImage } from "assets";
 import UploadImage from "./UploadImage";
 
-const CoverImage = ({ src = AssetSettingsCoverImage }: any) => {
+const CoverImage = ({ src }: any) => {
   const onChange = (e: any) => {
     console.log(e);
   };
 
-  return <UploadImage defaultImage={AssetSettingsCoverImage} src={src ?? AssetSettingsCoverImage} onChange={onChange} />;
+  return <UploadImage src={src} onChange={onChange} />;
 };
 
 export default CoverImage;

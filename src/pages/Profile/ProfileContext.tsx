@@ -1,9 +1,6 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import { IUserResponse } from "api/user/user.type";
 import userService from "api/user/user.service";
-import offerService from "api/offer/offer.service";
-import collectionService, { ActivityFilters } from "api/collections/collections.service";
-import { IconBid, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
 
 export const enum FollowType {
   Followers = 0,
@@ -24,57 +21,15 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
 
-  const getOffer = async () => {
-    const response = await offerService.getOffer({
-      userId: userId,
-      page: 1,
-    });
-
-    return response?.data.shift();
-  };
-  const getActivity = async () => {
-    try {
-      const response = await collectionService.getActivity({
-        userId: userId,
-      });
-
-      const lastActivity = response?.data.filter((activity) => activity.activityType !== ActivityFilters.Offers).shift();
-      const filter = {
-        [ActivityFilters.Mints]: { icon: IconQuarry, name: "Mints" },
-        [ActivityFilters.Sales]: { icon: IconMarketBasket, name: "Sale" },
-        [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transferred" },
-        [ActivityFilters.Listings]: { icon: IconTag, name: "Listed" },
-        [ActivityFilters.Bids]: { icon: IconBid, name: "Placed bid to" },
-      }[lastActivity?.activityType as number];
-
-      return {
-        ...lastActivity,
-        type: filter?.name,
-        typeIcon: filter?.icon,
-      };
-    } catch (e) {
-      console.log(e);
-
-      return {};
-    }
-  };
   const fetchUserProfile = async () => {
     setUserInfo({ tokens: [], likedTokens: [] } as any);
     try {
-      const [response, lastOffer, lastActivity] = await Promise.all([
-        await userService.getUser({
-          id: userId,
-          includes: [0, 1, 2, 3, 4],
-        }),
-        getOffer(),
-        getActivity(),
-      ]);
+      const response = await userService.getUser({
+        id: userId,
+        includes: [0, 1, 2, 3, 4],
+      });
 
-      setUserInfo({
-        ...response.data,
-        lastOffer,
-        lastActivity,
-      } as any);
+      setUserInfo(response.data as any);
     } catch (e) {
       console.log(e);
     }
@@ -82,6 +37,11 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
 
   React.useEffect(() => {
     fetchUserProfile();
+    window.addEventListener("CompleteCheckout", fetchUserProfile);
+
+    return () => {
+      window.addEventListener("CompleteCheckout", fetchUserProfile);
+    };
   }, [userId]);
 
   const onSetSocialActiveTab = (value: any) => {

@@ -15,7 +15,7 @@ const Range = (props: any) => {
   return (
     <div className="flex gap-5 px-5 py-2.5 border-r border-r-gray">
       <div className="flex flex-col justify-center flex-1 gap-2">
-        <div className="text-headline-01 uppercase text-gray-light">Sweep</div>
+        <div className="text-headline-01 uppercase text-gray-light -ml-1.5">Sweep</div>
         <div className="overflow-hidden px-1.5 -mx-1.5 rounded-full">
           <InputRange value={props.value} minValue={0} maxValue={props.maxValue ?? 30} onChange={props.onChange} />
         </div>
@@ -26,7 +26,7 @@ const Range = (props: any) => {
           onChange={(e: any) => {
             props.onChange(e.target.value);
           }}
-          icon={<IconClear className="w-6 h-6 mr-2 cursor-pointer" />}
+          icon={<IconClear className="w-6 h-6 mr-2" />}
           containerClassName="flex-row-reverse"
           className={clsx("w-10 border-l border-l-gray pl-4", props.value > 0 ? "text-white" : "text-gray")}
           placeholder={"0"}
@@ -45,7 +45,13 @@ const Index = ({ className }: { className?: string }) => {
   const onRangeChange = (value: any) => {
     setSweep(value);
     const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable)].splice(0, value);
-    dispatch(sweepAdd(sweepCollectionItems));
+    const collectionId = collectionItems?.[0].collectionId;
+    dispatch(
+      sweepAdd({
+        items: sweepCollectionItems,
+        collectionId,
+      })
+    );
   };
 
   const onKeyPress = (e: any) => {

@@ -1,0 +1,17 @@
+.beta-input {
+  width: 68px;
+  height: 68px;
+  border-radius: 8px;
+  padding: 11px 11px;
+  text-align: center;
+
+  @apply bg-bg border border-gray;
+  @apply outline-none;
+  @apply text-head3;
+  @apply transition-all;
+  @apply focus:bg-bg-light;
+}
+
+.beta-input.entered {
+  @apply bg-gray;
+}

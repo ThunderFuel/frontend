@@ -1,0 +1,33 @@
+.input-switch {
+  @apply relative inline-block;
+  @apply w-10 h-[26px];
+}
+
+.input-switch input[type="checkbox"] {
+  @apply absolute hidden -z-50 opacity-0 h-0 w-0;
+}
+
+.input-switch .slider {
+  @apply absolute cursor-pointer rounded-full;
+  @apply top-0 left-0 bottom-0 right-0;
+  @apply bg-gray transition-all;
+}
+
+.input-switch .slider:before {
+  @apply absolute w-[18px] h-[18px];
+  @apply left-1 bottom-1;
+  @apply bg-gray-light transition-all rounded-full;
+  content: "";
+}
+
+.input-switch input:checked + .slider {
+  @apply bg-white;
+}
+
+.input-switch input:focus + .slider {
+  @apply shadow-white;
+}
+
+.input-switch input:checked + .slider:before {
+  @apply translate-x-[14px] bg-bg;
+}

@@ -33,11 +33,14 @@ export default {
   async tokenLike(params: TokenLikeParams): Promise<ApiResponse<any>> {
     return await ThunderURL.post(`v1/token/like`, {}, { params });
   },
-  async tokenTransfer(tokenId: number, userId: number): Promise<ApiResponse<any>> {
-    return await ThunderURL.post("v1/token/transfer", {}, { params: { tokenId, userId } });
+  async tokenTransfer(tokenId: number, walletAddress: string): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/transfer", {}, { params: { tokenId, walletAddress } });
   },
-  async tokenOnAuction(onAuction: boolean, tokenId: number, expireTime?: number, startingPrice?: number): Promise<ApiResponse<any>> {
-    return await ThunderURL.post("v1/token/onauction", {}, { params: { onAuction, tokenId, expireTime, startingPrice } });
+  async tokenOnAuction(tokenId: number, expireTime?: number, startingPrice?: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/onauction", {}, { params: { tokenId, expireTime, startingPrice } });
+  },
+  async tokenCancelAuction(tokenId: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("v1/token/cancelauction", {}, { params: { tokenId } });
   },
   async tokenBuyNow(tokenIds: number[], userId: number): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/token/buynow", { tokenIds, userId });

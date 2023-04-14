@@ -79,3 +79,16 @@ export { ReactComponent as IconLikeHand } from "./icon-like-hand.svg";
 export { ReactComponent as IconTriangleInfo } from "./icon-triangle-info.svg";
 export { ReactComponent as IconChevronLeft } from "./icon-chevron-left.svg";
 export { ReactComponent as IconChevronRight } from "./icon-chevron-right.svg";
+
+export { ReactComponent as IconSortUp } from "./icon-sort-up.svg";
+export { ReactComponent as IconSortDown } from "./icon-sort-down.svg";
+export { ReactComponent as IconCircleCheck } from "./icon-circle-check.svg";
+export { ReactComponent as IconExitFullscreen } from "./icon-exit-fullscreen.svg";
+
+export { ReactComponent as IconCrop } from "./icon-crop.svg";
+export { ReactComponent as IconCalendar } from "./icon-calendar.svg";
+export { ReactComponent as IconPaperCode } from "./icon-paper-code.svg";
+export { ReactComponent as IconPencilRuler } from "./icon-pencil-ruler.svg";
+export { ReactComponent as IconPercent } from "./icon-percent.svg";
+export { ReactComponent as IconUpload } from "./icon-upload.svg";
+export { ReactComponent as IconCirclePlusWhite } from "./icon-circle-plus-white.svg";

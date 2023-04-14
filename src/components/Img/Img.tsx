@@ -15,7 +15,7 @@ const Img = ({ src, defaultImage = AssetDefaultImageBg, className, ...etc }: IIm
     e.target.src = defaultImage;
   };
 
-  return <img className={clsx("bg-gray", className)} ref={ref} src={src} loading="lazy" {...etc} onError={onError} />;
+  return <img className={clsx("bg-gray", className)} ref={ref} src={src ?? defaultImage} loading="lazy" {...etc} onError={onError} />;
 };
 
 export default React.forwardRef(Img);

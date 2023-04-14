@@ -1,13 +1,17 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
+import AuthorizationPageBase from "./AuthorizationPage";
 import { RouteConfig, ROUTES } from "./config";
+import MobileWarningPageBase from "./MobileWarningPage";
 
 const NotFound = React.lazy(() => import("pages/NotFound"));
 
 const getRoute = (route: RouteConfig) => {
   const Component = route.component;
   const Layout = route.layout ?? React.Fragment;
+  const AuthorizationPage = route.notLoggedIn ? React.Fragment : AuthorizationPageBase;
+  const MobileWarningPage = route.isResponsive ? React.Fragment : MobileWarningPageBase;
 
   return (
     <Route
@@ -15,11 +19,15 @@ const getRoute = (route: RouteConfig) => {
       path={route.path}
       element={
         <ErrorBoundary>
-          <Layout {...route.layoutProps}>
-            <React.Suspense fallback={null}>
-              <Component />
-            </React.Suspense>
-          </Layout>
+          <MobileWarningPage>
+            <AuthorizationPage>
+              <Layout {...route.layoutProps}>
+                <React.Suspense fallback={null}>
+                  <Component />
+                </React.Suspense>
+              </Layout>
+            </AuthorizationPage>
+          </MobileWarningPage>
         </ErrorBoundary>
       }
     >
@@ -27,7 +35,21 @@ const getRoute = (route: RouteConfig) => {
     </Route>
   );
 };
+
+export const EventDispatchLogout = "ThunderFuelDispatchLogout";
+
 const Router = () => {
+  React.useEffect(() => {
+    const detectPermissionDenied = () => {
+      window.location.reload();
+    };
+    window.addEventListener(EventDispatchLogout, detectPermissionDenied);
+
+    return () => {
+      window.removeEventListener(EventDispatchLogout, detectPermissionDenied);
+    };
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

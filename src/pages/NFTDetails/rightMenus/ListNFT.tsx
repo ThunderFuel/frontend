@@ -7,20 +7,25 @@ import Tab from "components/Tab";
 import InputPrice from "../components/InputPrice";
 import ToggleButton from "components/ToggleButton";
 import Input from "components/Input";
-import { getDateFromExpirationTime } from "utils";
+import { formatPrice, getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
 import dayjs from "dayjs";
 import { RightMenuType } from "store/NFTDetailsSlice";
+import floorService from "api/floor/floor.service";
+import EthereumPrice from "components/EthereumPrice";
+import { removeAll } from "../../../store/bulkListingSlice";
 
 // TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ onBack }: { onBack: any }) => {
   const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
+  const [topTrait, setTopTrait] = useState(0);
   const dispatch = useAppDispatch();
   const [isTimedAuction, setisTimedAuction] = useState(false);
   const [isPrivateSale, setisPrivateSale] = useState(false);
   const [hasStartingPrice, sethasStartingPrice] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [privateSaleAddress, setprivateSaleAddress] = useState("");
   const [price, setprice] = useState<any>(presetPrice ?? "");
   const [startingPrice, setstartingPrice] = useState<any>(0);
@@ -32,6 +37,10 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const isValidNumber = (price: any) => {
     return !(isNaN(Number(price)) || price === "") && price > 0;
   };
+  const onCheckoutComplete = () => {
+    dispatch(removeAll());
+    onBack();
+  };
 
   const footer = (
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
@@ -39,23 +48,26 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
         <Button
           disabled={!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false}
           onClick={() => {
-            if (isTimedAuction)
+            if (isTimedAuction) {
               dispatch(
                 setCheckout({
                   type: CheckoutType.ConfirmListing,
                   isAuction: isTimedAuction,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
                   auctionStartingPrice: startingPrice,
+                  onCheckoutComplete,
                 })
               );
-            else
+            } else if (price > 0) {
               dispatch(
                 setCheckout({
                   type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
                   price: price,
                   expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  onCheckoutComplete,
                 })
               );
+            }
 
             dispatch(toggleCheckoutModal());
           }}
@@ -82,14 +94,27 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     </div>
   );
 
-  const handleToggle = (isOn: boolean) => {
-    if (isTimedAuction) sethasStartingPrice(isOn);
-    else setisPrivateSale(isOn);
+  const handleToggle = () => {
+    if (isTimedAuction) sethasStartingPrice((prev) => !prev);
+    else setisPrivateSale((prev) => !prev);
   };
 
   const calculateReceivingAmount = (price: any) => {
     return price - (price * serviceFee) / 100 - (price * selectedNFT.collection?.royaltyFee) / 100;
   };
+
+  const fetchTopTrait = async () => {
+    try {
+      const responseTopTrait = await floorService.getTopTraitByTokenIds([selectedNFT.id]);
+      setTopTrait(responseTopTrait.data[selectedNFT.id]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchTopTrait();
+  }, [selectedNFT]);
 
   return (
     <RightMenu title={updateListing ? "Update Listing" : "List Your NFT"} footer={footer} onBack={onBack}>
@@ -102,21 +127,21 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               <span className="flex justify-between text-gray-light mt-2">
                 Current Price
                 <div className={`flex  items-center text-white`}>
-                  {selectedNFT.price} <IconEthereum color="gray" />
+                  <EthereumPrice price={selectedNFT.price} priceClassName="text-head6 font-spaceGrotesk" />
                 </div>
               </span>
             )}
           </div>
         </div>
         <Tab initTab={0} onChange={(value) => setisTimedAuction(!!value)}>
-          <Tab.Item id={0}>
-            <div className="flex justify-center items-center gap-x-[10px] -my-2">
+          <Tab.Item id={0} className="w-full">
+            <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
               <IconListed className="w-[17px] h-[17px]" />
               FIXED PRICE
             </div>
           </Tab.Item>
-          <Tab.Item id={1} disabled={updateListing ? true : false}>
-            <div className="flex justify-center items-center gap-x-[10px] -my-2">
+          <Tab.Item id={1} disabled={updateListing} className="w-full">
+            <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
               <IconAuction className="w-[17px] h-[17px]" />
               TIMED AUCTION
             </div>
@@ -126,7 +151,8 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
         <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
           {isTimedAuction ? "Set Duration" : "Listing Duration"}
           <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
-            <IconInfo className="w-[17px] h-[17px]" /> <span>Expires on </span> {getDateFromExpirationTime(duration.value)}
+            <IconInfo className="w-[17px] h-[17px]" />
+            <span>Expires on </span> {getDateFromExpirationTime(duration.value)}
           </div>
           <Select options={selectExpirationDates} onChange={setDuration} value={duration} />
         </div>
@@ -134,13 +160,13 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
             Enter Price*
             <InputPrice onChange={setprice} value={price} type="text" />
-            {price !== "" && price < selectedNFT.floorPrice && warning}
+            {price !== "" && price < selectedNFT?.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">
               <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
-                {selectedNFT.floorPrice} ETH - Floor Price
+                {selectedNFT?.collection ? formatPrice(selectedNFT?.collection?.floor) : "-"} ETH - Floor Price
               </div>
-              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.traitHighest?.price)}>
-                {selectedNFT.topTraitPrice} ETH - Top Trait Price
+              <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
+                {formatPrice(topTrait)} ETH - Top Trait Price
               </div>
             </div>
             <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray">
@@ -153,28 +179,30 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                 <div className="">{selectedNFT.collection?.royaltyFee}%</div>
               </div>
               <div className="flex w-full justify-between">
-                <div className="text-gray-light">You’ll Recieve</div>
+                <div className="text-gray-light">You’ll Receive</div>
                 <div className={`flex items-center ${isValidNumber(price) ? "text-green" : "text-gray-light"}`}>
-                  {isValidNumber(price) ? calculateReceivingAmount(price) : "-"} <IconEthereum />
+                  {isValidNumber(price) ? formatPrice(calculateReceivingAmount(price)) : "-"} <IconEthereum />
                 </div>
               </div>
             </div>
           </div>
         )}
-        <div className="flex flex-col gap-y-2 text-head6 font-spaceGrotesk text-white">
-          <div className="flex w-full justify-between">
-            {isTimedAuction ? "Starting Price" : "Private Sale"}
-            <div className="w-fit">
-              <ToggleButton isOn={isTimedAuction ? hasStartingPrice : isPrivateSale} onToggle={handleToggle} />
+        {isTimedAuction && (
+          <div className="flex flex-col gap-y-2 text-head6 font-spaceGrotesk text-white">
+            <div className="flex w-full justify-between">
+              {isTimedAuction ? "Starting Price" : "Private Sale"}
+              <div className="w-fit">
+                <ToggleButton isOn={isTimedAuction ? hasStartingPrice : isPrivateSale} onToggle={handleToggle} />
+              </div>
             </div>
+            <div className="flex gap-x-[5px] items-center text-bodySm text-gray-light">
+              <IconInfo className="w-[17px] h-[17px]" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
+            </div>
+            {isTimedAuction
+              ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
+              : isPrivateSale && <Input onChange={(event: any) => setprivateSaleAddress(event.target.value)} type="text" />}
           </div>
-          <div className="flex gap-x-[5px] items-center text-bodySm text-gray-light">
-            <IconInfo className="w-[17px] h-[17px]" /> {isTimedAuction ? "Bids below this amount won’t be accepted." : "Only the specified address can buy your item."}
-          </div>
-          {isTimedAuction
-            ? hasStartingPrice && <InputPrice onChange={setstartingPrice} value={startingPrice} type="text" />
-            : isPrivateSale && <Input onChange={setprivateSaleAddress} value={privateSaleAddress} type="text" />}
-        </div>
+        )}
         {isTimedAuction && (
           <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray text-head6 font-spaceGrotesk text-white">
             <div className="flex w-full justify-between">
@@ -186,9 +214,10 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               <div className="">{selectedNFT.collection?.royaltyFee}%</div>
             </div>
             <div className="flex w-full justify-between">
-              <div className="text-gray-light">You’ll Recieve</div>
+              <div className="text-gray-light">You’ll Receive</div>
               <div className={`flex items-center ${isValidNumber(startingPrice) ? "text-green" : "text-gray-light"}`}>
-                {isValidNumber(startingPrice) ? calculateReceivingAmount(startingPrice) : "-"} <IconEthereum />
+                {isValidNumber(startingPrice) ? formatPrice(calculateReceivingAmount(startingPrice)) : "-"}
+                <IconEthereum />
               </div>
             </div>
           </div>

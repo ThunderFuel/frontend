@@ -40,8 +40,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
 
   const onComplete = () => {
     setApproved(true);
-
-    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(true, selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice);
+    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
     else if (updateListing) nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
     else nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
   };
@@ -72,7 +71,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
     </div>
   );
 
-  const viewOnBlockchain = <button className="body-small text-gray-light underline">View on Blockchain</button>;
+  const viewOnBlockchain = <button className="body-small text-gray-light underline"></button>;
 
   return (
     <Modal
@@ -88,7 +87,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           checkoutAuctionStartingPrice ? (
             <CartItem text={"Starting Price"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutAuctionStartingPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
           ) : (
-            <CartItem text={""} name={selectedNFT.name} image={selectedNFT.image} price={""} id={0} titleSlot={viewOnBlockchain}></CartItem>
+            <CartItem text={"Starting Price"} name={selectedNFT.name} image={selectedNFT.image} price={0} id={0} titleSlot={viewOnBlockchain}></CartItem>
           )
         ) : (
           <CartItem text={"Price"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
