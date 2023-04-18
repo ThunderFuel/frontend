@@ -12,7 +12,6 @@ const schema = yup
   .object({
     collectionName: yup.string().required(),
     tokenSymbol: yup.string().required(),
-    abc: yup.mixed1().required().fileRequired(),
   })
   .required();
 

@@ -146,7 +146,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       loadingTemplate={MarketPlaceTableLoading}
       rowElementProps={rowElementProps}
       rowElement={Link}
-      theadClassName={"sticky"}
+      theadClassName={"sticky z-10"}
       theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
       headers={headers}
       items={items}
