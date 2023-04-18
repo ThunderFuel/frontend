@@ -10,7 +10,6 @@ const EthereumPrice = ({ price, priceClassName, className, fullPrice }: { price:
   const lthMinLimit = priceValue > 0 && priceValue < MIN_LIMIT;
   const priceText = priceValue === 0 ? 0 : lthMinLimit ? "<0.0001" : formatPrice(price);
 
-  console.log(lthMinLimit);
   const Component = lthMinLimit && !fullPrice ? Tooltip : React.Fragment;
 
   return (
