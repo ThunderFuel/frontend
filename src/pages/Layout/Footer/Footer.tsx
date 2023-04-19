@@ -4,7 +4,7 @@ import { AssetLogo } from "assets";
 
 const Footer = () => {
   return (
-    <div className="mt-auto flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full py-5 lg:py-10">
+    <div className="mt-auto flex flex-col lg:justify-center bg-bg-light w-full py-5 lg:py-10">
       <div className="container-fluid">
         {/* <div className="border-b border-b-gray pb-10 mb-5">
         <div className="container">
