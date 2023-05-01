@@ -5,6 +5,8 @@ import Textarea from "components/Textarea";
 import ModalEditDropPageTitle from "../modals/ModalEditDropPageTitle";
 import ModalAddSocialMedias from "../modals/ModalAddSocialMedias";
 import ModalAddTeamMember from "../modals/ModalAddTeamMember";
+import ModalChangeBackgroundColor from "../modals/ModalChangeBackgroundColor";
+import Tab from "./Tab";
 
 const Container = () => {
   return (
@@ -31,12 +33,17 @@ const Container = () => {
           </div>
         </div>
         <div>
-          <ul></ul>
+          <Tab className="text-white">
+            <Tab.Item title="Meet the Team">asdasd</Tab.Item>
+            <Tab.Item title="Road Map">asdasd</Tab.Item>
+            <Tab.Item title="FAQ">FAQ</Tab.Item>
+          </Tab>
         </div>
       </div>
       <ModalEditDropPageTitle show={false} />
       <ModalAddSocialMedias show={false} />
-      <ModalAddTeamMember show={true} />
+      <ModalAddTeamMember show={false} />
+      <ModalChangeBackgroundColor show={false} />
     </React.Fragment>
   );
 };
