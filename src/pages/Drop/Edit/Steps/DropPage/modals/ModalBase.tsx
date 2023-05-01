@@ -27,5 +27,6 @@ const Modal = ({ title, footer, children, ...etc }: any) => {
 };
 
 export default Object.assign(Modal, {
+  Header: ModalHeader,
   Footer: ModalFooter,
 });
