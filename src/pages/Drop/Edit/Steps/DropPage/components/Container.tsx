@@ -12,6 +12,7 @@ import ModalAddNewBlock from "../modals/ModalAddNewBlock";
 import ModalAddInfinityScrollGalleryBlock from "../modals/ModalAddInfinityScrollGalleryBlock";
 import ModalAddImageTextBlock from "../modals/ModalAddImageTextBlock";
 import ModalAddVideoTextBlock from "../modals/ModalAddVideoTextBlock";
+import ModalAddSingleImageBlock from "../modals/ModalAddSingleImageBlock";
 
 const Container = () => {
   return (
@@ -53,7 +54,8 @@ const Container = () => {
       <ModalAddNewBlock show={false} />
       <ModalAddInfinityScrollGalleryBlock show={false} />
       <ModalAddImageTextBlock show={false} />
-      <ModalAddVideoTextBlock show={true} />
+      <ModalAddVideoTextBlock show={false} />
+      <ModalAddSingleImageBlock show={true} />
     </React.Fragment>
   );
 };
