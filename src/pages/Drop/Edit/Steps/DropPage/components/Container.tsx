@@ -2,19 +2,15 @@ import React from "react";
 import Button from "components/Button";
 import { IconCirclePlusWhite, IconPencil } from "icons";
 import Textarea from "components/Textarea";
-import ModalEditDropPageTitle from "../modals/ModalEditDropPageTitle";
-import ModalAddSocialMedias from "../modals/ModalAddSocialMedias";
-import ModalAddTeamMember from "../modals/ModalAddTeamMember";
-import ModalChangeBackgroundColor from "../modals/ModalChangeBackgroundColor";
 import Tab from "./Tab";
-import ModalAddMilestone from "../modals/ModalAddMilestone";
-import ModalAddNewBlock from "../modals/ModalAddNewBlock";
-import ModalAddInfinityScrollGalleryBlock from "../modals/ModalAddInfinityScrollGalleryBlock";
-import ModalAddImageTextBlock from "../modals/ModalAddImageTextBlock";
-import ModalAddVideoTextBlock from "../modals/ModalAddVideoTextBlock";
-import ModalAddSingleImageBlock from "../modals/ModalAddSingleImageBlock";
+import { ModalNames, useModalContext } from "../modals/ModalContext";
 
 const Container = () => {
+  const modal = useModalContext();
+  const onAddNewBlock = () => {
+    modal.showModal(ModalNames.ModalAddNewBlock);
+  };
+
   return (
     <React.Fragment>
       <div className="flex flex-col rounded-lg border border-gray bg-gray p-8 gap-8">
@@ -33,7 +29,7 @@ const Container = () => {
           </Textarea>
         </div>
         <div className="h-32 flex-center border border-dashed border-white text-white bg-white bg-opacity-10 rounded-lg">
-          <div className="flex-center gap-2">
+          <div className="flex-center gap-2" onClick={onAddNewBlock}>
             <div className="text-headline-02">ADD NEW BLOCK</div>
             <IconCirclePlusWhite />
           </div>
@@ -46,16 +42,6 @@ const Container = () => {
           </Tab>
         </div>
       </div>
-      <ModalEditDropPageTitle show={false} />
-      <ModalAddSocialMedias show={false} />
-      <ModalAddTeamMember show={false} />
-      <ModalChangeBackgroundColor show={false} />
-      <ModalAddMilestone show={false} />
-      <ModalAddNewBlock show={false} />
-      <ModalAddInfinityScrollGalleryBlock show={false} />
-      <ModalAddImageTextBlock show={false} />
-      <ModalAddVideoTextBlock show={false} />
-      <ModalAddSingleImageBlock show={true} />
     </React.Fragment>
   );
 };

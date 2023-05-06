@@ -1,35 +1,36 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Modal from "./Modal";
 import Alert from "../components/Alert";
 import Img from "components/Img";
 import { AssetDropEditClipImageText, AssetDropEditClipInfinityScroll, AssetDropEditClipSingleImage, AssetDropEditClipSingleVideo, AssetDropEditClipVideoText } from "assets";
+import { ModalNames, useModalContext } from "./ModalContext";
 
 const options = [
   [
     {
-      type: "InfinityScroll",
+      type: ModalNames.ModalAddInfinityScrollGalleryBlock,
       image: AssetDropEditClipInfinityScroll,
       name: "Infinite Scroll Gallery",
     },
     {
-      type: "ImageText",
+      type: ModalNames.ModalAddImageTextBlock,
       image: AssetDropEditClipImageText,
       name: "Image & Text",
     },
     {
-      type: "VideoText",
+      type: ModalNames.ModalAddVideoTextBlock,
       image: AssetDropEditClipVideoText,
       name: "Video & Text",
     },
   ],
   [
     {
-      type: "SingleImage",
+      type: ModalNames.ModalAddSingleImageBlock,
       image: AssetDropEditClipSingleImage,
       name: "Single Image",
     },
     {
-      type: "SingleVideo",
+      type: ModalNames.ModalAddSingleVideoBlock,
       image: AssetDropEditClipSingleVideo,
       name: "Single Video",
     },
@@ -37,12 +38,16 @@ const options = [
 ];
 
 const ModalAddNewBlock = (props: any) => {
+  const { activeModal, closeAll, showModal } = useModalContext();
   const onClick = (item: any) => {
-    console.log(item);
+    showModal(item.type);
   };
+  const isShow = useMemo(() => {
+    return !!activeModal[ModalNames.ModalAddNewBlock];
+  }, [activeModal]);
 
   return (
-    <Modal {...props} title="Add New Block">
+    <Modal show={isShow} {...props} title="Add New Block" onClose={closeAll}>
       <div className="flex flex-col gap-6 text-white">
         <Alert>Choose the block format you would like to add.</Alert>
         <div className="p-5 flex flex-col gap-5">
