@@ -8,6 +8,7 @@ import ModalAddTeamMember from "../modals/ModalAddTeamMember";
 import ModalChangeBackgroundColor from "../modals/ModalChangeBackgroundColor";
 import Tab from "./Tab";
 import ModalAddMilestone from "../modals/ModalAddMilestone";
+import ModalAddNewBlock from "../modals/ModalAddNewBlock";
 
 const Container = () => {
   return (
@@ -45,7 +46,8 @@ const Container = () => {
       <ModalAddSocialMedias show={false} />
       <ModalAddTeamMember show={false} />
       <ModalChangeBackgroundColor show={false} />
-      <ModalAddMilestone show={true} />
+      <ModalAddMilestone show={false} />
+      <ModalAddNewBlock show={true} />
     </React.Fragment>
   );
 };
