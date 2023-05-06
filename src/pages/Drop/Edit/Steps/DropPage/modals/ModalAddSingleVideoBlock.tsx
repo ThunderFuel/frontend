@@ -3,8 +3,7 @@ import Modal from "./Modal";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import { ModalNames, useModalContext } from "./ModalContext";
-import imageService from "../../../../../../api/image/image.service";
-import axios from "axios";
+import { uploadImage } from "utils";
 
 const ModalAddSingleVideoBlock = () => {
   const { activeModal, closeAll, showModal } = useModalContext();
@@ -17,8 +16,7 @@ const ModalAddSingleVideoBlock = () => {
   };
 
   const onChange = async (e: any) => {
-    const response: any = await imageService.getToken();
-    await axios.put(response, e.target.files[0]);
+    await uploadImage(e.target.files[0]);
   };
 
   return (

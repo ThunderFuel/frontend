@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 import * as timeago from "timeago.js";
+import { ContainerClient } from "@azure/storage-blob";
+import imageService from "../api/image/image.service";
 
 export const addressFormat = (address: any) => {
   if (!address) {
@@ -102,4 +104,18 @@ export const formatPrice = (price: any) => {
     .replace(/\.?0+$/, "");
 };
 
-export const isObjectEmpty = (object: any) => (Object.keys(object).length === 0 ? true : false);
+export const isObjectEmpty = (object: any) => Object.keys(object).length === 0;
+
+export const uploadImage = async (file: File) => {
+  const clientUrl: any = await imageService.getToken();
+
+  const containerClient = new ContainerClient(clientUrl);
+
+  const blockBlobClient = containerClient.getBlockBlobClient(file.name);
+  const result = await blockBlobClient.uploadData(file, {
+    onProgress: (e) => {
+      console.log(e.loadedBytes);
+    },
+  });
+  console.log("uploaded", result);
+};
