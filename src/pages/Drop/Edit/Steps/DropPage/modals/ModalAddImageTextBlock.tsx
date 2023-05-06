@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Modal from "./Modal";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import InputLabel from "components/InputLabel";
 import Textarea from "components/Textarea";
 import LayoutOption from "../components/LayoutOption";
+import { ModalNames, useModalContext } from "./ModalContext";
 
-const ModalAddImageTextBlock = (props: any) => {
+const ModalAddImageTextBlock = () => {
+  const { activeModal, closeAll, showModal } = useModalContext();
+  const isShow = useMemo(() => {
+    return !!activeModal[ModalNames.ModalAddImageTextBlock];
+  }, [activeModal]);
+  const onBack = () => {
+    closeAll();
+    showModal(ModalNames.ModalAddNewBlock);
+  };
+
   return (
-    <Modal {...props} title="Add Image & Text Block" showBackButton={true} footer={<Modal.Footer onClose={props.onClose}>Add Block</Modal.Footer>}>
+    <Modal show={isShow} onBack={onBack} onClose={closeAll} title="Add Image & Text Block" showBackButton={true} footer={<Modal.Footer onClose={closeAll}>Add Block</Modal.Footer>}>
       <div className="flex flex-col gap-6 text-white">
         <div className="flex flex-col gap-4">
           <Label>Select a Layout</Label>

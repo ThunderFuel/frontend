@@ -28,7 +28,7 @@ const Container = () => {
             Welcome to the Chungos collection by Chungos on Thunder Marketplace
           </Textarea>
         </div>
-        <div className="h-32 flex-center border border-dashed border-white text-white bg-white bg-opacity-10 rounded-lg">
+        <div className="h-32 flex-center border border-dashed border-white text-white bg-white bg-opacity-10 rounded-lg cursor-pointer">
           <div className="flex-center gap-2" onClick={onAddNewBlock}>
             <div className="text-headline-02">ADD NEW BLOCK</div>
             <IconCirclePlusWhite />

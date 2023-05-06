@@ -12,6 +12,7 @@ import ModalAddInfinityScrollGalleryBlock from "./modals/ModalAddInfinityScrollG
 import ModalAddImageTextBlock from "./modals/ModalAddImageTextBlock";
 import ModalAddVideoTextBlock from "./modals/ModalAddVideoTextBlock";
 import ModalAddSingleImageBlock from "./modals/ModalAddSingleImageBlock";
+import ModalAddSingleVideoBlock from "./modals/ModalAddSingleVideoBlock";
 
 const DropPage = () => {
   return (
@@ -27,10 +28,11 @@ const DropPage = () => {
         <ModalChangeBackgroundColor show={false} />
         <ModalAddMilestone show={false} />
         <ModalAddNewBlock />
-        <ModalAddInfinityScrollGalleryBlock show={false} />
-        <ModalAddImageTextBlock show={false} />
-        <ModalAddVideoTextBlock show={false} />
-        <ModalAddSingleImageBlock show={false} />
+        <ModalAddInfinityScrollGalleryBlock />
+        <ModalAddImageTextBlock />
+        <ModalAddVideoTextBlock />
+        <ModalAddSingleImageBlock />
+        <ModalAddSingleVideoBlock />
       </ModalProvider>
     </div>
   );
