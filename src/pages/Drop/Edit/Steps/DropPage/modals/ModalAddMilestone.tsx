@@ -1,25 +1,14 @@
 import React from "react";
-import ModalBase from "./ModalBase";
+import Modal from "./Modal";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import InputLabel from "components/InputLabel";
 import Textarea from "components/Textarea";
 import InputSwitch from "components/InputSwitch";
-import { IconCircleLeft } from "../../../../../../icons";
 
-const ModalTitle = ({ onClose }: any) => {
-  return (
-    <div className="flex items-center gap-2.5">
-      <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={onClose}>
-        <IconCircleLeft />
-      </button>
-      Add Milestone
-    </div>
-  );
-};
 const ModalAddMilestone = (props: any) => {
   return (
-    <ModalBase {...props} title={<ModalTitle />} footer={<ModalBase.Footer onClose={props.onClose}>ADD MILESTONE</ModalBase.Footer>}>
+    <Modal {...props} title="Add Milestone" showBackButton={true} footer={<Modal.Footer onClose={props.onClose}>ADD MILESTONE</Modal.Footer>}>
       <div className="flex flex-col gap-6 text-white">
         <div className="flex flex-col gap-2">
           <Label helperText="400x200px recommended. PNG, GIF or JPEG. Max 20mb.">Image</Label>
@@ -35,7 +24,7 @@ const ModalAddMilestone = (props: any) => {
           <InputSwitch />
         </div>
       </div>
-    </ModalBase>
+    </Modal>
   );
 };
 

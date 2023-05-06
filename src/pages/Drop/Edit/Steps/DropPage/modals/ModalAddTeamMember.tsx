@@ -1,5 +1,5 @@
 import React from "react";
-import ModalBase from "./ModalBase";
+import Modal from "./Modal";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import InputLabel from "components/InputLabel";
@@ -9,7 +9,7 @@ import Input from "components/Input";
 
 const ModalAddTeamMember = (props: any) => {
   return (
-    <ModalBase {...props} title="Add Team Member" footer={<ModalBase.Footer onClose={props.onClose}>Add TEAM MEMBER</ModalBase.Footer>}>
+    <Modal {...props} title="Add Team Member" footer={<Modal.Footer onClose={props.onClose}>Add TEAM MEMBER</Modal.Footer>}>
       <div className="flex flex-col gap-6 text-white">
         <div className="flex flex-col gap-2">
           <Label helperText="100x100px recommended. PNG, GIF or JPEG. Max 20mb.">Avatar</Label>
@@ -29,7 +29,7 @@ const ModalAddTeamMember = (props: any) => {
           <Input icon={<IconTelegram />} placeholder="@telegram_username" />
         </div>
       </div>
-    </ModalBase>
+    </Modal>
   );
 };
 

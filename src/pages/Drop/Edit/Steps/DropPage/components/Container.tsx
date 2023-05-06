@@ -9,6 +9,8 @@ import ModalChangeBackgroundColor from "../modals/ModalChangeBackgroundColor";
 import Tab from "./Tab";
 import ModalAddMilestone from "../modals/ModalAddMilestone";
 import ModalAddNewBlock from "../modals/ModalAddNewBlock";
+import ModalAddInfinityScrollGalleryBlock from "../modals/ModalAddInfinityScrollGalleryBlock";
+import ModalAddImageTextBlock from "../modals/ModalAddImageTextBlock";
 
 const Container = () => {
   return (
@@ -47,7 +49,9 @@ const Container = () => {
       <ModalAddTeamMember show={false} />
       <ModalChangeBackgroundColor show={false} />
       <ModalAddMilestone show={false} />
-      <ModalAddNewBlock show={true} />
+      <ModalAddNewBlock show={false} />
+      <ModalAddInfinityScrollGalleryBlock show={false} />
+      <ModalAddImageTextBlock show={true} />
     </React.Fragment>
   );
 };

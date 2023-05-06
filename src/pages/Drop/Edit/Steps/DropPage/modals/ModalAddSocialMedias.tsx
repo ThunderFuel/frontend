@@ -1,12 +1,12 @@
 import React from "react";
-import ModalBase from "./ModalBase";
+import Modal from "./Modal";
 import { IconDiscord, IconInfo, IconSocial3Dots, IconTelegram, IconTwitter, IconWeblink } from "icons";
 import Label from "components/Label";
 import Input from "components/Input";
 
 const ModalAddSocialMedias = (props: any) => {
   return (
-    <ModalBase {...props} title="Add Social Links" footer={<ModalBase.Footer />}>
+    <Modal {...props} title="Add Social Links" footer={<Modal.Footer />}>
       <div className="flex flex-col gap-6">
         <div className="p-4 bg-gray rounded-md flex gap-5 items-center">
           <IconInfo className="text-white" />
@@ -24,7 +24,7 @@ const ModalAddSocialMedias = (props: any) => {
           <Input icon={<IconWeblink />} placeholder="yourwebsite.io" />
         </div>
       </div>
-    </ModalBase>
+    </Modal>
   );
 };
 

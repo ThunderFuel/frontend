@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "./ModalBase";
+import Modal from "./Modal";
 import InputLabel from "components/InputLabel";
 
 const ModalEditDropPageTitle = (props: any) => {
