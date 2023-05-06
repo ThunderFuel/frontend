@@ -11,6 +11,7 @@ import ModalAddMilestone from "../modals/ModalAddMilestone";
 import ModalAddNewBlock from "../modals/ModalAddNewBlock";
 import ModalAddInfinityScrollGalleryBlock from "../modals/ModalAddInfinityScrollGalleryBlock";
 import ModalAddImageTextBlock from "../modals/ModalAddImageTextBlock";
+import ModalAddVideoTextBlock from "../modals/ModalAddVideoTextBlock";
 
 const Container = () => {
   return (
@@ -51,7 +52,8 @@ const Container = () => {
       <ModalAddMilestone show={false} />
       <ModalAddNewBlock show={false} />
       <ModalAddInfinityScrollGalleryBlock show={false} />
-      <ModalAddImageTextBlock show={true} />
+      <ModalAddImageTextBlock show={false} />
+      <ModalAddVideoTextBlock show={true} />
     </React.Fragment>
   );
 };

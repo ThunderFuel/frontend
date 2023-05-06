@@ -94,3 +94,4 @@ export { ReactComponent as IconUpload } from "./icon-upload.svg";
 export { ReactComponent as IconCirclePlusWhite } from "./icon-circle-plus-white.svg";
 export { ReactComponent as IconCircleLeft } from "./icon-circle-left.svg";
 export { ReactComponent as IconText } from "./icon-text.svg";
+export { ReactComponent as IconVideo } from "./icon-video.svg";
