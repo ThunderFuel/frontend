@@ -39,7 +39,7 @@ const UploadFile = ({ className, error, accept = "image/*", ...etc }: any, ref: 
   return (
     <div className="flex flex-col gap-2">
       <label className={clsx("relative group flex w-full min-h-[140px] overflow-hidden justify-center items-center rounded-md border  border-gray", className)}>
-        <Img className="absolute" src={etc.value} />
+        <Img className="absolute" src={etc.value ?? null} />
         <input ref={ref} accept={accept} className="opacity-0 cursor-pointer h-full w-full absolute" type="file" {...etc} onChange={onChange} />
         <IconUpload className="text-gray-light w-10 h-10 group-hover:text-white" />
         {isUploading && <Progress value={uploadProcess} />}

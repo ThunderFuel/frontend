@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { IconWarning } from "../../icons";
+import InputError from "../InputError";
 
 interface ITextarea {
   icon?: React.ReactNode;
@@ -19,11 +19,7 @@ const Textarea = ({ className, containerClassName, icon, error, ...etc }: ITexta
         <textarea ref={ref} className={clsx("input peer resize-none", className)} {...etc}></textarea>
         {icon}
       </div>
-      {error && (
-        <span className="text-red body-small flex items-center">
-          <IconWarning /> {error}
-        </span>
-      )}
+      {error && <InputError error={error} />}
     </>
   );
 };

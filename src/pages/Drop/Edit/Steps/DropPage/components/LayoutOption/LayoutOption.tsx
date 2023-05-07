@@ -3,10 +3,12 @@ import { IconText, IconUpload, IconVideo } from "icons";
 import clsx from "clsx";
 import "./LayoutOption.css";
 
-const LayoutOption = ({ className, reverse, video, ...etc }: any) => {
+const LayoutOption = ({ className, reverse, video, ...etc }: any, ref: any) => {
+  console.log(etc);
+
   return (
     <label className={clsx("layout-option", className)}>
-      <input type="radio" {...etc} />
+      <input type="radio" ref={ref} {...etc} />
       <ul className={clsx(reverse && "flex-row-reverse")}>
         <li className="bg-gray-100">{video ? <IconVideo /> : <IconUpload />}</li>
         <li className="bg-gray">
@@ -17,4 +19,4 @@ const LayoutOption = ({ className, reverse, video, ...etc }: any) => {
   );
 };
 
-export default LayoutOption;
+export default React.forwardRef(LayoutOption);

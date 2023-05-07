@@ -108,8 +108,7 @@ export const isObjectEmpty = (object: any) => Object.keys(object).length === 0;
 
 export const uploadFile = async (file: File, onProcess: any = null) => {
   const clientUrl: any = await imageService.getToken({
-    fileName: file.name,
-    directoryName: Date.now().toString(),
+    ext: file.name.split(".").pop(),
   });
 
   const containerClient = new ContainerClient(clientUrl);

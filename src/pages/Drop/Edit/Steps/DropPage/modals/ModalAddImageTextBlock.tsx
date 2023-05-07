@@ -6,12 +6,14 @@ import InputLabel from "components/InputLabel";
 import Textarea from "components/Textarea";
 import LayoutOption from "../components/LayoutOption";
 import { ModalNames, useModalContext } from "./ModalContext";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import InputError from "components/InputError";
 
 const schema = yup
   .object({
+    layoutType: yup.string().required(),
     image: yup.string().required(),
     title: yup.string().required(),
     text: yup.string().required(),
@@ -26,6 +28,7 @@ const ModalAddImageTextBlock = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -50,9 +53,22 @@ const ModalAddImageTextBlock = () => {
         <div className="flex flex-col gap-4">
           <Label>Select a Layout</Label>
           <div className="flex gap-5">
-            <LayoutOption name="layout" />
-            <LayoutOption name="layout" reverse={true} />
+            <Controller
+              control={control}
+              render={({ field }) => {
+                return <LayoutOption name="layout" onChange={() => field.onChange("rtl")} />;
+              }}
+              name={"layoutType"}
+            />
+            <Controller
+              control={control}
+              render={({ field }) => {
+                return <LayoutOption name="layout" onChange={() => field.onChange("ltr")} reverse={true} />;
+              }}
+              name={"layoutType"}
+            />
           </div>
+          {errors.layoutType?.message && <InputError error={errors.layoutType?.message} />}
         </div>
         <div className="flex flex-col gap-2">
           <Label helperText="800x640px recommended. PNG, GIF or JPEG. Max 20mb.">Image*</Label>
