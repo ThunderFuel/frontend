@@ -14,22 +14,22 @@ const Progress = ({ value }: any) => {
   );
 };
 
-const UploadFile = ({ className, error, accept = "image/*", ...etc }: any, ref: any) => {
+const UploadFile = ({ className, error, accept = "image/*", value, onChange }: any) => {
   const [uploadProcess, setUploadProcess] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
-  const onChange = async (e: any) => {
+  const onInputChange = async (e: any) => {
     const file = e.target.files?.[0];
     if (file) {
       try {
         setUploadProcess(0);
         setIsUploading(true);
-        await uploadFile(file, (process: any) => {
+        const url = await uploadFile(file, (process: any) => {
           setUploadProcess(process);
         });
-        etc.onChange("");
+        onChange(url);
       } catch (e) {
-        etc.onChange(null);
+        onChange(null);
       } finally {
         setIsUploading(false);
       }
@@ -39,8 +39,8 @@ const UploadFile = ({ className, error, accept = "image/*", ...etc }: any, ref: 
   return (
     <div className="flex flex-col gap-2">
       <label className={clsx("relative group flex w-full min-h-[140px] overflow-hidden justify-center items-center rounded-md border  border-gray", className)}>
-        <Img className="absolute" src={etc.value ?? null} />
-        <input ref={ref} accept={accept} className="opacity-0 cursor-pointer h-full w-full absolute" type="file" {...etc} onChange={onChange} />
+        <Img className="absolute" src={value ?? null} />
+        <input accept={accept} className="opacity-0 cursor-pointer h-full w-full absolute" type="file" onChange={onInputChange} />
         <IconUpload className="text-gray-light w-10 h-10 group-hover:text-white" />
         {isUploading && <Progress value={uploadProcess} />}
       </label>
@@ -53,4 +53,4 @@ const UploadFile = ({ className, error, accept = "image/*", ...etc }: any, ref: 
   );
 };
 
-export default React.forwardRef(UploadFile);
+export default UploadFile;

@@ -13,10 +13,10 @@ import InputError from "components/InputError";
 
 const schema = yup
   .object({
-    layoutType: yup.string().required(),
-    image: yup.string().required(),
-    title: yup.string().required(),
-    text: yup.string().required(),
+    layoutType: yup.string().label("Layout Type").required(),
+    image: yup.string().label("Image").required(),
+    title: yup.string().label("Title").required(),
+    text: yup.string().label("Text").required(),
   })
   .required();
 const ModalAddImageTextBlock = () => {
@@ -72,7 +72,13 @@ const ModalAddImageTextBlock = () => {
         </div>
         <div className="flex flex-col gap-2">
           <Label helperText="800x640px recommended. PNG, GIF or JPEG. Max 20mb.">Image*</Label>
-          <UploadFile {...register("image")} error={errors.image?.message} />
+          <Controller
+            control={control}
+            render={({ field }) => {
+              return <UploadFile value={field.value} onChange={(value: any) => field.onChange(value)} error={errors.image?.message} />;
+            }}
+            name={"image"}
+          />
         </div>
         <InputLabel {...register("title")} error={errors.title?.message} label="Title*" />
         <div className="flex flex-col gap-2">

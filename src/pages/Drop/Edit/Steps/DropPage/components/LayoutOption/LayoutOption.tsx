@@ -4,8 +4,6 @@ import clsx from "clsx";
 import "./LayoutOption.css";
 
 const LayoutOption = ({ className, reverse, video, ...etc }: any, ref: any) => {
-  console.log(etc);
-
   return (
     <label className={clsx("layout-option", className)}>
       <input type="radio" ref={ref} {...etc} />
