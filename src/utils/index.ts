@@ -106,16 +106,17 @@ export const formatPrice = (price: any) => {
 
 export const isObjectEmpty = (object: any) => Object.keys(object).length === 0;
 
-export const uploadImage = async (file: File) => {
+export const uploadFile = async (file: File, onProcess: any = null) => {
   const clientUrl: any = await imageService.getToken();
 
   const containerClient = new ContainerClient(clientUrl);
 
   const blockBlobClient = containerClient.getBlockBlobClient(file.name);
-  const result = await blockBlobClient.uploadData(file, {
+  await blockBlobClient.uploadData(file, {
     onProgress: (e) => {
-      console.log(e.loadedBytes);
+      if (onProcess) {
+        onProcess(Math.floor((e.loadedBytes / file.size) * 100));
+      }
     },
   });
-  console.log("uploaded", result);
 };

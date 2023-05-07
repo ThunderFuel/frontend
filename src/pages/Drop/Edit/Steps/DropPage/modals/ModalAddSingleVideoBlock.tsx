@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import Label from "components/Label";
 import UploadFile from "components/UploadFile";
 import { ModalNames, useModalContext } from "./ModalContext";
-import { uploadImage } from "utils";
+import { uploadFile } from "utils";
 
 const ModalAddSingleVideoBlock = () => {
   const { activeModal, closeAll, showModal } = useModalContext();
@@ -16,7 +16,7 @@ const ModalAddSingleVideoBlock = () => {
   };
 
   const onChange = async (e: any) => {
-    await uploadImage(e.target.files[0]);
+    await uploadFile(e.target.files[0]);
   };
 
   return (
