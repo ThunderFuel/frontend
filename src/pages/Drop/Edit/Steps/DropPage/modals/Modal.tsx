@@ -19,10 +19,10 @@ const ModalHeader = ({ children, showBackButton, onBack }: { showBackButton?: bo
   );
 };
 
-export const ModalFooter = ({ onClose, children = "DONE" }: any) => {
+export const ModalFooter = ({ onSubmit, children = "DONE" }: any) => {
   return (
     <div className="p-5">
-      <Button className="w-full" onClick={onClose}>
+      <Button className="w-full" onClick={onSubmit}>
         {children}
       </Button>
     </div>

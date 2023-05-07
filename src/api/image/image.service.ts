@@ -1,7 +1,7 @@
 import { ThunderURL } from "../index";
 
 export default {
-  getToken: () => {
-    return ThunderURL.get("v1/auth/generatesasuri");
+  getToken: (params: { fileName: string; directoryName: string }) => {
+    return ThunderURL.get("v1/auth/generatesasuri", { params });
   },
 };
