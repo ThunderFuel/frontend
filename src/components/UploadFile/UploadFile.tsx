@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { IconUpload, IconWarning } from "icons";
 import Img from "../Img";
-import { uploadFile } from "../../utils";
+import { uploadFile } from "utils";
 
 const Progress = ({ value }: any) => {
   console.log(value);
