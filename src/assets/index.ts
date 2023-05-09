@@ -72,3 +72,5 @@ export { default as AssetDropEditClipVideoText } from "./drop/edit/clip-video-te
 export { default as AssetDropEditClipInfinityScroll } from "./drop/edit/clip-infinity-scroll.png";
 export { default as AssetDropEditClipSingleImage } from "./drop/edit/clip-single-image.png";
 export { default as AssetDropEditClipSingleVideo } from "./drop/edit/clip-single-video.png";
+
+export * as AssetDropTest from "./drop/test";

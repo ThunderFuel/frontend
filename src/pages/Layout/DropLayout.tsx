@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./Header";
+import Footer from "./Footer";
 
 interface Props {
   children: React.ReactNode;
@@ -7,14 +8,12 @@ interface Props {
   [key: string]: any;
 }
 
-const DropLayout = ({ children, ...etc }: Props) => {
-  console.log(etc);
-
+const DropLayout = ({ children }: Props) => {
   return (
-    <main className={"bg-bg min-h-screen flex flex-col bg-gray-dark"}>
-      <Header className={"bg-gray-dark"} />
-
+    <main className={"bg-bg min-h-screen flex flex-col bg-primary-50"}>
+      <Header />
       {children}
+      <Footer />
     </main>
   );
 };
