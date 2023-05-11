@@ -1,0 +1,11 @@
+export { default as infinity322 } from "./3-2 2.png";
+export { default as infinity323 } from "./3-2 3.png";
+export { default as infinity324 } from "./3-2 4.png";
+export { default as infinity328 } from "./3-2 8.png";
+export { default as infinity329 } from "./3-2 9.png";
+export { default as infinity3210 } from "./3-2 10.png";
+export { default as infinity3212 } from "./3-2 12.png";
+export { default as infinity3213 } from "./3-2 13.png";
+export { default as infinity3214 } from "./3-2 14.png";
+export { default as infinity3215 } from "./3-2 15.png";
+export { default as infinity3216 } from "./3-2 16.png";
