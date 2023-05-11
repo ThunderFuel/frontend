@@ -1,4 +1,5 @@
 import { AssetDropTest } from "assets";
+import { SocialTypes } from "../collections/collections.type";
 
 enum BLOCK_TYPE {
   Infinity,
@@ -9,9 +10,9 @@ enum BLOCK_TYPE {
 }
 
 export default {
-  getDropTest01: () => {
+  getDropPrimary: () => {
     return {
-      banner: AssetDropTest.Test01.Banner,
+      banner: AssetDropTest.DropPrimary.Banner,
       about:
         "Time for an experiment...\n" +
         "What is real and what is fake? Rich bros doing groceries in a Lambo, Instababes photoshopping themselves a new a-hole or two and bulky guys looking like Thor by only eating testicle sashimi (100% natty bro). Things are getting blurry, daddy.\n" +
@@ -24,22 +25,22 @@ export default {
         {
           type: BLOCK_TYPE.Infinity,
           images: [
-            AssetDropTest.Test01.Infinity.infinity322,
-            AssetDropTest.Test01.Infinity.infinity323,
-            AssetDropTest.Test01.Infinity.infinity324,
-            AssetDropTest.Test01.Infinity.infinity328,
-            AssetDropTest.Test01.Infinity.infinity329,
-            AssetDropTest.Test01.Infinity.infinity3210,
-            AssetDropTest.Test01.Infinity.infinity3212,
-            AssetDropTest.Test01.Infinity.infinity3213,
-            AssetDropTest.Test01.Infinity.infinity3214,
-            AssetDropTest.Test01.Infinity.infinity3215,
-            AssetDropTest.Test01.Infinity.infinity3216,
+            AssetDropTest.DropPrimary.Infinity.infinity322,
+            AssetDropTest.DropPrimary.Infinity.infinity323,
+            AssetDropTest.DropPrimary.Infinity.infinity324,
+            AssetDropTest.DropPrimary.Infinity.infinity328,
+            AssetDropTest.DropPrimary.Infinity.infinity329,
+            AssetDropTest.DropPrimary.Infinity.infinity3210,
+            AssetDropTest.DropPrimary.Infinity.infinity3212,
+            AssetDropTest.DropPrimary.Infinity.infinity3213,
+            AssetDropTest.DropPrimary.Infinity.infinity3214,
+            AssetDropTest.DropPrimary.Infinity.infinity3215,
+            AssetDropTest.DropPrimary.Infinity.infinity3216,
           ],
         },
         {
           type: BLOCK_TYPE.ImageText,
-          image: AssetDropTest.Test01.ImageText,
+          image: AssetDropTest.DropPrimary.ImageText,
           title: "Welcome to the Party!",
           text:
             "The Poser Party is an entertainment & music studio. We’re starting off by launching three virtual (soon to be) superstar DJs. Born in a digital identity, equipped to rock the digital world & the physical world.\n" +
@@ -56,11 +57,11 @@ export default {
         },
         {
           type: BLOCK_TYPE.SingleImage,
-          image: AssetDropTest.Test01.SingleImage,
+          image: AssetDropTest.DropPrimary.SingleImage,
         },
         {
           type: BLOCK_TYPE.ImageText,
-          image: AssetDropTest.Test01.ImageText01,
+          image: AssetDropTest.DropPrimary.ImageText01,
           title: "Utility",
           text:
             "Exclusive access to The Poser Party’s token-gated communities; The Party, Ron’s Gym, Jimmy’s Commune and George’s Traphouse\n" +
@@ -73,7 +74,7 @@ export default {
         },
         {
           type: BLOCK_TYPE.ImageText,
-          image: AssetDropTest.Test01.ImageText01,
+          image: AssetDropTest.DropPrimary.ImageText01,
           title: "Utility",
           text:
             "Exclusive access to The Poser Party’s token-gated communities; The Party, Ron’s Gym, Jimmy’s Commune and George’s Traphouse\n" +
@@ -87,9 +88,84 @@ export default {
       ],
       team: [
         {
+          image: AssetDropTest.DropPrimary.Team.richie,
           name: "Richie",
           label: "CO-FOUNDER",
           text: "Working as a high level business coach taught Richie (35) the psychology behind human influence. Combined with his experience as a touring MC, creative writing and storytelling, Richie is responsible for the creative concepting and branding behind The Poser Party. Richie, weirdly enough, also graduated a Masters in Law.",
+          socialMedias: [
+            {
+              type: SocialTypes.Twitter,
+              address: "",
+            },
+            {
+              type: SocialTypes.Telegram,
+              address: "",
+            },
+            {
+              type: SocialTypes.Website,
+              address: "",
+            },
+          ],
+        },
+        {
+          image: AssetDropTest.DropPrimary.Team.many,
+          name: "Manny",
+          label: "CO-FOUNDER",
+          text: "Manny (33) has had management level marketing experience from large corporations and the biggest dance record label; Spinnin’ Records. With over a decade of business experience from his technology master’s degree, Izzy provides the Poser Party strategic market vision for The Poser Party.",
+          socialMedias: [
+            {
+              type: SocialTypes.Twitter,
+              address: "",
+            },
+            {
+              type: SocialTypes.Telegram,
+              address: "",
+            },
+            {
+              type: SocialTypes.Website,
+              address: "",
+            },
+          ],
+        },
+        {
+          image: AssetDropTest.DropPrimary.Team.subgroover,
+          name: "Subgroover",
+          label: "Multi Platinum Producer",
+          text: "Subgroover has worked with the biggest names in the Music Industry, such as Tiesto, Steve Aoki, KSHMR and many more. Subgroover is a solid part of The Poser Party music team.",
+          socialMedias: [
+            {
+              type: SocialTypes.Twitter,
+              address: "",
+            },
+            {
+              type: SocialTypes.Telegram,
+              address: "",
+            },
+            {
+              type: SocialTypes.Website,
+              address: "",
+            },
+          ],
+        },
+        {
+          image: AssetDropTest.DropPrimary.Team.john,
+          name: "John F. Malta",
+          label: "Art Director & Illustrator",
+          text: "John F. Malta is a praised art director, illustrator and animator. During his career he has worked with various top-level brands as Netflix, Facebook, COMPLEX, Liquid Death, Dr. Martens and many more. He also has publications in the The New York Times, The New Yorker & The Wall Street Journal.",
+          socialMedias: [
+            {
+              type: SocialTypes.Twitter,
+              address: "",
+            },
+            {
+              type: SocialTypes.Telegram,
+              address: "",
+            },
+            {
+              type: SocialTypes.Website,
+              address: "",
+            },
+          ],
         },
       ],
     };

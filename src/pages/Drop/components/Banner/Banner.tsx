@@ -7,7 +7,7 @@ import "./Banner.css";
 const Banner = () => {
   return (
     <div className="banner-container">
-      <Img src={AssetDropTest.Test01.Banner} />
+      <Img src={AssetDropTest.DropPrimary.Banner} />
       <div className="shadow-banner" />
     </div>
   );
