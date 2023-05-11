@@ -9,6 +9,9 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
+import { Provider } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling auction",
@@ -33,13 +36,22 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenCancelAuction(selectedNFT.id);
+    const prov = new Provider("https://beta-3.fuel.network/graphql");
+    setContracts(contracts, prov);
+    nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
+      console.log(res);
+      cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], true).then((res) => {
+        console.log(res);
+        nftdetailsService.tokenCancelAuction(selectedNFT.id);
+      });
+    });
   };
 
   React.useEffect(() => {

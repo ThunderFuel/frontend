@@ -9,6 +9,12 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
+import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
+import { NativeAssetId, Provider } from "fuels";
+import { toGwei } from "utils";
+import userService from "api/user/user.service";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm offer",
@@ -34,13 +40,40 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
-    offerService.acceptOffer({ id: currentItem?.id });
+    nftdetailsService.getAuctionIndex([selectedNFT?.id]).then((res) => {
+      console.log(res);
+      const order = {
+        isBuySide: false,
+        taker: user.walletAddress,
+        maker: selectedNFT.highestBid.walletAddress, //OMER ABI
+        nonce: res.data[selectedNFT?.id],
+        price: toGwei(checkoutPrice),
+        collection: selectedNFT.collection.contractAddress,
+        token_id: selectedNFT.tokenOrder,
+        //BID OLDUGU ICIN BURASI AUCTION OLACAK
+        strategy: strategyAuctionContractId,
+        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
+      };
+
+      const prov = new Provider("https://beta-3.fuel.network/graphql");
+      setContracts(contracts, prov);
+
+      console.log(order);
+      executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId).then((res) => {
+        console.log(res);
+        if (res.transactionResult.status.type === "success") {
+          offerService.acceptOffer({ id: currentItem?.id });
+          userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
+        }
+      });
+    });
   };
 
   React.useEffect(() => {

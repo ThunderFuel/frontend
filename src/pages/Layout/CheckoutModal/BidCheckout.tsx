@@ -9,6 +9,11 @@ import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { NativeAssetId, Provider } from "fuels";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
+import { toGwei } from "utils";
+import userService from "api/user/user.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm your bid",
@@ -34,7 +39,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice } = useAppSelector((state) => state.checkout);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -43,7 +48,44 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+    nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
+      const order = {
+        isBuySide: true,
+        maker: user.walletAddress,
+        collection: selectedNFT.collection.contractAddress,
+        token_id: selectedNFT.tokenOrder,
+        price: toGwei(checkoutPrice),
+        amount: 1,
+        nonce: res.data[selectedNFT.id], //Auction bid de sabit tutabilirmisiz
+        strategy: strategyAuctionContractId,
+        payment_asset: NativeAssetId,
+        expiration_range: 1, // Bid de fixed verebiliriz - onemli degil
+        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+      };
+
+      const prov = new Provider("https://beta-3.fuel.network/graphql");
+      setContracts(contracts, prov);
+      console.log(order);
+
+      userService.getBidBalance(user.id).then((res) => {
+        const currentBidBalance = res.data;
+        console.log({ currentBidBalance });
+        if (currentBidBalance < checkoutPrice) {
+          const requiredBidAmount = checkoutPrice - currentBidBalance;
+          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId).then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+              userService.updateBidBalance(user.id, requiredBidAmount);
+            }
+          });
+        } else
+          placeOrder(exchangeContractId, provider, wallet, order).then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+          });
+      });
+    });
   };
 
   React.useEffect(() => {

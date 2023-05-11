@@ -6,11 +6,16 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
+import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { NativeAssetId, Provider } from "fuels";
+import userService from "api/user/user.service";
+import { toGwei } from "utils";
 
 const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { user, isConnected } = useAppSelector((state) => state.wallet);
+  const { user, isConnected, wallet } = useAppSelector((state) => state.wallet);
   const isOwner = () => {
     return user?.id === selectedNFT?.user?.id;
   };
@@ -31,7 +36,33 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => fetchCollection());
+              offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then((res) => {
+                const order = {
+                  isBuySide: false,
+                  taker: user.walletAddress,
+                  maker: selectedNFT.bestOffer.user.walletAddress,
+                  nonce: res.data[selectedNFT?.bestOffer?.id],
+                  price: toGwei(selectedNFT?.bestOffer?.price),
+                  collection: selectedNFT.collection.contractAddress,
+                  token_id: selectedNFT.tokenOrder,
+                  strategy: strategyFixedPriceContractId,
+                  extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
+                };
+
+                const prov = new Provider("https://beta-3.fuel.network/graphql");
+                setContracts(contracts, prov);
+
+                console.log(order);
+                executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId).then((res) => {
+                  console.log(res);
+                  if (res.transactionResult.status.type === "success") {
+                    offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => {
+                      userService.updateBidBalance(selectedNFT.bestOffer?.makerUserId, -selectedNFT.bestOffer?.price);
+                      fetchCollection();
+                    });
+                  }
+                });
+              });
             }}
           >
             ACCEPT OFFER

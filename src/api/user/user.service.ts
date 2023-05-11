@@ -35,4 +35,10 @@ export default {
   isLiked(data: any): Promise<ApiResponse<any>> {
     return ThunderURL.get("v1/user/isLiked", { params: data });
   },
+  getBidBalance(userId: number): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/user/getbidbalance", { params: { userId } });
+  },
+  updateBidBalance(userId: number, amount: number): Promise<ApiResponse<any>> {
+    return ThunderURL.post("v1/user/updatebidbalance", {}, { params: { userId, amount } });
+  },
 };

@@ -9,11 +9,15 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
-import { addressFormat, dateFormat } from "utils";
+import { addressFormat, dateFormat, toGwei } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
 import offerService from "api/offer/offer.service";
 import { OfferStatus } from "api/offer/offer.type";
 import clsx from "clsx";
+import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { NativeAssetId, Provider } from "fuels";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import userService from "api/user/user.service";
 
 const Box = ({
   item,
@@ -33,7 +37,8 @@ const Box = ({
   isAccepted: boolean;
 }) => {
   const dispatch = useAppDispatch();
-
+  const { wallet } = useAppSelector((state) => state.wallet);
+  console.log(item);
   const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
 
   const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
@@ -63,9 +68,33 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              offerService.acceptOffer({ id: item.id }).then(() => {
-                fetchOffers();
-                onBack();
+              offerService.getOffersIndex([item.id]).then((res) => {
+                const order = {
+                  isBuySide: false,
+                  taker: item.takerAddress,
+                  maker: item.makerAddress,
+                  nonce: res.data[item.id],
+                  price: toGwei(item.price),
+                  collection: item.contractAddress,
+                  token_id: item.tokenOrder,
+                  strategy: strategyFixedPriceContractId,
+                  extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+                };
+
+                const prov = new Provider("https://beta-3.fuel.network/graphql");
+                setContracts(contracts, prov);
+
+                console.log(order);
+                executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId).then((res) => {
+                  console.log(res);
+                  if (res.transactionResult.status.type === "success") {
+                    offerService.acceptOffer({ id: item.id }).then(() => {
+                      userService.updateBidBalance(item.makerUserId, -item.price);
+                      fetchOffers();
+                      onBack();
+                    });
+                  }
+                });
               });
             }}
           >

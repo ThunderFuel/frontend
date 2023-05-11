@@ -12,12 +12,14 @@ import AcceptOfferCheckout from "./AcceptOfferCheckout";
 import CancelAuctionCheckout from "./CancelAuctionCheckout";
 import TransferCheckout from "./TransferCheckout";
 import CancelListingCheckout from "./CancelListingCheckout";
+import { removeBuyNowItem } from "store/cartSlice";
 
 const Index = () => {
   const dispatch = useAppDispatch();
   const { show, isInsufficientBalance, checkoutType, onCheckoutComplete } = useAppSelector((state) => state.checkout);
   const onClose = () => {
     dispatch(toggleCheckoutModal());
+    if (checkoutType === CheckoutType.None) dispatch(removeBuyNowItem());
     if ([CheckoutType.MakeOffer, CheckoutType.PlaceBid, CheckoutType.UpdateOffer, CheckoutType.ConfirmListing, CheckoutType.UpdateListing].includes(checkoutType)) onCheckoutComplete();
   };
 

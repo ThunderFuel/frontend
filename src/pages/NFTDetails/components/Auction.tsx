@@ -31,7 +31,7 @@ const Auction = () => {
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay">
             <IconAuction width="17px" height="17px" /> AUCTION ENDS IN
           </span>
-          <AuctionCountdown expireTime={selectedNFT.expireTime} />
+          <AuctionCountdown expireTime={selectedNFT.expireTime ?? selectedNFT.onAuctionExpireTime} />
         </div>
       </div>
       {!(isOwner && !highestBid) && (

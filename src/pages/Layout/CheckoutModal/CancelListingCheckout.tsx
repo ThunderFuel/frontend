@@ -10,6 +10,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
+import { Provider } from "fuels";
+import { strategyFixedPriceContractId, provider, contracts, exchangeContractId } from "global-constants";
+import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
   description1: "Proceed in your wallet and confirm canceling listing.",
@@ -33,13 +37,25 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
     setApproved(true);
-    nftdetailsService.tokenCancelList(selectedNFT.id);
+
+    const prov = new Provider("https://beta-3.fuel.network/graphql");
+    setContracts(contracts, prov);
+
+    nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
+      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false).then((res) => {
+        console.log(res);
+        if (res.transactionResult.status.type === "success") {
+          nftdetailsService.tokenCancelList(selectedNFT.id);
+        }
+      });
+    });
   };
 
   React.useEffect(() => {

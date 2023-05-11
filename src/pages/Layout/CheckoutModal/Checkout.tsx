@@ -10,7 +10,11 @@ import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, removeBuyNowItem } from "store/cartSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { isObjectEmpty } from "utils";
+import { isObjectEmpty, toGwei } from "utils";
+
+import { bulkPurchase, executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { NativeAssetId, Provider } from "fuels";
 
 enum Status {
   notStarted = "notStarted",
@@ -163,7 +167,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
   const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     dispatch(getCartTotal());
@@ -175,12 +179,98 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const onComplete = async () => {
     const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
     try {
-      const res = await nftdetailsService.tokenBuyNow(tokenIds, user.id);
-      setApproved(true);
-      if (res.data) {
-        setSuccessCheckout(res.data);
-        window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-      }
+      nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+        if (!isObjectEmpty(buyNowItem)) {
+          console.log("BUY NOW");
+          const order = {
+            isBuySide: true,
+            taker: user.walletAddress,
+            maker: buyNowItem.user.walletAddress,
+            nonce: res.data[tokenIds[0]],
+            price: toGwei(buyNowItem.price),
+            token_id: buyNowItem.tokenOrder,
+            collection: buyNowItem.collection.contractAddress,
+            strategy: strategyFixedPriceContractId,
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          };
+
+          const prov = new Provider("https://beta-3.fuel.network/graphql");
+          setContracts(contracts, prov);
+
+          console.log(order);
+          executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId).then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success")
+              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                if (res.data) {
+                  setSuccessCheckout(res.data);
+                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                }
+              });
+          });
+        } else if (tokenIds.length === 1) {
+          console.log("BUY 1 ITEM");
+          const order = {
+            isBuySide: true,
+            taker: user.walletAddress,
+            maker: items[0].userWalletAddress,
+            nonce: res.data[items[0].id],
+            price: toGwei(items[0].price),
+            token_id: items[0].tokenOrder,
+            collection: items[0].contractAddress,
+            strategy: strategyFixedPriceContractId,
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          };
+
+          const prov = new Provider("https://beta-3.fuel.network/graphql");
+          setContracts(contracts, prov);
+
+          console.log(order);
+          executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId).then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success")
+              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                if (res.data) {
+                  setSuccessCheckout(res.data);
+                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                }
+              });
+          });
+        } else {
+          console.log("BULK PURCHASE");
+          nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+            const takerOrders = items.map((item) => {
+              return {
+                isBuySide: true,
+                taker: user.walletAddress,
+                maker: item.userWalletAddress,
+                nonce: res.data[item.id],
+                price: toGwei(item.price),
+                token_id: item.tokenOrder,
+                collection: item.contractAddress,
+                strategy: strategyFixedPriceContractId,
+                extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+              };
+            });
+            takerOrders[1].token_id = 31;
+
+            const prov = new Provider("https://beta-3.fuel.network/graphql");
+            setContracts(contracts, prov);
+
+            console.log(takerOrders);
+            bulkPurchase(exchangeContractId, provider, wallet, takerOrders, NativeAssetId).then((res) => {
+              console.log("bulkPurchase res:", res);
+              if (res?.transactionResult.status.type === "success")
+                nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                  if (res.data) {
+                    setSuccessCheckout(res.data);
+                    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                  }
+                });
+            });
+          });
+        }
+      });
     } catch (e) {
       console.log(e);
     }

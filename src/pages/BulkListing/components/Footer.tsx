@@ -8,9 +8,13 @@ import useToast from "hooks/useToast";
 import { PATHS } from "router/config/paths";
 import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/bulkListingSlice";
-import { formatPrice } from "../../../utils";
+import { formatPrice, toGwei } from "../../../utils";
+import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { NativeAssetId, Provider } from "fuels";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
 
 const Footer = ({ items, prices }: any) => {
   const dispatch = useAppDispatch();
@@ -18,6 +22,7 @@ const Footer = ({ items, prices }: any) => {
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
   const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
   const hasUpdate = bulkItems.some((item: any) => item.salable);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const onUpdateBulkListing = async () => {
     try {
@@ -38,10 +43,63 @@ const Footer = ({ items, prices }: any) => {
       });
 
       if (updateBulkListingRequest.length) {
-        await collectionsService.updateBulkListing(updateBulkListingRequest);
+        console.log(updateBulkListingRequest);
+        nftdetailsService.getLastIndex(0, user.id).then((res) => {
+          const makerOrders = updateBulkListingRequest.map((item: any, index: any) => {
+            return {
+              isBuySide: false,
+              maker: user.walletAddress,
+              collection: item.contractAddress, //OMER ABI
+              token_id: item.tokenOrder,
+              price: toGwei(item.price),
+              amount: 1,
+              nonce: res.data + 1 + index,
+              strategy: strategyFixedPriceContractId,
+              payment_asset: NativeAssetId,
+              expiration_range: Math.floor(item.expireTime / 1000),
+              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+            };
+          });
+
+          const prov = new Provider("https://beta-3.fuel.network/graphql");
+          setContracts(contracts, prov);
+
+          console.log(makerOrders);
+
+          bulkListing(exchangeContractId, provider, wallet, makerOrders).then((res) => {
+            console.log(res);
+            if (res?.transactionResult.status.type === "success") collectionsService.updateBulkListing(updateBulkListingRequest);
+          });
+        });
       }
       if (bulkListingRequest.length) {
-        await collectionsService.bulkListing(bulkListingRequest);
+        nftdetailsService.getLastIndex(0, user.id).then((res) => {
+          const makerOrders = bulkListingRequest.map((item: any, index: any) => {
+            return {
+              isBuySide: false,
+              maker: user.walletAddress,
+              collection: item.contractAddress, //OMER ABI
+              token_id: item.tokenOrder,
+              price: toGwei(item.price),
+              amount: 1,
+              nonce: res.data + 1 + index,
+              strategy: strategyFixedPriceContractId,
+              payment_asset: NativeAssetId,
+              expiration_range: Math.floor(item.expireTime / 1000),
+              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+            };
+          });
+
+          const prov = new Provider("https://beta-3.fuel.network/graphql");
+          setContracts(contracts, prov);
+
+          console.log(makerOrders);
+
+          bulkListing(exchangeContractId, provider, wallet, makerOrders).then((res) => {
+            console.log(res);
+            if (res?.transactionResult.status.type === "success") collectionsService.bulkListing(bulkListingRequest);
+          });
+        });
       }
 
       navigate(PATHS.PROFILE);

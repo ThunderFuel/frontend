@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { ethers } from "ethers";
 import * as timeago from "timeago.js";
 
 export const addressFormat = (address: any) => {
@@ -67,7 +68,11 @@ export function formatDisplayedNumber(num: number) {
 }
 
 export function toGwei(num: any) {
-  return num * 1000000000;
+  if (num === "") num = 0;
+
+  const x = ethers.utils.parseUnits(num.toString(), "gwei");
+
+  return x.toNumber();
 }
 
 export function randomIntFromInterval(min: number, max: number) {

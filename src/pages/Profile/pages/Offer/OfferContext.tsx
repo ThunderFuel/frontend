@@ -42,6 +42,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
 
   const onCancelAllOffer = async () => {
     try {
+      //TODO CONTRACT ENTREGRE ET
       await offerService.cancelAllOffer({ userId: value.userInfo.id });
       await fetchOffers();
     } catch (e) {
@@ -50,6 +51,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   const onAcceptOffer = async (item: any) => {
     try {
+      //TODO CONTRACT ENTREGRE ET
       await offerService.acceptOffer({ id: item.id });
       await fetchOffers();
     } catch (e) {
@@ -58,6 +60,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   const onCancelOffer = async (item: any) => {
     try {
+      //TODO CONTRACT ENTREGRE ET
       await offerService.cancelOffer({ id: item.id });
       await fetchOffers();
     } catch (e) {
