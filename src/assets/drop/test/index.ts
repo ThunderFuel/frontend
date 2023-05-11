@@ -1,1 +1,1 @@
-export * as Test01 from "./01/index";
+export * as DropPrimary from "./drop-primary/index";
