@@ -437,29 +437,24 @@ body {
 }
 
 :root {
-  --tw-text-opacity: 1;
-  --tw-bg-opacity: 1;
-  --th-white: #ffffff;
-  --th-black: #000000;
-  --th-bg-light: #1a1a1a;
-  --th-bg-dark: #1e1e1e;
-  --th-bg-100: #1a1a1a;
-  --th-bg: #141414;
-  --th-gray-light: #838383;
-  --th-gray-dark: #494650;
-  --th-gray-100: #2e2e2e;
-  --th-gray: #252525;
-  --th-green-light: #01ffc8;
-  --th-green: #d6ff7e;
-  --th-red: #e64040;
-  --th-orange: #e69040;
+  --th-white: 255 255 255;
+  --th-black: 0 0 0;
+  --th-bg-light: 26 26 26;
+  --th-bg-dark: 30 30 30;
+  --th-bg: 20 20 20;
+  --th-gray-light: 131 131 131;
+  --th-gray-dark: 73 70 80;
+  --th-gray-100: 46 46 46;
+  --th-gray: 37 37 37;
+  --th-green-light: 1 255 200;
+  --th-green: 214 255 126;
+  --th-red: 230 64 64;
+  --th-orange: 230 144 64;
 }
 
 .drop-primary {
-  --th-bg: #7a349b;
-  --th-gray-dark: #7a349b;
-  --th-gray: rgba(255, 255, 255, 0.1);
-  --th-gray-light: #fff;
+  --th-bg: 122 52 155;
+  --th-gray-dark: 122 52 155;
 }
 
 .text-drop-title {

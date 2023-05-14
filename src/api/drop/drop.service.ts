@@ -1,7 +1,7 @@
 import { AssetDropTest } from "assets";
 import { SocialTypes } from "../collections/collections.type";
 
-enum BLOCK_TYPE {
+export enum BLOCK_TYPE {
   Infinity,
   ImageText,
   SingleImage,
@@ -60,19 +60,6 @@ export default {
         {
           type: BLOCK_TYPE.SingleImage,
           image: AssetDropTest.DropPrimary.SingleImage,
-        },
-        {
-          type: BLOCK_TYPE.ImageText,
-          image: AssetDropTest.DropPrimary.ImageText01,
-          title: "Utility",
-          text:
-            "Exclusive access to The Poser Party’s token-gated communities; The Party, Ron’s Gym, Jimmy’s Commune and George’s Traphouse\n" +
-            "Curate & co-decide our artists careers by voting on creative proposals, music, and governance over the DAO treasuries.\n" +
-            "Join a gamified competition between the 3 virtual artists to join them in their road to stardom.\n" +
-            "Ability to submit creative and business proposals to be voted on by team and community.\n" +
-            "Access to all future token gated digital shows and metaverse events.\n" +
-            "Allowlist for all future digital collectible drops. Exclusive access to physical merch, live events & surprise airdrops (e.g. music NFTs, art upgrades & more) .",
-          reverse: true,
         },
         {
           type: BLOCK_TYPE.ImageText,

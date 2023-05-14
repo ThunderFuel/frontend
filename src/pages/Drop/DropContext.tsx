@@ -2,7 +2,13 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import dropService from "../../api/drop/drop.service";
 
 interface IDropDetailContext {
-  dropDetail: any;
+  dropDetail: {
+    className: string;
+    banner: string;
+    title: string;
+    about: string;
+    blocks: any;
+  };
 }
 
 export const DropDetailContext = createContext<IDropDetailContext>({} as any);
