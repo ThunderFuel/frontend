@@ -28,14 +28,18 @@ const Countdown = () => {
 };
 
 const Process = () => {
-  return <div className="rounded-md h-2.5 bg-white bg-opacity-10"></div>;
+  return (
+    <div className="process">
+      <span className="" />
+    </div>
+  );
 };
 const AllowListPhase = () => {
   return (
     <div className="allowlist-phase">
       <div className="header">
         <h5 className="text-h5">Allowlist Phase</h5>
-        <ul className="flex gap-5 flex-nowrap">
+        <ul className="properties">
           <li>12 May 06:00 PM UTC</li>
           <li>0.08 ETH</li>
           <li>2 Per Wallet</li>
