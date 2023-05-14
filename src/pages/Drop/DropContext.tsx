@@ -18,11 +18,11 @@ const DropDetailProvider = ({ children }: { children: ReactNode }) => {
     dropService.getDropPrimary().then((responseDrop: any) => {
       setDropDetail(responseDrop);
 
-      document.body.classList.add(responseDrop.className);
+      document.body.classList.add("drop", responseDrop.className);
     });
 
     return () => {
-      document.body.classList.remove(dropDetail.className);
+      document.body.classList.remove("drop", dropDetail.className);
     };
   }, []);
 

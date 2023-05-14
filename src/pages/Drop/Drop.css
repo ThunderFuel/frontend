@@ -1,21 +1,22 @@
-.drop-primary {
-  --th-bg: 122 52 155;
-  --th-gray-dark: 122 52 155;
-  --th-gray-light: 255 255 255;
-}
-
-.drop-primary #layout-header {
+.drop #layout-header {
   --th-gray: 255 255 255;
 }
 
-.drop-primary #layout-header .border-gray,
-.drop-primary #layout-header .lg\:border-gray,
-.drop-primary #layout-header .divide-gray > :not([hidden]) ~ :not([hidden]),
-.drop-primary #layout-header .tab,
-.drop-primary #layout-header .tab li,
-.drop-primary #layout-header .border-y.border-gray {
+.drop #layout-header .border-gray,
+.drop #layout-header .lg\:border-gray,
+.drop #layout-header .divide-gray > :not([hidden]) ~ :not([hidden]),
+.drop #layout-header .tab,
+.drop #layout-header .tab li,
+.drop #layout-header .border-y.border-gray {
   --tw-border-opacity: 0.1;
   --tw-divide-opacity: 0.1;
+}
+
+.drop-primary {
+  --th-bg: 122 52 155;
+  --th-bg-light: 122 52 155;
+  --th-gray-dark: 122 52 155;
+  --th-gray-light: 255 255 255;
 }
 
 .text-drop-title {
