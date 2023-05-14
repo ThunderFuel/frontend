@@ -8,6 +8,7 @@ interface IDropDetailContext {
     title: string;
     about: string;
     blocks: any;
+    team: any;
   };
 }
 

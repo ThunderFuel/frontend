@@ -5,6 +5,7 @@ import About from "./components/About/About";
 import Blocks from "./components/Blocks";
 
 import "./Drop.css";
+import Team from "./components/Team";
 
 const Drop = () => {
   return (
@@ -16,6 +17,9 @@ const Drop = () => {
           <About />
         </div>
         <Blocks />
+        <div className="mt-20 px-10">
+          <Team />
+        </div>
       </div>
     </DropDetailProvider>
   );
