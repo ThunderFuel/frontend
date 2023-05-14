@@ -437,6 +437,8 @@ body {
 }
 
 :root {
+  --tw-text-opacity: 1;
+  --tw-bg-opacity: 1;
   --th-white: #ffffff;
   --th-black: #000000;
   --th-bg-light: #1a1a1a;

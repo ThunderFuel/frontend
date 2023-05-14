@@ -11,8 +11,10 @@ enum BLOCK_TYPE {
 
 export default {
   getDropPrimary: () => {
-    return {
+    return Promise.resolve({
+      className: "drop-primary",
       banner: AssetDropTest.DropPrimary.Banner,
+      title: "The Poser Party",
       about:
         "Time for an experiment...\n" +
         "What is real and what is fake? Rich bros doing groceries in a Lambo, Instababes photoshopping themselves a new a-hole or two and bulky guys looking like Thor by only eating testicle sashimi (100% natty bro). Things are getting blurry, daddy.\n" +
@@ -168,6 +170,6 @@ export default {
           ],
         },
       ],
-    };
+    });
   },
 };

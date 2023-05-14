@@ -1,23 +1,21 @@
-import React, { useEffect } from "react";
-import TextImage, { TextImageAlign } from "./components/TextImage";
+import React from "react";
 import Banner from "./components/Banner/Banner";
+import DropDetailProvider from "./DropContext";
+import About from "./components/About/About";
+import Blocks from "./components/Blocks";
 
 const Drop = () => {
-  useEffect(() => {
-    document.body.classList.add("drop-primary");
-
-    return () => {
-      document.body.classList.remove("drop-primary");
-    };
-  }, []);
-
   return (
-    <div className="flex flex-col gap-5 px-10 py-5">
-      <h1 className="text-drop-title text-white">The Poser Party</h1>
-      <Banner />
-      <TextImage />
-      <TextImage align={TextImageAlign.Right} />
-    </div>
+    <DropDetailProvider>
+      <div className="flex flex-col gap-5 py-5">
+        <div className="px-10 flex flex-col gap-5">
+          <h1 className="text-drop-title text-white">The Poser Party</h1>
+          <Banner />
+          <About />
+        </div>
+        <Blocks />
+      </div>
+    </DropDetailProvider>
   );
 };
 

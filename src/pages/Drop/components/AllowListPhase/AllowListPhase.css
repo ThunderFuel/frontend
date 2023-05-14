@@ -1,0 +1,32 @@
+.countdown {
+  @apply flex;
+}
+
+.countdown li {
+  @apply flex flex-col text-center;
+  @apply text-h3 text-white;
+  @apply flex gap-2;
+  @apply rounded-sm bg-white bg-opacity-10 p-2;
+}
+
+.countdown li span {
+  @apply text-headline-02;
+  @apply text-white opacity-50;
+}
+
+.allowlist-phase {
+  @apply border border-white border-opacity-10 overflow-hidden rounded-md;
+}
+
+.allowlist-phase .header {
+  @apply flex flex-col;
+  @apply bg-white bg-opacity-10 p-5 flex gap-2.5;
+}
+
+.allowlist-phase .body {
+  @apply flex flex-col gap-5 p-5;
+}
+
+.allowlist-phase .footer {
+  @apply p-5;
+}
