@@ -1,8 +1,8 @@
 import React from "react";
 import Img from "components/Img";
 
-import "./Banner.css";
 import { useDropDetailContext } from "../../DropContext";
+import "./Banner.css";
 
 const Banner = () => {
   const { dropDetail } = useDropDetailContext();

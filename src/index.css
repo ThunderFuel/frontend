@@ -451,14 +451,3 @@ body {
   --th-red: 230 64 64;
   --th-orange: 230 144 64;
 }
-
-.drop-primary {
-  --th-bg: 122 52 155;
-  --th-gray-dark: 122 52 155;
-}
-
-.text-drop-title {
-  @apply font-spaceGrotesk font-extrabold;
-  font-size: 72px;
-  line-height: 100px;
-}

@@ -4,6 +4,8 @@ import DropDetailProvider from "./DropContext";
 import About from "./components/About/About";
 import Blocks from "./components/Blocks";
 
+import "./Drop.css";
+
 const Drop = () => {
   return (
     <DropDetailProvider>

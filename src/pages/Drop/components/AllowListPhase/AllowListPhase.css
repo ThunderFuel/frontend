@@ -38,8 +38,8 @@
 .allowlist-phase {
   @apply border border-white border-opacity-10 overflow-hidden rounded-md;
   @apply relative;
-  top: -100px;
-  z-index: 1111;
+  top: -80px;
+  z-index: 29;
 }
 
 .allowlist-phase .properties {
