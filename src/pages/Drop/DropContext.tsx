@@ -9,6 +9,7 @@ interface IDropDetailContext {
     about: string;
     blocks: any;
     team: any;
+    roadmap: any;
   };
 }
 
@@ -16,6 +17,7 @@ export const DropDetailContext = createContext<IDropDetailContext>({} as any);
 const DropDetailProvider = ({ children }: { children: ReactNode }) => {
   const [dropDetail, setDropDetail] = useState<any>({
     team: [],
+    roadmap: [],
   });
   useEffect(() => {
     dropService.getDropPrimary().then((responseDrop: any) => {

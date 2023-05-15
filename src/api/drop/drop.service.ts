@@ -241,6 +241,24 @@ const dropSecondary = {
       ],
     },
   ],
+  roadmap: [
+    {
+      title: "Attract top-tier talent",
+      text: "We've entered a partnership with the Neese Brothers, Co-Executive Producers of the #1 Netflix Series, Umbrella Academy. Through their collaboration, we are aiming to bring the Everbodys brand to TV with their creative direction. Web3 collaborations with Fusionara, Suptho, and Tribe are allowing us to create a foundation for growth in all directions of web3. Our mission is to become a household name.",
+      image: AssetDropTest.DropSecondary.Roadmap.Roadmap01,
+      checked: true,
+    },
+    {
+      title: "Develop a community-driven storytelling environment",
+      text: "Holders can help shape the story of the characters that will be featured in the animated series. Throughout the creation of the show, we encourage holders to join the conversations we host with the Neese Brothers and the team. With open dialogue, we will build a world by and for the community. Capturing the essence of Web3.",
+      image: AssetDropTest.DropSecondary.Roadmap.Roadmap02,
+    },
+    {
+      title: "Community Growth and Experiences",
+      text: "Everbodys combines the best of digital blockchain-loving and physical life: from Twitter to Discord to parties hosted by Founder & DJ of 18 years, Jamieson Hill. As the project expands, we provide a foundation for others to grow with us in the space, launching Web3 jobs for as many as possible. Our partnership with Thunder Marketplace will help us continue to deliver on our goals.",
+      image: AssetDropTest.DropSecondary.Roadmap.Roadmap03,
+    },
+  ],
 };
 
 export default {

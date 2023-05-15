@@ -6,6 +6,7 @@ import Blocks from "./components/Blocks";
 
 import "./Drop.css";
 import Team from "./components/Team";
+import Roadmap from "./components/Roadmap";
 
 const Drop = () => {
   return (
@@ -19,6 +20,7 @@ const Drop = () => {
         <Blocks />
         <div className="mt-20 px-10">
           <Team />
+          <Roadmap />
         </div>
       </div>
     </DropDetailProvider>

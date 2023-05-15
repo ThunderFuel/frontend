@@ -1,5 +1,4 @@
 import React from "react";
-import Img from "components/Img";
 import clsx from "clsx";
 
 const Text = ({ title, text }: any) => {
@@ -22,9 +21,7 @@ const TextImage = (props: ITextImage) => {
   return (
     <div className={clsx("flex gap-5", props.reverse ? "flex-row-reverse" : "")}>
       <Text title={props.title} text={props.text} />
-      <div className="flex-1">
-        <Img src={props.image} />
-      </div>
+      <div className="flex-1" style={{ background: `url(${props.image})` }} />
     </div>
   );
 };
