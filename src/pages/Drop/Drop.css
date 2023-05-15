@@ -19,6 +19,13 @@
   --th-gray-light: 255 255 255;
 }
 
+.drop-secondary {
+  --th-bg: 39 59 66;
+  --th-bg-light: 122 52 155;
+  --th-gray-dark: 122 52 155;
+  --th-gray-light: 255 255 255;
+}
+
 .text-drop-title {
   @apply font-spaceGrotesk font-extrabold;
   font-size: 72px;

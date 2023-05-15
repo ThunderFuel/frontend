@@ -14,7 +14,9 @@ interface IDropDetailContext {
 
 export const DropDetailContext = createContext<IDropDetailContext>({} as any);
 const DropDetailProvider = ({ children }: { children: ReactNode }) => {
-  const [dropDetail, setDropDetail] = useState<any>({});
+  const [dropDetail, setDropDetail] = useState<any>({
+    team: [],
+  });
   useEffect(() => {
     dropService.getDropPrimary().then((responseDrop: any) => {
       setDropDetail(responseDrop);
