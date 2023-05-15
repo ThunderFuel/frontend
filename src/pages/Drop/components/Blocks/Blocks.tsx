@@ -4,6 +4,7 @@ import { BLOCK_TYPE } from "api/drop/drop.service";
 import ImageText from "./ImageText";
 import SingleImage from "./SingleImage";
 import VideoText from "./VideoText";
+import InfiniteGallery from "./InfiniteGallery";
 
 const Blocks = () => {
   const { dropDetail } = useDropDetailContext();
@@ -11,7 +12,6 @@ const Blocks = () => {
     return null;
   }
   const getComponent = (block: any) => {
-    console.log(block);
     switch (block.type) {
       case BLOCK_TYPE.ImageText:
         return <ImageText image={block.image} title={block.title} text={block.text} reverse={block.reverse} />;
@@ -19,6 +19,8 @@ const Blocks = () => {
         return <VideoText image={block.image} video={block.video} title={block.title} text={block.text} reverse={block.reverse} />;
       case BLOCK_TYPE.SingleImage:
         return <SingleImage image={block.image} />;
+      case BLOCK_TYPE.Infinity:
+        return <InfiniteGallery images={block.images} />;
       default:
         return <React.Fragment />;
     }
