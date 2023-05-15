@@ -11,10 +11,10 @@ import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/bulkListingSlice";
 import { formatPrice, toGwei } from "../../../utils";
-import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { NativeAssetId, Provider } from "fuels";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
 
 const Footer = ({ items, prices }: any) => {
   const dispatch = useAppDispatch();
@@ -66,7 +66,7 @@ const Footer = ({ items, prices }: any) => {
 
           console.log(makerOrders);
 
-          bulkListing(exchangeContractId, provider, wallet, makerOrders).then((res) => {
+          bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, makerOrders).then((res) => {
             console.log(res);
             if (res?.transactionResult.status.type === "success") collectionsService.updateBulkListing(updateBulkListingRequest);
           });
@@ -95,7 +95,7 @@ const Footer = ({ items, prices }: any) => {
 
           console.log(makerOrders);
 
-          bulkListing(exchangeContractId, provider, wallet, makerOrders).then((res) => {
+          bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, makerOrders).then((res) => {
             console.log(res);
             if (res?.transactionResult.status.type === "success") collectionsService.bulkListing(bulkListingRequest);
           });
