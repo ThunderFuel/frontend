@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
 import { formatDisplayedNumber } from "utils";
 
-const Balances = () => {
+const Balances = (refresh: any) => {
   const { getBalance } = useWallet();
   const { user } = useAppSelector((state) => state.wallet);
   const [balance, setbalance] = useState<number>(0);
@@ -23,7 +23,7 @@ const Balances = () => {
   useEffect(() => {
     fetchBalance();
     fetchBidBalance();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="flex border border-gray rounded">
