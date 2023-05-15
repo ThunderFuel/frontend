@@ -25,17 +25,21 @@ const dropPrimary = {
     {
       type: BLOCK_TYPE.Infinity,
       images: [
-        AssetDropTest.DropPrimary.Infinity.infinity322,
-        AssetDropTest.DropPrimary.Infinity.infinity323,
-        AssetDropTest.DropPrimary.Infinity.infinity324,
-        AssetDropTest.DropPrimary.Infinity.infinity328,
-        AssetDropTest.DropPrimary.Infinity.infinity329,
-        AssetDropTest.DropPrimary.Infinity.infinity3210,
-        AssetDropTest.DropPrimary.Infinity.infinity3212,
-        AssetDropTest.DropPrimary.Infinity.infinity3213,
-        AssetDropTest.DropPrimary.Infinity.infinity3214,
-        AssetDropTest.DropPrimary.Infinity.infinity3215,
-        AssetDropTest.DropPrimary.Infinity.infinity3216,
+        [
+          AssetDropTest.DropPrimary.Infinity.infinity322,
+          AssetDropTest.DropPrimary.Infinity.infinity323,
+          AssetDropTest.DropPrimary.Infinity.infinity324,
+          AssetDropTest.DropPrimary.Infinity.infinity328,
+          AssetDropTest.DropPrimary.Infinity.infinity329,
+          AssetDropTest.DropPrimary.Infinity.infinity3210,
+        ],
+        [
+          AssetDropTest.DropPrimary.Infinity.infinity3212,
+          AssetDropTest.DropPrimary.Infinity.infinity3213,
+          AssetDropTest.DropPrimary.Infinity.infinity3214,
+          AssetDropTest.DropPrimary.Infinity.infinity3215,
+          AssetDropTest.DropPrimary.Infinity.infinity3216,
+        ],
       ],
     },
     {
