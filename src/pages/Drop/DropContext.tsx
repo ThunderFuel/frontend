@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import dropService from "../../api/drop/drop.service";
+import { useParams } from "react-router-dom";
 
 interface IDropDetailContext {
   dropDetail: {
@@ -15,12 +16,14 @@ interface IDropDetailContext {
 
 export const DropDetailContext = createContext<IDropDetailContext>({} as any);
 const DropDetailProvider = ({ children }: { children: ReactNode }) => {
+  const { dropId } = useParams();
+
   const [dropDetail, setDropDetail] = useState<any>({
     team: [],
     roadmap: [],
   });
   useEffect(() => {
-    dropService.getDropPrimary().then((responseDrop: any) => {
+    dropService.getDropPrimary(dropId).then((responseDrop: any) => {
       setDropDetail(responseDrop);
 
       document.body.classList.add("drop", responseDrop.className);
@@ -29,7 +32,7 @@ const DropDetailProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       document.body.classList.remove("drop", dropDetail.className);
     };
-  }, []);
+  }, [dropId]);
 
   const value = {
     dropDetail,

@@ -262,9 +262,9 @@ const dropSecondary = {
 };
 
 export default {
-  getDropPrimary: () => {
-    console.log(dropPrimary);
+  getDropPrimary: (dropId: any = 1) => {
+    const response = Number(dropId) === 1 ? dropPrimary : dropSecondary;
 
-    return Promise.resolve(dropSecondary);
+    return Promise.resolve(response);
   },
 };

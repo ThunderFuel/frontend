@@ -2,7 +2,7 @@ import React from "react";
 import Button from "components/Button";
 import { IconCirclePlusWhite, IconPencil } from "icons";
 import Textarea from "components/Textarea";
-import Tab from "./Tab";
+import Tab from "../../../../components/Tab";
 import { ModalNames, useModalContext } from "../modals/ModalContext";
 
 const Container = () => {

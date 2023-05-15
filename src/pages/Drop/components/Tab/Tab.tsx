@@ -4,7 +4,7 @@ import clsx from "clsx";
 const TabItem = ({ children }: any) => {
   return children;
 };
-const Tab = ({ children, number = 0, className }: any) => {
+const Tab = ({ children, number = 0, className, containerClassName }: any) => {
   const [activeTab, setActiveTab] = React.useState(number);
   const headerProps = children.map((child: any) => ({
     title: child.props.title,
@@ -31,7 +31,7 @@ const Tab = ({ children, number = 0, className }: any) => {
           );
         })}
       </ul>
-      <div className="border border-white border-opacity-10 rounded-md p-5">{getActiveTab}</div>
+      <div className={containerClassName}>{getActiveTab}</div>
     </div>
   );
 };

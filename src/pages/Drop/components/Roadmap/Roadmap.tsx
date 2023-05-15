@@ -3,6 +3,7 @@ import { useDropDetailContext } from "../../DropContext";
 import { IconCircleCheck, IconEmptyCircle } from "icons";
 
 import "./Roadmap.css";
+import clsx from "clsx";
 
 const Checked = ({ checked }: { checked?: boolean }) => {
   const Icon = checked ? IconCircleCheck : IconEmptyCircle;
@@ -11,7 +12,7 @@ const Checked = ({ checked }: { checked?: boolean }) => {
 };
 const RoadmapItems = ({ title, text, image, checked }: any) => {
   return (
-    <div className="roadmap">
+    <div className={clsx("roadmap", checked ? "bg-white bg-opacity-10 backdrop-blur-lg" : "")}>
       <div className="pt-5 pl-5">
         <Checked checked={checked} />
       </div>
@@ -26,13 +27,7 @@ const RoadmapItems = ({ title, text, image, checked }: any) => {
 const Roadmap = () => {
   const { dropDetail } = useDropDetailContext();
 
-  return (
-    <div className="flex flex-col gap-5">
-      {dropDetail.roadmap.map((item: any, k: number) => (
-        <RoadmapItems {...item} key={k} />
-      ))}
-    </div>
-  );
+  return <div className="flex flex-col gap-5">{dropDetail.roadmap && dropDetail.roadmap.map((item: any, k: number) => <RoadmapItems {...item} key={k} />)}</div>;
 };
 
 export default Roadmap;
