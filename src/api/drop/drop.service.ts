@@ -190,13 +190,14 @@ const dropSecondary = {
       image: AssetDropTest.DropSecondary.ImageText,
       title: "The Artist",
       text: 'Sean Solomon is an artist, animator, and writer. Sean has been refining his iconic visual style for more than a decade, creating work for television, music videos, gallery shows, and more. As an animator, he has worked for clients like Nike, Adidas, HBO, and Adult Swim. You may recognize his work from music videos for artists like Unknown Mortal Orchestra and Run the Jewels, or Fox\'s "Lucas Bros Moving Co," which he art directed. Sean is currently developing his own pilot for HBO Max. He also runs a successful clothing company called Die 9 Times. If you haven’t heard of Sean Solomon, you’ve probably seen his art shared online, bootlegged, or tattooed to someone’s arm.',
+      reverse: true,
     },
     {
       type: BLOCK_TYPE.VideoText,
       image: AssetDropTest.DropPrimary.ImageText01,
       title: "The Team",
+      video: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
       text: "Everybodys was co-founded by artist Sean Solomon and project manager David Schaefer, a writer and NFT enthusiast who joined the space in February 2021. David became a fan of Sean's work after attending an art show of Sean's when David was just 13. The two later went on to become friends through the LA music scene. The rest of the team was built similarly, with childhood friends and exciting new ones. The Everybodys team brings a perspective informed by years of experience making art, writing stories, and building communities. Whether in visual art, music, TV, or web 3, Solomon and Schaefer have always valued creative collaboration above all else.",
-      reverse: true,
     },
   ],
   team: [

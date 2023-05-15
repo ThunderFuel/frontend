@@ -1,8 +1,9 @@
 import React from "react";
 import { useDropDetailContext } from "../../DropContext";
 import { BLOCK_TYPE } from "api/drop/drop.service";
-import TextImage from "../TextImage";
-import SingleImage from "../SingleImage";
+import ImageText from "./ImageText";
+import SingleImage from "./SingleImage";
+import VideoText from "./VideoText";
 
 const Blocks = () => {
   const { dropDetail } = useDropDetailContext();
@@ -13,7 +14,9 @@ const Blocks = () => {
     console.log(block);
     switch (block.type) {
       case BLOCK_TYPE.ImageText:
-        return <TextImage image={block.image} title={block.title} text={block.text} reverse={block.reverse} />;
+        return <ImageText image={block.image} title={block.title} text={block.text} reverse={block.reverse} />;
+      case BLOCK_TYPE.VideoText:
+        return <VideoText image={block.image} video={block.video} title={block.title} text={block.text} reverse={block.reverse} />;
       case BLOCK_TYPE.SingleImage:
         return <SingleImage image={block.image} />;
       default:
