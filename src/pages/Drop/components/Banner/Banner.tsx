@@ -9,8 +9,7 @@ const Banner = () => {
 
   return (
     <div className="banner-container">
-      <Img src={dropDetail.banner} />
-      <div className="shadow-banner" />
+      <Img className="banner-image" src={dropDetail.banner} />
     </div>
   );
 };

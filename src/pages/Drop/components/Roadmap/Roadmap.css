@@ -1,4 +1,8 @@
-.image {
+.roadmap {
+  @apply flex gap-5 rounded-lg border border-white border-opacity-10 overflow-hidden;
+}
+
+.roadmap .image {
   @apply relative;
   width: 400px;
   height: 200px;

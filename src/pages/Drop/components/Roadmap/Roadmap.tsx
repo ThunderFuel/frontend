@@ -11,7 +11,7 @@ const Checked = ({ checked }: { checked?: boolean }) => {
 };
 const RoadmapItems = ({ title, text, image, checked }: any) => {
   return (
-    <div className="flex gap-5 rounded-lg border border-white border-opacity-10 overflow-hidden">
+    <div className="roadmap">
       <div className="pt-5 pl-5">
         <Checked checked={checked} />
       </div>

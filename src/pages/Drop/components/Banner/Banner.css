@@ -3,7 +3,7 @@
   border-radius: 12px 12px 0 0;
 }
 
-.shadow-banner {
-  @apply absolute z-20 top-0 left-0 w-full h-full;
-  background: linear-gradient(180deg, transparent 0%, rgba(var(--th-bg) / 0.01) 33.69%, rgb(var(--th-bg)) 95.72%);
+.banner-container .banner-image {
+  width: 100%;
+  mask-image: linear-gradient(0deg, rgba(25, 25, 25, 0) 0%, rgba(25, 25, 25, 0.615062) 33.69%, #191919 63.72%);
 }
