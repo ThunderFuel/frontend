@@ -2,6 +2,8 @@ import React from "react";
 import { useDropDetailContext } from "../../DropContext";
 import { IconCircleCheck, IconEmptyCircle } from "icons";
 
+import "./Roadmap.css";
+
 const Checked = ({ checked }: { checked?: boolean }) => {
   const Icon = checked ? IconCircleCheck : IconEmptyCircle;
 
@@ -17,7 +19,7 @@ const RoadmapItems = ({ title, text, image, checked }: any) => {
         <h5 className="text-h5 text-white">{title}</h5>
         <div className="body-medium text-white text-opacity-50">{text}</div>
       </div>
-      <div className="w-[400px] h-[200px]" style={{ backgroundImage: `url(${image})` }} />
+      <div className="image" style={{ backgroundImage: `url(${image})` }} />
     </div>
   );
 };
