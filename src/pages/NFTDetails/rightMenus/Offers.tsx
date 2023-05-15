@@ -38,6 +38,7 @@ const Box = ({
 }) => {
   const dispatch = useAppDispatch();
   const { wallet } = useAppSelector((state) => state.wallet);
+  const { show } = useAppSelector((state) => state.checkout);
   console.log(item);
   const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
 
@@ -45,6 +46,11 @@ const Box = ({
   const description = item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
 
   const isDisabled = item.isExpired || item.isCanceled;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className={clsx("flex flex-col border border-gray rounded-lg text-h6", isDisabled ? "text-gray-light" : "text-white")}>
@@ -67,7 +73,9 @@ const Box = ({
         <div className="flex border-t border-gray">
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
+            disabled={isButtonDisabled}
             onClick={() => {
+              setIsButtonDisabled(true);
               offerService.getOffersIndex([item.id]).then((res) => {
                 const order = {
                   isBuySide: false,
@@ -89,6 +97,7 @@ const Box = ({
                   console.log(res);
                   if (res.transactionResult.status.type === "success") {
                     offerService.acceptOffer({ id: item.id }).then(() => {
+                      setIsButtonDisabled(false);
                       userService.updateBidBalance(item.makerUserId, -item.price);
                       fetchOffers();
                       onBack();
@@ -107,7 +116,9 @@ const Box = ({
         <div className="flex border-t border-gray">
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
+            disabled={isButtonDisabled}
             onClick={() => {
+              setIsButtonDisabled(true);
               dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item }));
               dispatch(toggleCheckoutModal());
             }}

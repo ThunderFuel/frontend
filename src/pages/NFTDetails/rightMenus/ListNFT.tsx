@@ -31,6 +31,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const [startingPrice, setstartingPrice] = useState<any>(0);
   const [duration, setDuration] = useState(selectExpirationDates[0]);
   const updateListing = rightMenuType === RightMenuType.UpdateListing;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const serviceFee = 2.5;
 
@@ -46,8 +47,9 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
       <div className="flex justify-end p-5 ">
         <Button
-          disabled={!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false}
+          disabled={(!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false) ? true : isButtonDisabled}
           onClick={() => {
+            setIsButtonDisabled(true);
             if (isTimedAuction) {
               dispatch(
                 setCheckout({

@@ -57,7 +57,6 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         price: toGwei(checkoutPrice),
         collection: selectedNFT.collection.contractAddress,
         token_id: selectedNFT.tokenOrder,
-        //BID OLDUGU ICIN BURASI AUCTION OLACAK
         strategy: strategyAuctionContractId,
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
       };

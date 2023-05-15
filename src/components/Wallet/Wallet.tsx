@@ -79,7 +79,13 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`} className="w-full">
           GET TEST ETH <IconFaucet />
         </Button>
-        <Button disabled className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
+        <Button
+          className="btn-secondary w-full"
+          onClick={() => {
+            onClose();
+            dispatch(toggleManageFundsModal());
+          }}
+        >
           MANAGE FUNDS <IconArrowRight />
         </Button>
       </div>

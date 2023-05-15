@@ -46,8 +46,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
     const prov = new Provider("https://beta-3.fuel.network/graphql");
     setContracts(contracts, prov);
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-      console.log(res);
-      cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], true).then((res) => {
+      cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false).then((res) => {
         console.log(res);
         nftdetailsService.tokenCancelAuction(selectedNFT.id);
       });

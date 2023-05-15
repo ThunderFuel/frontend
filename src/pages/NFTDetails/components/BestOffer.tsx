@@ -2,7 +2,7 @@ import offerService from "api/offer/offer.service";
 import Button from "components/Button";
 import EthereumPrice from "components/EthereumPrice";
 import { IconAccept, IconOffer } from "icons";
-import React from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
@@ -16,6 +16,8 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected, wallet } = useAppSelector((state) => state.wallet);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const isOwner = () => {
     return user?.id === selectedNFT?.user?.id;
   };
@@ -34,8 +36,10 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
       <div className="flex flex-col bg-bg-light rounded-b p-5">
         {isOwner() ? (
           <Button
+            disabled={isButtonDisabled}
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
+              setIsButtonDisabled(true);
               offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then((res) => {
                 const order = {
                   isBuySide: false,
@@ -58,6 +62,7 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
                   if (res.transactionResult.status.type === "success") {
                     offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => {
                       userService.updateBidBalance(selectedNFT.bestOffer?.makerUserId, -selectedNFT.bestOffer?.price);
+                      setIsButtonDisabled(false);
                       fetchCollection();
                     });
                   }

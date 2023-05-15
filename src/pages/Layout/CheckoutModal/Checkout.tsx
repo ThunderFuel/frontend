@@ -185,11 +185,11 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
           const order = {
             isBuySide: true,
             taker: user.walletAddress,
-            maker: buyNowItem.user.walletAddress,
+            maker: buyNowItem.userWalletAddress ?? buyNowItem.user.walletAddress,
             nonce: res.data[tokenIds[0]],
             price: toGwei(buyNowItem.price),
             token_id: buyNowItem.tokenOrder,
-            collection: buyNowItem.collection.contractAddress,
+            collection: buyNowItem.contractAddress ?? buyNowItem.collection.contractAddress,
             strategy: strategyFixedPriceContractId,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           };

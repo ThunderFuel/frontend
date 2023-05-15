@@ -7,16 +7,37 @@ import Tab from "components/Tab";
 import InfoBox from "pages/NFTDetails/components/InfoBox";
 import { useAppDispatch, useAppSelector } from "store";
 import { toggleManageFundsModal } from "store/walletSlice";
+import { ZERO_B256, assetManagerContractId, poolContractId, provider } from "global-constants";
+import { toGwei } from "utils";
+import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
+import userService from "api/user/user.service";
 
 const ManageFunds = () => {
   const dispatch = useAppDispatch();
+
+  const { wallet, user } = useAppSelector((state) => state.wallet);
   const { manageFundsShow } = useAppSelector((state) => state.wallet);
   const [isAddToPool, setisAddToPool] = useState(true);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
+
+  function handleSwap() {
+    if (isAddToPool)
+      deposit(poolContractId, provider, wallet, toGwei(amount), ZERO_B256, assetManagerContractId).then((res) => {
+        console.log(res);
+        userService.updateBidBalance(user.id, amount);
+      });
+    else
+      withdraw(poolContractId, provider, wallet, toGwei(amount), ZERO_B256, assetManagerContractId).then((res) => {
+        console.log(res);
+        userService.updateBidBalance(user.id, -amount);
+      });
+  }
 
   const footer = (
     <div className="flex flex-col items-center p-5 gap-y-5">
-      <Button className="w-full">SWAP</Button>
+      <Button className="w-full" onClick={handleSwap}>
+        SWAP
+      </Button>
       <Button className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
         CLOSE
       </Button>
