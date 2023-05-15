@@ -49,6 +49,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
       console.log(e);
     }
   };
+
   const onAcceptOffer = async (item: any) => {
     try {
       //TODO CONTRACT ENTREGRE ET
