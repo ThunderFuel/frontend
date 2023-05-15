@@ -1,4 +1,4 @@
 .eslintrc.js
 tailwind.config.js
 postcss.config.js
-thunder-sdk
+src/thunder-sdk/**/*.d.ts
