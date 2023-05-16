@@ -33,6 +33,8 @@ const Footer = ({ items, prices }: any) => {
           tokenId: item.id,
           price: prices?.[item.uid],
           expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
+          tokenOrder: item.tokenOrder,
+          collection: item.contractAddress,
         };
 
         if (item.salable) {
@@ -49,7 +51,7 @@ const Footer = ({ items, prices }: any) => {
             return {
               isBuySide: false,
               maker: user.walletAddress,
-              collection: item.contractAddress, //OMER ABI
+              collection: item.collection,
               token_id: item.tokenOrder,
               price: toGwei(item.price),
               amount: 1,
@@ -78,7 +80,7 @@ const Footer = ({ items, prices }: any) => {
             return {
               isBuySide: false,
               maker: user.walletAddress,
-              collection: item.contractAddress, //OMER ABI
+              collection: item.collection,
               token_id: item.tokenOrder,
               price: toGwei(item.price),
               amount: 1,
