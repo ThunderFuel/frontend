@@ -9,6 +9,7 @@ import Team from "./components/Team";
 import Roadmap from "./components/Roadmap";
 import Title from "./components/Title";
 import Tab from "./components/Tab";
+import FAQ from "./components/FAQ";
 
 const Drop = () => {
   return (
@@ -28,7 +29,9 @@ const Drop = () => {
             <Tab.Item title="Road Map">
               <Roadmap />
             </Tab.Item>
-            <Tab.Item title="FAQ">FAQ</Tab.Item>
+            <Tab.Item title="FAQ">
+              <FAQ />
+            </Tab.Item>
           </Tab>
         </div>
       </div>

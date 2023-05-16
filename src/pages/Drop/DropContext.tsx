@@ -11,6 +11,7 @@ interface IDropDetailContext {
     blocks: any;
     team: any;
     roadmap: any;
+    faq: any;
   };
 }
 

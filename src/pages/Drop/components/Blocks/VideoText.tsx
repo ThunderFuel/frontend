@@ -20,10 +20,12 @@ const VideoText = (props: IVideoText) => {
   return (
     <div className={clsx("flex gap-5", props.reverse ? "flex-row-reverse" : "")}>
       <Text title={props.title} text={props.text} width={460} />
-      <div className="flex-1" style={{ background: `url(${props.image})` }}>
+      <div className="flex-1">
         {!playVideo ? (
-          <div className="w-full h-full flex-center bg-gray bg-opacity-50">
-            <IconVideo className="text-white w-16 h-16 cursor-pointer" onClick={onClick} />
+          <div className="flex-1 w-full h-full bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${props.image})` }}>
+            <div className="w-full h-full flex-center bg-gray bg-opacity-50">
+              <IconVideo className="text-white w-16 h-16 cursor-pointer" onClick={onClick} />
+            </div>
           </div>
         ) : (
           <video className="w-full h-full" controls autoPlay>
