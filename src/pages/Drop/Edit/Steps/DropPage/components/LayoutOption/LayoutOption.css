@@ -1,0 +1,28 @@
+.layout-option {
+  @apply flex cursor-pointer;
+}
+
+.layout-option input[type="radio"] {
+  position: absolute;
+  z-index: -9999;
+  display: none;
+  visibility: hidden;
+}
+
+.layout-option input[type="radio"]:checked + ul {
+  @apply border-white opacity-100;
+}
+
+.layout-option ul {
+  @apply flex border rounded-md overflow-hidden text-gray-light opacity-50;
+  @apply transition-all;
+  border-color: transparent;
+}
+
+.layout-option ul li:first-child {
+  padding: 12px 52px;
+}
+
+.layout-option ul li:last-child {
+  padding: 12px 29px;
+}

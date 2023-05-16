@@ -435,3 +435,19 @@ body {
     height: 2px !important;
   }
 }
+
+:root {
+  --th-white: 255 255 255;
+  --th-black: 0 0 0;
+  --th-bg-light: 26 26 26;
+  --th-bg-dark: 30 30 30;
+  --th-bg: 20 20 20;
+  --th-gray-light: 131 131 131;
+  --th-gray-dark: 73 70 80;
+  --th-gray-100: 46 46 46;
+  --th-gray: 37 37 37;
+  --th-green-light: 1 255 200;
+  --th-green: 214 255 126;
+  --th-red: 230 64 64;
+  --th-orange: 230 144 64;
+}

@@ -4,7 +4,7 @@ import { AssetLogo } from "assets";
 
 const Footer = () => {
   return (
-    <div className="mt-auto flex flex-col bg-gray-dark lg:justify-center bg-bg-light w-full py-5 lg:py-10">
+    <div className="mt-auto flex flex-col lg:justify-center bg-bg-light w-full py-5 lg:py-10">
       <div className="container-fluid">
         {/* <div className="border-b border-b-gray pb-10 mb-5">
         <div className="container">
@@ -27,22 +27,22 @@ const Footer = () => {
             <div className="h-[1px] bg-gray my-[40px] lg:hidden" />
             <div className="flex flex-wrap gap-x-[55px] lg:gap-x-[160px] gap-y-[28px] lg:pt-3 lg:flex-nowrap ">
               <div className="flex flex-col max-w-[140px] gap-3">
-                <h5 className="text-headline-01 text-gray-light mb-2">MARKETPLACE</h5>
-                <a className="text-headline-01 text-white">EXPLORE</a>
-                <a className="text-headline-01 text-white">SELL</a>
-                <a className="text-headline-01 text-white">CREATE</a>
+                <h5 className="text-headline-drop-primary text-gray-light mb-2">MARKETPLACE</h5>
+                <a className="text-headline-drop-primary text-white">EXPLORE</a>
+                <a className="text-headline-drop-primary text-white">SELL</a>
+                <a className="text-headline-drop-primary text-white">CREATE</a>
               </div>
               <div className="flex flex-col max-w-[140px] gap-3">
-                <h5 className="text-headline-01 text-gray-light mb-2">MY ACCOUNT</h5>
-                <a className="text-headline-01 text-white">PROFILE</a>
-                <a className="text-headline-01 text-white">FAVORITES</a>
-                <a className="text-headline-01 text-white">MY COLLECTIONS</a>
-                <a className="text-headline-01 text-white">SETTINGS</a>
+                <h5 className="text-headline-drop-primary text-gray-light mb-2">MY ACCOUNT</h5>
+                <a className="text-headline-drop-primary text-white">PROFILE</a>
+                <a className="text-headline-drop-primary text-white">FAVORITES</a>
+                <a className="text-headline-drop-primary text-white">MY COLLECTIONS</a>
+                <a className="text-headline-drop-primary text-white">SETTINGS</a>
               </div>
               <div className="flex flex-col w-[140px] gap-3">
-                <h5 className="text-headline-01 text-gray-light mb-2">COMPANY</h5>
-                <a className="text-headline-01 text-white">ABOUT</a>
-                <a className="text-headline-01 text-white">CAREERS</a>
+                <h5 className="text-headline-drop-primary text-gray-light mb-2">COMPANY</h5>
+                <a className="text-headline-drop-primary text-white">ABOUT</a>
+                <a className="text-headline-drop-primary text-white">CAREERS</a>
               </div>
             </div>
           </div>
@@ -55,13 +55,13 @@ const Footer = () => {
               <img src={AssetLogo} style={{ height: "32px" }} />
             </a>
             {/* <div className="flex flex-col items-center lg:flex-row gap-6">
-            <h5 className="text-headline-01 text-gray-light">EXPLORE</h5>
-            <h5 className="text-headline-01 text-gray-light">SELL</h5>
-            <h5 className="text-headline-01 text-gray-light">CREATE</h5>
-            <h5 className="text-headline-01 text-gray-light">SETTINGS</h5>
-            <h5 className="text-headline-01 text-gray-light">PRROFILE</h5>
-            <h5 className="text-headline-01 text-gray-light">TERMS</h5>
-            <h5 className="text-headline-01 text-gray-light">SERVICES</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">EXPLORE</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">SELL</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">CREATE</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">SETTINGS</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">PRROFILE</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">TERMS</h5>
+            <h5 className="text-headline-drop-primary text-gray-light">SERVICES</h5>
           </div> */}
           </div>
           <div className="flex justify-center">

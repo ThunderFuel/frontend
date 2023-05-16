@@ -118,7 +118,7 @@ export interface HeaderProps {
   showCartModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const Header = ({ className }: any) => {
+const Header = () => {
   const ref = useRef<any>(null);
 
   const setHeaderHeight = () => {
@@ -140,7 +140,7 @@ const Header = ({ className }: any) => {
   }, [ref.current]);
 
   return (
-    <header id="layout-header" className={clsx("sticky top-0 z-30", className ? className : "bg-bg")} ref={ref}>
+    <header id="layout-header" className={clsx("sticky top-0 z-30 bg-bg")} ref={ref}>
       {!useIsMobile() ? (
         <>
           <HeaderTop />

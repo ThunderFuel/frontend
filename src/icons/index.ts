@@ -92,3 +92,7 @@ export { ReactComponent as IconPencilRuler } from "./icon-pencil-ruler.svg";
 export { ReactComponent as IconPercent } from "./icon-percent.svg";
 export { ReactComponent as IconUpload } from "./icon-upload.svg";
 export { ReactComponent as IconCirclePlusWhite } from "./icon-circle-plus-white.svg";
+export { ReactComponent as IconCircleLeft } from "./icon-circle-left.svg";
+export { ReactComponent as IconText } from "./icon-text.svg";
+export { ReactComponent as IconVideo } from "./icon-video.svg";
+export { ReactComponent as IconEmptyCircle } from "./icon-empty-circle.svg";

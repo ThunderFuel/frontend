@@ -1,5 +1,6 @@
 import React from "react";
 import { IconInfo } from "icons";
+import clsx from "clsx";
 
 const LabelHelperText = ({ children }: any) => {
   return (
@@ -9,10 +10,10 @@ const LabelHelperText = ({ children }: any) => {
     </div>
   );
 };
-const Label = ({ children, helperText }: any) => {
+const Label = ({ children, helperText, className }: any) => {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-h6">{children}</label>
+      <label className={clsx("text-h6", className)}>{children}</label>
       {helperText && <LabelHelperText>{helperText}</LabelHelperText>}
     </div>
   );

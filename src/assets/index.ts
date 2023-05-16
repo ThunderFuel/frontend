@@ -66,3 +66,11 @@ export { default as AssetDropImage } from "./drop/image.png";
 
 export { default as AssetCreateImage1 } from "./create/create-image1.png";
 export { default as AssetCollectionCoverImage1 } from "./create/mock-collection-cover-image1.png";
+
+export { default as AssetDropEditClipImageText } from "./drop/edit/clip-image-text.png";
+export { default as AssetDropEditClipVideoText } from "./drop/edit/clip-video-text.png";
+export { default as AssetDropEditClipInfinityScroll } from "./drop/edit/clip-infinity-scroll.png";
+export { default as AssetDropEditClipSingleImage } from "./drop/edit/clip-single-image.png";
+export { default as AssetDropEditClipSingleVideo } from "./drop/edit/clip-single-video.png";
+
+export * as AssetDropTest from "./drop/test";

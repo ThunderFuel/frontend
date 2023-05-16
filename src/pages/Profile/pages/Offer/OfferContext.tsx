@@ -78,7 +78,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     const response = await offerService.getOffer({
       userId: value.userInfo.id,
       page: 1,
-      types: [0, 1],
+      types: [0, 1, 2],
     });
     const data = response.data
       .map((item: any) => ({

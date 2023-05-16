@@ -5,25 +5,25 @@ module.exports = {
       center: true,
     },
     colors: {
-      white: "#FFFFFF",
-      black: "#000000",
+      white: "rgb(var(--th-white) / <alpha-value>)",
+      black: "rgb(var(--th-black) / <alpha-value>)",
       bg: {
-        light: "#1A1A1A",
-        dark: "#1E1E1E",
-        DEFAULT: "#141414",
-        100: "#1A1A1A",
+        light: "rgb(var(--th-bg-light) / <alpha-value>)",
+        dark: "rgb(var(--th-bg-dark)/ <alpha-value>)",
+        DEFAULT: "rgb(var(--th-bg) / <alpha-value>)",
       },
       gray: {
-        light: "#838383",
-        dark: "#494650",
-        DEFAULT: "#252525",
+        light: "rgb(var(--th-gray-light) / <alpha-value>)",
+        dark: "rgb(var(--th-gray-dark) / <alpha-value>)",
+        DEFAULT: "rgb(var(--th-gray) / <alpha-value>)",
+        100: "rgb(var(--th-gray-100) / <alpha-value>)",
       },
       green: {
-        light: "#01FFC8",
-        DEFAULT: "#D6FF7E",
+        light: "rgb(var(--th-green-light) / <alpha-value>)",
+        DEFAULT: "rgb(var(--th-green) / <alpha-value>)",
       },
-      red: "#E64040",
-      orange: "#E69040",
+      red: "rgb(var(--th-red) / <alpha-value>)",
+      orange: "rgb(var(--th-orange) / <alpha-value>)",
     },
     extend: {
       backgroundImage: {
