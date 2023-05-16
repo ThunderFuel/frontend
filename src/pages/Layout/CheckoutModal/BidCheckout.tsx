@@ -47,7 +47,6 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
       const order = {
         isBuySide: true,
@@ -72,18 +71,26 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         console.log({ currentBidBalance });
         if (currentBidBalance < checkoutPrice) {
           const requiredBidAmount = checkoutPrice - currentBidBalance;
-          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId).then((res) => {
-            console.log(res);
-            if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-              userService.updateBidBalance(user.id, requiredBidAmount);
-            }
-          });
+          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId)
+            .then((res) => {
+              console.log(res);
+              if (res.transactionResult.status.type === "success") {
+                nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+                userService.updateBidBalance(user.id, requiredBidAmount);
+                setApproved(true);
+              }
+            })
+            .catch(() => setStartTransaction(false));
         } else
-          placeOrder(exchangeContractId, provider, wallet, order).then((res) => {
-            console.log(res);
-            if (res.transactionResult.status.type === "success") nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-          });
+          placeOrder(exchangeContractId, provider, wallet, order)
+            .then((res) => {
+              console.log(res);
+              if (res.transactionResult.status.type === "success") {
+                nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+                setApproved(true);
+              }
+            })
+            .catch(() => setStartTransaction(false));
       });
     });
   };
@@ -99,11 +106,11 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>

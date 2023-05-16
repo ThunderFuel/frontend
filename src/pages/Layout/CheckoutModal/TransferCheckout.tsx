@@ -49,14 +49,16 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
   const [showTransactionAnimation, setshowTransactionAnimation] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
     let tempAddress = "";
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
     const toAddress = tempAddress === "" ? address : tempAddress;
-    safeTransferFrom(ERC721ContractId, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder).then((res) => {
-      console.log(res);
-      nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
-    });
+    safeTransferFrom(ERC721ContractId, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
+      .then((res) => {
+        console.log(res);
+        nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
+        setApproved(true);
+      })
+      .catch(() => setStartTransaction(false));
   };
 
   React.useEffect(() => {
@@ -71,11 +73,11 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>

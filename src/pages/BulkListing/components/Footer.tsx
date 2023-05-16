@@ -4,17 +4,11 @@ import Button from "components/Button";
 import { IconCircleRemoveWhite, IconInfo, IconTag } from "icons";
 import dayjs from "dayjs";
 import useNavigate from "hooks/useNavigate";
-import useToast from "hooks/useToast";
 import { PATHS } from "router/config/paths";
-import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
-import { useAppDispatch, useAppSelector } from "store";
-import { removeAll } from "store/bulkListingSlice";
-import { formatPrice, toGwei } from "../../../utils";
-import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { NativeAssetId, Provider } from "fuels";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
+import { useAppDispatch } from "store";
+import { formatPrice } from "../../../utils";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Footer = ({ items, prices }: any) => {
   const dispatch = useAppDispatch();
@@ -22,94 +16,35 @@ const Footer = ({ items, prices }: any) => {
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
   const bulkItems = items.filter((item: any) => item.isChecked && prices?.[item.uid]);
   const hasUpdate = bulkItems.some((item: any) => item.salable);
-  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const onUpdateBulkListing = async () => {
-    try {
-      const bulkListingRequest: any = [];
-      const updateBulkListingRequest: any = [];
-      bulkItems.forEach((item: any) => {
-        const data = {
-          tokenId: item.id,
-          price: prices?.[item.uid],
-          expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
-          tokenOrder: item.tokenOrder,
-          collection: item.contractAddress,
-        };
+    const bulkListingRequest: any = [];
+    const updateBulkListingRequest: any = [];
+    bulkItems.forEach((item: any) => {
+      const data = {
+        tokenId: item.id,
+        price: prices?.[item.uid],
+        expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
+        tokenOrder: item.tokenOrder,
+        collection: item.contractAddress,
+        image: item.image, //needed for checkout modal
+      };
 
-        if (item.salable) {
-          updateBulkListingRequest.push(data);
-        } else {
-          bulkListingRequest.push(data);
-        }
-      });
-
-      if (updateBulkListingRequest.length) {
-        console.log(updateBulkListingRequest);
-        nftdetailsService.getLastIndex(0, user.id).then((res) => {
-          const makerOrders = updateBulkListingRequest.map((item: any, index: any) => {
-            return {
-              isBuySide: false,
-              maker: user.walletAddress,
-              collection: item.collection,
-              token_id: item.tokenOrder,
-              price: toGwei(item.price),
-              amount: 1,
-              nonce: res.data + 1 + index,
-              strategy: strategyFixedPriceContractId,
-              payment_asset: NativeAssetId,
-              expiration_range: Math.floor(item.expireTime / 1000),
-              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-            };
-          });
-
-          const prov = new Provider("https://beta-3.fuel.network/graphql");
-          setContracts(contracts, prov);
-
-          console.log(makerOrders);
-
-          bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, makerOrders).then((res) => {
-            console.log(res);
-            if (res?.transactionResult.status.type === "success") collectionsService.updateBulkListing(updateBulkListingRequest);
-          });
-        });
+      if (item.salable) {
+        updateBulkListingRequest.push(data);
+      } else {
+        bulkListingRequest.push(data);
       }
-      if (bulkListingRequest.length) {
-        nftdetailsService.getLastIndex(0, user.id).then((res) => {
-          const makerOrders = bulkListingRequest.map((item: any, index: any) => {
-            return {
-              isBuySide: false,
-              maker: user.walletAddress,
-              collection: item.collection,
-              token_id: item.tokenOrder,
-              price: toGwei(item.price),
-              amount: 1,
-              nonce: res.data + 1 + index,
-              strategy: strategyFixedPriceContractId,
-              payment_asset: NativeAssetId,
-              expiration_range: Math.floor(item.expireTime / 1000),
-              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-            };
-          });
+    });
 
-          const prov = new Provider("https://beta-3.fuel.network/graphql");
-          setContracts(contracts, prov);
-
-          console.log(makerOrders);
-
-          bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, makerOrders).then((res) => {
-            console.log(res);
-            if (res?.transactionResult.status.type === "success") collectionsService.bulkListing(bulkListingRequest);
-          });
-        });
-      }
-
-      navigate(PATHS.PROFILE);
-      dispatch(removeAll());
-    } catch (e: any) {
-      useToast().error(e.response.data.message);
-      console.log(e);
-    }
+    dispatch(
+      setCheckout({
+        type: CheckoutType.BulkListing,
+        bulkListItems: bulkListingRequest,
+        bulkUpdateItems: updateBulkListingRequest,
+      })
+    );
+    dispatch(toggleCheckoutModal());
   };
 
   const getExpiredDate = React.useMemo(() => {

@@ -44,7 +44,6 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
     if (checkoutIsAuction) {
       nftdetailsService.getLastIndex(2, user.id).then((res) => {
         const order = [
@@ -66,11 +65,15 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         const prov = new Provider("https://beta-3.fuel.network/graphql");
         setContracts(contracts, prov);
         console.log(order);
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order).then((res) => {
-          console.log(res);
-          if (res.transactionResult.status.type === "success")
-            nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
-        });
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
+              setApproved(true);
+            }
+          })
+          .catch(() => setStartTransaction(false));
       });
     } else if (updateListing) {
       nftdetailsService.getTokensIndex([selectedNFT?.id]).then((res) => {
@@ -93,10 +96,15 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         const prov = new Provider("https://beta-3.fuel.network/graphql");
         setContracts(contracts, prov);
         console.log(order);
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order).then((res) => {
-          console.log(res);
-          if (res.transactionResult.status.type === "success") nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
-        });
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+              setApproved(true);
+            }
+          })
+          .catch(() => setStartTransaction(false));
       });
     } else {
       nftdetailsService.getLastIndex(0, user.id).then((res) => {
@@ -119,10 +127,15 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         const prov = new Provider("https://beta-3.fuel.network/graphql");
         setContracts(contracts, prov);
         console.log(order);
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order).then((res) => {
-          console.log(res);
-          if (res.transactionResult.status.type === "success") nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
-        });
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+              setApproved(true);
+            }
+          })
+          .catch(() => setStartTransaction(false));
       });
     }
   };
@@ -138,11 +151,11 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>

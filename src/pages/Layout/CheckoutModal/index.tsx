@@ -13,6 +13,7 @@ import CancelAuctionCheckout from "./CancelAuctionCheckout";
 import TransferCheckout from "./TransferCheckout";
 import CancelListingCheckout from "./CancelListingCheckout";
 import { removeBuyNowItem } from "store/cartSlice";
+import BulkListingCheckout from "./BulkListingCheckout";
 
 const Index = () => {
   const dispatch = useAppDispatch();
@@ -27,8 +28,7 @@ const Index = () => {
     case CheckoutType.MakeOffer:
       return <MakeOfferCheckout show={show} onClose={onClose} />;
     case CheckoutType.PlaceBid:
-      return <BidCheckout show={show} onClose={onClose} />; //cart item-checkoutanimation-bid balance uyari
-    //
+      return <BidCheckout show={show} onClose={onClose} />;
     case CheckoutType.CancelOffer:
       return <CancelOfferCheckout show={show} onClose={onClose} />;
     case CheckoutType.UpdateOffer:
@@ -37,6 +37,8 @@ const Index = () => {
       return <AcceptOfferCheckout show={show} onClose={onClose} />;
     case CheckoutType.ConfirmListing:
       return <ConfirmListingCheckout show={show} onClose={onClose} />;
+    case CheckoutType.BulkListing:
+      return <BulkListingCheckout show={show} onClose={onClose} />;
     case CheckoutType.UpdateListing:
       return <ConfirmListingCheckout updateListing={true} show={show} onClose={onClose} />;
     case CheckoutType.Transfer:

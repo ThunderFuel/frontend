@@ -43,18 +43,19 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
-
     const prov = new Provider("https://beta-3.fuel.network/graphql");
     setContracts(contracts, prov);
 
     nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false).then((res) => {
-        console.log(res);
-        if (res.transactionResult.status.type === "success") {
-          nftdetailsService.tokenCancelList(selectedNFT.id);
-        }
-      });
+      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
+        .then((res) => {
+          console.log(res);
+          if (res.transactionResult.status.type === "success") {
+            nftdetailsService.tokenCancelList(selectedNFT.id);
+            setApproved(true);
+          }
+        })
+        .catch(() => setStartTransaction(false));
     });
   };
 
@@ -69,11 +70,11 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>
