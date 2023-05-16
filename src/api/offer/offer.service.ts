@@ -14,4 +14,7 @@ export default {
   async acceptOffer(params: any): Promise<ApiResponse<any>> {
     return ThunderURL.put("v1/offer/acceptoffer", {}, { params });
   },
+  async getOffersIndex(data: any[]): Promise<ApiResponse<any>> {
+    return ThunderURL.post("v1/offer/getoffersindex", data, {});
+  },
 };

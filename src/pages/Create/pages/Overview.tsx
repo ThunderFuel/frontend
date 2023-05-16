@@ -6,6 +6,8 @@ import EthereumPrice from "components/EthereumPrice";
 import CollectionItem from "components/CollectionList/components/List/CollectionItem";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
+import { IUserResponse } from "api/user/user.type";
+import { CollectionResponse } from "api/collections/collections.type";
 
 const Overview = () => {
   const navigate = UseNavigate();
@@ -45,6 +47,10 @@ const Overview = () => {
     collectionId: 2,
     rarity: 5,
     salable: true,
+    user: {} as IUserResponse,
+    userWalletAddress: "",
+    collection: {} as CollectionResponse,
+    contractAddress: "",
   };
 
   return (

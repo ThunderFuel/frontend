@@ -8,19 +8,12 @@ enum Status {
   done = "done",
 }
 
-const mockTransaction = async () => {
-  return await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(Status.done);
-    }, 1000);
-  });
-};
-
-export const CheckoutProcess = ({ onComplete, data }: { onComplete: () => void; data: any }) => {
+export const CheckoutProcess = ({ onComplete, data, approved }: { onComplete: () => any; data: any; approved: any }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
   const [transactionStatus, setTransactionStatus] = useState({
-    confirmTransaction: Status.pending,
-    waitingForApproval: Status.notStarted,
+    // confirmTransaction: Status.pending,
+    waitingForApproval: Status.pending,
     purchaseConfirm: Status.notStarted,
   });
   const [partiallyFailed, setPartiallyFailed] = useState(false);
@@ -32,35 +25,39 @@ export const CheckoutProcess = ({ onComplete, data }: { onComplete: () => void; 
     }));
   };
   const startTransactionProcess = async () => {
-    const confirmTransaction = (await mockTransaction()) as Status;
-    onSetTransactionStatus({
-      confirmTransaction,
-      waitingForApproval: Status.pending,
-    });
+    // const confirmTransaction = (await mockTransaction()) as Status;
+    // onSetTransactionStatus({
+    //   confirmTransaction,
+    //   waitingForApproval: Status.pending,
+    // });
 
-    const waitingForApproval = (await mockTransaction()) as Status;
-    onSetTransactionStatus({
-      waitingForApproval,
-      purchaseConfirm: Status.pending,
-    });
+    if (approved) {
+      const waitingForApproval = Status.done;
+      const purchaseConfirm = Status.done;
+      onSetTransactionStatus({
+        waitingForApproval,
+        purchaseConfirm,
+      });
 
-    const purchaseConfirm = (await mockTransaction()) as Status;
-    onSetTransactionStatus({
-      purchaseConfirm,
-    });
+      return;
+    } else {
+      const waitingForApproval = transactionStatus.waitingForApproval;
+      onSetTransactionStatus({
+        waitingForApproval,
+      });
+    }
+    onComplete();
   };
 
   useEffect(() => {
     setPartiallyFailed(false);
-    startTransactionProcess().then(() => {
-      onComplete();
-    });
-  }, []);
+    startTransactionProcess();
+  }, [approved]);
 
   return (
     <div className="flex flex-col w-full ">
       <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
-        <CheckoutProcessItem status={transactionStatus.confirmTransaction} title={title1} description={description1} />
+        {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title={title1} description={description1} /> */}
         <CheckoutProcessItem status={transactionStatus.waitingForApproval} title={title2} description={description2} />
         <CheckoutProcessItem status={transactionStatus.purchaseConfirm} title={title3} description={description3} />
 

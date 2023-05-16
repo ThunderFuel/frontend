@@ -4,13 +4,11 @@ import Button from "components/Button";
 import { IconCircleRemoveWhite, IconInfo, IconTag } from "icons";
 import dayjs from "dayjs";
 import useNavigate from "hooks/useNavigate";
-import useToast from "hooks/useToast";
 import { PATHS } from "router/config/paths";
-import collectionsService from "api/collections/collections.service";
 import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
-import { removeAll } from "store/bulkListingSlice";
 import { formatPrice } from "../../../utils";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Footer = ({ items, prices }: any) => {
   const dispatch = useAppDispatch();
@@ -20,36 +18,33 @@ const Footer = ({ items, prices }: any) => {
   const hasUpdate = bulkItems.some((item: any) => item.salable);
 
   const onUpdateBulkListing = async () => {
-    try {
-      const bulkListingRequest: any = [];
-      const updateBulkListingRequest: any = [];
-      bulkItems.forEach((item: any) => {
-        const data = {
-          tokenId: item.id,
-          price: prices?.[item.uid],
-          expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
-        };
+    const bulkListingRequest: any = [];
+    const updateBulkListingRequest: any = [];
+    bulkItems.forEach((item: any) => {
+      const data = {
+        tokenId: item.id,
+        price: prices?.[item.uid],
+        expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
+        tokenOrder: item.tokenOrder,
+        collection: item.contractAddress,
+        image: item.image, //needed for checkout modal
+      };
 
-        if (item.salable) {
-          updateBulkListingRequest.push(data);
-        } else {
-          bulkListingRequest.push(data);
-        }
-      });
-
-      if (updateBulkListingRequest.length) {
-        await collectionsService.updateBulkListing(updateBulkListingRequest);
+      if (item.salable) {
+        updateBulkListingRequest.push(data);
+      } else {
+        bulkListingRequest.push(data);
       }
-      if (bulkListingRequest.length) {
-        await collectionsService.bulkListing(bulkListingRequest);
-      }
+    });
 
-      navigate(PATHS.PROFILE);
-      dispatch(removeAll());
-    } catch (e: any) {
-      useToast().error(e.response.data.message);
-      console.log(e);
-    }
+    dispatch(
+      setCheckout({
+        type: CheckoutType.BulkListing,
+        bulkListItems: bulkListingRequest,
+        bulkUpdateItems: updateBulkListingRequest,
+      })
+    );
+    dispatch(toggleCheckoutModal());
   };
 
   const getExpiredDate = React.useMemo(() => {

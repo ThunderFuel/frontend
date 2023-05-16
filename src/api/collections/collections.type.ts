@@ -35,11 +35,14 @@ export interface CollectionItemResponse {
   rarity: number;
   salable: boolean;
   lastSalePrice?: number;
-  user?: IUserResponse;
+  user: IUserResponse;
   onAuction?: boolean;
   startingPrice?: number;
   highestBidPrice?: number;
   onAuctionExpireTime?: string;
+  userWalletAddress: string;
+  collection: CollectionResponse;
+  contractAddress: string;
 
   uid?: string;
   userId?: any;

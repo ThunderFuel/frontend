@@ -1,0 +1,219 @@
+{
+  "types": [
+    {
+      "typeId": 0,
+      "type": "()",
+      "components": [],
+      "typeParameters": null
+    },
+    {
+      "typeId": 1,
+      "type": "[_; 50]",
+      "components": [
+        {
+          "name": "__array_element",
+          "type": 3,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 9,
+              "typeArguments": null
+            }
+          ]
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 2,
+      "type": "b256",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 3,
+      "type": "enum Option",
+      "components": [
+        {
+          "name": "None",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "Some",
+          "type": 5,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [5]
+    },
+    {
+      "typeId": 4,
+      "type": "enum Side",
+      "components": [
+        {
+          "name": "Buy",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "Sell",
+          "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 5,
+      "type": "generic T",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 6,
+      "type": "struct Address",
+      "components": [
+        {
+          "name": "value",
+          "type": 2,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 7,
+      "type": "struct ContractId",
+      "components": [
+        {
+          "name": "value",
+          "type": 2,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 8,
+      "type": "struct ExtraParams",
+      "components": [
+        {
+          "name": "extra_address_param",
+          "type": 6,
+          "typeArguments": null
+        },
+        {
+          "name": "extra_contract_param",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "extra_u64_param",
+          "type": 10,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 9,
+      "type": "struct MakerOrderInput",
+      "components": [
+        {
+          "name": "side",
+          "type": 4,
+          "typeArguments": null
+        },
+        {
+          "name": "maker",
+          "type": 6,
+          "typeArguments": null
+        },
+        {
+          "name": "collection",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "token_id",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "price",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "amount",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "nonce",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "strategy",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "payment_asset",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "expiration_range",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "extra_params",
+          "type": 8,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 10,
+      "type": "u64",
+      "components": null,
+      "typeParameters": null
+    }
+  ],
+  "functions": [
+    {
+      "inputs": [
+        {
+          "name": "thunder_exchange",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "transfer_manager",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "orders",
+          "type": 1,
+          "typeArguments": null
+        }
+      ],
+      "name": "main",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": null
+    }
+  ],
+  "loggedTypes": [],
+  "messagesTypes": [],
+  "configurables": []
+}

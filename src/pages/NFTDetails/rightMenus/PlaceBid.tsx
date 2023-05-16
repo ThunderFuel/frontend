@@ -17,6 +17,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { getBalance } = useWallet();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const [bid, setBid] = useState<any>("");
   const [balance, setBalance] = useState<number>(0);
@@ -49,8 +50,10 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(bid) || !hasEnoughBalance()}
+          disabled={!isValidNumber(bid) || !hasEnoughBalance() ? true : isButtonDisabled}
           onClick={() => {
+            setIsButtonDisabled(true);
+
             dispatch(setCheckout({ type: CheckoutType.PlaceBid, price: bid, onCheckoutComplete: onBack }));
             dispatch(toggleCheckoutModal());
           }}

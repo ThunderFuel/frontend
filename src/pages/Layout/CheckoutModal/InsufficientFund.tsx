@@ -34,7 +34,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
         <EthereumPrice className="text-white" price={formatDisplayedNumber(balance)} />
       </div>
       <div className="flex flex-col w-full gap-y-2.5 p-5">
-        <BSButton target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-2.fuel.network/?address=${user?.contractAddress ?? address}`}>
+        <BSButton target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`}>
           ADD FUNDS
         </BSButton>
         <Button className="btn-secondary" onClick={onClose}>

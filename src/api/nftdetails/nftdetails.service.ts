@@ -54,4 +54,13 @@ export default {
   async tokenUpdateOffer(data: any): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/offer/updateoffer", data, {});
   },
+  async getLastIndex(indexType: number, userId: number): Promise<ApiResponse<any>> {
+    return await ThunderURL.get("/v1/user/getlastindex", { params: { indexType, userId } });
+  },
+  async getTokensIndex(data: any[]): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("/v1/token/gettokensindex", data, {});
+  },
+  async getAuctionIndex(data: any[]): Promise<ApiResponse<any>> {
+    return await ThunderURL.post("/v1/token/getauctionindex", data, {});
+  },
 };

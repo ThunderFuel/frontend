@@ -50,6 +50,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const [balance, setbalance] = useState<number>(0);
   const [offer, setoffer] = useState<any>("");
   const [expirationTime, setexpirationTime] = useState(selectExpirationDates[0]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   function fetchBalance() {
     getBalance().then((res) => setbalance(res ? res : 0));
@@ -79,8 +80,9 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(offer) || !hasEnoughBalance()}
+          disabled={!isValidNumber(offer) || !hasEnoughBalance() ? true : isButtonDisabled}
           onClick={() => {
+            setIsButtonDisabled(true);
             dispatch(
               setCheckout({
                 type: CheckoutType.MakeOffer,

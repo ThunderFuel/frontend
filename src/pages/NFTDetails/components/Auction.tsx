@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "components/Button";
 import { IconArrowRight, IconAuction, IconBid, IconEthereum } from "icons";
 
@@ -11,12 +11,19 @@ import { toggleWalletModal } from "store/walletSlice";
 const Auction = () => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { show } = useAppSelector((state) => state.checkout);
   const highestBid = JSON.stringify(selectedNFT.highestBid) !== "null";
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const [isOwner, setIsOwner] = React.useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   React.useEffect(() => {
     setIsOwner(user?.id === selectedNFT?.user?.id);
   }, [user, selectedNFT]);
+
+  React.useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className="flex flex-col border border-gray rounded-md">
@@ -31,7 +38,7 @@ const Auction = () => {
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay">
             <IconAuction width="17px" height="17px" /> AUCTION ENDS IN
           </span>
-          <AuctionCountdown expireTime={selectedNFT.expireTime} />
+          <AuctionCountdown expireTime={selectedNFT.expireTime ?? selectedNFT.onAuctionExpireTime} />
         </div>
       </div>
       {!(isOwner && !highestBid) && (
@@ -40,7 +47,9 @@ const Auction = () => {
             <>
               <Button
                 className="w-full text-button font-bigShoulderDisplay"
+                disabled={isButtonDisabled}
                 onClick={() => {
+                  setIsButtonDisabled(true);
                   dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.highestBid?.price }));
                   dispatch(toggleCheckoutModal());
                 }}

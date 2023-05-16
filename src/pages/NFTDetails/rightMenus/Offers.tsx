@@ -9,11 +9,15 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
-import { addressFormat, dateFormat } from "utils";
+import { addressFormat, dateFormat, toGwei } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
 import offerService from "api/offer/offer.service";
 import { OfferStatus } from "api/offer/offer.type";
 import clsx from "clsx";
+import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { NativeAssetId, Provider } from "fuels";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import userService from "api/user/user.service";
 
 const Box = ({
   item,
@@ -33,13 +37,20 @@ const Box = ({
   isAccepted: boolean;
 }) => {
   const dispatch = useAppDispatch();
-
+  const { wallet } = useAppSelector((state) => state.wallet);
+  const { show } = useAppSelector((state) => state.checkout);
+  console.log(item);
   const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
 
   const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
   const description = item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
 
   const isDisabled = item.isExpired || item.isCanceled;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className={clsx("flex flex-col border border-gray rounded-lg text-h6", isDisabled ? "text-gray-light" : "text-white")}>
@@ -62,10 +73,37 @@ const Box = ({
         <div className="flex border-t border-gray">
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
+            disabled={isButtonDisabled}
             onClick={() => {
-              offerService.acceptOffer({ id: item.id }).then(() => {
-                fetchOffers();
-                onBack();
+              setIsButtonDisabled(true);
+              offerService.getOffersIndex([item.id]).then((res) => {
+                const order = {
+                  isBuySide: false,
+                  taker: item.takerAddress,
+                  maker: item.makerAddress,
+                  nonce: res.data[item.id],
+                  price: toGwei(item.price),
+                  collection: item.contractAddress,
+                  token_id: item.tokenOrder,
+                  strategy: strategyFixedPriceContractId,
+                  extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+                };
+
+                const prov = new Provider("https://beta-3.fuel.network/graphql");
+                setContracts(contracts, prov);
+
+                console.log(order);
+                executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId).then((res) => {
+                  console.log(res);
+                  if (res.transactionResult.status.type === "success") {
+                    offerService.acceptOffer({ id: item.id }).then(() => {
+                      setIsButtonDisabled(false);
+                      userService.updateBidBalance(item.makerUserId, -item.price);
+                      fetchOffers();
+                      onBack();
+                    });
+                  }
+                });
               });
             }}
           >
@@ -78,7 +116,9 @@ const Box = ({
         <div className="flex border-t border-gray">
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
+            disabled={isButtonDisabled}
             onClick={() => {
+              setIsButtonDisabled(true);
               dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item }));
               dispatch(toggleCheckoutModal());
             }}

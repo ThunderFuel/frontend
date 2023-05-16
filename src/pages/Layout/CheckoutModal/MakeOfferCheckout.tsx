@@ -7,6 +7,11 @@ import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { NativeAssetId, Provider } from "fuels";
+import { strategyFixedPriceContractId, provider, ZERO_B256, contracts, exchangeContractId } from "global-constants";
+import { toGwei } from "utils";
+import userService from "api/user/user.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm transaction",
@@ -32,15 +37,59 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
-    nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+    nftdetailsService.getLastIndex(1, user.id).then((res) => {
+      const order = {
+        isBuySide: true,
+        maker: user.walletAddress,
+        collection: selectedNFT.collection.contractAddress,
+        token_id: selectedNFT.tokenOrder,
+        price: toGwei(checkoutPrice),
+        amount: 1, //fixed
+        nonce: res.data + 1,
+        strategy: strategyFixedPriceContractId,
+        payment_asset: NativeAssetId,
+        expiration_range: Math.floor(checkoutExpireTime / 1000),
+        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+      };
+      console.log(order);
+
+      const prov = new Provider("https://beta-3.fuel.network/graphql");
+      setContracts(contracts, prov);
+
+      userService.getBidBalance(user.id).then((res) => {
+        const currentBidBalance = res.data;
+        console.log(currentBidBalance, checkoutPrice);
+        if (currentBidBalance < checkoutPrice) {
+          const requiredBidAmount = checkoutPrice - currentBidBalance;
+          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId)
+            .then((res) => {
+              console.log(res);
+              if (res.transactionResult.status.type === "success") {
+                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+                userService.updateBidBalance(user.id, requiredBidAmount);
+                setApproved(true);
+              }
+            })
+            .catch(() => setStartTransaction(false));
+        } else
+          placeOrder(exchangeContractId, provider, wallet, order)
+            .then((res) => {
+              console.log(res);
+              if (res.transactionResult.status.type === "success") {
+                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+                setApproved(true);
+              }
+            })
+            .catch(() => setStartTransaction(false));
+      });
+    });
   };
 
   React.useEffect(() => {
@@ -54,11 +103,11 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>

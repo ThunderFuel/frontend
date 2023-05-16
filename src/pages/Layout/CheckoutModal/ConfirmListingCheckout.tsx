@@ -9,6 +9,10 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
+import { toGwei } from "utils";
+import { NativeAssetId, Provider } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -34,15 +38,106 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolean; onClose: any; updateListing?: boolean }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
-    if (checkoutIsAuction) nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
-    else if (updateListing) nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
-    else nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+    if (checkoutIsAuction) {
+      nftdetailsService.getLastIndex(2, user.id).then((res) => {
+        const order = [
+          {
+            isBuySide: false,
+            maker: user.walletAddress,
+            collection: selectedNFT.collection.contractAddress,
+            token_id: selectedNFT.tokenOrder,
+            price: 1, // auction icin onemsiz
+            amount: 1, // fixed
+            nonce: res.data + 1,
+            strategy: strategyAuctionContractId,
+            payment_asset: NativeAssetId,
+            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0 }, // laim degilse null
+          },
+        ];
+
+        const prov = new Provider("https://beta-3.fuel.network/graphql");
+        setContracts(contracts, prov);
+        console.log(order);
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
+              setApproved(true);
+            }
+          })
+          .catch(() => setStartTransaction(false));
+      });
+    } else if (updateListing) {
+      nftdetailsService.getTokensIndex([selectedNFT?.id]).then((res) => {
+        const order = [
+          {
+            isBuySide: false,
+            maker: user.walletAddress,
+            collection: selectedNFT.collection.contractAddress,
+            token_id: selectedNFT.tokenOrder,
+            price: toGwei(checkoutPrice),
+            amount: 1,
+            nonce: res.data[selectedNFT?.id],
+            strategy: strategyFixedPriceContractId,
+            payment_asset: NativeAssetId,
+            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          },
+        ];
+
+        const prov = new Provider("https://beta-3.fuel.network/graphql");
+        setContracts(contracts, prov);
+        console.log(order);
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+              setApproved(true);
+            }
+          })
+          .catch(() => setStartTransaction(false));
+      });
+    } else {
+      nftdetailsService.getLastIndex(0, user.id).then((res) => {
+        const order = [
+          {
+            isBuySide: false,
+            maker: user.walletAddress,
+            collection: selectedNFT.collection.contractAddress,
+            token_id: selectedNFT.tokenOrder,
+            price: toGwei(checkoutPrice),
+            amount: 1,
+            nonce: res.data + 1,
+            strategy: strategyFixedPriceContractId,
+            payment_asset: NativeAssetId,
+            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          },
+        ];
+
+        const prov = new Provider("https://beta-3.fuel.network/graphql");
+        setContracts(contracts, prov);
+        console.log(order);
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+              setApproved(true);
+            }
+          })
+          .catch(() => setStartTransaction(false));
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -56,11 +151,11 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>

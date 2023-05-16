@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "store";
-import { getSerializeAddress, setAddress, setIsConnected, setUser } from "../store/walletSlice";
+import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
 import { ZeroBytes32 } from "fuels";
 import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ export const useWallet = () => {
   };
 
   const getConnectionStatus = async () => {
-    return fuel.isConnected();
+    return fuel?.isConnected();
   };
 
   const getAccounts = async () => {
@@ -76,7 +76,11 @@ export const useWallet = () => {
             dispatch(setAddress(fuelAddress));
             if (fuelAddress !== null)
               fuel.getWallet(fuelAddress).then((wallet) => {
-                if (wallet !== null) userService.userCreate(wallet.address?.toB256()).then((user) => dispatch(setUser(user.data)));
+                if (wallet !== null)
+                  userService.userCreate(wallet.address?.toB256()).then((user) => {
+                    dispatch(setUser(user.data));
+                    dispatch(setWallet(wallet));
+                  });
               });
             dispatch(setIsConnected(connected));
 

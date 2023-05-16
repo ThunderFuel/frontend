@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Button from "components/Button";
 import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconListed, IconToken, IconUpdateListing } from "icons";
-import React, { SVGProps } from "react";
+import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
@@ -64,12 +64,20 @@ const Footer = () => {
 };
 const FooterListed = () => {
   const dispatch = useAppDispatch();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { show } = useAppSelector((state) => state.checkout);
+
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
       <Button
         className="btn-secondary"
+        disabled={isButtonDisabled}
         onClick={() => {
+          setIsButtonDisabled(true);
           dispatch(
             setCheckout({
               type: CheckoutType.CancelListing,
@@ -93,12 +101,20 @@ const FooterListed = () => {
 };
 const FooterAuction = () => {
   const dispatch = useAppDispatch();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { show } = useAppSelector((state) => state.checkout);
+
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
       <Button
         className="btn-secondary"
+        disabled={isButtonDisabled}
         onClick={() => {
+          setIsButtonDisabled(true);
           dispatch(setCheckout({ type: CheckoutType.CancelAuction }));
           dispatch(toggleCheckoutModal());
         }}

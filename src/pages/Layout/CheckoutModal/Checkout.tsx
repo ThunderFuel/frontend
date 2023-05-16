@@ -10,21 +10,17 @@ import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, removeBuyNowItem } from "store/cartSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { isObjectEmpty } from "utils";
+import { isObjectEmpty, toGwei } from "utils";
+
+import { bulkPurchase, executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { NativeAssetId, Provider } from "fuels";
 
 enum Status {
   notStarted = "notStarted",
   pending = "pending",
   done = "done",
 }
-
-const mockTransaction = async () => {
-  return await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(Status.done);
-    }, 1000);
-  });
-};
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
@@ -57,10 +53,10 @@ const CheckoutProcessItem = ({ title, description, status = Status.notStarted }:
   );
 };
 
-const CheckoutProcess = ({ onComplete }: { onComplete: () => void }) => {
+const CheckoutProcess = ({ onComplete, approved }: { onComplete: () => void; approved: any }) => {
   const [transactionStatus, setTransactionStatus] = useState({
-    confirmTransaction: Status.pending,
-    waitingForApproval: Status.notStarted,
+    // confirmTransaction: Status.pending,
+    waitingForApproval: Status.pending,
     purchaseConfirm: Status.notStarted,
   });
   const [partiallyFailed, setPartiallyFailed] = useState(false);
@@ -72,35 +68,39 @@ const CheckoutProcess = ({ onComplete }: { onComplete: () => void }) => {
     }));
   };
   const startTransactionProcess = async () => {
-    const confirmTransaction = (await mockTransaction()) as Status;
-    onSetTransactionStatus({
-      confirmTransaction,
-      waitingForApproval: Status.pending,
-    });
+    // const confirmTransaction = (await mockTransaction()) as Status;
+    // onSetTransactionStatus({
+    //   confirmTransaction,
+    //   waitingForApproval: Status.pending,
+    // });
 
-    const waitingForApproval = (await mockTransaction()) as Status;
-    onSetTransactionStatus({
-      waitingForApproval,
-      purchaseConfirm: Status.pending,
-    });
+    if (approved) {
+      const waitingForApproval = Status.done;
+      const purchaseConfirm = Status.done;
+      onSetTransactionStatus({
+        waitingForApproval,
+        purchaseConfirm,
+      });
 
-    const purchaseConfirm = (await mockTransaction()) as Status;
-    onSetTransactionStatus({
-      purchaseConfirm,
-    });
+      return;
+    } else {
+      const waitingForApproval = transactionStatus.waitingForApproval;
+      onSetTransactionStatus({
+        waitingForApproval,
+      });
+    }
+    onComplete();
   };
 
   React.useEffect(() => {
     setPartiallyFailed(false);
-    startTransactionProcess().then(() => {
-      onComplete();
-    });
-  }, []);
+    startTransactionProcess();
+  }, [approved]);
 
   return (
     <div className="flex flex-col w-full ">
       <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
-        <CheckoutProcessItem status={transactionStatus.confirmTransaction} title="Confirm transaction" description="Proceed in your wallet and confirm transaction" />
+        {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title="Confirm transaction" description="Proceed in your wallet and confirm transaction" /> */}
         <CheckoutProcessItem status={transactionStatus.waitingForApproval} title="Wait for approval" description="Waiting for transaction to be approved" />
         <CheckoutProcessItem status={transactionStatus.purchaseConfirm} title="Purchase completed!" description="Congrats your purchase is completed." />
 
@@ -120,7 +120,7 @@ const CheckoutProcess = ({ onComplete }: { onComplete: () => void }) => {
   );
 };
 
-const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items: any; itemCount: number; totalAmount: number; approved: boolean }) => {
+export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: { items: any; itemCount: number; totalAmount: number | string; approved: boolean }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -163,7 +163,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
   const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     dispatch(getCartTotal());
@@ -175,12 +175,106 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const onComplete = async () => {
     const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
     try {
-      const res = await nftdetailsService.tokenBuyNow(tokenIds, user.id);
-      setApproved(true);
-      if (res.data) {
-        setSuccessCheckout(res.data);
-        window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-      }
+      nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+        if (!isObjectEmpty(buyNowItem)) {
+          console.log("BUY NOW");
+          const order = {
+            isBuySide: true,
+            taker: user.walletAddress,
+            maker: buyNowItem.userWalletAddress ?? buyNowItem.user.walletAddress,
+            nonce: res.data[tokenIds[0]],
+            price: toGwei(buyNowItem.price),
+            token_id: buyNowItem.tokenOrder,
+            collection: buyNowItem.contractAddress ?? buyNowItem.collection.contractAddress,
+            strategy: strategyFixedPriceContractId,
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          };
+
+          const prov = new Provider("https://beta-3.fuel.network/graphql");
+          setContracts(contracts, prov);
+
+          console.log(order);
+          executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
+            .then((res) => {
+              console.log(res);
+              if (res.transactionResult.status.type === "success")
+                nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                  if (res.data) {
+                    setSuccessCheckout(res.data);
+                    setApproved(true);
+                    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                  }
+                });
+            })
+            .catch(() => setStartTransaction(false));
+        } else if (tokenIds.length === 1) {
+          console.log("BUY 1 ITEM");
+          const order = {
+            isBuySide: true,
+            taker: user.walletAddress,
+            maker: items[0].userWalletAddress,
+            nonce: res.data[items[0].id],
+            price: toGwei(items[0].price),
+            token_id: items[0].tokenOrder,
+            collection: items[0].contractAddress,
+            strategy: strategyFixedPriceContractId,
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          };
+
+          const prov = new Provider("https://beta-3.fuel.network/graphql");
+          setContracts(contracts, prov);
+
+          console.log(order);
+          executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
+            .then((res) => {
+              console.log(res);
+              if (res.transactionResult.status.type === "success")
+                nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                  if (res.data) {
+                    setSuccessCheckout(res.data);
+                    setApproved(true);
+                    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                  }
+                });
+            })
+            .catch(() => setStartTransaction(false));
+        } else {
+          console.log("BULK PURCHASE");
+          nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+            const takerOrders = items.map((item) => {
+              return {
+                isBuySide: true,
+                taker: user.walletAddress,
+                maker: item.userWalletAddress,
+                nonce: res.data[item.id],
+                price: toGwei(item.price),
+                token_id: item.tokenOrder,
+                collection: item.contractAddress,
+                strategy: strategyFixedPriceContractId,
+                extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+              };
+            });
+
+            const prov = new Provider("https://beta-3.fuel.network/graphql");
+            setContracts(contracts, prov);
+
+            console.log(takerOrders);
+            bulkPurchase(exchangeContractId, provider, wallet, takerOrders, NativeAssetId)
+              .then((res) => {
+                console.log("bulkPurchase res:", res);
+                if (res?.transactionResult.status.type === "success")
+                  nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                    if (res.data) {
+                      setSuccessCheckout(res.data);
+                      setApproved(true);
+                      window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                    }
+                  });
+              })
+              .catch(() => setStartTransaction(false));
+          });
+        }
+      });
     } catch (e) {
       console.log(e);
     }
@@ -196,7 +290,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   React.useEffect(() => {
     setApproved(false);
     setStartTransaction(false);
-    setSuccessCheckout(false);
     if (show) {
       setStartTransaction(true);
     }
@@ -205,11 +298,11 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} />
+        <CheckoutProcess onComplete={onComplete} approved={approved} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>
