@@ -51,7 +51,10 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
           nftdetailsService.tokenCancelAuction(selectedNFT.id);
           setApproved(true);
         })
-        .catch(() => setStartTransaction(false));
+        .catch((e) => {
+          console.log(e);
+          setStartTransaction(false);
+        });
     });
   };
 

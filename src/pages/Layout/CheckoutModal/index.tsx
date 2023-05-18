@@ -8,12 +8,13 @@ import MakeOfferCheckout from "./MakeOfferCheckout";
 import CancelOfferCheckout from "./CancelOfferCheckout";
 import UpdateOfferCheckout from "./UpdateOfferCheckout";
 import ConfirmListingCheckout from "./ConfirmListingCheckout";
-import AcceptOfferCheckout from "./AcceptOfferCheckout";
 import CancelAuctionCheckout from "./CancelAuctionCheckout";
 import TransferCheckout from "./TransferCheckout";
 import CancelListingCheckout from "./CancelListingCheckout";
 import { removeBuyNowItem } from "store/cartSlice";
 import BulkListingCheckout from "./BulkListingCheckout";
+import AcceptBidCheckout from "./AcceptBidCheckout";
+import AcceptOfferCheckout from "./AcceptOfferCheckout";
 
 const Index = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +34,8 @@ const Index = () => {
       return <CancelOfferCheckout show={show} onClose={onClose} />;
     case CheckoutType.UpdateOffer:
       return <UpdateOfferCheckout show={show} onClose={onClose} />;
+    case CheckoutType.AcceptBid:
+      return <AcceptBidCheckout show={show} onClose={onClose} />;
     case CheckoutType.AcceptOffer:
       return <AcceptOfferCheckout show={show} onClose={onClose} />;
     case CheckoutType.ConfirmListing:

@@ -73,7 +73,10 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
               setApproved(true);
             }
           })
-          .catch(() => setStartTransaction(false));
+          .catch((e) => {
+            console.log(e);
+            setStartTransaction(false);
+          });
       });
     } else if (updateListing) {
       nftdetailsService.getTokensIndex([selectedNFT?.id]).then((res) => {
@@ -104,7 +107,10 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
               setApproved(true);
             }
           })
-          .catch(() => setStartTransaction(false));
+          .catch((e) => {
+            console.log(e);
+            setStartTransaction(false);
+          });
       });
     } else {
       nftdetailsService.getLastIndex(0, user.id).then((res) => {
@@ -135,7 +141,10 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
               setApproved(true);
             }
           })
-          .catch(() => setStartTransaction(false));
+          .catch((e) => {
+            console.log(e);
+            setStartTransaction(false);
+          });
       });
     }
   };

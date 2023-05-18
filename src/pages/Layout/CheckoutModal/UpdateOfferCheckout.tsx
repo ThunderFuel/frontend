@@ -78,7 +78,10 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
                 setApproved(true);
               }
             })
-            .catch(() => setStartTransaction(false));
+            .catch((e) => {
+              console.log(e);
+              setStartTransaction(false);
+            });
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
@@ -88,7 +91,10 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
                 setApproved(true);
               }
             })
-            .catch(() => setStartTransaction(false));
+            .catch((e) => {
+              console.log(e);
+              setStartTransaction(false);
+            });
       });
     });
   };

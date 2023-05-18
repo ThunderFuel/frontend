@@ -124,7 +124,7 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
   const ref = React.useRef<HTMLDivElement>(null);
   const [showDetails, setShowDetails] = useState(false);
 
-  const getImages = items.slice(0, itemCount > 3 ? 3 : itemCount).map((i: any) => i.image);
+  const getImages = items.slice(0, itemCount > 3 ? 3 : itemCount).map((i: any) => (i.image ? i.image : i.tokenImage));
   const titleSlot = approved && (
     <div className="flex gap-x-2.5">
       {/* <button className="body-small text-gray-light underline">View on Blockchain</button> */}
@@ -206,7 +206,10 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
                   }
                 });
             })
-            .catch(() => setStartTransaction(false));
+            .catch((e) => {
+              console.log(e);
+              setStartTransaction(false);
+            });
         } else if (tokenIds.length === 1) {
           console.log("BUY 1 ITEM");
           const order = {
@@ -237,7 +240,10 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
                   }
                 });
             })
-            .catch(() => setStartTransaction(false));
+            .catch((e) => {
+              console.log(e);
+              setStartTransaction(false);
+            });
         } else {
           console.log("BULK PURCHASE");
           nftdetailsService.getTokensIndex(tokenIds).then((res) => {
@@ -271,7 +277,10 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
                     }
                   });
               })
-              .catch(() => setStartTransaction(false));
+              .catch((e) => {
+                console.log(e);
+                setStartTransaction(false);
+              });
           });
         }
       });

@@ -8,19 +8,21 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import offerService from "api/offer/offer.service";
+import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
+import { NativeAssetId, Provider } from "fuels";
+import { toGwei } from "utils";
+import userService from "api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
-import { Provider } from "fuels";
-import { strategyFixedPriceContractId, provider, contracts, exchangeContractId } from "global-constants";
-import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-
 const checkoutProcessTexts = {
-  title1: "Confirm your canceling listing",
-  description1: "Proceed in your wallet and confirm canceling listing.",
+  title1: "Confirm bid",
+  description1: "Proceed in your wallet and confirm accepting bid.",
   title2: "Wait for approval",
   description2: "Waiting for transaction to be approved",
-  title3: "Your listing is canceled!",
-  description3: "Your listing succesfully canceled.",
+  title3: "Your NFT sold!",
+  description3: "Congrats, your NFT succesfully sold.",
 };
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
@@ -35,23 +37,39 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   );
 };
 
-const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { wallet } = useAppSelector((state) => state.wallet);
+  const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
   const onComplete = () => {
-    const prov = new Provider("https://beta-3.fuel.network/graphql");
-    setContracts(contracts, prov);
+    nftdetailsService.getAuctionIndex([selectedNFT?.id]).then((res) => {
+      console.log(res);
+      const order = {
+        isBuySide: false,
+        taker: user.walletAddress,
+        maker: selectedNFT.highestBid.walletAddress, //OMER ABI
+        nonce: res.data[selectedNFT?.id],
+        price: toGwei(checkoutPrice),
+        collection: selectedNFT.collection.contractAddress,
+        token_id: selectedNFT.tokenOrder,
+        strategy: strategyAuctionContractId,
+        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
+      };
 
-    nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
+      const prov = new Provider("https://beta-3.fuel.network/graphql");
+      setContracts(contracts, prov);
+
+      console.log(order);
+      executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
         .then((res) => {
           console.log(res);
           if (res.transactionResult.status.type === "success") {
-            nftdetailsService.tokenCancelList(selectedNFT.id);
+            offerService.acceptOffer({ id: currentItem?.id });
+            userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
             setApproved(true);
           }
         })
@@ -88,16 +106,16 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
     </div>
   );
 
-  // const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
+  const viewOnBlockchain = approved && <button className="body-small text-gray-light underline"></button>;
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Cancel Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Accept Bid" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text="Listed at" name={selectedNFT?.name} image={selectedNFT?.image} price={selectedNFT?.price} id={0}></CartItem>
+        <CartItem text={"Bid"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
   );
 };
 
-export default CancelListingCheckout;
+export default AcceptBidCheckout;

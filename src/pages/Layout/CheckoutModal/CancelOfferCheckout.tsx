@@ -12,8 +12,11 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 import { Provider } from "fuels";
 import { strategyFixedPriceContractId, provider, contracts, exchangeContractId } from "global-constants";
-import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { cancelAllOrders, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
+import { CheckoutCartItems } from "./Checkout";
+import { useDispatch } from "react-redux";
+import { removeCancelOfferItems } from "store/checkoutSlice";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -37,9 +40,9 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 };
 
 const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { currentItem } = useAppSelector((state) => state.checkout);
-  const { wallet } = useAppSelector((state) => state.wallet);
+  const dispatch = useDispatch();
+  const { currentItem, cancelOfferItems, onCheckoutComplete } = useAppSelector((state) => state.checkout);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -47,18 +50,36 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const onComplete = () => {
     const prov = new Provider("https://beta-3.fuel.network/graphql");
     setContracts(contracts, prov);
-
-    offerService.getOffersIndex([currentItem.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
+    if (cancelOfferItems?.length > 0) {
+      cancelAllOrders(exchangeContractId, provider, wallet, strategyFixedPriceContractId)
         .then((res) => {
           console.log(res);
           if (res.transactionResult.status.type === "success") {
-            nftdetailsService.cancelOffer(currentItem.id);
+            offerService.cancelAllOffer({ userId: user.id }).then(() => onCheckoutComplete());
+            dispatch(removeCancelOfferItems());
             setApproved(true);
           }
         })
-        .catch(() => setStartTransaction(false));
-    });
+        .catch((e) => {
+          console.log(e);
+          setStartTransaction(false);
+        });
+    } else {
+      offerService.getOffersIndex([currentItem.id]).then((res) => {
+        cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
+          .then((res) => {
+            console.log(res);
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.cancelOffer(currentItem.id).then(() => onCheckoutComplete());
+              setApproved(true);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            setStartTransaction(false);
+          });
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -88,9 +109,20 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   );
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Cancel Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal
+      backdropDisabled={true}
+      className="checkout"
+      title={cancelOfferItems?.length > 0 ? "Cancel All Offers" : "Cancel Your Offer"}
+      show={show}
+      onClose={onClose}
+      footer={<Footer approved={approved} onClose={onClose} />}
+    >
       <div className="flex flex-col p-5">
-        <CartItem text={"Your Offer"} name={selectedNFT.name} image={selectedNFT.image} price={currentItem.price} id={0}></CartItem>
+        {cancelOfferItems?.length > 0 ? (
+          <CheckoutCartItems items={cancelOfferItems} itemCount={cancelOfferItems.length} totalAmount={""} approved={approved}></CheckoutCartItems>
+        ) : (
+          <CartItem text={"Your Offer"} name={currentItem.tokenName} image={currentItem.tokenImage} price={currentItem.price} id={0}></CartItem>
+        )}{" "}
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>

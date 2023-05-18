@@ -25,7 +25,12 @@ const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
 const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => {
   return (
     <div className="grid grid-cols-2">
-      <Button className="btn-secondary btn-sm rounded-t-none border-r-0" onClick={() => onCancelOffer(item)}>
+      <Button
+        className="btn-secondary btn-sm rounded-t-none border-r-0"
+        onClick={() => {
+          onCancelOffer(item);
+        }}
+      >
         cancel offer <IconCircleRemoveWhite />
       </Button>
       <Button className="btn-secondary btn-sm rounded-t-none" onClick={() => onUpdateOffer(item)}>

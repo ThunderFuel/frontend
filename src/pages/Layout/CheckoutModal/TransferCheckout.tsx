@@ -58,7 +58,10 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
         nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
         setApproved(true);
       })
-      .catch(() => setStartTransaction(false));
+      .catch((e) => {
+        console.log(e);
+        setStartTransaction(false);
+      });
   };
 
   React.useEffect(() => {
