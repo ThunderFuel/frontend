@@ -202,9 +202,9 @@ const dropSecondary = {
     },
     {
       type: BLOCK_TYPE.VideoText,
-      image: AssetDropTest.DropPrimary.ImageText01,
+      image: AssetDropTest.DropSecondary.VideText,
       title: "The Team",
-      video: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
+      video: "/video.mp4",
       text: "Everybodys was co-founded by artist Sean Solomon and project manager David Schaefer, a writer and NFT enthusiast who joined the space in February 2021. David became a fan of Sean's work after attending an art show of Sean's when David was just 13. The two later went on to become friends through the LA music scene. The rest of the team was built similarly, with childhood friends and exciting new ones. The Everybodys team brings a perspective informed by years of experience making art, writing stories, and building communities. Whether in visual art, music, TV, or web 3, Solomon and Schaefer have always valued creative collaboration above all else.",
     },
   ],
@@ -266,6 +266,24 @@ const dropSecondary = {
       title: "Community Growth and Experiences",
       text: "Everbodys combines the best of digital blockchain-loving and physical life: from Twitter to Discord to parties hosted by Founder & DJ of 18 years, Jamieson Hill. As the project expands, we provide a foundation for others to grow with us in the space, launching Web3 jobs for as many as possible. Our partnership with Thunder Marketplace will help us continue to deliver on our goals.",
       image: AssetDropTest.DropSecondary.Roadmap.Roadmap03,
+    },
+  ],
+  faq: [
+    {
+      title: "When is the mint date?",
+      text: "When is the mint date?",
+    },
+    {
+      title: "What is the mint price?",
+      text: "What is the mint price?",
+    },
+    {
+      title: "How do I get on the Allowlist?",
+      text: "How do I get on the Allowlist?",
+    },
+    {
+      title: "Do I pay gas fees when minting?",
+      text: "Yes, gas fees occur for any transaction or attempted transaction on the Ethereum blockchain, including a mint. The amount varies depending on a variety of factors including how many people are using the network at that specific moment. OpenSea does not control gas prices, nor does it receive or profit from them, and OpenSea is not able to refund gas fees. You'll pay gas fees even if you weren't able to successfully mint.",
     },
   ],
 };
