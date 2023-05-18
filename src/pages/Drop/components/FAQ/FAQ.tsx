@@ -24,7 +24,7 @@ const Faq = () => {
   const { dropDetail } = useDropDetailContext();
 
   return (
-    <div className="flex flex-col gap-5 w-[800px]">
+    <div className="flex flex-col gap-5 w-full max-w-[800px]">
       {dropDetail.faq.map((item: any, i: number) => (
         <FaqItem item={item} key={i} />
       ))}
