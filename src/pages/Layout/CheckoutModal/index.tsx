@@ -22,7 +22,8 @@ const Index = () => {
   const onClose = () => {
     dispatch(toggleCheckoutModal());
     if (checkoutType === CheckoutType.None) dispatch(removeBuyNowItem());
-    if ([CheckoutType.MakeOffer, CheckoutType.PlaceBid, CheckoutType.UpdateOffer, CheckoutType.ConfirmListing, CheckoutType.UpdateListing].includes(checkoutType)) onCheckoutComplete();
+    if ([CheckoutType.MakeOffer, CheckoutType.PlaceBid, CheckoutType.UpdateOffer, CheckoutType.ConfirmListing, CheckoutType.UpdateListing, CheckoutType.CancelOffer].includes(checkoutType))
+      onCheckoutComplete();
   };
 
   switch (checkoutType) {

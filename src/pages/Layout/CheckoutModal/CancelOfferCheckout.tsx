@@ -12,11 +12,9 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 import { Provider } from "fuels";
 import { strategyFixedPriceContractId, provider, contracts, exchangeContractId } from "global-constants";
-import { cancelAllOrders, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { cancelAllOrdersBySide, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import { CheckoutCartItems } from "./Checkout";
-import { useDispatch } from "react-redux";
-import { removeCancelOfferItems } from "store/checkoutSlice";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -40,8 +38,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 };
 
 const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const dispatch = useDispatch();
-  const { currentItem, cancelOfferItems, onCheckoutComplete } = useAppSelector((state) => state.checkout);
+  const { currentItem, cancelOfferItems } = useAppSelector((state) => state.checkout);
   const { wallet, user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
@@ -51,12 +48,11 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     const prov = new Provider("https://beta-3.fuel.network/graphql");
     setContracts(contracts, prov);
     if (cancelOfferItems?.length > 0) {
-      cancelAllOrders(exchangeContractId, provider, wallet, strategyFixedPriceContractId)
+      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
         .then((res) => {
           console.log(res);
           if (res.transactionResult.status.type === "success") {
-            offerService.cancelAllOffer({ userId: user.id }).then(() => onCheckoutComplete());
-            dispatch(removeCancelOfferItems());
+            offerService.cancelAllOffer({ userId: user.id });
             setApproved(true);
           }
         })
@@ -70,7 +66,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
           .then((res) => {
             console.log(res);
             if (res.transactionResult.status.type === "success") {
-              nftdetailsService.cancelOffer(currentItem.id).then(() => onCheckoutComplete());
+              nftdetailsService.cancelOffer(currentItem.id);
               setApproved(true);
             }
           })
@@ -107,6 +103,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       )}
     </div>
   );
+  console.log(cancelOfferItems);
 
   return (
     <Modal
@@ -121,7 +118,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         {cancelOfferItems?.length > 0 ? (
           <CheckoutCartItems items={cancelOfferItems} itemCount={cancelOfferItems.length} totalAmount={""} approved={approved}></CheckoutCartItems>
         ) : (
-          <CartItem text={"Your Offer"} name={currentItem.tokenName} image={currentItem.tokenImage} price={currentItem.price} id={0}></CartItem>
+          <CartItem text={"Your Offer"} name={currentItem?.tokenName} image={currentItem?.tokenImage} price={currentItem?.price} id={0}></CartItem>
         )}{" "}
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
