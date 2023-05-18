@@ -50,7 +50,7 @@ const Auction = () => {
                 disabled={isButtonDisabled}
                 onClick={() => {
                   setIsButtonDisabled(true);
-                  dispatch(setCheckout({ type: CheckoutType.AcceptOffer, price: selectedNFT.highestBid?.price }));
+                  dispatch(setCheckout({ type: CheckoutType.AcceptBid, price: selectedNFT.highestBid?.price }));
                   dispatch(toggleCheckoutModal());
                 }}
               >
