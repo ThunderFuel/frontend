@@ -42,6 +42,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [startTransaction, setStartTransaction] = useState(false);
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
     nftdetailsService.getLastIndex(1, user.id).then((res) => {
@@ -80,7 +81,8 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             })
             .catch((e) => {
               console.log(e);
-              setStartTransaction(false);
+              if (e.message.includes("RequireRevertError")) setIsFailed(true);
+              else setStartTransaction(false);
             });
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
@@ -93,7 +95,8 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             })
             .catch((e) => {
               console.log(e);
-              setStartTransaction(false);
+              if (e.message.includes("RequireRevertError")) setIsFailed(true);
+              else setStartTransaction(false);
             });
       });
     });
@@ -110,7 +113,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">

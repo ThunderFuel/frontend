@@ -40,6 +40,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
     const prov = new Provider("https://beta-3.fuel.network/graphql");
@@ -53,7 +54,8 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
         })
         .catch((e) => {
           console.log(e);
-          setStartTransaction(false);
+          if (e.message.includes("RequireRevertError")) setIsFailed(true);
+          else setStartTransaction(false);
         });
     });
   };
@@ -69,7 +71,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
