@@ -75,7 +75,6 @@ export const checkoutSlice = createSlice({
     removeCancelOfferItems: (state) => {
       state.cancelOfferItems = [];
     },
-    //TODO checkoutlarda bidbalanceupdated yerine bunu kullan
     setAmountAddedBidBalance: (state, action) => {
       state.amountAddedBidBalance = action.payload;
     },
