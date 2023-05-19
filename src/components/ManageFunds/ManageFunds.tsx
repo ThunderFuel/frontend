@@ -40,7 +40,7 @@ const ManageFunds = () => {
   const footer = (
     <div className="flex flex-col items-center p-5 gap-y-5">
       <Button className="w-full" disabled={isDisabled} onClick={handleSwap}>
-        SWAP
+        {isAddToPool ? "DEPOSIT" : "WITHDRAW"}
       </Button>
       <Button className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
         CLOSE
