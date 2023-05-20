@@ -76,7 +76,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           })
           .catch((e) => {
             console.log(e);
-            if (e.message.includes("RequireRevertError")) setIsFailed(true);
+            if (e.message.includes("Revert")) setIsFailed(true);
             else setStartTransaction(false);
           });
       });
@@ -111,7 +111,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           })
           .catch((e) => {
             console.log(e);
-            if (e.message.includes("RequireRevertError")) setIsFailed(true);
+            if (e.message.includes("Revert")) setIsFailed(true);
             else setStartTransaction(false);
           });
       });
@@ -146,7 +146,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           })
           .catch((e) => {
             console.log(e);
-            if (e.message.includes("RequireRevertError")) setIsFailed(true);
+            if (e.message.includes("Revert")) setIsFailed(true);
             else setStartTransaction(false);
           });
       });
