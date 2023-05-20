@@ -55,7 +55,10 @@ const NFTDetails = () => {
   }, [isActive, show]);
 
   useEffect(() => {
-    return () => resetMenuState();
+    return () => {
+      resetMenuState();
+      dispatch(setSelectedNFT({}));
+    };
   }, []);
 
   const resetMenuState = () => {
