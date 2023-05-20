@@ -45,6 +45,8 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [startTransaction, setStartTransaction] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
+  const [currentBidBalance, setCurrentBidBalance] = useState(0);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
@@ -67,22 +69,24 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       console.log(order);
 
       userService.getBidBalance(user.id).then((res) => {
-        const currentBidBalance = res.data;
-        console.log({ currentBidBalance });
-        if (currentBidBalance < checkoutPrice) {
-          const requiredBidAmount = checkoutPrice - currentBidBalance;
+        setCurrentBidBalance(res.data);
+        const _currentBidBalance = res.data;
+        console.log(_currentBidBalance);
+        if (_currentBidBalance < checkoutPrice) {
+          const requiredBidAmount = checkoutPrice - _currentBidBalance;
           depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId)
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-                userService.updateBidBalance(user.id, requiredBidAmount);
+                userService.updateBidBalance(user.id, requiredBidAmount).then(() => setBidBalanceUpdated(true));
                 setApproved(true);
               }
             })
             .catch((e) => {
               console.log(e);
-              setStartTransaction(false);
+              if (e.message.includes("RequireRevertError")) setIsFailed(true);
+              else setStartTransaction(false);
             });
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
@@ -95,7 +99,8 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             })
             .catch((e) => {
               console.log(e);
-              setStartTransaction(false);
+              if (e.message.includes("RequireRevertError")) setIsFailed(true);
+              else setStartTransaction(false);
             });
       });
     });
@@ -112,7 +117,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
@@ -137,8 +142,10 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         <div className="flex gap-x-2 p-[10px] m-5 rounded-[5px] bg-bg-light border border-gray">
           <IconInfo color="orange" />
           <div className="flex flex-col gap-y-[6px] text-head6 font-spaceGrotesk text-white">
-            1.2 ETH added to your balance.
-            <span className="flex text-bodySm text-gray-light">In order to place this bid 1.2 ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.</span>
+            {checkoutPrice - currentBidBalance} ETH added to your balance.
+            <span className="flex text-bodySm text-gray-light">
+              In order to place this bid {checkoutPrice - currentBidBalance} ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.
+            </span>
           </div>
         </div>
       )}

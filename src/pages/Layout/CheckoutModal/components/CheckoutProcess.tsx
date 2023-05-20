@@ -8,7 +8,7 @@ enum Status {
   done = "done",
 }
 
-export const CheckoutProcess = ({ onComplete, data, approved }: { onComplete: () => any; data: any; approved: any }) => {
+export const CheckoutProcess = ({ onComplete, data, approved, failed }: { onComplete: () => any; data: any; approved: any; failed: any }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
   const [transactionStatus, setTransactionStatus] = useState({
@@ -31,7 +31,7 @@ export const CheckoutProcess = ({ onComplete, data, approved }: { onComplete: ()
     //   waitingForApproval: Status.pending,
     // });
 
-    if (approved) {
+    if (approved || failed) {
       const waitingForApproval = Status.done;
       const purchaseConfirm = Status.done;
       onSetTransactionStatus({
@@ -50,9 +50,11 @@ export const CheckoutProcess = ({ onComplete, data, approved }: { onComplete: ()
   };
 
   useEffect(() => {
-    setPartiallyFailed(false);
+    if (!failed) {
+      setPartiallyFailed(false);
+    } else setPartiallyFailed(true);
     startTransactionProcess();
-  }, [approved]);
+  }, [approved, failed]);
 
   return (
     <div className="flex flex-col w-full ">
@@ -64,11 +66,11 @@ export const CheckoutProcess = ({ onComplete, data, approved }: { onComplete: ()
         {partiallyFailed && (
           <div className="flex justify-center gap-x-2 p-2.5 border bg-bg-light border-gray rounded-[5px]">
             <div className="flex">
-              <IconWarning className="fill-red" />
+              <IconWarning className="text-red" />
             </div>
             <div className="flex flex-col">
-              <span className="text-h6 text-white">1 item failed</span>
-              <span className="body-small text-gray-light">Purchases can fail due to network issues, gas fee increases, or because someone else bought the item before you.</span>
+              <span className="text-h6 text-white">Transaction failed</span>
+              <span className="body-small text-gray-light">Transactions can fail due to network issues, gas fee increases, or because someone else bought the item before you.</span>
             </div>
           </div>
         )}
