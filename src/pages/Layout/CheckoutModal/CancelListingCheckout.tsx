@@ -58,7 +58,7 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
         })
         .catch((e) => {
           console.log(e);
-          if (e.message.includes("RequireRevertError")) setIsFailed(true);
+          if (e.message.includes("Revert")) setIsFailed(true);
           else setStartTransaction(false);
         });
     });
