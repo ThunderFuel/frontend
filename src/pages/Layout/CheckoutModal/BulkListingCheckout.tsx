@@ -79,8 +79,8 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         .then((res) => {
           console.log(res);
           if (res?.transactionResult.status.type === "success") {
-            collectionsService.updateBulkListing(bulkUpdateItems);
-            if (bulkListItems.length) collectionsService.bulkListing(bulkListItems);
+            if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(bulkUpdateItems);
+            if (bulkListItems.length > 0) collectionsService.bulkListing(bulkListItems);
 
             setApproved(true);
           }
