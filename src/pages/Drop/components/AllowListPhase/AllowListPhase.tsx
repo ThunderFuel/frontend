@@ -4,9 +4,13 @@ import { createEvent, DateArray } from "ics";
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
 import { countDownTimer, dateFormat, downloadFile, formatPrice, numberFormat, randomIntFromInterval } from "utils";
-import { IconCalendar } from "../../../../icons";
+import { IconCalendar, IconToken } from "../../../../icons";
 import Button from "../../../../components/Button";
 import { useDropDetailContext } from "../../Detail/DetailContext";
+import Img from "../../../../components/Img/Img";
+import Marquee from "react-fast-marquee";
+import { BLOCK_TYPE } from "../../../../api/drop/drop.service";
+import clsx from "clsx";
 
 const Countdown = ({ startDate }: any) => {
   const [timer, setTimer] = React.useReducer(
@@ -114,31 +118,52 @@ const ButtonCalendar = ({ title, startDate, endDate }: any) => {
   );
 };
 
+const Gallery = ({ images }: any) => {
+  return (
+    <Marquee className="flex gap-5">
+      <div className="flex gap-5">
+        {images.map((item: any, k: number) => (
+          <Img key={`${k}`} src={item} />
+        ))}
+      </div>
+    </Marquee>
+  );
+};
+
+const ButtonMint = () => {
+  const onClick = () => console.log("log");
+
+  return (
+    <Button className="w-full btn-primary" onClick={onClick}>
+      Mint now <IconToken />
+    </Button>
+  );
+};
+
 const AllowListPhase = () => {
   const { dropDetail } = useDropDetailContext();
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
   const allowListPhase = dropDetail.allowListPhase?.[0];
+  const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
   const isAvailable = dayjs().valueOf() > allowListPhase.startDate;
 
   return (
     <div className="allowlist-phase">
       <div className="header">
         <h5 className="text-h5">Allowlist Phase</h5>
-        <ul className="properties">
-          <li>{dateFormat(allowListPhase.startDate, "DD MMM YYYY hh:ss A")}</li>
+        <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
+          <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Now" : dateFormat(allowListPhase.startDate, "DD MMM YYYY hh:ss A")}</li>
           <li>{formatPrice(allowListPhase.price)} ETH</li>
           <li>{allowListPhase.walletCount} Per Wallet</li>
         </ul>
       </div>
       <div className="body">
-        {isAvailable ? null : <RemainingTime startDate={allowListPhase.startDate} />}
+        {isAvailable ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={allowListPhase.startDate} />}
         <Process available={allowListPhase.available} taken={allowListPhase.taken} />
       </div>
-      <div className="footer">
-        <ButtonCalendar />
-      </div>
+      <div className="footer">{isAvailable ? <ButtonMint /> : <ButtonCalendar />}</div>
     </div>
   );
 };

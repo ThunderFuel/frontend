@@ -295,7 +295,7 @@ const dropSecondary = {
   ],
   allowListPhase: [
     {
-      startDate: 1687117656000,
+      startDate: 1684584312000,
       endDate: 1687344293000,
       available: 1000,
       price: 0.12312312,
