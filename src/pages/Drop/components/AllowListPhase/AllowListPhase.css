@@ -1,5 +1,5 @@
 .countdown {
-  @apply flex gap-5;
+  @apply grid grid-cols-4 gap-5;
 }
 
 .countdown li {

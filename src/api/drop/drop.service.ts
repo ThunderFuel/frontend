@@ -163,10 +163,10 @@ const dropPrimary = {
   allowListPhase: [
     {
       startDate: 1687117656000,
+      endDate: 1687344293000,
       available: 1000,
       price: 0.12312312,
       walletCount: 2,
-      active: true,
     },
   ],
 };
@@ -181,22 +181,18 @@ const dropSecondary = {
     {
       type: BLOCK_TYPE.Infinity,
       images: [
-        [
-          AssetDropTest.DropSecondary.Infinity.infinity01,
-          AssetDropTest.DropSecondary.Infinity.infinity02,
-          AssetDropTest.DropSecondary.Infinity.infinity03,
-          AssetDropTest.DropSecondary.Infinity.infinity04,
-          AssetDropTest.DropSecondary.Infinity.infinity05,
-          AssetDropTest.DropSecondary.Infinity.infinity06,
-        ],
-        [
-          AssetDropTest.DropSecondary.Infinity.infinity07,
-          AssetDropTest.DropSecondary.Infinity.infinity08,
-          AssetDropTest.DropSecondary.Infinity.infinity09,
-          AssetDropTest.DropSecondary.Infinity.infinity10,
-          AssetDropTest.DropSecondary.Infinity.infinity11,
-          AssetDropTest.DropSecondary.Infinity.infinity12,
-        ],
+        AssetDropTest.DropSecondary.Infinity.infinity01,
+        AssetDropTest.DropSecondary.Infinity.infinity02,
+        AssetDropTest.DropSecondary.Infinity.infinity03,
+        AssetDropTest.DropSecondary.Infinity.infinity04,
+        AssetDropTest.DropSecondary.Infinity.infinity05,
+        AssetDropTest.DropSecondary.Infinity.infinity06,
+        AssetDropTest.DropSecondary.Infinity.infinity07,
+        AssetDropTest.DropSecondary.Infinity.infinity08,
+        AssetDropTest.DropSecondary.Infinity.infinity09,
+        AssetDropTest.DropSecondary.Infinity.infinity10,
+        AssetDropTest.DropSecondary.Infinity.infinity11,
+        AssetDropTest.DropSecondary.Infinity.infinity12,
       ],
     },
     {
@@ -294,6 +290,15 @@ const dropSecondary = {
     {
       title: "Do I pay gas fees when minting?",
       text: "Yes, gas fees occur for any transaction or attempted transaction on the Ethereum blockchain, including a mint. The amount varies depending on a variety of factors including how many people are using the network at that specific moment. OpenSea does not control gas prices, nor does it receive or profit from them, and OpenSea is not able to refund gas fees. You'll pay gas fees even if you weren't able to successfully mint.",
+    },
+  ],
+  allowListPhase: [
+    {
+      startDate: 1687117656000,
+      endDate: 1687344293000,
+      available: 1000,
+      price: 0.12312312,
+      walletCount: 2,
     },
   ],
 };

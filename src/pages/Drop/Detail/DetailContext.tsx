@@ -10,6 +10,7 @@ interface IDropDetailContext {
     team: any;
     roadmap: any;
     faq: any;
+    allowListPhase: any;
   };
 }
 

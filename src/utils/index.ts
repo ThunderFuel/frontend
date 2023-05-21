@@ -77,7 +77,7 @@ export function toGwei(num: any) {
   return x.toNumber();
 }
 
-export function randomIntFromInterval(min: number, max: number) {
+export function randomIntFromInterval(min = 1, max = 11111111) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -147,4 +147,15 @@ export const countDownTimer = (time: number) => {
     minutes: calculateHelper(distance % (1000 * 60 * 60), 1000 * 60),
     seconds: calculateHelper(distance % (1000 * 60), 1000),
   };
+};
+
+export const downloadFile = (file: File) => {
+  const url = URL.createObjectURL(file);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = file.name;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
 };
