@@ -141,8 +141,15 @@ const OfferList = () => {
       </div>
       <div className="flex flex-col gap-3">
         {getOffers.map((item: any, k: any) => {
-          if (isOffersMade) return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />;
-          else return item.ownerId === user.id ? <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} /> : null;
+          if (isOffersMade) {
+            return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />;
+          } else {
+            if (item.ownerId !== user.id) {
+              // return false;
+            }
+
+            return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />;
+          }
         })}
         {!getOffers.length && (
           <div className="flex-center">

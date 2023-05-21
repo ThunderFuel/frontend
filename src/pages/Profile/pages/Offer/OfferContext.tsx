@@ -62,8 +62,14 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
 
   const onAcceptOffer = async (item: any) => {
     try {
-      console.log(item);
-      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, item: item, price: item.price, onCheckoutComplete: fetchOffers }));
+      dispatch(
+        setCheckout({
+          type: CheckoutType.AcceptOffer,
+          item: item,
+          price: item.price,
+          onCheckoutComplete: fetchOffers,
+        })
+      );
       dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
@@ -71,7 +77,14 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   const onCancelOffer = async (item: any) => {
     try {
-      dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item, price: item.price, onCheckoutComplete: fetchOffers }));
+      dispatch(
+        setCheckout({
+          type: CheckoutType.CancelOffer,
+          item: item,
+          price: item.price,
+          onCheckoutComplete: fetchOffers,
+        })
+      );
       dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
