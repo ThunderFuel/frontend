@@ -1,5 +1,5 @@
 import React from "react";
-import { useDropDetailContext } from "../../DropContext";
+import { useDropDetailContext } from "../../Detail/DetailContext";
 import Img from "components/Img";
 
 const TeamMember = ({ member }: any) => {

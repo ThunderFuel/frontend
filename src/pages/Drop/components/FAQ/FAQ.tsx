@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDropDetailContext } from "../../DropContext";
+import { useDropDetailContext } from "../../Detail/DetailContext";
 import Collapse from "components/Collapse/Collapse";
 import clsx from "clsx";
 

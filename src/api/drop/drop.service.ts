@@ -159,6 +159,16 @@ const dropPrimary = {
       ],
     },
   ],
+  faq: [],
+  allowListPhase: [
+    {
+      startDate: 1687117656000,
+      available: 1000,
+      price: 0.12312312,
+      walletCount: 2,
+      active: true,
+    },
+  ],
 };
 const dropSecondary = {
   className: "drop-secondary",

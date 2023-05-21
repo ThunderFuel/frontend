@@ -1,5 +1,5 @@
 import React from "react";
-import { useDropDetailContext } from "../../DropContext";
+import { useDropDetailContext } from "../../Detail/DetailContext";
 import { IconCircleCheck, IconEmptyCircle } from "icons";
 
 import "./Roadmap.css";

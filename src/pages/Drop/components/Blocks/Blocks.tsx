@@ -1,5 +1,5 @@
 import React from "react";
-import { useDropDetailContext } from "../../DropContext";
+import { useDropDetailContext } from "../../Detail/DetailContext";
 import { BLOCK_TYPE } from "api/drop/drop.service";
 import ImageText from "./ImageText";
 import SingleImage from "./SingleImage";

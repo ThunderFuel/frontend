@@ -1,7 +1,7 @@
 import React from "react";
 import Img from "components/Img";
 
-import { useDropDetailContext } from "../../DropContext";
+import { useDropDetailContext } from "../../Detail/DetailContext";
 import "./Banner.css";
 
 const Banner = () => {

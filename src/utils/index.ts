@@ -131,3 +131,20 @@ export const uploadFile = async (file: File, onProcess: any = null) => {
 
   return response.data.cdnUrl;
 };
+
+const calculateHelper = (distance: number, divider: number = 1000 * 60 * 60 * 24) => {
+  return Math.floor(distance / divider)
+    .toString()
+    .padStart(2, "0");
+};
+
+export const countDownTimer = (time: number) => {
+  const distance = time - dayjs().valueOf();
+
+  return {
+    days: calculateHelper(distance, 1000 * 60 * 60 * 24),
+    hours: calculateHelper(distance % (1000 * 60 * 60 * 24), 1000 * 60 * 60),
+    minutes: calculateHelper(distance % (1000 * 60 * 60), 1000 * 60),
+    seconds: calculateHelper(distance % (1000 * 60), 1000),
+  };
+};

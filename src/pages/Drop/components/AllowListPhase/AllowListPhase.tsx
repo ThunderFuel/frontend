@@ -1,26 +1,45 @@
 import React from "react";
 import Button from "components/Button";
+import { IconCalendar } from "icons";
+import { createEvent, DateArray } from "ics";
 
 import "./AllowListPhase.css";
-import { IconCalendar } from "icons";
+import dayjs from "dayjs";
+import { countDownTimer } from "utils";
 
-const Countdown = () => {
+const Countdown = ({ startDate }: any) => {
+  const [timer, setTimer] = React.useReducer(
+    (prevState: any, nextState: any) => {
+      return { ...prevState, ...nextState };
+    },
+    { days: 0, hours: 0, minutes: 0, seconds: 0 }
+  );
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const remainingTime = countDownTimer(startDate);
+      setTimer(remainingTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <ul className="countdown">
       <li>
-        09
+        {timer.days}
         <span>DAYS</span>
       </li>
       <li>
-        02
+        {timer.hours}
         <span>HOURS</span>
       </li>
       <li>
-        09
+        {timer.minutes}
         <span>MINS</span>
       </li>
       <li>
-        09
+        {timer.seconds}
         <span>SECS</span>
       </li>
     </ul>
@@ -34,7 +53,49 @@ const Process = () => {
     </div>
   );
 };
+
 const AllowListPhase = () => {
+  const startDate = 1687117656000;
+  const onCreateCalendar = async () => {
+    const filename = "ExampleEvent.ics";
+    const file = await new Promise((resolve, reject) => {
+      const startDate = dayjs()
+        .format("YYYY-M-D-H-m")
+        .split("-")
+        .map((t) => Number(t)) as DateArray;
+
+      const endDate = dayjs()
+        .add(1, "days")
+        .format("YYYY-M-D-H-m")
+        .split("-")
+        .map((t) => Number(t)) as DateArray;
+
+      const event = {
+        productId: "myCalendarId",
+        uid: "123" + "@ics.com",
+        title: "test here",
+        start: startDate,
+        end: endDate,
+      };
+
+      createEvent(event, (error, value) => {
+        if (error) {
+          reject(error);
+        }
+
+        resolve(new File([value], filename, { type: "plain/text" }));
+      });
+    });
+    const url = URL.createObjectURL(file as File);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="allowlist-phase">
       <div className="header">
@@ -48,7 +109,7 @@ const AllowListPhase = () => {
       <div className="body">
         <div className="flex items-center justify-between">
           <span className="text-headline-02">MINTING STARTS IN</span>
-          <Countdown />
+          <Countdown startDate={startDate} />
         </div>
         <div>
           <div className="flex justify-between">
@@ -59,7 +120,7 @@ const AllowListPhase = () => {
         </div>
       </div>
       <div className="footer">
-        <Button className="w-full btn-primary">
+        <Button className="w-full btn-primary" onClick={onCreateCalendar}>
           add to calendar <IconCalendar />
         </Button>
       </div>
