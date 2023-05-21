@@ -47,7 +47,7 @@
 }
 
 .allowlist-phase .properties li {
-  @apply flex-center gap-1 text-white text-opacity-50;
+  @apply flex-center gap-1 text-white text-opacity-50 text-h6;
 }
 
 .allowlist-phase .properties li:before {

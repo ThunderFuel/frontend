@@ -3,7 +3,7 @@ import { createEvent, DateArray } from "ics";
 
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
-import { countDownTimer, dateFormat, downloadFile, formatPrice, randomIntFromInterval } from "utils";
+import { countDownTimer, dateFormat, downloadFile, formatPrice, numberFormat, randomIntFromInterval } from "utils";
 import { IconCalendar } from "../../../../icons";
 import Button from "../../../../components/Button";
 import { useDropDetailContext } from "../../Detail/DetailContext";
@@ -46,6 +46,14 @@ const Countdown = ({ startDate }: any) => {
     </ul>
   );
 };
+const RemainingTime = ({ startDate }: any) => {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-headline-02">MINTING STARTS IN</span>
+      <Countdown startDate={startDate} />
+    </div>
+  );
+};
 
 const Process = ({ available, taken }: any) => {
   const processWidth = React.useMemo(() => {
@@ -53,8 +61,17 @@ const Process = ({ available, taken }: any) => {
   }, [available, taken]);
 
   return (
-    <div className="process">
-      <span className="transition-all min-w-[0.625rem]" style={{ width: `${processWidth}%` }} />
+    <div>
+      <div className="flex justify-between">
+        <span className="text-headline-02 text-opacity-50">AVAILABLE</span>
+        <h6 className="text-h6 text-white">
+          {taken ? `${numberFormat(taken)} / ` : null}
+          {numberFormat(available)}
+        </h6>
+      </div>
+      <div className="process">
+        <span className="transition-all min-w-[0.625rem]" style={{ width: `${processWidth}%` }} />
+      </div>
     </div>
   );
 };
@@ -99,34 +116,25 @@ const ButtonCalendar = ({ title, startDate, endDate }: any) => {
 
 const AllowListPhase = () => {
   const { dropDetail } = useDropDetailContext();
-  console.log(dropDetail);
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
   const allowListPhase = dropDetail.allowListPhase?.[0];
+  const isAvailable = dayjs().valueOf() > allowListPhase.startDate;
 
   return (
     <div className="allowlist-phase">
       <div className="header">
         <h5 className="text-h5">Allowlist Phase</h5>
         <ul className="properties">
-          <li>{dateFormat(allowListPhase.startDate, "DD MMM YYYY HH:ss")}</li>
+          <li>{dateFormat(allowListPhase.startDate, "DD MMM YYYY hh:ss A")}</li>
           <li>{formatPrice(allowListPhase.price)} ETH</li>
           <li>{allowListPhase.walletCount} Per Wallet</li>
         </ul>
       </div>
       <div className="body">
-        <div className="flex items-center justify-between">
-          <span className="text-headline-02">MINTING STARTS IN</span>
-          <Countdown startDate={allowListPhase.startDate} />
-        </div>
-        <div>
-          <div className="flex justify-between">
-            <span className="text-headline-02">AVAILABLE</span>
-            <span className="text-white">{allowListPhase.available}</span>
-          </div>
-          <Process available={allowListPhase.available} taken={allowListPhase.taken} />
-        </div>
+        {isAvailable ? null : <RemainingTime startDate={allowListPhase.startDate} />}
+        <Process available={allowListPhase.available} taken={allowListPhase.taken} />
       </div>
       <div className="footer">
         <ButtonCalendar />
