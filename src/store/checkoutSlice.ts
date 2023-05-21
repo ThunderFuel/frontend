@@ -15,6 +15,7 @@ export enum CheckoutType {
   Standard,
   UpdateListing,
   BulkListing,
+  AcceptBid,
 }
 
 export const checkoutSlice = createSlice({
@@ -28,9 +29,10 @@ export const checkoutSlice = createSlice({
     checkoutAuctionStartingPrice: 0,
     checkoutExpireTime: 0 as number,
     amountAddedBidBalance: 0,
-    currentItem: { id: 0, price: 0 },
+    currentItem: {} as any,
     bulkListItems: [],
     bulkUpdateItems: [],
+    cancelOfferItems: [],
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCheckoutComplete: () => {},
   },
@@ -63,19 +65,22 @@ export const checkoutSlice = createSlice({
       state.currentItem = action.payload?.item;
       state.bulkListItems = action.payload?.bulkListItems;
       state.bulkUpdateItems = action.payload?.bulkUpdateItems;
+      state.cancelOfferItems = action.payload?.cancelOfferItems;
       state.onCheckoutComplete = action.payload?.onCheckoutComplete ?? noOp;
     },
     removeBulkItems: (state) => {
       state.bulkListItems = [];
       state.bulkUpdateItems = [];
     },
-    //TODO checkoutlarda bidbalanceupdated yerine bunu kullan
+    removeCancelOfferItems: (state) => {
+      state.cancelOfferItems = [];
+    },
     setAmountAddedBidBalance: (state, action) => {
       state.amountAddedBidBalance = action.payload;
     },
   },
 });
 
-export const { toggleCheckoutModal, setIsInsufficientBalance, setCheckout, setAmountAddedBidBalance, removeBulkItems } = checkoutSlice.actions;
+export const { toggleCheckoutModal, setIsInsufficientBalance, setCheckout, setAmountAddedBidBalance, removeBulkItems, removeCancelOfferItems } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

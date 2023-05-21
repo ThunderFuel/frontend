@@ -10,14 +10,15 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
 import { NativeAssetId, Provider } from "fuels";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 const checkoutProcessTexts = {
-  title1: "Confirm offer",
-  description1: "Proceed in your wallet and confirm accepting offer.",
+  title1: "Confirm bid",
+  description1: "Proceed in your wallet and confirm accepting bid.",
   title2: "Wait for approval",
   description2: "Waiting for transaction to be approved",
   title3: "Your NFT sold!",
@@ -36,25 +37,27 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   );
 };
 
-const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { checkoutPrice, currentItem, onCheckoutComplete } = useAppSelector((state) => state.checkout);
-  const { wallet } = useAppSelector((state) => state.wallet);
+const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    offerService.getOffersIndex([currentItem.id]).then((res) => {
+    nftdetailsService.getAuctionIndex([selectedNFT?.id]).then((res) => {
+      console.log(res);
       const order = {
         isBuySide: false,
-        taker: currentItem.takerAddress,
-        maker: currentItem.makerAddress,
-        nonce: res.data[currentItem.id],
-        price: toGwei(currentItem.price),
-        collection: currentItem.contractAddress,
-        token_id: currentItem.tokenOrder,
-        strategy: strategyFixedPriceContractId,
+        taker: user.walletAddress,
+        maker: selectedNFT.highestBid.walletAddress, //OMER ABI
+        nonce: res.data[selectedNFT?.id],
+        price: toGwei(checkoutPrice),
+        collection: selectedNFT.collection.contractAddress,
+        token_id: selectedNFT.tokenOrder,
+        strategy: strategyAuctionContractId,
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
       };
 
@@ -66,10 +69,9 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         .then((res) => {
           console.log(res);
           if (res.transactionResult.status.type === "success") {
-            offerService.acceptOffer({ id: currentItem.id }).then(() => {
-              userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
-              onCheckoutComplete();
-            });
+            offerService.acceptOffer({ id: currentItem?.id });
+            userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
+            setApproved(true);
           }
         })
         .catch((e) => {
@@ -109,13 +111,13 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const viewOnBlockchain = approved && <button className="body-small text-gray-light underline"></button>;
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Accept Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal backdropDisabled={true} className="checkout" title="Accept Bid" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Offer"} name={currentItem.tokenName} image={currentItem.tokenImage} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        <CartItem text={"Bid"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
   );
 };
 
-export default AcceptOfferCheckout;
+export default AcceptBidCheckout;

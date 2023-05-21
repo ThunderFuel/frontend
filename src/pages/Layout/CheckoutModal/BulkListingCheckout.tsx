@@ -47,6 +47,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
   const bulkItems = bulkListItems.concat(bulkUpdateItems);
 
   const onComplete = async () => {
@@ -78,13 +79,17 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         .then((res) => {
           console.log(res);
           if (res?.transactionResult.status.type === "success") {
-            collectionsService.updateBulkListing(bulkUpdateItems);
-            if (bulkListItems.length) collectionsService.bulkListing(bulkListItems);
+            if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(bulkUpdateItems);
+            if (bulkListItems.length > 0) collectionsService.bulkListing(bulkListItems);
 
             setApproved(true);
           }
         })
-        .catch(() => setStartTransaction(false));
+        .catch((e) => {
+          console.log(e);
+          if (e.message.includes("Revert")) setIsFailed(true);
+          else setStartTransaction(false);
+        });
     });
   };
 
@@ -99,7 +104,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">

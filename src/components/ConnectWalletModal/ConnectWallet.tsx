@@ -1,28 +1,16 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconBurner, IconFuelet, IconLightning } from "icons";
+import { IconArrowRight, IconFuelet, IconLightning } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
-import { Wallet } from "fuels";
 import { useDispatch } from "react-redux";
-import { setAddress, setBurnerWallet, setIsBurner, setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
-import userService from "api/user/user.service";
+import { toggleWalletModal } from "store/walletSlice";
 
 export const ConnectWallet = () => {
   const { walletConnect } = useWallet();
   const dispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, error, loading] = useFuel();
-
-  function generateBurnerUser() {
-    const wallet = Wallet.generate({ provider: "https://node-beta-2.fuel.network/graphql" });
-    dispatch(setBurnerWallet(wallet));
-
-    dispatch(setAddress(wallet.address.toB256()));
-    userService.userCreate(wallet.address.toB256()).then((res) => dispatch(setUser(res.data)));
-    dispatch(setIsBurner(true));
-    dispatch(setIsConnected(true));
-  }
 
   return (
     <div className="flex flex-col h-full p-5 gap-y-5">
@@ -54,17 +42,6 @@ export const ConnectWallet = () => {
           <Button disabled className="btn-sm btn-secondary opacity-0 ease-in-out transform duration-300 group-hover:opacity-100">
             SOON
           </Button>
-        </div>
-        <div
-          className="cursor-pointer h-[77px] flex items-center gap-x-2.5 px-2.5 py-5 bg-bg-light border border-gray rounded-[5px] hover:bg-gray"
-          onClick={() => {
-            generateBurnerUser();
-          }}
-        >
-          <div className="flex p-1.5 bg-gray rounded-full">
-            <IconBurner className="w-5 h-5" />
-          </div>
-          <h6 className="text-head6 font-spaceGrotesk text-white">Generate Burner Wallet</h6>
         </div>
       </div>
       <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">

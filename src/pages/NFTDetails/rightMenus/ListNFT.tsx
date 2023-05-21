@@ -17,7 +17,6 @@ import floorService from "api/floor/floor.service";
 import EthereumPrice from "components/EthereumPrice";
 import { removeAll } from "../../../store/bulkListingSlice";
 
-// TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ onBack }: { onBack: any }) => {
   const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
   const [topTrait, setTopTrait] = useState(0);

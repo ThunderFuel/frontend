@@ -5,7 +5,7 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
-import { setCheckout } from "store/checkoutSlice";
+import { CheckoutType, removeCancelOfferItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 interface IOfferContext {
   userInfo?: any;
@@ -18,6 +18,7 @@ export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState({
     offerType: 0,
@@ -42,9 +43,18 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
 
   const onCancelAllOffer = async () => {
     try {
-      //TODO CONTRACT ENTREGRE ET
-      await offerService.cancelAllOffer({ userId: value.userInfo.id });
-      await fetchOffers();
+      const activeOffers = offers.filter((item: any) => item.status === OfferStatus.ActiveOffer);
+      dispatch(
+        setCheckout({
+          type: CheckoutType.CancelOffer,
+          cancelOfferItems: activeOffers,
+          onCheckoutComplete: () => {
+            dispatch(removeCancelOfferItems());
+            fetchOffers();
+          },
+        })
+      );
+      dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
     }
@@ -52,18 +62,17 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
 
   const onAcceptOffer = async (item: any) => {
     try {
-      //TODO CONTRACT ENTREGRE ET
-      await offerService.acceptOffer({ id: item.id });
-      await fetchOffers();
+      console.log(item);
+      dispatch(setCheckout({ type: CheckoutType.AcceptOffer, item: item, price: item.price, onCheckoutComplete: fetchOffers }));
+      dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
     }
   };
   const onCancelOffer = async (item: any) => {
     try {
-      //TODO CONTRACT ENTREGRE ET
-      await offerService.cancelOffer({ id: item.id });
-      await fetchOffers();
+      dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item, price: item.price, onCheckoutComplete: fetchOffers }));
+      dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
     }

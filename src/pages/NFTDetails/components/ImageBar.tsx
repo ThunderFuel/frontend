@@ -37,7 +37,7 @@ const ImageBar = ({ toggleFullscreen }: any) => {
 
   useEffect(() => {
     fetchIsLiked();
-  }, [user, isLiked]);
+  }, [user, isLiked, selectedNFT]);
 
   const onShare = () => {
     shareTwitter.shareNft(selectedNFT.name, selectedNFT.collection.name);

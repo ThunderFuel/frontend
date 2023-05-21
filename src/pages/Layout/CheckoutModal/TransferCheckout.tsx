@@ -47,6 +47,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
   const [address, setaddress] = useState("");
   const [startTransaction, setStartTransaction] = useState(false);
   const [showTransactionAnimation, setshowTransactionAnimation] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
     let tempAddress = "";
@@ -58,7 +59,11 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
         nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
         setApproved(true);
       })
-      .catch(() => setStartTransaction(false));
+      .catch((e) => {
+        console.log(e);
+        if (e.message.includes("Revert")) setIsFailed(true);
+        else setStartTransaction(false);
+      });
   };
 
   React.useEffect(() => {
@@ -73,7 +78,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} />
+        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">

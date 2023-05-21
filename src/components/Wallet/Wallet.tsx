@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
-import { setIsBurner, setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
+import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
 import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
 import { Button } from "react-bootstrap";
 import Balances from "components/Balances";
@@ -14,7 +14,7 @@ import Avatar from "components/Avatar";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
-  const { user, isBurner, address } = useAppSelector((state) => state.wallet);
+  const { user, address } = useAppSelector((state) => state.wallet);
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
 
@@ -111,15 +111,9 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <div
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
               onClick={() => {
-                if (!isBurner) {
-                  walletDisconnect();
-                  dispatch(setIsConnected(false));
-                  dispatch(setUser({}));
-                } else {
-                  dispatch(setIsConnected(false));
-                  dispatch(setIsBurner(false));
-                  dispatch(setUser({}));
-                }
+                walletDisconnect();
+                dispatch(setIsConnected(false));
+                dispatch(setUser({}));
                 onClose();
               }}
             >
