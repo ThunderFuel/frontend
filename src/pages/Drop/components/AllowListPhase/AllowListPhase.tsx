@@ -3,7 +3,7 @@ import { createEvent, DateArray } from "ics";
 
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
-import { countDownTimer, downloadFile, randomIntFromInterval } from "utils";
+import { countDownTimer, dateFormat, downloadFile, formatPrice, randomIntFromInterval } from "utils";
 import { IconCalendar } from "../../../../icons";
 import Button from "../../../../components/Button";
 import { useDropDetailContext } from "../../Detail/DetailContext";
@@ -47,10 +47,14 @@ const Countdown = ({ startDate }: any) => {
   );
 };
 
-const Process = () => {
+const Process = ({ available, taken }: any) => {
+  const processWidth = React.useMemo(() => {
+    return Math.floor((taken * 100) / available);
+  }, [available, taken]);
+
   return (
     <div className="process">
-      <span className="" />
+      <span className="transition-all min-w-[0.625rem]" style={{ width: `${processWidth}%` }} />
     </div>
   );
 };
@@ -106,9 +110,9 @@ const AllowListPhase = () => {
       <div className="header">
         <h5 className="text-h5">Allowlist Phase</h5>
         <ul className="properties">
-          <li>12 May 06:00 PM UTC</li>
-          <li>0.08 ETH</li>
-          <li>2 Per Wallet</li>
+          <li>{dateFormat(allowListPhase.startDate, "DD MMM YYYY HH:ss")}</li>
+          <li>{formatPrice(allowListPhase.price)} ETH</li>
+          <li>{allowListPhase.walletCount} Per Wallet</li>
         </ul>
       </div>
       <div className="body">
@@ -121,7 +125,7 @@ const AllowListPhase = () => {
             <span className="text-headline-02">AVAILABLE</span>
             <span className="text-white">{allowListPhase.available}</span>
           </div>
-          <Process />
+          <Process available={allowListPhase.available} taken={allowListPhase.taken} />
         </div>
       </div>
       <div className="footer">

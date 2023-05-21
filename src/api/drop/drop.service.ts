@@ -167,6 +167,7 @@ const dropPrimary = {
       available: 1000,
       price: 0.12312312,
       walletCount: 2,
+      taken: 555,
     },
   ],
 };
@@ -299,6 +300,7 @@ const dropSecondary = {
       available: 1000,
       price: 0.12312312,
       walletCount: 2,
+      taken: 555,
     },
   ],
 };
