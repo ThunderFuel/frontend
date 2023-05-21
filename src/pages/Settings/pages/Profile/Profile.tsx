@@ -12,6 +12,7 @@ import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import useNavigate from "hooks/useNavigate";
+import { uploadFile } from "utils";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -22,6 +23,22 @@ const Profile = () => {
 
   const onChange = (field: string, value: any) => {
     setUserInfo((prevState: any) => ({ ...prevState, ...{ [field]: value } }));
+  };
+  const onChangeCoverImage = async (file: File) => {
+    const imageUrl = await uploadFile(file);
+    setUserInfo((value: any) => {
+      value.banner = imageUrl;
+
+      return value;
+    });
+  };
+  const onChangeProfileImage = async (file: File) => {
+    const imageUrl = await uploadFile(file);
+    setUserInfo((value: any) => {
+      value.image = imageUrl;
+
+      return value;
+    });
   };
 
   const onSubmit = async () => {
@@ -59,8 +76,8 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col gap-10 p-10 w-[500px]">
-      <CoverImage src={userInfo.banner} />
-      <ProfileImage src={userInfo.image ?? getDefaultAvatarSrc(userInfo.id)} />
+      <CoverImage src={userInfo.banner} onChange={onChangeCoverImage} />
+      <ProfileImage src={userInfo.image ?? getDefaultAvatarSrc(userInfo.id)} onChange={onChangeProfileImage} />
       <Input label="Display Name" value={userInfo.userName} onChange={(e: any) => onChange("userName", e.target.value)} />
       <Textarea label="Bio" placeholder="Tell about yourself!" value={userInfo.bio} onChange={(e: any) => onChange("bio", e.target.value)} />
       <Input label="Email" helperText="Your e-mail address for notifications." value={userInfo.email} onChange={(e: any) => onChange("email", e.target.value)} />
