@@ -7,7 +7,7 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
-import { formatPrice } from "../../../utils";
+import { formatPrice } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const Footer = ({ items, prices }: any) => {

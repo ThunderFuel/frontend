@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
 import { toGwei } from "utils";
 import { NativeAssetId, Provider } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
@@ -17,6 +17,7 @@ import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { removeBulkItems } from "store/checkoutSlice";
+import { removeAll } from "../../../store/bulkListingSlice";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -117,6 +118,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
               onClose();
               navigate(PATHS.PROFILE);
               dispatch(removeBulkItems());
+              dispatch(removeAll());
             }}
           >
             CLOSE
@@ -134,8 +136,6 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       show={show}
       onClose={() => {
         onClose();
-        navigate(PATHS.PROFILE);
-        dispatch(removeBulkItems());
       }}
       footer={<Footer approved={approved} onClose={onClose} />}
     >
