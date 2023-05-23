@@ -5,8 +5,8 @@ import { formatPrice } from "utils";
 import Tooltip from "../Tooltip";
 
 const MIN_LIMIT = 0.0001;
-const EmptyFragment = () => {
-  return <div />;
+const EmptyFragment = ({ children }: any) => {
+  return <div>{children}</div>;
 };
 const EthereumPrice = ({ price, priceClassName, className, fullPrice }: { price: any; priceClassName?: string; className?: string; fullPrice?: boolean }) => {
   const priceValue = price || 0;
