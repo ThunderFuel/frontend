@@ -6,6 +6,8 @@ type ISelectedCartItem = CollectionItemResponse;
 
 const LocalStorageCartsKey = "thunder_carts";
 
+const PurchaseLimit = 5;
+
 export const getItemsFromLocalStorage = () => {
   try {
     const items = useLocalStorage().getItem(LocalStorageCartsKey);
@@ -57,7 +59,7 @@ export const cartSlice = createSlice({
     },
     add: (state, action) => {
       const isItemExists = Array.from(state.items).some((item) => item.uid === action.payload.uid);
-      if (!isItemExists) {
+      if (!isItemExists && state.items.length < PurchaseLimit) {
         state.items.push(action.payload);
 
         setItemsFromLocalStorage(state.items as any);

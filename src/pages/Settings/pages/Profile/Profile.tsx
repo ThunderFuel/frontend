@@ -26,19 +26,17 @@ const Profile = () => {
   };
   const onChangeCoverImage = async (file: File) => {
     const imageUrl = await uploadFile(file);
-    setUserInfo((value: any) => {
-      value.banner = imageUrl;
-
-      return value;
-    });
+    setUserInfo((value: any) => ({
+      ...value,
+      banner: imageUrl,
+    }));
   };
   const onChangeProfileImage = async (file: File) => {
     const imageUrl = await uploadFile(file);
-    setUserInfo((value: any) => {
-      value.image = imageUrl;
-
-      return value;
-    });
+    setUserInfo((value: any) => ({
+      ...value,
+      image: imageUrl,
+    }));
   };
 
   const onSubmit = async () => {
