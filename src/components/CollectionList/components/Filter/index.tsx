@@ -71,7 +71,7 @@ const Index = ({ className }: { className?: string }) => {
               </div>
               {options?.hiddenSweep ? null : (
                 <div className="w-5/12">
-                  <Range maxValue={30} value={sweep} onChange={onRangeChange} />
+                  <Range maxValue={5} value={sweep} onChange={onRangeChange} />
                 </div>
               )}
             </div>
