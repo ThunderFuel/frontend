@@ -34,15 +34,22 @@ const Balances = (refresh: any) => {
             className="w-4 h-4 text-gray-light cursor-pointer hover:text-white"
             onClick={() => {
               fetchBalance();
-              fetchBidBalance();
             }}
           />
         </div>
         <EthereumPrice price={formatDisplayedNumber(balance)} priceClassName="text-head3 text-white" />
       </div>
       <div className="w-[1px] bg-gray"></div>
-      <div className="flex w-full p-4 flex-col">
-        <h1 className="flex text-headlineSm font-bigShoulderDisplay text-gray-light">BID BALANCE</h1>
+      <div className="flex w-full p-4 flex-col ">
+        <div className="flex w-full justify-between items-center">
+          <h1 className="flex text-headlineSm font-bigShoulderDisplay text-gray-light">BID BALANCE</h1>
+          <IconRefresh
+            className="w-4 h-4 text-gray-light cursor-pointer hover:text-white"
+            onClick={() => {
+              fetchBidBalance();
+            }}
+          />
+        </div>
         <EthereumPrice price={bidBalance} priceClassName="text-head3 text-white" />
       </div>
     </div>

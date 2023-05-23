@@ -18,8 +18,8 @@ const checkoutProcessTexts = {
   description1: "Proceed in your wallet and confirm transaction",
   title2: "Wait for approval",
   description2: "Waiting for transaction to be approved",
-  title3: "Purchase completed!",
-  description3: "Congrats your purchase is completed.",
+  title3: "Your offer submitted!",
+  description3: "Congrats, you offer succesfully submitted.",
 };
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
