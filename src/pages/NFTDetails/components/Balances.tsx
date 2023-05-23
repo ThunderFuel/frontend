@@ -1,8 +1,9 @@
 import userService from "api/user/user.service";
-import { IconEthereum, IconRefresh } from "icons";
+import { IconRefresh } from "icons";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
 import { formatDisplayedNumber } from "utils";
+import EthereumPrice from "../../../components/EthereumPrice";
 
 const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance: () => void }) => {
   const { user } = useAppSelector((state) => state.wallet);
@@ -24,9 +25,8 @@ const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance
           <span className="text-gray-light">Wallet Balance</span>
           <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => onFetchBalance()} />
         </div>
-        <div className="flex items-center ">
-          {formatDisplayedNumber(balance)}
-          <IconEthereum width="20px" color="gray" />
+        <div className="flex items-center">
+          <EthereumPrice price={formatDisplayedNumber(balance)} priceClassName="text-h6" />
         </div>
       </div>
       <div className="flex justify-between">
@@ -35,8 +35,7 @@ const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance
           <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => fetchBidBalance()} />
         </div>
         <div className="flex items-center">
-          {bidBalance}
-          <IconEthereum width="20px" color="gray" />
+          <EthereumPrice price={bidBalance} priceClassName="text-h6" />
         </div>
       </div>
     </div>

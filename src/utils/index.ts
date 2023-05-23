@@ -66,7 +66,7 @@ export const getDateFromExpirationTime = (expireTime: number) => {
 };
 
 export function formatDisplayedNumber(num: number) {
-  return num / 1000000000;
+  return formatPrice(num / 1000000000);
 }
 
 export function toGwei(num: any) {
