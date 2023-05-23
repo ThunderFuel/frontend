@@ -11,6 +11,8 @@ import { useFuel } from "hooks/useFuel";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
+import { removeAll } from "store/bulkListingSlice";
+import { removeBulkItems } from "store/checkoutSlice";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
@@ -114,6 +116,8 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
                 walletDisconnect();
                 dispatch(setIsConnected(false));
                 dispatch(setUser({}));
+                dispatch(removeAll());
+                dispatch(removeBulkItems());
                 onClose();
               }}
             >
