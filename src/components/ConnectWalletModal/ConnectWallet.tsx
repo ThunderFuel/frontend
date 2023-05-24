@@ -10,7 +10,9 @@ export const ConnectWallet = () => {
   const { walletConnect } = useWallet();
   const dispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuel, error, loading] = useFuel();
+  const [fuel, fuelError, fuelLoading] = useFuel();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [fuelet, fueletError, fueletLoading] = useFuel();
 
   return (
     <div className="flex flex-col h-full p-5 gap-y-5">
@@ -22,7 +24,7 @@ export const ConnectWallet = () => {
             </div>
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
-          {error === "" ? (
+          {fuelError === "" ? (
             <Button className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100" onClick={() => walletConnect().then((res) => res ?? dispatch(toggleWalletModal()))}>
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
@@ -34,14 +36,23 @@ export const ConnectWallet = () => {
             </a>
           )}
         </div>
+
         <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
           <div className="flex items-center gap-x-2.5">
             <IconFuelet className="w-8 h-8" />
-            <h6 className="text-head6 font-spaceGrotesk text-gray-light">Fuelet</h6>
+            <h6 className="text-head6 font-spaceGrotesk text-white">Fuelet</h6>
           </div>
-          <Button disabled className="btn-sm btn-secondary opacity-0 ease-in-out transform duration-300 group-hover:opacity-100">
-            SOON
-          </Button>
+          {fueletError === "" ? (
+            <Button className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100" onClick={() => walletConnect().then((res) => res ?? dispatch(toggleWalletModal()))}>
+              CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
+            </Button>
+          ) : (
+            <a href="https://chrome.google.com/webstore/detail/fuelet-wallet/bifidjkcdpgfnlbcjpdkdcnbiooooblg" target="_blank" rel="noreferrer">
+              <Button className="btn-sm btn-secondary">
+                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
+              </Button>
+            </a>
+          )}
         </div>
       </div>
       <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">
