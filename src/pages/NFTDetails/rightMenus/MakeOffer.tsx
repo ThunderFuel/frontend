@@ -6,11 +6,12 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import RightMenu from "../components/RightMenu";
 import CartItem from "../components/CartItem";
 import { useWallet } from "hooks/useWallet";
-import { formatDisplayedNumber, getDateFromExpirationTime, toGwei } from "utils";
+import { getDateFromExpirationTime, toGwei } from "utils";
 import Select, { ISelectOption } from "components/Select";
 import dayjs from "dayjs";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
+import userService from "api/user/user.service";
 
 export const selectExpirationDates: ISelectOption[] = [
   {
@@ -45,9 +46,12 @@ const offerDescription =
 const MakeOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { user } = useAppSelector((state) => state.wallet);
 
   const { getBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
+  const [bidBalance, setBidBalance] = useState<number>(0);
+
   const [offer, setoffer] = useState<any>("");
   const [expirationTime, setexpirationTime] = useState(selectExpirationDates[0]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -55,9 +59,13 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   function fetchBalance() {
     getBalance().then((res) => setbalance(res ? res : 0));
   }
+  function fetchBidBalance() {
+    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+  }
 
   useEffect(() => {
     fetchBalance();
+    fetchBidBalance();
   }, []);
 
   const isValidNumber = (price: any) => {
@@ -69,7 +77,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   };
 
   const bidBalanceControl = () => {
-    return toGwei(offer) - balance;
+    return <span className="font-bold whitespace-nowrap">{offer - bidBalance} ETH</span>;
   };
 
   const footer = (
@@ -113,11 +121,11 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
             <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
           </div>
         )}
-        {toGwei(offer) !== 0 && balance >= toGwei(offer) && toGwei(offer) > balance && (
-          <span className="flex items-center gap-x-[5px] text-bodySm text-orange">
+        {toGwei(offer) !== 0 && balance >= toGwei(offer) && offer > bidBalance && (
+          <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
-            {formatDisplayedNumber(bidBalanceControl())} ETH will be automatically added your bid balance to place this bid.
-          </span>
+            <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>
+          </div>
         )}
       </div>
       <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk relative z-10">
