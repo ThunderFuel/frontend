@@ -11,6 +11,9 @@ import Img from "../../../../components/Img/Img";
 import Marquee from "react-fast-marquee";
 import { BLOCK_TYPE } from "../../../../api/drop/drop.service";
 import clsx from "clsx";
+import { mint } from "thunder-sdk/src/contracts/erc721";
+import { useAppSelector } from "store";
+import { ERC721ContractId, provider } from "global-constants";
 
 const Countdown = ({ startDate }: any) => {
   const [timer, setTimer] = React.useReducer(
@@ -130,8 +133,23 @@ const Gallery = ({ images }: any) => {
   );
 };
 
-const ButtonMint = () => {
-  const onClick = () => console.log("log");
+const ButtonMint = (mintCount: any) => {
+  const { user, wallet } = useAppSelector((state) => state.wallet);
+
+  const onClick = () => {
+    mint(ERC721ContractId, provider, wallet, mintCount, user.walletAddress)
+      .then((res) => {
+        console.log(res);
+        if (res?.transactionResult.status.type === "success") {
+          console.log("MINTED");
+          /*TODO HANDLE SUCCESS*/
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        /*TODO HANDLE ERROR*/
+      });
+  };
 
   return (
     <Button className="w-full btn-primary" onClick={onClick}>
@@ -163,7 +181,7 @@ const AllowListPhase = () => {
         {isAvailable ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={allowListPhase.startDate} />}
         <Process available={allowListPhase.available} taken={allowListPhase.taken} />
       </div>
-      <div className="footer">{isAvailable ? <ButtonMint /> : <ButtonCalendar />}</div>
+      <div className="footer">{isAvailable ? <ButtonMint mintCount={5} /> : <ButtonCalendar />}</div>
     </div>
   );
 };
