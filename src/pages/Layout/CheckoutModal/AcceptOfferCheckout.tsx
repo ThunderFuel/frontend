@@ -92,7 +92,16 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">

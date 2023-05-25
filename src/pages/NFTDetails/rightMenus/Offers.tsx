@@ -19,7 +19,7 @@ const Box = ({
   isExpired,
   ownOffer,
   isOwner,
-  fetchOffers,
+  onBack,
   isAccepted,
 }: {
   item: any;
@@ -65,7 +65,7 @@ const Box = ({
                   type: CheckoutType.AcceptOffer,
                   item: item,
                   price: item.price,
-                  onCheckoutComplete: fetchOffers,
+                  onCheckoutComplete: onBack,
                 })
               );
               dispatch(toggleCheckoutModal());
@@ -81,7 +81,13 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item, onCheckoutComplete: fetchOffers }));
+              dispatch(
+                setCheckout({
+                  type: CheckoutType.CancelOffer,
+                  item: item,
+                  onCheckoutComplete: onBack,
+                })
+              );
               dispatch(toggleCheckoutModal());
             }}
           >
@@ -92,7 +98,12 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setCheckout({ item: item }));
+              dispatch(
+                setCheckout({
+                  item: item,
+                  onCheckoutComplete: onBack,
+                })
+              );
               dispatch(setRightMenu(RightMenuType.UpdateOffer));
             }}
           >

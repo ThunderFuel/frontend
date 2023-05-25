@@ -20,6 +20,7 @@ enum Status {
   notStarted = "notStarted",
   pending = "pending",
   done = "done",
+  error = "error",
 }
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
@@ -34,20 +35,31 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   );
 };
 
-const CheckoutProcessItem = ({ title, description, status = Status.notStarted }: { title: string; description: string; status: Status }) => {
+const CheckoutProcessItem = ({ title, description, status = Status.notStarted, isLast = false }: { title: string; description: string; status: Status; isLast?: boolean }) => {
   const isPending = status === Status.pending;
+  const isFailed = status === Status.error;
+
   const icon: any = {
     [Status.notStarted]: <IconMilestone className="stroke-gray" />,
     [Status.pending]: <IconSpinner className="animate-spin" />,
     [Status.done]: <IconDone className="text-white" />,
+    [Status.error]: <IconWarning className="text-red shrink-0" />,
   };
 
   return (
     <div className="flex items-center gap-x-[22px]">
-      {icon[status]}
+      <div className="flex h-full justify-start mt-1"> {icon[status]}</div>
       <div className="flex flex-col text-gray-light gap-2">
-        <div className={clsx("text-h5 transition-all duration-300", isPending && "text-white")}>{title}</div>
-        <div className={clsx("body-medium transition-all duration-300 overflow-hidden", isPending ? "h-5 opacity-100" : " h-0 opacity-0")}>{description}</div>
+        <div className={clsx("text-h5 transition-all duration-300", isPending || isFailed || (isLast && status === Status.done) ? "text-white" : "")}>{title}</div>
+        <div
+          className={clsx(
+            "body-medium transition-all duration-300 overflow-hidden",
+            isPending ? "h-5 opacity-100" : "h-0 opacity-0",
+            isLast && (status === Status.done || status === Status.error) ? "h-auto opacity-100" : "h-0 opacity-0"
+          )}
+        >
+          {description}
+        </div>
       </div>
     </div>
   );
@@ -60,6 +72,8 @@ const CheckoutProcess = ({ onComplete, approved, failed }: { onComplete: () => v
     purchaseConfirm: Status.notStarted,
   });
   const [partiallyFailed, setPartiallyFailed] = useState(false);
+  const errorTitle = "Transaction failed";
+  const errorDescription = "Transactions can fail due to network issues, gas fee increases, or because someone else bought the item before you.";
 
   const onSetTransactionStatus = (state: any) => {
     setTransactionStatus((prevState) => ({
@@ -102,9 +116,13 @@ const CheckoutProcess = ({ onComplete, approved, failed }: { onComplete: () => v
       <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
         {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title="Confirm transaction" description="Proceed in your wallet and confirm transaction" /> */}
         <CheckoutProcessItem status={transactionStatus.waitingForApproval} title="Wait for approval" description="Waiting for transaction to be approved" />
-        <CheckoutProcessItem status={transactionStatus.purchaseConfirm} title="Purchase completed!" description="Congrats your purchase is completed." />
-
-        {partiallyFailed && (
+        <CheckoutProcessItem
+          status={partiallyFailed ? Status.error : transactionStatus.purchaseConfirm}
+          title={partiallyFailed ? errorTitle : "Purchase completed!"}
+          description={partiallyFailed ? errorDescription : "Congrats your purchase is completed."}
+          isLast={true}
+        />
+        {/* {partiallyFailed && (
           <div className="flex justify-center gap-x-2 p-2.5 border bg-bg-light border-gray rounded-[5px]">
             <div className="flex">
               <IconWarning className="text-red" />
@@ -114,7 +132,7 @@ const CheckoutProcess = ({ onComplete, approved, failed }: { onComplete: () => v
               <span className="body-small text-gray-light">Transactions can fail due to network issues, gas fee increases, or because someone else bought the item before you.</span>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
@@ -311,7 +329,16 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} approved={approved} failed={isFailed} />
+        <>
+          <CheckoutProcess onComplete={onComplete} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
