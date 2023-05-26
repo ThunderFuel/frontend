@@ -178,7 +178,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         <div className="p-2.5 border-b border-b-gray">
           {options?.isProfile ? <div className="body-medium text-gray-light mb-1 text-overflow">{collection?.collectionName ?? "-"}</div> : null}
 
-          <h6 className="text-h6 text-white text-overflow">{collection.name ?? "-"}</h6>
+          <h6 className="text-h6 text-white text-overflow">{collection.name ?? collection.tokenOrder}</h6>
         </div>
         <div className="p-2.5 flex items-center">
           {collection.salable ? (
