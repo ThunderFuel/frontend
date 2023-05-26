@@ -26,6 +26,24 @@ const drops = [
       name: "CHRYSALISM",
       image: AssetProfileAvatar2,
     },
+    socials: [
+      {
+        type: SocialTypes.Twitter,
+        url: "asd",
+      },
+      {
+        type: SocialTypes.Twitter,
+        url: "asd",
+      },
+      {
+        type: SocialTypes.Twitter,
+        url: "asd",
+      },
+      {
+        type: SocialTypes.Twitter,
+        url: "asd",
+      },
+    ],
   },
   {
     image: AssetDropIndex.Drop2,

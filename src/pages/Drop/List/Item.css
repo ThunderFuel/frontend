@@ -1,5 +1,5 @@
 .drop-item-container {
-  @apply relative;
+  @apply relative rounded-md overflow-hidden;
   @apply flex flex-col justify-between px-5 pt-5 pb-10;
   @apply text-white;
   min-height: 560px;
@@ -18,4 +18,16 @@
   border-color: rgba(255, 255, 255, 0.25);
   background: rgba(84, 84, 84, 0.25);
   backdrop-filter: blur(39.1006px);
+}
+
+.drop-item-share ul {
+  @apply border-white border-opacity-25;
+
+  background: rgba(84, 84, 84, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(39.1006px);
+}
+
+.drop-item-share ul li {
+  @apply border-white border-opacity-25 text-white text-opacity-50;
 }
