@@ -91,7 +91,7 @@ const SidebarFilter = () => {
         },
         {
           value: 0,
-          text: "Cancel Offers",
+          text: "Canceled Offers",
         },
       ],
     },
