@@ -18,6 +18,7 @@ import { toggleWalletModal } from "store/walletSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
+import { formatPrice } from "../../../../utils";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -200,7 +201,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         ) : (
           <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
             <IconMarketBasket />
-            <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
+            <span className="body-small text-overflow">Last sale price {formatPrice(collection.lastSalePrice) ?? 0} ETH</span>
           </div>
         )}
         {!selectionDisabled && !options?.isProfile ? (
