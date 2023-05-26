@@ -3,14 +3,15 @@ import { createEvent, DateArray } from "ics";
 
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
-import { countDownTimer, dateFormat, downloadFile, formatPrice, numberFormat, randomIntFromInterval } from "utils";
-import { IconCalendar, IconMinus, IconPlus, IconToken } from "../../../../icons";
-import Button from "../../../../components/Button";
+import { countDownTimer, dateFormat, downloadFile, formatPrice, randomIntFromInterval } from "utils";
+import { IconCalendar, IconMinus, IconPlus, IconToken } from "icons";
+import Button from "components/Button";
 import { useDropDetailContext } from "../../Detail/DetailContext";
-import Img from "../../../../components/Img/Img";
+import Img from "components/Img/Img";
 import Marquee from "react-fast-marquee";
-import { BLOCK_TYPE } from "../../../../api/drop/drop.service";
+import { BLOCK_TYPE } from "api/drop/drop.service";
 import clsx from "clsx";
+import Process from "../Process";
 
 const Countdown = ({ startDate }: any) => {
   const [timer, setTimer] = React.useReducer(
@@ -55,27 +56,6 @@ const RemainingTime = ({ startDate }: any) => {
     <div className="flex items-center justify-between">
       <span className="text-headline-02">MINTING STARTS IN</span>
       <Countdown startDate={startDate} />
-    </div>
-  );
-};
-
-const Process = ({ available, taken }: any) => {
-  const processWidth = React.useMemo(() => {
-    return Math.floor((taken * 100) / available);
-  }, [available, taken]);
-
-  return (
-    <div>
-      <div className="flex justify-between">
-        <span className="text-headline-02 text-opacity-50">AVAILABLE</span>
-        <h6 className="text-h6 text-white">
-          {taken ? `${numberFormat(taken)} / ` : null}
-          {numberFormat(available)}
-        </h6>
-      </div>
-      <div className="process">
-        <span className="transition-all min-w-[0.625rem]" style={{ width: `${processWidth}%` }} />
-      </div>
     </div>
   );
 };

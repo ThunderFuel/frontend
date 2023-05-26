@@ -26,15 +26,6 @@
   @apply text-white opacity-50;
 }
 
-.process {
-  @apply rounded-md h-2.5 bg-white bg-opacity-10;
-}
-
-.process span {
-  @apply block h-2.5 w-2.5 rounded-full;
-  @apply bg-white;
-}
-
 .allowlist-phase {
   @apply border border-white border-opacity-10 overflow-hidden rounded-md;
   @apply relative;

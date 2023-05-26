@@ -11,6 +11,7 @@ export enum BLOCK_TYPE {
 
 export enum DROP_STATUS {
   MINT_NOW,
+  MINT_LIVE,
 }
 
 const drops = [
