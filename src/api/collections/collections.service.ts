@@ -1,7 +1,16 @@
 import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
 import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
-import { ActivityItemResponse, CollectionFilterResponse, CollectionItemResponse, CollectionItemsRequest, CollectionResponse, UpdateBulkListingRequestItem, WatchListRequest } from "./collections.type";
+import {
+  ActivityItemResponse,
+  CollectionFilterResponse,
+  CollectionItemResponse,
+  CollectionItemsRequest,
+  CollectionResponse,
+  MintRequest,
+  UpdateBulkListingRequestItem,
+  WatchListRequest,
+} from "./collections.type";
 import { IconBid, IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
 
 const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
@@ -71,5 +80,9 @@ export default {
 
   async getCollectionFloor(ids: any): Promise<ApiResponse<any>> {
     return ThunderURL.post(`v1/floor/collectionfloor`, ids);
+  },
+
+  async mint(data: MintRequest): Promise<ApiResponse<any>> {
+    return ThunderURL.post(`v1/collection/mint`, data);
   },
 };

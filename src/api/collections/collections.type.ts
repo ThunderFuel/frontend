@@ -1,5 +1,11 @@
 import { IUserResponse } from "../user/user.type";
 
+export interface MintRequest {
+  contractWalletAddress: string;
+  count: number;
+  walletAddress: string;
+}
+
 export enum SocialTypes {
   Website = 0,
   Discord = 1,
