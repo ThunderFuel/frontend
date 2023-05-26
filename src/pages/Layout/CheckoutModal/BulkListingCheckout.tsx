@@ -66,7 +66,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
           nonce: res.data + 1 + index,
           strategy: strategyFixedPriceContractId,
           payment_asset: NativeAssetId,
-          expiration_range: Math.floor(item.expireTime / 1000),
+          expiration_range: item.expireTime,
           extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
         };
       });

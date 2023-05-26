@@ -58,7 +58,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data + 1,
             strategy: strategyAuctionContractId,
             payment_asset: NativeAssetId,
-            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            expiration_range: checkoutExpireTime,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0 }, // laim degilse null
           },
         ];
@@ -93,7 +93,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data[selectedNFT?.id],
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
-            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            expiration_range: checkoutExpireTime,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           },
         ];
@@ -128,7 +128,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data + 1,
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
-            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            expiration_range: checkoutExpireTime,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           },
         ];
