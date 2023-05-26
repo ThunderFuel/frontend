@@ -58,7 +58,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         nonce: res.data[selectedNFT?.bestOffer?.id],
         strategy: strategyFixedPriceContractId,
         payment_asset: NativeAssetId,
-        expiration_range: Math.floor(checkoutExpireTime / 1000), // saniye olacak
+        expiration_range: checkoutExpireTime / 1000, // saniye olacak
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
       console.log(order);
