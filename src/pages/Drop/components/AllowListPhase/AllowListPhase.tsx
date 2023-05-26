@@ -1,10 +1,11 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from "react";
 import { createEvent, DateArray } from "ics";
 
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
 import { countDownTimer, dateFormat, downloadFile, formatPrice, numberFormat, randomIntFromInterval } from "utils";
-import { IconCalendar, IconToken } from "../../../../icons";
+import { IconCalendar, IconMinus, IconPlus, IconToken } from "../../../../icons";
 import Button from "../../../../components/Button";
 import { useDropDetailContext } from "../../Detail/DetailContext";
 import Img from "../../../../components/Img/Img";
@@ -14,6 +15,7 @@ import clsx from "clsx";
 import { mint } from "thunder-sdk/src/contracts/erc721";
 import { useAppSelector } from "store";
 import { ERC721ContractId, provider } from "global-constants";
+import collectionsService from "api/collections/collections.service";
 
 const Countdown = ({ startDate }: any) => {
   const [timer, setTimer] = React.useReducer(
@@ -133,11 +135,42 @@ const Gallery = ({ images }: any) => {
   );
 };
 
-const ButtonMint = (mintCount: any) => {
-  const { user, wallet } = useAppSelector((state) => state.wallet);
+const InputMint = ({ onChange }: any) => {
+  const [value, setValue] = useState(1);
+  const onUpdateValue = (number: number) => {
+    const val = value + number;
+    if (val < 1 || val > 5) {
+      return false;
+    }
 
+    setValue(val);
+    onChange(val);
+  };
+
+  return (
+    <div className="flex items-center border border-white border-opacity-10 rounded-md">
+      <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
+      <div className="flex flex-col items-center">
+        <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
+          <IconPlus className={value === 5 ? "opacity-50" : ""} />
+        </span>
+        <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
+          <IconMinus className={value === 1 ? "opacity-50" : ""} />
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const ButtonMint = () => {
+  const { user, wallet } = useAppSelector((state) => state.wallet);
+  const [amount, setAmount] = useState(1);
+
+  const tempContract = "0xbd82b3b28d1ac90e499ae9a22f0e2f9c5cb15167d4d24f167dfeab6bb84019cf";
+  const tempWallet = "0x2dca5e3e7a1affb20d3001f758a1e3eb6e21dfd29ab3d328d4f5fbd2c7af69f1";
   const onClick = () => {
-    mint(ERC721ContractId, provider, wallet, mintCount, user.walletAddress)
+    // collectionsService.mint({ contractWalletAddress: "9191", count: amount, walletAddress: tempWallet }).then((res) => console.log(res));
+    mint(ERC721ContractId, provider, wallet, amount, tempWallet)
       .then((res) => {
         console.log(res);
         if (res?.transactionResult.status.type === "success") {
@@ -151,10 +184,15 @@ const ButtonMint = (mintCount: any) => {
       });
   };
 
+  const onChange = (e: any) => setAmount(e);
+
   return (
-    <Button className="w-full btn-primary" onClick={onClick}>
-      Mint now <IconToken />
-    </Button>
+    <div className="flex gap-2">
+      <InputMint onChange={onChange} />
+      <Button className="w-full btn-primary" onClick={onClick}>
+        Mint now <IconToken />
+      </Button>
+    </div>
   );
 };
 
@@ -181,7 +219,7 @@ const AllowListPhase = () => {
         {isAvailable ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={allowListPhase.startDate} />}
         <Process available={allowListPhase.available} taken={allowListPhase.taken} />
       </div>
-      <div className="footer">{isAvailable ? <ButtonMint mintCount={5} /> : <ButtonCalendar />}</div>
+      <div className="footer">{isAvailable ? <ButtonMint /> : <ButtonCalendar />}</div>
     </div>
   );
 };
