@@ -18,7 +18,7 @@ const DropPage = () => {
   return (
     <div className="flex flex-col gap-12">
       <div className="w-[500px] text-white">
-        <PageTitle title="Drop Page" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+        <PageTitle title="List Page" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
       </div>
       <ModalProvider>
         <Container />

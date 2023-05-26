@@ -1,4 +1,4 @@
-import { AssetDropTest } from "assets";
+import { AssetDropIndex, AssetDropTest, AssetProfileAvatar1, AssetProfileAvatar2, AssetProfileAvatar3 } from "assets";
 import { SocialTypes } from "../collections/collections.type";
 
 export enum BLOCK_TYPE {
@@ -8,6 +8,61 @@ export enum BLOCK_TYPE {
   VideoText,
   SingleVideo,
 }
+
+export enum DROP_STATUS {
+  MINT_NOW,
+}
+
+const drops = [
+  {
+    image: AssetDropIndex.Drop1,
+    color: "#494650",
+    name: "CHRYSALISM",
+    status: DROP_STATUS.MINT_NOW,
+    available: 1000,
+    taken: 555,
+    creator: {
+      name: "CHRYSALISM",
+      image: AssetProfileAvatar2,
+    },
+  },
+  {
+    image: AssetDropIndex.Drop2,
+    color: "#1B323F",
+    name: "Shellz Orb",
+    status: DROP_STATUS.MINT_NOW,
+    available: 1000,
+    taken: 555,
+    creator: {
+      name: "Shellz Orb",
+      image: AssetProfileAvatar1,
+    },
+  },
+  {
+    image: AssetDropIndex.Drop3,
+    color: "#5F4429",
+    name: "StrangersHQ",
+    status: DROP_STATUS.MINT_NOW,
+    available: 1000,
+    taken: 100,
+    creator: {
+      name: "Collective-Strangers",
+      image: AssetProfileAvatar3,
+    },
+  },
+  {
+    image: AssetDropIndex.Drop4,
+    color: "#380E14",
+    name: "The Immortal Pass",
+    status: DROP_STATUS.MINT_NOW,
+    available: 1000,
+    taken: 100,
+    creator: {
+      name: "OrangeComet",
+      image: AssetProfileAvatar3,
+    },
+  },
+];
 
 const dropPrimary = {
   className: "drop-primary",
@@ -310,5 +365,8 @@ export default {
     const response = Number(dropId) === 1 ? dropPrimary : dropSecondary;
 
     return Promise.resolve(response);
+  },
+  getDrops: () => {
+    return Promise.resolve(drops);
   },
 };
