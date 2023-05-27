@@ -5,6 +5,7 @@ import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
 import { setWalletType, toggleWalletModal } from "store/walletSlice";
+import { useFuelet } from "hooks/useFuelet";
 
 export const ConnectWallet = () => {
   const { walletConnect } = useWallet();
@@ -12,7 +13,7 @@ export const ConnectWallet = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, fuelError, fuelLoading] = useFuel();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuelet, fueletError, fueletLoading] = useFuel();
+  const [fuelet, fueletError, fueletLoading] = useFuelet();
 
   return (
     <div className="flex flex-col h-full p-5 gap-y-5">

@@ -16,8 +16,9 @@ export function useFuelet() {
     // If fuelet is already loaded, call the handler
     if (window.fuelet) {
       onFueletLoaded();
+    } else {
+      setError("Fuelet is not installed");
     }
-
     // Listen for the fueletLoaded event
     document.addEventListener("FueletLoaded", onFueletLoaded);
 
