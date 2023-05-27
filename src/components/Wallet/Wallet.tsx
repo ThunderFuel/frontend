@@ -7,7 +7,6 @@ import { Button } from "react-bootstrap";
 import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
 import { addressFormat } from "utils";
-import { useFuel } from "hooks/useFuel";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
@@ -20,8 +19,6 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuel, error, loading] = useFuel();
   const MenuItems = [
     {
       title: "My Profile",
