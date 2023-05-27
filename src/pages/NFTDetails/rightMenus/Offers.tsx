@@ -157,7 +157,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
         </Button>
       )}
       {offers.map((offer: any, index: any) => {
-        if (offer.isCanceled) {
+        if (offer.isCanceled || offer.isAccepted || offer.isExpired) {
           return <></>;
         }
 
