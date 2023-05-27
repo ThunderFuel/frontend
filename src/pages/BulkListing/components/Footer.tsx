@@ -22,6 +22,7 @@ const Footer = ({ items, prices }: any) => {
     const updateBulkListingRequest: any = [];
     bulkItems.forEach((item: any) => {
       const data = {
+        name: item.name,
         tokenId: item.id,
         price: prices?.[item.uid],
         expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
