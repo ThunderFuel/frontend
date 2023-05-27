@@ -8,7 +8,7 @@ interface IDropDetailContext {
     about: string;
     blocks: any;
     team: any;
-    roadmap: any;
+    roadMap: any;
     faq: any;
     allowListPhase: any;
   };

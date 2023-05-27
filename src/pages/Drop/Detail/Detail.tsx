@@ -15,7 +15,7 @@ const Detail = () => {
 
   const [dropDetail, setDropDetail] = useState<any>({
     team: [],
-    roadmap: [],
+    roadMap: [],
     faq: [],
     allowListPhase: [],
   });
