@@ -270,7 +270,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-01 text-gray-light">CONTRACT ADDRESS</div>
-                  {addressFormat(nft?.collection?.walletAddress)}
+                  {addressFormat(nft?.collection?.contractAddress)}
                 </div>
               </Box>
               <BoxWithIcon className="hover:bg-bg-light" icon={IconToken}>
