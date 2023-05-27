@@ -30,7 +30,7 @@ function formatActivityData(data: any): { icon: any; title: string; description:
   const description = (
     <ActivityItemDescription
       activityType={data.activityType}
-      fromUserContractAddress={data.fromUser.walletAddress}
+      fromUserContractAddress={data?.fromUser?.walletAddress}
       createdTimeStamp={data.createdTimeStamp}
       toUserContractAddress={data?.toUser?.walletAddress}
     />

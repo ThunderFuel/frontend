@@ -64,7 +64,7 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
     const toUserContractAddressLabel = user.walletAddress === toUserContractAddress ? "you" : addressFormat(toUserContractAddress);
 
     let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel} to ${toUserContractAddressLabel}</span>, ${timeagoFormat(createdTimeStamp)}`;
-    if ([ActivityFilters.Listings, ActivityFilters.Bids, ActivityFilters.Offers].includes(activityType)) {
+    if ([ActivityFilters.Listings, ActivityFilters.Bids, ActivityFilters.Offers, ActivityFilters.Mints].includes(activityType)) {
       text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel}</span>, ${timeagoFormat(createdTimeStamp)}`;
     }
 

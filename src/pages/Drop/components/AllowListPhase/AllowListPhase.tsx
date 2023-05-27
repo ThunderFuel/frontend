@@ -146,7 +146,7 @@ const ButtonMint = () => {
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const [amount, setAmount] = useState(1);
 
-  const tempContract = "0xbd82b3b28d1ac90e499ae9a22f0e2f9c5cb15167d4d24f167dfeab6bb84019cf";
+  const tempContract = "0x3cf27804d6a1c653dcce062b6f33937a815ee7ae7471787b3c0a661c22d45947";
   const onClick = () => {
     mint(ERC721ContractId, provider, wallet, amount, user.walletAddress)
       .then((res) => {
