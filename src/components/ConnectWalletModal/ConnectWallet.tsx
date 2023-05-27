@@ -4,8 +4,8 @@ import { IconArrowRight, IconFuelet, IconLightning } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
-import { setWalletType, toggleWalletModal } from "store/walletSlice";
 import { useFuelet } from "hooks/useFuelet";
+import { toggleWalletModal } from "store/walletSlice";
 
 export const ConnectWallet = () => {
   const { walletConnect } = useWallet();
@@ -47,9 +47,7 @@ export const ConnectWallet = () => {
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100"
               onClick={() => {
-                dispatch(setWalletType("Fuelet"));
-
-                walletConnect().then((res) => {
+                walletConnect("Fuelet").then((res) => {
                   if (res) {
                     dispatch(toggleWalletModal());
                   }
