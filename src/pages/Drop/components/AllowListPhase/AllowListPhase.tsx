@@ -147,15 +147,13 @@ const ButtonMint = () => {
   const [amount, setAmount] = useState(1);
 
   const tempContract = "0xbd82b3b28d1ac90e499ae9a22f0e2f9c5cb15167d4d24f167dfeab6bb84019cf";
-  const tempWallet = "0x2dca5e3e7a1affb20d3001f758a1e3eb6e21dfd29ab3d328d4f5fbd2c7af69f1";
   const onClick = () => {
-    collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: tempWallet }).then((res) => console.log(res));
-    mint(ERC721ContractId, provider, wallet, amount, tempWallet)
+    mint(ERC721ContractId, provider, wallet, amount, user.walletAddress)
       .then((res) => {
         console.log(res);
         if (res?.transactionResult.status.type === "success") {
           /*TODO HANDLE SUCCESS*/
-          collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: tempWallet }).then((res) => console.log("MINTED", res));
+          collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: user.walletAddress }).then((res) => console.log("MINTED", res));
         }
       })
       .catch((e) => {
