@@ -6,7 +6,7 @@ const ModalEditDropPageTitle = (props: any) => {
   const { onClose, ...etc } = props;
 
   return (
-    <Modal title="Edit Drop Page Title" {...etc} footer={<Modal.Footer onClose={onClose} />}>
+    <Modal title="Edit List Page Title" {...etc} footer={<Modal.Footer onClose={onClose} />}>
       <div className="text-white">
         <InputLabel label="Enter Title*" />
       </div>

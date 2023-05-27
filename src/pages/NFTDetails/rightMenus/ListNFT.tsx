@@ -177,7 +177,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">Creator Earnings</div>
-                <div className="">{selectedNFT.collection?.royaltyFee}%</div>
+                <div className={`${selectedNFT.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royaltyFee ? `${selectedNFT.collection?.royaltyFee} %` : "-"}</div>
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">You’ll Receive</div>
@@ -212,7 +212,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">Creator Earnings</div>
-              <div className="">{selectedNFT.collection?.royaltyFee}%</div>
+              <div className={`${selectedNFT.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royaltyFee ? `${selectedNFT.collection?.royaltyFee} %` : "-"}</div>
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">You’ll Receive</div>

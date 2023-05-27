@@ -5,8 +5,14 @@ import Layout from "pages/Layout/Layout";
 
 const DropDetail = React.lazy(() => import("pages/Drop/Detail"));
 const DropEdit = React.lazy(() => import("pages/Drop/Edit"));
+const Drops = React.lazy(() => import("pages/Drop/List/List"));
 
 export default [
+  {
+    path: PATHS.DROPS,
+    component: Drops,
+    layout: Layout,
+  },
   {
     path: PATHS.DROP_DETAIL,
     component: DropDetail,
