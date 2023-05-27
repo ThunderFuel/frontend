@@ -16,7 +16,8 @@ const List = () => {
   };
   const getDrops = async () => {
     const response = await dropService.getDrops();
-    setItems(response);
+    console.log(response.data);
+    setItems(response.data);
   };
 
   useEffect(() => {

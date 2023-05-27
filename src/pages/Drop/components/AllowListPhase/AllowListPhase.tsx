@@ -100,7 +100,7 @@ const ButtonCalendar = ({ title, startDate, endDate }: any) => {
 
 const Gallery = ({ images }: any) => {
   return (
-    <Marquee className="flex gap-5">
+    <Marquee className="flex gap-5" pauseOnHover={true}>
       <div className="flex gap-5">
         {images.map((item: any, k: number) => (
           <Img key={`${k}`} src={item} />
