@@ -96,3 +96,4 @@ export { ReactComponent as IconCircleLeft } from "./icon-circle-left.svg";
 export { ReactComponent as IconText } from "./icon-text.svg";
 export { ReactComponent as IconVideo } from "./icon-video.svg";
 export { ReactComponent as IconEmptyCircle } from "./icon-empty-circle.svg";
+export { ReactComponent as IconMinus } from "./icon-minus.svg";

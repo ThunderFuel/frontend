@@ -58,7 +58,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data + 1,
             strategy: strategyAuctionContractId,
             payment_asset: NativeAssetId,
-            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            expiration_range: checkoutExpireTime,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0 }, // laim degilse null
           },
         ];
@@ -93,7 +93,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data[selectedNFT?.id],
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
-            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            expiration_range: checkoutExpireTime,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           },
         ];
@@ -128,7 +128,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data + 1,
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
-            expiration_range: Math.floor(checkoutExpireTime / 1000),
+            expiration_range: checkoutExpireTime,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           },
         ];
@@ -164,7 +164,16 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">

@@ -51,7 +51,7 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
       {isUnavailable && <div className="absolute top-0 w-full h-full left-0 bg-gray/80" />}
       {isRemovable && (
         <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <IconTrash className="cursor-pointer" onClick={onRemove} />
+          <IconTrash className="cursor-pointer text-white" onClick={onRemove} />
         </div>
       )}
     </div>

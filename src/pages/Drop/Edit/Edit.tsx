@@ -9,16 +9,16 @@ import DropPage from "./Steps/DropPage";
 const Edit = () => {
   return (
     <Wizard number={3}>
-      <Wizard.Step title={"Drop Details"} icon={<IconCrop />}>
+      <Wizard.Step title={"List Details"} icon={<IconCrop />}>
         <Details />
       </Wizard.Step>
-      <Wizard.Step title={"Drop Schedule"} icon={<IconCalendar />}>
+      <Wizard.Step title={"List Schedule"} icon={<IconCalendar />}>
         <Schedule />
       </Wizard.Step>
       <Wizard.Step title={"Metadata"} icon={<IconPaperCode />}>
         <Metadata />
       </Wizard.Step>
-      <Wizard.Step title={"Drop Page"} icon={<IconPencilRuler />}>
+      <Wizard.Step title={"List Page"} icon={<IconPencilRuler />}>
         <DropPage />
       </Wizard.Step>
     </Wizard>

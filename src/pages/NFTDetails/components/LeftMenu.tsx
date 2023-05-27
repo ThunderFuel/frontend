@@ -15,7 +15,6 @@ import MetadataTable from "./MetadataTable";
 import Avatar from "components/Avatar";
 import UseNavigate from "hooks/useNavigate";
 import ReadMore from "components/ReadMore";
-import offerService from "api/offer/offer.service";
 import ActivityItemDescription from "components/ActivityDescription";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
 
@@ -36,10 +35,10 @@ const BoxWithIcon = React.memo(({ children, className, icon }: { children: React
 });
 BoxWithIcon.displayName = "BoxWithIcon";
 
-const HoverButton = ({ Icon, text, btnClassName, onClick }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any }) => {
+const HoverButton = ({ Icon, text, btnClassName, onClick, disabled }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any; disabled?: boolean }) => {
   return (
     <div className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" onClick={onClick}>
-      <Button className={clsx("btn-sm btn-secondary no-bg", btnClassName)}>
+      <Button className={clsx("btn-sm btn-secondary no-bg", btnClassName)} disabled={disabled}>
         {text}
         <Icon className="w-[18px] h-[18px]" />
       </Button>
@@ -130,7 +129,6 @@ const LeftMenu = (props: any) => {
   const { nft, fetchCollection } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
-  // const { walletConnect } = useWallet();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
@@ -238,7 +236,22 @@ const LeftMenu = (props: any) => {
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => fetchCollection());
+                      dispatch(
+                        setCheckout({
+                          type: CheckoutType.AcceptOffer,
+                          item: {
+                            ...selectedNFT.bestOffer,
+                            contractAddress: selectedNFT.collection.contractAddress,
+                            makerAddress: selectedNFT.bestOffer.user.walletAddress,
+                            takerAddress: selectedNFT.user.walletAddress,
+                            tokenOrder: selectedNFT.tokenOrder,
+                            tokenImage: selectedNFT.image,
+                          },
+                          price: selectedNFT.bestOffer?.price,
+                          onCheckoutComplete: fetchCollection,
+                        })
+                      );
+                      dispatch(toggleCheckoutModal());
                     }}
                   />
                 )}
@@ -257,7 +270,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-01 text-gray-light">CONTRACT ADDRESS</div>
-                  {addressFormat(nft?.collection?.walletAddress)}
+                  {addressFormat(nft?.collection?.contractAddress)}
                 </div>
               </Box>
               <BoxWithIcon className="hover:bg-bg-light" icon={IconToken}>

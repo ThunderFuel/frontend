@@ -39,7 +39,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { checkoutPrice, currentItem, onCheckoutComplete } = useAppSelector((state) => state.checkout);
   const { wallet } = useAppSelector((state) => state.wallet);
-
+  console.log({ currentItem });
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
@@ -69,6 +69,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             offerService.acceptOffer({ id: currentItem.id }).then(() => {
               userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
               onCheckoutComplete();
+              setApproved(true);
             });
           }
         })
@@ -91,7 +92,16 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">

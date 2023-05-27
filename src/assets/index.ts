@@ -74,3 +74,4 @@ export { default as AssetDropEditClipSingleImage } from "./drop/edit/clip-single
 export { default as AssetDropEditClipSingleVideo } from "./drop/edit/clip-single-video.png";
 
 export * as AssetDropTest from "./drop/test";
+export * as AssetDropIndex from "./drop/index";
