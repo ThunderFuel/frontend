@@ -1,7 +1,7 @@
 import { IUserResponse } from "../user/user.type";
 
 export interface MintRequest {
-  contractWalletAddress: string;
+  contractAddress: string;
   count: number;
   walletAddress: string;
 }
