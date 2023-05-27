@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import Text from "./Text";
-import { IconVideo } from "../../../../icons";
+import { IconVideo } from "icons";
 
 interface IVideoText {
   image: string;
@@ -29,7 +29,7 @@ const VideoText = (props: IVideoText) => {
           </div>
         ) : (
           <video className="w-full h-full" controls autoPlay>
-            <source src={props.video} type="video/mp4" />
+            <source src="/video.mp4" type="video/mp4" />
           </video>
         )}
       </div>

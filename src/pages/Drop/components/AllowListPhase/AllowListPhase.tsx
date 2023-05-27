@@ -108,7 +108,7 @@ const Gallery = ({ images }: any) => {
     <Marquee className="flex gap-5" pauseOnHover={true}>
       <div className="flex gap-5">
         {images.map((item: any, k: number) => (
-          <Img key={`${k}`} src={item} />
+          <Img className="w-72 h-72" key={`${k}`} src={item} />
         ))}
       </div>
     </Marquee>

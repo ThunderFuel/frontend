@@ -1,6 +1,7 @@
 import React from "react";
 import { useDropDetailContext } from "../../Detail/DetailContext";
 import Img from "components/Img";
+import SocialButtons from "../SocialButtons";
 
 const TeamMember = ({ member }: any) => {
   return (
@@ -14,6 +15,9 @@ const TeamMember = ({ member }: any) => {
             <h5 className="text-h5 text-white">{member.name}</h5>
             <div className="text-headline-02 text-white text-opacity-50">{member.label}</div>
           </div>
+        </div>
+        <div>
+          <SocialButtons socialMedias={member.socialMedias} />
         </div>
       </div>
       <div className="body-medium text-white">{member.text}</div>

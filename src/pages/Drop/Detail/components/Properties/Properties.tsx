@@ -17,7 +17,7 @@ const Properties = () => {
             <Team />
           </Tab.Item>
         ) : null}
-        {dropDetail.roadmap && dropDetail.roadmap.length ? (
+        {dropDetail.roadMap && dropDetail.roadMap.length ? (
           <Tab.Item title="Road Map">
             <Roadmap />
           </Tab.Item>

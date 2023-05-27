@@ -15,16 +15,17 @@ const Detail = () => {
 
   const [dropDetail, setDropDetail] = useState<any>({
     team: [],
-    roadmap: [],
+    roadMap: [],
     faq: [],
     allowListPhase: [],
   });
 
   useEffect(() => {
-    dropService.getDropPrimary(dropId).then((responseDrop: any) => {
-      setDropDetail(responseDrop);
+    dropService.getDropDetail(dropId).then((response: any) => {
+      const dropDetail = response.data;
+      setDropDetail(dropDetail);
 
-      document.body.classList.add("drop", responseDrop.className);
+      document.body.classList.add("drop", dropDetail.className);
     });
 
     return () => {

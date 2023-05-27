@@ -11,22 +11,22 @@ const Blocks = () => {
   if (!dropDetail?.blocks) {
     return null;
   }
-  const getComponent = (block: any) => {
+  const getComponent = (block: any, k: number) => {
     switch (block.type) {
       case BLOCK_TYPE.ImageText:
-        return <ImageText image={block.image} title={block.title} text={block.text} reverse={block.reverse} />;
+        return <ImageText key={k} image={block.image} title={block.title} text={block.text} reverse={block.reverse} />;
       case BLOCK_TYPE.VideoText:
-        return <VideoText image={block.image} video={block.video} title={block.title} text={block.text} reverse={block.reverse} />;
+        return <VideoText key={k} image={block.image} video={block.video} title={block.title} text={block.text} reverse={block.reverse} />;
       case BLOCK_TYPE.SingleImage:
-        return <SingleImage image={block.image} />;
+        return <SingleImage key={k} image={block.image} />;
       case BLOCK_TYPE.Infinity:
-        return <InfiniteGallery images={block.images} />;
+        return <InfiniteGallery key={k} images={block.images} />;
       default:
-        return <React.Fragment />;
+        return <div key={k} />;
     }
   };
 
-  return <>{dropDetail?.blocks.map((block: any) => getComponent(block))}</>;
+  return <>{dropDetail?.blocks.map((block: any, k: number) => getComponent(block, k))}</>;
 };
 
 export default Blocks;
