@@ -12,7 +12,6 @@ import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import useNavigate from "hooks/useNavigate";
-import { uploadFile } from "utils";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -24,15 +23,13 @@ const Profile = () => {
   const onChange = (field: string, value: any) => {
     setUserInfo((prevState: any) => ({ ...prevState, ...{ [field]: value } }));
   };
-  const onChangeCoverImage = async (file: File) => {
-    const imageUrl = await uploadFile(file);
+  const onChangeCoverImage = async (imageUrl: string) => {
     setUserInfo((value: any) => ({
       ...value,
       banner: imageUrl,
     }));
   };
-  const onChangeProfileImage = async (file: File) => {
-    const imageUrl = await uploadFile(file);
+  const onChangeProfileImage = async (imageUrl: string) => {
     setUserInfo((value: any) => ({
       ...value,
       image: imageUrl,

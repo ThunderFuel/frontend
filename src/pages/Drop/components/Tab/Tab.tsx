@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import clsx from "clsx";
 
 const TabItem = ({ children }: any) => {
@@ -6,13 +6,17 @@ const TabItem = ({ children }: any) => {
 };
 const Tab = ({ children, number = 0, className, containerClassName }: any) => {
   const [activeTab, setActiveTab] = React.useState(number);
-  const headerProps = children.map((child: any) => ({
-    title: child.props.title,
-  }));
+  const headerProps = useMemo(() => {
+    return children
+      .map((child: any) => ({
+        title: child?.props?.title,
+      }))
+      .filter((child: any) => child.title);
+  }, [children]);
 
   const getActiveTab = React.useMemo(() => {
     return children[activeTab];
-  }, [activeTab]);
+  }, [activeTab, children]);
 
   return (
     <div className={clsx("flex flex-col gap-5", className)}>

@@ -1,5 +1,7 @@
-import { AssetDropIndex, AssetDropTest, AssetProfileAvatar1, AssetProfileAvatar2, AssetProfileAvatar3 } from "assets";
+import { AssetDropTest } from "assets";
+import { ThunderURL } from "../index";
 import { SocialTypes } from "../collections/collections.type";
+import { MarketplaceItemResponse } from "../marketplace/marketplace.type";
 
 export enum BLOCK_TYPE {
   Infinity,
@@ -11,77 +13,9 @@ export enum BLOCK_TYPE {
 
 export enum DROP_STATUS {
   MINT_NOW,
-  MINT_LIVE,
+  MIN_SOON,
+  MIN_OUT,
 }
-
-const drops = [
-  {
-    image: AssetDropIndex.Drop1,
-    color: "#494650",
-    name: "CHRYSALISM",
-    status: DROP_STATUS.MINT_NOW,
-    available: 1000,
-    taken: 555,
-    creator: {
-      name: "CHRYSALISM",
-      image: AssetProfileAvatar2,
-    },
-    socials: [
-      {
-        type: SocialTypes.Twitter,
-        url: "asd",
-      },
-      {
-        type: SocialTypes.Twitter,
-        url: "asd",
-      },
-      {
-        type: SocialTypes.Twitter,
-        url: "asd",
-      },
-      {
-        type: SocialTypes.Twitter,
-        url: "asd",
-      },
-    ],
-  },
-  {
-    image: AssetDropIndex.Drop2,
-    color: "#1B323F",
-    name: "Shellz Orb",
-    status: DROP_STATUS.MINT_NOW,
-    available: 1000,
-    taken: 555,
-    creator: {
-      name: "Shellz Orb",
-      image: AssetProfileAvatar1,
-    },
-  },
-  {
-    image: AssetDropIndex.Drop3,
-    color: "#5F4429",
-    name: "StrangersHQ",
-    status: DROP_STATUS.MINT_NOW,
-    available: 1000,
-    taken: 100,
-    creator: {
-      name: "Collective-Strangers",
-      image: AssetProfileAvatar3,
-    },
-  },
-  {
-    image: AssetDropIndex.Drop4,
-    color: "#380E14",
-    name: "The Immortal Pass",
-    status: DROP_STATUS.MINT_NOW,
-    available: 1000,
-    taken: 100,
-    creator: {
-      name: "OrangeComet",
-      image: AssetProfileAvatar3,
-    },
-  },
-];
 
 const dropPrimary = {
   className: "drop-primary",
@@ -386,6 +320,6 @@ export default {
     return Promise.resolve(response);
   },
   getDrops: () => {
-    return Promise.resolve(drops);
+    return ThunderURL.get<MarketplaceItemResponse[]>("v1/drop/drops");
   },
 };

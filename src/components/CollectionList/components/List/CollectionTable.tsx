@@ -16,7 +16,7 @@ const Collection = ({ item }: { item: any }) => {
       <div className={clsx("min-w-[56px] max-w-[56px] aspect-square rounded-sm overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}>
         <Img className="h-full" alt={item.image} src={item.image} loading="lazy" />
       </div>
-      <h6 className="text-h6 text-white">{item.name}</h6>
+      <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>
     </div>
   );
 };
@@ -82,7 +82,7 @@ const CollectionTable = () => {
       text: "Last Sale",
       width: "15%",
       align: "flex-end",
-      render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>NO sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
+      render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>No Sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
     },
     {
       key: "owner",
