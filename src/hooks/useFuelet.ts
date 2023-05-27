@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
 
@@ -16,6 +16,8 @@ export function useFuelet() {
     // If fuelet is already loaded, call the handler
     if (window.fuelet) {
       onFueletLoaded();
+    } else {
+      setError("sad");
     }
 
     // Listen for the fueletLoaded event
