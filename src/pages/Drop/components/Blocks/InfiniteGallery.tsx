@@ -17,7 +17,7 @@ const InfiniteGallery = ({ images }: any) => {
           <Marquee direction={i % 2 === 1 ? "right" : "left"} key={i} className="flex gap-5" pauseOnHover={true}>
             <div className="flex gap-5">
               {image.map((item: any, k: number) => (
-                <Img key={`${i}_${k}`} src={item} />
+                <Img className="w-72 h-72" key={`${i}_${k}`} src={item} />
               ))}
             </div>
           </Marquee>
