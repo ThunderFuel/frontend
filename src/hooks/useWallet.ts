@@ -7,16 +7,22 @@ import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
 import { useFuelet } from "./useFuelet";
 import { useFuel } from "./useFuel";
+import { useMemo } from "react";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
-  const { user, isConnected } = useAppSelector((state) => state.wallet);
+  const { user, isConnected, walletType } = useAppSelector((state) => state.wallet);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuelet] = useFuelet();
-  const [fuel] = useFuel();
+  const fuelet = useFuelet()[0];
+  const _fuel = useFuel()[0];
 
+  const fuel = useMemo(() => {
+    if (walletType === "Fuelet") return fuelet;
+
+    return _fuel;
+  }, [walletType]);
   const hasEnoughFunds = async () => {
     try {
       const provider = await getProvider();
@@ -62,6 +68,8 @@ export const useWallet = () => {
   };
 
   const walletConnect = async () => {
+    console.log("connectwallet");
+    console.log(walletType, fuel);
     if (!isConnected) {
       try {
         await fuel.connect().then((connected: any) => {
