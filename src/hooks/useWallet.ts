@@ -99,7 +99,7 @@ export const useWallet = () => {
       await fuel.disconnect();
       dispatch(setIsConnected(false));
     } catch (e) {
-      useErrorModal(e);
+      console.log(e);
     }
   };
 

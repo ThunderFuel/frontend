@@ -31,7 +31,7 @@ export const ConnectWallet = () => {
             </Button>
           ) : (
             <a href="https://wallet.fuel.network/" target="_blank" rel="noreferrer">
-              <Button className="btn-sm btn-secondary">
+              <Button className="btn-sm btn-secondary no-bg">
                 INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
               </Button>
             </a>
@@ -58,7 +58,7 @@ export const ConnectWallet = () => {
             </Button>
           ) : (
             <a href="https://chrome.google.com/webstore/detail/fuelet-wallet/bifidjkcdpgfnlbcjpdkdcnbiooooblg" target="_blank" rel="noreferrer">
-              <Button className="btn-sm btn-secondary">
+              <Button className="btn-sm btn-secondary no-bg">
                 INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
               </Button>
             </a>
