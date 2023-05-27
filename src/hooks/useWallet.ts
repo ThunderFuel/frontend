@@ -8,6 +8,8 @@ import { isObjectEmpty } from "utils";
 import { useFuelet } from "./useFuelet";
 import { useFuel } from "./useFuel";
 
+let fuel: any;
+
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
@@ -16,7 +18,6 @@ export const useWallet = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fuelet = useFuelet()[0];
   const _fuel = useFuel()[0];
-  let fuel = _fuel;
 
   const setFuel = (type: any) => {
     fuel = type === "Fuelet" ? fuelet : _fuel;
