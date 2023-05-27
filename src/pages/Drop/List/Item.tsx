@@ -9,7 +9,8 @@ import SocialButtons from "../../Collection/components/SocialButtons";
 const ItemStatus = ({ status }: any) => {
   const text = {
     [DROP_STATUS.MINT_NOW]: "Minting Now",
-    [DROP_STATUS.MINT_LIVE]: "Minting Live",
+    [DROP_STATUS.MIN_SOON]: "Minting Soon",
+    [DROP_STATUS.MIN_OUT]: "Minting Out",
   }[status as DROP_STATUS];
 
   return <div className="drop-item-badge flex-center text-green">{text ?? "-"}</div>;
