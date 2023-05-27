@@ -3,17 +3,25 @@ import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } f
 import { ZeroBytes32 } from "fuels";
 import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
-import { useFuel } from "./useFuel";
 import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
+import { useFuelet } from "./useFuelet";
+import { useFuel } from "./useFuel";
+
+let fuel: any;
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
-  const [fuel] = useFuel();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const fuelet = useFuelet()[0];
+  const _fuel = useFuel()[0];
 
+  const setFuel = (type: any) => {
+    fuel = type === "Fuelet" ? fuelet : _fuel;
+  };
   const hasEnoughFunds = async () => {
     try {
       const provider = await getProvider();
@@ -58,14 +66,16 @@ export const useWallet = () => {
     }
   };
 
-  const walletConnect = async () => {
+  const walletConnect = async (type = "Fuel") => {
+    setFuel(type);
+
     if (!isConnected) {
       try {
         await fuel.connect().then((connected: any) => {
           getAccounts().then((fuelAddress) => {
             dispatch(setAddress(fuelAddress));
             if (fuelAddress !== null)
-              fuel.getWallet(fuelAddress).then((wallet) => {
+              fuel.getWallet(fuelAddress).then((wallet: any) => {
                 if (wallet !== null)
                   userService.userCreate(wallet.address?.toB256()).then((user) => {
                     dispatch(setUser(user.data));
@@ -90,7 +100,7 @@ export const useWallet = () => {
       await fuel.disconnect();
       dispatch(setIsConnected(false));
     } catch (e) {
-      useErrorModal(e);
+      console.log(e);
     }
   };
 
