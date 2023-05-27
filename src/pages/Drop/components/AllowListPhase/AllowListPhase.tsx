@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { createEvent, DateArray } from "ics";
 
@@ -11,6 +12,10 @@ import Img from "components/Img/Img";
 import Marquee from "react-fast-marquee";
 import { BLOCK_TYPE } from "api/drop/drop.service";
 import clsx from "clsx";
+import { mint } from "thunder-sdk/src/contracts/erc721";
+import { useAppSelector } from "store";
+import { ERC721ContractId, provider } from "global-constants";
+import collectionsService from "api/collections/collections.service";
 import Process from "../Process";
 
 const Countdown = ({ startDate }: any) => {
@@ -136,9 +141,28 @@ const InputMint = ({ onChange }: any) => {
     </div>
   );
 };
+
 const ButtonMint = () => {
-  const onClick = () => console.log("log");
-  const onChange = (e: any) => console.log(e);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
+  const [amount, setAmount] = useState(1);
+
+  const tempContract = "0x3cf27804d6a1c653dcce062b6f33937a815ee7ae7471787b3c0a661c22d45947";
+  const onClick = () => {
+    mint(ERC721ContractId, provider, wallet, amount, user.walletAddress)
+      .then((res) => {
+        console.log(res);
+        if (res?.transactionResult.status.type === "success") {
+          /*TODO HANDLE SUCCESS*/
+          collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: user.walletAddress }).then((res) => console.log("MINTED", res));
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        /*TODO HANDLE ERROR*/
+      });
+  };
+
+  const onChange = (e: any) => setAmount(e);
 
   return (
     <div className="flex gap-2">
