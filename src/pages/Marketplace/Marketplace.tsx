@@ -6,7 +6,7 @@ import MarketplaceProvider from "./MarketplaceContext";
 
 const Marketplace = () => {
   return (
-    <div className="flex flex-col gap-20 py-16">
+    <div className="flex flex-col gap-10 py-10">
       <HotDrops />
       <MarketplaceProvider>
         <Filter />
