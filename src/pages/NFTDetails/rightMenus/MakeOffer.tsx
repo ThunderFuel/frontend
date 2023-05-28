@@ -8,7 +8,6 @@ import CartItem from "../components/CartItem";
 import { useWallet } from "hooks/useWallet";
 import { getDateFromExpirationTime, toGwei } from "utils";
 import Select, { ISelectOption } from "components/Select";
-import dayjs from "dayjs";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
 import userService from "api/user/user.service";
@@ -95,7 +94,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
               setCheckout({
                 type: CheckoutType.MakeOffer,
                 price: offer,
-                expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed(),
+                expireTime: expirationTime?.value,
                 onCheckoutComplete: onBack,
               })
             );

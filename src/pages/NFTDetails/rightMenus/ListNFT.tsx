@@ -11,7 +11,6 @@ import { formatPrice, getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
-import dayjs from "dayjs";
 import { RightMenuType } from "store/NFTDetailsSlice";
 import floorService from "api/floor/floor.service";
 import EthereumPrice from "components/EthereumPrice";
@@ -54,7 +53,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                 setCheckout({
                   type: CheckoutType.ConfirmListing,
                   isAuction: isTimedAuction,
-                  expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  expireTime: duration?.value,
                   auctionStartingPrice: startingPrice,
                   onCheckoutComplete,
                 })
@@ -64,7 +63,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                 setCheckout({
                   type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
                   price: price,
-                  expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  expireTime: duration?.value,
                   onCheckoutComplete,
                 })
               );

@@ -10,7 +10,7 @@ import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
-import { toGwei } from "utils";
+import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { NativeAssetId, Provider } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import collectionsService from "api/collections/collections.service";
@@ -54,6 +54,14 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const onComplete = async () => {
     console.log({ bulkUpdateItems, bulkListItems });
 
+    const _bulkListItems = bulkListItems.map((item: any) => {
+      return { ...item, expireTime: formatTimeBackend(item.expireTime) };
+    });
+
+    const _bulkUpdateItems = bulkUpdateItems.map((item: any) => {
+      return { ...item, expireTime: formatTimeBackend(item.expireTime) };
+    });
+
     nftdetailsService.getLastIndex(0, user.id).then((res) => {
       const makerOrders = bulkItems.map((item: any, index: any) => {
         return {
@@ -66,7 +74,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
           nonce: res.data + 1 + index,
           strategy: strategyFixedPriceContractId,
           payment_asset: NativeAssetId,
-          expiration_range: item.expireTime,
+          expiration_range: formatTimeContract(item.expireTime),
           extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
         };
       });
@@ -80,8 +88,8 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         .then((res) => {
           console.log(res);
           if (res?.transactionResult.status.type === "success") {
-            if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(bulkUpdateItems);
-            if (bulkListItems.length > 0) collectionsService.bulkListing(bulkListItems);
+            if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(_bulkUpdateItems);
+            if (bulkListItems.length > 0) collectionsService.bulkListing(_bulkListItems);
 
             setApproved(true);
           }

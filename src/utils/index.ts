@@ -159,3 +159,11 @@ export const downloadFile = (file: File) => {
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
 };
+
+export const formatTimeContract = (time: any) => {
+  return time * 24 * 60 * 60;
+};
+
+export const formatTimeBackend = (time: any) => {
+  return Math.round(dayjs().add(time, "days").valueOf() / 1000);
+};

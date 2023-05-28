@@ -10,7 +10,7 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { NativeAssetId, Provider } from "fuels";
 import { strategyFixedPriceContractId, provider, ZERO_B256, contracts, exchangeContractId } from "global-constants";
-import { toGwei } from "utils";
+import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import userService from "api/user/user.service";
 
 const checkoutProcessTexts = {
@@ -56,7 +56,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         nonce: res.data + 1,
         strategy: strategyFixedPriceContractId,
         payment_asset: NativeAssetId,
-        expiration_range: checkoutExpireTime,
+        expiration_range: formatTimeContract(checkoutExpireTime),
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
       console.log(order);
@@ -74,7 +74,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
-                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: formatTimeBackend(checkoutExpireTime) });
                 userService.updateBidBalance(user.id, requiredBidAmount).then(() => setBidBalanceUpdated(true));
                 setApproved(true);
               }
@@ -89,7 +89,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
-                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: checkoutExpireTime });
+                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: formatTimeBackend(checkoutExpireTime) });
                 setApproved(true);
               }
             })
