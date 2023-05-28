@@ -11,7 +11,7 @@ import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
-import { toGwei } from "utils";
+import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { NativeAssetId, Provider } from "fuels";
 
 const checkoutProcessTexts = {
@@ -58,7 +58,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data + 1,
             strategy: strategyAuctionContractId,
             payment_asset: NativeAssetId,
-            expiration_range: checkoutExpireTime,
+            expiration_range: formatTimeContract(checkoutExpireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0 }, // laim degilse null
           },
         ];
@@ -70,7 +70,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           .then((res) => {
             console.log(res);
             if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenOnAuction(selectedNFT.id, checkoutExpireTime, checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
+              nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
               setApproved(true);
             }
           })
@@ -93,7 +93,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data[selectedNFT?.id],
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
-            expiration_range: checkoutExpireTime,
+            expiration_range: formatTimeContract(checkoutExpireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           },
         ];
@@ -105,7 +105,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           .then((res) => {
             console.log(res);
             if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+              nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) }]);
               setApproved(true);
             }
           })
@@ -128,7 +128,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             nonce: res.data + 1,
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
-            expiration_range: checkoutExpireTime,
+            expiration_range: formatTimeContract(checkoutExpireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           },
         ];
@@ -140,7 +140,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           .then((res) => {
             console.log(res);
             if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: checkoutExpireTime }]);
+              nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) }]);
               setApproved(true);
             }
           })

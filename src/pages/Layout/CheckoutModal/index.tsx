@@ -23,7 +23,15 @@ const Index = () => {
     dispatch(toggleCheckoutModal());
     if (checkoutType === CheckoutType.None) dispatch(removeBuyNowItem());
 
-    const isValidOnCheckoutComplete = [CheckoutType.MakeOffer, CheckoutType.PlaceBid, CheckoutType.UpdateOffer, CheckoutType.ConfirmListing, CheckoutType.UpdateListing, CheckoutType.CancelOffer];
+    const isValidOnCheckoutComplete = [
+      CheckoutType.BulkListing,
+      CheckoutType.MakeOffer,
+      CheckoutType.PlaceBid,
+      CheckoutType.UpdateOffer,
+      CheckoutType.ConfirmListing,
+      CheckoutType.UpdateListing,
+      CheckoutType.CancelOffer,
+    ];
     if (isValidOnCheckoutComplete.includes(checkoutType)) {
       onCheckoutComplete();
     }

@@ -25,7 +25,7 @@ const Footer = ({ items, prices }: any) => {
         name: item.name,
         tokenId: item.id,
         price: prices?.[item.uid],
-        expireTime: Math.round(dayjs().add(expiredDateValue?.value, "days").valueOf() / 1000),
+        expireTime: expiredDateValue?.value,
         tokenOrder: item.tokenOrder,
         collection: item.contractAddress,
         image: item.image, //needed for checkout modal
