@@ -10,21 +10,21 @@ export enum FUEL_TYPE {
   FUELET,
 }
 
-const gatewayType: any = storage.getItem(FuelGatewayType);
-let gateway: any;
+let gatewayType: any = storage.getItem(FuelGatewayType);
 
 export const useFuelExtension = () => {
   const fuelet = useFuelet()[0];
   const fuel = useFuel()[0];
-  gateway = gatewayType === FUEL_TYPE.FUELET ? fuelet : fuel;
 
   const setGatewayType = (type: FUEL_TYPE) => {
     storage.setItem(FuelGatewayType, type);
-    gateway = type === FUEL_TYPE.FUELET ? fuelet : fuel;
+    gatewayType = type;
   };
 
   return {
-    gateway,
+    selectedGateway: () => {
+      return [fuel, fuelet][gatewayType];
+    },
     setGatewayType,
   };
 };

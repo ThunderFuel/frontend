@@ -12,8 +12,7 @@ export const useWallet = () => {
   const dispatch = useAppDispatch();
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
-  const { setGatewayType, gateway: fuel } = useFuelExtension();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { setGatewayType, selectedGateway: fuel } = useFuelExtension();
 
   const hasEnoughFunds = async () => {
     try {
@@ -27,14 +26,12 @@ export const useWallet = () => {
   };
 
   const getConnectionStatus = async () => {
-    console.log("musa", fuel);
-
-    return fuel?.isConnected();
+    return fuel()?.isConnected();
   };
 
   const getAccounts = async () => {
     try {
-      const accounts = await fuel.accounts();
+      const accounts = await fuel().accounts();
 
       return accounts[0];
     } catch (e: any) {
@@ -43,7 +40,7 @@ export const useWallet = () => {
   };
 
   const getProvider = async () => {
-    return fuel.getProvider();
+    return fuel().getProvider();
   };
 
   const getBalance = async () => {
@@ -63,25 +60,28 @@ export const useWallet = () => {
 
   const walletConnect = async (type: FUEL_TYPE = FUEL_TYPE.FUEL) => {
     setGatewayType(type);
-
     if (!isConnected) {
       try {
-        await fuel.connect().then((connected: any) => {
-          getAccounts().then((fuelAddress) => {
-            dispatch(setAddress(fuelAddress));
-            if (fuelAddress !== null)
-              fuel.getWallet(fuelAddress).then((wallet: any) => {
-                if (wallet !== null)
-                  userService.userCreate(wallet.address?.toB256()).then((user) => {
-                    dispatch(setUser(user.data));
-                    dispatch(setWallet(wallet));
+        await fuel()
+          .connect()
+          .then((connected: any) => {
+            getAccounts().then((fuelAddress) => {
+              dispatch(setAddress(fuelAddress));
+              if (fuelAddress !== null)
+                fuel()
+                  .getWallet(fuelAddress)
+                  .then((wallet: any) => {
+                    if (wallet !== null)
+                      userService.userCreate(wallet.address?.toB256()).then((user) => {
+                        dispatch(setUser(user.data));
+                        dispatch(setWallet(wallet));
+                      });
                   });
-              });
-            dispatch(setIsConnected(connected));
+              dispatch(setIsConnected(connected));
 
-            return connected;
+              return connected;
+            });
           });
-        });
       } catch (e) {
         useErrorModal(e);
       }
@@ -92,7 +92,7 @@ export const useWallet = () => {
 
   const walletDisconnect = async () => {
     try {
-      await fuel.disconnect();
+      await fuel().disconnect();
       dispatch(setIsConnected(false));
     } catch (e) {
       console.log(e);
