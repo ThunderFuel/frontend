@@ -6,10 +6,9 @@ import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
 import { useFuelet } from "hooks/useFuelet";
 import { toggleWalletModal } from "store/walletSlice";
-import { FUEL_TYPE } from "../../hooks/useFuelExtension";
 
 export const ConnectWallet = () => {
-  const { walletConnect } = useWallet();
+  const { walletConnectFuelet, walletConnectFuel } = useWallet();
   const dispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, fuelError, fuelLoading] = useFuel();
@@ -27,7 +26,7 @@ export const ConnectWallet = () => {
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
           {fuelError === "" ? (
-            <Button className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100" onClick={() => walletConnect().then((res) => res ?? dispatch(toggleWalletModal()))}>
+            <Button className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100" onClick={() => walletConnectFuel().then((res) => res ?? dispatch(toggleWalletModal()))}>
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
@@ -48,7 +47,7 @@ export const ConnectWallet = () => {
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100"
               onClick={() => {
-                walletConnect(FUEL_TYPE.FUELET).then((res) => {
+                walletConnectFuelet().then((res) => {
                   if (res) {
                     dispatch(toggleWalletModal());
                   }

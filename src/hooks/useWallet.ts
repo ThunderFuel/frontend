@@ -58,8 +58,17 @@ export const useWallet = () => {
     }
   };
 
-  const walletConnect = async (type: FUEL_TYPE = FUEL_TYPE.FUEL) => {
-    setGatewayType(type);
+  const walletConnectFuel = () => {
+    setGatewayType(FUEL_TYPE.FUEL);
+
+    return walletConnect();
+  };
+  const walletConnectFuelet = () => {
+    setGatewayType(FUEL_TYPE.FUELET);
+
+    return walletConnect();
+  };
+  const walletConnect = async () => {
     if (!isConnected) {
       try {
         await fuel()
@@ -105,5 +114,7 @@ export const useWallet = () => {
     getBalance,
     hasEnoughFunds,
     getConnectionStatus,
+    walletConnectFuel,
+    walletConnectFuelet,
   };
 };
