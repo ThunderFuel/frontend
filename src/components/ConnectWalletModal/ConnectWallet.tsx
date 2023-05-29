@@ -6,6 +6,7 @@ import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
 import { useFuelet } from "hooks/useFuelet";
 import { toggleWalletModal } from "store/walletSlice";
+import { FUEL_TYPE } from "../../hooks/useFuelExtension";
 
 export const ConnectWallet = () => {
   const { walletConnect } = useWallet();
@@ -47,7 +48,7 @@ export const ConnectWallet = () => {
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100"
               onClick={() => {
-                walletConnect("Fuelet").then((res) => {
+                walletConnect(FUEL_TYPE.FUELET).then((res) => {
                   if (res) {
                     dispatch(toggleWalletModal());
                   }

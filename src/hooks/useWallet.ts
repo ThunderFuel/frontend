@@ -5,23 +5,16 @@ import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
-import { useFuelet } from "./useFuelet";
-import { useFuel } from "./useFuel";
-
-let fuel: any;
+import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
+  const { setGatewayType, gateway: fuel } = useFuelExtension();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fuelet = useFuelet()[0];
-  const _fuel = useFuel()[0];
 
-  const setFuel = (type: any) => {
-    fuel = type === "Fuelet" ? fuelet : _fuel;
-  };
   const hasEnoughFunds = async () => {
     try {
       const provider = await getProvider();
@@ -34,6 +27,8 @@ export const useWallet = () => {
   };
 
   const getConnectionStatus = async () => {
+    console.log("musa", fuel);
+
     return fuel?.isConnected();
   };
 
@@ -66,8 +61,8 @@ export const useWallet = () => {
     }
   };
 
-  const walletConnect = async (type = "Fuel") => {
-    setFuel(type);
+  const walletConnect = async (type: FUEL_TYPE = FUEL_TYPE.FUEL) => {
+    setGatewayType(type);
 
     if (!isConnected) {
       try {
