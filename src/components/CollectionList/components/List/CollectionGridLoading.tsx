@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 import { AssetLoadingGrid } from "assets";
 
-const CollectionGridLoading = ({ page }: { page: number }) => {
+const CollectionGridLoading = ({ page }: { page?: number }) => {
   const { displayType } = useCollectionListContext();
   const collectionItems = new Array(20 * (page ?? 1)).fill(1);
   // const collectionItems = new Array(20).fill(1);

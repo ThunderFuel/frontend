@@ -3,7 +3,7 @@ import Button from "components/Button";
 import { IconCancel, IconClock, IconOffer, IconWarning } from "icons";
 import RightMenu from "../components/RightMenu";
 import { useAppDispatch, useAppSelector } from "store";
-import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu, setYourCurrentOffer } from "store/NFTDetailsSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
@@ -98,12 +98,7 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(
-                setCheckout({
-                  item: item,
-                  onCheckoutComplete: onBack,
-                })
-              );
+              dispatch(setYourCurrentOffer(item.price));
               dispatch(setRightMenu(RightMenuType.UpdateOffer));
             }}
           >

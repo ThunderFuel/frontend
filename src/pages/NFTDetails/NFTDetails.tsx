@@ -11,7 +11,7 @@ import Activity from "./rightMenus/Activity";
 import Bids from "./rightMenus/Bids";
 import Offers from "./rightMenus/Offers";
 import { useAppDispatch, useAppSelector } from "store";
-import { RightMenuType, setIsLiked, setPresetPrice, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
+import { RightMenuType, setIsLiked, setPresetPrice, setRightMenu, setSelectedNFT, setYourCurrentOffer } from "store/NFTDetailsSlice";
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
@@ -65,6 +65,7 @@ const NFTDetails = () => {
     setIsActive(false);
     dispatch(setRightMenu(RightMenuType.None));
     dispatch(setPresetPrice(""));
+    dispatch(setYourCurrentOffer(""));
   };
 
   const Component = React.useMemo(() => {

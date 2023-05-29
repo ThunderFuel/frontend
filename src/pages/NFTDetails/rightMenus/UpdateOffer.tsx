@@ -10,7 +10,6 @@ import { useWallet } from "hooks/useWallet";
 import { getDateFromExpirationTime, toGwei } from "utils";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
-import dayjs from "dayjs";
 import Balances from "../components/Balances";
 import userService from "api/user/user.service";
 
@@ -69,8 +68,11 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
                 type: CheckoutType.UpdateOffer,
                 item: currentItem,
                 price: offer,
-                expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed(),
-                onCheckoutComplete: onBack,
+                expireTime: expirationTime?.value,
+                onCheckoutComplete: () => {
+                  dispatch(setCheckout({ item: {} }));
+                  onBack();
+                },
               })
             );
             dispatch(toggleCheckoutModal());
