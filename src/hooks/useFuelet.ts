@@ -6,7 +6,7 @@ const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
 export function useFuelet() {
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
-  const [fuel, setFuel] = useState<Window["fuelet"]>(globalWindow.fuel);
+  const [fuel, setFuel] = useState<Window["fuelet"]>(globalWindow.fuelet);
 
   useEffect(() => {
     const onFueletLoaded = () => {

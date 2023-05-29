@@ -12,7 +12,7 @@ export const useWallet = () => {
   const dispatch = useAppDispatch();
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
-  const { setGatewayType, selectedGateway: fuel } = useFuelExtension();
+  const { setGatewayType, selectedGateway: fuel, clearGatewayType } = useFuelExtension();
 
   const hasEnoughFunds = async () => {
     try {
@@ -103,6 +103,7 @@ export const useWallet = () => {
     try {
       await fuel().disconnect();
       dispatch(setIsConnected(false));
+      clearGatewayType();
     } catch (e) {
       console.log(e);
     }

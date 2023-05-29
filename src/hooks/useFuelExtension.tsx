@@ -3,7 +3,7 @@ import { useFuel } from "./useFuel";
 import { useLocalStorage } from "./useLocalStorage";
 
 const storage = useLocalStorage();
-const FuelGatewayType = "fuelGatewayType";
+const FuelGatewayType = "thunder_fuel_gateway_type";
 
 export enum FUEL_TYPE {
   FUEL,
@@ -20,11 +20,16 @@ export const useFuelExtension = () => {
     storage.setItem(FuelGatewayType, type);
     gatewayType = type;
   };
+  const clearGatewayType = () => {
+    storage.removeItem(FuelGatewayType);
+    gatewayType = null;
+  };
 
   return {
     selectedGateway: () => {
       return [fuel, fuelet][gatewayType];
     },
     setGatewayType,
+    clearGatewayType,
   };
 };
