@@ -9,9 +9,9 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
-import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { NativeAssetId, Provider } from "fuels";
+import { approveAndExecuteOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
+import { Provider } from "fuels";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
 
@@ -61,8 +61,9 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       const prov = new Provider("https://beta-3.fuel.network/graphql");
       setContracts(contracts, prov);
 
-      console.log(order);
-      executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
+      console.log({ exchangeContractId, provider, wallet, order, transferManagerContractId });
+
+      approveAndExecuteOrder(exchangeContractId, provider, wallet, order, transferManagerContractId)
         .then((res) => {
           console.log(res);
           if (res.transactionResult.status.type === "success") {

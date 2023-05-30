@@ -13,7 +13,7 @@ import { addressFormat } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toB256 } from "fuels";
 import { safeTransferFrom } from "thunder-sdk/src/contracts/erc721";
-import { ERC721ContractId, provider } from "global-constants";
+import { provider } from "global-constants";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -24,18 +24,27 @@ const checkoutProcessTexts = {
   description3: "Your NFT is succesfully transferred.",
 };
 
-const Footer = ({ address, callback, animationStarted, onClose }: { address: string; callback: any; animationStarted: boolean; onClose: any }) => {
+const Footer = ({ address, callback, animationStarted, onClose, approved }: { approved: boolean; address: string; callback: any; animationStarted: boolean; onClose: any }) => {
   return (
-    <div className={clsx("transition-all duration-300 overflow-hidden", !animationStarted ? "h-fit opacity-100" : "h-0 opacity-0")}>
-      <div className={"flex flex-col gap-y-[10px] w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest" disabled={address === ""} onClick={callback}>
-          TRANSFER
-        </Button>
-        <Button className="btn-secondary w-full tracking-widest" onClick={onClose}>
-          CLOSE
-        </Button>
+    <>
+      <div className={clsx("transition-all duration-300 overflow-hidden", !animationStarted ? "h-fit opacity-100" : "h-0 opacity-0")}>
+        <div className={"flex flex-col gap-y-[10px] w-full items-center justify-center p-5"}>
+          <Button className="w-full tracking-widest" disabled={address === ""} onClick={callback}>
+            TRANSFER
+          </Button>
+          <Button className="btn-secondary w-full tracking-widest" onClick={onClose}>
+            CLOSE
+          </Button>
+        </div>
       </div>
-    </div>
+      <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
+        <div className={"flex w-full items-center justify-center p-5"}>
+          <Button className="w-full tracking-widest" onClick={onClose}>
+            DONE
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -53,7 +62,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
     let tempAddress = "";
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
     const toAddress = tempAddress === "" ? address : tempAddress;
-    safeTransferFrom(ERC721ContractId, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
+    safeTransferFrom(selectedNFT.collection.contractAddress, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
       .then((res) => {
         console.log(res);
         nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
@@ -111,7 +120,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
       title="Transfer Your NFT"
       show={show}
       onClose={onClose}
-      footer={<Footer address={address} animationStarted={showTransactionAnimation} callback={setshowTransactionAnimation} onClose={onClose} />}
+      footer={<Footer approved={approved} address={address} animationStarted={showTransactionAnimation} callback={setshowTransactionAnimation} onClose={onClose} />}
     >
       <div className="flex flex-col p-5">
         {/*TODO price yerine string yazilabilmeli */}

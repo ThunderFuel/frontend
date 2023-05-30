@@ -27,13 +27,14 @@ const main = async (contractId: string, amount: BigNumberish) => {
 const approve = async (contractId: string) => {
     const provider = "https://beta-3.fuel.network/graphql"
     const okanWallet = "0xda095454134996e62333131a81b77794f3edca42036dff09a51ca72ab6ebc1d2"
+    const okanWallet2 = "0x4e9f62e8c97d08266af1c554219d53696350a03b34dfbe2b4c86eb8493efb705"
     const tm = "0x44f93062f0e8ce54973a1c9fe972a25e3845a798adf892059bfe67c3576a1f22"
 
-    const { transactionResult } = await setApprovalForAll(contractId, provider, okanWallet, tm, true);
+    const { transactionResult } = await setApprovalForAll(contractId, provider, okanWallet2, tm, true);
     return transactionResult.status.type
 }
 
-approve(nft9)
+approve(nft13)
     .then((res) => console.log(`nft1: ${res}`))
     .catch((err) => console.log(err))
 
