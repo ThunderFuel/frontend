@@ -10,6 +10,7 @@ const Activity = () => {
   const [activities, setActivities] = useState<any>([]);
   const [pagination, setPagination] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [currentFilter, setCurrentFilter] = useState<any>(null);
 
   const filters = collectionService.getActivityFilters();
 
@@ -47,7 +48,7 @@ const Activity = () => {
     if (params.page > 1) {
       setIsLoading(true);
       try {
-        const response = await getActivityItems({ page: params.page });
+        const response = await getActivityItems({ page: params.page, ...currentFilter });
 
         setActivities((prevState: any[]) => [...prevState, ...(response.data as any)]);
       } finally {
@@ -56,6 +57,7 @@ const Activity = () => {
     }
   };
   const onChangeFilterValue = (params: any) => {
+    setCurrentFilter(params);
     fetchActivity(params);
   };
 
