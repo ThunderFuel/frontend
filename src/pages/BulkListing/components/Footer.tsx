@@ -9,6 +9,7 @@ import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
 import { formatPrice } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { removeAll } from "store/bulkListingSlice";
 
 const Footer = ({ items, prices }: any) => {
   const dispatch = useAppDispatch();
@@ -43,6 +44,10 @@ const Footer = ({ items, prices }: any) => {
         type: CheckoutType.BulkListing,
         bulkListItems: bulkListingRequest,
         bulkUpdateItems: updateBulkListingRequest,
+        onCheckoutComplete: () => {
+          navigate(PATHS.PROFILE);
+          dispatch(removeAll());
+        },
       })
     );
     dispatch(toggleCheckoutModal());
