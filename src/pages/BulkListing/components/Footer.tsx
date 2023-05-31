@@ -8,7 +8,7 @@ import { PATHS } from "router/config/paths";
 import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
 import { formatPrice } from "utils";
-import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, removeBulkItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { removeAll } from "store/bulkListingSlice";
 
 const Footer = ({ items, prices }: any) => {
@@ -46,6 +46,7 @@ const Footer = ({ items, prices }: any) => {
         bulkUpdateItems: updateBulkListingRequest,
         onCheckoutComplete: () => {
           navigate(PATHS.PROFILE);
+          dispatch(removeBulkItems());
           dispatch(removeAll());
         },
       })

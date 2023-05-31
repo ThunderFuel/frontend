@@ -5,7 +5,7 @@ import Button from "components/Button";
 import Modal from "components/Modal";
 
 import { IconWarning } from "icons";
-import { useAppDispatch, useAppSelector } from "store";
+import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
@@ -14,10 +14,6 @@ import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { NativeAssetId, Provider } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import collectionsService from "api/collections/collections.service";
-import UseNavigate from "hooks/useNavigate";
-import { PATHS } from "router/config/paths";
-import { removeBulkItems } from "store/checkoutSlice";
-import { removeAll } from "../../../store/bulkListingSlice";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -43,8 +39,6 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
-  const dispatch = useAppDispatch();
-  const navigate = UseNavigate();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -52,8 +46,6 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const bulkItems = bulkListItems.concat(bulkUpdateItems);
 
   const onComplete = async () => {
-    console.log({ bulkUpdateItems, bulkListItems });
-
     const _bulkListItems = bulkListItems.map((item: any) => {
       return { ...item, expireTime: formatTimeBackend(item.expireTime) };
     });
@@ -129,15 +121,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
-          <Button
-            className="btn-secondary m-5"
-            onClick={() => {
-              onClose();
-              navigate(PATHS.PROFILE);
-              dispatch(removeBulkItems());
-              dispatch(removeAll());
-            }}
-          >
+          <Button className="btn-secondary m-5" onClick={onClose}>
             CLOSE
           </Button>
         </div>
