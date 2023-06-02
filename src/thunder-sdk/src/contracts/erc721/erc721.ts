@@ -31,10 +31,10 @@ export async function mint(contractId: string, provider: string, wallet: string 
   try {
     const contract = await setup(contractId, provider, wallet);
     const _to: IdentityInput = { Address: { value: to } };
-    const { transactionResult, transactionResponse } = await contract.functions.mint(amount, _to).txParams({ gasPrice: 1 }).call();
-    return { transactionResponse, transactionResult };
+    const { transactionResult, transactionResponse, logs } = await contract.functions.mint(amount, _to).txParams({ gasPrice: 1 }).call();
+    return { transactionResponse, transactionResult, logs };
   } catch (err: any) {
-    throw Error("ERC721: mint failed");
+    throw Error(`ERC721: mint failed ${err}`);
   }
 }
 
