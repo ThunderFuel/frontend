@@ -153,7 +153,7 @@ const ButtonMint = () => {
         console.log(res);
         if (res?.transactionResult.status.type === "success") {
           /*TODO HANDLE SUCCESS*/
-          collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: user.walletAddress }).then((res) => console.log("MINTED", res));
+          collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: user.walletAddress, logs: res.logs }).then((res) => console.log("MINTED", res));
         }
       })
       .catch((e) => {
