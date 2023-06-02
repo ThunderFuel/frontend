@@ -10,8 +10,8 @@ import { useAppDispatch, useAppSelector } from "store";
 import { getDefaultAvatarSrc } from "components/Avatar/Avatar";
 import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
-import { PATHS } from "router/config/paths";
 import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(user as any);
 
   const onChange = (field: string, value: any) => {
+    console.log(field, value);
     setUserInfo((prevState: any) => ({ ...prevState, ...{ [field]: value } }));
   };
   const onChangeCoverImage = async (imageUrl: string) => {
@@ -38,6 +39,7 @@ const Profile = () => {
 
   const onSubmit = async () => {
     try {
+      console.log(userInfo);
       const data = {
         id: user.id,
         bio: userInfo.bio,
@@ -54,10 +56,9 @@ const Profile = () => {
       };
       const response = await userService.userUpdate(data);
       dispatch(setUser(response.data));
+      navigate(PATHS.PROFILE);
     } catch (e) {
       console.log(e);
-    } finally {
-      navigate(PATHS.PROFILE);
     }
   };
 
