@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Tab from "components/Tab";
 import dropService, { DROP_STATUS } from "api/drop/drop.service";
 import Item from "./Item";
+import NotFound from "components/NotFound";
 
 const List = () => {
   const [items, setItems] = useState<any>([]);
@@ -39,6 +40,11 @@ const List = () => {
             <Item key={k} item={item} />
           ))}
         </div>
+        {!items.length && (
+          <div className="flex-center">
+            <NotFound />
+          </div>
+        )}
       </div>
     </div>
   );
