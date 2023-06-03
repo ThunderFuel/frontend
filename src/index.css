@@ -63,6 +63,13 @@ body {
     @apply whitespace-nowrap text-ellipsis overflow-hidden flex-1;
   }
 
+  .text-overflow-3 {
+    @apply text-ellipsis overflow-hidden flex-1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
   .container-fluid {
     @apply w-full px-5 lg:px-10 3xl:m-auto 3xl:max-w-[1980px];
   }

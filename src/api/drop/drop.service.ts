@@ -9,16 +9,16 @@ export enum BLOCK_TYPE {
 }
 
 export enum DROP_STATUS {
-  MINT_NOW,
-  MIN_SOON,
-  MIN_OUT,
+  MINT_LIVE,
+  MINT_SOON,
+  MINT_OUT,
 }
 
 export default {
   getDropDetail: (dropId: any = 1) => {
     return ThunderURL.get<any>(`v1/drop/detail?id=${dropId}`);
   },
-  getDrops: () => {
-    return ThunderURL.get<any[]>("v1/drop/drops");
+  getDrops: (params: any) => {
+    return ThunderURL.get<any[]>("v1/drop/drops", { params });
   },
 };
