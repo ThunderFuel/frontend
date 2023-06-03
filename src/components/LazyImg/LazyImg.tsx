@@ -1,27 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
-import { AssetDefaultImageBg } from "assets";
+import React, { useEffect, useRef } from "react";
 import Img from "../Img";
+import { AssetDefaultImageBg } from "assets";
 
-const LazyImg = (props: any) => {
-  const [inView, setInView] = useState(false);
-  const placeholderRef = useRef<any>();
+const LazyImg = ({ src, ...etc }: any) => {
+  const ref = useRef<any>();
   useEffect(() => {
     const observer = new IntersectionObserver((entries, obs) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          setInView(true);
+          ref.current.src = src;
           obs.disconnect();
         }
       }
     }, {});
-    observer.observe(placeholderRef.current);
+    observer.observe(ref.current);
 
     return () => {
       observer.disconnect();
     };
   }, []);
 
-  return inView ? <Img {...props} alt={props.alt || ""} /> : <img {...props} ref={placeholderRef} src={AssetDefaultImageBg} />;
+  return <Img {...etc} src={AssetDefaultImageBg} ref={ref} />;
 };
 
 export default LazyImg;
