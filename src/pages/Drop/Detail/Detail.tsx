@@ -9,9 +9,12 @@ import { useParams } from "react-router-dom";
 
 import "./Detail.css";
 import Properties from "./components/Properties";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
 
 const Detail = () => {
   const { dropId } = useParams();
+  const navigate = useNavigate();
 
   const [dropDetail, setDropDetail] = useState<any>({
     team: [],
@@ -21,12 +24,17 @@ const Detail = () => {
   });
 
   useEffect(() => {
-    dropService.getDropDetail(dropId).then((response: any) => {
-      const dropDetail = response.data;
-      setDropDetail(dropDetail);
+    dropService
+      .getDropDetail(dropId)
+      .then((response: any) => {
+        const dropDetail = response.data;
+        setDropDetail(dropDetail);
 
-      document.body.classList.add("drop", dropDetail.className);
-    });
+        document.body.classList.add("drop", dropDetail.className);
+      })
+      .catch(() => {
+        navigate(PATHS.DROPS);
+      });
 
     return () => {
       document.body.removeAttribute("class");
