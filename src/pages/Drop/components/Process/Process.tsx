@@ -13,8 +13,7 @@ const Process = ({ available, taken }: any) => {
       <div className="flex justify-between">
         <span className="text-headline-02 text-opacity-50">AVAILABLE</span>
         <h6 className="text-h6 text-white">
-          {taken ? `${numberFormat(taken)} / ` : null}
-          {numberFormat(available)}
+          {numberFormat(taken)} {" / "} {numberFormat(available)}
         </h6>
       </div>
       <div className="process">

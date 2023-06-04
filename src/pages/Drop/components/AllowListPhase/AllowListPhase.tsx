@@ -1,61 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
-import { createEvent, DateArray } from "ics";
+import React from "react";
 
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
-import { countDownTimer, dateFormat, downloadFile, formatPrice, randomIntFromInterval } from "utils";
-import { IconCalendar, IconMinus, IconPlus, IconToken } from "icons";
-import Button from "components/Button";
+import { dateFormat, formatPrice } from "utils";
 import { useDropDetailContext } from "../../Detail/DetailContext";
-import Img from "components/Img/Img";
-import Marquee from "react-fast-marquee";
 import { BLOCK_TYPE } from "api/drop/drop.service";
 import clsx from "clsx";
-import { mint } from "thunder-sdk/src/contracts/erc721";
-import { useAppSelector } from "store";
-import { ERC721ContractId, provider } from "global-constants";
-import collectionsService from "api/collections/collections.service";
 import Process from "../Process";
+import Gallery from "./components/Gallery";
+import Countdown from "./components/Countdown";
+import ButtonMint from "./components/ButtonMint";
+import ButtonCalendar from "./components/ButtonCalendar";
 
-const Countdown = ({ startDate }: any) => {
-  const [timer, setTimer] = React.useReducer(
-    (prevState: any, nextState: any) => {
-      return { ...prevState, ...nextState };
-    },
-    { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  );
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      const remainingTime = countDownTimer(startDate);
-      setTimer(remainingTime);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <ul className="countdown">
-      <li>
-        {timer.days}
-        <span>DAYS</span>
-      </li>
-      <li>
-        {timer.hours}
-        <span>HOURS</span>
-      </li>
-      <li>
-        {timer.minutes}
-        <span>MINS</span>
-      </li>
-      <li>
-        {timer.seconds}
-        <span>SECS</span>
-      </li>
-    </ul>
-  );
-};
 const RemainingTime = ({ startDate }: any) => {
   return (
     <div className="flex items-center justify-between">
@@ -65,141 +22,34 @@ const RemainingTime = ({ startDate }: any) => {
   );
 };
 
-const ButtonCalendar = ({ title, startDate, endDate }: any) => {
-  const calendarTimeFormat = (date: number) => {
-    return dayjs(date)
-      .format("YYYY-M-D-H-m")
-      .split("-")
-      .map((t) => Number(t)) as DateArray;
-  };
-  const onCreateCalendar = async () => {
-    const filename = "ExampleEvent.ics";
-    const file = await new Promise((resolve, reject) => {
-      const calendarStart = calendarTimeFormat(startDate);
-      const calendarEnd = calendarTimeFormat(endDate);
-
-      const event = {
-        productId: randomIntFromInterval().toString(),
-        uid: randomIntFromInterval().toString(),
-        title: title,
-        start: calendarStart,
-        end: calendarEnd,
-      };
-
-      createEvent(event, (error, value) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(new File([value], filename, { type: "plain/text" }));
-      });
-    });
-    downloadFile(file as File);
-  };
-
-  return (
-    <Button className="w-full btn-primary" onClick={onCreateCalendar}>
-      add to calendar <IconCalendar />
-    </Button>
-  );
-};
-
-const Gallery = ({ images }: any) => {
-  return (
-    <Marquee className="flex gap-5" pauseOnHover={true}>
-      <div className="flex gap-5">
-        {images.map((item: any, k: number) => (
-          <Img className="w-72 h-72" key={`${k}`} src={item} />
-        ))}
-      </div>
-    </Marquee>
-  );
-};
-
-const InputMint = ({ onChange }: any) => {
-  const [value, setValue] = useState(1);
-  const onUpdateValue = (number: number) => {
-    const val = value + number;
-    if (val < 1 || val > 5) {
-      return false;
-    }
-
-    setValue(val);
-    onChange(val);
-  };
-
-  return (
-    <div className="flex items-center border border-white border-opacity-10 rounded-md">
-      <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
-      <div className="flex flex-col items-center">
-        <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
-          <IconPlus className={value === 5 ? "opacity-50" : ""} />
-        </span>
-        <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
-          <IconMinus className={value === 1 ? "opacity-50" : ""} />
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const ButtonMint = () => {
-  const { user, wallet } = useAppSelector((state) => state.wallet);
-  const [amount, setAmount] = useState(1);
-
-  const tempContract = "0x3cf27804d6a1c653dcce062b6f33937a815ee7ae7471787b3c0a661c22d45947";
-  const onClick = () => {
-    mint(ERC721ContractId, provider, wallet, amount, user.walletAddress)
-      .then((res) => {
-        console.log(res);
-        if (res?.transactionResult.status.type === "success") {
-          /*TODO HANDLE SUCCESS*/
-          collectionsService.mint({ contractAddress: tempContract, count: amount, walletAddress: user.walletAddress, logs: res.logs }).then((res) => console.log("MINTED", res));
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        /*TODO HANDLE ERROR*/
-      });
-  };
-
-  const onChange = (e: any) => setAmount(e);
-
-  return (
-    <div className="flex gap-2">
-      <InputMint onChange={onChange} />
-      <Button className="w-full btn-primary" onClick={onClick}>
-        Mint now <IconToken />
-      </Button>
-    </div>
-  );
-};
-
 const AllowListPhase = () => {
   const { dropDetail } = useDropDetailContext();
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
-  const allowListPhase = dropDetail.allowListPhase?.[0];
   const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
-  const isAvailable = dayjs().valueOf() > allowListPhase.startDate;
 
-  return (
-    <div className="allowlist-phase">
-      <div className="header">
-        <h5 className="text-h5">Allowlist Phase</h5>
-        <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
-          <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Now" : dateFormat(allowListPhase.startDate, "DD MMM YYYY hh:ss A")}</li>
-          <li>{formatPrice(allowListPhase.price)} ETH</li>
-          <li>{allowListPhase.walletCount} Per Wallet</li>
-        </ul>
+  return dropDetail?.allowListPhase.map((phase: any, i: number) => {
+    const isAvailable = dayjs().valueOf() > phase.startDate;
+
+    return (
+      <div className="allowlist-phase" key={i}>
+        <div className="header">
+          <h5 className="text-h5">{phase.title ?? "Allowlist Phase"}</h5>
+          <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
+            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Now" : dateFormat(phase.startDate, "DD MMM YYYY hh:ss A")}</li>
+            <li>{formatPrice(phase.price)} ETH</li>
+            <li>{phase.walletCount} Per Wallet</li>
+          </ul>
+        </div>
+        <div className="body">
+          {isAvailable ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={phase.startDate} />}
+          <Process available={phase.available} taken={phase.taken} />
+        </div>
+        <div className="footer">{isAvailable ? <ButtonMint /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}</div>
       </div>
-      <div className="body">
-        {isAvailable ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={allowListPhase.startDate} />}
-        <Process available={allowListPhase.available} taken={allowListPhase.taken} />
-      </div>
-      <div className="footer">{isAvailable ? <ButtonMint /> : <ButtonCalendar />}</div>
-    </div>
-  );
+    );
+  });
 };
 
 export default AllowListPhase;
