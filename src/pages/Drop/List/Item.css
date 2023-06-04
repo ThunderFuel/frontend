@@ -3,6 +3,7 @@
   @apply flex flex-col justify-between px-5 pt-5 pb-10;
   @apply text-white;
   min-height: 560px;
+  @apply bg-bg;
 }
 
 .drop-item-container-bg {

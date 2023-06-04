@@ -458,3 +458,73 @@ body {
   --th-red: 230 64 64;
   --th-orange: 230 144 64;
 }
+
+.drop #layout-header {
+  --th-gray: 255 255 255;
+}
+
+.drop #layout-header .border-gray,
+.drop #layout-header .lg\:border-gray,
+.drop #layout-header .divide-gray > :not([hidden]) ~ :not([hidden]),
+.drop #layout-header .tab,
+.drop #layout-header .tab li,
+.drop #layout-header .border-y.border-gray {
+  --tw-border-opacity: 0.1;
+  --tw-divide-opacity: 0.1;
+}
+
+.drop .search-group-title {
+  --tw-text-opacity: 0.5;
+}
+
+.drop .search-group-item {
+  --tw-bg-opacity: 0.1;
+}
+
+.drop-item-container.drop-primary,
+.drop.drop-primary {
+  --th-bg: 122 52 155;
+  --th-bg-light: 122 52 155;
+  --th-gray-dark: 122 52 155;
+  --th-gray-light: 255 255 255;
+}
+
+.drop-item-container.drop-secondary,
+.drop.drop-secondary {
+  --th-bg: 39 59 66;
+  --th-bg-light: 39 59 66;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop-item-container.drop-blue,
+.drop.drop-blue {
+  --th-bg: 0 112 207;
+  --th-bg-light: 0 112 207;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop-item-container.drop-gray-light,
+.drop.drop-gray-light {
+  --th-bg: 65 65 65;
+  --th-bg-light: 65 65 65;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop-item-container.drop-gray,
+.drop.drop-gray {
+  --th-bg: 37 37 37;
+  --th-bg-light: 37 37 37;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop-item-container.drop-police-blue,
+.drop.drop-police-blue {
+  --th-bg: 62 72 99;
+  --th-bg-light: 62 72 99;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
