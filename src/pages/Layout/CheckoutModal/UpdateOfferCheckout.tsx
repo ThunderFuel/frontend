@@ -5,7 +5,7 @@ import Button from "components/Button";
 import CartItem from "components/CartItem";
 import Modal from "components/Modal";
 
-import { IconWarning } from "icons";
+import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
@@ -45,6 +45,8 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
+  const [currentBidBalance, setCurrentBidBalance] = useState(0);
 
   const onComplete = () => {
     offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then((res) => {
@@ -68,14 +70,15 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
       userService.getBidBalance(user.id).then((res) => {
         const currentBidBalance = res.data;
+        setCurrentBidBalance(currentBidBalance);
         if (currentBidBalance < checkoutPrice) {
-          const requiredBidAmount = checkoutPrice - currentBidBalance;
+          const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
           depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.tokenUpdateOffer({ id: currentItem?.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) });
-                userService.updateBidBalance(user.id, checkoutPrice);
+                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
                 setApproved(true);
               }
             })
@@ -143,6 +146,17 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         <CartItem text={"Your Offer"} name={selectedNFT?.name} image={selectedNFT?.image} price={checkoutPrice} id={0}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
+      {bidBalanceUpdated && approved && (
+        <div className="flex gap-x-2 p-[10px] m-5 rounded-[5px] bg-bg-light border border-gray">
+          <IconInfo color="orange" />
+          <div className="flex w-full flex-col gap-y-[6px] text-head6 font-spaceGrotesk text-white">
+            {(checkoutPrice - currentBidBalance).toFixed(9)} ETH added to your balance.
+            <span className="text-bodySm text-gray-light">
+              In order to make this offer {(checkoutPrice - currentBidBalance).toFixed(9)} ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.
+            </span>
+          </div>
+        </div>
+      )}
     </Modal>
   );
 };

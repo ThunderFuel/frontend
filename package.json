@@ -35,6 +35,7 @@
     "timeago.js": "^4.0.2",
     "typescript": "^4.6.3",
     "web-vitals": "^2.1.4",
+    "web3": "^1.10.0",
     "yup": "^0.32.11"
   },
   "scripts": {
