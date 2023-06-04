@@ -9,7 +9,6 @@ import "./CollectionItem.css";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import { PATHS } from "router/config/paths";
 import { useCollectionListContext } from "../../CollectionListContext";
-import Img from "components/Img";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
 import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
@@ -18,7 +17,8 @@ import { toggleWalletModal } from "store/walletSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
-import { formatPrice } from "../../../../utils";
+import { formatPrice } from "utils";
+import LazyImg from "../../../LazyImg";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -172,7 +172,9 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
             ) : null
           ) : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
-            {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
+            {collection.image !== null && (
+              <LazyImg alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+            )}
           </div>
         </div>
         <div className="p-2.5 border-b border-b-gray">

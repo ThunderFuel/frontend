@@ -61,7 +61,7 @@ const Tab = () => {
   }, [location]);
 
   return (
-    <div className="border-b border-gray relative z-20">
+    <div className="border-b border-gray relative z-[21]">
       <div className="inline-flex -my-[1px]">
         <TabBase
           initTab={initTab}

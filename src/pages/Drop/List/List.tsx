@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Tab from "components/Tab";
-import dropService from "api/drop/drop.service";
+import dropService, { DROP_STATUS } from "api/drop/drop.service";
 import Item from "./Item";
-
-enum Type {
-  Minting_Now,
-  Minting_Soon,
-  Minted_Out,
-}
+import NotFound from "components/NotFound";
 
 const List = () => {
   const [items, setItems] = useState<any>([]);
-  const onTabChange = (e: any) => {
-    console.log(e);
+  const onTabChange = async (e: any) => {
+    await getDrops({ type: e });
   };
-  const getDrops = async () => {
-    const response = await dropService.getDrops();
-    console.log(response.data);
+  const getDrops = async (params = {}) => {
+    const response = await dropService.getDrops(params);
     setItems(response.data);
   };
 
@@ -32,10 +26,10 @@ const List = () => {
       <div className="border-t border-b border-gray">
         <div className="container-fluid">
           <div className="flex">
-            <Tab initTab={Type.Minting_Now} className="secondary" onChange={onTabChange}>
-              <Tab.Item id={Type.Minting_Now}>Mint Now</Tab.Item>
-              <Tab.Item id={Type.Minting_Soon}>Mint Soon</Tab.Item>
-              <Tab.Item id={Type.Minted_Out}>Mint Out</Tab.Item>
+            <Tab initTab={DROP_STATUS.MINT_LIVE} className="secondary" onChange={onTabChange}>
+              <Tab.Item id={DROP_STATUS.MINT_LIVE}>Mint Now</Tab.Item>
+              <Tab.Item id={DROP_STATUS.MINT_SOON}>Mint Soon</Tab.Item>
+              <Tab.Item id={DROP_STATUS.MINT_OUT}>Mint Out</Tab.Item>
             </Tab>
           </div>
         </div>
@@ -46,6 +40,11 @@ const List = () => {
             <Item key={k} item={item} />
           ))}
         </div>
+        {!items.length && (
+          <div className="flex-center">
+            <NotFound />
+          </div>
+        )}
       </div>
     </div>
   );
