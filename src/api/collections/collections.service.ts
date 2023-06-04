@@ -1,6 +1,5 @@
 import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
-import { AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4 } from "assets";
 import {
   ActivityItemResponse,
   CollectionFilterResponse,
@@ -13,8 +12,6 @@ import {
 } from "./collections.type";
 import { IconBid, IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
 
-const images = [AssetCollectionItem0, AssetCollectionItem1, AssetCollectionItem2, AssetCollectionItem3, AssetCollectionItem4];
-
 export enum ActivityFilters {
   Offers = 0,
   Mints = 1,
@@ -25,20 +22,6 @@ export enum ActivityFilters {
 }
 
 export default {
-  async getCollections() {
-    return [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4].map((item) => ({
-      id: item,
-      collection: `Genuine Undead #${item}`,
-      name: `Genuine Undead #${item}`,
-      image: images[item],
-      price: 1.43,
-      floor: 1.43,
-      lastSale: 0.88,
-      owner: "Apedad23",
-      timeListed: "2 hours ago",
-      isActive: item % 4 !== 0,
-    }));
-  },
   async getFilters(params: any): Promise<ApiResponse<CollectionFilterResponse>> {
     return await ThunderURL.get("v1/collection/getfilters", {
       params,
@@ -82,6 +65,9 @@ export default {
     return ThunderURL.post(`v1/floor/collectionfloor`, ids);
   },
 
+  async cancelAllListings(params: any = {}) {
+    return ThunderURL.post("v1/token/cancelalllisting", {}, { params });
+  },
   async mint(data: MintRequest): Promise<ApiResponse<any>> {
     return ThunderURL.post(`v1/collection/mint`, data);
   },

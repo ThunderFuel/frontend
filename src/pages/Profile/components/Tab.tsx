@@ -5,6 +5,9 @@ import { PATHS } from "router/config/paths";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IconDots } from "icons";
 import { useClickOutside } from "hooks/useClickOutside";
+import { useAppSelector } from "../../../store";
+import offerService from "../../../api/offer/offer.service";
+import collectionsService from "../../../api/collections/collections.service";
 
 const routes = [
   { path: PATHS.PROFILE_OWNED, name: "Owned" },
@@ -18,14 +21,39 @@ const getInitTab = () => {
   return routes.slice(1).find((route: any) => location.pathname.search(route.path) > -1)?.path;
 };
 
+enum CancelType {
+  CancelAllListings,
+  CancelAllOffers,
+  CancelAllListingsAndOffers,
+}
+
 const TabMoreDropdowns = () => {
+  const { user } = useAppSelector((state) => state.wallet);
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLLIElement>(null);
-  const items = [{ text: "Cancel All Listings" }, { text: "Cancel All Offers" }, { text: "Cancel All Listings and Offers" }];
+  const items = [
+    {
+      text: "Cancel All Listings",
+      type: CancelType.CancelAllListings,
+    },
+    { text: "Cancel All Offers", type: CancelType.CancelAllOffers },
+    { text: "Cancel All Listings and Offers", type: CancelType.CancelAllListingsAndOffers },
+  ];
 
   useClickOutside(containerRef, () => {
     setShow(false);
   });
+
+  const onClick = async (type: CancelType) => {
+    const params = { userId: user.id };
+    if (CancelType.CancelAllListings === type) {
+      await collectionsService.cancelAllListings(params);
+    } else if (CancelType.CancelAllOffers === type) {
+      await offerService.cancelAllOffer(params);
+    } else if (CancelType.CancelAllListingsAndOffers) {
+      await offerService.cancelAllOfferAndListings(params);
+    }
+  };
 
   return (
     <li className="relative" ref={containerRef}>
@@ -36,7 +64,7 @@ const TabMoreDropdowns = () => {
         <ul className="absolute right-0 top-full mt-1 flex flex-col bg-bg border border-gray rounded-[4px] divide-y divide-gray overflow-hidden z-10">
           {items.map((item, k) => {
             return (
-              <li key={k} onClick={console.log} className="flex items-center justify-between cursor-pointer px-4 py-3 text-white hover:bg-bg-light">
+              <li key={k} onClick={() => onClick(item.type)} className="flex items-center justify-between cursor-pointer px-4 py-3 text-white hover:bg-bg-light">
                 <div className="flex w-full body-medium whitespace-nowrap">{item.text}</div>
               </li>
             );
