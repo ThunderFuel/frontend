@@ -7,8 +7,11 @@ const InputEthereum = (props: any) => {
 
   const onInput = (value: any) => {
     const [val, decimal] = String(value).split(".");
+    console.log(val, decimal);
     if (decimal && decimal.length > 9) {
       onChange(`${val}.${decimal.substring(0, 9)}`);
+
+      return;
     }
     onChange(value);
   };
@@ -24,7 +27,7 @@ const InputEthereum = (props: any) => {
     }
   };
 
-  return <Input {...etc} onChange={handleChange} icon={<IconEthereum className="text-gray-light peer-focus:text-white" />} />;
+  return <Input {...etc} maxLength="15" onChange={handleChange} icon={<IconEthereum className="text-gray-light peer-focus:text-white" />} />;
 };
 
 export default InputEthereum;

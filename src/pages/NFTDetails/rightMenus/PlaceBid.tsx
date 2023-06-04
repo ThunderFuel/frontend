@@ -23,7 +23,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const [bid, setBid] = useState<any>("");
-  const [balance, setBalance] = useState<number>(0);
+  const [balance, setBalance] = useState<any>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
 
   function fetchBalance() {
@@ -84,7 +84,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
             <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
           </div>
         )}
-        {toGwei(bid) !== 0 && balance >= toGwei(bid) && bid > bidBalance && (
+        {!toGwei(bid).eq(0) && balance >= toGwei(bid) && bid > bidBalance && (
           <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
             <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>

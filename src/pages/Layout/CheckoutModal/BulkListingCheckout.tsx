@@ -61,7 +61,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
           maker: user.walletAddress,
           collection: item.collection,
           token_id: item.tokenOrder,
-          price: toGwei(item.price),
+          price: toGwei(item.price).toNumber(),
           amount: 1,
           nonce: res.data + 1 + index,
           strategy: strategyFixedPriceContractId,

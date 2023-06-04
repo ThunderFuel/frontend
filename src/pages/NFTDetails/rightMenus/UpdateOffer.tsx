@@ -23,7 +23,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
 
   const { getBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
+  const [balance, setbalance] = useState<any>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
 
   const [offer, setoffer] = useState<any>("");
@@ -97,7 +97,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
             <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
           </div>
         )}
-        {toGwei(offer) !== 0 && balance >= toGwei(offer) && offer > bidBalance && (
+        {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
           <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
             <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>

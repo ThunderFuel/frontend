@@ -54,7 +54,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         taker: user.walletAddress,
         maker: selectedNFT.highestBid.walletAddress, //OMER ABI
         nonce: res.data[selectedNFT?.id],
-        price: toGwei(checkoutPrice),
+        price: toGwei(checkoutPrice).toNumber(),
         collection: selectedNFT.collection.contractAddress,
         token_id: selectedNFT.tokenOrder,
         strategy: strategyAuctionContractId,

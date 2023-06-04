@@ -24,13 +24,13 @@ const ManageFunds = () => {
   function handleSwap() {
     setIsDisabled(true);
     if (isAddToPool)
-      deposit(poolContractId, provider, wallet, toGwei(amount), ZERO_B256, assetManagerContractId).then((res) => {
+      deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId).then((res) => {
         console.log(res);
         userService.updateBidBalance(user.id, amount);
         setIsDisabled(false);
       });
     else
-      withdraw(poolContractId, provider, wallet, toGwei(amount), ZERO_B256, assetManagerContractId).then((res) => {
+      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId).then((res) => {
         console.log(res);
         userService.updateBidBalance(user.id, -amount);
         setIsDisabled(false);

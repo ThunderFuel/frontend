@@ -53,7 +53,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         maker: user.walletAddress,
         collection: selectedNFT.collection.contractAddress,
         token_id: selectedNFT.tokenOrder,
-        price: toGwei(checkoutPrice),
+        price: toGwei(checkoutPrice).toNumber(),
         amount: 1, //fixed
         nonce: res.data[selectedNFT?.bestOffer?.id],
         strategy: strategyFixedPriceContractId,
@@ -70,7 +70,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         const currentBidBalance = res.data;
         if (currentBidBalance < checkoutPrice) {
           const requiredBidAmount = checkoutPrice - currentBidBalance;
-          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId)
+          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {

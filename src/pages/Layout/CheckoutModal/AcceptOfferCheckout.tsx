@@ -51,7 +51,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         taker: currentItem.takerAddress,
         maker: currentItem.makerAddress,
         nonce: res.data[currentItem.id],
-        price: toGwei(currentItem.price),
+        price: toGwei(currentItem.price).toNumber(),
         collection: currentItem.contractAddress,
         token_id: currentItem.tokenOrder,
         strategy: strategyFixedPriceContractId,
