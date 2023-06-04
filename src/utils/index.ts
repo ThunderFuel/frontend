@@ -74,7 +74,7 @@ export function toGwei(num: any) {
 
   const x = ethers.utils.parseUnits(num.toString(), "gwei");
 
-  return x.toNumber();
+  return x;
 }
 
 export function randomIntFromInterval(min = 1, max = 11111111) {

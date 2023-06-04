@@ -55,7 +55,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         maker: user.walletAddress,
         collection: selectedNFT.collection.contractAddress,
         token_id: selectedNFT.tokenOrder,
-        price: toGwei(checkoutPrice),
+        price: toGwei(checkoutPrice).toNumber(),
         amount: 1,
         nonce: res.data[selectedNFT.id], //Auction bid de sabit tutabilirmisiz
         strategy: strategyAuctionContractId,
@@ -74,7 +74,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         console.log(_currentBidBalance);
         if (_currentBidBalance < checkoutPrice) {
           const requiredBidAmount = checkoutPrice - _currentBidBalance;
-          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount), NativeAssetId)
+          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
