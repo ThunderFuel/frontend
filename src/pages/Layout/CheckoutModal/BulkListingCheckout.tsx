@@ -44,8 +44,66 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const bulkItems = bulkListItems.concat(bulkUpdateItems);
+  let bulkListMakerOders = [] as any;
+  let bulkUpdateMakerOders = [] as any;
+  const promises = [] as any;
+
+  const handleOrders = async ({ bulkListItems, bulkUpdateItems }: { bulkListItems: any; bulkUpdateItems: any }) => {
+    console.log(bulkListItems, bulkUpdateItems);
+
+    const tokenIds = bulkUpdateItems.map((item: any) => item.tokenId); // for bulkupdate
+    let updatePromise;
+    let listPromise;
+    if (bulkUpdateItems.length > 0) {
+      updatePromise = nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+        console.log("bulk update -  getTokensIndex:", res);
+        bulkUpdateMakerOders = bulkUpdateItems.map((item: any) => {
+          return {
+            isBuySide: false,
+            maker: user.walletAddress,
+            collection: item.collection,
+            token_id: item.tokenOrder,
+            price: toGwei(item.price).toNumber(),
+            amount: 1,
+            nonce: res.data[item.tokenId],
+            strategy: strategyFixedPriceContractId,
+            payment_asset: NativeAssetId,
+            expiration_range: formatTimeContract(item.expireTime),
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+          };
+        });
+      });
+      promises.push(updatePromise);
+    }
+
+    if (bulkListItems.length > 0) {
+      listPromise = nftdetailsService.getLastIndex(0, user.id).then((res) => {
+        console.log("bulk list - getLastIndex:", res);
+
+        bulkListMakerOders = bulkListItems.map((item: any, index: any) => {
+          return {
+            isBuySide: false,
+            maker: user.walletAddress,
+            collection: item.collection,
+            token_id: item.tokenOrder,
+            price: toGwei(item.price).toNumber(),
+            amount: 1,
+            nonce: res.data + 1 + index,
+            strategy: strategyFixedPriceContractId,
+            payment_asset: NativeAssetId,
+            expiration_range: formatTimeContract(item.expireTime),
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+          };
+        });
+      });
+      promises.push(listPromise);
+    }
+
+    return { bulkListMakerOders, bulkUpdateMakerOders };
+  };
 
   const onComplete = async () => {
+    //FOR BACKEND
     const _bulkListItems = bulkListItems.map((item: any) => {
       return { ...item, expireTime: formatTimeBackend(item.expireTime) };
     });
@@ -53,45 +111,37 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     const _bulkUpdateItems = bulkUpdateItems.map((item: any) => {
       return { ...item, expireTime: formatTimeBackend(item.expireTime) };
     });
+    //FOR BACKEND
 
-    nftdetailsService.getLastIndex(0, user.id).then((res) => {
-      const makerOrders = bulkItems.map((item: any, index: any) => {
-        return {
-          isBuySide: false,
-          maker: user.walletAddress,
-          collection: item.collection,
-          token_id: item.tokenOrder,
-          price: toGwei(item.price).toNumber(),
-          amount: 1,
-          nonce: res.data + 1 + index,
-          strategy: strategyFixedPriceContractId,
-          payment_asset: NativeAssetId,
-          expiration_range: formatTimeContract(item.expireTime),
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-        };
+    handleOrders({ bulkListItems, bulkUpdateItems });
+
+    Promise.all(promises)
+      .then(() => {
+        const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
+        console.log({ bulkMakerOrders });
+
+        const prov = new Provider("https://beta-3.fuel.network/graphql");
+        setContracts(contracts, prov);
+
+        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders)
+          .then((res) => {
+            console.log(res);
+            if (res?.transactionResult.status.type === "success") {
+              if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(_bulkUpdateItems);
+              if (bulkListItems.length > 0) collectionsService.bulkListing(_bulkListItems);
+
+              setApproved(true);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            if (e.message.includes("Revert")) setIsFailed(true);
+            else setStartTransaction(false);
+          });
+      })
+      .catch((error) => {
+        console.log("Promise Error:", error);
       });
-
-      const prov = new Provider("https://beta-3.fuel.network/graphql");
-      setContracts(contracts, prov);
-
-      console.log(makerOrders);
-
-      bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, makerOrders)
-        .then((res) => {
-          console.log(res);
-          if (res?.transactionResult.status.type === "success") {
-            if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(_bulkUpdateItems);
-            if (bulkListItems.length > 0) collectionsService.bulkListing(_bulkListItems);
-
-            setApproved(true);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Revert")) setIsFailed(true);
-          else setStartTransaction(false);
-        });
-    });
   };
 
   React.useEffect(() => {
