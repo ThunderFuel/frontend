@@ -76,7 +76,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   };
 
   const bidBalanceControl = () => {
-    return <span className="font-bold whitespace-nowrap">{offer - bidBalance} ETH</span>;
+    return <span className="font-bold whitespace-nowrap">{(offer - bidBalance).toFixed(9)} ETH</span>;
   };
 
   const footer = (

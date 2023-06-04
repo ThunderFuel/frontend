@@ -69,13 +69,13 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         const _currentBidBalance = res.data;
         console.log(_currentBidBalance);
         if (_currentBidBalance < checkoutPrice) {
-          const requiredBidAmount = checkoutPrice - _currentBidBalance;
+          const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
           depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: formatTimeBackend(checkoutExpireTime) });
-                userService.updateBidBalance(user.id, requiredBidAmount).then(() => setBidBalanceUpdated(true));
+                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
                 setApproved(true);
               }
             })
@@ -147,9 +147,9 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         <div className="flex gap-x-2 p-[10px] m-5 rounded-[5px] bg-bg-light border border-gray">
           <IconInfo color="orange" />
           <div className="flex w-full flex-col gap-y-[6px] text-head6 font-spaceGrotesk text-white">
-            {checkoutPrice - currentBidBalance} ETH added to your balance.
+            {(checkoutPrice - currentBidBalance).toFixed(9)} ETH added to your balance.
             <span className="text-bodySm text-gray-light">
-              In order to make this offer {checkoutPrice - currentBidBalance} ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.
+              In order to make this offer {(checkoutPrice - currentBidBalance).toFixed(9)} ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.
             </span>
           </div>
         </div>

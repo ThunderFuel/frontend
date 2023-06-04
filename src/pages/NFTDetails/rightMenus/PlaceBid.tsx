@@ -47,7 +47,7 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   };
 
   const bidBalanceControl = () => {
-    return <span className="font-bold whitespace-nowrap">{bid - bidBalance} ETH</span>;
+    return <span className="font-bold whitespace-nowrap">{(bid - bidBalance).toFixed(9)} ETH</span>;
   };
 
   const footer = (
