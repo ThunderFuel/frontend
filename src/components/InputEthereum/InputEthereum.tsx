@@ -7,7 +7,6 @@ const InputEthereum = (props: any) => {
 
   const onInput = (value: any) => {
     const [val, decimal] = String(value).split(".");
-    console.log(val, decimal);
     if (decimal && decimal.length > 9) {
       onChange(`${val}.${decimal.substring(0, 9)}`);
 
