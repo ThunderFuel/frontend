@@ -4,7 +4,7 @@ export interface MintRequest {
   contractAddress: string;
   count: number;
   walletAddress: string;
-  logs: any[];
+  tokenIds: any[];
 }
 
 export enum SocialTypes {
