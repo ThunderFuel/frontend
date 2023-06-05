@@ -70,9 +70,11 @@ export function formatDisplayedNumber(num: number) {
 }
 
 export function toGwei(num: any) {
-  if (num === "") num = 0;
+  let _num = num;
+  if (num === "") _num = 0;
+  if (num === ".") _num = 0.1;
 
-  const x = ethers.utils.parseUnits(num.toString(), "gwei");
+  const x = ethers.utils.parseUnits(_num.toString(), "gwei");
 
   return x;
 }
