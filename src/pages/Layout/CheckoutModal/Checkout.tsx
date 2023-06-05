@@ -227,8 +227,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             })
             .catch((e) => {
               console.log(e);
-              if (e.message.includes("Revert")) setIsFailed(true);
-              else setStartTransaction(false);
+              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                setStartTransaction(false);
+              else setIsFailed(true);
             });
         } else if (tokenIds.length === 1) {
           console.log("BUY 1 ITEM");
@@ -262,8 +263,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             })
             .catch((e) => {
               console.log(e);
-              if (e.message.includes("Revert")) setIsFailed(true);
-              else setStartTransaction(false);
+              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                setStartTransaction(false);
+              else setIsFailed(true);
             });
         } else {
           console.log("BULK PURCHASE");
@@ -300,8 +302,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
               })
               .catch((e) => {
                 console.log(e);
-                if (e.message.includes("Revert")) setIsFailed(true);
-                else setStartTransaction(false);
+                if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                  setStartTransaction(false);
+                else setIsFailed(true);
               });
           });
         }

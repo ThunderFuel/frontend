@@ -76,8 +76,9 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         })
         .catch((e) => {
           console.log(e);
-          if (e.message.includes("Revert")) setIsFailed(true);
-          else setStartTransaction(false);
+          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+            setStartTransaction(false);
+          else setIsFailed(true);
         });
     });
   };
