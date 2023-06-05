@@ -8,7 +8,7 @@ import { useClickOutside } from "hooks/useClickOutside";
 import { useAppSelector } from "../../../store";
 import offerService from "../../../api/offer/offer.service";
 import collectionsService from "../../../api/collections/collections.service";
-import { Provider } from "fuels/*";
+import { Provider } from "fuels";
 import { cancelAllOrders, cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
 
