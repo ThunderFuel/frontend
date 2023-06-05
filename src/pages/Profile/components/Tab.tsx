@@ -8,6 +8,9 @@ import { useClickOutside } from "hooks/useClickOutside";
 import { useAppSelector } from "../../../store";
 import offerService from "../../../api/offer/offer.service";
 import collectionsService from "../../../api/collections/collections.service";
+import { Provider } from "fuels/*";
+import { cancelAllOrders, cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
 
 const routes = [
   { path: PATHS.PROFILE_OWNED, name: "Owned" },
@@ -28,7 +31,7 @@ enum CancelType {
 }
 
 const TabMoreDropdowns = () => {
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLLIElement>(null);
   const items = [
@@ -46,12 +49,29 @@ const TabMoreDropdowns = () => {
 
   const onClick = async (type: CancelType) => {
     const params = { userId: user.id };
+    const prov = new Provider("https://beta-3.fuel.network/graphql");
+    setContracts(contracts, prov);
     if (CancelType.CancelAllListings === type) {
-      await collectionsService.cancelAllListings(params);
+      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false).then((res) => {
+        console.log(res);
+        if (res.transactionResult.status.type === "success") {
+          collectionsService.cancelAllListings(params);
+        }
+      });
     } else if (CancelType.CancelAllOffers === type) {
-      await offerService.cancelAllOffer(params);
+      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true).then((res) => {
+        console.log(res);
+        if (res.transactionResult.status.type === "success") {
+          offerService.cancelAllOffer(params);
+        }
+      });
     } else if (CancelType.CancelAllListingsAndOffers) {
-      await offerService.cancelAllOfferAndListings(params);
+      cancelAllOrders(exchangeContractId, provider, wallet, strategyFixedPriceContractId).then((res) => {
+        console.log(res);
+        if (res.transactionResult.status.type === "success") {
+          offerService.cancelAllOfferAndListings(params);
+        }
+      });
     }
   };
 
