@@ -102,7 +102,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
       <div className="flex flex-col p-5">
         <CartItem
           text={selectedNFT.highestBid ? "Highest Bid" : ""}
-          name={selectedNFT.name}
+          name={selectedNFT.name ?? selectedNFT.tokenOrder}
           image={selectedNFT.image}
           price={selectedNFT.highestBid ? selectedNFT.highestBid.price : ""}
           id={0}

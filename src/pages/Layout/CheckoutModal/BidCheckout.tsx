@@ -146,7 +146,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   return (
     <Modal backdropDisabled={true} className="checkout" title="Place a Bid" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Your Bid"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0}></CartItem>
+        <CartItem text={"Your Bid"} name={selectedNFT.name ?? selectedNFT.tokenOrder} image={selectedNFT.image} price={+checkoutPrice} id={0}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
       {bidBalanceUpdated && approved && (

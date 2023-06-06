@@ -187,7 +187,7 @@ const LeftMenu = (props: any) => {
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
             </div>
           </div>
-          <h3 className="text-h3 text-white">{nft.name}</h3>
+          <h3 className="text-h3 text-white">{nft.name ?? "Bored Ape #" + nft.tokenOrder}</h3>
         </div>
         <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
           <div

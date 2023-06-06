@@ -103,7 +103,7 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   return (
     <Modal backdropDisabled={true} className="checkout" title="Cancel Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text="Listed at" name={selectedNFT?.name} image={selectedNFT?.image} price={selectedNFT?.price} id={0}></CartItem>
+        <CartItem text="Listed at" name={selectedNFT?.name ?? selectedNFT?.tokenOrder} image={selectedNFT?.image} price={selectedNFT?.price} id={0}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>

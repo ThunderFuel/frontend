@@ -73,7 +73,7 @@ const MyCart = () => {
                 <CartItem
                   key={index}
                   text="Price"
-                  name={i.name}
+                  name={i.name ?? i.tokenOrder}
                   price={i.price}
                   image={i.image}
                   id={i.id}

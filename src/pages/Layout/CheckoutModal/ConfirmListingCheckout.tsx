@@ -219,12 +219,19 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
       <div className="flex flex-col p-5">
         {checkoutIsAuction ? (
           checkoutAuctionStartingPrice ? (
-            <CartItem text={"Starting Price"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutAuctionStartingPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+            <CartItem
+              text={"Starting Price"}
+              name={selectedNFT.name ?? selectedNFT.tokenOrder}
+              image={selectedNFT.image}
+              price={checkoutAuctionStartingPrice}
+              id={0}
+              titleSlot={viewOnBlockchain}
+            ></CartItem>
           ) : (
-            <CartItem text={"Starting Price"} name={selectedNFT.name} image={selectedNFT.image} price={0} id={0} titleSlot={viewOnBlockchain}></CartItem>
+            <CartItem text={"Starting Price"} name={selectedNFT.name ?? selectedNFT.tokenOrder} image={selectedNFT.image} price={0} id={0} titleSlot={viewOnBlockchain}></CartItem>
           )
         ) : (
-          <CartItem text={"Price"} name={selectedNFT.name} image={selectedNFT.image} price={checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+          <CartItem text={"Price"} name={selectedNFT.name ?? selectedNFT.tokenOrder} image={selectedNFT.image} price={checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
         )}
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
