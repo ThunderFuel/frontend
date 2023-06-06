@@ -5,12 +5,8 @@ import { PATHS } from "router/config/paths";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IconDots } from "icons";
 import { useClickOutside } from "hooks/useClickOutside";
-import { useAppSelector } from "../../../store";
-import offerService from "../../../api/offer/offer.service";
-import collectionsService from "../../../api/collections/collections.service";
-import { cancelAllOrders, cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { FuelProvider } from "../../../api";
+import { useDispatch } from "react-redux";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const routes = [
   { path: PATHS.PROFILE_OWNED, name: "Owned" },
@@ -31,7 +27,7 @@ enum CancelType {
 }
 
 const TabMoreDropdowns = () => {
-  const { user, wallet } = useAppSelector((state) => state.wallet);
+  const dispatch = useDispatch();
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLLIElement>(null);
   const items = [
@@ -48,29 +44,33 @@ const TabMoreDropdowns = () => {
   });
 
   const onClick = async (type: CancelType) => {
-    const params = { userId: user.id };
-    setContracts(contracts, FuelProvider);
     if (CancelType.CancelAllListings === type) {
-      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false).then((res) => {
-        console.log(res);
-        if (res.transactionResult.status.type === "success") {
-          collectionsService.cancelAllListings(params);
-        }
-      });
+      {
+        dispatch(
+          setCheckout({
+            type: CheckoutType.CancelAllListings,
+          })
+        );
+        dispatch(toggleCheckoutModal());
+      }
     } else if (CancelType.CancelAllOffers === type) {
-      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true).then((res) => {
-        console.log(res);
-        if (res.transactionResult.status.type === "success") {
-          offerService.cancelAllOffer(params);
-        }
-      });
+      {
+        dispatch(
+          setCheckout({
+            type: CheckoutType.CancelAllOffers,
+          })
+        );
+        dispatch(toggleCheckoutModal());
+      }
     } else if (CancelType.CancelAllListingsAndOffers) {
-      cancelAllOrders(exchangeContractId, provider, wallet, strategyFixedPriceContractId).then((res) => {
-        console.log(res);
-        if (res.transactionResult.status.type === "success") {
-          offerService.cancelAllOfferAndListings(params);
-        }
-      });
+      {
+        dispatch(
+          setCheckout({
+            type: CheckoutType.CancelAllOffersListings,
+          })
+        );
+        dispatch(toggleCheckoutModal());
+      }
     }
   };
 

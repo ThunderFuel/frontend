@@ -15,6 +15,9 @@ import { removeBuyNowItem } from "store/cartSlice";
 import BulkListingCheckout from "./BulkListingCheckout";
 import AcceptBidCheckout from "./AcceptBidCheckout";
 import AcceptOfferCheckout from "./AcceptOfferCheckout";
+import CancelAllListingCheckout from "./CancelAllListingCheckout";
+import CancelAllOffers from "./CancelAllOffersCheckout";
+import CancelAllOffersListingsCheckout from "./CancelAllOffersListingsCheckout";
 
 const Index = () => {
   const dispatch = useAppDispatch();
@@ -62,6 +65,12 @@ const Index = () => {
       return <CancelAuctionCheckout show={show} onClose={onClose} />; //DESIGNDA YOK!
     case CheckoutType.CancelListing:
       return <CancelListingCheckout show={show} onClose={onClose} />; //DESIGNDA YOK!
+    case CheckoutType.CancelAllListings:
+      return <CancelAllListingCheckout show={show} onClose={onClose} />;
+    case CheckoutType.CancelAllOffers:
+      return <CancelAllOffers show={show} onClose={onClose} />;
+    case CheckoutType.CancelAllOffersListings:
+      return <CancelAllOffersListingsCheckout show={show} onClose={onClose} />;
     default:
       return isInsufficientBalance ? <InsufficientFund show={show} onClose={onClose} /> : <Checkout show={show} onClose={onClose} />;
   }
