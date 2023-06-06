@@ -10,10 +10,11 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { NativeAssetId, Provider } from "fuels";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
+import { NativeAssetId } from "fuels";
+import { contracts, exchangeContractId, provider, strategyAuctionContractId, ZERO_B256 } from "global-constants";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your bid",
@@ -64,8 +65,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
 
-      const prov = new Provider("https://beta-3.fuel.network/graphql");
-      setContracts(contracts, prov);
+      setContracts(contracts, FuelProvider);
       console.log(order);
 
       userService.getBidBalance(user.id).then((res) => {

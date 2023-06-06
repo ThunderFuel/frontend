@@ -11,9 +11,10 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { NativeAssetId, Provider } from "fuels";
+import { NativeAssetId } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import collectionsService from "api/collections/collections.service";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -120,8 +121,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
         console.log({ bulkMakerOrders });
 
-        const prov = new Provider("https://beta-3.fuel.network/graphql");
-        setContracts(contracts, prov);
+        setContracts(contracts, FuelProvider);
 
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders)
           .then((res) => {

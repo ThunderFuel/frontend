@@ -11,7 +11,7 @@ import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
-import { Provider } from "fuels";
+import { FuelProvider } from "api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling auction",
@@ -43,8 +43,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    const prov = new Provider("https://beta-3.fuel.network/graphql");
-    setContracts(contracts, prov);
+    setContracts(contracts, FuelProvider);
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
       cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
         .then((res) => {

@@ -8,10 +8,11 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { NativeAssetId, Provider } from "fuels";
-import { strategyFixedPriceContractId, provider, ZERO_B256, contracts, exchangeContractId } from "global-constants";
+import { NativeAssetId } from "fuels";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import userService from "api/user/user.service";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm transaction",
@@ -59,10 +60,8 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         expiration_range: formatTimeContract(checkoutExpireTime),
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
-      console.log(order);
 
-      const prov = new Provider("https://beta-3.fuel.network/graphql");
-      setContracts(contracts, prov);
+      setContracts(contracts, FuelProvider);
 
       userService.getBidBalance(user.id).then((res) => {
         setCurrentBidBalance(res.data);
@@ -74,7 +73,13 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
-                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: formatTimeBackend(checkoutExpireTime) });
+                nftdetailsService.makeOffer({
+                  makerUserId: user.id,
+                  tokenId: selectedNFT.id,
+                  price: checkoutPrice,
+                  priceType: 0,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                });
                 userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
                 setApproved(true);
               }
@@ -90,7 +95,13 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
-                nftdetailsService.makeOffer({ makerUserId: user.id, tokenId: selectedNFT.id, price: checkoutPrice, priceType: 0, expireTime: formatTimeBackend(checkoutExpireTime) });
+                nftdetailsService.makeOffer({
+                  makerUserId: user.id,
+                  tokenId: selectedNFT.id,
+                  price: checkoutPrice,
+                  priceType: 0,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                });
                 setApproved(true);
               }
             })

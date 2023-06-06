@@ -1,4 +1,5 @@
 import HttpClient from "./HttpClient";
+import { Provider } from "fuels";
 
 export const ThunderURL = new HttpClient(process.env.REACT_APP_API_URL as string);
-export const EtherscanURL = new HttpClient("https://api.etherscan.io/");
+export const FuelProvider = new Provider("https://beta-3.fuel.network/graphql");

@@ -10,12 +10,13 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
-import { NativeAssetId, Provider } from "fuels";
-import { strategyFixedPriceContractId, provider, ZERO_B256, contracts, exchangeContractId } from "global-constants";
+import { NativeAssetId } from "fuels";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import userService from "api/user/user.service";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your offer",
@@ -65,8 +66,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       };
       console.log(order);
 
-      const prov = new Provider("https://beta-3.fuel.network/graphql");
-      setContracts(contracts, prov);
+      setContracts(contracts, FuelProvider);
 
       userService.getBidBalance(user.id).then((res) => {
         const currentBidBalance = res.data;
@@ -77,7 +77,11 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
-                nftdetailsService.tokenUpdateOffer({ id: currentItem?.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) });
+                nftdetailsService.tokenUpdateOffer({
+                  id: currentItem?.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                });
                 userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
                 setApproved(true);
               }
@@ -93,7 +97,11 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             .then((res) => {
               console.log(res);
               if (res.transactionResult.status.type === "success") {
-                nftdetailsService.tokenUpdateOffer({ id: currentItem?.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) });
+                nftdetailsService.tokenUpdateOffer({
+                  id: currentItem?.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                });
                 setApproved(true);
               }
             })

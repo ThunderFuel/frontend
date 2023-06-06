@@ -9,12 +9,11 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-
-import { Provider } from "fuels";
-import { strategyFixedPriceContractId, provider, contracts, exchangeContractId } from "global-constants";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
 import { cancelAllOrdersBySide, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import { CheckoutCartItems } from "./Checkout";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -46,8 +45,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    const prov = new Provider("https://beta-3.fuel.network/graphql");
-    setContracts(contracts, prov);
+    setContracts(contracts, FuelProvider);
     if (cancelOfferItems?.length > 0) {
       cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
         .then((res) => {

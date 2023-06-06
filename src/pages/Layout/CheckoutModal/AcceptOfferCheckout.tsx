@@ -10,10 +10,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import { approveAndExecuteOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
-import { Provider } from "fuels";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
+import { FuelProvider } from "api";
 
 const checkoutProcessTexts = {
   title1: "Confirm offer",
@@ -58,8 +58,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      const prov = new Provider("https://beta-3.fuel.network/graphql");
-      setContracts(contracts, prov);
+      setContracts(contracts, FuelProvider);
 
       console.log({ exchangeContractId, provider, wallet, order, transferManagerContractId });
 

@@ -13,8 +13,9 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { isObjectEmpty, toGwei } from "utils";
 
 import { bulkPurchase, executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { NativeAssetId, Provider } from "fuels";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
+import { NativeAssetId } from "fuels";
+import { FuelProvider } from "../../../api";
 
 enum Status {
   notStarted = "notStarted",
@@ -209,8 +210,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           };
 
-          const prov = new Provider("https://beta-3.fuel.network/graphql");
-          setContracts(contracts, prov);
+          setContracts(contracts, FuelProvider);
 
           console.log(order);
           executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
@@ -245,8 +245,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           };
 
-          const prov = new Provider("https://beta-3.fuel.network/graphql");
-          setContracts(contracts, prov);
+          setContracts(contracts, FuelProvider);
 
           console.log(order);
           executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
@@ -284,8 +283,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
               };
             });
 
-            const prov = new Provider("https://beta-3.fuel.network/graphql");
-            setContracts(contracts, prov);
+            setContracts(contracts, FuelProvider);
 
             console.log(takerOrders);
             bulkPurchase(exchangeContractId, provider, wallet, takerOrders, NativeAssetId)

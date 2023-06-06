@@ -8,9 +8,9 @@ import { useClickOutside } from "hooks/useClickOutside";
 import { useAppSelector } from "../../../store";
 import offerService from "../../../api/offer/offer.service";
 import collectionsService from "../../../api/collections/collections.service";
-import { Provider } from "fuels";
 import { cancelAllOrders, cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { FuelProvider } from "../../../api";
 
 const routes = [
   { path: PATHS.PROFILE_OWNED, name: "Owned" },
@@ -49,8 +49,7 @@ const TabMoreDropdowns = () => {
 
   const onClick = async (type: CancelType) => {
     const params = { userId: user.id };
-    const prov = new Provider("https://beta-3.fuel.network/graphql");
-    setContracts(contracts, prov);
+    setContracts(contracts, FuelProvider);
     if (CancelType.CancelAllListings === type) {
       cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false).then((res) => {
         console.log(res);

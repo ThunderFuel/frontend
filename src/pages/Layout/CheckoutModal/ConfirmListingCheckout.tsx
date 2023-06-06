@@ -10,9 +10,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { ZERO_B256, contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId } from "global-constants";
+import { contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { NativeAssetId, Provider } from "fuels";
+import { NativeAssetId } from "fuels";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -59,12 +60,15 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             strategy: strategyAuctionContractId,
             payment_asset: NativeAssetId,
             expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0 }, // laim degilse null
+            extra_params: {
+              extra_address_param: ZERO_B256,
+              extra_contract_param: ZERO_B256,
+              extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0,
+            }, // laim degilse null
           },
         ];
 
-        const prov = new Provider("https://beta-3.fuel.network/graphql");
-        setContracts(contracts, prov);
+        setContracts(contracts, FuelProvider);
         console.log(order);
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
           .then((res) => {
@@ -99,14 +103,19 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           },
         ];
 
-        const prov = new Provider("https://beta-3.fuel.network/graphql");
-        setContracts(contracts, prov);
+        setContracts(contracts, FuelProvider);
         console.log(order);
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
           .then((res) => {
             console.log(res);
             if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenUpdateListing([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) }]);
+              nftdetailsService.tokenUpdateListing([
+                {
+                  tokenId: selectedNFT.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                },
+              ]);
               setApproved(true);
             }
           })
@@ -135,14 +144,19 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           },
         ];
 
-        const prov = new Provider("https://beta-3.fuel.network/graphql");
-        setContracts(contracts, prov);
+        setContracts(contracts, FuelProvider);
         console.log(order);
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
           .then((res) => {
             console.log(res);
             if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenList([{ tokenId: selectedNFT.id, price: checkoutPrice, expireTime: formatTimeBackend(checkoutExpireTime) }]);
+              nftdetailsService.tokenList([
+                {
+                  tokenId: selectedNFT.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                },
+              ]);
               setApproved(true);
             }
           })
