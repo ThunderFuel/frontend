@@ -41,7 +41,7 @@ const Box = ({
   return (
     <div className={clsx("flex flex-col border border-gray rounded-lg text-h6", isDisabled ? "text-gray-light" : "text-white")}>
       <div className={`flex w-full p-[15px] gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
-        <Avatar image={item?.user?.image} userId={item?.user?.id} className={"w-8 h-8 flex-shrink-0"} />
+        <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
             {item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
