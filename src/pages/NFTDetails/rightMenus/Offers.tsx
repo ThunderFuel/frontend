@@ -44,7 +44,7 @@ const Box = ({
         <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
-            {item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
+            {ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
           </span>
           <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
             <Icon className="w-[15px] h-[15px] flex-shrink-0" />
