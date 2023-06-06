@@ -57,12 +57,15 @@ const CollectionTable = () => {
     {
       key: "selection",
       text: "",
-      render: (collection) =>
-        collection.salable && (
-          <div className="p-6">
-            <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
-          </div>
-        ),
+      render: (collection) => (
+        <div className="p-6">
+          {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
+            collection.onAuction ? null : (
+              <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
+            )
+          ) : null}
+        </div>
+      ),
       width: "64px",
     },
     {

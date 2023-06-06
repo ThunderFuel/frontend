@@ -79,13 +79,11 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
-  const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setSweep, options } = useCollectionListContext();
   const { isConnected } = useAppSelector((state) => state.wallet);
   const { hasEnoughFunds } = useWallet();
-  const isOwnCollectionItem = collection?.userId === user.id;
   const { days, hours, minutes } = remainingTime(collection.onAuctionExpireTime);
 
   const onToggleCart = () => {
@@ -166,7 +164,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
+          {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : !selectionDisabled ? (
               <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
             ) : null
@@ -208,7 +206,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         )}
         {!selectionDisabled && !options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {!isOwnCollectionItem ? (
+            {!collection.isOwnCollectionItem ? (
               collection.salable ? (
                 <ButtonBuyNow onClick={onBuyNow} />
               ) : collection.onAuction ? (

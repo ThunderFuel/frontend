@@ -50,6 +50,7 @@ export interface CollectionItemResponse {
   userWalletAddress: string;
   collection: CollectionResponse;
   contractAddress: string;
+  isOwnCollectionItem?: boolean;
 
   uid?: string;
   userId?: any;
