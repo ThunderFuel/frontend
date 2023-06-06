@@ -22,21 +22,26 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState({
     offerType: 0,
-    offerStatus: [0, 1, 2, 3, 4] as any,
+    offerStatus: [] as any,
   });
 
   const getOffers = React.useMemo(() => {
     return offers
       .filter((item: any) => item.isOfferMade === !!filterValue.offerType)
       .filter((item: any) => {
+        if (!filterValue.offerStatus.length) {
+          return true;
+        }
+
         return (
-          (filterValue.offerStatus.includes(1) && item.isActiveOffer) ||
-          (filterValue.offerStatus.includes(3) && item.isExpired) ||
-          (filterValue.offerStatus.includes(0) && item.isCanceled) ||
-          (filterValue.offerStatus.includes(2) && item.isAccepted)
+          (filterValue.offerStatus.includes(OfferStatus.ActiveOffer) && item.isActiveOffer) ||
+          (filterValue.offerStatus.includes(OfferStatus.ExpiredOffer) && item.isExpired) ||
+          (filterValue.offerStatus.includes(OfferStatus.Cancelled) && item.isCanceled) ||
+          (filterValue.offerStatus.includes(OfferStatus.AcceptedOffer) && item.isAccepted)
         );
       });
   }, [offers, filterValue]);
+
   const onChangeFilterValue = (value: any) => {
     setFilterValue((prevState: any) => ({ ...prevState, ...value }));
   };

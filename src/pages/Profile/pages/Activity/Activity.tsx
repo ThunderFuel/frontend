@@ -26,6 +26,7 @@ const Activity = () => {
       description: "",
       image: item.token.image,
       type: filters?.[item.activityType as ActivityFilters].name,
+      typeIcon: filters?.[item.activityType as ActivityFilters].icon,
     }));
 
     setPagination({
