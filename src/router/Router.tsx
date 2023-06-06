@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
 import AuthorizationPageBase from "./AuthorizationPage";
 import { RouteConfig, ROUTES } from "./config";
+import MobileWarningPageBase from "./MobileWarningPage";
 
 const NotFound = React.lazy(() => import("pages/NotFound"));
 
@@ -10,7 +11,7 @@ const getRoute = (route: RouteConfig) => {
   const Component = route.component;
   const Layout = route.layout ?? React.Fragment;
   const AuthorizationPage = route.notLoggedIn ? React.Fragment : AuthorizationPageBase;
-  const MobileWarningPage = React.Fragment; // route.isResponsive ? React.Fragment : MobileWarningPageBase;
+  const MobileWarningPage = route.isResponsive ? React.Fragment : MobileWarningPageBase;
 
   return (
     <Route
