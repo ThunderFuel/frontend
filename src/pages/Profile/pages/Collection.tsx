@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import CollectionList from "../components/CollectionList";
 import userService from "api/user/user.service";
 import { useProfile } from "../ProfileContext";
@@ -73,6 +73,13 @@ const Collection = () => {
     }
   };
 
+  const getCollections = useMemo(() => {
+    return collectionItems.map((item: any) => ({
+      ...item,
+      isOwnCollectionItem: item?.userId === userInfo.id,
+    }));
+  }, [collectionItems]);
+
   const fetchFilters = async () => {
     setIsLoading(true);
     try {
@@ -92,7 +99,7 @@ const Collection = () => {
   }, [userInfo]);
 
   return (
-    <CollectionList isLoading={isLoading} collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={{ ...options, ...profileOptions }} onChangeFilter={onChangeFilter} />
+    <CollectionList isLoading={isLoading} collectionItems={getCollections} initParams={initParams} filterItems={filter} options={{ ...options, ...profileOptions }} onChangeFilter={onChangeFilter} />
   );
 };
 
