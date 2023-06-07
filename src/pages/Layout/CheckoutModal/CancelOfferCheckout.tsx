@@ -130,7 +130,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         {cancelOfferItems?.length > 0 ? (
           <CheckoutCartItems items={cancelOfferItems} itemCount={cancelOfferItems.length} totalAmount={""} approved={approved}></CheckoutCartItems>
         ) : (
-          <CartItem text={"Your Offer"} name={currentItem?.tokenName} image={currentItem?.tokenImage} price={currentItem?.price} id={0}></CartItem>
+          <CartItem text={"Your Offer"} name={currentItem?.tokenName ?? currentItem?.tokenOrder} image={currentItem?.tokenImage} price={currentItem?.price} id={0}></CartItem>
         )}{" "}
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>

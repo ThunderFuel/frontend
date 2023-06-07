@@ -160,7 +160,7 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
       <div className="flex flex-col gap-2">
         <CartItem
           text="Total"
-          name={`${itemCount === 1 ? items[0].name : itemCount + " Items"}`}
+          name={`${itemCount === 1 ? items[0].name ?? items[0].tokenOrder : itemCount + " Items"}`}
           price={totalAmount}
           image={getImages}
           id={1}
@@ -171,7 +171,7 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
       <div className="overflow-hidden transition-all" style={{ height: showDetails ? `${ref.current?.scrollHeight}px` : 0 }} ref={ref}>
         <div className={clsx("p-2.5 gap-y-2.5 border-x border-b rounded-b-md border-gray")}>
           {items.map((item: any, i: number) => (
-            <CartItem key={i} text="Price" name={item.name} price={item.price} image={item.image} id={item.id} />
+            <CartItem key={i} text="Price" name={item.name ?? item.tokenOrder} price={item.price} image={item.image} id={item.id} />
           ))}
         </div>
       </div>

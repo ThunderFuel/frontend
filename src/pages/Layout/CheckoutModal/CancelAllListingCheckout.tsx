@@ -2,24 +2,23 @@ import React, { useState } from "react";
 import clsx from "clsx";
 
 import Button from "components/Button";
-import CartItem from "components/CartItem";
 import Modal from "components/Modal";
 
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
-import { FuelProvider } from "api";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { FuelProvider } from "../../../api";
+import collectionsService from "api/collections/collections.service";
 
 const checkoutProcessTexts = {
-  title1: "Confirm your canceling auction",
-  description1: "Proceed in your wallet and confirm canceling auction.",
+  title1: "Confirm your canceling listing",
+  description1: "Proceed in your wallet and confirm canceling listing.",
   title2: "Wait for approval",
   description2: "Waiting for transaction to be approved",
-  title3: "Your auction is canceled!",
-  description3: "Your auction succesfully canceled.",
+  title3: "Your listings are canceled!",
+  description3: "Your listings are succesfully canceled.",
 };
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
@@ -34,9 +33,8 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   );
 };
 
-const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { wallet } = useAppSelector((state) => state.wallet);
+const CancelAllListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+  const { wallet, user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -44,20 +42,21 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
 
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
-    nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
-        .then((res) => {
-          console.log(res);
-          nftdetailsService.tokenCancelAuction(selectedNFT.id);
-          setApproved(true);
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
-    });
+    const params = { userId: user.id };
+
+    cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false)
+      .then((res) => {
+        console.log(res);
+        if (res.transactionResult.status.type === "success") {
+          collectionsService.cancelAllListings(params);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+          setStartTransaction(false);
+        else setIsFailed(true);
+      });
   };
 
   React.useEffect(() => {
@@ -98,19 +97,10 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   // const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Cancel Auction" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
-      <div className="flex flex-col p-5">
-        <CartItem
-          text={selectedNFT.highestBid ? "Highest Bid" : ""}
-          name={selectedNFT.name ?? selectedNFT.tokenOrder}
-          image={selectedNFT.image}
-          price={selectedNFT.highestBid ? selectedNFT.highestBid.price : ""}
-          id={0}
-        ></CartItem>
-      </div>
+    <Modal backdropDisabled={true} className="checkout" title="Cancel All Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
   );
 };
 
-export default CancelAuctionCheckout;
+export default CancelAllListingCheckout;

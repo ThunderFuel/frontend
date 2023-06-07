@@ -16,6 +16,9 @@ export enum CheckoutType {
   UpdateListing,
   BulkListing,
   AcceptBid,
+  CancelAllListings,
+  CancelAllOffers,
+  CancelAllOffersListings,
 }
 
 export const checkoutSlice = createSlice({

@@ -125,7 +125,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
     >
       <div className="flex flex-col p-5">
         {/*TODO price yerine string yazilabilmeli */}
-        <CartItem text={"Address"} name={selectedNFT.name} image={selectedNFT.image} price={addressFormat(address)} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        <CartItem text={"Address"} name={selectedNFT.name ?? selectedNFT.tokenOrder} image={selectedNFT.image} price={addressFormat(address)} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       {showTransactionAnimation ? (
         <div className="flex border-t border-gray">{checkoutProcess}</div>

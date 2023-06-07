@@ -5,7 +5,7 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
-import { CheckoutType, removeCancelOfferItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 interface IOfferContext {
   userInfo?: any;
@@ -48,13 +48,10 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
 
   const onCancelAllOffer = async () => {
     try {
-      const activeOffers = offers.filter((item: any) => item.status === OfferStatus.ActiveOffer);
       dispatch(
         setCheckout({
-          type: CheckoutType.CancelOffer,
-          cancelOfferItems: activeOffers,
+          type: CheckoutType.CancelAllOffers,
           onCheckoutComplete: () => {
-            dispatch(removeCancelOfferItems());
             fetchOffers();
           },
         })
