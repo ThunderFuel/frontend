@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Balances from "components/Balances";
 import Button from "components/Button";
 import InputEthereum from "components/InputEthereum";
@@ -14,9 +14,9 @@ import userService from "api/user/user.service";
 
 const ManageFunds = () => {
   const dispatch = useAppDispatch();
-
   const { wallet, user } = useAppSelector((state) => state.wallet);
   const { manageFundsShow } = useAppSelector((state) => state.wallet);
+
   const [isAddToPool, setisAddToPool] = useState(true);
   const [amount, setAmount] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -24,17 +24,25 @@ const ManageFunds = () => {
   function handleSwap() {
     setIsDisabled(true);
     if (isAddToPool)
-      deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId).then((res) => {
-        console.log(res);
-        userService.updateBidBalance(user.id, amount);
-        setIsDisabled(false);
-      });
+      deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
+        .then((res) => {
+          console.log(res);
+          userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
+        })
+        .catch((e) => {
+          console.log(e);
+          setIsDisabled(false);
+        });
     else
-      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId).then((res) => {
-        console.log(res);
-        userService.updateBidBalance(user.id, -amount);
-        setIsDisabled(false);
-      });
+      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
+        .then((res) => {
+          console.log(res);
+          userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
+        })
+        .catch((e) => {
+          console.log(e);
+          setIsDisabled(false);
+        });
   }
 
   const footer = (
@@ -48,11 +56,20 @@ const ManageFunds = () => {
     </div>
   );
 
+  React.useEffect(() => {
+    return () => {
+      setIsDisabled(false);
+      setAmount(0);
+    };
+  }, [manageFundsShow]);
+
+  const renderBalances = useMemo(() => <Balances refresh={isDisabled} />, [isDisabled]);
+
   return (
     <Modal className="checkout" title="Manage Funds" footer={footer} onClose={() => dispatch(toggleManageFundsModal())} show={manageFundsShow}>
       <div className="flex flex-col p-5 gap-y-2.5">
         <InfoBox title={""} description={"You can always add to your bid balance or withdraw from your bid balance without limitation."} />
-        <Balances refresh={isDisabled} />
+        {renderBalances}
         <div className="flex flex-col gap-y-[25px]">
           <Tab className="bg-gray" initTab={0} onChange={(value) => setisAddToPool(!value)}>
             <Tab.Item id={0}>
