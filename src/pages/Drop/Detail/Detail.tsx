@@ -8,7 +8,6 @@ import dropService from "api/drop/drop.service";
 import { useParams } from "react-router-dom";
 
 import "./Detail.css";
-import Properties from "./components/Properties";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 
@@ -56,7 +55,6 @@ const Detail = () => {
           <About />
         </div>
         <Blocks />
-        <Properties />
       </div>
     </DropDetailProvider>
   );

@@ -7,7 +7,6 @@ import { useDropDetailContext } from "../../DetailContext";
 
 const Properties = () => {
   const { dropDetail } = useDropDetailContext();
-  console.log(dropDetail);
 
   return (
     <div className="mt-10 px-10">

@@ -528,3 +528,11 @@ body {
   --th-gray-dark: 48 57 63;
   --th-gray-light: 255 255 255;
 }
+
+.drop-item-container.drop-thunder,
+.drop.drop-thunder {
+  --th-bg: 75 75 75;
+  --th-bg-light: 75 75 75;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}

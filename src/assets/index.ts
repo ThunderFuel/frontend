@@ -75,3 +75,4 @@ export { default as AssetDropEditClipSingleVideo } from "./drop/edit/clip-single
 
 export * as AssetDropTest from "./drop/test";
 export * as AssetDropIndex from "./drop/index";
+export * as AssetDropThunder from "./drop/thunder";
