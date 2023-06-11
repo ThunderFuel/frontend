@@ -4,7 +4,7 @@ import clsx from "clsx";
 const TabItem = ({ children }: any) => {
   return children;
 };
-const Tab = ({ children, number = 0, className, containerClassName }: any) => {
+const Tab = ({ children, number = 0, className, containerClassName, headerClassName }: any) => {
   const [activeTab, setActiveTab] = React.useState(number);
   const headerProps = useMemo(() => {
     return children
@@ -15,12 +15,12 @@ const Tab = ({ children, number = 0, className, containerClassName }: any) => {
   }, [children]);
 
   const getActiveTab = React.useMemo(() => {
-    return children[activeTab];
+    return children.filter((child: any) => !!child)[activeTab];
   }, [activeTab, children]);
 
   return (
     <div className={clsx("flex flex-col gap-5", className)}>
-      <ul className="flex gap-12">
+      <ul className={clsx("flex gap-10", headerClassName)}>
         {headerProps.map((header: any, i: number) => {
           return (
             <li
