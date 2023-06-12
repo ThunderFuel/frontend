@@ -21,7 +21,7 @@ const FaqItem = ({ item }: any) => {
 };
 const Faq = ({ faq }: any) => {
   return (
-    <div className="flex flex-col gap-5 w-full max-w-[800px]">
+    <div className="flex flex-col gap-4 w-full max-w-[800px]">
       {faq.map((item: any, i: number) => (
         <FaqItem item={item} key={i} />
       ))}
