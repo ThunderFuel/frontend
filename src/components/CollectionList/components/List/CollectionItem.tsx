@@ -82,9 +82,11 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setSweep, options } = useCollectionListContext();
-  const { isConnected } = useAppSelector((state) => state.wallet);
+  const { isConnected, user } = useAppSelector((state) => state.wallet);
   const { hasEnoughFunds } = useWallet();
   const { days, hours, minutes } = remainingTime(collection.onAuctionExpireTime);
+
+  const isOwnCollectionItem = collection?.userId === user.id;
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -206,7 +208,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         )}
         {!selectionDisabled && !options?.isProfile ? (
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
-            {!collection.isOwnCollectionItem ? (
+            {!isOwnCollectionItem ? (
               collection.salable ? (
                 <ButtonBuyNow onClick={onBuyNow} />
               ) : collection.onAuction ? (
