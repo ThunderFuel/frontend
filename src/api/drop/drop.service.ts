@@ -24,15 +24,11 @@ const responseThunder = {
     banner: AssetDropThunder.Banner,
     title: "Open Beta Testers",
     about:
-      "We are excited to announce the launch of Thunder Marketplace OPEN BETA!\n" +
-      "\n" +
-      "As a token of our gratitude, we introduce the Open Beta Tester ID NFT Collection reflecting the spirit of our marketplace: innovation, creativity and community. By minting NFTs on our testnet, you will allow us to fully explore the possibilities of our marketplace and to perfect our systems before we go live.\n" +
-      "\n" +
-      "Each participant will receive a unique, individually minted NFT. This NFT will serve as a permanent reminder of your involvement in our marketplace, acting as a kind of digital badge of honor. And you should be ready to show this badge if any opportunity comes knocking at your door in the future.\n" +
-      "\n" +
-      "By participating in our open beta in this new era of digital art and collectibles, you are taking part in shaping the story of our superior NFT experience. Thank you for being a part of our journey and welcome to the exclusive club of Open Beta Testers.\n" +
-      "\n" +
-      "Let's create, innovate, and inspire together!",
+      "<p>We are excited to announce the launch of Thunder Marketplace OPEN BETA!</p>" +
+      "<p class='mt-4'>As a token of our gratitude, we introduce the Open Beta Tester ID NFT Collection reflecting the spirit of our marketplace: innovation, creativity and community. By minting NFTs on our testnet, you will allow us to fully explore the possibilities of our marketplace and to perfect our systems before we go live.</p>" +
+      "<p class='mt-4'>Each participant will receive a unique, individually minted NFT. This NFT will serve as a permanent reminder of your involvement in our marketplace, acting as a kind of digital badge of honor. And you should be ready to show this badge if any opportunity comes knocking at your door in the future.</p>" +
+      "<p class='mt-4'>By participating in our open beta in this new era of digital art and collectibles, you are taking part in shaping the story of our superior NFT experience. Thank you for being a part of our journey and welcome to the exclusive club of Open Beta Testers.</p>" +
+      "<p class='mt-4'>Let's create, innovate, and inspire together!</p>",
     blocks: [
       {
         type: BLOCK_TYPE.SingleVideo,
