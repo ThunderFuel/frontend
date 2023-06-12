@@ -37,7 +37,7 @@ const responseThunder = {
       {
         type: BLOCK_TYPE.SingleVideo,
         image: AssetDropThunder.SingleVideoBg,
-        video: "/thunder-video.mp4",
+        video: "https://thassetstorage.blob.core.windows.net/assets/thunder-video.mp4",
       },
     ],
     faq: [
