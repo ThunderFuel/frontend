@@ -35,8 +35,9 @@ const responseThunder = {
       "Let's create, innovate, and inspire together!",
     blocks: [
       {
-        type: BLOCK_TYPE.SingleImage,
-        image: AssetDropThunder.SingleImage,
+        type: BLOCK_TYPE.SingleVideo,
+        image: AssetDropThunder.SingleVideoBg,
+        video: "/thunder-video.mp4",
       },
     ],
     faq: [

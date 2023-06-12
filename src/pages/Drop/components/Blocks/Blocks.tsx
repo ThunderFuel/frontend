@@ -5,6 +5,7 @@ import ImageText from "./ImageText";
 import SingleImage from "./SingleImage";
 import VideoText from "./VideoText";
 import InfiniteGallery from "./InfiniteGallery";
+import SingleVideo from "./SingleVideo";
 
 const Blocks = () => {
   const { dropDetail } = useDropDetailContext();
@@ -21,6 +22,8 @@ const Blocks = () => {
         return <SingleImage key={k} image={block.image} />;
       case BLOCK_TYPE.Infinity:
         return <InfiniteGallery key={k} images={block.images} />;
+      case BLOCK_TYPE.SingleVideo:
+        return <SingleVideo key={k} image={block.image} video={block.video} />;
       default:
         return <div key={k} />;
     }
