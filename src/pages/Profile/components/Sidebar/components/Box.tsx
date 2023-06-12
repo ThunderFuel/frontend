@@ -51,6 +51,7 @@ const BoxWithIconLastActivity = React.memo(({ lastActivity }: any) => {
           fromUserContractAddress={lastActivity.fromUser?.walletAddress}
           createdTimeStamp={lastActivity.createdTimeStamp}
           toUserContractAddress={lastActivity.toUser?.walletAddress}
+          noTime={true}
         />
       </h6>
     </BoxWithIcon>

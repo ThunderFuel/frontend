@@ -142,6 +142,7 @@ const LeftMenu = (props: any) => {
         fromUserContractAddress={fromUser?.walletAddress}
         createdTimeStamp={createdTimeStamp}
         toUserContractAddress={toUser?.walletAddress}
+        noTime={true}
       />
     );
   }
