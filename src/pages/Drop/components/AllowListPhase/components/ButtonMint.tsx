@@ -6,11 +6,11 @@ import collectionsService from "api/collections/collections.service";
 import Button from "components/Button";
 import { IconMinus, IconPlus, IconToken } from "icons";
 
-const InputMint = ({ onChange }: any) => {
+const InputMint = ({ onChange, walletCount }: any) => {
   const [value, setValue] = useState(1);
   const onUpdateValue = (number: number) => {
     const val = value + number;
-    if (val < 1 || val > 5) {
+    if (val < 1 || val > walletCount) {
       return false;
     }
 
@@ -23,17 +23,17 @@ const InputMint = ({ onChange }: any) => {
       <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
       <div className="flex flex-col items-center">
         <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
-          <IconPlus className={value === 5 ? "opacity-50" : ""} />
+          <IconPlus className={value >= walletCount ? "opacity-50" : ""} />
         </span>
         <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
-          <IconMinus className={value === 1 ? "opacity-50" : ""} />
+          <IconMinus className={value <= 1 ? "opacity-50" : ""} />
         </span>
       </div>
     </div>
   );
 };
 
-const ButtonMint = () => {
+const ButtonMint = ({ walletCount }: { walletCount: number }) => {
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const [amount, setAmount] = useState(1);
 
@@ -64,7 +64,7 @@ const ButtonMint = () => {
 
   return (
     <div className="flex gap-2">
-      <InputMint onChange={onChange} />
+      {walletCount > 1 ? <InputMint onChange={onChange} walletCount={walletCount} /> : null}
       <Button className="w-full btn-primary" onClick={onClick}>
         Mint now <IconToken />
       </Button>

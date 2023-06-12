@@ -46,7 +46,7 @@ const AllowListPhase = () => {
           {isAvailable && infinityBlock ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={phase.startDate} />}
           <Process available={phase.available} taken={phase.taken} />
         </div>
-        <div className="footer">{isAvailable ? <ButtonMint /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}</div>
+        <div className="footer">{isAvailable ? <ButtonMint walletCount={phase.walletCount} /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}</div>
       </div>
     );
   });
