@@ -1,0 +1,26 @@
+.drop-detail-tab {
+  @apply flex flex-col gap-5;
+}
+
+.drop-detail-tab ul {
+  @apply flex gap-10;
+  @apply -mx-5 px-5 bg-white bg-opacity-10 border border-white border-opacity-10 rounded-md;
+}
+
+.drop-detail-tab li {
+  @apply relative cursor-pointer py-5;
+}
+
+.drop-detail-tab li.active:after {
+  content: "";
+  @apply w-full;
+  @apply absolute -bottom-0.5 border-b border-b-white;
+}
+
+.drop-detail-tab li h4 {
+  @apply opacity-50;
+}
+
+.drop-detail-tab li.active h4 {
+  @apply opacity-100;
+}

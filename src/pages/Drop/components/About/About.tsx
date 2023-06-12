@@ -11,7 +11,7 @@ const About = () => {
 
   return (
     <div className="flex gap-20 px-10 text-white">
-      <Tab className="text-white flex-1" headerClassName="-mx-5 p-5 bg-white bg-opacity-10 border border-white border-opacity-10 rounded-md">
+      <Tab className="text-white flex-1" headerClassName="">
         <Tab.Item title="About">
           <div className="body-medium" dangerouslySetInnerHTML={{ __html: dropDetail.about }}></div>
         </Tab.Item>

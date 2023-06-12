@@ -4,8 +4,8 @@ import Img from "components/Img";
 import Marquee from "react-fast-marquee";
 import { chunk } from "utils";
 
-const InfiniteGallery = ({ images }: any) => {
-  if (!images.length) {
+const InfiniteGallery = ({ images, hidden }: any) => {
+  if (!images.length || hidden) {
     return null;
   }
   const imageList = chunk(images, 6);

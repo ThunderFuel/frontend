@@ -35,6 +35,20 @@ const responseThunder = {
         image: AssetDropThunder.SingleVideoBg,
         video: "https://thassetstorage.blob.core.windows.net/assets/thunder-video.mp4",
       },
+      {
+        type: BLOCK_TYPE.Infinity,
+        hidden: true,
+        images: [
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+          AssetDropThunder.Infinity1,
+        ],
+      },
     ],
     faq: [
       { title: "When is the mint date?", text: "When is the mint date?" },
