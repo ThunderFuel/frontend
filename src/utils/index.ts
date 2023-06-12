@@ -107,7 +107,7 @@ export const formatPrice = (price: any) => {
   if (price < 0.0001) return "<0.0001";
 
   return parseFloat(price)
-    .toFixed(4)
+    .toFixed(5) //.toFixed(4)
     .replace(/\.?0+$/, "");
 };
 
