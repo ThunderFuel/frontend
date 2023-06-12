@@ -3,13 +3,13 @@ import React from "react";
 import "./Item.css";
 import Process from "../components/Process/Process";
 import { DROP_STATUS } from "api/drop/drop.service";
-import Img from "components/Img";
 import SocialButtons from "../components/SocialButtons";
 import clsx from "clsx";
-import { dateFormat } from "../../../utils";
+import { dateFormat } from "utils";
 import { Link } from "react-router-dom";
-import { getAbsolutePath } from "../../../hooks/useNavigate";
-import { PATHS } from "../../../router/config/paths";
+import { getAbsolutePath } from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
+import Creator from "../components/Creator";
 
 const ItemStatusLabel = ({ className, children }: any) => {
   return (
@@ -29,17 +29,6 @@ const ItemStatus = ({ status, startDate }: any) => {
 
   return <div className="drop-item-badge flex-center">{text}</div>;
 };
-const ItemCreator = ({ creator }: any) => {
-  return (
-    <div className="drop-item-badge flex gap-2.5 items-center">
-      <Img className="w-8 h-8 overflow-hidden rounded-full" src={creator.image} />
-      <div className="text-white">
-        <span className="text-white text-opacity-50">Created by </span>
-        {creator.name}
-      </div>
-    </div>
-  );
-};
 
 const DropItem = ({ item }: any) => {
   return (
@@ -54,7 +43,7 @@ const DropItem = ({ item }: any) => {
             <h2 className="text-h2">{item.name}</h2>
             <div className="flex gap-2.5">
               <ItemStatus status={item.status} startDate={item.startDate} />
-              <ItemCreator creator={item.creator} />
+              <Creator creator={item.creator} />
             </div>
             <Process available={item.available || 0} taken={item.taken || 0} />
             <div className="body-medium max-h-0 transition-all group-hover:max-h-20 text-overflow-3">

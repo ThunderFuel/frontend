@@ -11,6 +11,7 @@ interface IDropDetailContext {
     roadMap: any;
     faq: any;
     allowListPhase: any;
+    creator: any;
   };
 }
 

@@ -11,12 +11,3 @@
   @apply overflow-hidden rounded-md bg-no-repeat bg-center bg-cover;
   mask-image: linear-gradient(0deg, rgba(25, 25, 25, 0) 9.38%, rgba(25, 25, 25, 0.615062) 62.27%, #191919 91.33%);
 }
-
-.drop-item-badge {
-  @apply text-h6 border rounded-md;
-  padding: 10px;
-  padding-right: 20px;
-  border-color: rgba(255, 255, 255, 0.25);
-  background: rgba(84, 84, 84, 0.25);
-  backdrop-filter: blur(39.1006px);
-}
