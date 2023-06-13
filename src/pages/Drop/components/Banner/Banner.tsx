@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
-import Img from "components/Img";
 
-import { useDropDetailContext } from "../../Detail/DetailContext";
 import "./Banner.css";
 
 const Banner = () => {
-  const { dropDetail } = useDropDetailContext();
-
   const setScrollPosition = () => {
     const offset = window.scrollY;
     const offsetHeight = document.body.offsetHeight;
@@ -26,7 +22,9 @@ const Banner = () => {
 
   return (
     <div className="banner-container animate">
-      <Img className="banner-image" src={dropDetail.banner} />
+      <video className="banner-image" autoPlay loop>
+        <source src="https://thassetstorage.blob.core.windows.net/assets/thunder-banner-video.mp4" type="video/mp4" />
+      </video>
     </div>
   );
 };
