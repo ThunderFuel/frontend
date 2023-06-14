@@ -37,7 +37,7 @@ const ManageFunds = () => {
       withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
         .then((res) => {
           console.log(res);
-          userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
+          userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
         })
         .catch((e) => {
           console.log(e);
