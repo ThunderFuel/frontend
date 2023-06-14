@@ -153,9 +153,9 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         <div className="flex gap-x-2 p-[10px] m-5 rounded-[5px] bg-bg-light border border-gray">
           <IconInfo color="orange" />
           <div className="flex flex-col gap-y-[6px] text-head6 font-spaceGrotesk text-white">
-            {(checkoutPrice - currentBidBalance).toFixed(9)} ETH added to your balance.
+            {parseFloat((checkoutPrice - currentBidBalance).toFixed(9))} ETH added to your balance.
             <span className="flex text-bodySm text-gray-light">
-              In order to place this bid {(checkoutPrice - currentBidBalance).toFixed(9)} ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.
+              In order to place this bid {parseFloat((checkoutPrice - currentBidBalance).toFixed(9))} ETH added to your bid balance. You can always view and withdraw your bid balance from your wallet.
             </span>
           </div>
         </div>
