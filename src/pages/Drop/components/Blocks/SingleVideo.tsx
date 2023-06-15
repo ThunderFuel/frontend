@@ -38,7 +38,7 @@ const SingleVideo = (props: ISingleVideo) => {
           </div>
         </div>
       ) : (
-        <video className="w-full h-full" controls autoPlay loop>
+        <video className="w-full h-full" autoPlay loop>
           <source src={props.video} type="video/mp4" />
         </video>
       )}

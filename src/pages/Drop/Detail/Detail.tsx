@@ -41,6 +41,11 @@ const Detail = () => {
   }, [dropId]);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     return () => {
       document.body.removeAttribute("class");
     };

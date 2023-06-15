@@ -473,6 +473,21 @@ body {
   --tw-divide-opacity: 0.1;
 }
 
+.drop .cart.modalbase .modal {
+  --th-gray: 255 255 255;
+}
+
+.drop .modalbase .modal .mhead,
+.drop .modalbase .border-b,
+.drop .modalbase .border-t,
+.drop .modalbase .border-gray {
+  --tw-border-opacity: 0.1;
+}
+
+.drop .modalbase .bg-gray {
+  --tw-bg-opacity: 0.1;
+}
+
 .drop .search-group-title {
   --tw-text-opacity: 0.5;
 }
