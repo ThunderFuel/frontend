@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
+import Img from "components/Img";
 
 import { useDropDetailContext } from "../../Detail/DetailContext";
 import "./Banner.css";
 
 const Banner = () => {
   const { dropDetail } = useDropDetailContext();
+  const ref = useRef<HTMLVideoElement>(null);
   const setScrollPosition = () => {
     const offset = window.scrollY;
     const offsetHeight = document.body.offsetHeight;
@@ -22,11 +24,21 @@ const Banner = () => {
     };
   });
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.play();
+    }
+  }, [dropDetail.bannerVideo]);
+
   return (
     <div className="banner-container animate">
-      <video className="banner-image" autoPlay loop>
-        <source src={dropDetail.banner} type="video/mp4" />
-      </video>
+      {dropDetail.bannerVideo ? (
+        <video ref={ref} className="banner-image" controls muted autoPlay loop poster={dropDetail.bannerImage}>
+          <source src={dropDetail.bannerVideo} type="video/mp4" />
+        </video>
+      ) : (
+        <Img className="banner-image" src={dropDetail.bannerImage} />
+      )}
     </div>
   );
 };

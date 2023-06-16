@@ -14,7 +14,7 @@ const DropItem = ({ item }: any) => {
   return (
     <Link to={getAbsolutePath(PATHS.DROP_DETAIL, { dropId: item.id })}>
       <div className={clsx("drop-item-container group", item.className)}>
-        <div className="drop-item-container-bg" style={{ backgroundImage: `url(${item.banner})` }} />
+        <div className="drop-item-container-bg" style={{ backgroundImage: `url(${item.bannerImage})` }} />
         <div className="flex flex-1 flex-col justify-between relative z-10">
           <div className="flex justify-end">
             <SocialButtons socialMedias={item.socials} disableShare={true} />
