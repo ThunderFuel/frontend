@@ -107,10 +107,12 @@ const CheckoutProcess = ({ onComplete, approved, failed }: { onComplete: () => v
     onComplete();
   };
 
-  React.useEffect(() => {
-    setPartiallyFailed(false);
+  useEffect(() => {
+    if (!failed) {
+      setPartiallyFailed(false);
+    } else setPartiallyFailed(true);
     startTransactionProcess();
-  }, [approved]);
+  }, [approved, failed]);
 
   return (
     <div className="flex flex-col w-full ">
@@ -322,6 +324,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   React.useEffect(() => {
     setApproved(false);
     setStartTransaction(false);
+    setIsFailed(false);
+
     if (show) {
       setStartTransaction(true);
     }
