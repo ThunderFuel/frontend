@@ -3,12 +3,14 @@ import Table, { ITableHeader } from "components/Table";
 import Checkbox from "components/CheckBox";
 import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
 import { useAppDispatch } from "store";
-import { dateFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
 import EthereumPrice from "components/EthereumPrice";
 import clsx from "clsx";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
+import { PATHS } from "router/config/paths";
+import UseNavigate from "hooks/useNavigate";
 
 const Collection = ({ item }: { item: any }) => {
   return (
@@ -27,6 +29,7 @@ const UnSalableLabel = ({ children }: any) => {
 
 const CollectionTable = () => {
   const dispatch = useAppDispatch();
+  const navigate = UseNavigate();
   const { collectionItems, setSweep, options } = useCollectionListContext();
 
   const onToggleCart = (collection: any) => {
@@ -92,7 +95,16 @@ const CollectionTable = () => {
       text: "Owner",
       width: "20%",
       align: "flex-end",
-      render: (item) => <div className="cell text-h6 text-gray-light hover:text-white hover:underline">{item.owner ?? "-"}</div>,
+      render: (item) => (
+        <div
+          className="cell text-h6 text-gray-light hover:text-white hover:underline"
+          onClick={() => {
+            navigate(PATHS.USER, { userId: item?.userId });
+          }}
+        >
+          {item?.userName ?? addressFormat(item?.userWalletAddress ?? "")}
+        </div>
+      ),
     },
     {
       key: "listedTime",
