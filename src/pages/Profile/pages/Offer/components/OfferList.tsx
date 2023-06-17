@@ -1,5 +1,5 @@
 import React from "react";
-import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconLink, IconWarning } from "icons";
+import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconInfo, IconLikeHand, IconLink, IconWarning } from "icons";
 import Img from "components/Img/Img";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
@@ -64,7 +64,7 @@ const OfferItemExpireLabel = ({ item }: any) => {
     </div>
   );
 };
-const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) => {
+const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, isOnHold = null }: any) => {
   const { options, userInfo } = useProfile();
   const path = getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item?.tokenId });
   const isDisabled = item.isExpired || item.isCanceled;
@@ -106,6 +106,11 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
           <div className="inline-flex">
             <OfferItemExpireLabel item={item} />
           </div>
+          {isOnHold && (
+            <div className="flex gap-1 rounded-[5px] p-[6px] border border-gray text-orange">
+              <IconInfo className=" flex-shrink-0 w-[15px] h-[15px]" /> <span className="text-bodyMd">Offer exceeds your bid balance. Offer is on hold until you add funds to your bid balance.</span>
+            </div>
+          )}
         </div>
         <EthereumPrice className={isDisabled ? "text-gray-light" : "text-white"} price={item.price} />
       </div>
@@ -124,7 +129,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
 const OfferList = () => {
   const { options } = useProfile();
   const { user } = useAppSelector((state) => state.wallet);
-  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers } = useOfferContext();
+  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers, bidBalance } = useOfferContext();
   const isOffersMade = filterValue.offerType === 1;
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
   const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
@@ -142,7 +147,7 @@ const OfferList = () => {
       <div className="flex flex-col gap-3">
         {getOffers.map((item: any, k: any) => {
           if (isOffersMade) {
-            return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />;
+            return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} isOnHold={item.price > bidBalance} />;
           } else {
             if (item.ownerId !== user.id) {
               // return false;
