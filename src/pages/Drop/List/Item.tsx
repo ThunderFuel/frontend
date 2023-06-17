@@ -27,7 +27,7 @@ const DropItem = ({ item }: any) => {
             </div>
             <Process available={item.available || 0} taken={item.taken || 0} />
             <div className="body-medium max-h-0 transition-all group-hover:max-h-20 text-overflow-3">
-              Shellz Orb is a brand set in a post-apocalyptic world. We are born through NFTs to expand into all facets of Web3 and media.
+              As a token of our gratitude, we introduce the Open Beta Tester ID NFT Collection reflecting the spirit of our marketplace: innovation, creativity and community.
             </div>
           </div>
         </div>
