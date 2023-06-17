@@ -122,7 +122,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, isOnHold
           </div>
           {isOnHold && options?.isProfile && item.isActiveOffer ? (
             <div className="flex gap-1 rounded-[5px] p-[6px] border border-gray text-orange">
-              <IconInfo className=" flex-shrink-0 w-[15px] h-[15px]" /> <span className="text-bodyMd">Offer exceeds your bid balance. Offer is on hold until you add funds to your bid balance</span>
+              <IconInfo className=" flex-shrink-0 w-[15px] h-[15px]" /> <span className="text-bodyMd">Offer exceeds your bid balance. Offer is on hold until you add funds to your bid balance.</span>
             </div>
           ) : (
             <></>
@@ -130,7 +130,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, isOnHold
           {offerOwnerBidBalance < item.price && !item.isOfferMade && options?.isProfile && item.isActiveOffer ? (
             <div className="flex gap-1 rounded-[5px] p-[6px] border border-gray text-orange">
               <IconInfo className=" flex-shrink-0 w-[15px] h-[15px]" />{" "}
-              <span className="text-bodyMd">Offer exceeds bidder`s available balance. Offer is on hold until bidder increases bid balance.</span>
+              <span className="text-bodyMd">Offer amount exceeds bidder`s current balance. Offer is on hold until bidder has enough bid balance.</span>
             </div>
           ) : (
             <></>
@@ -141,7 +141,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, isOnHold
       {options?.isProfile && item.isActiveOffer ? (
         offerOwnerBidBalance < item.price && !item.isOfferMade ? (
           <div className="flex-center px-4 py-3 gap-[6px] border border-gray rounded-[5px] bg-gray text-gray-light">
-            <span className="text-headline-02">HOLD ON</span>
+            <span className="text-headline-02">ON HOLD</span>
             <IconHand className="w-[18px] h-[18px]" />
           </div>
         ) : !item.isOfferMade ? (
