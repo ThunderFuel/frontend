@@ -33,7 +33,7 @@ const Banner = () => {
   return (
     <div className="banner-container animate">
       {dropDetail.bannerVideo ? (
-        <video ref={ref} className="banner-image" controls muted autoPlay loop poster={dropDetail.bannerImage}>
+        <video ref={ref} className="banner-image" muted autoPlay loop poster={dropDetail.bannerImage}>
           <source src={dropDetail.bannerVideo} type="video/mp4" />
         </video>
       ) : (
