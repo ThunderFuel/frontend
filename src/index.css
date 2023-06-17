@@ -443,6 +443,11 @@ body {
   }
 }
 
+.Toastify__toast-container {
+  width: 560px !important;
+}
+
+
 :root {
   --th-white: 255 255 255;
   --th-black: 0 0 0;

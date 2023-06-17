@@ -6,6 +6,8 @@ import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import userService from "api/user/user.service";
+import useToast from "hooks/useToast";
 
 interface IOfferContext {
   userInfo?: any;
@@ -64,15 +66,20 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
 
   const onAcceptOffer = async (item: any) => {
     try {
-      dispatch(
-        setCheckout({
-          type: CheckoutType.AcceptOffer,
-          item: item,
-          price: item.price,
-          onCheckoutComplete: fetchOffers,
-        })
-      );
-      dispatch(toggleCheckoutModal());
+      userService.getBidBalance(item.makerUserId).then((res) => {
+        if (res.data < item.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+        else {
+          dispatch(
+            setCheckout({
+              type: CheckoutType.AcceptOffer,
+              item: item,
+              price: item.price,
+              onCheckoutComplete: fetchOffers,
+            })
+          );
+          dispatch(toggleCheckoutModal());
+        }
+      });
     } catch (e) {
       console.log(e);
     }

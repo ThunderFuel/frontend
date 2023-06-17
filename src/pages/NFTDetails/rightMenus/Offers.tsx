@@ -13,6 +13,8 @@ import { addressFormat, dateFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
 import { OfferStatus } from "api/offer/offer.type";
 import clsx from "clsx";
+import userService from "api/user/user.service";
+import useToast from "hooks/useToast";
 
 const Box = ({
   item,
@@ -60,15 +62,20 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(
-                setCheckout({
-                  type: CheckoutType.AcceptOffer,
-                  item: item,
-                  price: item.price,
-                  onCheckoutComplete: onBack,
-                })
-              );
-              dispatch(toggleCheckoutModal());
+              userService.getBidBalance(item.makerUserId).then((res) => {
+                if (res.data < item.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+                else {
+                  dispatch(
+                    setCheckout({
+                      type: CheckoutType.AcceptOffer,
+                      item: item,
+                      price: item.price,
+                      onCheckoutComplete: onBack,
+                    })
+                  );
+                  dispatch(toggleCheckoutModal());
+                }
+              });
             }}
           >
             ACCEPT OFFER

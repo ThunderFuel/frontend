@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import useToast from "hooks/useToast";
+import userService from "api/user/user.service";
 
 const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const dispatch = useAppDispatch();
@@ -32,22 +34,27 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              dispatch(
-                setCheckout({
-                  type: CheckoutType.AcceptOffer,
-                  item: {
-                    ...selectedNFT.bestOffer,
-                    contractAddress: selectedNFT.collection.contractAddress,
-                    makerAddress: selectedNFT.bestOffer.user.walletAddress,
-                    takerAddress: selectedNFT.user.walletAddress,
-                    tokenOrder: selectedNFT.tokenOrder,
-                    tokenImage: selectedNFT.image,
-                  },
-                  price: selectedNFT.bestOffer?.price,
-                  onCheckoutComplete: fetchCollection,
-                })
-              );
-              dispatch(toggleCheckoutModal());
+              userService.getBidBalance(selectedNFT?.bestOffer?.makerUserId).then((res) => {
+                if (res.data < selectedNFT?.bestOffer?.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+                else {
+                  dispatch(
+                    setCheckout({
+                      type: CheckoutType.AcceptOffer,
+                      item: {
+                        ...selectedNFT.bestOffer,
+                        contractAddress: selectedNFT.collection.contractAddress,
+                        makerAddress: selectedNFT.bestOffer.user.walletAddress,
+                        takerAddress: selectedNFT.user.walletAddress,
+                        tokenOrder: selectedNFT.tokenOrder,
+                        tokenImage: selectedNFT.image,
+                      },
+                      price: selectedNFT.bestOffer?.price,
+                      onCheckoutComplete: fetchCollection,
+                    })
+                  );
+                  dispatch(toggleCheckoutModal());
+                }
+              });
             }}
           >
             ACCEPT OFFER
