@@ -11,6 +11,7 @@ import { ZERO_B256, assetManagerContractId, poolContractId, provider } from "glo
 import { toGwei } from "utils";
 import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
 import userService from "api/user/user.service";
+import { IconInfo } from "icons";
 
 const ManageFunds = () => {
   const dispatch = useAppDispatch();
@@ -82,6 +83,11 @@ const ManageFunds = () => {
           <div className="flex flex-col gap-y-2">
             <h6 className="text-head6 font-spaceGrotesk text-white"> {isAddToPool ? "Add To Bid Balance" : "Withdraw From Bid Balance"}</h6>
             <InputEthereum onChange={(value: any) => setAmount(value)} value={amount} />
+            {!isAddToPool && (
+              <div className="flex gap-[5px] rounded-[5px] text-orange">
+                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" /> <span className="text-bodyMd">Offers don`t cancel when you withdraw. Manage your offers in your profile.</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
