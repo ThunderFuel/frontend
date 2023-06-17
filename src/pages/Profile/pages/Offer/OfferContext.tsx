@@ -106,9 +106,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     navigate(PATHS.NFT_DETAILS, { nftId: item.tokenId });
   };
 
-  const getBidBalance = async () => {
-    userService.getBidBalance(value.userInfo.id).then((res) => setBidBalance(res.data));
-  };
+  const getBidBalance = async (id = value.userInfo.id) => userService.getBidBalance(id);
 
   const fetchOffers = async () => {
     const response = await offerService.getOffer({
@@ -130,7 +128,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   React.useEffect(() => {
     if (value.userInfo?.id) {
-      getBidBalance();
+      getBidBalance().then((res) => setBidBalance(res.data));
       fetchOffers();
     }
   }, [value.userInfo]);
@@ -145,6 +143,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     onAcceptOffer,
     onCancelOffer,
     onUpdateOffer,
+    getBidBalance,
   };
 
   return <OfferContext.Provider value={contextValue}>{children}</OfferContext.Provider>;
