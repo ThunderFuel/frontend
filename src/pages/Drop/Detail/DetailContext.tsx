@@ -3,7 +3,8 @@ import React, { createContext, ReactNode, useContext } from "react";
 interface IDropDetailContext {
   dropDetail: {
     className: string;
-    banner: string;
+    bannerImage: string;
+    bannerVideo: string;
     title: string;
     about: string;
     blocks: any;
