@@ -11,6 +11,7 @@ import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModa
 import { toggleWalletModal } from "store/walletSlice";
 import { useWallet } from "hooks/useWallet";
 import { formatPrice } from "utils";
+import useToast from "hooks/useToast";
 
 const FixedPrice = () => {
   const dispatch = useDispatch();
@@ -107,8 +108,11 @@ const FixedPrice = () => {
                   dispatch(remove(selectedNFT.uid));
                   setAddCartIsDisabled(false);
                 } else {
-                  if (isItemAlreadyAdded() === undefined) dispatch(add(selectedNFT));
-                  setAddCartIsDisabled(true);
+                  if (items.length === 5) useToast().error("In the open beta, you can add up to 5 items in your cart.");
+                  else {
+                    if (isItemAlreadyAdded() === undefined) dispatch(add(selectedNFT));
+                    setAddCartIsDisabled(true);
+                  }
                 }
               }}
             >
