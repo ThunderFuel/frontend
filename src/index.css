@@ -481,13 +481,14 @@ body {
 .drop #layout-header .tab li span:hover {
   --tw-bg-opacity: 0.1;
   background-color: rgb(var(--th-white) / var(--tw-bg-opacity));
+  --tw-text-opacity: .5;
 }
 
 .drop #layout-header .search-result-container .search-group-item:hover {
   --tw-bg-opacity: 0.1;
 }
 
-.drop .cart.modalbase .modal {
+.drop .modalbase .modal {
   --th-gray: 255 255 255;
 }
 
@@ -519,7 +520,11 @@ body {
 }
 
 .drop.drop-primary #layout-header .group.relative div {
-  --th-gray: 122 52 155;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-primary .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
 
 .drop-item-container.drop-secondary,
@@ -531,8 +536,13 @@ body {
 }
 
 .drop.drop-secondary #layout-header .group.relative div {
-  --th-gray: 39 59 66;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
+
+.drop.drop-secondary .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
 
 .drop-item-container.drop-blue,
 .drop.drop-blue {
@@ -543,7 +553,11 @@ body {
 }
 
 .drop.drop-blue #layout-header .group.relative div {
-  --th-gray: 0 112 207;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-blue .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
 
 
@@ -556,7 +570,11 @@ body {
 }
 
 .drop.drop-gray-light #layout-header .group.relative div {
-  --th-gray: 65 65 65;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-gray-light .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
 
 .drop-item-container.drop-gray,
@@ -568,7 +586,11 @@ body {
 }
 
 .drop.drop-gray #layout-header .group.relative div {
-  --th-gray: 37 37 37;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-gray .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
 
 .drop-item-container.drop-police-blue,
@@ -580,7 +602,11 @@ body {
 }
 
 .drop.drop-police-blue #layout-header .group.relative div {
-  --th-gray: 62 72 99;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-police-blue .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
 
 .drop-item-container.drop-thunder,
@@ -592,5 +618,9 @@ body {
 }
 
 .drop.drop-thunder #layout-header .group.relative div {
-  --th-gray: 75 75 75;
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-thunder .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }

@@ -3,7 +3,7 @@ import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
 import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
 import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
-import { Button } from "react-bootstrap";
+import Button from "components/Button";
 import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
 import { addressFormat } from "utils";
@@ -74,10 +74,10 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const footer = (
     <div className="flex mt-auto flex-col p-5 gap-y-2.5">
       <Balances />
-      <div className="flex w-full gap-x-2.5">
-        <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`} className="w-full">
+      <div className="grid grid-cols-2 gap-x-2.5">
+        <a target="_blank" rel="noreferrer" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`} className="btn btn-primary w-full">
           GET TEST ETH <IconFaucet />
-        </Button>
+        </a>
         <Button
           className="btn-secondary w-full"
           onClick={() => {
