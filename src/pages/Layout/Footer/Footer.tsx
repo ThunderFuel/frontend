@@ -52,7 +52,7 @@ const Footer = () => {
         <div className="flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
             <a href="/">
-              <img src={AssetLogo} style={{ height: "32px" }} alt="logo" />
+              <img src={AssetLogo} className="h-8" alt="logo" />
             </a>
             {/* <div className="flex flex-col items-center lg:flex-row gap-6">
             <h5 className="text-headline-drop-primary text-gray-light">EXPLORE</h5>
