@@ -17,6 +17,7 @@ import UseNavigate from "hooks/useNavigate";
 import ReadMore from "components/ReadMore";
 import ActivityItemDescription from "components/ActivityDescription";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
+import EthereumPrice from "components/EthereumPrice/EthereumPrice";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -222,7 +223,10 @@ const LeftMenu = (props: any) => {
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {formatPrice(nft.bestOffer?.price)} ETH by{" "}
+                    <div className="inline-block">
+                      <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={formatPrice(nft.bestOffer?.price)} />
+                    </div>
+                    by{" "}
                     <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>
                       {isBestOfferOwner() ? "you" : nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)}
                     </span>

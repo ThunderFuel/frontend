@@ -2,6 +2,8 @@ import React from "react";
 import { ActivityFilters } from "api/collections/collections.service";
 import { addressFormat, formatPrice, timeagoFormat } from "utils";
 import { useAppSelector } from "store";
+import { renderToString } from "react-dom/server";
+import EthereumPrice from "components/EthereumPrice/EthereumPrice";
 
 interface IActivityItemDescription {
   activityType: number;
@@ -11,22 +13,37 @@ interface IActivityItemDescription {
   price?: string;
   noTime?: boolean;
 }
-
 const ActivityItemDescription = React.memo(({ price, activityType, fromUserContractAddress, toUserContractAddress, createdTimeStamp, noTime = false }: IActivityItemDescription) => {
   const { user } = useAppSelector((state) => state.wallet);
   let activeTypeLabel = `${ActivityFilters[activityType]} by`;
   if (price) {
     if (ActivityFilters.Bids === activityType) {
-      activeTypeLabel = `${formatPrice(price)} ETH bid placed by`;
+      activeTypeLabel = `${renderToString(
+        <div className="inline-block">
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+        </div>
+      )}bid placed by`;
     }
     if (ActivityFilters.Listings === activityType) {
-      activeTypeLabel = `${formatPrice(price)} ETH list by`;
+      activeTypeLabel = `${renderToString(
+        <div className="inline-block">
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+        </div>
+      )}list by`;
     }
     if (ActivityFilters.Offers === activityType) {
-      activeTypeLabel = `${formatPrice(price)} ETH offer made by`;
+      activeTypeLabel = `${renderToString(
+        <div className="inline-block">
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+        </div>
+      )}offer made by`;
     }
     if (ActivityFilters.Sales === activityType) {
-      activeTypeLabel = `${formatPrice(price)} ETH sale by`;
+      activeTypeLabel = `${renderToString(
+        <div className="inline-block">
+          <EthereumPrice iconClassName="h-[18px] w-[18px]" price={formatPrice(price)} priceClassName="text-head6" />
+        </div>
+      )}sale by`;
     }
     if (ActivityFilters.Transfers === activityType) {
       activeTypeLabel = `Transferred by`;
