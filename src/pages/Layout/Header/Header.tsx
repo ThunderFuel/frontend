@@ -47,8 +47,8 @@ const HeaderTop = React.memo(() => {
   }, []);
 
   return (
-    <div className="container-fluid flex  items-center">
-      <div className="flex items-center  gap-5 shrink-0 text-headlineSm font-bigShoulderDisplay uppercase">
+    <div className="px-4 flex  items-center">
+      <div className="flex items-center  gap-5 shrink-0 text-headline-01">
         <span className="flex items-center">
           <IconEthereum color="#838383" />
           <span className="text-white">${ethPrice}</span>
