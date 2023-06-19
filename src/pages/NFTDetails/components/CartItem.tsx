@@ -5,8 +5,7 @@ import { RightMenuType } from "store/NFTDetailsSlice";
 import { formatPrice } from "utils";
 
 const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
-  const { rightMenuType } = useAppSelector((state) => state.nftdetails);
-  const { currentItem } = useAppSelector((state) => state.checkout);
+  const { rightMenuType, yourCurrentOffer } = useAppSelector((state) => state.nftdetails);
 
   return (
     <div className="flex border border-gray gap-x-[18px] p-[10px] text-head6 font-spaceGrotesk text-white rounded-md">
@@ -54,11 +53,11 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
                   </>
                 )}
           </div>
-          {currentItem?.price !== 0 && (
+          {yourCurrentOffer !== "" && (
             <div className="flex justify-between">
               <span className="text-gray-light">Your Current Offer</span>
               <div className="flex items-center text-green">
-                {formatPrice(currentItem?.price) ?? "-"}
+                {formatPrice(yourCurrentOffer) ?? "-"}
                 <IconEthereum className="h-5 w-5" />
               </div>
             </div>

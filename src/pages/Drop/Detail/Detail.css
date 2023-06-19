@@ -1,0 +1,6 @@
+
+.text-drop-title {
+  @apply font-spaceGrotesk font-extrabold;
+  font-size: 72px;
+  line-height: 100px;
+}

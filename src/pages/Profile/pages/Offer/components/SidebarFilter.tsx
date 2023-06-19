@@ -91,7 +91,7 @@ const SidebarFilter = () => {
         },
         {
           value: 0,
-          text: "Cancel Offers",
+          text: "Canceled Offers",
         },
       ],
     },
@@ -103,7 +103,7 @@ const SidebarFilter = () => {
   };
 
   const getFilterItems = React.useMemo(() => {
-    filterItems[0].values[0].count = offers.filter((item: any) => !item.isOfferMade && item.ownerId === user.id).length;
+    filterItems[0].values[0].count = offers.filter((item: any) => !item.isOfferMade && (user.id ? item.ownerId === user.id : true)).length;
     filterItems[0].values[1].count = offers.filter((item: any) => item.isOfferMade).length;
 
     return filterItems;

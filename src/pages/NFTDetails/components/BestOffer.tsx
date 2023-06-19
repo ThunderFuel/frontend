@@ -1,16 +1,19 @@
-import offerService from "api/offer/offer.service";
+import React from "react";
 import Button from "components/Button";
 import EthereumPrice from "components/EthereumPrice";
 import { IconAccept, IconOffer } from "icons";
-import React from "react";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import useToast from "hooks/useToast";
+import userService from "api/user/user.service";
 
 const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
+
   const isOwner = () => {
     return user?.id === selectedNFT?.user?.id;
   };
@@ -31,7 +34,27 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
           <Button
             className="w-full gap-x-[6px] text-button font-bigShoulderDisplay"
             onClick={() => {
-              offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => fetchCollection());
+              userService.getBidBalance(selectedNFT?.bestOffer?.makerUserId).then((res) => {
+                if (res.data < selectedNFT?.bestOffer?.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+                else {
+                  dispatch(
+                    setCheckout({
+                      type: CheckoutType.AcceptOffer,
+                      item: {
+                        ...selectedNFT.bestOffer,
+                        contractAddress: selectedNFT.collection.contractAddress,
+                        makerAddress: selectedNFT.bestOffer.user.walletAddress,
+                        takerAddress: selectedNFT.user.walletAddress,
+                        tokenOrder: selectedNFT.tokenOrder,
+                        tokenImage: selectedNFT.image,
+                      },
+                      price: selectedNFT.bestOffer?.price,
+                      onCheckoutComplete: fetchCollection,
+                    })
+                  );
+                  dispatch(toggleCheckoutModal());
+                }
+              });
             }}
           >
             ACCEPT OFFER

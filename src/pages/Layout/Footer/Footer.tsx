@@ -5,7 +5,7 @@ import { AssetLogo } from "assets";
 const Footer = () => {
   return (
     <div className="mt-auto flex flex-col lg:justify-center bg-bg-light w-full py-5 lg:py-10">
-      <div className="container-fluid">
+      <div className="px-4">
         {/* <div className="border-b border-b-gray pb-10 mb-5">
         <div className="container">
           <div className="lg:flex lg:items-start lg:justify-between">
@@ -49,10 +49,10 @@ const Footer = () => {
         </div>
       </div> */}
 
-        <div className="container flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
+        <div className="flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
             <a href="/">
-              <img src={AssetLogo} style={{ height: "32px" }} />
+              <img src={AssetLogo} className="h-8" alt="logo" />
             </a>
             {/* <div className="flex flex-col items-center lg:flex-row gap-6">
             <h5 className="text-headline-drop-primary text-gray-light">EXPLORE</h5>

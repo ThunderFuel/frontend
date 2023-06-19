@@ -1,0 +1,27 @@
+.countdown {
+  @apply grid grid-cols-4 gap-5;
+}
+
+.countdown li {
+  @apply flex flex-col text-center;
+  @apply text-h3 text-white;
+  @apply flex gap-2;
+  @apply rounded-sm bg-white bg-opacity-10 p-2;
+  @apply relative;
+}
+
+.countdown li:after {
+  @apply absolute;
+  top: 4px;
+  right: -15px;
+  content: ":";
+}
+
+.countdown li:last-child:after {
+  display: none;
+}
+
+.countdown li span {
+  @apply text-headline-02;
+  @apply text-white opacity-50;
+}

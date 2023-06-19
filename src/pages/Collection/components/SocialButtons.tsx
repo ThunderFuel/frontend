@@ -95,7 +95,7 @@ const SocialShareButton = ({ collection, user }: any) => {
 
   return (
     <li className="relative" ref={containerRef}>
-      <div className={clsx("px-2 py-2  hover:text-white cursor-pointer", show ? "text-white bg-bg-light" : "text-gray-light")} onClick={() => setShow(!show)}>
+      <div className={clsx("px-2 py-2 hover:text-white cursor-pointer", show ? "text-white bg-bg-light" : "text-gray-light")} onClick={() => setShow(!show)}>
         <IconShare />
       </div>
       {show ? (
@@ -115,7 +115,19 @@ const SocialShareButton = ({ collection, user }: any) => {
     </li>
   );
 };
-const SocialButtons = ({ socialMedias, collection, user }: { socialMedias: { url: string; type: SocialTypes }[] | null; collection?: any; user?: any }) => {
+const SocialButtons = ({
+  socialMedias,
+  collection,
+  user,
+  disableShare = false,
+  className,
+}: {
+  socialMedias: { url: string; type: SocialTypes }[] | null;
+  collection?: any;
+  user?: any;
+  disableShare?: boolean;
+  className?: string;
+}) => {
   const iconList: any = {
     [SocialTypes.Website]: IconWeblink,
     [SocialTypes.Discord]: IconDiscord,
@@ -127,7 +139,7 @@ const SocialButtons = ({ socialMedias, collection, user }: { socialMedias: { url
   };
 
   return (
-    <div className="flex gap-5">
+    <div className={clsx("flex gap-5", className)}>
       {socialMedias?.length ? (
         <ul className="inline-flex border border-gray rounded-[4px]">
           {socialMedias?.map((media, key) => {
@@ -135,10 +147,12 @@ const SocialButtons = ({ socialMedias, collection, user }: { socialMedias: { url
           })}
         </ul>
       ) : null}
-      <ul className="inline-flex border border-gray rounded-[4px]">
-        {collection ? <FavoriteButton collection={collection} /> : null}
-        <SocialShareButton collection={collection} user={user} />
-      </ul>
+      {!disableShare ? (
+        <ul className="inline-flex border border-gray rounded-[4px]">
+          {collection ? <FavoriteButton collection={collection} /> : null}
+          <SocialShareButton collection={collection} user={user} />
+        </ul>
+      ) : null}
     </div>
   );
 };

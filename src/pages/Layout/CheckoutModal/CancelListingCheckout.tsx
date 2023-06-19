@@ -9,6 +9,9 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
@@ -33,13 +36,30 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
-    nftdetailsService.tokenCancelList(selectedNFT.id);
+    setContracts(contracts, FuelProvider);
+
+    nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
+      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
+        .then((res) => {
+          if (res.transactionResult.status.type === "success") {
+            nftdetailsService.tokenCancelList(selectedNFT.id);
+            setApproved(true);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+            setStartTransaction(false);
+          else setIsFailed(true);
+        });
+    });
   };
 
   React.useEffect(() => {
@@ -53,11 +73,20 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>
@@ -73,7 +102,7 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   return (
     <Modal backdropDisabled={true} className="checkout" title="Cancel Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text="Listed at" name={selectedNFT?.name} image={selectedNFT?.image} price={selectedNFT?.price} id={0}></CartItem>
+        <CartItem text="Listed at" name={selectedNFT?.name ?? selectedNFT?.tokenOrder} image={selectedNFT?.image} price={selectedNFT?.price} id={0}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>

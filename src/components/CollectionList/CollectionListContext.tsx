@@ -1,8 +1,9 @@
 import React, { createContext, ReactNode, useContext, useMemo, useReducer, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getBulkListingSelectedTokenOrderList } from "store/bulkListingSlice";
 import { getCartSelectedTokenOrderList } from "store/cartSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 export enum DisplayType {
   GRID3 = "3",
@@ -26,7 +27,7 @@ export const CollectionListContext = createContext<ICollectionListContext>({} as
 
 const CollectionListProvider = ({ value, children }: { value: ICollectionListContext; children: ReactNode }) => {
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const bulkListingSelectedTokenOrderList = useSelector(getBulkListingSelectedTokenOrderList);
   const cartSelectedTokenOrderList = useSelector(getCartSelectedTokenOrderList);
 
@@ -57,6 +58,19 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   };
   const deleteParams = (name: any) => {
     setParams({ type: ParamsType.Delete, name });
+  };
+
+  const onCancelAllListings = async () => {
+    try {
+      dispatch(
+        setCheckout({
+          type: CheckoutType.CancelAllListings,
+        })
+      );
+      dispatch(toggleCheckoutModal());
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const collectionItems = React.useMemo(() => {
@@ -97,6 +111,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     deleteParams,
     setDisplayType,
     setSweep,
+    onCancelAllListings,
   };
 
   return <CollectionListContext.Provider value={contextValue}>{children}</CollectionListContext.Provider>;

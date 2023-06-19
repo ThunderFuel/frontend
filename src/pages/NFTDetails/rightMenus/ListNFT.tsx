@@ -11,13 +11,11 @@ import { formatPrice, getDateFromExpirationTime } from "utils";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
-import dayjs from "dayjs";
 import { RightMenuType } from "store/NFTDetailsSlice";
 import floorService from "api/floor/floor.service";
 import EthereumPrice from "components/EthereumPrice";
 import { removeAll } from "../../../store/bulkListingSlice";
 
-// TODO FIXED PRICE ILE AUCTION I AYIR!!!!
 const ListNFT = ({ onBack }: { onBack: any }) => {
   const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
   const [topTrait, setTopTrait] = useState(0);
@@ -31,6 +29,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const [startingPrice, setstartingPrice] = useState<any>(0);
   const [duration, setDuration] = useState(selectExpirationDates[0]);
   const updateListing = rightMenuType === RightMenuType.UpdateListing;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const serviceFee = 2.5;
 
@@ -46,14 +45,15 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
       <div className="flex justify-end p-5 ">
         <Button
-          disabled={!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false}
+          disabled={(!isTimedAuction ? !isValidNumber(price) : hasStartingPrice ? !isValidNumber(startingPrice) : false) ? true : isButtonDisabled}
           onClick={() => {
+            setIsButtonDisabled(true);
             if (isTimedAuction) {
               dispatch(
                 setCheckout({
                   type: CheckoutType.ConfirmListing,
                   isAuction: isTimedAuction,
-                  expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  expireTime: duration?.value,
                   auctionStartingPrice: startingPrice,
                   onCheckoutComplete,
                 })
@@ -63,7 +63,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
                 setCheckout({
                   type: updateListing ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
                   price: price,
-                  expireTime: (dayjs().add(duration?.value, "day").valueOf() / 1000).toFixed(),
+                  expireTime: duration?.value,
                   onCheckoutComplete,
                 })
               );
@@ -176,7 +176,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">Creator Earnings</div>
-                <div className="">{selectedNFT.collection?.royaltyFee}%</div>
+                <div className={`${selectedNFT.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royaltyFee ? `${selectedNFT.collection?.royaltyFee} %` : "-"}</div>
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">You’ll Receive</div>
@@ -211,7 +211,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">Creator Earnings</div>
-              <div className="">{selectedNFT.collection?.royaltyFee}%</div>
+              <div className={`${selectedNFT.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royaltyFee ? `${selectedNFT.collection?.royaltyFee} %` : "-"}</div>
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">You’ll Receive</div>

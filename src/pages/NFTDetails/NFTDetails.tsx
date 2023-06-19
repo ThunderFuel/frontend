@@ -11,7 +11,7 @@ import Activity from "./rightMenus/Activity";
 import Bids from "./rightMenus/Bids";
 import Offers from "./rightMenus/Offers";
 import { useAppDispatch, useAppSelector } from "store";
-import { RightMenuType, setIsLiked, setPresetPrice, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
+import { RightMenuType, setPresetPrice, setRightMenu, setSelectedNFT, setYourCurrentOffer } from "store/NFTDetailsSlice";
 import collectionsService from "api/collections/collections.service";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
@@ -28,7 +28,7 @@ const NFTDetails = () => {
   const dispatch = useAppDispatch();
   const { rightMenuType } = useAppSelector((state) => state.nftdetails);
   const { isConnected } = useAppSelector((state) => state.wallet);
-  const { show } = useAppSelector((state) => state.checkout);
+  // const { show } = useAppSelector((state) => state.checkout);
 
   const [isActive, setIsActive] = useState(false);
   const [nft, setNft] = useState<CollectionItemResponse>({} as any);
@@ -38,7 +38,6 @@ const NFTDetails = () => {
     const response = await collectionsService.getCollection({ id: nftId });
     setNft(response.data);
     dispatch(setSelectedNFT(response.data));
-    dispatch(setIsLiked(response.data.user?.likedTokens?.includes(response.data.id) ?? false));
   };
 
   useEffect(() => {
@@ -50,18 +49,22 @@ const NFTDetails = () => {
     if (!isConnected) resetMenuState();
   }, [nftId, isConnected]);
 
-  useEffect(() => {
-    if (!isActive) fetchCollection();
-  }, [isActive, show]);
+  // useEffect(() => {
+  //   if (!isActive) fetchCollection();
+  // }, [isActive, show]);
 
   useEffect(() => {
-    return () => resetMenuState();
+    return () => {
+      resetMenuState();
+      dispatch(setSelectedNFT({}));
+    };
   }, []);
 
   const resetMenuState = () => {
     setIsActive(false);
     dispatch(setRightMenu(RightMenuType.None));
     dispatch(setPresetPrice(""));
+    dispatch(setYourCurrentOffer(""));
   };
 
   const Component = React.useMemo(() => {
@@ -106,12 +109,17 @@ const NFTDetails = () => {
               <div className="relative w-full image-width bg-gray rounded-md">
                 <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
               </div>
-              <ImageBar toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
+              <ImageBar nft={nft} toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
             </div>
           </div>
         </div>
         <div className="w-[42%]" id="rightMenuWrapper">
-          <Component onBack={() => resetMenuState()} />
+          <Component
+            onBack={() => {
+              resetMenuState();
+              fetchCollection();
+            }}
+          />
         </div>
         <FullScreenImage image={nft.image} onClose={() => setshowFullscreenImage(false)} show={showFullscreenImage} />
       </div>

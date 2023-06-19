@@ -63,6 +63,13 @@ body {
     @apply whitespace-nowrap text-ellipsis overflow-hidden flex-1;
   }
 
+  .text-overflow-3 {
+    @apply text-ellipsis overflow-hidden flex-1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
   .container-fluid {
     @apply w-full px-5 lg:px-10 3xl:m-auto 3xl:max-w-[1980px];
   }
@@ -436,6 +443,11 @@ body {
   }
 }
 
+.Toastify__toast-container {
+  width: 560px !important;
+}
+
+
 :root {
   --th-white: 255 255 255;
   --th-black: 0 0 0;
@@ -450,4 +462,182 @@ body {
   --th-green: 214 255 126;
   --th-red: 230 64 64;
   --th-orange: 230 144 64;
+}
+
+.drop #layout-header {
+  --th-gray: 255 255 255;
+}
+
+.drop #layout-header .border-gray,
+.drop #layout-header .lg\:border-gray,
+.drop #layout-header .divide-gray > :not([hidden]) ~ :not([hidden]),
+.drop #layout-header .tab,
+.drop #layout-header .tab li,
+.drop #layout-header .border-y.border-gray {
+  --tw-border-opacity: 0.1;
+  --tw-divide-opacity: 0.1;
+}
+
+.drop #layout-header .tab li span {
+  --tw-text-opacity: .5;
+}
+
+.drop #layout-header .tab li span:hover {
+  --tw-bg-opacity: 0.1;
+  background-color: rgb(var(--th-white) / var(--tw-bg-opacity));
+}
+
+
+.drop #layout-header .header-search .input::-webkit-input-placeholder {
+  opacity: 0.5;
+}
+
+.drop #layout-header .header-search .input + svg {
+  --tw-text-opacity: 0.5
+}
+
+.drop #layout-header .header-search .input:focus + svg {
+  --tw-text-opacity: 1;
+}
+
+.text-gray-light
+.drop #layout-header .search-result-container .search-group-item:hover {
+  --tw-bg-opacity: 0.1;
+}
+
+.drop .modalbase .modal {
+  --th-gray: 255 255 255;
+}
+
+.drop .modalbase .modal .mhead,
+.drop .modalbase .border-b,
+.drop .modalbase .border-t,
+.drop .modalbase .border-gray {
+  --tw-border-opacity: 0.1;
+}
+
+.drop .modalbase .bg-gray {
+  --tw-bg-opacity: 0.1;
+}
+
+.drop .search-group-title {
+  --tw-text-opacity: 0.5;
+}
+
+.drop .search-group-item {
+  --tw-bg-opacity: 0.1;
+}
+
+.drop-item-container.drop-primary,
+.drop.drop-primary {
+  --th-bg: 122 52 155;
+  --th-bg-light: 122 52 155;
+  --th-gray-dark: 122 52 155;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-primary #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-primary .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop-item-container.drop-secondary,
+.drop.drop-secondary {
+  --th-bg: 39 59 66;
+  --th-bg-light: 39 59 66;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-secondary #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-secondary .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+
+.drop-item-container.drop-blue,
+.drop.drop-blue {
+  --th-bg: 0 112 207;
+  --th-bg-light: 0 112 207;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-blue #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-blue .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+
+.drop-item-container.drop-gray-light,
+.drop.drop-gray-light {
+  --th-bg: 65 65 65;
+  --th-bg-light: 65 65 65;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-gray-light #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-gray-light .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop-item-container.drop-gray,
+.drop.drop-gray {
+  --th-bg: 37 37 37;
+  --th-bg-light: 37 37 37;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-gray #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-gray .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop-item-container.drop-police-blue,
+.drop.drop-police-blue {
+  --th-bg: 62 72 99;
+  --th-bg-light: 62 72 99;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-police-blue #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-police-blue .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop-item-container.drop-thunder,
+.drop.drop-thunder {
+  --th-bg: 75 75 75;
+  --th-bg-light: 75 75 75;
+  --th-gray-dark: 48 57 63;
+  --th-gray-light: 255 255 255;
+}
+
+.drop.drop-thunder #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-thunder .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }

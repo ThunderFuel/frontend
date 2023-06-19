@@ -21,7 +21,7 @@ enum FilterComponentType {
   CollectionCheckboxList = 6,
 }
 
-const SidebarFilter = ({ className }: { className?: string }) => {
+const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
   const { displayType, setDisplayType, filters, params, setParams, deleteParams, options } = useCollectionListContext();
   const [show, setShow] = React.useState(options?.hiddeSidebarFilter);
 
@@ -88,9 +88,9 @@ const SidebarFilter = ({ className }: { className?: string }) => {
 
   return (
     <div className="flex justify-end">
-      <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : className ? className : "w-72")}>
+      <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : className)}>
         <div className={`sticky h-fit ${show ? "overflow-hidden" : ""}`} style={{ top: "calc(var(--headerHeight) + 68px)" }}>
-          <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", "w-72", className, !show ? "overflow-hidden overflow-y-auto" : "")}>
+          <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", !show ? "overflow-hidden overflow-y-auto" : "")}>
             <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
               <div className="icon-btn bg-white fill-gray">
                 <IconFilter />

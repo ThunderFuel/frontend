@@ -74,6 +74,7 @@ const Table = ({
   rowElement,
   rowElementProps,
   loadingTemplate,
+  containerFluidClassName,
   ...props
 }: ITable) => {
   const _getHeaders = headers.map((header, i) => (
@@ -132,11 +133,11 @@ const Table = ({
     <div>
       <div className={clsx("table", className)} {...props}>
         <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
-          <div className={clsx("container-fluid", props.containerFluidClassName)}>
+          <div className={clsx("container-fluid", containerFluidClassName)}>
             <div className="tr">{_getHeaders}</div>
           </div>
         </div>
-        <div data-testid="tableBody" className={clsx("tbody container-fluid", props.containerFluidClassName)}>
+        <div data-testid="tableBody" className={clsx("tbody container-fluid", containerFluidClassName)}>
           {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
         </div>
         <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>

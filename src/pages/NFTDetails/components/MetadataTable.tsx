@@ -21,7 +21,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
   return (
     <div className="flex flex-col border border-gray rounded-[5px]">
       <h6 className="pl-5 py-4 border-b border-gray">Metadata</h6>
-      <div className="table-head grid-cols-3">
+      <div className="table-head grid-cols-[1fr_2fr_1fr]">
         <div className="text-headline-01">TRAIT</div>
         <div className="text-headline-01">NAME</div>
         <div className="text-headline-01">TRAIT FLOOR</div>
@@ -30,7 +30,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
       {metadata.map((item: any, i: number) => {
         return (
           <div className="group" key={i}>
-            <div className="table-body grid-cols-3 cursor-pointer">
+            <div className="table-body grid-cols-[1fr_2fr_1fr] cursor-pointer">
               <div>{item.traitType} </div>
               <div className="text-white">{item.value}</div>
               <div>

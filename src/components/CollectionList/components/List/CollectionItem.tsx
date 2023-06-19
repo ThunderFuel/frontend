@@ -9,7 +9,6 @@ import "./CollectionItem.css";
 import { CollectionItemResponse } from "api/collections/collections.type";
 import { PATHS } from "router/config/paths";
 import { useCollectionListContext } from "../../CollectionListContext";
-import Img from "components/Img";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
 import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
@@ -18,6 +17,8 @@ import { toggleWalletModal } from "store/walletSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
+import { formatPrice } from "utils";
+import LazyImg from "../../../LazyImg";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -78,14 +79,14 @@ const CollectionItemCheckbox = (props: any) => {
   );
 };
 const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
-  const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setSweep, options } = useCollectionListContext();
-  const { isConnected } = useAppSelector((state) => state.wallet);
+  const { isConnected, user } = useAppSelector((state) => state.wallet);
   const { hasEnoughFunds } = useWallet();
-  const isOwnCollectionItem = collection?.userId === user.id;
   const { days, hours, minutes } = remainingTime(collection.onAuctionExpireTime);
+
+  const isOwnCollectionItem = collection?.userId === user.id;
 
   const onToggleCart = () => {
     if (!collection.isSelected) {
@@ -165,19 +166,21 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
+          {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : !selectionDisabled ? (
               <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
             ) : null
           ) : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
-            {collection.image !== null && <Img alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />}
+            {collection.image !== null && (
+              <LazyImg alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
+            )}
           </div>
         </div>
         <div className="p-2.5 border-b border-b-gray">
           {options?.isProfile ? <div className="body-medium text-gray-light mb-1 text-overflow">{collection?.collectionName ?? "-"}</div> : null}
 
-          <h6 className="text-h6 text-white text-overflow">{collection.name ?? "-"}</h6>
+          <h6 className="text-h6 text-white text-overflow">{collection.name ?? collection.tokenOrder}</h6>
         </div>
         <div className="p-2.5 flex items-center">
           {collection.salable ? (
@@ -200,7 +203,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         ) : (
           <div className={clsx("p-2.5 flex items-center text-gray-light gap-1", !collection.lastSalePrice && "invisible")}>
             <IconMarketBasket />
-            <span className="body-small text-overflow">Last sale price {collection.lastSalePrice ?? 0} ETH</span>
+            <span className="body-small text-overflow">Last sale price {formatPrice(collection.lastSalePrice) ?? 0} ETH</span>
           </div>
         )}
         {!selectionDisabled && !options?.isProfile ? (

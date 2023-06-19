@@ -11,12 +11,14 @@ import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModa
 import { toggleWalletModal } from "store/walletSlice";
 import { useWallet } from "hooks/useWallet";
 import { formatPrice } from "utils";
+import useToast from "hooks/useToast";
 
 const FixedPrice = () => {
   const dispatch = useDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { items } = useAppSelector((state) => state.cart);
+  const { show } = useAppSelector((state) => state.checkout);
 
   const expireTime = selectedNFT.expireTime;
   const timeoutId = useRef<NodeJS.Timeout | null>(null);
@@ -24,6 +26,8 @@ const FixedPrice = () => {
   const previousMinutes = useRef(remaining.minutes);
   const { days, hours, minutes } = remainingTime(expireTime);
   const [addCartIsDisabled, setAddCartIsDisabled] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const { hasEnoughFunds } = useWallet();
 
   const isOwner = () => {
@@ -51,6 +55,10 @@ const FixedPrice = () => {
     };
   }, [expireTime]);
 
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
+
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
       <div className="flex justify-center items-center text-bodyMd text-white gap-x-2 py-[10px]">
@@ -76,7 +84,9 @@ const FixedPrice = () => {
           <div className="flex gap-x-[10px] ">
             <Button
               className="w-full text-button font-bigShoulderDisplay"
+              disabled={isButtonDisabled}
               onClick={() => {
+                setIsButtonDisabled(true);
                 if (user?.id) {
                   dispatch(setCheckout({ type: CheckoutType.None }));
                   dispatch(addBuyNowItem(selectedNFT));
@@ -98,8 +108,11 @@ const FixedPrice = () => {
                   dispatch(remove(selectedNFT.uid));
                   setAddCartIsDisabled(false);
                 } else {
-                  if (isItemAlreadyAdded() === undefined) dispatch(add(selectedNFT));
-                  setAddCartIsDisabled(true);
+                  if (items.length === 5) useToast().error("In the open beta, you can add up to 5 items in your cart.");
+                  else {
+                    if (isItemAlreadyAdded() === undefined) dispatch(add(selectedNFT));
+                    setAddCartIsDisabled(true);
+                  }
                 }
               }}
             >

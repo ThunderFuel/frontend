@@ -16,8 +16,10 @@ const InputLabel = ({ className, containerClassName, icon, children, ...etc }: a
     </div>
   );
 };
-const Socials = ({ value }: any) => {
-  const webSite = value.find((val: any) => val.type === SocialTypes.Website);
+const Socials = ({ value, onChange }: any) => {
+  const webSiteIndex = value.findIndex((val: any) => val.type === SocialTypes.Website);
+  const webSite = value[webSiteIndex];
+
   const socialTypes = [
     {
       text: "Connect Twitter",
@@ -35,6 +37,19 @@ const Socials = ({ value }: any) => {
       icon: IconSocial3Dots,
     },
   ];
+
+  const onChangeWebsite = (e: any) => {
+    const newVal = [...value];
+    if (!webSite) {
+      newVal.push({
+        type: SocialTypes.Website,
+        url: e.target.value,
+      });
+    } else {
+      newVal[webSiteIndex].url = e.target.value;
+    }
+    onChange(newVal);
+  };
 
   return (
     <>
@@ -58,7 +73,7 @@ const Socials = ({ value }: any) => {
           })}
         </div>
       </div>
-      <Input label="Website" placeholder="yourwebsite.io" value={webSite?.url} icon={<IconWeblink className="text-gray-light" />} />
+      <Input label="Website" placeholder="yourwebsite.io" value={webSite?.url} onChange={onChangeWebsite} icon={<IconWeblink className="text-gray-light" />} />
     </>
   );
 };

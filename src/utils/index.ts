@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { ethers } from "ethers";
 import * as timeago from "timeago.js";
 import { ContainerClient } from "@azure/storage-blob";
 import imageService from "../api/image/image.service";
@@ -65,14 +66,20 @@ export const getDateFromExpirationTime = (expireTime: number) => {
 };
 
 export function formatDisplayedNumber(num: number) {
-  return num / 1000000000;
+  return formatPrice(num / 1000000000);
 }
 
 export function toGwei(num: any) {
-  return num * 1000000000;
+  let _num = num;
+  if (num === "") _num = 0;
+  if (num === ".") _num = 0.1;
+
+  const x = ethers.utils.parseUnits(_num.toString(), "gwei");
+
+  return x;
 }
 
-export function randomIntFromInterval(min: number, max: number) {
+export function randomIntFromInterval(min = 1, max = 11111111) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -100,7 +107,7 @@ export const formatPrice = (price: any) => {
   if (price < 0.0001) return "<0.0001";
 
   return parseFloat(price)
-    .toFixed(4)
+    .toFixed(5) //.toFixed(4)
     .replace(/\.?0+$/, "");
 };
 
@@ -125,4 +132,40 @@ export const uploadFile = async (file: File, onProcess: any = null) => {
   });
 
   return response.data.cdnUrl;
+};
+
+const calculateHelper = (distance: number, divider: number = 1000 * 60 * 60 * 24) => {
+  return Math.floor(distance / divider)
+    .toString()
+    .padStart(2, "0");
+};
+
+export const countDownTimer = (time: number) => {
+  const distance = time - dayjs().valueOf();
+
+  return {
+    days: calculateHelper(distance, 1000 * 60 * 60 * 24),
+    hours: calculateHelper(distance % (1000 * 60 * 60 * 24), 1000 * 60 * 60),
+    minutes: calculateHelper(distance % (1000 * 60 * 60), 1000 * 60),
+    seconds: calculateHelper(distance % (1000 * 60), 1000),
+  };
+};
+
+export const downloadFile = (file: File) => {
+  const url = URL.createObjectURL(file);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = file.name;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
+};
+
+export const formatTimeContract = (time: any) => {
+  return time * 24 * 60 * 60;
+};
+
+export const formatTimeBackend = (time: any) => {
+  return Math.round(dayjs().add(time, "days").valueOf() / 1000);
 };

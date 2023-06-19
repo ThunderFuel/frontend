@@ -11,7 +11,7 @@ const Schedule = () => {
   return (
     <div className="grid grid-cols-2 gap-10 text-white">
       <div className="flex flex-col gap-10">
-        <PageTitle title="Drop Schedule" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+        <PageTitle title="List Schedule" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
         <div className="flex flex-col gap-6">
           <Label helperText="Set pricing and options for your Public Sale.">Public Mint</Label>
           <div className="p-5 flex flex-col gap-6 border border-gray rounded-md">

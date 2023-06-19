@@ -9,6 +9,11 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
+import { cancelAllOrdersBySide, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import offerService from "api/offer/offer.service";
+import { CheckoutCartItems } from "./Checkout";
+import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -32,15 +37,46 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 };
 
 const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { currentItem } = useAppSelector((state) => state.checkout);
+  const { currentItem, cancelOfferItems } = useAppSelector((state) => state.checkout);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
-    nftdetailsService.cancelOffer(currentItem.id);
+    setContracts(contracts, FuelProvider);
+    if (cancelOfferItems?.length > 0) {
+      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
+        .then((res) => {
+          if (res.transactionResult.status.type === "success") {
+            offerService.cancelAllOffer({ userId: user.id });
+            setApproved(true);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+            setStartTransaction(false);
+          else setIsFailed(true);
+        });
+    } else {
+      offerService.getOffersIndex([currentItem.id]).then((res) => {
+        cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
+          .then((res) => {
+            if (res.transactionResult.status.type === "success") {
+              nftdetailsService.cancelOffer(currentItem.id);
+              setApproved(true);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+              setStartTransaction(false);
+            else setIsFailed(true);
+          });
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -54,11 +90,20 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>
@@ -70,9 +115,20 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   );
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Cancel Your Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
+    <Modal
+      backdropDisabled={true}
+      className="checkout"
+      title={cancelOfferItems?.length > 0 ? "Cancel All Offers" : "Cancel Your Offer"}
+      show={show}
+      onClose={onClose}
+      footer={<Footer approved={approved} onClose={onClose} />}
+    >
       <div className="flex flex-col p-5">
-        <CartItem text={"Your Offer"} name={selectedNFT.name} image={selectedNFT.image} price={currentItem.price} id={0}></CartItem>
+        {cancelOfferItems?.length > 0 ? (
+          <CheckoutCartItems items={cancelOfferItems} itemCount={cancelOfferItems.length} totalAmount={""} approved={approved}></CheckoutCartItems>
+        ) : (
+          <CartItem text={"Your Offer"} name={currentItem?.tokenName ?? currentItem?.tokenOrder} image={currentItem?.tokenImage} price={currentItem?.price} id={0}></CartItem>
+        )}{" "}
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>

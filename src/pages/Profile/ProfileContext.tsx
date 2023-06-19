@@ -1,6 +1,11 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import { IUserResponse } from "api/user/user.type";
 import userService from "api/user/user.service";
+import { cancelAllOrdersBySide, setContracts } from "../../thunder-sdk/src/contracts/thunder_exchange";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "../../global-constants";
+import collectionsService from "api/collections/collections.service";
+import { useAppSelector } from "store";
+import { FuelProvider } from "api";
 
 export const enum FollowType {
   Followers = 0,
@@ -18,6 +23,7 @@ interface IProfileContext {
 export const ProfileContext = createContext<IProfileContext>({} as any);
 
 const ProfileProvider = ({ userId, options, children }: { userId: any; options: any; children: ReactNode }) => {
+  const { user, wallet } = useAppSelector((state) => state.wallet);
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
 
@@ -61,6 +67,16 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
     } catch (e) {
       console.log(e);
     }
+  };
+
+  options.onCancelAllListings = () => {
+    setContracts(contracts, FuelProvider);
+
+    cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false).then((res) => {
+      if (res.transactionResult.status.type === "success") {
+        collectionsService.cancelAllListings({ userId: user.id });
+      }
+    });
   };
 
   const value = {

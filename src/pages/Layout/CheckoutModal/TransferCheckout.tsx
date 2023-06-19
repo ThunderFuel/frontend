@@ -12,6 +12,8 @@ import { CheckoutProcess } from "./components/CheckoutProcess";
 import { addressFormat } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toB256 } from "fuels";
+import { safeTransferFrom } from "thunder-sdk/src/contracts/erc721";
+import { provider } from "global-constants";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -22,34 +24,55 @@ const checkoutProcessTexts = {
   description3: "Your NFT is succesfully transferred.",
 };
 
-const Footer = ({ address, callback, animationStarted, onClose }: { address: string; callback: any; animationStarted: boolean; onClose: any }) => {
+const Footer = ({ address, callback, animationStarted, onClose, approved }: { approved: boolean; address: string; callback: any; animationStarted: boolean; onClose: any }) => {
   return (
-    <div className={clsx("transition-all duration-300 overflow-hidden", !animationStarted ? "h-fit opacity-100" : "h-0 opacity-0")}>
-      <div className={"flex flex-col gap-y-[10px] w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest" disabled={address === ""} onClick={callback}>
-          TRANSFER
-        </Button>
-        <Button className="btn-secondary w-full tracking-widest" onClick={onClose}>
-          CLOSE
-        </Button>
+    <>
+      <div className={clsx("transition-all duration-300 overflow-hidden", !animationStarted ? "h-fit opacity-100" : "h-0 opacity-0")}>
+        <div className={"flex flex-col gap-y-[10px] w-full items-center justify-center p-5"}>
+          <Button className="w-full tracking-widest" disabled={address === ""} onClick={callback}>
+            TRANSFER
+          </Button>
+          <Button className="btn-secondary w-full tracking-widest" onClick={onClose}>
+            CLOSE
+          </Button>
+        </div>
       </div>
-    </div>
+      <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
+        <div className={"flex w-full items-center justify-center p-5"}>
+          <Button className="w-full tracking-widest" onClick={onClose}>
+            DONE
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 
 const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [address, setaddress] = useState("");
   const [startTransaction, setStartTransaction] = useState(false);
   const [showTransactionAnimation, setshowTransactionAnimation] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
     let tempAddress = "";
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
-    nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
+    const toAddress = tempAddress === "" ? address : tempAddress;
+    safeTransferFrom(selectedNFT.collection.contractAddress, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
+      .then(() => {
+        nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
+        setApproved(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+          setStartTransaction(false);
+        else setIsFailed(true);
+      });
   };
 
   React.useEffect(() => {
@@ -64,11 +87,20 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>
@@ -88,11 +120,11 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
       title="Transfer Your NFT"
       show={show}
       onClose={onClose}
-      footer={<Footer address={address} animationStarted={showTransactionAnimation} callback={setshowTransactionAnimation} onClose={onClose} />}
+      footer={<Footer approved={approved} address={address} animationStarted={showTransactionAnimation} callback={setshowTransactionAnimation} onClose={onClose} />}
     >
       <div className="flex flex-col p-5">
         {/*TODO price yerine string yazilabilmeli */}
-        <CartItem text={"Address"} name={selectedNFT.name} image={selectedNFT.image} price={addressFormat(address)} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        <CartItem text={"Address"} name={selectedNFT.name ?? selectedNFT.tokenOrder} image={selectedNFT.image} price={addressFormat(address)} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       {showTransactionAnimation ? (
         <div className="flex border-t border-gray">{checkoutProcess}</div>

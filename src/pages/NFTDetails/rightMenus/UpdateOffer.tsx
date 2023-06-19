@@ -7,11 +7,11 @@ import RightMenu from "../components/RightMenu";
 import CartItem from "../components/CartItem";
 import InputPrice from "../components/InputPrice";
 import { useWallet } from "hooks/useWallet";
-import { formatDisplayedNumber, getDateFromExpirationTime, toGwei } from "utils";
+import { getDateFromExpirationTime, toGwei } from "utils";
 import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
-import dayjs from "dayjs";
 import Balances from "../components/Balances";
+import userService from "api/user/user.service";
 
 const offerDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
@@ -20,18 +20,24 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { currentItem } = useAppSelector((state) => state.checkout);
+  const { user } = useAppSelector((state) => state.wallet);
 
   const { getBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
+  const [balance, setbalance] = useState<any>(0);
+  const [bidBalance, setBidBalance] = useState<number>(0);
+
   const [offer, setoffer] = useState<any>("");
   const [expirationTime, setexpirationTime] = useState(selectExpirationDates[0]);
 
   function fetchBalance() {
     getBalance().then((res) => setbalance(res ? res : 0));
   }
-
+  function fetchBidBalance() {
+    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+  }
   useEffect(() => {
     fetchBalance();
+    fetchBidBalance();
   }, []);
 
   const isValidNumber = (price: any) => {
@@ -43,7 +49,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   };
 
   const bidBalanceControl = () => {
-    return toGwei(offer) - balance;
+    return <span className="font-bold whitespace-nowrap">{parseFloat((offer - bidBalance).toFixed(9))} ETH</span>;
   };
 
   const footer = (
@@ -61,8 +67,11 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
                 type: CheckoutType.UpdateOffer,
                 item: currentItem,
                 price: offer,
-                expireTime: (dayjs().add(expirationTime?.value, "day").valueOf() / 1000).toFixed(),
-                onCheckoutComplete: onBack,
+                expireTime: expirationTime?.value,
+                onCheckoutComplete: () => {
+                  dispatch(setCheckout({ item: {} }));
+                  onBack();
+                },
               })
             );
             dispatch(toggleCheckoutModal());
@@ -87,11 +96,11 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
             <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
           </div>
         )}
-        {offer !== "" && balance >= offer && offer > balance && (
-          <span className="flex items-center gap-x-[5px] text-bodySm text-orange">
+        {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
+          <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
-            {formatDisplayedNumber(bidBalanceControl())} ETH will be automatically added your bid balance to place this bid.
-          </span>
+            <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>
+          </div>
         )}
       </div>
       <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">

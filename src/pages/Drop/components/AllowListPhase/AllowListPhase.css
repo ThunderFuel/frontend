@@ -1,40 +1,3 @@
-.countdown {
-  @apply flex gap-5;
-}
-
-.countdown li {
-  @apply flex flex-col text-center;
-  @apply text-h3 text-white;
-  @apply flex gap-2;
-  @apply rounded-sm bg-white bg-opacity-10 p-2;
-  @apply relative;
-}
-
-.countdown li:after {
-  @apply absolute;
-  top: 4px;
-  right: -15px;
-  content: ":";
-}
-
-.countdown li:last-child:after {
-  display: none;
-}
-
-.countdown li span {
-  @apply text-headline-02;
-  @apply text-white opacity-50;
-}
-
-.process {
-  @apply rounded-md h-2.5 bg-white bg-opacity-10;
-}
-
-.process span {
-  @apply block h-2.5 w-2.5 rounded-full;
-  @apply bg-white;
-}
-
 .allowlist-phase {
   @apply border border-white border-opacity-10 overflow-hidden rounded-md;
   @apply relative;
@@ -43,17 +6,17 @@
 }
 
 .allowlist-phase .properties {
-  @apply flex gap-5 flex-nowrap;
+  @apply flex gap-5 flex-nowrap text-white;
 }
 
 .allowlist-phase .properties li {
-  @apply flex-center gap-1 text-white text-opacity-50;
+  @apply flex-center gap-1 text-h6;
 }
 
 .allowlist-phase .properties li:before {
   content: "";
+  background: currentColor;
   @apply block h-2.5 w-2.5 rounded-full;
-  @apply bg-white bg-opacity-50;
 }
 
 .allowlist-phase .header {

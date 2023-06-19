@@ -5,9 +5,8 @@ import Tab from "../../components/Tab";
 import ButtonWallet from "../../components/ButtonWallet";
 
 const Home = () => {
-  const onChange = (i: any) => {
-    console.log(i);
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onChange = () => {};
 
   return (
     <div className="flex gap-4 p-5 flex-col">

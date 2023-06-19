@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDropDetailContext } from "../../DropContext";
 import Collapse from "components/Collapse/Collapse";
 import clsx from "clsx";
 
@@ -20,12 +19,10 @@ const FaqItem = ({ item }: any) => {
     </Collapse>
   );
 };
-const Faq = () => {
-  const { dropDetail } = useDropDetailContext();
-
+const Faq = ({ faq }: any) => {
   return (
-    <div className="flex flex-col gap-5 w-[800px]">
-      {dropDetail.faq.map((item: any, i: number) => (
+    <div className="flex flex-col gap-4 w-full max-w-[800px]">
+      {faq.map((item: any, i: number) => (
         <FaqItem item={item} key={i} />
       ))}
     </div>

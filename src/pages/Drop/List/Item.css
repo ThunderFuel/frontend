@@ -1,0 +1,13 @@
+.drop-item-container {
+  @apply relative rounded-md overflow-hidden;
+  @apply flex flex-col justify-between px-5 pt-5 pb-10;
+  @apply text-white;
+  min-height: 560px;
+  @apply bg-bg;
+}
+
+.drop-item-container-bg {
+  @apply absolute top-0 left-0 w-full h-full;
+  @apply overflow-hidden rounded-md bg-no-repeat bg-center bg-cover;
+  mask-image: linear-gradient(0deg, rgba(25, 25, 25, 0) 9.38%, rgba(25, 25, 25, 0.615062) 62.27%, #191919 91.33%);
+}

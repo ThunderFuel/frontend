@@ -1,0 +1,8 @@
+.drop-item-badge {
+  @apply text-h6 border rounded-md;
+  padding: 10px;
+  padding-right: 20px;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(84, 84, 84, 0.25);
+  backdrop-filter: blur(39.1006px);
+}

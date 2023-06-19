@@ -21,6 +21,8 @@ import etherscanService from "api/etherscan/etherscan.service";
 import { useDispatch } from "react-redux";
 import { toggleClosedBetaModal } from "store/commonSlice";
 import Tab from "./components/Tab";
+import Avatar from "components/Avatar/Avatar";
+import UseNavigate from "hooks/useNavigate";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -45,8 +47,8 @@ const HeaderTop = React.memo(() => {
   }, []);
 
   return (
-    <div className="container-fluid flex  items-center">
-      <div className="flex items-center  gap-5 shrink-0 text-headlineSm font-bigShoulderDisplay uppercase">
+    <div className="px-4 flex  items-center">
+      <div className="flex items-center  gap-5 shrink-0 text-headline-01">
         <span className="flex items-center">
           <IconEthereum color="#838383" />
           <span className="text-white">${ethPrice}</span>
@@ -78,15 +80,22 @@ const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
 HeaderCardBadge.displayName = "HeaderCardBadge";
 
 const HeaderIconButtonGroup = React.memo(() => {
-  const selectedCarts = useAppSelector((state) => state.cart.items);
   const dispatch = useAppDispatch();
-  const { isConnected } = useAppSelector((state) => state.wallet);
+  const navigate = UseNavigate();
+
+  const selectedCarts = useAppSelector((state) => state.cart.items);
+  const { isConnected, user } = useAppSelector((state) => state.wallet);
 
   return (
     <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
+      {isConnected && (
+        <HeaderIconButton className="hidden lg:flex p-[18px]" onClick={() => navigate(PATHS.PROFILE, {})}>
+          <Avatar image={user?.image} userId={user?.id} className="w-9 h-9" />
+        </HeaderIconButton>
+      )}
       <HeaderIconButton className="hidden lg:flex" onClick={() => dispatch(toggleWalletModal())}>
         <IconWallet className={clsx("h-[30px] w-[30px]", isConnected ? "text-white" : "text-gray-light")} />
       </HeaderIconButton>

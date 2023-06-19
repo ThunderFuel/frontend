@@ -7,22 +7,21 @@ import userService from "api/user/user.service";
 import { toggleWalletModal } from "store/walletSlice";
 import { useShareTwitter } from "hooks/useShareTwitter";
 
-const ImageBar = ({ toggleFullscreen }: any) => {
+const ImageBar = ({ nft, toggleFullscreen }: any) => {
   const dispatch = useAppDispatch();
   const shareTwitter = useShareTwitter();
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const [isLiked, setIsliked] = useState(false);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const isOwner = () => {
-    return user?.id === selectedNFT?.user?.id;
+    return user?.id === nft?.user?.id;
   };
 
   const handleLike = () => {
     if (isConnected)
       nftdetailsService
         .tokenLike({
-          tokenId: selectedNFT.id,
+          tokenId: nft.id,
           userId: user.id,
           like: !isLiked,
         })
@@ -31,16 +30,18 @@ const ImageBar = ({ toggleFullscreen }: any) => {
   };
 
   const fetchIsLiked = async () => {
-    const response = await userService.isLiked({ tokenId: selectedNFT.id, userId: user.id });
-    setIsliked(response.data);
+    if (nft.id !== undefined && user.id !== undefined) {
+      const response = await userService.isLiked({ tokenId: nft.id, userId: user.id });
+      setIsliked(response.data);
+    }
   };
 
   useEffect(() => {
     fetchIsLiked();
-  }, [user, isLiked]);
+  }, [user]);
 
   const onShare = () => {
-    shareTwitter.shareNft(selectedNFT.name, selectedNFT.collection.name);
+    shareTwitter.shareNft(nft.name, nft.collection.name);
   };
   const icons = [
     {
@@ -51,7 +52,8 @@ const ImageBar = ({ toggleFullscreen }: any) => {
       },
     },
     { icon: IconFullscreen, onClick: () => toggleFullscreen() },
-    { icon: IconRefresh, onClick: () => console.log("IconRefresh") },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    { icon: IconRefresh, onClick: () => {} },
     {
       icon: IconShare,
       onClick: onShare,

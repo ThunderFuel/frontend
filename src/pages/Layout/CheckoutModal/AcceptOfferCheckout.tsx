@@ -9,6 +9,11 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
+import { approveAndExecuteOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
+import { toGwei } from "utils";
+import userService from "api/user/user.service";
+import { FuelProvider } from "api";
 
 const checkoutProcessTexts = {
   title1: "Confirm offer",
@@ -32,15 +37,45 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 };
 
 const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
-
+  const { checkoutPrice, currentItem, onCheckoutComplete } = useAppSelector((state) => state.checkout);
+  const { wallet } = useAppSelector((state) => state.wallet);
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    setApproved(true);
-    offerService.acceptOffer({ id: currentItem?.id });
+    offerService.getOffersIndex([currentItem.id]).then((res) => {
+      const order = {
+        isBuySide: false,
+        taker: currentItem.takerAddress,
+        maker: currentItem.makerAddress,
+        nonce: res.data[currentItem.id],
+        price: toGwei(currentItem.price).toNumber(),
+        collection: currentItem.contractAddress,
+        token_id: currentItem.tokenOrder,
+        strategy: strategyFixedPriceContractId,
+        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
+      };
+
+      setContracts(contracts, FuelProvider);
+
+      approveAndExecuteOrder(exchangeContractId, provider, wallet, order, transferManagerContractId)
+        .then((res) => {
+          if (res.transactionResult.status.type === "success") {
+            offerService.acceptOffer({ id: currentItem.id }).then(() => {
+              userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
+              onCheckoutComplete();
+              setApproved(true);
+            });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+            setStartTransaction(false);
+          else setIsFailed(true);
+        });
+    });
   };
 
   React.useEffect(() => {
@@ -54,11 +89,20 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const checkoutProcess = (
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
-        <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} />
+        <>
+          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          {isFailed && (
+            <div className="flex flex-col w-full border-t border-gray">
+              <Button className="btn-secondary m-5" onClick={onClose}>
+                CLOSE
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="flex flex-col w-full border-t border-gray">
           <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="fill-red" />
+            <IconWarning className="text-red" />
             <span className="text-h5 text-white">You rejected the request in your wallet!</span>
           </div>
           <Button className="btn-secondary m-5" onClick={onClose}>
@@ -74,7 +118,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   return (
     <Modal backdropDisabled={true} className="checkout" title="Accept Offer" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
       <div className="flex flex-col p-5">
-        <CartItem text={"Offer"} name={selectedNFT.name} image={selectedNFT.image} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
+        <CartItem text={"Offer"} name={currentItem.tokenName ?? currentItem.tokenOrder} image={currentItem.tokenImage} price={+checkoutPrice} id={0} titleSlot={viewOnBlockchain}></CartItem>
       </div>
       <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>

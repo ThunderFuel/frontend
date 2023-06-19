@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Button from "components/Button";
 import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconListed, IconToken, IconUpdateListing } from "icons";
-import React, { SVGProps } from "react";
+import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
@@ -15,9 +15,9 @@ import MetadataTable from "./MetadataTable";
 import Avatar from "components/Avatar";
 import UseNavigate from "hooks/useNavigate";
 import ReadMore from "components/ReadMore";
-import offerService from "api/offer/offer.service";
 import ActivityItemDescription from "components/ActivityDescription";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
+import EthereumPrice from "components/EthereumPrice/EthereumPrice";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -36,10 +36,10 @@ const BoxWithIcon = React.memo(({ children, className, icon }: { children: React
 });
 BoxWithIcon.displayName = "BoxWithIcon";
 
-const HoverButton = ({ Icon, text, btnClassName, onClick }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any }) => {
+const HoverButton = ({ Icon, text, btnClassName, onClick, disabled }: { Icon: React.FC<SVGProps<SVGSVGElement>>; text: string; btnClassName?: string; onClick?: any; disabled?: boolean }) => {
   return (
     <div className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" onClick={onClick}>
-      <Button className={clsx("btn-sm btn-secondary no-bg", btnClassName)}>
+      <Button className={clsx("btn-sm btn-secondary no-bg", btnClassName)} disabled={disabled}>
         {text}
         <Icon className="w-[18px] h-[18px]" />
       </Button>
@@ -64,12 +64,20 @@ const Footer = () => {
 };
 const FooterListed = () => {
   const dispatch = useAppDispatch();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { show } = useAppSelector((state) => state.checkout);
+
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
       <Button
         className="btn-secondary"
+        disabled={isButtonDisabled}
         onClick={() => {
+          setIsButtonDisabled(true);
           dispatch(
             setCheckout({
               type: CheckoutType.CancelListing,
@@ -93,12 +101,20 @@ const FooterListed = () => {
 };
 const FooterAuction = () => {
   const dispatch = useAppDispatch();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { show } = useAppSelector((state) => state.checkout);
+
+  useEffect(() => {
+    if (!show) setIsButtonDisabled(false);
+  }, [show]);
 
   return (
     <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
       <Button
         className="btn-secondary"
+        disabled={isButtonDisabled}
         onClick={() => {
+          setIsButtonDisabled(true);
           dispatch(setCheckout({ type: CheckoutType.CancelAuction }));
           dispatch(toggleCheckoutModal());
         }}
@@ -114,7 +130,6 @@ const LeftMenu = (props: any) => {
   const { nft, fetchCollection } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
-  // const { walletConnect } = useWallet();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
@@ -128,6 +143,7 @@ const LeftMenu = (props: any) => {
         fromUserContractAddress={fromUser?.walletAddress}
         createdTimeStamp={createdTimeStamp}
         toUserContractAddress={toUser?.walletAddress}
+        noTime={true}
       />
     );
   }
@@ -173,7 +189,7 @@ const LeftMenu = (props: any) => {
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
             </div>
           </div>
-          <h3 className="text-h3 text-white">{nft.name}</h3>
+          <h3 className="text-h3 text-white">{nft.name ? nft.name : nft?.tokenOrder ? "Bored Ape #" + nft?.tokenOrder : ""}</h3>
         </div>
         <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
           <div
@@ -207,7 +223,10 @@ const LeftMenu = (props: any) => {
                 <div className="flex flex-col gap-y-[5px]">
                   <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
-                    {formatPrice(nft.bestOffer?.price)} ETH by{" "}
+                    <div className="inline-block">
+                      <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={formatPrice(nft.bestOffer?.price)} />
+                    </div>
+                    by{" "}
                     <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>
                       {isBestOfferOwner() ? "you" : nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)}
                     </span>
@@ -222,7 +241,22 @@ const LeftMenu = (props: any) => {
                     Icon={IconAccept}
                     text="ACCEPT"
                     onClick={() => {
-                      offerService.acceptOffer({ id: selectedNFT?.bestOffer?.id }).then(() => fetchCollection());
+                      dispatch(
+                        setCheckout({
+                          type: CheckoutType.AcceptOffer,
+                          item: {
+                            ...selectedNFT.bestOffer,
+                            contractAddress: selectedNFT.collection.contractAddress,
+                            makerAddress: selectedNFT.bestOffer.user.walletAddress,
+                            takerAddress: selectedNFT.user.walletAddress,
+                            tokenOrder: selectedNFT.tokenOrder,
+                            tokenImage: selectedNFT.image,
+                          },
+                          price: selectedNFT.bestOffer?.price,
+                          onCheckoutComplete: fetchCollection,
+                        })
+                      );
+                      dispatch(toggleCheckoutModal());
                     }}
                   />
                 )}
@@ -241,7 +275,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-01 text-gray-light">CONTRACT ADDRESS</div>
-                  {addressFormat(nft?.collection?.walletAddress)}
+                  {addressFormat(nft?.collection?.contractAddress)}
                 </div>
               </Box>
               <BoxWithIcon className="hover:bg-bg-light" icon={IconToken}>

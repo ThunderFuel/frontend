@@ -17,6 +17,7 @@ import Button from "components/Button";
 import { IconPencil } from "icons";
 import { PATHS } from "router/config/paths";
 
+const EDITABLE_USER = 708;
 const Collection = () => {
   const navigate = UseNavigate();
 
@@ -55,9 +56,11 @@ const Collection = () => {
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
                 <div className="flex gap-5">
                   <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
-                  <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
-                    EDIT COLLECTION <IconPencil />
-                  </Button>
+                  {user.id === EDITABLE_USER && (
+                    <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
+                      EDIT COLLECTION <IconPencil />
+                    </Button>
+                  )}
                 </div>
 
                 <ReadMore text={collection?.description ?? ""} characterLimit={150} />

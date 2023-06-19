@@ -14,6 +14,12 @@ export enum CheckoutType {
   CancelBid,
   Standard,
   UpdateListing,
+  BulkListing,
+  AcceptBid,
+  CancelAllListings,
+  CancelAllOffers,
+  CancelAllOffersListings,
+  MintCheckout,
 }
 
 export const checkoutSlice = createSlice({
@@ -26,8 +32,13 @@ export const checkoutSlice = createSlice({
     checkoutIsAuction: false,
     checkoutAuctionStartingPrice: 0,
     checkoutExpireTime: 0 as number,
+    checkoutMintAmount: 0,
+    checkoutMintImage: "",
     amountAddedBidBalance: 0,
-    currentItem: { id: 0, price: 0 },
+    currentItem: {} as any,
+    bulkListItems: [],
+    bulkUpdateItems: [],
+    cancelOfferItems: [],
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCheckoutComplete: () => {},
   },
@@ -58,15 +69,26 @@ export const checkoutSlice = createSlice({
       state.checkoutExpireTime = action.payload?.expireTime;
       state.checkoutAuctionStartingPrice = action.payload?.auctionStartingPrice;
       state.currentItem = action.payload?.item;
+      state.bulkListItems = action.payload?.bulkListItems;
+      state.bulkUpdateItems = action.payload?.bulkUpdateItems;
+      state.cancelOfferItems = action.payload?.cancelOfferItems;
+      state.checkoutMintAmount = action.payload?.mintAmount;
+      state.checkoutMintImage = action.payload?.mintImage;
       state.onCheckoutComplete = action.payload?.onCheckoutComplete ?? noOp;
     },
-    //TODO checkoutlarda bidbalanceupdated yerine bunu kullan
+    removeBulkItems: (state) => {
+      state.bulkListItems = [];
+      state.bulkUpdateItems = [];
+    },
+    removeCancelOfferItems: (state) => {
+      state.cancelOfferItems = [];
+    },
     setAmountAddedBidBalance: (state, action) => {
       state.amountAddedBidBalance = action.payload;
     },
   },
 });
 
-export const { toggleCheckoutModal, setIsInsufficientBalance, setCheckout, setAmountAddedBidBalance } = checkoutSlice.actions;
+export const { toggleCheckoutModal, setIsInsufficientBalance, setCheckout, setAmountAddedBidBalance, removeBulkItems, removeCancelOfferItems } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

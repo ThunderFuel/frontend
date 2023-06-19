@@ -1,70 +1,58 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import Button from "components/Button";
 
 import "./AllowListPhase.css";
-import { IconCalendar } from "icons";
+import dayjs from "dayjs";
+import { dateFormat, formatPrice } from "utils";
+import { useDropDetailContext } from "../../Detail/DetailContext";
+import { BLOCK_TYPE } from "api/drop/drop.service";
+import clsx from "clsx";
+import Process from "../Process";
+import Gallery from "./components/Gallery";
+import Countdown from "./components/Countdown";
+import ButtonMint from "./components/ButtonMint";
+import ButtonCalendar from "./components/ButtonCalendar";
 
-const Countdown = () => {
+const RemainingTime = ({ startDate }: any) => {
   return (
-    <ul className="countdown">
-      <li>
-        09
-        <span>DAYS</span>
-      </li>
-      <li>
-        02
-        <span>HOURS</span>
-      </li>
-      <li>
-        09
-        <span>MINS</span>
-      </li>
-      <li>
-        09
-        <span>SECS</span>
-      </li>
-    </ul>
-  );
-};
-
-const Process = () => {
-  return (
-    <div className="process">
-      <span className="" />
+    <div className="flex items-center justify-between">
+      <span className="text-headline-02">MINTING STARTS IN</span>
+      <Countdown startDate={startDate} />
     </div>
   );
 };
+
 const AllowListPhase = () => {
-  return (
-    <div className="allowlist-phase">
-      <div className="header">
-        <h5 className="text-h5">Allowlist Phase</h5>
-        <ul className="properties">
-          <li>12 May 06:00 PM UTC</li>
-          <li>0.08 ETH</li>
-          <li>2 Per Wallet</li>
-        </ul>
-      </div>
-      <div className="body">
-        <div className="flex items-center justify-between">
-          <span className="text-headline-02">MINTING STARTS IN</span>
-          <Countdown />
+  const { dropDetail } = useDropDetailContext();
+  if (!dropDetail?.allowListPhase.length) {
+    return null;
+  }
+  const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
+  const _image = infinityBlock.images[0];
+
+  return dropDetail?.allowListPhase.map((phase: any, i: number) => {
+    const isAvailable = dayjs().valueOf() > phase.startDate;
+
+    return (
+      <div className="allowlist-phase" key={i}>
+        <div className="header">
+          <h5 className="text-h5">{phase.title ?? "Allowlist Phase"}</h5>
+          <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
+            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : dateFormat(phase.startDate, "DD MMM YYYY hh:ss A")}</li>
+            <li>{phase.price > 0 ? `${formatPrice(phase.price)} ETH` : "Free"}</li>
+            <li>{phase.walletCount} Per Wallet</li>
+          </ul>
         </div>
-        <div>
-          <div className="flex justify-between">
-            <span className="text-headline-02">AVAILABLE</span>
-            <span className="text-white">8.888</span>
-          </div>
-          <Process />
+        <div className="body">
+          {isAvailable && infinityBlock ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={phase.startDate} />}
+          <Process available={phase.available} taken={phase.taken} />
+        </div>
+        <div className="footer">
+          {isAvailable ? <ButtonMint walletCount={phase.walletCount} mintImage={_image} /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}
         </div>
       </div>
-      <div className="footer">
-        <Button className="w-full btn-primary">
-          add to calendar <IconCalendar />
-        </Button>
-      </div>
-    </div>
-  );
+    );
+  });
 };
 
 export default AllowListPhase;

@@ -13,7 +13,7 @@ const toastOptions = {
   theme: "dark",
   progressClassName: "toast-process",
   closeButton: () => (
-    <div className="flex-center">
+    <div className="flex-center mr-2.5">
       <IconClose className="text-gray-light" />
     </div>
   ),

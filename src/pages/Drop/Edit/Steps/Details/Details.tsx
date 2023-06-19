@@ -46,14 +46,14 @@ const Details = () => {
 
   return (
     <div className="flex flex-col gap-10 text-white max-w-[500px]">
-      <PageTitle title="Drop Details" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+      <PageTitle title="List Details" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
       <div className="flex flex-col gap-6">
         <InputLabel label={"Collection Name*"} {...register("collectionName")} error={errors.collectionName?.message} />
         <InputLabel label={"Token Symbol*"} helperText={"A shorthand abbreviation for your collection name. Examples: BAYC, PUNKS"} {...register("tokenSymbol")} error={errors.tokenSymbol?.message} />
         <InputLabel label={"Collection Size*"} helperText="Total number of NFTs in your collection." />
         <div>
           <div className="flex flex-col gap-2">
-            <Label helperText="This is the list of addresses who will be paid out from your contract. Thunder Marketplace takes a 10% fee on all primary sales..">Drop Earnings*</Label>
+            <Label helperText="This is the list of addresses who will be paid out from your contract. Thunder Marketplace takes a 10% fee on all primary sales..">List Earnings*</Label>
             <div className="flex flex-col gap-2">
               {fields.map((field, index) => (
                 <InputGroup key={index} />

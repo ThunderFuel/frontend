@@ -3,12 +3,14 @@ import Table, { ITableHeader } from "components/Table";
 import Checkbox from "components/CheckBox";
 import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
 import { useAppDispatch } from "store";
-import { dateFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
 import EthereumPrice from "components/EthereumPrice";
 import clsx from "clsx";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
+import { PATHS } from "router/config/paths";
+import UseNavigate from "hooks/useNavigate";
 
 const Collection = ({ item }: { item: any }) => {
   return (
@@ -16,7 +18,7 @@ const Collection = ({ item }: { item: any }) => {
       <div className={clsx("min-w-[56px] max-w-[56px] aspect-square rounded-sm overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}>
         <Img className="h-full" alt={item.image} src={item.image} loading="lazy" />
       </div>
-      <h6 className="text-h6 text-white">{item.name}</h6>
+      <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>
     </div>
   );
 };
@@ -27,6 +29,7 @@ const UnSalableLabel = ({ children }: any) => {
 
 const CollectionTable = () => {
   const dispatch = useAppDispatch();
+  const navigate = UseNavigate();
   const { collectionItems, setSweep, options } = useCollectionListContext();
 
   const onToggleCart = (collection: any) => {
@@ -57,12 +60,15 @@ const CollectionTable = () => {
     {
       key: "selection",
       text: "",
-      render: (collection) =>
-        collection.salable && (
-          <div className="p-6">
-            <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
-          </div>
-        ),
+      render: (collection) => (
+        <div className="p-6">
+          {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
+            collection.onAuction ? null : (
+              <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
+            )
+          ) : null}
+        </div>
+      ),
       width: "64px",
     },
     {
@@ -82,14 +88,23 @@ const CollectionTable = () => {
       text: "Last Sale",
       width: "15%",
       align: "flex-end",
-      render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>NO sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
+      render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>No Sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
     },
     {
       key: "owner",
       text: "Owner",
       width: "20%",
       align: "flex-end",
-      render: (item) => <div className="cell text-h6 text-gray-light hover:text-white hover:underline">{item.owner ?? "-"}</div>,
+      render: (item) => (
+        <div
+          className="cell text-h6 text-gray-light hover:text-white hover:underline"
+          onClick={() => {
+            navigate(PATHS.USER, { userId: item?.userId });
+          }}
+        >
+          {item?.userName ?? addressFormat(item?.userWalletAddress ?? "")}
+        </div>
+      ),
     },
     {
       key: "listedTime",

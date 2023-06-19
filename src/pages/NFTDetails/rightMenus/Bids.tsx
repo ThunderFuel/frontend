@@ -45,7 +45,7 @@ const Bids = ({ onBack }: { onBack: any }) => {
           <span className="flex items-center gap-x-2 text-headlineMd font-bigShoulderDisplay text-gray-light">
             <IconAuction width="17px" /> AUCTION ENDS IN
           </span>
-          <AuctionCountdown expireTime={selectedNFT.expireTime} />
+          <AuctionCountdown expireTime={selectedNFT.expireTime ?? selectedNFT.onAuctionExpireTime} />
         </div>
         {!isOwner && (
           <Button

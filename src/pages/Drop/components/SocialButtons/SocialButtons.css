@@ -1,0 +1,11 @@
+.drop-share ul {
+  @apply border-white border-opacity-25;
+
+  background: rgba(84, 84, 84, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(39.1006px);
+}
+
+.drop-share ul li {
+  @apply border-white border-opacity-25 text-white text-opacity-50;
+}

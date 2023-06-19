@@ -3,7 +3,7 @@ import Button from "components/Button";
 import { IconCancel, IconClock, IconOffer, IconWarning } from "icons";
 import RightMenu from "../components/RightMenu";
 import { useAppDispatch, useAppSelector } from "store";
-import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu, setYourCurrentOffer } from "store/NFTDetailsSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
@@ -11,16 +11,16 @@ import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
 import { addressFormat, dateFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
-import offerService from "api/offer/offer.service";
 import { OfferStatus } from "api/offer/offer.type";
 import clsx from "clsx";
+import userService from "api/user/user.service";
+import useToast from "hooks/useToast";
 
 const Box = ({
   item,
   isExpired,
   ownOffer,
   isOwner,
-  fetchOffers,
   onBack,
   isAccepted,
 }: {
@@ -33,7 +33,6 @@ const Box = ({
   isAccepted: boolean;
 }) => {
   const dispatch = useAppDispatch();
-
   const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
 
   const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
@@ -44,10 +43,10 @@ const Box = ({
   return (
     <div className={clsx("flex flex-col border border-gray rounded-lg text-h6", isDisabled ? "text-gray-light" : "text-white")}>
       <div className={`flex w-full p-[15px] gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
-        <Avatar image={item?.user?.image} userId={item?.user?.id} className={"w-8 h-8 flex-shrink-0"} />
+        <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
         <div className="flex flex-col gap-y-[10px]">
           <span>
-            {item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
+            {ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
           </span>
           <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
             <Icon className="w-[15px] h-[15px] flex-shrink-0" />
@@ -63,9 +62,19 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              offerService.acceptOffer({ id: item.id }).then(() => {
-                fetchOffers();
-                onBack();
+              userService.getBidBalance(item.makerUserId).then((res) => {
+                if (res.data < item.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+                else {
+                  dispatch(
+                    setCheckout({
+                      type: CheckoutType.AcceptOffer,
+                      item: item,
+                      price: item.price,
+                      onCheckoutComplete: onBack,
+                    })
+                  );
+                  dispatch(toggleCheckoutModal());
+                }
               });
             }}
           >
@@ -79,7 +88,13 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setCheckout({ type: CheckoutType.CancelOffer, item: item }));
+              dispatch(
+                setCheckout({
+                  type: CheckoutType.CancelOffer,
+                  item: item,
+                  onCheckoutComplete: onBack,
+                })
+              );
               dispatch(toggleCheckoutModal());
             }}
           >
@@ -90,7 +105,7 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setCheckout({ item: item }));
+              dispatch(setYourCurrentOffer(item.price));
               dispatch(setRightMenu(RightMenuType.UpdateOffer));
             }}
           >
@@ -144,7 +159,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
         </Button>
       )}
       {offers.map((offer: any, index: any) => {
-        if (offer.isCanceled) {
+        if (offer.isCanceled || offer.isAccepted || offer.isExpired) {
           return <></>;
         }
 

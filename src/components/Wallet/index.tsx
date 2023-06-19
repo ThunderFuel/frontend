@@ -4,13 +4,13 @@ import { useAppDispatch, useAppSelector } from "store";
 import { setIsConnected, toggleWalletModal } from "store/walletSlice";
 import Wallet from "./Wallet";
 import { useWallet } from "hooks/useWallet";
-import { useFuel } from "hooks/useFuel";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const Index = () => {
   const dispatch = useAppDispatch();
   const { walletConnect, getConnectionStatus } = useWallet();
   const { show, isConnected } = useAppSelector((state) => state.wallet);
-  const [fuel] = useFuel();
+  const { selectedGateway: fuel } = useFuelExtension();
 
   useEffect(() => {
     getConnectionStatus().then((res) => {
@@ -19,7 +19,7 @@ const Index = () => {
         walletConnect();
       }
     });
-  }, [fuel]);
+  }, [fuel()]);
 
   return isConnected ? <Wallet show={show} onClose={() => dispatch(toggleWalletModal())} /> : <ConnectWallet show={show} onClose={() => dispatch(toggleWalletModal())} />;
 };

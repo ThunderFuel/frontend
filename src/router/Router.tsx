@@ -4,6 +4,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import AuthorizationPageBase from "./AuthorizationPage";
 import { RouteConfig, ROUTES } from "./config";
 import MobileWarningPageBase from "./MobileWarningPage";
+import LayoutBase from "pages/Layout/Layout";
 
 const NotFound = React.lazy(() => import("pages/NotFound"));
 
@@ -58,11 +59,11 @@ const Router = () => {
         <Route
           path="*"
           element={
-            <ErrorBoundary>
+            <LayoutBase hiddenFooter={true}>
               <React.Suspense fallback={null}>
                 <NotFound />
               </React.Suspense>
-            </ErrorBoundary>
+            </LayoutBase>
           }
         />
       </Routes>

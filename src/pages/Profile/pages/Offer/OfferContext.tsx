@@ -5,7 +5,9 @@ import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
-import { setCheckout } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import userService from "api/user/user.service";
+import useToast from "hooks/useToast";
 
 interface IOfferContext {
   userInfo?: any;
@@ -18,48 +20,82 @@ export const OfferContext = createContext<IOfferContext>({} as any);
 const OfferProvider = ({ value, children }: { value: IOfferContext; children: ReactNode }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState({
     offerType: 0,
-    offerStatus: [0, 1, 2, 3, 4] as any,
+    offerStatus: [] as any,
   });
+  const [bidBalance, setBidBalance] = React.useState(null as any);
 
   const getOffers = React.useMemo(() => {
     return offers
       .filter((item: any) => item.isOfferMade === !!filterValue.offerType)
       .filter((item: any) => {
+        if (!filterValue.offerStatus.length) {
+          return true;
+        }
+
         return (
-          (filterValue.offerStatus.includes(1) && item.isActiveOffer) ||
-          (filterValue.offerStatus.includes(3) && item.isExpired) ||
-          (filterValue.offerStatus.includes(0) && item.isCanceled) ||
-          (filterValue.offerStatus.includes(2) && item.isAccepted)
+          (filterValue.offerStatus.includes(OfferStatus.ActiveOffer) && item.isActiveOffer) ||
+          (filterValue.offerStatus.includes(OfferStatus.ExpiredOffer) && item.isExpired) ||
+          (filterValue.offerStatus.includes(OfferStatus.Cancelled) && item.isCanceled) ||
+          (filterValue.offerStatus.includes(OfferStatus.AcceptedOffer) && item.isAccepted)
         );
       });
   }, [offers, filterValue]);
+
   const onChangeFilterValue = (value: any) => {
     setFilterValue((prevState: any) => ({ ...prevState, ...value }));
   };
 
   const onCancelAllOffer = async () => {
     try {
-      await offerService.cancelAllOffer({ userId: value.userInfo.id });
-      await fetchOffers();
+      dispatch(
+        setCheckout({
+          type: CheckoutType.CancelAllOffers,
+          onCheckoutComplete: () => {
+            fetchOffers();
+          },
+        })
+      );
+      dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
     }
   };
+
   const onAcceptOffer = async (item: any) => {
     try {
-      await offerService.acceptOffer({ id: item.id });
-      await fetchOffers();
+      userService.getBidBalance(item.makerUserId).then((res) => {
+        if (res.data < item.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+        else {
+          dispatch(
+            setCheckout({
+              type: CheckoutType.AcceptOffer,
+              item: item,
+              price: item.price,
+              onCheckoutComplete: fetchOffers,
+            })
+          );
+          dispatch(toggleCheckoutModal());
+        }
+      });
     } catch (e) {
       console.log(e);
     }
   };
   const onCancelOffer = async (item: any) => {
     try {
-      await offerService.cancelOffer({ id: item.id });
-      await fetchOffers();
+      dispatch(
+        setCheckout({
+          type: CheckoutType.CancelOffer,
+          item: item,
+          price: item.price,
+          onCheckoutComplete: fetchOffers,
+        })
+      );
+      dispatch(toggleCheckoutModal());
     } catch (e) {
       console.log(e);
     }
@@ -69,6 +105,8 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     dispatch(setCheckout({ item: item }));
     navigate(PATHS.NFT_DETAILS, { nftId: item.tokenId });
   };
+
+  const getBidBalance = async (id = value.userInfo.id) => userService.getBidBalance(id);
 
   const fetchOffers = async () => {
     const response = await offerService.getOffer({
@@ -90,6 +128,7 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   };
   React.useEffect(() => {
     if (value.userInfo?.id) {
+      getBidBalance().then((res) => setBidBalance(res.data));
       fetchOffers();
     }
   }, [value.userInfo]);
@@ -98,11 +137,13 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
     offers,
     getOffers,
     filterValue,
+    bidBalance,
     onChangeFilterValue,
     onCancelAllOffer,
     onAcceptOffer,
     onCancelOffer,
     onUpdateOffer,
+    getBidBalance,
   };
 
   return <OfferContext.Provider value={contextValue}>{children}</OfferContext.Provider>;

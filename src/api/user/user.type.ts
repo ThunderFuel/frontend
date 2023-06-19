@@ -29,8 +29,8 @@ export interface IUserResponse {
   lastName: string;
   phone: null | string;
   gender: null | string;
-  contractAddress?: null | string;
-  walletAddress: null | string;
+  contractAddress: null | string;
+  walletAddress: string;
   image: null | string;
   banner: null | string;
   socialMedias: any[];

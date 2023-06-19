@@ -7,7 +7,7 @@ const InfoBox = ({ title, description }: { title?: string; description: string }
       <IconInfo className="w-6 h-6" />
       <div className="flex w-full flex-col gap-y-[5px]">
         {title ? <h6 className="text-head6 font-spaceGrotesk">{title}</h6> : <></>}
-        <p className="w-full text-bodyMd text-gray-light">{description}</p>
+        <p className="w-full text-bodySm text-gray-light">{description}</p>
       </div>
     </div>
   );

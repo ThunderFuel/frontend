@@ -1,5 +1,12 @@
 import { IUserResponse } from "../user/user.type";
 
+export interface MintRequest {
+  contractAddress: string;
+  count: number;
+  walletAddress: string;
+  tokenIds: any[];
+}
+
 export enum SocialTypes {
   Website = 0,
   Discord = 1,
@@ -35,11 +42,15 @@ export interface CollectionItemResponse {
   rarity: number;
   salable: boolean;
   lastSalePrice?: number;
-  user?: IUserResponse;
+  user: IUserResponse;
   onAuction?: boolean;
   startingPrice?: number;
   highestBidPrice?: number;
   onAuctionExpireTime?: string;
+  userWalletAddress: string;
+  collection: CollectionResponse;
+  contractAddress: string;
+  isOwnCollectionItem?: boolean;
 
   uid?: string;
   userId?: any;

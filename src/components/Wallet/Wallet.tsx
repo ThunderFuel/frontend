@@ -1,25 +1,24 @@
 import React from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
-import { setIsBurner, setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
+import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
 import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
-import { Button } from "react-bootstrap";
+import Button from "components/Button";
 import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
 import { addressFormat } from "utils";
-import { useFuel } from "hooks/useFuel";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
+import { removeAll } from "store/bulkListingSlice";
+import { removeBulkItems } from "store/checkoutSlice";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
-  const { user, isBurner, address } = useAppSelector((state) => state.wallet);
+  const { user, address } = useAppSelector((state) => state.wallet);
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuel, error, loading] = useFuel();
   const MenuItems = [
     {
       title: "My Profile",
@@ -75,11 +74,17 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const footer = (
     <div className="flex mt-auto flex-col p-5 gap-y-2.5">
       <Balances />
-      <div className="flex w-full gap-x-2.5">
-        <Button target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-2.fuel.network/?address=${user?.contractAddress ?? address}`} className="w-full">
+      <div className="grid grid-cols-2 gap-x-2.5">
+        <a target="_blank" rel="noreferrer" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`} className="btn btn-primary w-full">
           GET TEST ETH <IconFaucet />
-        </Button>
-        <Button disabled className="btn-secondary w-full" onClick={() => dispatch(toggleManageFundsModal())}>
+        </a>
+        <Button
+          className="btn-secondary w-full"
+          onClick={() => {
+            onClose();
+            dispatch(toggleManageFundsModal());
+          }}
+        >
           MANAGE FUNDS <IconArrowRight />
         </Button>
       </div>
@@ -105,15 +110,11 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <div
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
               onClick={() => {
-                if (!isBurner) {
-                  walletDisconnect();
-                  dispatch(setIsConnected(false));
-                  dispatch(setUser({}));
-                } else {
-                  dispatch(setIsConnected(false));
-                  dispatch(setIsBurner(false));
-                  dispatch(setUser({}));
-                }
+                walletDisconnect();
+                dispatch(setIsConnected(false));
+                dispatch(setUser({}));
+                dispatch(removeAll());
+                dispatch(removeBulkItems());
                 onClose();
               }}
             >

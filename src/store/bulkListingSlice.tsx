@@ -3,6 +3,8 @@ import { CollectionItemResponse } from "api/collections/collections.type";
 
 type IBulkListingItem = CollectionItemResponse;
 
+const BulkLimit = 50;
+
 export const bulkListingSlice = createSlice({
   name: "bulkListing",
   initialState: {
@@ -21,8 +23,10 @@ export const bulkListingSlice = createSlice({
       state.items = [];
     },
     add: (state, action) => {
-      state.items.push(action.payload);
-      state.selectedUID.push(action.payload.uid);
+      if (state.items.length < BulkLimit) {
+        state.items.push(action.payload);
+        state.selectedUID.push(action.payload.uid);
+      }
     },
     toggleSelectedUID: (state, action) => {
       const index = state.selectedUID.indexOf(action.payload.uid);

@@ -1,5 +1,5 @@
-import React from "react";
-import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconLink, IconWarning } from "icons";
+import React, { useState } from "react";
+import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconInfo, IconLikeHand, IconLink, IconWarning } from "icons";
 import Img from "components/Img/Img";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
@@ -25,7 +25,12 @@ const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
 const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => {
   return (
     <div className="grid grid-cols-2">
-      <Button className="btn-secondary btn-sm rounded-t-none border-r-0" onClick={() => onCancelOffer(item)}>
+      <Button
+        className="btn-secondary btn-sm rounded-t-none border-r-0"
+        onClick={() => {
+          onCancelOffer(item);
+        }}
+      >
         cancel offer <IconCircleRemoveWhite />
       </Button>
       <Button className="btn-secondary btn-sm rounded-t-none" onClick={() => onUpdateOffer(item)}>
@@ -59,10 +64,24 @@ const OfferItemExpireLabel = ({ item }: any) => {
     </div>
   );
 };
-const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) => {
+const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, isOnHold = null, getBidBalance }: any) => {
   const { options, userInfo } = useProfile();
   const path = getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item?.tokenId });
   const isDisabled = item.isExpired || item.isCanceled;
+  const [offerOwnerBidBalance, setOfferOwnerBidBalance] = useState(null as any);
+
+  const fetchBidBalance = async () => {
+    try {
+      const response = await getBidBalance(item.makerUserId);
+      setOfferOwnerBidBalance(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (!item.isOfferMade && offerOwnerBidBalance === null) fetchBidBalance();
+  }, []);
 
   const getOfferMadeUserLabel = () => {
     if (options?.isProfile && item.isOfferMade) {
@@ -84,7 +103,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
         )}
       >
         <Link to={path} className="w-16 h-16 rounded-md overflow-hidden relative group">
-          <Img className={clsx("w-full", isDisabled ? "opacity-50" : "")} src={item.tokenImage ?? null} alt={item.tokenName} />
+          <Img className={clsx("w-full", isDisabled ? "opacity-50" : "", isOnHold && item.isOfferMade ? "opacity-50" : "")} src={item.tokenImage ?? null} alt={item.tokenName} />
           <div className="opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 absolute bg-gray bg-opacity-80 top-0 left-0 w-full h-full flex-center">
             <IconLink className="text-white" />
           </div>
@@ -101,11 +120,31 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
           <div className="inline-flex">
             <OfferItemExpireLabel item={item} />
           </div>
+          {isOnHold && options?.isProfile && item.isActiveOffer ? (
+            <div className="flex gap-1 rounded-[5px] p-[6px] border border-gray text-orange">
+              <IconInfo className=" flex-shrink-0 w-[15px] h-[15px]" /> <span className="text-bodyMd">Offer exceeds your bid balance. Offer is on hold until you add funds to your bid balance.</span>
+            </div>
+          ) : (
+            <></>
+          )}
+          {offerOwnerBidBalance < item.price && !item.isOfferMade && options?.isProfile && item.isActiveOffer ? (
+            <div className="flex gap-1 rounded-[5px] p-[6px] border border-gray text-orange">
+              <IconInfo className=" flex-shrink-0 w-[15px] h-[15px]" />{" "}
+              <span className="text-bodyMd">Offer amount exceeds bidder`s current balance. Offer is on hold until bidder has enough bid balance.</span>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <EthereumPrice className={isDisabled ? "text-gray-light" : "text-white"} price={item.price} />
       </div>
       {options?.isProfile && item.isActiveOffer ? (
-        !item.isOfferMade ? (
+        offerOwnerBidBalance < item.price && !item.isOfferMade ? (
+          <div className="flex-center px-4 py-3 gap-[6px] border border-gray rounded-[5px] bg-gray text-gray-light">
+            <span className="text-headline-02">ON HOLD</span>
+            <IconHand className="w-[18px] h-[18px]" />
+          </div>
+        ) : !item.isOfferMade ? (
           <OfferItemAcceptButton onAcceptOffer={onAcceptOffer} item={item} />
         ) : (
           <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />
@@ -119,7 +158,7 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer }: any) =
 const OfferList = () => {
   const { options } = useProfile();
   const { user } = useAppSelector((state) => state.wallet);
-  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers } = useOfferContext();
+  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers, bidBalance, getBidBalance } = useOfferContext();
   const isOffersMade = filterValue.offerType === 1;
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
   const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
@@ -136,8 +175,15 @@ const OfferList = () => {
       </div>
       <div className="flex flex-col gap-3">
         {getOffers.map((item: any, k: any) => {
-          if (isOffersMade) return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} />;
-          else return item.ownerId === user.id ? <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} /> : null;
+          if (isOffersMade) {
+            return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} isOnHold={item.price > bidBalance} />;
+          } else {
+            if (item.ownerId !== user.id) {
+              // return false;
+            }
+
+            return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} getBidBalance={getBidBalance} />;
+          }
         })}
         {!getOffers.length && (
           <div className="flex-center">
