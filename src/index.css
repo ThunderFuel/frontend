@@ -478,12 +478,29 @@ body {
   --tw-divide-opacity: 0.1;
 }
 
-.drop #layout-header .tab li span:hover {
-  --tw-bg-opacity: 0.1;
-  background-color: rgb(var(--th-white) / var(--tw-bg-opacity));
+.drop #layout-header .tab li span {
   --tw-text-opacity: .5;
 }
 
+.drop #layout-header .tab li span:hover {
+  --tw-bg-opacity: 0.1;
+  background-color: rgb(var(--th-white) / var(--tw-bg-opacity));
+}
+
+
+.drop #layout-header .header-search .input::-webkit-input-placeholder {
+  opacity: 0.5;
+}
+
+.drop #layout-header .header-search .input + svg {
+  --tw-text-opacity: 0.5
+}
+
+.drop #layout-header .header-search .input:focus + svg {
+  --tw-text-opacity: 1;
+}
+
+.text-gray-light
 .drop #layout-header .search-result-container .search-group-item:hover {
   --tw-bg-opacity: 0.1;
 }
