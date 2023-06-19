@@ -3,7 +3,7 @@ import Button from "../components/Button";
 import { IconRefresh } from "../icons";
 import Img from "../components/Img/Img";
 import { AssetNotFound } from "../assets";
-import Sentry from "@sentry/react";
+import * as Sentry from "@sentry/browser";
 
 interface IErrorBoundaryProps {
   readonly children: JSX.Element | JSX.Element[];
