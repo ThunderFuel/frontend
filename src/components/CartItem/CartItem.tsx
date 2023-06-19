@@ -38,7 +38,7 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
   };
 
   return (
-    <div className="relative">
+    <div className="relative ">
       <div className={clsx(images.length > 1 && "w-20")}>
         {images.map((img: any, index) => {
           return (
@@ -50,7 +50,7 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
       </div>
       {isUnavailable && <div className="absolute top-0 w-full h-full left-0 bg-gray/80" />}
       {isRemovable && (
-        <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="absolute top-0 left-0 flex-center h-16 w-16 bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-md">
           <IconTrash className="cursor-pointer text-white" onClick={onRemove} />
         </div>
       )}
