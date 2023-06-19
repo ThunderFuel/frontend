@@ -66,17 +66,14 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       };
 
       setContracts(contracts, FuelProvider);
-      console.log(order);
 
       userService.getBidBalance(user.id).then((res) => {
         setCurrentBidBalance(res.data);
         const _currentBidBalance = res.data;
-        console.log(_currentBidBalance);
         if (_currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
           depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
                 userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
@@ -92,7 +89,6 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
                 setApproved(true);

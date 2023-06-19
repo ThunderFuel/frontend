@@ -64,7 +64,6 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         expiration_range: formatTimeContract(checkoutExpireTime),
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
-      console.log(order);
 
       setContracts(contracts, FuelProvider);
 
@@ -75,7 +74,6 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
           const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
           depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.tokenUpdateOffer({
                   id: currentItem?.id,
@@ -95,7 +93,6 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.tokenUpdateOffer({
                   id: currentItem?.id,

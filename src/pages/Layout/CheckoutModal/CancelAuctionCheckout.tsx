@@ -46,8 +46,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
     setContracts(contracts, FuelProvider);
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
       cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           nftdetailsService.tokenCancelAuction(selectedNFT.id);
           setApproved(true);
         })

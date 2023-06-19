@@ -69,10 +69,8 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         ];
 
         setContracts(contracts, FuelProvider);
-        console.log(order);
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
           .then((res) => {
-            console.log(res);
             if (res.transactionResult.status.type === "success") {
               nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
               setApproved(true);
@@ -104,10 +102,8 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         ];
 
         setContracts(contracts, FuelProvider);
-        console.log(order);
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
           .then((res) => {
-            console.log(res);
             if (res.transactionResult.status.type === "success") {
               nftdetailsService.tokenUpdateListing([
                 {
@@ -145,10 +141,8 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         ];
 
         setContracts(contracts, FuelProvider);
-        console.log(order);
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
           .then((res) => {
-            console.log(res);
             if (res.transactionResult.status.type === "success") {
               nftdetailsService.tokenList([
                 {

@@ -66,12 +66,10 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
       userService.getBidBalance(user.id).then((res) => {
         setCurrentBidBalance(res.data);
         const _currentBidBalance = res.data;
-        console.log(_currentBidBalance);
         if (_currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
           depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.makeOffer({
                   makerUserId: user.id,
@@ -93,7 +91,6 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success") {
                 nftdetailsService.makeOffer({
                   makerUserId: user.id,

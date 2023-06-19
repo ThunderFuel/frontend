@@ -35,7 +35,6 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   function fetchBidBalance() {
     userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
   }
-  console.log(bidBalance);
   useEffect(() => {
     fetchBalance();
     fetchBidBalance();

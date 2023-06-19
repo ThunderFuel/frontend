@@ -50,14 +50,11 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const promises = [] as any;
 
   const handleOrders = async ({ bulkListItems, bulkUpdateItems }: { bulkListItems: any; bulkUpdateItems: any }) => {
-    console.log(bulkListItems, bulkUpdateItems);
-
     const tokenIds = bulkUpdateItems.map((item: any) => item.tokenId); // for bulkupdate
     let updatePromise;
     let listPromise;
     if (bulkUpdateItems.length > 0) {
       updatePromise = nftdetailsService.getTokensIndex(tokenIds).then((res) => {
-        console.log("bulk update -  getTokensIndex:", res);
         bulkUpdateMakerOders = bulkUpdateItems.map((item: any) => {
           return {
             isBuySide: false,
@@ -79,8 +76,6 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
     if (bulkListItems.length > 0) {
       listPromise = nftdetailsService.getLastIndex(0, user.id).then((res) => {
-        console.log("bulk list - getLastIndex:", res);
-
         bulkListMakerOders = bulkListItems.map((item: any, index: any) => {
           return {
             isBuySide: false,
@@ -119,13 +114,11 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     Promise.all(promises)
       .then(() => {
         const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
-        console.log({ bulkMakerOrders });
 
         setContracts(contracts, FuelProvider);
 
         bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders)
           .then((res) => {
-            console.log(res);
             if (res?.transactionResult.status.type === "success") {
               if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(_bulkUpdateItems);
               if (bulkListItems.length > 0) collectionsService.bulkListing(_bulkListItems);

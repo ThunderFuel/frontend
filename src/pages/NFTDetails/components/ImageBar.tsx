@@ -52,7 +52,8 @@ const ImageBar = ({ nft, toggleFullscreen }: any) => {
       },
     },
     { icon: IconFullscreen, onClick: () => toggleFullscreen() },
-    { icon: IconRefresh, onClick: () => console.log("IconRefresh") },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    { icon: IconRefresh, onClick: () => {} },
     {
       icon: IconShare,
       onClick: onShare,

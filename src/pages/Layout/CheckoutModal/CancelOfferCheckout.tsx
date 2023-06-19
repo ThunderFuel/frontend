@@ -49,7 +49,6 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     if (cancelOfferItems?.length > 0) {
       cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
         .then((res) => {
-          console.log(res);
           if (res.transactionResult.status.type === "success") {
             offerService.cancelAllOffer({ userId: user.id });
             setApproved(true);
@@ -65,7 +64,6 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       offerService.getOffersIndex([currentItem.id]).then((res) => {
         cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
           .then((res) => {
-            console.log(res);
             if (res.transactionResult.status.type === "success") {
               nftdetailsService.cancelOffer(currentItem.id);
               setApproved(true);
@@ -115,7 +113,6 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       )}
     </div>
   );
-  console.log(cancelOfferItems);
 
   return (
     <Modal

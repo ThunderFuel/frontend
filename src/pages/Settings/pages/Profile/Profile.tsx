@@ -21,7 +21,6 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState(user as any);
 
   const onChange = (field: string, value: any) => {
-    console.log(field, value);
     setUserInfo((prevState: any) => ({ ...prevState, ...{ [field]: value } }));
   };
   const onChangeCoverImage = async (imageUrl: string) => {
@@ -39,7 +38,6 @@ const Profile = () => {
 
   const onSubmit = async () => {
     try {
-      console.log(userInfo);
       const data = {
         id: user.id,
         bio: userInfo.bio,

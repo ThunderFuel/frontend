@@ -39,7 +39,6 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { checkoutPrice, currentItem, onCheckoutComplete } = useAppSelector((state) => state.checkout);
   const { wallet } = useAppSelector((state) => state.wallet);
-  console.log({ currentItem });
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
@@ -60,11 +59,8 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
       setContracts(contracts, FuelProvider);
 
-      console.log({ exchangeContractId, provider, wallet, order, transferManagerContractId });
-
       approveAndExecuteOrder(exchangeContractId, provider, wallet, order, transferManagerContractId)
         .then((res) => {
-          console.log(res);
           if (res.transactionResult.status.type === "success") {
             offerService.acceptOffer({ id: currentItem.id }).then(() => {
               userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);

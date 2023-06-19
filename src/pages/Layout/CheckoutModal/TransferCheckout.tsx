@@ -63,8 +63,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
     const toAddress = tempAddress === "" ? address : tempAddress;
     safeTransferFrom(selectedNFT.collection.contractAddress, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
         setApproved(true);
       })

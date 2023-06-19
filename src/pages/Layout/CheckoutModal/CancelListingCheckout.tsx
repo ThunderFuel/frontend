@@ -48,7 +48,6 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
     nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
       cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
         .then((res) => {
-          console.log(res);
           if (res.transactionResult.status.type === "success") {
             nftdetailsService.tokenCancelList(selectedNFT.id);
             setApproved(true);

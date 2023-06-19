@@ -199,7 +199,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     try {
       nftdetailsService.getTokensIndex(tokenIds).then((res) => {
         if (!isObjectEmpty(buyNowItem)) {
-          console.log("BUY NOW");
           const order = {
             isBuySide: true,
             taker: user.walletAddress,
@@ -214,10 +213,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
           setContracts(contracts, FuelProvider);
 
-          console.log(order);
           executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success")
                 nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                   if (res.data) {
@@ -234,7 +231,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
               else setIsFailed(true);
             });
         } else if (tokenIds.length === 1) {
-          console.log("BUY 1 ITEM");
           const order = {
             isBuySide: true,
             taker: user.walletAddress,
@@ -249,10 +245,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
           setContracts(contracts, FuelProvider);
 
-          console.log(order);
           executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
             .then((res) => {
-              console.log(res);
               if (res.transactionResult.status.type === "success")
                 nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                   if (res.data) {
@@ -269,7 +263,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
               else setIsFailed(true);
             });
         } else {
-          console.log("BULK PURCHASE");
           nftdetailsService.getTokensIndex(tokenIds).then((res) => {
             const takerOrders = items.map((item) => {
               return {
@@ -287,10 +280,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
             setContracts(contracts, FuelProvider);
 
-            console.log(takerOrders);
             bulkPurchase(exchangeContractId, provider, wallet, takerOrders, NativeAssetId)
               .then((res) => {
-                console.log("bulkPurchase res:", res);
                 if (res?.transactionResult.status.type === "success")
                   nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                     if (res.data) {

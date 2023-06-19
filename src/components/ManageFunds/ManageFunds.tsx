@@ -26,8 +26,7 @@ const ManageFunds = () => {
     setIsDisabled(true);
     if (isAddToPool)
       deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
         })
         .catch((e) => {
@@ -36,8 +35,7 @@ const ManageFunds = () => {
         });
     else
       withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
         })
         .catch((e) => {

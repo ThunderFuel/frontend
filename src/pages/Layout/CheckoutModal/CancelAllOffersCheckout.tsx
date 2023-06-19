@@ -46,7 +46,6 @@ const CancelAllOffers = ({ show, onClose }: { show: boolean; onClose: any }) => 
 
     cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
       .then((res) => {
-        console.log(res);
         if (res.transactionResult.status.type === "success") {
           offerService.cancelAllOffer(params);
         }

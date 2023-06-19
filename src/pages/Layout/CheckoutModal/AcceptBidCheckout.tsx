@@ -49,7 +49,6 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
 
   const onComplete = () => {
     nftdetailsService.getAuctionIndex([selectedNFT?.id]).then((res) => {
-      console.log(res);
       const order = {
         isBuySide: false,
         taker: user.walletAddress,
@@ -64,10 +63,8 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
 
       setContracts(contracts, FuelProvider);
 
-      console.log(order);
       executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
         .then((res) => {
-          console.log(res);
           if (res.transactionResult.status.type === "success") {
             offerService.acceptOffer({ id: currentItem?.id });
             userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
