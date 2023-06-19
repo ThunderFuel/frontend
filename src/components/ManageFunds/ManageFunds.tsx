@@ -83,7 +83,8 @@ const ManageFunds = () => {
             <InputEthereum onChange={(value: any) => setAmount(value)} value={amount} />
             {!isAddToPool && (
               <div className="flex gap-[5px] rounded-[5px] text-orange">
-                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" /> <span className="text-bodyMd">Offers don`t cancel when you withdraw. Manage your offers in your profile.</span>
+                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />{" "}
+                <span className="text-bodyMd">Your offers will not be canceled automatically when you withdraw. You can manage your offers in your profile.</span>
               </div>
             )}
           </div>
