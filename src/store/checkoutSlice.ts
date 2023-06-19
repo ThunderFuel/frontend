@@ -19,6 +19,7 @@ export enum CheckoutType {
   CancelAllListings,
   CancelAllOffers,
   CancelAllOffersListings,
+  MintCheckout,
 }
 
 export const checkoutSlice = createSlice({
@@ -31,6 +32,8 @@ export const checkoutSlice = createSlice({
     checkoutIsAuction: false,
     checkoutAuctionStartingPrice: 0,
     checkoutExpireTime: 0 as number,
+    checkoutMintAmount: 0,
+    checkoutMintImage: "",
     amountAddedBidBalance: 0,
     currentItem: {} as any,
     bulkListItems: [],
@@ -69,6 +72,8 @@ export const checkoutSlice = createSlice({
       state.bulkListItems = action.payload?.bulkListItems;
       state.bulkUpdateItems = action.payload?.bulkUpdateItems;
       state.cancelOfferItems = action.payload?.cancelOfferItems;
+      state.checkoutMintAmount = action.payload?.mintAmount;
+      state.checkoutMintImage = action.payload?.mintImage;
       state.onCheckoutComplete = action.payload?.onCheckoutComplete ?? noOp;
     },
     removeBulkItems: (state) => {

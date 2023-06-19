@@ -18,6 +18,7 @@ import AcceptOfferCheckout from "./AcceptOfferCheckout";
 import CancelAllListingCheckout from "./CancelAllListingCheckout";
 import CancelAllOffers from "./CancelAllOffersCheckout";
 import CancelAllOffersListingsCheckout from "./CancelAllOffersListingsCheckout";
+import MintCheckout from "./MintCheckout";
 
 const Index = () => {
   const dispatch = useAppDispatch();
@@ -62,15 +63,17 @@ const Index = () => {
     case CheckoutType.Transfer:
       return <TransferCheckout show={show} onClose={onClose} />;
     case CheckoutType.CancelAuction:
-      return <CancelAuctionCheckout show={show} onClose={onClose} />; //DESIGNDA YOK!
+      return <CancelAuctionCheckout show={show} onClose={onClose} />;
     case CheckoutType.CancelListing:
-      return <CancelListingCheckout show={show} onClose={onClose} />; //DESIGNDA YOK!
+      return <CancelListingCheckout show={show} onClose={onClose} />;
     case CheckoutType.CancelAllListings:
       return <CancelAllListingCheckout show={show} onClose={onClose} />;
     case CheckoutType.CancelAllOffers:
       return <CancelAllOffers show={show} onClose={onClose} />;
     case CheckoutType.CancelAllOffersListings:
       return <CancelAllOffersListingsCheckout show={show} onClose={onClose} />;
+    case CheckoutType.MintCheckout:
+      return <MintCheckout show={show} onClose={onClose} />;
     default:
       return isInsufficientBalance ? <InsufficientFund show={show} onClose={onClose} /> : <Checkout show={show} onClose={onClose} />;
   }

@@ -28,6 +28,7 @@ const AllowListPhase = () => {
     return null;
   }
   const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
+  const _image = infinityBlock.images[0];
 
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
     const isAvailable = dayjs().valueOf() > phase.startDate;
@@ -46,7 +47,9 @@ const AllowListPhase = () => {
           {isAvailable && infinityBlock ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={phase.startDate} />}
           <Process available={phase.available} taken={phase.taken} />
         </div>
-        <div className="footer">{isAvailable ? <ButtonMint walletCount={phase.walletCount} /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}</div>
+        <div className="footer">
+          {isAvailable ? <ButtonMint walletCount={phase.walletCount} mintImage={_image} /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}
+        </div>
       </div>
     );
   });

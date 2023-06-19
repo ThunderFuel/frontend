@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useAppSelector } from "store";
-import { mint } from "thunder-sdk/src/contracts/erc721";
-import { ERC721ContractId, provider } from "global-constants";
-import collectionsService from "api/collections/collections.service";
 import Button from "components/Button";
 import { IconMinus, IconPlus, IconToken } from "icons";
 import { useDispatch } from "react-redux";
 import { toggleWalletModal } from "store/walletSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const InputMint = ({ onChange, walletCount }: any) => {
   const [value, setValue] = useState(1);
@@ -35,34 +33,22 @@ const InputMint = ({ onChange, walletCount }: any) => {
   );
 };
 
-const ButtonMint = ({ walletCount }: { walletCount: number }) => {
-  const { user, wallet, isConnected } = useAppSelector((state) => state.wallet);
+const ButtonMint = ({ walletCount, mintImage }: { walletCount: number; mintImage: string }) => {
+  const { isConnected } = useAppSelector((state) => state.wallet);
   const [amount, setAmount] = useState(1);
   const dispatch = useDispatch();
 
-  const tempContract = "0x3cf27804d6a1c653dcce062b6f33937a815ee7ae7471787b3c0a661c22d45947";
   const onClick = () => {
     if (!isConnected) dispatch(toggleWalletModal());
     else
-      mint(ERC721ContractId, provider, wallet, amount, user.walletAddress)
-        .then((res) => {
-          console.log(res);
-          if (res?.transactionResult.status.type === "success") {
-            const _tokenIds = res.logs.map((item) => item.token_id.toNumber()); //logs
-
-            collectionsService
-              .mint({
-                contractAddress: tempContract,
-                count: amount,
-                walletAddress: user.walletAddress,
-                tokenIds: _tokenIds,
-              })
-              .then((res) => console.log("MINTED", res));
-          }
+      dispatch(
+        setCheckout({
+          type: CheckoutType.MintCheckout,
+          mintAmount: amount,
+          mintImage: mintImage,
         })
-        .catch((e) => {
-          console.log(e);
-        });
+      );
+    dispatch(toggleCheckoutModal());
   };
 
   const onChange = (e: any) => setAmount(e);
