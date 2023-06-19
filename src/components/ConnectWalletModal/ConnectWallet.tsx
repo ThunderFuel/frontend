@@ -26,7 +26,10 @@ export const ConnectWallet = () => {
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
           {fuelError === "" ? (
-            <Button className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100" onClick={() => walletConnectFuel().then((res) => res ?? dispatch(toggleWalletModal()))}>
+            <Button
+              className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
+              onClick={() => walletConnectFuel().then((res) => res ?? dispatch(toggleWalletModal()))}
+            >
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
@@ -45,7 +48,7 @@ export const ConnectWallet = () => {
           </div>
           {fueletError === "" ? (
             <Button
-              className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100"
+              className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
               onClick={() => {
                 walletConnectFuelet().then((res) => {
                   if (res) {
