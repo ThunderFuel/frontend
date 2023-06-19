@@ -26,12 +26,12 @@ const Landing = () => {
       <div className="py-2.5 h-[33px] w-full text-headline-01 uppercase bg-gray text-center text-white overflow-hidden">
         <div className="flex flex-col flex-grow ease-in-out transform duration-[350ms]">
           <div className="h-[33px]">
-            Closed beta is live now! -{" "}
+            Open beta is live now -{" "}
             <span
               className="relative cursor-pointer after:content-[''] after:absolute after:left-0 after:-bottom-1 after:border-b after:border after:w-full"
               onClick={() => navigate(PATHS.MARKETPLACE)}
             >
-              LOGIN
+              Go to marketplace
             </span>
           </div>
           <div className="h-[33px]">Marketplace Coming Soon</div>
