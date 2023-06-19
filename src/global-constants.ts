@@ -4,13 +4,13 @@ export const ZERO_B256 = "0x0000000000000000000000000000000000000000000000000000
 export const exchangeContractId = "0x88ccf5f44f586bc962e5f2a6945fa1b0b0309d79606660a05bb6d5d8fb4b3db9";
 export const assetManagerContractId = "0xa0732def1afa51e5fe6d8ada46824fbe794b2959e901875b219055b80a076891";
 export const poolContractId = "0x4fd8c3335fcb9daf317a0a0bff373735cb0b73b297f657eced288174fe9b504c";
-export const strategyFixedPriceContractId = "0x152140c1afc85dc22ba6183a7369648e7acd6a66e60e9c933fa93cb473183799";
-export const strategyAuctionContractId = "0xb5ff24a8923a22d2d5680e43df9cfe157c73184c6d2c397d139b8efb417ee7af";
+export const strategyFixedPriceContractId = "0xfb692ed3f7410dc287d10e42efb2c4a2ed6c910c192237a8053bc977a5cd73e5";
+export const strategyAuctionContractId = "0x7a6f0b6e7a181cb0d21b99e4703eb706dbc00fa385726af5e7124dde4d286276";
 export const executionManagerContractId = "0xbaad27814dcfca96d88c209e80e4a5cc6fbaac6e07ba1ef75ca0fdbe54878f06";
 export const transferManagerContractId = "0x44f93062f0e8ce54973a1c9fe972a25e3845a798adf892059bfe67c3576a1f22";
 export const transferSelectorContractId = "0xbb55fd1eac8df688b719ddfc2374d911db743523e13d81ded77100a4e0ae1277";
 export const royaltyManagerContractId = "0x2a08b7c9a7133fa52a1505897975e0e5a6ff7cb385e16c0d551152de7ecca47e";
-export const ERC721ContractId = "0xbd82b3b28d1ac90e499ae9a22f0e2f9c5cb15167d4d24f167dfeab6bb84019cf";
+export const ERC721ContractId = "0xa806571323a7214505069fdf6b00b3c331b34d542807bb9a8b3e528907d66c56";
 
 export const contracts = {
   pool: "0x4fd8c3335fcb9daf317a0a0bff373735cb0b73b297f657eced288174fe9b504c",
@@ -19,8 +19,8 @@ export const contracts = {
   assetManager: "0xa0732def1afa51e5fe6d8ada46824fbe794b2959e901875b219055b80a076891",
   transferSelector: "0xbb55fd1eac8df688b719ddfc2374d911db743523e13d81ded77100a4e0ae1277",
   transferManager: "0x44f93062f0e8ce54973a1c9fe972a25e3845a798adf892059bfe67c3576a1f22",
-  strategyFixedPrice: "0x152140c1afc85dc22ba6183a7369648e7acd6a66e60e9c933fa93cb473183799",
-  strategyAuction: "0xb5ff24a8923a22d2d5680e43df9cfe157c73184c6d2c397d139b8efb417ee7af",
+  strategyFixedPrice: "0xfb692ed3f7410dc287d10e42efb2c4a2ed6c910c192237a8053bc977a5cd73e5",
+  strategyAuction: "0x7a6f0b6e7a181cb0d21b99e4703eb706dbc00fa385726af5e7124dde4d286276",
   exchange: "0x88ccf5f44f586bc962e5f2a6945fa1b0b0309d79606660a05bb6d5d8fb4b3db9",
-  erc721: "0xbd82b3b28d1ac90e499ae9a22f0e2f9c5cb15167d4d24f167dfeab6bb84019cf",
+  erc721: "0xa806571323a7214505069fdf6b00b3c331b34d542807bb9a8b3e528907d66c56",
 };
