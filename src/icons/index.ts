@@ -98,3 +98,4 @@ export { ReactComponent as IconVideo } from "./icon-video.svg";
 export { ReactComponent as IconEmptyCircle } from "./icon-empty-circle.svg";
 export { ReactComponent as IconMinus } from "./icon-minus.svg";
 export { ReactComponent as IconDots } from "./icon-dots.svg";
+export { ReactComponent as IconFuelWallet } from "./icon-fuel-wallet.svg";

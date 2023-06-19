@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconFuelet, IconLightning } from "icons";
+import { IconArrowRight, IconFuelWallet, IconFuelet, IconLightning } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
@@ -20,9 +20,7 @@ export const ConnectWallet = () => {
       <div className="flex flex-col gap-y-2.5">
         <div className="flex items-center px-2.5 py-4 justify-between bg-bg-light border border-gray rounded-[5px] group">
           <div className="flex items-center gap-x-2.5">
-            <div className="flex p-1.5 bg-gray rounded-full">
-              <IconLightning className="text-[#01FFC8] w-5 h-5" />
-            </div>
+            <IconFuelWallet />
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
           {fuelError === "" ? (
