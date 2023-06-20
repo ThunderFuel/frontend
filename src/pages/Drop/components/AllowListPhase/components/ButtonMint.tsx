@@ -40,7 +40,7 @@ const ButtonMint = ({ walletCount, mintImage }: { walletCount: number; mintImage
 
   const onClick = () => {
     if (!isConnected) dispatch(toggleWalletModal());
-    else
+    else {
       dispatch(
         setCheckout({
           type: CheckoutType.MintCheckout,
@@ -48,7 +48,8 @@ const ButtonMint = ({ walletCount, mintImage }: { walletCount: number; mintImage
           mintImage: mintImage,
         })
       );
-    dispatch(toggleCheckoutModal());
+      dispatch(toggleCheckoutModal());
+    }
   };
 
   const onChange = (e: any) => setAmount(e);

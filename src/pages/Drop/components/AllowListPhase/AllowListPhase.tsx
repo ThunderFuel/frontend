@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 
 import "./AllowListPhase.css";
 import dayjs from "dayjs";
@@ -12,6 +12,9 @@ import Gallery from "./components/Gallery";
 import Countdown from "./components/Countdown";
 import ButtonMint from "./components/ButtonMint";
 import ButtonCalendar from "./components/ButtonCalendar";
+import { useAppSelector } from "store";
+import collectionsService from "api/collections/collections.service";
+import Button from "components/Button/Button";
 
 const RemainingTime = ({ startDate }: any) => {
   return (
@@ -24,6 +27,14 @@ const RemainingTime = ({ startDate }: any) => {
 
 const AllowListPhase = () => {
   const { dropDetail } = useDropDetailContext();
+  const { isConnected, user } = useAppSelector((state) => state.wallet);
+  const [isMintable, setIsMintable] = useState(false);
+  React.useEffect(() => {
+    if (isConnected)
+      collectionsService
+        .checkMintable({ contractAddress: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa", walletAddress: user.walletAddress })
+        .then((res: any) => setIsMintable(res.data));
+  }, []);
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
@@ -48,7 +59,17 @@ const AllowListPhase = () => {
           <Process available={phase.available} taken={phase.taken} />
         </div>
         <div className="footer">
-          {isAvailable ? <ButtonMint walletCount={phase.walletCount} mintImage={_image} /> : <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />}
+          {isAvailable ? (
+            isMintable && isConnected ? (
+              <div className="flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
+                MAX PER WALLET MINTED!
+              </div>
+            ) : (
+              <ButtonMint walletCount={phase.walletCount} mintImage={_image} />
+            )
+          ) : (
+            <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />
+          )}
         </div>
       </div>
     );
