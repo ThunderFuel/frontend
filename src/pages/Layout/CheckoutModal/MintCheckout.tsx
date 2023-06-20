@@ -51,14 +51,13 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  // const tempContract = "0xa806571323a7214505069fdf6b00b3c331b34d542807bb9a8b3e528907d66c56";
-  const tempContract = "0x3cf27804d6a1c653dcce062b6f33937a815ee7ae7471787b3c0a661c22d45947";
+  const tempContract = "0xa806571323a7214505069fdf6b00b3c331b34d542807bb9a8b3e528907d66c56";
 
   const [mintedNFT, setMintedNFT] = useState({} as any);
 
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
-    mint(ERC721ContractId, provider, wallet, checkoutMintAmount, user.walletAddress)
+    mint(ERC721ContractId, provider, wallet, checkoutMintAmount, user.walletAddress, true)
       .then((res) => {
         console.log(res);
         if (res?.transactionResult.status.type === "success") {
