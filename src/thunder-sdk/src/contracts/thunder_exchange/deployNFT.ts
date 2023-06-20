@@ -31,7 +31,7 @@ let nft14: Contract;
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const main = async (provider: Provider) => {
-    await deploy();
+    //await deploy();
     await initialize(provider);
 }
 
@@ -39,6 +39,8 @@ const deploy = async () => {
     // Deploy NFTs
     const nftBytecode = readFileSync(path.join(__dirname, '../../bin-files/NFT.bin'));
     const nftFactory = new ContractFactory(nftBytecode, NFTAbi__factory.abi, OWNER);
+
+    console.log("start")
 
     nft1 = await nftFactory.deployContract({gasPrice: 1});
     console.log(`nft1 contract id: ${nft1.id.toB256()}`)
@@ -57,31 +59,31 @@ const deploy = async () => {
     await sleep(1500);
 
     nft5 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft5 contract id: ${nft5.id.toB256()}`)
+    console.log(`nft5 contract id: ${0x7fdb57ceb8e72598fbccec06af601503840a3ed029a9dc5443dac76b998dc422}`)
     await sleep(1500);
 
     nft6 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft6 contract id: ${nft6.id.toB256()}`)
+    console.log(`nft6 contract id: ${0x1b8b36002a10f1bbadd21a37deaf56387d80c57ef5a082418706fe519d998ceb}`)
     await sleep(1500);
 
     nft7 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft7 contract id: ${nft7.id.toB256()}`)
+    console.log(`nft7 contract id: ${0xa52f7cf2641a2111b159dd4e5a693eb5789619893e7d6858c254f68ca9f77d68}`)
     await sleep(1500);
 
     nft8 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft8 contract id: ${nft8.id.toB256()}`)
+    console.log(`nft8 contract id: ${0x5f083b2c1618e850a217cad0e397f7668d2cf01fb80d3240dc40584c76ab348e}`)
     await sleep(1500);
 
     nft9 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft9 contract id: ${nft9.id.toB256()}`)
+    console.log(`nft9 contract id: ${0x84b0f13be0a36c063f13551cffbfd369b52f760045d0b2f7dd2a1f6d7a281ad3}`)
     await sleep(1500);
 
     nft10 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft10 contract id: ${nft10.id.toB256()}`)
+    console.log(`nft10 contract id: ${0xc89c1755844c41da1382e2138d2d5ec962924b7647bbef065768cc480fd77a84}`)
     await sleep(1500);
 
     nft11 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft11 contract id: ${nft11.id.toB256()}`)
+    console.log(`nft11 contract id: ${0x68b801425c556a76a7248f3708b4be7f3b3f1d1c289fa438f560c90b03dedf2a}`)
     await sleep(1500);
 
     nft12 = await nftFactory.deployContract({gasPrice: 1});
@@ -89,64 +91,64 @@ const deploy = async () => {
     await sleep(1500);
 
     nft13 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft13 contract id: ${nft13.id.toB256()}`)
+    console.log(`nft13 contract id: ${0x5ef5f55ce97eaf1c861af2b92f6b2ae16fc3754cc1daeef276f9f1af084cfc0f}`)
     await sleep(1500);
 
     nft14 = await nftFactory.deployContract({gasPrice: 1});
-    console.log(`nft14 contract id: ${nft14.id.toB256()}`)
+    console.log(`nft14 contract id: ${0xb7310b2b00e8ebaaea73cbe8304c5216df2471d551a7cf1d5c84bbf0de932e63}`)
     await sleep(1500);
 }
 
 const initialize = async (provider: Provider) => {
     // nft1 init
-    const { transactionResult: nft1Init } = await ERC721.initialize(
-        nft1.id.toB256(),
-        provider.url,
-        OWNER.privateKey,
-        10000,
-        TM
-    );
-    console.log(`nft1 init: ${nft1Init.status.type}`)
-    await sleep(5000);
+    // const { transactionResult: nft1Init } = await ERC721.initialize(
+    //     nft1.id.toB256(),
+    //     provider.url,
+    //     OWNER.privateKey,
+    //     10000,
+    //     TM
+    // );
+    // console.log(`nft1 init: ${nft1Init.status.type}`)
+    // await sleep(5000);
 
-    const { transactionResult: nft1RegisterRoyalty } = await RoyaltyManager.registerRoyaltyInfo(
-        RM,
-        provider.url,
-        OWNER.privateKey,
-        nft1.id.toB256(),
-        OWNER.address.toB256(),
-        true,
-        500
-    );
-    console.log(`nft1 royalty registry: ${nft1RegisterRoyalty.status.type}`)
-    await sleep(5000);
+    // const { transactionResult: nft1RegisterRoyalty } = await RoyaltyManager.registerRoyaltyInfo(
+    //     RM,
+    //     provider.url,
+    //     OWNER.privateKey,
+    //     nft1.id.toB256(),
+    //     OWNER.address.toB256(),
+    //     true,
+    //     500
+    // );
+    // console.log(`nft1 royalty registry: ${nft1RegisterRoyalty.status.type}`)
+    // await sleep(5000);
 
-    // nft2 init
-    const { transactionResult: nft2Init } = await ERC721.initialize(
-        nft2.id.toB256(),
-        provider.url,
-        OWNER.privateKey,
-        10000,
-        TM
-    );
-    console.log(`nft2 init: ${nft2Init.status.type}`)
-    await sleep(5000);
+    // // nft2 init
+    // const { transactionResult: nft2Init } = await ERC721.initialize(
+    //     nft2.id.toB256(),
+    //     provider.url,
+    //     OWNER.privateKey,
+    //     10000,
+    //     TM
+    // );
+    // console.log(`nft2 init: ${nft2Init.status.type}`)
+    // await sleep(5000);
 
-    const { transactionResult: nft2RegisterRoyalty } = await RoyaltyManager.registerRoyaltyInfo(
-        RM,
-        provider.url,
-        OWNER.privateKey,
-        nft2.id.toB256(),
-        OWNER.address.toB256(),
-        true,
-        500
-    );
-    console.log(`nft2 royalty registry: ${nft2RegisterRoyalty.status.type}`)
-    await sleep(5000);
+    // const { transactionResult: nft2RegisterRoyalty } = await RoyaltyManager.registerRoyaltyInfo(
+    //     RM,
+    //     provider.url,
+    //     OWNER.privateKey,
+    //     nft2.id.toB256(),
+    //     OWNER.address.toB256(),
+    //     true,
+    //     500
+    // );
+    // console.log(`nft2 royalty registry: ${nft2RegisterRoyalty.status.type}`)
+    // await sleep(5000);
 
     // nft3 init
     const { transactionResult: nft3Init } = await ERC721.initialize(
-        nft3.id.toB256(),
+        "0x2027da4b620609162cae3e1f07802b0e59b1beff71269121395b27d652e20c10",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -159,7 +161,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft3.id.toB256(),
+        "0x2027da4b620609162cae3e1f07802b0e59b1beff71269121395b27d652e20c10",
         OWNER.address.toB256(),
         true,
         500
@@ -169,7 +171,7 @@ const initialize = async (provider: Provider) => {
 
     // nft4 init
     const { transactionResult: nft4Init } = await ERC721.initialize(
-        nft4.id.toB256(),
+        "0x8f1441f609b02de2c367e1c8c785e89d0dca1bd6fc1e2eccb9e982bf905791ce",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -182,7 +184,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft4.id.toB256(),
+        "0x8f1441f609b02de2c367e1c8c785e89d0dca1bd6fc1e2eccb9e982bf905791ce",
         OWNER.address.toB256(),
         true,
         500
@@ -192,7 +194,7 @@ const initialize = async (provider: Provider) => {
 
     // nft5 init
     const { transactionResult: nft5Init } = await ERC721.initialize(
-        nft5.id.toB256(),
+        "0x7fdb57ceb8e72598fbccec06af601503840a3ed029a9dc5443dac76b998dc422",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -205,7 +207,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft5.id.toB256(),
+        "0x7fdb57ceb8e72598fbccec06af601503840a3ed029a9dc5443dac76b998dc422",
         OWNER.address.toB256(),
         true,
         500
@@ -215,7 +217,7 @@ const initialize = async (provider: Provider) => {
 
     // nft6 init
     const { transactionResult: nft6Init } = await ERC721.initialize(
-        nft6.id.toB256(),
+        "0x1b8b36002a10f1bbadd21a37deaf56387d80c57ef5a082418706fe519d998ceb",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -228,7 +230,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft6.id.toB256(),
+        "0x1b8b36002a10f1bbadd21a37deaf56387d80c57ef5a082418706fe519d998ceb",
         OWNER.address.toB256(),
         true,
         500
@@ -238,7 +240,7 @@ const initialize = async (provider: Provider) => {
 
     // nft7 init
     const { transactionResult: nft7Init } = await ERC721.initialize(
-        nft7.id.toB256(),
+        "0xa52f7cf2641a2111b159dd4e5a693eb5789619893e7d6858c254f68ca9f77d68",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -251,7 +253,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft7.id.toB256(),
+        "0xa52f7cf2641a2111b159dd4e5a693eb5789619893e7d6858c254f68ca9f77d68",
         OWNER.address.toB256(),
         true,
         500
@@ -261,7 +263,7 @@ const initialize = async (provider: Provider) => {
 
     // nft8 init
     const { transactionResult: nft8Init } = await ERC721.initialize(
-        nft8.id.toB256(),
+        "0x5f083b2c1618e850a217cad0e397f7668d2cf01fb80d3240dc40584c76ab348e",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -274,7 +276,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft8.id.toB256(),
+        "0x5f083b2c1618e850a217cad0e397f7668d2cf01fb80d3240dc40584c76ab348e",
         OWNER.address.toB256(),
         true,
         500
@@ -284,7 +286,7 @@ const initialize = async (provider: Provider) => {
 
     // nft9 init
     const { transactionResult: nft9Init } = await ERC721.initialize(
-        nft9.id.toB256(),
+        "0x84b0f13be0a36c063f13551cffbfd369b52f760045d0b2f7dd2a1f6d7a281ad3",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -297,7 +299,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft9.id.toB256(),
+        "0x84b0f13be0a36c063f13551cffbfd369b52f760045d0b2f7dd2a1f6d7a281ad3",
         OWNER.address.toB256(),
         true,
         500
@@ -307,7 +309,7 @@ const initialize = async (provider: Provider) => {
 
     // nft10 init
     const { transactionResult: nft10Init } = await ERC721.initialize(
-        nft10.id.toB256(),
+        "0xc89c1755844c41da1382e2138d2d5ec962924b7647bbef065768cc480fd77a84",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -320,7 +322,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft10.id.toB256(),
+        "0xc89c1755844c41da1382e2138d2d5ec962924b7647bbef065768cc480fd77a84",
         OWNER.address.toB256(),
         true,
         500
@@ -330,7 +332,7 @@ const initialize = async (provider: Provider) => {
 
     // nft11 init
     const { transactionResult: nft11Init } = await ERC721.initialize(
-        nft11.id.toB256(),
+        "0x68b801425c556a76a7248f3708b4be7f3b3f1d1c289fa438f560c90b03dedf2a",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -343,7 +345,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft11.id.toB256(),
+        "0x68b801425c556a76a7248f3708b4be7f3b3f1d1c289fa438f560c90b03dedf2a",
         OWNER.address.toB256(),
         true,
         500
@@ -353,7 +355,7 @@ const initialize = async (provider: Provider) => {
 
     // nft12 init
     const { transactionResult: nft12Init } = await ERC721.initialize(
-        nft12.id.toB256(),
+        "0x99248fef2f354594d4d4b90f0edecddc3b548dec6cf77238d238bc57f6caa18f",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -366,7 +368,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft12.id.toB256(),
+        "0x99248fef2f354594d4d4b90f0edecddc3b548dec6cf77238d238bc57f6caa18f",
         OWNER.address.toB256(),
         true,
         500
@@ -376,7 +378,7 @@ const initialize = async (provider: Provider) => {
 
     // nft13 init
     const { transactionResult: nft13Init } = await ERC721.initialize(
-        nft13.id.toB256(),
+        "0x5ef5f55ce97eaf1c861af2b92f6b2ae16fc3754cc1daeef276f9f1af084cfc0f",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -389,7 +391,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft13.id.toB256(),
+        "0x5ef5f55ce97eaf1c861af2b92f6b2ae16fc3754cc1daeef276f9f1af084cfc0f",
         OWNER.address.toB256(),
         true,
         500
@@ -399,7 +401,7 @@ const initialize = async (provider: Provider) => {
 
     // nft14 init
     const { transactionResult: nft14Init } = await ERC721.initialize(
-        nft14.id.toB256(),
+        "0xb7310b2b00e8ebaaea73cbe8304c5216df2471d551a7cf1d5c84bbf0de932e63",
         provider.url,
         OWNER.privateKey,
         10000,
@@ -412,7 +414,7 @@ const initialize = async (provider: Provider) => {
         RM,
         provider.url,
         OWNER.privateKey,
-        nft14.id.toB256(),
+        "0xb7310b2b00e8ebaaea73cbe8304c5216df2471d551a7cf1d5c84bbf0de932e63",
         OWNER.address.toB256(),
         true,
         500
