@@ -48,6 +48,7 @@ const CancelAllListingCheckout = ({ show, onClose }: { show: boolean; onClose: a
       .then((res) => {
         if (res.transactionResult.status.type === "success") {
           collectionsService.cancelAllListings(params);
+          setApproved(true);
         }
       })
       .catch((e) => {

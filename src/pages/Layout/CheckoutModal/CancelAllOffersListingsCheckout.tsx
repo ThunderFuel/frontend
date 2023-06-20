@@ -48,6 +48,7 @@ const CancelAllOffersListingsCheckout = ({ show, onClose }: { show: boolean; onC
       .then((res) => {
         if (res.transactionResult.status.type === "success") {
           offerService.cancelAllOfferAndListings(params);
+          setApproved(true);
         }
       })
       .catch((e) => {
