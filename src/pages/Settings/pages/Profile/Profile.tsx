@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Input from "./components/Input";
 import Textarea from "./components/Textarea";
-import Socials from "./components/Socials";
+// import Socials from "./components/Socials";
 import CoverImage from "./components/CoverImage";
 import ProfileImage from "./components/ProfileImage";
 import { EventSettingsSubmit } from "../../Settings";
@@ -75,7 +75,7 @@ const Profile = () => {
       <Input label="Display Name" value={userInfo.userName} onChange={(e: any) => onChange("userName", e.target.value)} />
       <Textarea label="Bio" placeholder="Tell about yourself!" value={userInfo.bio} onChange={(e: any) => onChange("bio", e.target.value)} />
       <Input label="Email" helperText="Your e-mail address for notifications." value={userInfo.email} onChange={(e: any) => onChange("email", e.target.value)} />
-      <Socials value={userInfo.socialMedias ?? []} onChange={(value: any) => onChange("socialMedias", value)} />
+      {/* <Socials value={userInfo.socialMedias ?? []} onChange={(value: any) => onChange("socialMedias", value)} /> */}
     </div>
   );
 };
