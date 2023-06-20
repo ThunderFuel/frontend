@@ -5,6 +5,7 @@ export interface MintRequest {
   count: number;
   walletAddress: string;
   tokenIds: any[];
+  dropId: number;
 }
 
 export enum SocialTypes {
