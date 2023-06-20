@@ -14,7 +14,7 @@ const StatusLabel = ({ className, children }: any) => {
 const BadgeStatus = ({ status, startDate }: any) => {
   const text =
     {
-      [DROP_STATUS.MINT_LIVE]: <StatusLabel className="text-green">Mint Live</StatusLabel>,
+      [DROP_STATUS.MINT_LIVE]: <StatusLabel className="text-green">Minting Live</StatusLabel>,
       [DROP_STATUS.MINT_SOON]: <StatusLabel className="text-white">{dateFormat(startDate, "DD MMM YYYY hh:ss A")}</StatusLabel>,
       [DROP_STATUS.MINT_OUT]: <StatusLabel className="text-white text-opacity-50">Minting Out</StatusLabel>,
     }[status as DROP_STATUS] ?? "-";
