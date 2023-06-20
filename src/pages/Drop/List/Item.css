@@ -9,5 +9,5 @@
 .drop-item-container-bg {
   @apply absolute top-0 left-0 w-full h-full;
   @apply overflow-hidden rounded-md bg-no-repeat bg-center bg-cover;
-  mask-image: linear-gradient(0deg, rgba(25, 25, 25, 0) 9.38%, rgba(25, 25, 25, 0.615062) 62.27%, #191919 91.33%);
+  mask-image: linear-gradient(0deg, rgba(25, 25, 25, 0) 9.38%, rgba(25, 25, 25, 0.615062) 30%, #191919 91.33%);
 }

@@ -26,9 +26,7 @@ const DropItem = ({ item }: any) => {
               <Creator creator={item.creator} />
             </div>
             <Process available={item.available || 0} taken={item.taken || 0} />
-            <div className="body-medium max-h-0 transition-all group-hover:max-h-20 text-overflow-3">
-              As a token of our gratitude, we introduce the Open Beta Tester ID NFT Collection reflecting the spirit of our marketplace: innovation, creativity and community.
-            </div>
+            <div className="body-medium max-h-0 transition-all group-hover:max-h-20 text-overflow-3">{item.description}</div>
           </div>
         </div>
       </div>

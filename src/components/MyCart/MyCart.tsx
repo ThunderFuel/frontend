@@ -38,15 +38,15 @@ const MyCart = () => {
   };
   const footer = (
     <div className="flex flex-col w-full h-full items-center">
-      <div className="flex w-full px-5 py-2 justify-between border-y border-gray">
-        <span className="text-head6 font-spaceGrotesk text-gray-light">Total</span>
+      <div className="flex w-full px-5 py-2 justify-between border-b border-gray">
+        <span className="text-h6 text-gray-light">Total</span>
         <span className="flex items-center text-white">
           <EthereumPrice price={totalAmount} priceClassName="text-head6 font-spaceGrotesk" />
         </span>
       </div>
       <div className="flex w-full p-5">
         <Button
-          className="w-full"
+          className="w-full btn-primary"
           onClick={() => {
             onToggleCheckoutModal();
           }}
