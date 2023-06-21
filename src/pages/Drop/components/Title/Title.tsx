@@ -3,12 +3,12 @@ import { useDropDetailContext } from "../../Detail/DetailContext";
 import Creator from "../Creator";
 import BadgeStatus from "../BadgeStatus";
 import dayjs from "dayjs";
-import { DROP_STATUS } from "../../../../api/drop/drop.service";
+import { DROP_STATUS } from "api/drop/drop.service";
 
 const Title = () => {
   const { dropDetail } = useDropDetailContext();
   const phase = dropDetail.allowListPhase?.[0] ?? {};
-  const now = dayjs().valueOf();
+  const now = dayjs().valueOf() / 1000;
   const status = phase.startDate > now ? DROP_STATUS.MINT_SOON : phase.endDate < now ? DROP_STATUS.MINT_OUT : DROP_STATUS.MINT_LIVE;
 
   return (
