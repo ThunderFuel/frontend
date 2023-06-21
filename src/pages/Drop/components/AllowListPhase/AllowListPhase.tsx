@@ -28,13 +28,15 @@ const RemainingTime = ({ startDate }: any) => {
 const AllowListPhase = () => {
   const { dropDetail } = useDropDetailContext();
   const { isConnected, user } = useAppSelector((state) => state.wallet);
+  const [isMintingCompleted, setIsMintingCompleted] = useState(false);
   const [isMintable, setIsMintable] = useState(false);
   React.useEffect(() => {
     if (isConnected)
-      collectionsService
-        .checkMintable({ contractAddress: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa", walletAddress: user.walletAddress })
-        .then((res: any) => setIsMintable(res.data));
-  }, []);
+      collectionsService.checkMintable({ contractAddress: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa", walletAddress: user.walletAddress }).then((res: any) => {
+        setIsMintable(res.data);
+        setIsMintingCompleted(false);
+      });
+  }, [user, isMintingCompleted]);
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
@@ -60,12 +62,12 @@ const AllowListPhase = () => {
         </div>
         <div className="footer">
           {isAvailable ? (
-            isMintable && isConnected ? (
+            !isMintable && isConnected ? (
               <div className="flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
                 MAX PER WALLET MINTED!
               </div>
             ) : (
-              <ButtonMint walletCount={phase.walletCount} mintImage={_image} />
+              <ButtonMint walletCount={phase.walletCount} mintImage={_image} onMintComplete={() => setIsMintingCompleted(true)} />
             )
           ) : (
             <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />

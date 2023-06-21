@@ -319,7 +319,7 @@ export async function bulkListing(
 export async function bulkPlaceOrder(
     contractId: string,
     provider: string,
-    wallet: WalletLocked,
+    wallet: WalletLocked | WalletUnlocked,
     transferManager: string,
     orders: MakerOrder[],
 ) {
@@ -659,36 +659,40 @@ export async function bulkPurchase(
     orders: TakerOrder[],
     assetId: string,
 ) {
-    let calls: FunctionInvocationScope<any[], any>[] = [];
-    const contract = await setup(contractId, provider, wallet);
-    const _provider = new Provider(provider);
-    const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
-    const _contracts = [pool, executionManager, assetManager, transferSelector, _contract, strategyFixedPrice, royaltyManager, transferManager]
+    try {
+        let calls: FunctionInvocationScope<any[], any>[] = [];
+        const contract = await setup(contractId, provider, wallet);
+        const _provider = new Provider(provider);
+        const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+        const _contracts = [pool, executionManager, assetManager, transferSelector, _contract, strategyFixedPrice, royaltyManager, transferManager]
 
-    for (const order of orders) {
-        if (order.isBuySide) {
-            const takerOrder = _convertToTakerOrder(order);
-            const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
-            const _collection = new Contract(takerOrder.collection.value, NFTAbi__factory.abi, _provider);
+        for (const order of orders) {
+            if (order.isBuySide) {
+                const takerOrder = _convertToTakerOrder(order);
+                const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
+                const _collection = new Contract(takerOrder.collection.value, NFTAbi__factory.abi, _provider);
 
-            if (order.strategy == strategyAuction.id.toB256()) continue;
-            if (!_contracts.includes(_collection)) _contracts.push(_collection)
-            const call = contract.functions
-                .execute_order(takerOrder)
-                .txParams({gasPrice: 1, variableOutputs: 3})
-                .addContracts([strategyFixedPrice, _collection, royaltyManager, executionManager, transferSelector, transferManager])
-                .callParams({forward: coin})
-            calls.push(call);
+                if (order.strategy == strategyAuction.id.toB256()) continue;
+                if (!_contracts.includes(_collection)) _contracts.push(_collection)
+                const call = contract.functions
+                    .execute_order(takerOrder)
+                    .txParams({gasPrice: 1, variableOutputs: 3})
+                    .addContracts([strategyFixedPrice, _collection, royaltyManager, executionManager, transferSelector, transferManager])
+                    .callParams({forward: coin})
+                calls.push(call);
+            }
         }
+
+        if (calls.length === 0) return null;
+
+        const { transactionResponse, transactionResult } = await contract.multiCall(calls)
+            .txParams({gasPrice: 1})
+            .addContracts(_contracts)
+            .call();
+        return { transactionResponse, transactionResult };
+    } catch(err: any) {
+        throw Error(`Exchange. setPool failed. Reason: ${err}`)
     }
-
-    if (calls.length === 0) return null;
-
-    const { transactionResponse, transactionResult } = await contract.multiCall(calls)
-        .txParams({gasPrice: 1})
-        .addContracts(_contracts)
-        .call();
-    return { transactionResponse, transactionResult };
 }
 
 export async function setPool(

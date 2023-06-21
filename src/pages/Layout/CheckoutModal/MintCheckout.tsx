@@ -43,7 +43,7 @@ const Footer = ({ approved, onClick, onClose }: { approved: boolean; onClick: an
 };
 
 const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { checkoutMintAmount, checkoutMintImage, checkoutDropId } = useAppSelector((state) => state.checkout);
+  const { checkoutMintAmount, checkoutMintImage, onCheckoutComplete } = useAppSelector((state) => state.checkout);
   const { wallet, user } = useAppSelector((state) => state.wallet);
   const navigate = UseNavigate();
 
@@ -51,7 +51,7 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const tempContract = "0xa806571323a7214505069fdf6b00b3c331b34d542807bb9a8b3e528907d66c56";
+  const tempContract = "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa";
 
   const [mintedNFT, setMintedNFT] = useState({} as any);
 
@@ -65,14 +65,13 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
           collectionsService
             .mint({
               contractAddress: tempContract,
-              count: checkoutMintAmount,
               walletAddress: user.walletAddress,
               tokenIds: _tokenIds,
-              dropId: checkoutDropId,
             })
             .then((res) => {
               setMintedNFT(res.data.tokens[0]);
               setApproved(true);
+              onCheckoutComplete();
             });
         }
       })

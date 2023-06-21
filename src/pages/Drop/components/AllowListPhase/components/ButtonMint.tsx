@@ -33,7 +33,7 @@ const InputMint = ({ onChange, walletCount }: any) => {
   );
 };
 
-const ButtonMint = ({ walletCount, mintImage }: { walletCount: number; mintImage: string }) => {
+const ButtonMint = ({ walletCount, mintImage, onMintComplete }: { walletCount: number; mintImage: string; onMintComplete: any }) => {
   const { isConnected } = useAppSelector((state) => state.wallet);
   const [amount, setAmount] = useState(1);
   const dispatch = useDispatch();
@@ -46,6 +46,7 @@ const ButtonMint = ({ walletCount, mintImage }: { walletCount: number; mintImage
           type: CheckoutType.MintCheckout,
           mintAmount: amount,
           mintImage: mintImage,
+          onCheckoutComplete: onMintComplete,
         })
       );
       dispatch(toggleCheckoutModal());
