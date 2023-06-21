@@ -39,8 +39,9 @@ const ButtonMint = ({ walletCount, mintImage, onMintComplete }: { walletCount: n
   const dispatch = useDispatch();
 
   const onClick = () => {
-    if (!isConnected) dispatch(toggleWalletModal());
-    else {
+    if (!isConnected) {
+      dispatch(toggleWalletModal());
+    } else {
       dispatch(
         setCheckout({
           type: CheckoutType.MintCheckout,
