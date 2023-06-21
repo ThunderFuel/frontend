@@ -5,7 +5,7 @@ import "./Process.css";
 
 const Process = ({ available, taken }: any) => {
   const processWidth = React.useMemo(() => {
-    return Math.floor((taken / available) * 100);
+    return (taken / available) * 100;
   }, [available, taken]);
 
   return (
