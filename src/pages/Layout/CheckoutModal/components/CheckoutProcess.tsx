@@ -8,6 +8,15 @@ enum Status {
   error = "error",
 }
 
+export function handleTransactionError({ error, setStartTransaction, setIsFailed }: { error: any; setStartTransaction: (bool: boolean) => void; setIsFailed: (bool: boolean) => void }) {
+  console.log(error);
+  if (error.message.includes("Request cancelled without user response!") || error.message.includes("Error: User rejected the transaction!") || error.message.includes("An unexpected error occurred")) {
+    setStartTransaction(false);
+  } else {
+    setIsFailed(true);
+  }
+}
+
 export const CheckoutProcess = ({ onComplete, data, approved, failed }: { onComplete: () => any; data: any; approved: any; failed: any }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;

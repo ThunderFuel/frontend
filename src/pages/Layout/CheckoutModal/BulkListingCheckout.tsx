@@ -6,7 +6,7 @@ import Modal from "components/Modal";
 
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess } from "./components/CheckoutProcess";
+import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
@@ -99,43 +99,56 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   };
 
   const onComplete = async () => {
-    //FOR BACKEND
-    const _bulkListItems = bulkListItems.map((item: any) => {
-      return { ...item, expireTime: formatTimeBackend(item.expireTime) };
-    });
-
-    const _bulkUpdateItems = bulkUpdateItems.map((item: any) => {
-      return { ...item, expireTime: formatTimeBackend(item.expireTime) };
-    });
-    //FOR BACKEND
-
-    handleOrders({ bulkListItems, bulkUpdateItems });
-
-    Promise.all(promises)
-      .then(() => {
-        const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
-
-        setContracts(contracts, FuelProvider);
-
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders)
-          .then((res) => {
-            if (res?.transactionResult.status.type === "success") {
-              if (bulkUpdateItems.length > 0) collectionsService.updateBulkListing(_bulkUpdateItems);
-              if (bulkListItems.length > 0) collectionsService.bulkListing(_bulkListItems);
-
-              setApproved(true);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-              setStartTransaction(false);
-            else setIsFailed(true);
-          });
-      })
-      .catch((error) => {
-        console.log("Promise Error:", error);
+    try {
+      // FOR BACKEND
+      const _bulkListItems = bulkListItems.map((item: any) => {
+        return { ...item, expireTime: formatTimeBackend(item.expireTime) };
       });
+      // FOR BACKEND
+      const _bulkUpdateItems = bulkUpdateItems.map((item: any) => {
+        return { ...item, expireTime: formatTimeBackend(item.expireTime) };
+      });
+
+      handleOrders({
+        bulkListItems,
+        bulkUpdateItems,
+      });
+
+      Promise.all(promises)
+        .then(async () => {
+          const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
+          setContracts(contracts, FuelProvider);
+
+          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders);
+
+          if (bulkPlaceOrderRes?.transactionResult.status.type === "success") {
+            if (bulkUpdateItems.length > 0) {
+              try {
+                await collectionsService.updateBulkListing(_bulkUpdateItems);
+              } catch (e) {
+                console.log("Error from updateBulkListing:", e);
+                setIsFailed(true);
+              }
+            }
+
+            if (bulkListItems.length > 0) {
+              try {
+                await collectionsService.bulkListing(_bulkListItems);
+              } catch (e) {
+                console.log("Error from bulkListing:", e);
+                setIsFailed(true);
+              }
+            }
+
+            setApproved(true);
+          }
+        })
+        .catch((e) => {
+          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+        });
+    } catch (e) {
+      handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+    }
   };
 
   React.useEffect(() => {

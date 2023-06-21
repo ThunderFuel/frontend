@@ -7,7 +7,7 @@ import Modal from "components/Modal";
 
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess } from "./components/CheckoutProcess";
+import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
@@ -45,17 +45,18 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = () => {
-    if (checkoutIsAuction) {
-      nftdetailsService.getLastIndex(2, user.id).then((res) => {
+  const onComplete = async () => {
+    try {
+      if (checkoutIsAuction) {
+        const res = await nftdetailsService.getLastIndex(2, user.id);
         const order = [
           {
             isBuySide: false,
             maker: user.walletAddress,
             collection: selectedNFT.collection.contractAddress,
             token_id: selectedNFT.tokenOrder,
-            price: 1, // auction icin onemsiz
-            amount: 1, // fixed
+            price: 1,
+            amount: 1,
             nonce: res.data + 1,
             strategy: strategyAuctionContractId,
             payment_asset: NativeAssetId,
@@ -64,27 +65,24 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
               extra_address_param: ZERO_B256,
               extra_contract_param: ZERO_B256,
               extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0,
-            }, // laim degilse null
+            },
           },
         ];
 
         setContracts(contracts, FuelProvider);
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
-          .then((res) => {
-            if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
-              setApproved(true);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-              setStartTransaction(false);
-            else setIsFailed(true);
-          });
-      });
-    } else if (updateListing) {
-      nftdetailsService.getTokensIndex([selectedNFT?.id]).then((res) => {
+
+        try {
+          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+
+          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+            await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
+            setApproved(true);
+          }
+        } catch (e) {
+          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+        }
+      } else if (updateListing) {
+        const res = await nftdetailsService.getTokensIndex([selectedNFT?.id]);
         const order = [
           {
             isBuySide: false,
@@ -97,33 +95,30 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
             expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           },
         ];
 
         setContracts(contracts, FuelProvider);
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
-          .then((res) => {
-            if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenUpdateListing([
-                {
-                  tokenId: selectedNFT.id,
-                  price: checkoutPrice,
-                  expireTime: formatTimeBackend(checkoutExpireTime),
-                },
-              ]);
-              setApproved(true);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-              setStartTransaction(false);
-            else setIsFailed(true);
-          });
-      });
-    } else {
-      nftdetailsService.getLastIndex(0, user.id).then((res) => {
+
+        try {
+          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+
+          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+            await nftdetailsService.tokenUpdateListing([
+              {
+                tokenId: selectedNFT.id,
+                price: checkoutPrice,
+                expireTime: formatTimeBackend(checkoutExpireTime),
+              },
+            ]);
+            setApproved(true);
+          }
+        } catch (e) {
+          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+        }
+      } else {
+        const res = await nftdetailsService.getLastIndex(0, user.id);
         const order = [
           {
             isBuySide: false,
@@ -136,31 +131,31 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             strategy: strategyFixedPriceContractId,
             payment_asset: NativeAssetId,
             expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           },
         ];
 
         setContracts(contracts, FuelProvider);
-        bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order)
-          .then((res) => {
-            if (res.transactionResult.status.type === "success") {
-              nftdetailsService.tokenList([
-                {
-                  tokenId: selectedNFT.id,
-                  price: checkoutPrice,
-                  expireTime: formatTimeBackend(checkoutExpireTime),
-                },
-              ]);
-              setApproved(true);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-              setStartTransaction(false);
-            else setIsFailed(true);
-          });
-      });
+
+        try {
+          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+
+          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+            await nftdetailsService.tokenList([
+              {
+                tokenId: selectedNFT.id,
+                price: checkoutPrice,
+                expireTime: formatTimeBackend(checkoutExpireTime),
+              },
+            ]);
+            setApproved(true);
+          }
+        } catch (e) {
+          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+        }
+      }
+    } catch (error) {
+      setIsFailed(true);
     }
   };
 
