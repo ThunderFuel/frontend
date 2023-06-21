@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Img from "components/Img";
 
 import { useDropDetailContext } from "../../Detail/DetailContext";
@@ -24,21 +24,17 @@ const Banner = () => {
     };
   });
 
-  useLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.play();
-    }
-  }, [dropDetail.bannerVideo]);
-
   return (
-    <div className="banner-container animate">
-      {dropDetail.bannerVideo ? (
-        <video ref={ref} className="banner-image" muted autoPlay loop poster={dropDetail.bannerImage}>
-          <source src={dropDetail.bannerVideo} type="video/mp4" />
-        </video>
-      ) : (
-        <Img className="banner-image" src={dropDetail.bannerImage} />
-      )}
+    <div className="banner-container">
+      <div className="banner-wrapper animate">
+        {dropDetail.bannerVideo ? (
+          <video ref={ref} className="banner-image" muted autoPlay loop poster={dropDetail.bannerImage}>
+            <source src={dropDetail.bannerVideo} type="video/mp4" />
+          </video>
+        ) : (
+          <Img className="banner-image" src={dropDetail.bannerImage} />
+        )}
+      </div>
     </div>
   );
 };
