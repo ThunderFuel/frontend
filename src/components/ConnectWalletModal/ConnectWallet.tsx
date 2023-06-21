@@ -31,7 +31,7 @@ export const ConnectWallet = () => {
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
-            <a href="https://wallet.fuel.network/" target="_blank" rel="noreferrer">
+            <a href="https://chrome.google.com/webstore/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok" target="_blank" rel="noreferrer">
               <Button className="btn-sm btn-secondary no-bg">
                 INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
               </Button>

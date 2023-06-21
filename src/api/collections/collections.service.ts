@@ -71,4 +71,9 @@ export default {
   async mint(data: MintRequest): Promise<ApiResponse<any>> {
     return ThunderURL.post(`v1/collection/mint`, data);
   },
+  async checkMintable(params: any): Promise<ApiResponse<CollectionFilterResponse>> {
+    return await ThunderURL.get("v1/collection/checkmintable", {
+      params,
+    });
+  },
 };

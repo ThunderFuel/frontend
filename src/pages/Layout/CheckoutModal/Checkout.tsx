@@ -302,6 +302,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       });
     } catch (e) {
       console.log(e);
+      setIsFailed(true);
     }
   };
 

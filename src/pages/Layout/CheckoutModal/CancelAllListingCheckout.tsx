@@ -47,7 +47,10 @@ const CancelAllListingCheckout = ({ show, onClose }: { show: boolean; onClose: a
     cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false)
       .then((res) => {
         if (res.transactionResult.status.type === "success") {
-          collectionsService.cancelAllListings(params);
+          collectionsService
+            .cancelAllListings(params)
+            .then(() => setApproved(true))
+            .catch(() => setIsFailed(true));
         }
       })
       .catch((e) => {

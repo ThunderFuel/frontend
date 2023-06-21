@@ -46,70 +46,95 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    nftdetailsService.getLastIndex(1, user.id).then((res) => {
-      const order = {
-        isBuySide: true,
-        maker: user.walletAddress,
-        collection: selectedNFT.collection.contractAddress,
-        token_id: selectedNFT.tokenOrder,
-        price: toGwei(checkoutPrice).toNumber(),
-        amount: 1, //fixed
-        nonce: res.data + 1,
-        strategy: strategyFixedPriceContractId,
-        payment_asset: NativeAssetId,
-        expiration_range: formatTimeContract(checkoutExpireTime),
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-      };
+    nftdetailsService
+      .getLastIndex(1, user.id)
+      .then((res) => {
+        const order = {
+          isBuySide: true,
+          maker: user.walletAddress,
+          collection: selectedNFT.collection.contractAddress,
+          token_id: selectedNFT.tokenOrder,
+          price: toGwei(checkoutPrice).toNumber(),
+          amount: 1, //fixed
+          nonce: res.data + 1,
+          strategy: strategyFixedPriceContractId,
+          payment_asset: NativeAssetId,
+          expiration_range: formatTimeContract(checkoutExpireTime),
+          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+        };
 
-      setContracts(contracts, FuelProvider);
+        setContracts(contracts, FuelProvider);
 
-      userService.getBidBalance(user.id).then((res) => {
-        setCurrentBidBalance(res.data);
-        const _currentBidBalance = res.data;
-        if (_currentBidBalance < checkoutPrice) {
-          const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
-            .then((res) => {
-              if (res.transactionResult.status.type === "success") {
-                nftdetailsService.makeOffer({
-                  makerUserId: user.id,
-                  tokenId: selectedNFT.id,
-                  price: checkoutPrice,
-                  priceType: 0,
-                  expireTime: formatTimeBackend(checkoutExpireTime),
+        userService
+          .getBidBalance(user.id)
+          .then((res) => {
+            setCurrentBidBalance(res.data);
+            const _currentBidBalance = res.data;
+            if (_currentBidBalance < checkoutPrice) {
+              const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
+              depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
+                .then((res) => {
+                  if (res.transactionResult.status.type === "success") {
+                    nftdetailsService
+                      .makeOffer({
+                        makerUserId: user.id,
+                        tokenId: selectedNFT.id,
+                        price: checkoutPrice,
+                        priceType: 0,
+                        expireTime: formatTimeBackend(checkoutExpireTime),
+                      })
+                      .then(() => {
+                        userService
+                          .updateBidBalance(user.id, Number(requiredBidAmount))
+                          .then(() => {
+                            setBidBalanceUpdated(true);
+                            setApproved(true);
+                          })
+                          .catch(() => setIsFailed(true));
+                      })
+                      .catch(() => setIsFailed(true));
+                  }
+                })
+                .catch((e) => {
+                  console.log(e);
+                  if (
+                    e.message.includes("Request cancelled without user response!") ||
+                    e.message.includes("Error: User rejected the transaction!") ||
+                    e.message.includes("An unexpected error occurred")
+                  )
+                    setStartTransaction(false);
+                  else setIsFailed(true);
                 });
-                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
-                setApproved(true);
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-                setStartTransaction(false);
-              else setIsFailed(true);
-            });
-        } else
-          placeOrder(exchangeContractId, provider, wallet, order)
-            .then((res) => {
-              if (res.transactionResult.status.type === "success") {
-                nftdetailsService.makeOffer({
-                  makerUserId: user.id,
-                  tokenId: selectedNFT.id,
-                  price: checkoutPrice,
-                  priceType: 0,
-                  expireTime: formatTimeBackend(checkoutExpireTime),
+            } else
+              placeOrder(exchangeContractId, provider, wallet, order)
+                .then((res) => {
+                  if (res.transactionResult.status.type === "success") {
+                    nftdetailsService
+                      .makeOffer({
+                        makerUserId: user.id,
+                        tokenId: selectedNFT.id,
+                        price: checkoutPrice,
+                        priceType: 0,
+                        expireTime: formatTimeBackend(checkoutExpireTime),
+                      })
+                      .then(() => setApproved(true))
+                      .catch(() => setIsFailed(true));
+                  }
+                })
+                .catch((e) => {
+                  console.log(e);
+                  if (
+                    e.message.includes("Request cancelled without user response!") ||
+                    e.message.includes("Error: User rejected the transaction!") ||
+                    e.message.includes("An unexpected error occurred")
+                  )
+                    setStartTransaction(false);
+                  else setIsFailed(true);
                 });
-                setApproved(true);
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-                setStartTransaction(false);
-              else setIsFailed(true);
-            });
-      });
-    });
+          })
+          .catch(() => setIsFailed(true));
+      })
+      .catch(() => setIsFailed(true));
   };
 
   React.useEffect(() => {
