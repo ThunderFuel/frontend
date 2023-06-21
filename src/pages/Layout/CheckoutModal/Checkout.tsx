@@ -277,7 +277,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
                 extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
               };
             });
-            console.log(takerOrders);
 
             setContracts(contracts, FuelProvider);
 

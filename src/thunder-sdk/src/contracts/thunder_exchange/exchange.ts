@@ -527,7 +527,6 @@ export async function bulkPurchase(contractId: string, provider: string, wallet:
           .addContracts([strategyFixedPrice, _collection, royaltyManager, executionManager, transferSelector, transferManager])
           .callParams({ forward: coin });
         calls.push(call);
-        console.log("7");
       }
     }
 
