@@ -511,23 +511,15 @@ export async function bulkPurchase(contractId: string, provider: string, wallet:
     const _provider = new Provider(provider);
     const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
     const _contracts = [pool, executionManager, assetManager, transferSelector, _contract, strategyFixedPrice, royaltyManager, transferManager];
-    console.log("1");
     for (const order of orders) {
-      console.log("2");
-
       if (order.isBuySide) {
-        console.log("3");
-
         const takerOrder = _convertToTakerOrder(order);
         const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
         const _collection = new Contract(takerOrder.collection.value, NFTAbi__factory.abi, _provider);
-        console.log("4");
 
         if (order.strategy == strategyAuction.id.toB256()) continue;
-        console.log("5");
 
         if (!_contracts.includes(_collection)) _contracts.push(_collection);
-        console.log("6");
 
         const call = contract.functions
           .execute_order(takerOrder)
@@ -538,13 +530,10 @@ export async function bulkPurchase(contractId: string, provider: string, wallet:
         console.log("7");
       }
     }
-    console.log("8");
 
     if (calls.length === 0) return null;
-    console.log("9");
 
     const { transactionResponse, transactionResult } = await contract.multiCall(calls).txParams({ gasPrice: 1 }).addContracts(_contracts).call();
-    console.log("10");
 
     return { transactionResponse, transactionResult };
   } catch (err: any) {
