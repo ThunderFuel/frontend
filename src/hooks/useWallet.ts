@@ -4,22 +4,21 @@ import { ZeroBytes32 } from "fuels";
 import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import userService from "api/user/user.service";
-import { isObjectEmpty } from "utils";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
-  const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
+  const { totalAmount } = useAppSelector((state) => state.cart);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { setGatewayType, selectedGateway: fuel, clearGatewayType } = useFuelExtension();
 
-  const hasEnoughFunds = async () => {
+  const hasEnoughFunds = async (buyNowItemPrice?: any) => {
     try {
       const provider = await getProvider();
       const balance = await provider.getBalance(getWalletAddress === "" ? user.walletAddress : getWalletAddress, ZeroBytes32);
 
-      return balance.toNumber() === 0 ? false : balance.toNumber() / 1000000000 >= (!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount);
+      return balance.toNumber() === 0 ? false : balance.toNumber() / 1000000000 >= (buyNowItemPrice !== undefined ? buyNowItemPrice : totalAmount);
     } catch {
       return false;
     }

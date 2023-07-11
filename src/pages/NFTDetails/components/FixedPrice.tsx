@@ -90,7 +90,7 @@ const FixedPrice = () => {
                 if (user?.id) {
                   dispatch(setCheckout({ type: CheckoutType.None }));
                   dispatch(addBuyNowItem(selectedNFT));
-                  hasEnoughFunds().then((res) => {
+                  hasEnoughFunds(selectedNFT.price).then((res) => {
                     dispatch(setIsInsufficientBalance(!res));
                     dispatch(toggleCheckoutModal());
                   });

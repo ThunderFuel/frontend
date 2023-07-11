@@ -124,11 +124,11 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
       dispatch(toggleWalletModal());
     } else {
       dispatch(addBuyNowItem(collection));
-
       try {
-        const res = await hasEnoughFunds();
-        dispatch(setIsInsufficientBalance(!res));
-        dispatch(toggleCheckoutModal());
+        hasEnoughFunds(collection.price).then((res) => {
+          dispatch(setIsInsufficientBalance(!res));
+          dispatch(toggleCheckoutModal());
+        });
       } catch (e) {
         console.log(e);
       }
