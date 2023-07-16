@@ -1,5 +1,5 @@
 import Marquee from "react-fast-marquee";
-import Img from "../../../../../components/Img/Img";
+import Img from "components/Img/Img";
 import React from "react";
 
 const Gallery = ({ images }: any) => {

@@ -641,3 +641,18 @@ body {
 .drop.drop-thunder .modalbase .btn-primary {
   color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
+
+
+.drop-item-container.drop-fluid,
+.drop.drop-thunder {
+  --th-bg: 20 20 20;
+  --th-bg-light: 20 20 20;
+}
+
+.drop.drop-fluid #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-fluid .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}

@@ -14,7 +14,7 @@ import ButtonMint from "./components/ButtonMint";
 import ButtonCalendar from "./components/ButtonCalendar";
 import { useAppSelector } from "store";
 import collectionsService from "api/collections/collections.service";
-import Button from "components/Button/Button";
+import SingleVideo from "../Blocks/SingleVideo";
 
 const RemainingTime = ({ startDate }: any) => {
   return (
@@ -32,16 +32,23 @@ const AllowListPhase = () => {
   const [isMintable, setIsMintable] = useState(false);
   React.useEffect(() => {
     if (isConnected)
-      collectionsService.checkMintable({ contractAddress: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa", walletAddress: user.walletAddress }).then((res: any) => {
-        setIsMintable(res.data);
-        setIsMintingCompleted(false);
-      });
+      collectionsService
+        .checkMintable({
+          contractAddress: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa",
+          walletAddress: user.walletAddress,
+        })
+        .then((res: any) => {
+          setIsMintable(res.data);
+          setIsMintingCompleted(false);
+        });
   }, [user, isMintingCompleted]);
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
   const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
   const _image = infinityBlock.images[0];
+  const isVideo = _image.includes(".mp4");
+  console.log(_image, isVideo);
 
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
     const isAvailable = dayjs().valueOf() > phase.startDate;
@@ -57,7 +64,7 @@ const AllowListPhase = () => {
           </ul>
         </div>
         <div className="body">
-          {isAvailable && infinityBlock ? <Gallery images={infinityBlock.images} /> : <RemainingTime startDate={phase.startDate} />}
+          {isAvailable && infinityBlock ? !isVideo ? <Gallery images={infinityBlock.images} /> : <SingleVideo image={""} video={_image} /> : <RemainingTime startDate={phase.startDate} />}
           <Process available={phase.available} taken={phase.taken} />
         </div>
         <div className="footer">
