@@ -20,7 +20,7 @@ const DropItem = ({ item }: any) => {
             <SocialButtons socialMedias={item.socials} disableShare={true} />
           </div>
           <div className="relative z-10 flex flex-col gap-5">
-            <h2 className="text-h2">{item.name}</h2>
+            <h2 className="text-h2">{item.name ?? item.title}</h2>
             <div className="flex gap-2.5">
               <BadgeStatus status={item.status} startDate={item.startDate} />
               <Creator creator={item.creator} />
