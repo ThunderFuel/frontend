@@ -4,7 +4,7 @@ import Banner from "../components/Banner";
 import About from "../components/About";
 import Blocks from "../components/Blocks";
 import DropDetailProvider from "./DetailContext";
-import dropService from "api/drop/drop.service";
+import dropService, { FLUID_DROP_IDS } from "api/drop/drop.service";
 import { useParams } from "react-router-dom";
 
 import "./Detail.css";
@@ -27,6 +27,12 @@ const Detail = () => {
       .getDropDetail(dropId)
       .then((response: any) => {
         const dropDetail = response.data;
+        if (dropId && FLUID_DROP_IDS.includes(Number(dropId))) {
+          dropDetail.creator = {
+            name: "Fluid",
+            image: "https://thassetstorage.blob.core.windows.net/assets/drop/f330f6a4-37a8-4d28-9af2-5953fffasd334.png",
+          };
+        }
         setDropDetail(dropDetail);
 
         document.body.classList.add("drop", dropDetail.className);

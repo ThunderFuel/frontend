@@ -14,6 +14,8 @@ export enum DROP_STATUS {
   MINT_OUT,
 }
 
+export const FLUID_DROP_IDS = [16, 17];
+
 export default {
   getDropDetail: async (dropId: any = 1) => {
     const response = await ThunderURL.get<any>(`v1/drop/detail?id=${dropId}`);
