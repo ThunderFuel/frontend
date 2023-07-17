@@ -13,6 +13,7 @@ interface IDropDetailContext {
     faq: any;
     allowListPhase: any;
     creator: any;
+    id?: number;
   };
 }
 

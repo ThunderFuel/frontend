@@ -34,7 +34,12 @@ const AllowListPhase = () => {
     if (isConnected)
       collectionsService
         .checkMintable({
-          contractAddress: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa",
+          contractAddress:
+            dropDetail.id === 16
+              ? "0x3076ee977c798183dfe4ddee454d457ac7c6f85ed35ff47a4212f6e1ba44e04c"
+              : dropDetail.id === 17
+              ? "0x23a7cc0f348d35a1f3425bdb18279cc169b8da1491d576a76d66527485b2cc57"
+              : "",
           walletAddress: user.walletAddress,
         })
         .then((res: any) => {
@@ -74,7 +79,7 @@ const AllowListPhase = () => {
                 MAX PER WALLET MINTED!
               </div>
             ) : (
-              <ButtonMint walletCount={phase.walletCount} mintImage={_image} onMintComplete={() => setIsMintingCompleted(true)} />
+              <ButtonMint walletCount={phase.walletCount} mintImage={_image} mintId={dropDetail.id} onMintComplete={() => setIsMintingCompleted(true)} />
             )
           ) : (
             <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />
