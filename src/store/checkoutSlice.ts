@@ -34,6 +34,7 @@ export const checkoutSlice = createSlice({
     checkoutExpireTime: 0 as number,
     checkoutMintAmount: 0,
     checkoutMintImage: "",
+    checkoutMintId: null as any,
     amountAddedBidBalance: 0,
     currentItem: {} as any,
     bulkListItems: [],
@@ -74,6 +75,7 @@ export const checkoutSlice = createSlice({
       state.cancelOfferItems = action.payload?.cancelOfferItems;
       state.checkoutMintAmount = action.payload?.mintAmount;
       state.checkoutMintImage = action.payload?.mintImage;
+      state.checkoutMintImage = action.payload?.mintId;
       state.onCheckoutComplete = action.payload?.onCheckoutComplete ?? noOp;
     },
     removeBulkItems: (state) => {
