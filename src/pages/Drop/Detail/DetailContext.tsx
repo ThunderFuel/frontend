@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext } from "react";
 
 interface IDropDetailContext {
   dropDetail: {
+    id: number;
     className: string;
     bannerImage: string;
     bannerVideo: string;
