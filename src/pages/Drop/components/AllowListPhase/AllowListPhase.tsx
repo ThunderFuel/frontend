@@ -38,7 +38,7 @@ const AllowListPhase = () => {
           walletAddress: user.walletAddress,
         })
         .then((res: any) => {
-          setIsMintable(true);
+          setIsMintable(res.data);
           setIsMintingCompleted(false);
         });
   }, [user, isMintingCompleted, dropDetail.contractAddress]);
