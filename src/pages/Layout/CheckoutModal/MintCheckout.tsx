@@ -43,7 +43,7 @@ const Footer = ({ approved, onClick, onClose }: { approved: boolean; onClick: an
 };
 
 const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { checkoutMintAmount, checkoutMintImage, onCheckoutComplete, checkoutMintId } = useAppSelector((state) => state.checkout);
+  const { checkoutMintAmount, checkoutMintImage, onCheckoutComplete, checkoutMintContractAddress } = useAppSelector((state) => state.checkout);
   const { wallet, user } = useAppSelector((state) => state.wallet);
   const navigate = UseNavigate();
 
@@ -51,8 +51,7 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const contractAddress =
-    checkoutMintId === 16 ? "0x3076ee977c798183dfe4ddee454d457ac7c6f85ed35ff47a4212f6e1ba44e04c" : checkoutMintId === 17 ? "0x23a7cc0f348d35a1f3425bdb18279cc169b8da1491d576a76d66527485b2cc57" : "";
+  const contractAddress = checkoutMintContractAddress;
 
   const [mintedNFT, setMintedNFT] = useState({} as any);
 
