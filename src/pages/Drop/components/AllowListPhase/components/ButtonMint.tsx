@@ -6,11 +6,11 @@ import { useDispatch } from "react-redux";
 import { toggleWalletModal } from "store/walletSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
-const InputMint = ({ onChange, walletCount }: any) => {
+const InputMint = ({ onChange, remainingDrops }: any) => {
   const [value, setValue] = useState(1);
   const onUpdateValue = (number: number) => {
     const val = value + number;
-    if (val < 1 || val > walletCount) {
+    if (val < 1 || val > remainingDrops) {
       return false;
     }
 
@@ -23,7 +23,7 @@ const InputMint = ({ onChange, walletCount }: any) => {
       <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
       <div className="flex flex-col items-center">
         <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
-          <IconPlus className={value >= walletCount ? "opacity-50" : ""} />
+          <IconPlus className={value >= remainingDrops ? "opacity-50" : ""} />
         </span>
         <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
           <IconMinus className={value <= 1 ? "opacity-50" : ""} />
@@ -33,7 +33,7 @@ const InputMint = ({ onChange, walletCount }: any) => {
   );
 };
 
-const ButtonMint = ({ walletCount, mintImage, onMintComplete, mintContractAddress }: { walletCount: number; mintImage: string; onMintComplete: any; mintContractAddress: string }) => {
+const ButtonMint = ({ remainingDrops, mintImage, onMintComplete, mintContractAddress }: { remainingDrops: number; mintImage: string; onMintComplete: any; mintContractAddress: string }) => {
   const { isConnected } = useAppSelector((state) => state.wallet);
   const [amount, setAmount] = useState(1);
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const ButtonMint = ({ walletCount, mintImage, onMintComplete, mintContractAddres
 
   return (
     <div className="flex gap-2">
-      {walletCount > 1 ? <InputMint onChange={onChange} walletCount={walletCount} /> : null}
+      {remainingDrops > 1 ? <InputMint onChange={onChange} remainingDrops={remainingDrops} /> : null}
       <Button className="w-full btn-primary" onClick={onClick}>
         Mint now <IconToken />
       </Button>

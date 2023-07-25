@@ -15,6 +15,7 @@ export enum DROP_STATUS {
 }
 
 export const FLUID_DROP_IDS = [16, 17];
+export const FLUID_WALLET_COUNT = 20;
 
 export default {
   getDropDetail: async (dropId: any = 1) => {

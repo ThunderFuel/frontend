@@ -21,6 +21,11 @@ export enum ActivityFilters {
   Bids = 5,
 }
 
+export enum ChecklistStatus {
+  Eligible,
+  NotEligible,
+}
+
 export default {
   async getFilters(params: any): Promise<ApiResponse<CollectionFilterResponse>> {
     return await ThunderURL.get("v1/collection/getfilters", {
@@ -71,7 +76,7 @@ export default {
   async mint(data: MintRequest): Promise<ApiResponse<any>> {
     return ThunderURL.post(`v1/collection/mint`, data);
   },
-  async checkMintable(params: any): Promise<ApiResponse<CollectionFilterResponse>> {
+  async checkMintable(params: any): Promise<ApiResponse<{ status: number; remaining: number }>> {
     return await ThunderURL.get("v1/collection/checkmintable", {
       params,
     });
