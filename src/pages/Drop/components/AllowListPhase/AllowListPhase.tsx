@@ -5,16 +5,20 @@ import "./AllowListPhase.css";
 import dayjs from "dayjs";
 import { dateFormat, formatPrice } from "utils";
 import { useDropDetailContext } from "../../Detail/DetailContext";
-import { BLOCK_TYPE } from "api/drop/drop.service";
+import { BLOCK_TYPE, FLUID_DROP_IDS, FLUID_WALLET_COUNT } from "api/drop/drop.service";
 import clsx from "clsx";
 import Process from "../Process";
 import Gallery from "./components/Gallery";
 import Countdown from "./components/Countdown";
 import ButtonMint from "./components/ButtonMint";
 import ButtonCalendar from "./components/ButtonCalendar";
-import { useAppSelector } from "store";
-import collectionsService from "api/collections/collections.service";
+import collectionsService, { ChecklistStatus } from "api/collections/collections.service";
 import SingleVideo from "../Blocks/SingleVideo";
+import { useAppSelector } from "store";
+import { toggleWalletModal } from "store/walletSlice";
+import { useDispatch } from "react-redux";
+import Button from "components/Button";
+import { IconArrowRight } from "icons";
 
 const RemainingTime = ({ startDate }: any) => {
   return (
@@ -26,10 +30,12 @@ const RemainingTime = ({ startDate }: any) => {
 };
 
 const AllowListPhase = () => {
+  const dispatch = useDispatch();
   const { dropDetail } = useDropDetailContext();
   const { isConnected, user } = useAppSelector((state) => state.wallet);
   const [isMintingCompleted, setIsMintingCompleted] = useState(false);
   const [isMintable, setIsMintable] = useState(false);
+  const [remainingDrops, setRemainingDrops] = useState(0);
   React.useEffect(() => {
     if (isConnected && dropDetail.contractAddress && user.walletAddress)
       collectionsService
@@ -37,47 +43,69 @@ const AllowListPhase = () => {
           contractAddress: dropDetail.contractAddress,
           walletAddress: user.walletAddress,
         })
-        .then((res: any) => {
-          setIsMintable(true);
+        .then(({ data }) => {
+          setIsMintable(data.status === ChecklistStatus.Eligible);
+          setRemainingDrops(data.remaining);
           setIsMintingCompleted(false);
         });
   }, [user, isMintingCompleted, dropDetail.contractAddress]);
+
+  const onToggleWallet = () => {
+    dispatch(toggleWalletModal());
+  };
+
   if (!dropDetail?.allowListPhase.length) {
     return null;
   }
+
+  const walletCount = FLUID_DROP_IDS.includes(Number(dropDetail.id)) ? FLUID_WALLET_COUNT : null;
+
   const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
   const _image = infinityBlock.images[0];
   const isVideo = _image.includes(".mp4");
-  console.log(_image, isVideo);
 
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
-    const isAvailable = dayjs().valueOf() > phase.startDate;
+    const startDate = phase.startDate * 1000;
+    const endDate = phase.endDate * 1000;
+    const phaseWalletCount = walletCount ?? phase.walletCount;
+
+    const isAvailable = dayjs().valueOf() > startDate;
 
     return (
       <div className="allowlist-phase" key={i}>
         <div className="header">
           <h5 className="text-h5">{phase.title ?? "Allowlist Phase"}</h5>
           <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
-            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : dateFormat(phase.startDate, "DD MMM YYYY hh:ss A")}</li>
+            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : dateFormat(startDate, "DD MMM YYYY hh:ss A")}</li>
             <li>{phase.price > 0 ? `${formatPrice(phase.price)} ETH` : "Free"}</li>
-            <li>{phase.walletCount} Per Wallet</li>
+            <li>{walletCount ?? phaseWalletCount} Per Wallet</li>
           </ul>
         </div>
         <div className="body">
-          {isAvailable && infinityBlock ? !isVideo ? <Gallery images={infinityBlock.images} /> : <SingleVideo image={""} video={_image} /> : <RemainingTime startDate={phase.startDate} />}
+          {isAvailable && infinityBlock ? !isVideo ? <Gallery images={infinityBlock.images} /> : <SingleVideo image={""} video={_image} /> : <RemainingTime startDate={startDate} />}
           <Process available={phase.available} taken={phase.taken} />
         </div>
         <div className="footer">
           {isAvailable ? (
-            !isMintable && isConnected ? (
-              <div className="flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
-                MAX PER WALLET MINTED!
-              </div>
+            isConnected ? (
+              !isMintable ? (
+                <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
+                  you are not eligible!
+                </div>
+              ) : remainingDrops === 0 ? (
+                <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
+                  MAX PER WALLET MINTED!
+                </div>
+              ) : (
+                <ButtonMint remainingDrops={remainingDrops} mintImage={_image} mintContractAddress={dropDetail.contractAddress} onMintComplete={() => setIsMintingCompleted(true)} />
+              )
             ) : (
-              <ButtonMint walletCount={phase.walletCount} mintImage={_image} mintContractAddress={dropDetail.contractAddress} onMintComplete={() => setIsMintingCompleted(true)} />
+              <Button onClick={onToggleWallet} className="w-full btn-primary">
+                CONNECT WALLET <IconArrowRight className="w-[18px] h-[18px]" />
+              </Button>
             )
           ) : (
-            <ButtonCalendar title={dropDetail.title} startDate={phase.startDate} endDate={phase.endDate} />
+            <ButtonCalendar title={dropDetail.title} startDate={startDate} endDate={endDate} />
           )}
         </div>
       </div>

@@ -18,6 +18,10 @@ const store = configureStore({
     nftdetails: NFTDetailsSlice.reducer,
     bulkListing: bulkListingSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;
