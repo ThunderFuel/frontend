@@ -7,7 +7,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import { ERC721ContractId, contracts, provider } from "global-constants";
+import { contracts, provider } from "global-constants";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { FuelProvider } from "../../../api";
 import { mint } from "thunder-sdk/src/contracts/erc721";
@@ -57,14 +57,14 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
-    mint(ERC721ContractId, provider, wallet, checkoutMintAmount, user.walletAddress, true)
+    mint(contractAddress, provider, wallet, checkoutMintAmount, user.walletAddress, false)
       .then((res) => {
         console.log(res);
         if (res?.transactionResult.status.type === "success") {
           const _tokenIds = res.logs.map((item) => item.token_id.toNumber());
           collectionsService
             .mint({
-              contractAddress: contractAddress,
+              contractAddress,
               walletAddress: user.walletAddress,
               tokenIds: _tokenIds,
             })
