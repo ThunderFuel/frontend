@@ -32,23 +32,24 @@ const RemainingTime = ({ startDate }: any) => {
 const AllowListPhase = () => {
   const dispatch = useDispatch();
   const { dropDetail } = useDropDetailContext();
-  const { isConnected, user } = useAppSelector((state) => state.wallet);
+  const { isConnected, user, wallet } = useAppSelector((state) => state.wallet);
   const [isMintingCompleted, setIsMintingCompleted] = useState(false);
   const [isMintable, setIsMintable] = useState(false);
   const [remainingDrops, setRemainingDrops] = useState(0);
   React.useEffect(() => {
-    if (isConnected && dropDetail.contractAddress && user.walletAddress)
+    if (isConnected && dropDetail.contractAddress && wallet.address) {
       collectionsService
         .checkMintable({
           contractAddress: dropDetail.contractAddress,
-          walletAddress: user.walletAddress,
+          walletAddress: wallet.address.toString(),
         })
         .then(({ data }) => {
           setIsMintable(data.status === ChecklistStatus.Eligible);
           setRemainingDrops(data.remaining);
           setIsMintingCompleted(false);
         });
-  }, [user, isMintingCompleted, dropDetail.contractAddress]);
+    }
+  }, [isMintingCompleted, dropDetail.contractAddress, wallet]);
 
   const onToggleWallet = () => {
     dispatch(toggleWalletModal());
