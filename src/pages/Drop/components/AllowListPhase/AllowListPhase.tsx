@@ -92,7 +92,7 @@ const AllowListPhase = () => {
                 <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
                   you are not eligible!
                 </div>
-              ) : remainingDrops === 0 ? (
+              ) : remainingDrops <= 0 ? (
                 <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
                   MAX PER WALLET MINTED!
                 </div>
