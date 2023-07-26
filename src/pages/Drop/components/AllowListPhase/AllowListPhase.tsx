@@ -37,11 +37,12 @@ const AllowListPhase = () => {
   const [isMintable, setIsMintable] = useState(false);
   const [remainingDrops, setRemainingDrops] = useState(0);
   React.useEffect(() => {
-    if (isConnected && dropDetail.contractAddress && wallet.address) {
+    if (isConnected && dropDetail.contractAddress && wallet.address && user.walletAddress) {
       collectionsService
         .checkMintable({
           contractAddress: dropDetail.contractAddress,
           walletAddress: wallet.address.toString(),
+          userWalletAddress: user.walletAddress,
         })
         .then(({ data }) => {
           setIsMintable(data.status === ChecklistStatus.Eligible);
@@ -49,7 +50,7 @@ const AllowListPhase = () => {
           setIsMintingCompleted(false);
         });
     }
-  }, [isMintingCompleted, dropDetail.contractAddress, wallet]);
+  }, [isMintingCompleted, dropDetail.contractAddress, wallet, user.walletAddress]);
 
   const onToggleWallet = () => {
     dispatch(toggleWalletModal());
