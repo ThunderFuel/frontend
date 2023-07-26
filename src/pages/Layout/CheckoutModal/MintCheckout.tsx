@@ -14,6 +14,7 @@ import { mint } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import DroppedItem from "../../Drop/components/AllowListPhase/components/DroppedItem";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -128,7 +129,7 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex border-t border-gray">{checkoutProcess}</div>
       {approved && (
         <div className="p-5 border-t border-gray">
-          <img src={checkoutMintImage} className="rounded-md object-cover w-full max-h-[440px]" />
+          <DroppedItem images={[checkoutMintImage]} className="rounded-md object-cover w-full max-h-[440px]" />
         </div>
       )}
     </Modal>

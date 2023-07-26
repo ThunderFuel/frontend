@@ -8,17 +8,16 @@ import { useDropDetailContext } from "../../Detail/DetailContext";
 import { BLOCK_TYPE, FLUID_DROP_IDS, FLUID_WALLET_COUNT } from "api/drop/drop.service";
 import clsx from "clsx";
 import Process from "../Process";
-import Gallery from "./components/Gallery";
 import Countdown from "./components/Countdown";
 import ButtonMint from "./components/ButtonMint";
 import ButtonCalendar from "./components/ButtonCalendar";
 import collectionsService, { ChecklistStatus } from "api/collections/collections.service";
-import SingleVideo from "../Blocks/SingleVideo";
 import { useAppSelector } from "store";
 import { toggleWalletModal } from "store/walletSlice";
 import { useDispatch } from "react-redux";
 import Button from "components/Button";
 import { IconArrowRight } from "icons";
+import DroppedItem from "./components/DroppedItem";
 
 const RemainingTime = ({ startDate }: any) => {
   return (
@@ -64,7 +63,6 @@ const AllowListPhase = () => {
 
   const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
   const _image = infinityBlock.images[0];
-  const isVideo = _image.includes(".mp4");
 
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
     const startDate = phase.startDate * 1000;
@@ -84,7 +82,7 @@ const AllowListPhase = () => {
           </ul>
         </div>
         <div className="body">
-          {isAvailable && infinityBlock ? !isVideo ? <Gallery images={infinityBlock.images} /> : <SingleVideo image={""} video={_image} /> : <RemainingTime startDate={startDate} />}
+          {isAvailable && infinityBlock ? <DroppedItem images={infinityBlock.images} /> : <RemainingTime startDate={startDate} />}
           <Process available={phase.available} taken={phase.taken} />
         </div>
         <div className="footer">
