@@ -7,13 +7,14 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import { contracts, ERC721ContractId, provider } from "global-constants";
+import { contracts, provider } from "global-constants";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { FuelProvider } from "../../../api";
 import { mint } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import DroppedItem from "../../Drop/components/AllowListPhase/components/DroppedItem";
 import { useSelector } from "react-redux";
 import { getSerializeAddress } from "store/walletSlice";
 
@@ -61,14 +62,14 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
-    mint(ERC721ContractId, provider, wallet, checkoutMintAmount, user.walletAddress, false)
+    mint(contractAddress, provider, wallet, checkoutMintAmount, user.walletAddress, false)
       .then((res) => {
         console.log(res);
         if (res?.transactionResult.status.type === "success") {
           const _tokenIds = res.logs.map((item) => item.token_id.toNumber());
           collectionsService
             .mint({
-              contractAddress: contractAddress,
+              contractAddress,
               walletAddress: user.walletAddress,
               fuelWalletAddress: walletAddress,
               tokenIds: _tokenIds,
@@ -133,7 +134,7 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex border-t border-gray">{checkoutProcess}</div>
       {approved && (
         <div className="p-5 border-t border-gray">
-          <img src={checkoutMintImage} className="rounded-md object-cover w-full max-h-[440px]" />
+          <DroppedItem images={[checkoutMintImage]} className="rounded-md object-cover w-full max-h-[440px]" />
         </div>
       )}
     </Modal>
