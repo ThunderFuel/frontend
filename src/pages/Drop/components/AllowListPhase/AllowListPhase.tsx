@@ -75,7 +75,7 @@ const AllowListPhase = () => {
         <div className="header">
           <h5 className="text-h5">{phase.title ?? "Allowlist Phase"}</h5>
           <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
-            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : dateFormat(startDate, "DD MMM YYYY hh:ss A")}</li>
+            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : isExpired ? "Mint Out" : dateFormat(startDate, "DD MMM YYYY hh:ss A")}</li>
             <li>{phase.price > 0 ? `${formatPrice(phase.price)} ETH` : "Free"}</li>
             <li>{phaseWalletCount} Per Wallet</li>
           </ul>
