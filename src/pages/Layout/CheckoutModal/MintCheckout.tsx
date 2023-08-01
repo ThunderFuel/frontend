@@ -14,6 +14,8 @@ import { mint } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import { useSelector } from "react-redux";
+import { getSerializeAddress } from "store/walletSlice";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -45,6 +47,8 @@ const Footer = ({ approved, onClick, onClose }: { approved: boolean; onClick: an
 const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { checkoutMintAmount, checkoutMintImage, onCheckoutComplete, checkoutMintContractAddress } = useAppSelector((state) => state.checkout);
   const { wallet, user } = useAppSelector((state) => state.wallet);
+  const walletAddress = useSelector(getSerializeAddress);
+
   const navigate = UseNavigate();
 
   const [approved, setApproved] = useState(false);
@@ -66,6 +70,7 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             .mint({
               contractAddress: contractAddress,
               walletAddress: user.walletAddress,
+              fuelWalletAddress: walletAddress,
               tokenIds: _tokenIds,
             })
             .then((res) => {

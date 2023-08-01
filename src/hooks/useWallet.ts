@@ -79,11 +79,12 @@ export const useWallet = () => {
                 fuel()
                   .getWallet(fuelAddress)
                   .then((wallet: any) => {
-                    if (wallet !== null)
-                      userService.userCreate(wallet.address?.toB256()).then((user) => {
+                    if (wallet !== null) {
+                      userService.userCreate({ walletAddress: wallet.address }).then((user) => {
                         dispatch(setUser(user.data));
                         dispatch(setWallet(wallet));
                       });
+                    }
                   });
               dispatch(setIsConnected(connected));
 

@@ -23,8 +23,10 @@ export default {
   userUpdate(body: ICreateUser) {
     return ThunderURL.post("v1/user", body);
   },
-  userCreate(address: string) {
-    return ThunderURL.post("v1/user/create", {}, { params: { address } });
+  userCreate({ walletAddress }: any) {
+    const data = { params: { address: walletAddress.toB256(), fuelAddress: walletAddress } };
+
+    return ThunderURL.post("v1/user/create", {}, data);
   },
   getFollowers(params: any = {}) {
     return ThunderURL.get("v1/user/followers", { params });
