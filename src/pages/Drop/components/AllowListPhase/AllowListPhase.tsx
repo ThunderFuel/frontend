@@ -13,8 +13,8 @@ import ButtonMint from "./components/ButtonMint";
 import ButtonCalendar from "./components/ButtonCalendar";
 import collectionsService, { ChecklistStatus } from "api/collections/collections.service";
 import { useAppSelector } from "store";
-import { getSerializeAddress, toggleWalletModal } from "store/walletSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { toggleWalletModal } from "store/walletSlice";
+import { useDispatch } from "react-redux";
 import Button from "components/Button";
 import { IconArrowRight } from "icons";
 import DroppedItem from "./components/DroppedItem";
@@ -30,18 +30,17 @@ const RemainingTime = ({ startDate }: any) => {
 
 const AllowListPhase = () => {
   const dispatch = useDispatch();
-  const walletAddress = useSelector(getSerializeAddress);
   const { dropDetail } = useDropDetailContext();
-  const { isConnected } = useAppSelector((state) => state.wallet);
+  const { isConnected, wallet } = useAppSelector((state) => state.wallet);
   const [isMintingCompleted, setIsMintingCompleted] = useState(false);
   const [isMintable, setIsMintable] = useState(false);
   const [remainingDrops, setRemainingDrops] = useState(0);
   React.useEffect(() => {
-    if (isConnected && dropDetail.contractAddress && walletAddress) {
+    if (isConnected && dropDetail.contractAddress && wallet.address) {
       collectionsService
         .checkMintable({
           contractAddress: dropDetail.contractAddress,
-          walletAddress: walletAddress,
+          walletAddress: wallet.address.toB256(),
         })
         .then(({ data }) => {
           setIsMintable(data.status === ChecklistStatus.Eligible);
@@ -49,7 +48,7 @@ const AllowListPhase = () => {
           setIsMintingCompleted(false);
         });
     }
-  }, [isMintingCompleted, dropDetail.contractAddress, walletAddress]);
+  }, [isMintingCompleted, dropDetail.contractAddress, wallet.address]);
 
   const onToggleWallet = () => {
     dispatch(toggleWalletModal());
