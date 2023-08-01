@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Tab from "components/Tab";
-import dropService, { DROP_STATUS, FLUID_DROP_IDS } from "api/drop/drop.service";
+import dropService, { DROP_STATUS } from "api/drop/drop.service";
 import Item from "./Item";
 import NotFound from "components/NotFound";
 import { getSerializeAddress } from "store/walletSlice";
@@ -16,17 +16,7 @@ const List = () => {
     params.walletAddress = walletAddress;
 
     const response = await dropService.getDrops(params);
-    const data = response.data.map((item) => {
-      if (FLUID_DROP_IDS.includes(item.id)) {
-        item.creator = {
-          name: "Fluid",
-          image: "https://thassetstorage.blob.core.windows.net/assets/drop/f330f6a4-37a8-4d28-9af2-5953fffasd334.png",
-        };
-      }
-
-      return item;
-    });
-    setItems(data);
+    setItems(response.data);
   };
 
   useEffect(() => {
