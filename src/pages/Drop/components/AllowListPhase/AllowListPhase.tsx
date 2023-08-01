@@ -5,7 +5,7 @@ import "./AllowListPhase.css";
 import dayjs from "dayjs";
 import { dateFormat, formatPrice } from "utils";
 import { useDropDetailContext } from "../../Detail/DetailContext";
-import { BLOCK_TYPE, FLUID_DROP_IDS, FLUID_WALLET_COUNT } from "api/drop/drop.service";
+import { BLOCK_TYPE } from "api/drop/drop.service";
 import clsx from "clsx";
 import Process from "../Process";
 import Countdown from "./components/Countdown";
@@ -28,6 +28,17 @@ const RemainingTime = ({ startDate }: any) => {
   );
 };
 
+const Properties = ({ isAvailable, phase, isExpired, startDate }: any) => {
+  const phaseWalletCount = phase.walletCount ?? 0;
+
+  return (
+    <ul className={clsx("properties", !isAvailable && "!text-opacity-50")}>
+      <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : isExpired ? "Mint Out" : dateFormat(startDate, "DD MMM YYYY hh:ss A")}</li>
+      <li>{phase.price > 0 ? `${formatPrice(phase.price)} ETH` : "Free"}</li>
+      <li>{phaseWalletCount} Per Wallet</li>
+    </ul>
+  );
+};
 const AllowListPhase = () => {
   const dispatch = useDispatch();
   const { dropDetail } = useDropDetailContext();
@@ -64,47 +75,48 @@ const AllowListPhase = () => {
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
     const startDate = phase.startDate * 1000;
     const endDate = phase.endDate * 1000;
-    const phaseWalletCount = phase.walletCount;
 
-    const isAvailable = dayjs().valueOf() > startDate;
+    const now = dayjs().valueOf();
+    const isAvailable = now >= startDate && now <= endDate;
+    const isExpired = now > endDate;
 
     return (
       <div className="allowlist-phase" key={i}>
-        <div className="header">
+        <div className={clsx("header", isExpired && "!border-b-0")}>
           <h5 className="text-h5">{phase.title ?? "Allowlist Phase"}</h5>
-          <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
-            <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : dateFormat(startDate, "DD MMM YYYY hh:ss A")}</li>
-            <li>{phase.price > 0 ? `${formatPrice(phase.price)} ETH` : "Free"}</li>
-            <li>{phaseWalletCount} Per Wallet</li>
-          </ul>
+          <Properties isAvailable={isAvailable} phase={isAvailable} isExpired={isExpired} startDate={startDate} />
         </div>
-        <div className="body">
-          {isAvailable && infinityBlock ? <DroppedItem images={infinityBlock.images} /> : <RemainingTime startDate={startDate} />}
-          <Process available={phase.available} taken={phase.taken} />
-        </div>
-        <div className="footer">
-          {isAvailable ? (
-            isConnected ? (
-              !isMintable ? (
-                <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
-                  you are not eligible!
-                </div>
-              ) : remainingDrops <= 0 ? (
-                <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
-                  MAX PER WALLET MINTED!
-                </div>
+        {!isExpired && (
+          <>
+            <div className="body">
+              {isAvailable && infinityBlock ? <DroppedItem images={infinityBlock.images} /> : <RemainingTime startDate={startDate} />}
+              <Process available={phase.available} taken={phase.taken} />
+            </div>
+            <div className="footer">
+              {isAvailable ? (
+                isConnected ? (
+                  !isMintable ? (
+                    <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
+                      you are not eligible!
+                    </div>
+                  ) : remainingDrops <= 0 ? (
+                    <div className="uppercase flex-center cursor-default text-button text-white text-opacity-25 w-full font-bigShoulderDisplay bg-white bg-opacity-25 rounded-[4px] py-[14px] px-[16px]">
+                      MAX PER WALLET MINTED!
+                    </div>
+                  ) : (
+                    <ButtonMint remainingDrops={remainingDrops} mintImage={_image} mintContractAddress={dropDetail.contractAddress} onMintComplete={() => setIsMintingCompleted(true)} />
+                  )
+                ) : (
+                  <Button onClick={onToggleWallet} className="w-full btn-primary">
+                    CONNECT WALLET <IconArrowRight className="w-[18px] h-[18px]" />
+                  </Button>
+                )
               ) : (
-                <ButtonMint remainingDrops={remainingDrops} mintImage={_image} mintContractAddress={dropDetail.contractAddress} onMintComplete={() => setIsMintingCompleted(true)} />
-              )
-            ) : (
-              <Button onClick={onToggleWallet} className="w-full btn-primary">
-                CONNECT WALLET <IconArrowRight className="w-[18px] h-[18px]" />
-              </Button>
-            )
-          ) : (
-            <ButtonCalendar title={dropDetail.title} startDate={startDate} endDate={endDate} />
-          )}
-        </div>
+                <ButtonCalendar title={dropDetail.title} startDate={startDate} endDate={endDate} />
+              )}
+            </div>
+          </>
+        )}
       </div>
     );
   });
