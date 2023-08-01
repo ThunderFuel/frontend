@@ -31,17 +31,16 @@ const RemainingTime = ({ startDate }: any) => {
 const AllowListPhase = () => {
   const dispatch = useDispatch();
   const { dropDetail } = useDropDetailContext();
-  const { isConnected, user, wallet } = useAppSelector((state) => state.wallet);
+  const { isConnected, wallet } = useAppSelector((state) => state.wallet);
   const [isMintingCompleted, setIsMintingCompleted] = useState(false);
   const [isMintable, setIsMintable] = useState(false);
   const [remainingDrops, setRemainingDrops] = useState(0);
   React.useEffect(() => {
-    if (isConnected && dropDetail.contractAddress && wallet.address && user.walletAddress) {
+    if (isConnected && dropDetail.contractAddress && wallet.address) {
       collectionsService
         .checkMintable({
           contractAddress: dropDetail.contractAddress,
-          walletAddress: wallet.address.toString(),
-          userWalletAddress: user.walletAddress,
+          walletAddress: wallet.address.toB256(),
         })
         .then(({ data }) => {
           setIsMintable(data.status === ChecklistStatus.Eligible);
@@ -49,7 +48,7 @@ const AllowListPhase = () => {
           setIsMintingCompleted(false);
         });
     }
-  }, [isMintingCompleted, dropDetail.contractAddress, wallet, user.walletAddress]);
+  }, [isMintingCompleted, dropDetail.contractAddress, wallet.address]);
 
   const onToggleWallet = () => {
     dispatch(toggleWalletModal());
@@ -59,15 +58,13 @@ const AllowListPhase = () => {
     return null;
   }
 
-  const walletCount = FLUID_DROP_IDS.includes(Number(dropDetail.id)) ? FLUID_WALLET_COUNT : null;
-
   const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
   const _image = infinityBlock.images[0];
 
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
     const startDate = phase.startDate * 1000;
     const endDate = phase.endDate * 1000;
-    const phaseWalletCount = walletCount ?? phase.walletCount;
+    const phaseWalletCount = phase.walletCount;
 
     const isAvailable = dayjs().valueOf() > startDate;
 
@@ -78,7 +75,7 @@ const AllowListPhase = () => {
           <ul className={clsx("properties", !isAvailable && "text-opacity-50")}>
             <li className={clsx(isAvailable && "text-green")}>{isAvailable ? "Minting Live" : dateFormat(startDate, "DD MMM YYYY hh:ss A")}</li>
             <li>{phase.price > 0 ? `${formatPrice(phase.price)} ETH` : "Free"}</li>
-            <li>{walletCount ?? phaseWalletCount} Per Wallet</li>
+            <li>{phaseWalletCount} Per Wallet</li>
           </ul>
         </div>
         <div className="body">

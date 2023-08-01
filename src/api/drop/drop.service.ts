@@ -18,8 +18,13 @@ export const FLUID_DROP_IDS = [16, 17];
 export const FLUID_WALLET_COUNT = 20;
 
 export default {
-  getDropDetail: async (dropId: any = 1) => {
-    const response = await ThunderURL.get<any>(`v1/drop/detail?id=${dropId}`);
+  getDropDetail: async (dropId: any = 1, walletAddress: any) => {
+    const response = await ThunderURL.get<any>("v1/drop/detail", {
+      params: {
+        id: dropId,
+        walletAddress: walletAddress,
+      },
+    });
     response.data.blocks = response.data.blocks.map((block: any) => {
       if (block.type === BLOCK_TYPE.Infinity) {
         block.hidden = true;

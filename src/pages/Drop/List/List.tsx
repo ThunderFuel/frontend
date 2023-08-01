@@ -3,13 +3,18 @@ import Tab from "components/Tab";
 import dropService, { DROP_STATUS, FLUID_DROP_IDS } from "api/drop/drop.service";
 import Item from "./Item";
 import NotFound from "components/NotFound";
+import { getSerializeAddress } from "store/walletSlice";
+import { useSelector } from "react-redux";
 
 const List = () => {
+  const walletAddress = useSelector(getSerializeAddress);
   const [items, setItems] = useState<any>([]);
   const onTabChange = async (e: any) => {
     await getDrops({ type: e });
   };
-  const getDrops = async (params = {}) => {
+  const getDrops = async (params = {} as any) => {
+    params.walletAddress = walletAddress;
+
     const response = await dropService.getDrops(params);
     const data = response.data.map((item) => {
       if (FLUID_DROP_IDS.includes(item.id)) {

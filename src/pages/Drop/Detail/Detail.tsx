@@ -10,10 +10,13 @@ import { useParams } from "react-router-dom";
 import "./Detail.css";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import { useSelector } from "react-redux";
+import { getSerializeAddress } from "store/walletSlice";
 
 const Detail = () => {
   const { dropId } = useParams();
   const navigate = useNavigate();
+  const walletAddress = useSelector(getSerializeAddress);
 
   const [dropDetail, setDropDetail] = useState<any>({
     team: [],
@@ -24,7 +27,7 @@ const Detail = () => {
 
   useEffect(() => {
     dropService
-      .getDropDetail(dropId)
+      .getDropDetail(dropId, walletAddress)
       .then((response: any) => {
         const dropDetail = response.data;
         if (dropId && FLUID_DROP_IDS.includes(Number(dropId))) {

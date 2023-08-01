@@ -3,6 +3,7 @@ import { IUserResponse } from "../user/user.type";
 export interface MintRequest {
   contractAddress: string;
   walletAddress: string;
+  fuelWalletAddress: string;
   tokenIds: any[];
 }
 
