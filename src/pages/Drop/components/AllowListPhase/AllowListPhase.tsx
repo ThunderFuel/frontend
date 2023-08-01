@@ -5,7 +5,7 @@ import "./AllowListPhase.css";
 import dayjs from "dayjs";
 import { dateFormat, formatPrice } from "utils";
 import { useDropDetailContext } from "../../Detail/DetailContext";
-import { BLOCK_TYPE, FLUID_DROP_IDS, FLUID_WALLET_COUNT } from "api/drop/drop.service";
+import { BLOCK_TYPE } from "api/drop/drop.service";
 import clsx from "clsx";
 import Process from "../Process";
 import Countdown from "./components/Countdown";
@@ -64,9 +64,11 @@ const AllowListPhase = () => {
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {
     const startDate = phase.startDate * 1000;
     const endDate = phase.endDate * 1000;
-    const phaseWalletCount = phase.walletCount;
+    const phaseWalletCount = phase.walletCount ?? 0;
 
-    const isAvailable = dayjs().valueOf() > startDate;
+    const now = dayjs().valueOf();
+    const isAvailable = now >= startDate && now <= endDate;
+    const isExpired = now > endDate;
 
     return (
       <div className="allowlist-phase" key={i}>
@@ -79,7 +81,7 @@ const AllowListPhase = () => {
           </ul>
         </div>
         <div className="body">
-          {isAvailable && infinityBlock ? <DroppedItem images={infinityBlock.images} /> : <RemainingTime startDate={startDate} />}
+          {isAvailable && infinityBlock ? <DroppedItem images={infinityBlock.images} /> : !isExpired ? <RemainingTime startDate={startDate} /> : null}
           <Process available={phase.available} taken={phase.taken} />
         </div>
         <div className="footer">
