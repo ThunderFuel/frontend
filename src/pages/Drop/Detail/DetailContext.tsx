@@ -15,6 +15,7 @@ interface IDropDetailContext {
     allowListPhase: any;
     creator: any;
     contractAddress: string;
+    collectionId: number;
   };
 }
 
