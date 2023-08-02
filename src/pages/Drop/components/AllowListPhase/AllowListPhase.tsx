@@ -18,6 +18,8 @@ import { useDispatch } from "react-redux";
 import Button from "components/Button";
 import { IconArrowRight } from "icons";
 import DroppedItem from "./components/DroppedItem";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "../../../../router/config/paths";
 
 const RemainingTime = ({ startDate }: any) => {
   return (
@@ -44,6 +46,7 @@ const Properties = ({ isAvailable, phase, isExpired, startDate, remainingDrops }
   );
 };
 const AllowListPhase = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { dropDetail } = useDropDetailContext();
   const { isConnected, wallet } = useAppSelector((state) => state.wallet);
@@ -113,8 +116,13 @@ const AllowListPhase = () => {
                 CONNECT WALLET <IconArrowRight className="w-[18px] h-[18px]" />
               </Button>
             )
+          ) : isExpired ? (
+            <Button className="w-full" onClick={() => navigate(PATHS.COLLECTION, { collectionId: dropDetail.collectionId })}>
+              go to collection page
+              <IconArrowRight className="w-[18px] h-[18px]" />
+            </Button>
           ) : (
-            !isExpired && <ButtonCalendar title={dropDetail.title} startDate={startDate} endDate={endDate} />
+            <ButtonCalendar title={dropDetail.title} startDate={startDate} endDate={endDate} />
           )}
         </div>
       </div>
