@@ -294,14 +294,24 @@ const LeftMenu = (props: any) => {
           </div>
         </div>
         <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
-          <div
-            className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
-            onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
-          >
-            <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
-            <h6 className="text-h6 text-gray-light">
-              Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
-            </h6>
+          <div className="flex gap-2.5">
+            <div
+              className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
+              onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
+            >
+              <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
+              <h6 className="text-h6 text-gray-light">
+                Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
+              </h6>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <h6 className="text-h6 text-gray-light">
+                on <span className="text-white">{mockData.network}</span>
+              </h6>
+              <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                <IconFuelWallet className="w-[18px] h-[18px]" />
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
@@ -326,7 +336,7 @@ const LeftMenu = (props: any) => {
             </div>
           </div>
 
-          <div className="body-medium text-white mb-2.5">
+          <div className="body-medium text-white mb-10">
             <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 

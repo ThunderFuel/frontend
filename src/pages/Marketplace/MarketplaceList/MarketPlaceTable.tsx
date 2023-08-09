@@ -139,6 +139,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   const rowElementProps = (item: any) => {
     return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };
   };
+  console.log(items);
 
   return (
     <Table

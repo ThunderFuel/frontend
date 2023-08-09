@@ -118,6 +118,62 @@ const Box = ({
   );
 };
 
+// const headers: ITableHeader[] = [
+//   {
+//     key: "from",
+//     text: `FROM`,
+//     width: "24%",
+//     align: "flex-start",
+//     sortValue: 1,
+//     render: (item) => (
+//       <div className={`flex w-full items-center p-[15px] gap-x-[15px]  ${item.isExpired ? "opacity-50" : ""}`}>
+//         <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
+//         <div className="flex  flex-col gap-y-[10px]">
+//           <span>{item.ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress)} </span>
+//         </div>
+//       </div>
+//     ),
+//     // renderHeader: (header) => <span>asasas</span>,
+//   },
+//   {
+//     key: "price",
+//     text: "PRICE",
+//     width: "20%",
+//     align: "flex-end",
+//     render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
+//   },
+//   {
+//     key: "floor difference",
+//     text: "FLOOR DIFFERENCE",
+//     width: "28%",
+//     align: "flex-end",
+//     sortValue: 2,
+//     render: (item) => <span className="text-bodyMd font-spaceGrotesk">40% Below</span>,
+//     // renderHeader: (header) => <span>asasas</span>,
+//   },
+//   {
+//     key: "expires",
+//     text: "EXPIRES",
+//     width: "24%",
+//     align: "flex-end",
+//     sortValue: 3,
+//     render: (item) => {
+//       const targetDate = new Date(item.expireTime);
+//       const now = new Date();
+
+//       const timeDifferenceInHours = differenceInHours(targetDate, now);
+//       const timeDifferenceInMinutes = differenceInMinutes(addHours(targetDate, -timeDifferenceInHours), now);
+
+//       return (
+//         <span className="flex items-center gap-[5px] text-bodyMd font-spaceGrotesk">
+//           in {timeDifferenceInHours} hours <IconClock className="flex-shrink-0 w-[15px] h-[15px]" />
+//         </span>
+//       );
+//     },
+//     // renderHeader: (header) => <span>asasas</span>,
+//   },
+// ];
+
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
@@ -144,6 +200,8 @@ const Offers = ({ onBack }: { onBack: any }) => {
   useEffect(() => {
     fetchOffers();
   }, [nftId]);
+
+  console.log(offers);
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
