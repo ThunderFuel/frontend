@@ -5,6 +5,7 @@
 .table .thead {
   @apply border-b border-solid border-gray bg-bg;
 }
+
 .table .thead .tr {
   @apply flex items-center;
 }
@@ -13,9 +14,11 @@
   flex: 1;
   @apply flex py-4 pl-4 text-gray-light uppercase;
 }
+
 .table .thead .tr .th:nth-child(2) {
   @apply pr-[7px];
 }
+
 .table .thead .tr .th:nth-child(4) {
   @apply pr-[7px];
 }
@@ -32,18 +35,26 @@
   @apply py-5;
   @apply flex flex-col gap-2;
 }
+
 .table .tbody .tr {
   @apply flex flex-row items-center border border-gray rounded-lg;
   @apply hover:bg-bg-light;
 }
+
 .table .tbody .tr.active {
   @apply bg-gray;
 }
+
 .table .tbody .tr .td {
   flex: 1;
   @apply flex text-white;
 }
+
 .table .tbody .tr .td .cell {
   @apply p-3.5 overflow-hidden;
   @apply whitespace-nowrap overflow-ellipsis;
+}
+
+.table .tbody .tr.after {
+  @apply -mt-2 border-t-0 rounded-none;
 }

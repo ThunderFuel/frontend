@@ -161,8 +161,8 @@ const Header = () => {
                   <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
                 </Link>
 
-                <Search />
                 <Tab />
+                <Search />
               </div>
               <HeaderIconButtonGroup />
             </div>
