@@ -7,7 +7,7 @@ const ActivityList = (props: any) => {
   return (
     <ActivityProvider value={props}>
       <div className="container-fluid flex">
-        <Sidebar />
+        {!props.hideSidebar && <Sidebar />}
         <ActivityItems />
       </div>
     </ActivityProvider>
