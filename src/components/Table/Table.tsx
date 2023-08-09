@@ -29,6 +29,7 @@ export interface ITable {
   containerFluidClassName?: string;
   loadingTemplate?: any;
   thClassName?: string;
+  afterRow?: any;
 }
 
 const TableNotFound = React.memo(() => {
@@ -77,6 +78,7 @@ const Table = ({
   loadingTemplate,
   containerFluidClassName,
   thClassName,
+  afterRow,
   ...props
 }: ITable) => {
   const _getHeaders = headers.map((header, i) => (
@@ -118,10 +120,10 @@ const Table = ({
             );
           })}
         </RowElement>
-        {item.afterRow ? (
-          <div key={`afterRow_${k.toString()}`} className={"tr"}>
+        {afterRow ? (
+          <div key={`afterRow_${k.toString()}`} className={"tr after"}>
             <td colSpan={headers.length} className="py-5 px-8 text-left">
-              {item.afterRow}
+              {afterRow(item)}
             </td>
           </div>
         ) : (
