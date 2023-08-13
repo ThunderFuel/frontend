@@ -5,6 +5,8 @@ import { useOfferContext } from "../OfferContext";
 import Checkbox from "components/CheckBox";
 import Radio from "components/Radio";
 
+import SidebarFilterBase from "components/SidebarFilter";
+
 const CheckboxList = ({ filterItem, value = [], onChange }: any) => {
   const onClick = (checkedValue: any) => {
     const indexOf = value.indexOf(checkedValue);
@@ -108,22 +110,20 @@ const SidebarFilter = () => {
   }, [offers, filterValue]);
 
   return (
-    <div className="sticky h-fit" style={{ top: "var(--headerHeight)" }}>
-      <div className="py-5 pr-5 border-r border-gray w-60 flex flex-col gap-2.5">
-        {getFilterItems.map((filterItem: any, index: number) => {
-          const Component = filterItem.component;
+    <SidebarFilterBase className="w-[280px]">
+      {getFilterItems.map((filterItem: any, index: number) => {
+        const Component = filterItem.component;
 
-          return (
-            <Collapse key={index} isOpen={true}>
-              <Collapse.Header>{filterItem.name}</Collapse.Header>
-              <Collapse.Body>
-                <Component filterItem={filterItem} value={filterValue[filterItem.type]} onChange={onChange} />
-              </Collapse.Body>
-            </Collapse>
-          );
-        })}
-      </div>
-    </div>
+        return (
+          <Collapse key={index} isOpen={true}>
+            <Collapse.Header>{filterItem.name}</Collapse.Header>
+            <Collapse.Body>
+              <Component filterItem={filterItem} value={filterValue[filterItem.type]} onChange={onChange} />
+            </Collapse.Body>
+          </Collapse>
+        );
+      })}
+    </SidebarFilterBase>
   );
 };
 

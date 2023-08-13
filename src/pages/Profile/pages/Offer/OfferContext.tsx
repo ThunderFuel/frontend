@@ -68,8 +68,9 @@ const OfferProvider = ({ value, children }: { value: IOfferContext; children: Re
   const onAcceptOffer = async (item: any) => {
     try {
       userService.getBidBalance(item.makerUserId).then((res) => {
-        if (res.data < item.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
-        else {
+        if (res.data < item.price) {
+          useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
+        } else {
           dispatch(
             setCheckout({
               type: CheckoutType.AcceptOffer,

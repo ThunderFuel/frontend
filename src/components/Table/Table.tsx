@@ -92,7 +92,7 @@ const Table = ({
     const RowElement = rowElement ?? TableRow;
 
     return (
-      <React.Fragment key={`parentRow_${k.toString()}`}>
+      <div className="tr-group" key={`parentRow_${k.toString()}`}>
         {item.beforeRow ? (
           <div className="tr" key={`beforeRow_${k.toString()}`}>
             <td colSpan={headers.length} className="py-5 px-8 text-left">
@@ -131,7 +131,7 @@ const Table = ({
         ) : (
           <></>
         )}
-      </React.Fragment>
+      </div>
     );
   });
 

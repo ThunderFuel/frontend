@@ -40,7 +40,14 @@
 .table .tbody .tr {
   @apply p-2.5;
   @apply flex flex-row items-center border border-gray rounded-lg;
-  @apply hover:bg-bg-light;
+}
+
+.table .tbody .tr-group:hover .tr {
+  @apply bg-bg-light;
+}
+
+.table .tbody .tr-group:has(.after) .tr:not(.after) {
+  @apply border-b-0;
 }
 
 .table .tbody .tr.active {
@@ -58,5 +65,5 @@
 }
 
 .table .tbody .tr.after {
-  @apply -mt-2 border-t-0 rounded-none;
+  @apply -mt-2 border-t-0 rounded-b-lg;
 }
