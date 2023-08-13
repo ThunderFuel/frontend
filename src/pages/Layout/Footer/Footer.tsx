@@ -1,15 +1,12 @@
 import React from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
-import { useDispatch } from "react-redux";
 import etherscanService from "api/etherscan/etherscan.service";
-import { IconEthereum, IconGas, IconInfo } from "icons";
-import { toggleClosedBetaModal } from "store/commonSlice";
+import { IconEthereum, IconGas, IconSun } from "icons";
 
 const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
   const [gasFee, setGasFee] = React.useState<any>(0);
   const [ethPrice, setEthPrice] = React.useState(0);
-  const dispatch = useDispatch();
 
   const getData = async () => {
     const response = await etherscanService.getData();
@@ -28,9 +25,9 @@ const FooterBottom = React.memo(() => {
   }, []);
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center">
-        <div className="flex items-center gap-5 shrink-0 text-headline-01">
+    <div className="flex items-center justify-between px-4">
+      <div className="flex items-center border-r border-r-gray">
+        <div className="flex items-center gap-4 shrink-0 text-headline-01 border-r border-r-gray py-3 pr-4">
           <span className="flex items-center">
             <IconEthereum color="#838383" />
             <span className="text-white">${ethPrice}</span>
@@ -40,14 +37,8 @@ const FooterBottom = React.memo(() => {
             <span className="text-white">{gasFee} GWEI</span>
           </span>
         </div>
-        <div className="flex w-full pt-[6px] pb-[6px] items-center gap-x-[10px] border-l ml-[27px] border-gray pl-[15px] text-white">
-          <IconInfo className="w-[18px] h-[18px]" />
-          <span className="body-small !text-[12px] !font-medium	">
-            Thunder is currently in beta phase. All data and transactions are being conducted on the testnet.{" "}
-            <span className="body-small !text-[12px] !font-medium underline cursor-pointer" onClick={() => dispatch(toggleClosedBetaModal())}>
-              Learn More
-            </span>
-          </span>
+        <div className="px-3">
+          <IconSun className="text-white" />
         </div>
       </div>
       <SocialMediaIcons />
@@ -57,7 +48,7 @@ const FooterBottom = React.memo(() => {
 FooterBottom.displayName = "FooterBottom";
 const Footer = () => {
   return (
-    <div className="bg-bg border-t border-t-gray p-4">
+    <div className="bg-bg border-t border-t-gray sticky bottom-0 left-0 w-full">
       <FooterBottom />
     </div>
   );

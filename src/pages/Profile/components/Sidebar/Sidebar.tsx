@@ -47,9 +47,8 @@ const Sidebar = ({ isProfile = false }: any) => {
                 {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
               </BoxGroupItem>
             </BoxGroup>
-            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">
-              VerticalCrypto Art Gallery. As a leading curatorial media studio, we work at the intersection of the web3 ecosystem, crypto art and bloc... Read More
-            </div>
+            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio} </div>
+
             {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
             {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}
           </div>
