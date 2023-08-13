@@ -48,7 +48,7 @@ const FooterBottom = React.memo(() => {
 FooterBottom.displayName = "FooterBottom";
 const Footer = () => {
   return (
-    <div className="bg-bg border-t border-t-gray sticky bottom-0 left-0 w-full">
+    <div className="bg-bg border-t border-t-gray sticky bottom-0 left-0 w-full z-20">
       <FooterBottom />
     </div>
   );
