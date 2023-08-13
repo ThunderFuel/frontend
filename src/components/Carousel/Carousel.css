@@ -140,7 +140,7 @@
 }
 
 .carousel-indicators {
-  @apply absolute -top-6 right-0 flex justify-center gap-1.5;
+  @apply absolute -bottom-5 left-1/2 flex justify-center gap-1.5 -translate-x-1/2;
   z-index: 2;
 }
 
