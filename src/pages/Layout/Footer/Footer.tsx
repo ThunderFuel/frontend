@@ -1,74 +1,64 @@
 import React from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
-import { AssetLogo } from "assets";
+import { useDispatch } from "react-redux";
+import etherscanService from "api/etherscan/etherscan.service";
+import { IconEthereum, IconGas, IconInfo } from "icons";
+import { toggleClosedBetaModal } from "store/commonSlice";
 
-const Footer = () => {
+const IntervalValue = 600000;
+const FooterBottom = React.memo(() => {
+  const [gasFee, setGasFee] = React.useState<any>(0);
+  const [ethPrice, setEthPrice] = React.useState(0);
+  const dispatch = useDispatch();
+
+  const getData = async () => {
+    const response = await etherscanService.getData();
+
+    setEthPrice(response.result.ethusd);
+    setGasFee(response.result.safeGasPrice);
+  };
+
+  React.useEffect(() => {
+    getData();
+    const interval = setInterval(() => {
+      getData();
+    }, IntervalValue);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="mt-auto flex flex-col lg:justify-center bg-bg-light w-full py-5 lg:py-10">
-      <div className="px-4">
-        {/* <div className="border-b border-b-gray pb-10 mb-5">
-        <div className="container">
-          <div className="lg:flex lg:items-start lg:justify-between">
-            <div className="flex flex-col items-start lg:justify-center justify-start text-white">
-              <h4 className="text-head4 font-spaceGrotesk">Subscribe to our newsletter</h4>
-              <span className="text-bodyMd font-spaceGrotesk flex max-w-[335px] lg:max-w-[440px] mt-2 mb-7">
-                Newsworthy headlines from across the metaverse, delivered straight to your inbox every week.
-              </span>
-              <div className="flex bg-bg items-center justify-between max-w-[335px] lg:max-w-[400px] w-full rounded-lg pl-5 pr-2.5 py-2.5">
-                <input
-                  className="text-gray-light h-[19px] text-bodyMd max-w-[192px] lg:max-w-[257px]"
-                  type={"email"}
-                  placeholder="E-mail Address"
-                  style={{ background: "none", outline: "none" }}
-                />
-                <Button className="text-headlineMd py-3 px-4">SUBSCRIBE</Button>
-              </div>
-            </div>
-            <div className="h-[1px] bg-gray my-[40px] lg:hidden" />
-            <div className="flex flex-wrap gap-x-[55px] lg:gap-x-[160px] gap-y-[28px] lg:pt-3 lg:flex-nowrap ">
-              <div className="flex flex-col max-w-[140px] gap-3">
-                <h5 className="text-headline-drop-primary text-gray-light mb-2">MARKETPLACE</h5>
-                <a className="text-headline-drop-primary text-white">EXPLORE</a>
-                <a className="text-headline-drop-primary text-white">SELL</a>
-                <a className="text-headline-drop-primary text-white">CREATE</a>
-              </div>
-              <div className="flex flex-col max-w-[140px] gap-3">
-                <h5 className="text-headline-drop-primary text-gray-light mb-2">MY ACCOUNT</h5>
-                <a className="text-headline-drop-primary text-white">PROFILE</a>
-                <a className="text-headline-drop-primary text-white">FAVORITES</a>
-                <a className="text-headline-drop-primary text-white">MY COLLECTIONS</a>
-                <a className="text-headline-drop-primary text-white">SETTINGS</a>
-              </div>
-              <div className="flex flex-col w-[140px] gap-3">
-                <h5 className="text-headline-drop-primary text-gray-light mb-2">COMPANY</h5>
-                <a className="text-headline-drop-primary text-white">ABOUT</a>
-                <a className="text-headline-drop-primary text-white">CAREERS</a>
-              </div>
-            </div>
-          </div>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <div className="flex items-center gap-5 shrink-0 text-headline-01">
+          <span className="flex items-center">
+            <IconEthereum color="#838383" />
+            <span className="text-white">${ethPrice}</span>
+          </span>
+          <span className="flex items-center">
+            <IconGas className="mr-[6px]" />
+            <span className="text-white">{gasFee} GWEI</span>
+          </span>
         </div>
-      </div> */}
-
-        <div className="flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
-            <a href="/">
-              <img src={AssetLogo} className="h-8" alt="logo" />
-            </a>
-            {/* <div className="flex flex-col items-center lg:flex-row gap-6">
-            <h5 className="text-headline-drop-primary text-gray-light">EXPLORE</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">SELL</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">CREATE</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">SETTINGS</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">PRROFILE</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">TERMS</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">SERVICES</h5>
-          </div> */}
-          </div>
-          <div className="flex justify-center">
-            <SocialMediaIcons />
-          </div>
+        <div className="flex w-full pt-[6px] pb-[6px] items-center gap-x-[10px] border-l ml-[27px] border-gray pl-[15px] text-white">
+          <IconInfo className="w-[18px] h-[18px]" />
+          <span className="body-small !text-[12px] !font-medium	">
+            Thunder is currently in beta phase. All data and transactions are being conducted on the testnet.{" "}
+            <span className="body-small !text-[12px] !font-medium underline cursor-pointer" onClick={() => dispatch(toggleClosedBetaModal())}>
+              Learn More
+            </span>
+          </span>
         </div>
       </div>
+      <SocialMediaIcons />
+    </div>
+  );
+});
+FooterBottom.displayName = "FooterBottom";
+const Footer = () => {
+  return (
+    <div className="bg-bg border-t border-t-gray p-4">
+      <FooterBottom />
     </div>
   );
 };
