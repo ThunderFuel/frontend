@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import Button from "components/Button";
 import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconItems, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing, IconViews } from "icons";
@@ -272,7 +273,7 @@ const LeftMenu = (props: any) => {
             </div>
           </div>
           <h3 className="text-h3 text-white">{nft.name ? nft.name : nft?.tokenOrder ? "Bored Ape #" + nft?.tokenOrder : ""}</h3>
-          <div className="flex gap-5">
+          {/* <div className="flex gap-5">
             <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
               <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
                 <IconViews className="w-[17px] h-[17px]" />
@@ -291,7 +292,7 @@ const LeftMenu = (props: any) => {
               </div>
               You have {mockData.userOwns}
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
           <div className="flex gap-2.5">
@@ -313,7 +314,7 @@ const LeftMenu = (props: any) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
               <div className="flex relative w-16 h-8">
                 {mockData.ownerPictures.map((item, idx) => (
@@ -334,16 +335,16 @@ const LeftMenu = (props: any) => {
                 <IconFuelWallet className="w-[18px] h-[18px]" />
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="body-medium text-white mb-10">
             <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
-          <InputCount onChange={onChange} remainingAmount={mockData.listings.length} listings={mockData.listings} />
-          <div className="flex gap-[5px] text-bodySm font-spaceGrotesk text-gray-light">
+          {/* <InputCount onChange={onChange} remainingAmount={mockData.listings.length} listings={mockData.listings} /> */}
+          {/* <div className="flex gap-[5px] text-bodySm font-spaceGrotesk text-gray-light">
             <IconInfo className="w-[18px] h-[18px]" /> {multipleEditionBuyArray.length} Edition{multipleEditionBuyArray.length > 1 ? "s" : ""} / Average Item Price: {calculateAveragePrice()}ETH
-          </div>
+          </div> */}
           {nft.salable ? (
             <FixedPrice />
           ) : nft.onAuction ? (
@@ -402,7 +403,7 @@ const LeftMenu = (props: any) => {
             </Box>
           )}
           {renderLastActivity(nft.lastActivity)}
-          {renderListing(mockData.lastListing)}
+          {/* {renderListing(mockData.lastListing)} */}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
           <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />
