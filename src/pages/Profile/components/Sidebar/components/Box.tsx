@@ -18,9 +18,9 @@ const BoxGroup = React.memo(({ children, className }: any) => {
 });
 BoxGroup.displayName = "BoxGroup";
 
-const BoxGroupItem = React.memo(({ children, header }: any) => {
+const BoxGroupItem = React.memo(({ children, header, ...etc }: any) => {
   return (
-    <li className="flex flex-1 flex-col rounded-md gap-2 px-4 py-3.5 text-gray-light bg-bg border-r border-gray last:border-r-0">
+    <li {...etc} className="flex flex-1 flex-col rounded-md gap-2 px-4 py-3.5 text-gray-light bg-bg border-r border-gray last:border-r-0 cursor-pointer">
       <div className="text-headline-01 uppercase">{header}</div>
       <h4 className="text-h4 text-white">{children}</h4>
     </li>
