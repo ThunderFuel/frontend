@@ -101,3 +101,4 @@ export { ReactComponent as IconDots } from "./icon-dots.svg";
 export { ReactComponent as IconFuelWallet } from "./icon-fuel-wallet.svg";
 export { ReactComponent as IconViews } from "./icon-views.svg";
 export { ReactComponent as IconItems } from "./icon-items.svg";
+export { ReactComponent as IconSwap } from "./icon-swap.svg";

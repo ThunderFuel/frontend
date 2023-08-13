@@ -1,5 +1,6 @@
 .table {
   @apply w-full;
+  @apply flex flex-col gap-2.5;
 }
 
 .table .thead {
@@ -12,7 +13,7 @@
 
 .table .thead .tr .th {
   flex: 1;
-  @apply flex py-4 pl-4 text-gray-light uppercase;
+  @apply flex py-2.5 pl-2.5 text-gray-light uppercase;
 }
 
 .table .thead .tr .th:nth-child(2) {
@@ -32,11 +33,12 @@
 }
 
 .table .tbody {
-  @apply py-5;
+  /* @apply py-5; */
   @apply flex flex-col gap-2;
 }
 
 .table .tbody .tr {
+  @apply p-2.5;
   @apply flex flex-row items-center border border-gray rounded-lg;
   @apply hover:bg-bg-light;
 }

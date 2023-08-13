@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import ActivityItem from "./ActivityItem";
 import { useActivityContext } from "../ActivityContext";
 import NotFound from "../../NotFound";
 import Table, { ITableHeader } from "../../Table";
 
-const ActivityItems = () => {
-  const { getActivities, pagination } = useActivityContext();
+const ActivityItems = (props: any) => {
+  const { getActivities, pagination, actionButton } = useActivityContext();
   const headers = [
     {
       key: "from",
@@ -17,17 +18,17 @@ const ActivityItems = () => {
     },
   ] as ITableHeader[];
   const afterRow = (item: any) => {
-    return <div>{JSON.stringify(item)}</div>;
+    return <></>;
   };
 
   return (
-    <div className="flex flex-col flex-1 p-5 gap-5">
-      <div className="text-headline-02 text-gray-light">{pagination.itemsCount} ACTIVITIES</div>
+    <div className="flex flex-col flex-1  gap-5">
+      {!props.noTitle && <div className="text-headline-02 text-gray-light">{pagination?.itemsCount} ACTIVITIES</div>}
       <div className="flex flex-col gap-4">
-        <Table headers={headers} items={getActivities} afterRow={afterRow} />
-        {getActivities.map((item: any, index: number) => (
+        <Table actionButton={actionButton} theadClassName={"sticky z-10"} thClassName="" containerFluidClassName="!px-5" headers={props.headers ?? headers} items={getActivities} />
+        {/* {getActivities.map((item: any, index: number) => (
           <ActivityItem key={index} item={item} />
-        ))}
+        ))} */}
         {!getActivities.length ? <NotFound /> : null}
       </div>
     </div>

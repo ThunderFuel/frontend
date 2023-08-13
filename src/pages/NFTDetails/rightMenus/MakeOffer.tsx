@@ -39,9 +39,6 @@ export const selectExpirationDates: ISelectOption[] = [
   },
 ];
 
-const offerDescription =
-  "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
-
 const MakeOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
@@ -109,15 +106,19 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   );
 
   return (
-    <RightMenu title="Make Offer" description={offerDescription} footer={footer} onBack={onBack}>
+    <RightMenu title="Make Offer" footer={footer} onBack={onBack}>
       <CartItem selectedNFT={selectedNFT} />
-      <div className="flex flex-col gap-y-2">
+      <div className="flex flex-col gap-2">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Offer</h6>
+        <div className="flex gap-[5px] text-bodySm text-gray-light">
+          <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
+          <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
+        </div>
         <InputEthereum onChange={setoffer} value={offer} type="text" />
         {balance < toGwei(offer) && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
-            <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
+            <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
           </div>
         )}
         {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
