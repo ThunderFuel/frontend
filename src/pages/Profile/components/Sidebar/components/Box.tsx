@@ -4,7 +4,7 @@ import { IconHand, IconQuarry } from "icons";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
 import { useAppSelector } from "store";
 import { addressFormat } from "utils";
-import ActivityItemDescription from "../../../../../components/ActivityDescription";
+import ActivityItemDescription from "components/ActivityDescription";
 
 interface IBox {
   header: string;
@@ -12,6 +12,21 @@ interface IBox {
   className?: string;
   children: any;
 }
+
+const BoxGroup = React.memo(({ children, className }: any) => {
+  return <ul className={clsx("flex rounded-md border border-gray", className)}>{children}</ul>;
+});
+BoxGroup.displayName = "BoxGroup";
+
+const BoxGroupItem = React.memo(({ children, header }: any) => {
+  return (
+    <li className="flex flex-1 flex-col rounded-md gap-2 px-4 py-3.5 text-gray-light bg-bg border-r border-gray last:border-r-0">
+      <div className="text-headline-01 uppercase">{header}</div>
+      <h4 className="text-h4 text-white">{children}</h4>
+    </li>
+  );
+});
+BoxGroupItem.displayName = "BoxGroup";
 
 const Box = React.memo(({ header, onClick, className, children }: IBox) => {
   return (
@@ -73,4 +88,4 @@ const BoxWithIconLastOffer = React.memo(({ lastOffer }: any) => {
 });
 BoxWithIconLastOffer.displayName = "BoxWithIconLastOffer";
 
-export { Box, BoxWithIcon, BoxWithIconLastActivity, BoxWithIconLastOffer };
+export { Box, BoxWithIcon, BoxWithIconLastActivity, BoxWithIconLastOffer, BoxGroup, BoxGroupItem };
