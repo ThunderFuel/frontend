@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
 import etherscanService from "api/etherscan/etherscan.service";
 import { IconEthereum, IconGas, IconSun } from "icons";
@@ -47,8 +47,27 @@ const FooterBottom = React.memo(() => {
 });
 FooterBottom.displayName = "FooterBottom";
 const Footer = () => {
+  const ref = useRef<any>(null);
+  const setFooterHeight = () => {
+    const cssRoot = document.querySelector(":root");
+    if (cssRoot) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      cssRoot.style.setProperty("--footerHeight", `${ref.current?.offsetHeight || 0}px`);
+    }
+  };
+
+  React.useLayoutEffect(() => {
+    setFooterHeight();
+    window.addEventListener("resize", () => setFooterHeight());
+
+    return () => {
+      window.removeEventListener("resize", () => setFooterHeight());
+    };
+  }, [ref.current]);
+
   return (
-    <div className="bg-bg border-t border-t-gray sticky bottom-0 left-0 w-full z-20">
+    <div className="bg-bg border-t border-t-gray sticky bottom-0 left-0 w-full z-20" ref={ref}>
       <FooterBottom />
     </div>
   );

@@ -7,7 +7,6 @@ import RangeInputOptions from "./components/RangeInputOptions";
 import RangeInput from "./components/RangeInput";
 import { useCollectionListContext } from "../../CollectionListContext";
 
-import "./SideBarFilter.css";
 import CollectionCheckboxList from "./components/CollectionCheckboxList";
 import SidebarFilterBase from "components/SidebarFilter";
 
