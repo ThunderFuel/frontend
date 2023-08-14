@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Button from "components/Button";
 import { IconCancel, IconClock, IconOffer, IconWarning } from "icons";
@@ -10,14 +9,12 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
-import { addressFormat, dateFormat, timeagoFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
 import { OfferStatus } from "api/offer/offer.type";
 import clsx from "clsx";
 import userService from "api/user/user.service";
 import useToast from "hooks/useToast";
-import ActivityList from "components/ActivityList/ActivityList";
-import { ITableHeader } from "components/Table";
 
 const Box = ({
   item,
@@ -121,54 +118,6 @@ const Box = ({
   );
 };
 
-const headers: ITableHeader[] = [
-  {
-    key: "from",
-    text: `FROM`,
-    width: "24%",
-    align: "flex-start",
-    sortValue: 1,
-    render: (item) => (
-      <div className={`flex w-full items-center gap-x-[15px]  ${item.isExpired ? "opacity-50" : ""}`}>
-        <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
-        <div className="flex  flex-col gap-y-[10px]">
-          <span>{item.ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress, 1)} </span>
-        </div>
-      </div>
-    ),
-    // renderHeader: (header) => <span>asasas</span>,
-  },
-  {
-    key: "price",
-    text: "PRICE",
-    width: "20%",
-    align: "flex-end",
-    render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
-  },
-  {
-    key: "floor difference",
-    text: "FLOOR DIFFERENCE",
-    width: "28%",
-    align: "flex-end",
-    sortValue: 2,
-    render: () => <span className="text-bodyMd font-spaceGrotesk">40% Below</span>,
-    // renderHeader: (header) => <span>asasas</span>,
-  },
-  {
-    key: "expires",
-    text: "EXPIRES",
-    width: "24%",
-    align: "flex-end",
-    sortValue: 3,
-    render: (item) => (
-      <span className="flex items-center gap-[5px] text-bodyMd font-spaceGrotesk">
-        {timeagoFormat(item.expireTime)}
-        <IconClock className="flex-shrink-0 w-[15px] h-[15px]" />
-      </span>
-    ),
-  },
-];
-
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
@@ -192,25 +141,41 @@ const Offers = ({ onBack }: { onBack: any }) => {
     setOffers(data);
   };
 
-  const MakeOfferButton = () => (
-    <Button
-      className="btn-sm btn-secondary mx-5"
-      onClick={() => {
-        if (!isConnected) dispatch(toggleWalletModal());
-        else dispatch(setRightMenu(RightMenuType.MakeOffer));
-      }}
-    >
-      MAKE OFFER <IconOffer className="w-[18px] h-[18px]" />
-    </Button>
-  );
-
   useEffect(() => {
     fetchOffers();
   }, [nftId]);
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
-      <ActivityList actionButton={!isOwner() ? MakeOfferButton : null} noTitle={true} noContainerFluid={true} hideSidebar={true} activities={offers} headers={headers} />
+      {!isOwner() && (
+        <Button
+          className="btn-secondary no-bg"
+          onClick={() => {
+            if (!isConnected) dispatch(toggleWalletModal());
+            else dispatch(setRightMenu(RightMenuType.MakeOffer));
+          }}
+        >
+          MAKE OFFER <IconOffer />
+        </Button>
+      )}
+      {offers.map((offer: any, index: any) => {
+        if (offer.isCanceled || offer.isAccepted || offer.isExpired) {
+          return <></>;
+        }
+
+        return (
+          <Box
+            item={offer}
+            key={index}
+            isOwner={isOwner}
+            ownOffer={user.id === offer?.makerUserId && offer.isActiveOffer}
+            fetchOffers={fetchOffers}
+            onBack={onBack}
+            isExpired={offer.isExpired}
+            isAccepted={offer.isAccepted}
+          />
+        );
+      })}
     </RightMenu>
   );
 };

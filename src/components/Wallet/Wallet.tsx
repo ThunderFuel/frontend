@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
 import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
-import { IconActivity, IconArrowRight, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconSwap, IconWallet } from "icons";
+import { IconActivity, IconArrowRight, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
 import Button from "components/Button";
 import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
@@ -15,7 +15,7 @@ import { removeBulkItems } from "store/checkoutSlice";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, address } = useAppSelector((state) => state.wallet);
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
 
@@ -74,8 +74,10 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const footer = (
     <div className="flex mt-auto flex-col p-5 gap-y-2.5">
       <Balances />
-
       <div className="grid grid-cols-2 gap-x-2.5">
+        <a target="_blank" rel="noreferrer" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`} className="btn btn-primary w-full">
+          GET TEST ETH <IconFaucet />
+        </a>
         <Button
           className="btn-secondary w-full"
           onClick={() => {
@@ -84,10 +86,6 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
           }}
         >
           MANAGE FUNDS <IconArrowRight />
-        </Button>
-        <Button className="btn btn-primary w-full">
-          Bridge to Linea
-          <IconSwap />
         </Button>
       </div>
     </div>
@@ -98,7 +96,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
         <Avatar image={user?.image} userId={user?.id} className="w-20 h-20" />
         <div className="flex flex-col gap-y-[11px] justify-end">
-          <h4 className="text-head4 text-white">{user?.userName ?? addressFormat(user?.walletAddress ?? "")}</h4>
+          <h4 className="text-head4 text-green">{user?.userName ?? addressFormat(user?.walletAddress ?? "")}</h4>
           <div className="flex gap-x-2.5">
             <a
               target="_blank"

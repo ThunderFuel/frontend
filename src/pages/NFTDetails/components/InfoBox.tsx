@@ -3,11 +3,11 @@ import React from "react";
 
 const InfoBox = ({ title, description }: { title?: string; description: string }) => {
   return (
-    <div className="flex bg-gray gap-2 p-2.5 text-bodySm font-spaceGrotesk text-white rounded-[5px]">
+    <div className="flex bg-bg-light gap-x-[15px] p-[15px] text-bodySm font-spaceGrotesk text-white border-b border-gray">
       <IconInfo className="w-6 h-6" />
       <div className="flex w-full flex-col gap-y-[5px]">
-        {title ? <h6 className="text-head6">{title}</h6> : <></>}
-        <p className="w-full text-bodyMd text-white">{description}</p>
+        {title ? <h6 className="text-head6 font-spaceGrotesk">{title}</h6> : <></>}
+        <p className="w-full text-bodySm text-gray-light">{description}</p>
       </div>
     </div>
   );

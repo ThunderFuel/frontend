@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { SVGProps, useEffect, useState } from "react";
 import { IconBid, IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
 import Filter from "../components/Filter";
@@ -7,20 +6,21 @@ import EthereumPrice from "components/EthereumPrice";
 import { useAppSelector } from "store";
 import collectionsService from "api/collections/collections.service";
 import ActivityItemDescription from "components/ActivityDescription";
-import ActivityList from "components/ActivityList/ActivityList";
-import { ITableHeader } from "components/Table";
-import { addressFormat, timeagoFormat } from "utils";
 
-const ActivityType = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
+const CustomBox = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
-    <div className="flex items-center justify-between gap-[11px]">
-      <div className="flex w-full gap-x-[10px]">
-        <div className="flex w-full max-w-[120px] items-center gap-x-[10px]">
-          <div className="h-fit w-fit rounded-full bg-gray p-[6px]">
-            <Icon width="20px" height="20px" />
+    <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
+      <div className="flex items-center justify-between p-[15px] gap-x-[11px]">
+        <div className="flex w-full gap-x-[10px]">
+          <div className="flex w-full max-w-[120px] items-center gap-x-[10px]">
+            <div className="h-fit w-fit rounded-full bg-gray p-[6px]">
+              <Icon width="20px" height="20px" />
+            </div>
+            {title}
           </div>
-          {title}
+          <div className="text-bodyMd w-full">{description}</div>
         </div>
+        {price && <EthereumPrice price={price} />}
       </div>
     </div>
   );
@@ -74,62 +74,12 @@ function formatActivityData(data: any): { icon: any; title: string; description:
   }
 }
 
-const headers: ITableHeader[] = [
-  {
-    key: "type",
-    text: `TYPE`,
-    width: "20%",
-    align: "flex-start",
-    sortValue: 1,
-    render: (item) => {
-      const { icon, title, description } = formatActivityData(item);
-
-      return <ActivityType title={title} description={description} Icon={icon} price={item.price} />;
-    },
-    // renderHeader: (header) => <span>asasas</span>,
-  },
-  {
-    key: "price",
-    text: "PRICE",
-    width: "20%",
-    align: "flex-end",
-    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" />,
-  },
-  {
-    key: "from",
-    text: `FROM`,
-    width: "20%",
-    align: "flex-end",
-    sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.fromUser?.walletAddress, 1)}</span>,
-    // renderHeader: (header) => <span>asasas</span>,
-  },
-  {
-    key: "to",
-    text: `TO`,
-    width: "20%",
-    align: "flex-end",
-    sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.toUser?.walletAddress, 1)}</span>,
-  },
-
-  {
-    key: "date",
-    text: "DATE",
-    width: "20%",
-    align: "flex-end",
-    sortValue: 3,
-    render: (item) => <span>{timeagoFormat(item?.createdAt)}</span>,
-    // renderHeader: (header) => <span>asasas</span>,
-  },
-];
-
 const Activity = ({ onBack }: { onBack: any }) => {
   const [notActiveFilters, setnotActiveFilters] = useState<number[]>([]);
 
   const [activities, setActivities] = useState<any>([]);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  console.log(activities);
+
   const fetchActivities = async () => {
     const response = await collectionsService.getActivity({ page: 1, pageSize: 10, tokenId: selectedNFT.id });
     setActivities(response.data);
@@ -140,11 +90,13 @@ const Activity = ({ onBack }: { onBack: any }) => {
   }, [selectedNFT]);
 
   function renderItems() {
-    const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType));
+    return activities.map((activity: any, index: any) => {
+      if (notActiveFilters.includes(activity.activityType)) return;
 
-    // const { icon, title, description } = formatActivityData(activity);
+      const { icon, title, description } = formatActivityData(activity);
 
-    return <ActivityList noTitle={true} noContainerFluid={true} hideSidebar={true} activities={_activities} headers={headers} />;
+      return <CustomBox key={index} title={title} description={description} Icon={icon} price={activity.price} />;
+    });
   }
 
   return (

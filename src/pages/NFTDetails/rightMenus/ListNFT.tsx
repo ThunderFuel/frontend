@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import Button from "components/Button";
-import { IconAuction, IconEthereum, IconInfo, IconItems, IconListed, IconMinus, IconPlus } from "icons";
+import { IconAuction, IconEthereum, IconInfo, IconListed } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import RightMenu from "../components/RightMenu";
 import Tab from "components/Tab";
@@ -31,8 +30,6 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const [duration, setDuration] = useState(selectExpirationDates[0]);
   const updateListing = rightMenuType === RightMenuType.UpdateListing;
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
-  const [isMultipleEdition, setIsMultipleEdition] = useState(false);
 
   const serviceFee = 2.5;
 
@@ -119,33 +116,6 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
     fetchTopTrait();
   }, [selectedNFT]);
 
-  const InputCount = ({ onChange, remainingAmount }: any) => {
-    const [value, setValue] = useState(1);
-    const onUpdateValue = (number: number) => {
-      const val = value + number;
-      if (val < 1 || val > remainingAmount) {
-        return false;
-      }
-
-      setValue(val);
-      onChange(number === 1 ? "add" : "remove");
-    };
-
-    return (
-      <div className="flex items-center text-white w-fit border border-white border-opacity-10 rounded-md">
-        <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
-        <div className="flex flex-col items-center">
-          <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
-            <IconPlus className={value >= remainingAmount ? "opacity-50" : ""} />
-          </span>
-          <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
-            <IconMinus className={value <= 1 ? "opacity-50" : ""} />
-          </span>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <RightMenu title={updateListing ? "Update Listing" : "List Your NFT"} footer={footer} onBack={onBack}>
       <div className="flex flex-col gap-y-5">
@@ -163,23 +133,20 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             )}
           </div>
         </div>
-
-        {!isMultipleEdition && (
-          <Tab initTab={0} onChange={(value) => setisTimedAuction(!!value)}>
-            <Tab.Item id={0} className="w-full">
-              <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
-                <IconListed className="w-[17px] h-[17px]" />
-                FIXED PRICE
-              </div>
-            </Tab.Item>
-            <Tab.Item id={1} disabled={updateListing} className="w-full">
-              <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
-                <IconAuction className="w-[17px] h-[17px]" />
-                TIMED AUCTION
-              </div>
-            </Tab.Item>
-          </Tab>
-        )}
+        <Tab initTab={0} onChange={(value) => setisTimedAuction(!!value)}>
+          <Tab.Item id={0} className="w-full">
+            <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
+              <IconListed className="w-[17px] h-[17px]" />
+              FIXED PRICE
+            </div>
+          </Tab.Item>
+          <Tab.Item id={1} disabled={updateListing} className="w-full">
+            <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
+              <IconAuction className="w-[17px] h-[17px]" />
+              TIMED AUCTION
+            </div>
+          </Tab.Item>
+        </Tab>
         {isTimedAuction && infoBox}
         <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
           {isTimedAuction ? "Set Duration" : "Listing Duration"}
@@ -189,25 +156,9 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           </div>
           <Select options={selectExpirationDates} onChange={setDuration} value={duration} />
         </div>
-        {isMultipleEdition && (
-          <div className="flex justify-between">
-            <div className="flex flex-col gap-2">
-              <h6 className="text-h6 text-white">Quantity*</h6>
-              <div className="flex gap-[5px] text-gray-light">
-                <IconItems className="w-[17px] h-[17px]" />
-                <span className="text-bodySm font-spaceGrotesk">You`ve 2 editions available</span>
-              </div>
-            </div>
-            <InputCount
-              onChange={() => {
-                console.log("inputcount");
-              }}
-            />
-          </div>
-        )}
         {!isTimedAuction && (
           <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
-            {isMultipleEdition ? "Enter Price per Item*" : "Enter Price*"}
+            Enter Price*
             <InputPrice onChange={setprice} value={price} type="text" />
             {price !== "" && price < selectedNFT?.floorPrice && warning}
             <div className="flex text-bodyMd gap-x-2">

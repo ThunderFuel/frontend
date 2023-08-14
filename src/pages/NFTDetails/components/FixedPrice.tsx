@@ -61,7 +61,7 @@ const FixedPrice = () => {
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
-      <div className="flex pl-2 items-center text-bodyMd text-white gap-x-2 py-[10px]">
+      <div className="flex justify-center items-center text-bodyMd text-white gap-x-2 py-[10px]">
         <IconListed className="w-[19px]" />
         Sale ends in {days}d {hours}h {minutes}m
       </div>
