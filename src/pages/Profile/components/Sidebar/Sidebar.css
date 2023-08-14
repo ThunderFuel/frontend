@@ -6,7 +6,7 @@
 }
 
 .profile-cover-image {
-  @apply relative bg-gray transition-all;
+  @apply relative bg-gray transition-all bg-cover bg-right;
   width: 410px;
   min-height: 410px;
   max-height: 410px;
