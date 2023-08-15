@@ -54,7 +54,7 @@ const HotDrops = () => {
                   </div>
                   <div className="flex flex-col gap-5">
                     <div className="body-medium text-white text-overflow-2">{item.description}</div>
-                    <Button className="uppercase" onClick={() => navigate(PATHS.COLLECTION, { collectionId: item.id })}>
+                    <Button className="uppercase btn-sm" onClick={() => navigate(PATHS.COLLECTION, { collectionId: item.id })}>
                       explore collectıon <IconArrowRight />
                     </Button>
                   </div>
