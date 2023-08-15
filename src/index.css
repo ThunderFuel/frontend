@@ -4,6 +4,7 @@
 
 :root {
   --headerHeight: 1px;
+  --footerHeight: 1px;
 }
 
 body {
@@ -508,7 +509,6 @@ body {
   --tw-text-opacity: 1;
 }
 
-.text-gray-light
 .drop #layout-header .search-result-container .search-group-item:hover {
   --tw-bg-opacity: 0.1;
 }

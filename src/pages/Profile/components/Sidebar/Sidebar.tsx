@@ -8,22 +8,27 @@ import CoverImage from "./components/CoverImage";
 import { ButtonEdit, ButtonFollow } from "./components/Buttons";
 import { FollowType, useProfile } from "../../ProfileContext";
 
+const SidebarBio = ({ children }: any) => {
+  return (
+    <div className="flex items-end body-medium">
+      <span className=" min-h-[21px] text-overflow-3">{children}</span>
+    </div>
+  );
+};
+
 const Sidebar = ({ isProfile = false }: any) => {
   const { userInfo, onSetSocialActiveTab } = useProfile();
   const ownedTokens = userInfo?.tokens ?? [];
-  userInfo.bio =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. I";
-  const listedTokens = ownedTokens.filter((item: any) => item.salable);
 
   return (
     <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px]">
       <div className="sidebar-container">
         {isProfile ? <ButtonEdit /> : <ButtonFollow />}
         <CoverImage src={userInfo?.banner} />
-        <div className="p-5 relative text-white flex">
-          <div className="flex flex-col w-full">
-            <LogoContainer userInfo={userInfo} />
-            <BoxGroup className="mt-4">
+        <div className="p-5 relative text-white flex flex-col gap-5">
+          <LogoContainer userInfo={userInfo} />
+          <div className="sidebar-profile-info flex gap-4">
+            <BoxGroup>
               <BoxGroupItem
                 header="Followers"
                 onClick={() => {
@@ -46,13 +51,13 @@ const Sidebar = ({ isProfile = false }: any) => {
                   onSetSocialActiveTab(FollowType.Follows);
                 }}
               >
-                {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
+                {numberFormat(ownedTokens.length)}
               </BoxGroupItem>
             </BoxGroup>
-            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio} </div>
-            {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
-            {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}
+            <SidebarBio>{userInfo?.bio}</SidebarBio>
           </div>
+          {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
+          {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}
         </div>
       </div>
     </div>
