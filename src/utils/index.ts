@@ -4,20 +4,14 @@ import * as timeago from "timeago.js";
 import { ContainerClient } from "@azure/storage-blob";
 import imageService from "../api/image/image.service";
 
-export const addressFormat = (address: any, type = 0) => {
+export const addressFormat = (address: any) => {
   if (!address) {
     return "-";
   }
-  if (type === 0) {
-    const first6 = address.substring(0, 6);
-    const last4 = address.substring(address.length - 4);
+  const first6 = address.substring(0, 6);
+  const last4 = address.substring(address.length - 4);
 
-    return first6 + "..." + last4;
-  } else if (type === 1) {
-    const first6 = address.substring(0, 6);
-
-    return first6;
-  }
+  return first6 + "..." + last4;
 };
 
 export const openInNewTab = (url: string): void => {

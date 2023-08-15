@@ -122,8 +122,7 @@ body {
 
   .btn.btn-secondary {
     @apply text-white bg-bg border-gray;
-    @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none disabled:border-none;
-
+    @apply disabled:text-gray-light;
   }
 
   .btn.btn-secondary.no-bg {
@@ -135,8 +134,8 @@ body {
   }
 
   .btn.btn-sm {
-    @apply py-3 px-4;
-    @apply text-headlineMd font-bigShoulderDisplay;
+    @apply py-[11.5px] px-4;
+    @apply text-headlineMd;
   }
 
   .btn-wallet {

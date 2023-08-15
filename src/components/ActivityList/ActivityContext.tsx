@@ -6,7 +6,6 @@ interface IActivityContext {
   selectedFilter: any;
   filters: any;
   pagination: any;
-  actionButton?: any;
 }
 
 export const ActivityContext = createContext<IActivityContext>({} as any);

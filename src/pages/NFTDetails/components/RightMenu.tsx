@@ -3,8 +3,6 @@ import React from "react";
 import InfoBox from "./InfoBox";
 import clsx from "clsx";
 
-const tableMenus = ["Offers", "Activity", "Listings", "Bids"];
-
 const RightMenu = ({
   children,
   title,
@@ -51,8 +49,7 @@ const RightMenu = ({
         {title}
       </div>
       {description ? <InfoBox description={description} /> : <></>}
-      {/* <div className={clsx("flex flex-1 px-10 flex-col py-5 gap-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "")}>{children}</div> */}
-      <div className={clsx("flex flex-1 flex-col gap-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "", !tableMenus.includes(title) ? "px-10 py-5" : "")}>{children}</div>
+      <div className={clsx("flex flex-1 flex-col px-10 py-5 gap-y-5", childrenHasOverflow ? "overflow-y-scroll no-scrollbar" : "")}>{children}</div>
 
       {footer && <div className="sticky z-10 bottom-0 mt-auto w-full border-t border-gray bg-bg">{footer}</div>}
     </div>

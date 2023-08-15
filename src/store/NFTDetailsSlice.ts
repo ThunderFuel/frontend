@@ -10,7 +10,6 @@ export enum RightMenuType {
   PlaceBid,
   UpdateOffer,
   UpdateListing,
-  Listings,
 }
 
 export const NFTDetailsSlice = createSlice({
