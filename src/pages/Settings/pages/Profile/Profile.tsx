@@ -73,7 +73,7 @@ const Profile = () => {
       <CoverImage src={userInfo.banner} onChange={onChangeCoverImage} />
       <ProfileImage src={userInfo.image ?? getDefaultAvatarSrc(userInfo.id)} onChange={onChangeProfileImage} />
       <Input label="Display Name" value={userInfo.userName} onChange={(e: any) => onChange("userName", e.target.value)} />
-      <Textarea label="Bio" placeholder="Tell about yourself!" value={userInfo.bio} onChange={(e: any) => onChange("bio", e.target.value)} />
+      <Textarea label="Bio" placeholder="Tell about yourself!" value={userInfo.bio} onChange={(e: any) => onChange("bio", e.target.value)} maxlength={150} />
       <Input label="Email" helperText="Your e-mail address for notifications." value={userInfo.email} onChange={(e: any) => onChange("email", e.target.value)} />
       {/* <Socials value={userInfo.socialMedias ?? []} onChange={(value: any) => onChange("socialMedias", value)} /> */}
     </div>
