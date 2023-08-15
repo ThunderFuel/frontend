@@ -110,7 +110,7 @@ const SidebarFilter = () => {
   }, [offers, filterValue]);
 
   return (
-    <SidebarFilterBase className="w-[280px]">
+    <SidebarFilterBase className="w-60">
       {getFilterItems.map((filterItem: any, index: number) => {
         const Component = filterItem.component;
 
