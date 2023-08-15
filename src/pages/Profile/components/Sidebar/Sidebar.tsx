@@ -8,27 +8,20 @@ import CoverImage from "./components/CoverImage";
 import { ButtonEdit, ButtonFollow } from "./components/Buttons";
 import { FollowType, useProfile } from "../../ProfileContext";
 
-const SidebarBio = ({ children }: any) => {
-  return (
-    <div className="flex items-end body-medium">
-      <span className=" min-h-[21px] text-overflow-3">{children}</span>
-    </div>
-  );
-};
-
 const Sidebar = ({ isProfile = false }: any) => {
   const { userInfo, onSetSocialActiveTab } = useProfile();
   const ownedTokens = userInfo?.tokens ?? [];
+  const listedTokens = ownedTokens.filter((item: any) => item.salable);
 
   return (
-    <div className="flex flex-col border-r border-gray" style={{ minWidth: "var(--profile-cover-image-width)", maxWidth: "var(--profile-cover-image-width)" }}>
+    <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px]">
       <div className="sidebar-container">
         {isProfile ? <ButtonEdit /> : <ButtonFollow />}
         <CoverImage src={userInfo?.banner} />
-        <div className="p-5 relative text-white flex flex-col gap-5">
-          <LogoContainer userInfo={userInfo} />
-          <div className="sidebar-profile-info flex gap-4">
-            <BoxGroup>
+        <div className="p-5 relative text-white flex">
+          <div className="flex flex-col w-full">
+            <LogoContainer userInfo={userInfo} />
+            <BoxGroup className="mt-4">
               <BoxGroupItem
                 header="Followers"
                 onClick={() => {
@@ -51,13 +44,14 @@ const Sidebar = ({ isProfile = false }: any) => {
                   onSetSocialActiveTab(FollowType.Follows);
                 }}
               >
-                {numberFormat(ownedTokens.length)}
+                {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
               </BoxGroupItem>
             </BoxGroup>
-            <SidebarBio>{userInfo?.bio}</SidebarBio>
+            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio} </div>
+
+            {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
+            {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}
           </div>
-          {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
-          {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}
         </div>
       </div>
     </div>

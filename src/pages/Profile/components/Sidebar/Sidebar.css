@@ -1,14 +1,17 @@
-:root {
-  --profile-cover-image-height: 410px;
-  --profile-cover-image-width: 410px;
-  --sidebar-container-height: calc(100vh - var(--headerHeight) - var(--footerHeight));
-}
-
 .sidebar-container {
   @apply sticky;
   top: var(--headerHeight);
-  height: var(--sidebar-container-height);
+  height: calc(100vh - var(--headerHeight));
   min-height: 585px;
+}
+
+.profile-cover-image {
+  @apply relative bg-gray transition-all;
+  width: 410px;
+  min-height: 410px;
+  max-height: 410px;
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, #141414 19.50%, rgba(25, 25, 25, 0.00) 74.06%);
 }
 
 @media (max-height: 768px) {
@@ -18,21 +21,8 @@
   }
 }
 
-.profile-cover-image {
-  @apply relative bg-gray transition-all bg-cover bg-right overflow-hidden;
-  width: var(--profile-cover-image-width);
-  min-height: var(--profile-cover-image-height);
-  max-height: var(--profile-cover-image-height);
-  mask-image: linear-gradient(180deg, #141414 19.50%, rgba(25, 25, 25, 0.00) 74.06%);
-}
-
 .btn-edit {
   background: transparent;
   z-index: 1;
   @apply border-white px-4 py-3 absolute top-5 right-5 text-white;
-}
-
-.sidebar-profile-info {
-  @apply flex flex-col justify-between w-full;
-  height: calc(var(--sidebar-container-height) - var(--profile-cover-image-height) - 6rem - 4.25rem);
 }

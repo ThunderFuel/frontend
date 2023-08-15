@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import Button from "components/Button";
-import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconListed, IconToken, IconUpdateListing } from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconItems, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing, IconViews } from "icons";
 import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
@@ -18,6 +19,7 @@ import ReadMore from "components/ReadMore";
 import ActivityItemDescription from "components/ActivityDescription";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
 import EthereumPrice from "components/EthereumPrice/EthereumPrice";
+import { AssetMockNFT1 } from "assets";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -126,12 +128,63 @@ const FooterAuction = () => {
   );
 };
 
+const InputCount = ({ onChange, remainingAmount }: any) => {
+  const [value, setValue] = useState(1);
+  const onUpdateValue = (number: number) => {
+    const val = value + number;
+    if (val < 1 || val > remainingAmount) {
+      return false;
+    }
+
+    setValue(val);
+    onChange(number === 1 ? "add" : "remove");
+  };
+
+  return (
+    <div className="flex items-center text-white w-fit border border-white border-opacity-10 rounded-md">
+      <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
+      <div className="flex flex-col items-center">
+        <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
+          <IconPlus className={value >= remainingAmount ? "opacity-50" : ""} />
+        </span>
+        <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
+          <IconMinus className={value <= 1 ? "opacity-50" : ""} />
+        </span>
+      </div>
+    </div>
+  );
+};
+
 const LeftMenu = (props: any) => {
+  const mockData = {
+    views: 22,
+    totalCount: 20,
+    available: 3,
+    userOwns: 2,
+    ownerPictures: [AssetMockNFT1, AssetMockNFT1, AssetMockNFT1],
+    ownerCount: 8,
+    network: "Fuel",
+    lastListing: { user: { userId: 1, userName: "okitoki", image: AssetMockNFT1 }, price: 1.5, address: "0x123456" },
+    listings: [
+      { ownerPicture: AssetMockNFT1, price: 1.5, address: "0x123456" },
+      { ownerPicture: AssetMockNFT1, price: 2, address: "0x123456" },
+      { ownerPicture: AssetMockNFT1, price: 3, address: "0x123456" },
+    ],
+  };
   const { nft, fetchCollection } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const [multipleEditionBuyArray, setMultipleEditionBuyArray] = useState([mockData.listings[0]]);
+
+  const onChange = (action: any) => {
+    if (action === "add") {
+      setMultipleEditionBuyArray((prev) => [...prev, mockData.listings[prev.length]]);
+    } else if (action === "remove") {
+      setMultipleEditionBuyArray((prev) => prev.slice(0, prev.length - 1));
+    }
+  };
 
   function formatActivityData(activity: any) {
     const { activityType, toUser, fromUser, createdTimeStamp, price } = activity;
@@ -172,11 +225,41 @@ const LeftMenu = (props: any) => {
       </BoxWithIcon>
     );
   }
+
+  function renderListing(lastListing: any) {
+    if (lastListing === undefined || lastListing === null) return;
+
+    return (
+      <Box className="bg-bg-light justify-between pr-4">
+        <div className="flex items-center gap-x-2.5">
+          <Avatar image={lastListing?.user?.image} userId={lastListing?.user?.userId} className="w-8 h-8 rounded-full" />
+          <div className="flex flex-col gap-y-[5px]">
+            <span className="text-headline-01 text-gray-light">LISTINGS</span>
+            <h6 className="text-h6 text-white">
+              <div className="inline-block">
+                <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={formatPrice(lastListing?.price)} />
+              </div>
+              by <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>{isBestOfferOwner() ? "you" : lastListing?.user?.userName ?? addressFormat(lastListing?.address)}</span>
+            </h6>
+          </div>
+        </div>
+        <div className="flex gap-x-2.5">
+          <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Listings))} />
+        </div>
+      </Box>
+    );
+  }
   const isOwner = () => {
     return isConnected ? user?.id === nft?.user?.id : false;
   };
   const isBestOfferOwner = () => {
     return isConnected ? (nft.bestOffer?.user?.walletAddress === user.walletAddress ? true : false) : false;
+  };
+  const calculateAveragePrice = () => {
+    const sum = multipleEditionBuyArray.reduce((acc, item) => acc + item.price, 0);
+    const average = sum / multipleEditionBuyArray.length;
+
+    return average;
   };
 
   return (
@@ -190,22 +273,78 @@ const LeftMenu = (props: any) => {
             </div>
           </div>
           <h3 className="text-h3 text-white">{nft.name ? nft.name : nft?.tokenOrder ? "Bored Ape #" + nft?.tokenOrder : ""}</h3>
+          {/* <div className="flex gap-5">
+            <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
+              <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
+                <IconViews className="w-[17px] h-[17px]" />
+              </div>
+              {mockData.views} Views
+            </div>
+            <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
+              <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
+                <IconListed className="w-[17px] h-[17px]" />
+              </div>
+              {mockData.available + "/" + mockData.totalCount} Available
+            </div>
+            <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
+              <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
+                <IconItems className="w-[17px] h-[17px]" />
+              </div>
+              You have {mockData.userOwns}
+            </div>
+          </div> */}
         </div>
         <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
-          <div
-            className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
-            onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
-          >
-            <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
-            <h6 className="text-h6 text-gray-light">
-              Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
-            </h6>
+          <div className="flex gap-2.5">
+            <div
+              className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
+              onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
+            >
+              <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
+              <h6 className="text-h6 text-gray-light">
+                Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
+              </h6>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <h6 className="text-h6 text-gray-light">
+                on <span className="text-white">{mockData.network}</span>
+              </h6>
+              <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                <IconFuelWallet className="w-[18px] h-[18px]" />
+              </div>
+            </div>
           </div>
+          {/* <div className="flex items-center gap-4">
+            <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
+              <div className="flex relative w-16 h-8">
+                {mockData.ownerPictures.map((item, idx) => (
+                  <div className={clsx("absolute w-8 h-8", idx === 1 ? "left-4" : idx === 2 ? "left-8" : "")} key={`img+${idx}`}>
+                    <img src={item} className="w-8 h-8 rounded-full" />
+                  </div>
+                ))}
+              </div>
+              <h6 className="text-h6 text-white">
+                {mockData.ownerCount} <span className="text-gray-light">Owners</span>
+              </h6>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <h6 className="text-h6 text-gray-light">
+                on <span className="text-white">{mockData.network}</span>
+              </h6>
+              <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                <IconFuelWallet className="w-[18px] h-[18px]" />
+              </div>
+            </div>
+          </div> */}
 
-          <div className="body-medium text-white mb-2.5">
+          <div className="body-medium text-white mb-10">
             <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
+          {/* <InputCount onChange={onChange} remainingAmount={mockData.listings.length} listings={mockData.listings} /> */}
+          {/* <div className="flex gap-[5px] text-bodySm font-spaceGrotesk text-gray-light">
+            <IconInfo className="w-[18px] h-[18px]" /> {multipleEditionBuyArray.length} Edition{multipleEditionBuyArray.length > 1 ? "s" : ""} / Average Item Price: {calculateAveragePrice()}ETH
+          </div> */}
           {nft.salable ? (
             <FixedPrice />
           ) : nft.onAuction ? (
@@ -264,6 +403,7 @@ const LeftMenu = (props: any) => {
             </Box>
           )}
           {renderLastActivity(nft.lastActivity)}
+          {/* {renderListing(mockData.lastListing)} */}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
           <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />

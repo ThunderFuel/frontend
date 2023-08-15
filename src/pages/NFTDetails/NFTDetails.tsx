@@ -17,6 +17,7 @@ import { CollectionItemResponse } from "api/collections/collections.type";
 import Img from "components/Img";
 import "./nftdetails.css";
 import FullScreenImage from "components/FullScreenImage";
+import Listings from "./rightMenus/Listings";
 
 const None = React.memo(() => {
   return <div />;
@@ -85,6 +86,8 @@ const NFTDetails = () => {
         return UpdateOffer;
       case RightMenuType.UpdateListing:
         return ListNFT;
+      case RightMenuType.Listings:
+        return Listings;
       default:
         return None;
     }

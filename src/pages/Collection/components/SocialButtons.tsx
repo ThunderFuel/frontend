@@ -99,7 +99,7 @@ const SocialShareButton = ({ collection, user }: any) => {
         <IconShare />
       </div>
       {show ? (
-        <ul className="absolute left-0 top-full mt-1 flex flex-col bg-bg border border-gray rounded-[4px] divide-y divide-gray overflow-hidden">
+        <ul className="absolute right-0 top-full mt-1 flex flex-col bg-bg border border-gray rounded-[4px] divide-y divide-gray overflow-hidden">
           {items.map((item, k) => {
             const Icon = item.icon;
 

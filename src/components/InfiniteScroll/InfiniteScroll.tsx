@@ -6,10 +6,9 @@ interface IInfiniteScroll {
   onChangePagination: any;
   isLoading: any;
   bottomOffset?: any;
-  className?: any;
 }
 
-const InfiniteScroll = ({ children, pagination, onChangePagination, isLoading, bottomOffset = 100, className }: IInfiniteScroll) => {
+const InfiniteScroll = ({ children, pagination, onChangePagination, isLoading, bottomOffset = 100 }: IInfiniteScroll) => {
   const onPageChange = () => {
     const nextPage = (pagination?.pageNumber ?? 0) + 1;
     if (pagination?.pageCount >= nextPage) {
@@ -36,7 +35,7 @@ const InfiniteScroll = ({ children, pagination, onChangePagination, isLoading, b
     };
   }, [pagination, isLoading]);
 
-  return <div className={className}>{children}</div>;
+  return <div>{children}</div>;
 };
 
 export default InfiniteScroll;
