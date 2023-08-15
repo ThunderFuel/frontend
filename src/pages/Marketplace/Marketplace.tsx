@@ -6,7 +6,7 @@ import HotDropsV2 from "./HotDropsV2";
 
 const Marketplace = () => {
   return (
-    <div className="flex flex-col gap-10 py-10">
+    <div className="flex flex-col gap-10 pb-10">
       {/*<HotDrops />*/}
       <HotDropsV2 />
       <MarketplaceProvider>

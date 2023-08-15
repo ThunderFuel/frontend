@@ -6,7 +6,7 @@ import marketplaceService from "api/marketplace/marketplace.service";
 import Button from "components/Button";
 
 import "./HotDrops.css";
-import { PATHS } from "../../router/config/paths";
+import { PATHS } from "router/config/paths";
 
 const HotDrops = () => {
   const navigate = UseNavigate();
@@ -42,17 +42,17 @@ const HotDrops = () => {
   }, []);
 
   return (
-    <div className="container-fluid">
+    <div className="">
       <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
         {items.map((item, k) => {
           return (
             <Carousel.Item key={k}>
-              <div className="flex min-h-[440px] w-full">
-                <div className="flex flex-col justify-between w-4/12">
+              <div className="flex min-h-[440px] w-full border-b border-gray">
+                <div className="flex flex-col justify-between px-10 py-5 border-r border-gray" style={{ width: "440px" }}>
                   <div className="flex flex-col gap-5">
-                    <h4 className="text-h4 text-white">{item.name}</h4>
+                    <h2 className="text-h2 text-white">{item.name}</h2>
                   </div>
-                  <div className="flex flex-col gap-5 py-5">
+                  <div className="flex flex-col gap-5">
                     <div className="body-medium text-white text-overflow-2">{item.description}</div>
                     <Button className="uppercase" onClick={() => navigate(PATHS.COLLECTION, { collectionId: item.id })}>
                       explore collectıon <IconArrowRight />

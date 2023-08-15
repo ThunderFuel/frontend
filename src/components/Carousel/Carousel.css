@@ -111,11 +111,11 @@
 }
 
 .carousel-control-prev {
-  left: -40px;
+  left: 0;
 }
 
 .carousel-control-next {
-  right: -40px;
+  right: 0;
 }
 
 .carousel-control-prev-icon,
