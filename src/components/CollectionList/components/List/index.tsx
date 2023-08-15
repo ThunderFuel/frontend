@@ -19,7 +19,7 @@ const Index = () => {
         <div className={clsx("text-headline-02 text-gray-light", !options?.hiddenSidebar && "pl-5")}>
           {pagination?.itemsCount ?? collectionItems.length} {options?.itemLabel ?? "ITEMS"}
         </div>
-        {options?.isProfile ? (
+        {options?.isProfile && collectionItems.length > 0 ? (
           <Button className="btn-secondary btn-sm" onClick={onCancelAllListings}>
             cancel all listings <IconCircleRemoveWhite />
           </Button>
