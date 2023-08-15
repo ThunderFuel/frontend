@@ -70,49 +70,6 @@ const ActivityItems = () => {
   const headers: ITableHeader[] = [
     {
       key: "type",
-      text: "TYPE",
-      width: "17%",
-      align: "flex-start",
-      render: (item) => {
-        const Icon = item.typeIcon ?? IconHand;
-
-        function formatType(type: any) {
-          if (type === "Sales") return "Sale";
-          if (type === "Offers") return "Offer";
-          if (type === "Listings") return "Listing";
-          if (type === "Bids") return "Bid";
-          if (type === "Mints") return "Mint";
-          if (type === "Transfers") return "Transfer";
-
-          return type;
-        }
-
-        return (
-          <div className="flex items-center gap-2.5 w-32">
-            <div className="flex-center h-8 w-8 rounded-full bg-gray">
-              <Icon />
-            </div>
-            <h6 className="text-h6 text-overflow">{formatType(item.type)}</h6>
-          </div>
-        );
-      },
-    },
-    {
-      key: "item",
-      text: "ITEM",
-      width: "29%",
-      align: "flex-start",
-      render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
-    },
-    {
-      key: "price",
-      text: "PRICE",
-      width: "12%",
-      align: "flex-end",
-      render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
-    },
-    {
-      key: "type",
       text: `TYPE`,
       width: "20%",
       align: "flex-start",
@@ -157,7 +114,7 @@ const ActivityItems = () => {
       render: (item) => {
         return (
           <div className="pr-2.5">
-            <span className="body-medium text-white">{timeagoFormat(item.expireTime)}</span>
+            <span className="body-medium text-white">{timeagoFormat(item.createdTimeStamp)}</span>
           </div>
         );
       },

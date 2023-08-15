@@ -69,7 +69,7 @@ const Activity = () => {
   }, [userInfo.id]);
 
   return (
-    <InfiniteScroll pagination={pagination} onChangePagination={onChangePagination} isLoading={isLoading}>
+    <InfiniteScroll pagination={pagination} onChangePagination={onChangePagination} isLoading={isLoading} className="h-full">
       <ActivityList activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />
     </InfiniteScroll>
   );
