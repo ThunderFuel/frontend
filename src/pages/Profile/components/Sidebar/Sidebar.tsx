@@ -21,7 +21,7 @@ const Sidebar = ({ isProfile = false }: any) => {
   const ownedTokens = userInfo?.tokens ?? [];
 
   return (
-    <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px]">
+    <div className="flex flex-col border-r border-gray" style={{ minWidth: "var(--profile-cover-image-width)", maxWidth: "var(--profile-cover-image-width)" }}>
       <div className="sidebar-container">
         {isProfile ? <ButtonEdit /> : <ButtonFollow />}
         <CoverImage src={userInfo?.banner} />
