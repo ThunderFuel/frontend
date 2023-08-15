@@ -1,12 +1,12 @@
 .sidebar-container {
   @apply sticky;
   top: var(--headerHeight);
-  height: calc(100vh - var(--headerHeight));
+  height: calc(100vh - var(--headerHeight) - var(--footerHeight));
   min-height: 585px;
 }
 
 .profile-cover-image {
-  @apply relative bg-gray transition-all;
+  @apply relative bg-gray transition-all bg-cover bg-right;
   width: 410px;
   min-height: 410px;
   max-height: 410px;
