@@ -112,7 +112,7 @@ const Tab = () => {
       <div className="inline-flex -my-[1px]">
         <TabBase
           initTab={initTab}
-          className="secondary"
+          className="secondary !border-l-0"
           onChange={(item) => {
             if (item !== "more") {
               navigate(item);
