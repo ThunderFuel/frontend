@@ -1,5 +1,6 @@
 :root {
   --profile-cover-image-height: 410px;
+  --profile-cover-image-width: 410px;
   --sidebar-container-height: calc(100vh - var(--headerHeight) - var(--footerHeight));
 }
 
@@ -18,11 +19,10 @@
 }
 
 .profile-cover-image {
-  @apply relative bg-gray transition-all bg-cover bg-right;
-  width: 410px;
+  @apply relative bg-gray transition-all bg-cover bg-right overflow-hidden;
+  width: var(--profile-cover-image-width);
   min-height: var(--profile-cover-image-height);
   max-height: var(--profile-cover-image-height);
-  overflow: hidden;
   mask-image: linear-gradient(180deg, #141414 19.50%, rgba(25, 25, 25, 0.00) 74.06%);
 }
 

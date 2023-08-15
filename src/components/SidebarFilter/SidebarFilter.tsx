@@ -11,7 +11,13 @@ const SidebarFilter = ({ options, className, children, displayType, setDisplayTy
     const tmpShow = !show;
     if (displayType !== DisplayType.LIST) {
       if (tmpShow) {
-        setDisplayType((prevState: string) => String(parseInt(prevState) + 1));
+        setDisplayType((prevState: string) => {
+          if (parseInt(prevState) + 1 > parseInt(DisplayType.GRID4)) {
+            return prevState;
+          }
+
+          return String(parseInt(prevState) + 1);
+        });
       } else {
         setDisplayType((prevState: string) => String(parseInt(prevState) - 1));
       }
