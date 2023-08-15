@@ -87,6 +87,9 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.NFT_DETAILS,
     component: NFTDetails,
     layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
   {
     path: PATHS.PROFILE,

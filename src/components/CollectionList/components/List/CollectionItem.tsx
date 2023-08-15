@@ -166,7 +166,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
+          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : !selectionDisabled ? (
               <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
             ) : null
