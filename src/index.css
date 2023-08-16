@@ -4,6 +4,7 @@
 
 :root {
   --headerHeight: 1px;
+  --footerHeight: 1px;
 }
 
 body {

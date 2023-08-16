@@ -1,7 +1,7 @@
 .sidebar-container {
   @apply sticky;
   top: var(--headerHeight);
-  height: calc(100vh - var(--headerHeight));
+  height: calc(100vh - var(--headerHeight) - var(--footerHeight));
   min-height: 585px;
 }
 
