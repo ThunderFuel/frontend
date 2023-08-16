@@ -52,10 +52,12 @@ export const walletSlice = createSlice({
 export const getSerializeAddress = createSelector(
   (state: any) => {
     if (state.wallet.address.trim() !== "") {
+      console.log(state.wallet.address);
+
       return Address.fromString(state.wallet.address);
     }
 
-    return "";
+    return null;
   },
   (address: any) => address
 );

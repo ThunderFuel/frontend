@@ -1,9 +1,7 @@
 import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
-import { ZeroBytes32 } from "fuels";
 import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
-import userService from "api/user/user.service";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 
 export const useWallet = () => {
@@ -11,50 +9,22 @@ export const useWallet = () => {
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
-  const { setGatewayType, selectedGateway: fuel, clearGatewayType } = useFuelExtension();
+  const { setGatewayType, selectedGateway, clearGatewayType } = useFuelExtension();
 
   const hasEnoughFunds = async (buyNowItemPrice?: any) => {
-    try {
-      const provider = await getProvider();
-      const balance = await provider.getBalance(getWalletAddress === "" ? user.walletAddress : getWalletAddress, ZeroBytes32);
-
-      return balance.toNumber() === 0 ? false : balance.toNumber() / 1000000000 >= (buyNowItemPrice !== undefined ? buyNowItemPrice : totalAmount);
-    } catch {
-      return false;
-    }
+    return selectedGateway().hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
   };
 
   const getConnectionStatus = async () => {
-    return fuel()?.isConnected();
-  };
-
-  const getAccounts = async () => {
-    try {
-      const accounts = await fuel().accounts();
-
-      return accounts[0];
-    } catch (e: any) {
-      return null;
-    }
-  };
-
-  const getProvider = async () => {
-    return fuel().getProvider();
+    return selectedGateway()?.isConnected();
   };
 
   const getBalance = async () => {
-    try {
-      if (isConnected) {
-        const provider = await getProvider();
-
-        const address = getWalletAddress;
-        const balance = await provider.getBalance(address === "" ? user.walletAddress : address, ZeroBytes32);
-
-        return balance.toNumber();
-      }
-    } catch (e: any) {
-      // useErrorModal(e);
+    if (isConnected) {
+      return selectedGateway().getBalance(getWalletAddress, user.walletAddress);
     }
+
+    return null;
   };
 
   const walletConnectFuel = () => {
@@ -70,40 +40,25 @@ export const useWallet = () => {
   const walletConnect = async () => {
     if (!isConnected) {
       try {
-        await fuel()
-          .connect()
-          .then((connected: any) => {
-            getAccounts().then((fuelAddress) => {
-              dispatch(setAddress(fuelAddress));
-              if (fuelAddress !== null)
-                fuel()
-                  .getWallet(fuelAddress)
-                  .then((wallet: any) => {
-                    if (wallet !== null) {
-                      userService.userCreate({ walletAddress: wallet.address }).then((user) => {
-                        dispatch(setUser(user.data));
-                        dispatch(setWallet(wallet));
-                      });
-                    }
-                  });
-              dispatch(setIsConnected(connected));
+        const { connect, user, wallet, fuelAddress } = await selectedGateway().walletConnect();
+        dispatch(setUser(user));
+        dispatch(setWallet(wallet));
+        dispatch(setIsConnected(connect));
+        dispatch(setAddress(fuelAddress));
 
-              return connected;
-            });
-          });
+        return connect;
       } catch (e) {
         useErrorModal(e);
       }
     }
-
-    return isConnected;
   };
 
   const walletDisconnect = async () => {
     try {
-      await fuel().disconnect();
-      dispatch(setIsConnected(false));
-      clearGatewayType();
+      await selectedGateway().walletDisconnect(() => {
+        dispatch(setIsConnected(false));
+        clearGatewayType();
+      });
     } catch (e) {
       console.log(e);
     }
