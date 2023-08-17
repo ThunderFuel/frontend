@@ -9,7 +9,7 @@ const ActivityList = (props: any) => {
     <ActivityProvider value={props}>
       <div className={clsx(props.noContainerFluid ? "flex " : "container-fluid flex")}>
         {!props.hideSidebar && <Sidebar />}
-        <ActivityItems noTitle={props.noTitle} headers={props.headers} />
+        <ActivityItems hideTitle={props.noTitle} headers={props.headers} />
       </div>
     </ActivityProvider>
   );
