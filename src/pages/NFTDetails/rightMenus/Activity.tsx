@@ -144,7 +144,7 @@ const Activity = ({ onBack }: { onBack: any }) => {
 
     // const { icon, title, description } = formatActivityData(activity);
 
-    return <ActivityList noTitle={true} noContainerFluid={true} hideSidebar={true} activities={_activities} headers={headers} />;
+    return <ActivityList hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />;
   }
 
   return (
