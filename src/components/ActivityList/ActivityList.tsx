@@ -7,9 +7,9 @@ import clsx from "clsx";
 const ActivityList = (props: any) => {
   return (
     <ActivityProvider value={props}>
-      <div className={clsx(props.noContainerFluid ? "flex " : "container-fluid flex")}>
+      <div className={clsx("flex", props.containerClassName)}>
         {!props.hideSidebar && <Sidebar />}
-        <ActivityItems noTitle={props.noTitle} headers={props.headers} />
+        <ActivityItems hideTitle={props.hideTitle} headers={props.headers} />
       </div>
     </ActivityProvider>
   );

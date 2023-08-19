@@ -29,7 +29,7 @@ const CollectionFooter = () => {
   };
 
   return (
-    <div className="sticky border-t border-t-gray bg-bg z-20" style={{ bottom: "calc(var(--footerHeight))" }}>
+    <div className="sticky border-t border-t-gray bg-bg z-20 bottom-0">
       <div className="flex items-center justify-between py-3">
         <div className="flex gap-2 text-headline-02 text-gray-light pl-5">
           <IconShoppingCart />

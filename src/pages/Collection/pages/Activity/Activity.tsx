@@ -84,7 +84,7 @@ const Activity = () => {
         setParams({ page: page });
       }}
     >
-      <ActivityList activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
+      <ActivityList containerClassName={"pl-10"} activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
     </InfiniteScroll>
   );
 };
