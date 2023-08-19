@@ -28,7 +28,7 @@ class FuelProvider extends BaseProvider {
     const address = walletAddress ? walletAddress : userWalletAddress;
     const balance = await _provider?.getBalance(address, ZeroBytes32);
 
-    return balance?.toNumber();
+    return balance?.toNumber() / 1000000000;
   }
 
   async getProvider(): Promise<any> {

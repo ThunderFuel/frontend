@@ -1,19 +1,21 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconFuelWallet, IconFuelet, IconLightning } from "icons";
+import { IconArrowRight, IconContract, IconFuelWallet, IconFuelet, IconLightning } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
 import { useFuelet } from "hooks/useFuelet";
 import { toggleWalletModal } from "store/walletSlice";
+import { useMetamask } from "hooks/useMetamask";
 
 export const ConnectWallet = () => {
-  const { walletConnectFuelet, walletConnectFuel } = useWallet();
+  const { walletConnectFuelet, walletConnectFuel, walletConnectWagmi } = useWallet();
   const dispatch = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuel, fuelError, fuelLoading] = useFuel();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuelet, fueletError, fueletLoading] = useFuelet();
+  const [metamaskError] = useMetamask();
 
   return (
     <div className="flex flex-col h-full p-5 gap-y-5">
@@ -59,6 +61,33 @@ export const ConnectWallet = () => {
             </Button>
           ) : (
             <a href="https://chrome.google.com/webstore/detail/fuelet-wallet/bifidjkcdpgfnlbcjpdkdcnbiooooblg" target="_blank" rel="noreferrer">
+              <Button className="btn-sm btn-secondary no-bg">
+                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
+              </Button>
+            </a>
+          )}
+        </div>
+
+        <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
+          <div className="flex items-center gap-x-2.5">
+            <IconContract className="w-8 h-8" />
+            <h6 className="text-head6 font-spaceGrotesk text-white">Metamask</h6>
+          </div>
+          {metamaskError === "" ? (
+            <Button
+              className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
+              onClick={() => {
+                walletConnectWagmi().then((res) => {
+                  if (res) {
+                    dispatch(toggleWalletModal());
+                  }
+                });
+              }}
+            >
+              CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
+            </Button>
+          ) : (
+            <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank" rel="noreferrer">
               <Button className="btn-sm btn-secondary no-bg">
                 INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
               </Button>

@@ -14,6 +14,33 @@ import LOCALES from "./locales";
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
 
+import { WagmiConfig, createConfig, configureChains, mainnet } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+
+const { chains, publicClient, webSocketPublicClient } = configureChains([mainnet], [publicProvider()]);
+
+const config = createConfig({
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    // new CoinbaseWalletConnector({
+    //   chains,
+    //   options: {
+    //     appName: "wagmi",
+    //   },
+    // }),
+    // new WalletConnectConnector({
+    //   chains,
+    //   options: {
+    //     projectId: "...",
+    //   },
+    // }),
+  ],
+  publicClient,
+  webSocketPublicClient,
+});
+
 i18next.use(initReactI18next).init({
   resources: LOCALES,
   lng: "tr",
@@ -33,7 +60,9 @@ Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router />
+      <WagmiConfig config={config}>
+        <Router />
+      </WagmiConfig>
     </Provider>
     <ToastContainer />
   </React.StrictMode>,

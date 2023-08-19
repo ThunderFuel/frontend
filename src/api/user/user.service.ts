@@ -24,7 +24,7 @@ export default {
     return ThunderURL.post("v1/user", body);
   },
   userCreate({ walletAddress }: any) {
-    const data = { params: { address: walletAddress.toB256(), fuelAddress: walletAddress } };
+    const data = { params: { address: typeof walletAddress === "object" ? walletAddress.toB256() : walletAddress, fuelAddress: walletAddress } };
 
     return ThunderURL.post("v1/user/create", {}, data);
   },
