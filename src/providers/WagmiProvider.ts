@@ -43,6 +43,8 @@ class WagmiProvider extends BaseProvider {
 
       const account = this.provider?.getAccount();
 
+      this.provider.watchNetwork((network) => console.log(network, "network changed"));
+
       return { user: user.data, address: account?.address, connect: account?.isConnected, fuelAddress: null };
     } catch (e) {
       console.log(e);
