@@ -4,7 +4,6 @@ import { useWallet } from "hooks/useWallet";
 import { IconRefresh } from "icons";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
-import { formatDisplayedNumber } from "utils";
 
 const Balances = (refresh: any) => {
   const { getBalance } = useWallet();
@@ -37,7 +36,7 @@ const Balances = (refresh: any) => {
             }}
           />
         </div>
-        <EthereumPrice price={formatDisplayedNumber(balance)} priceClassName="text-head3 text-white" />
+        <EthereumPrice price={balance} priceClassName="text-head3 text-white" />
       </div>
       <div className="w-[1px] bg-gray"></div>
       <div className="flex w-full p-4 flex-col ">

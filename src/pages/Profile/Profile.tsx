@@ -10,7 +10,7 @@ import ConnectWalletScreen from "components/ConnectWalletScreen";
 const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
 
-  if (!user.id) {
+  if (!user?.id) {
     return <ConnectWalletScreen />;
   }
 
