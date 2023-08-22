@@ -14,31 +14,58 @@ import LOCALES from "./locales";
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
 
-import { WagmiConfig, createConfig, configureChains, mainnet } from "wagmi";
+import { WagmiConfig, createConfig, configureChains } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { createClient } from "@reservoir0x/reservoir-sdk";
+import { goerli, linea, mainnet } from "wagmi/chains";
 
-const { chains, publicClient, webSocketPublicClient } = configureChains([mainnet], [publicProvider()]);
+const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
+
+export const lineaWethaddress = "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f";
+
+export const connectors = [
+  new MetaMaskConnector({ chains }),
+  new WalletConnectConnector({
+    chains,
+    options: {
+      projectId: "fbbe076e89456ef4f6f54493682058b9",
+    },
+  }),
+  new CoinbaseWalletConnector({
+    chains,
+    options: {
+      appName: "wagmi demo",
+    },
+  }),
+];
 
 const config = createConfig({
   autoConnect: true,
-  connectors: [
-    new MetaMaskConnector({ chains }),
-    // new CoinbaseWalletConnector({
-    //   chains,
-    //   options: {
-    //     appName: "wagmi",
-    //   },
-    // }),
-    // new WalletConnectConnector({
-    //   chains,
-    //   options: {
-    //     projectId: "...",
-    //   },
-    // }),
-  ],
+  connectors: connectors,
   publicClient,
   webSocketPublicClient,
+});
+
+createClient({
+  chains: [
+    {
+      id: 59144,
+      baseApiUrl: "https://api-linea.reservoir.tools",
+      active: true,
+      apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
+    },
+    {
+      id: 5,
+      baseApiUrl: "https://api-goerli.reservoir.tools/",
+      active: true,
+      apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
+    },
+  ],
+  source: "thundernft.market",
+  marketplaceFees: [`0x313A0A2338999cf88F3F7FF935fe9D9128FFB074:200`],
 });
 
 i18next.use(initReactI18next).init({

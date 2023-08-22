@@ -30,7 +30,7 @@ export interface IUserResponse {
   phone: null | string;
   gender: null | string;
   contractAddress: null | string;
-  walletAddress: string;
+  walletAddress: any;
   image: null | string;
   banner: null | string;
   socialMedias: any[];

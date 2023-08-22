@@ -103,3 +103,6 @@ export { ReactComponent as IconViews } from "./icon-views.svg";
 export { ReactComponent as IconItems } from "./icon-items.svg";
 export { ReactComponent as IconSwap } from "./icon-swap.svg";
 export { ReactComponent as IconSun } from "./icon-sun.svg";
+export { ReactComponent as IconMetamask } from "./icon-metamask.svg";
+export { ReactComponent as IconWalletConnect } from "./icon-walletconnect.svg";
+export { ReactComponent as IconCoinbase } from "./icon-coinbase.svg";

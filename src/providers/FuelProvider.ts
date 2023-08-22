@@ -31,6 +31,11 @@ class FuelProvider extends BaseProvider {
     return balance?.toNumber() / 1000000000;
   }
 
+  async getBidBalance(): Promise<any> {
+    // userService.getBidBalance(userId).then((res) => console.log(res));
+    return "";
+  }
+
   async getProvider(): Promise<any> {
     return this.provider?.getProvider();
   }

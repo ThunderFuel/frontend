@@ -20,6 +20,9 @@ import ActivityItemDescription from "components/ActivityDescription";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
 import EthereumPrice from "components/EthereumPrice/EthereumPrice";
 import { AssetMockNFT1 } from "assets";
+import { createWalletClient, custom, parseEther } from "viem";
+import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
+import { goerli, linea } from "wagmi/chains";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -262,6 +265,138 @@ const LeftMenu = (props: any) => {
     return average;
   };
 
+  function handleAL() {
+    const wallet = createWalletClient({
+      chain: linea,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    _client.actions.buyToken({
+      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:5" }],
+      wallet,
+      chainId: 5,
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+      options: {
+        partial: true,
+      },
+    });
+  }
+
+  function handleList() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      // chain: linea,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    const _expireTime = "1695404031";
+
+    _client.actions.listToken({
+      wallet,
+      listings: [
+        {
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
+          orderKind: "seaport-v1.5",
+          orderbook: "reservoir",
+          weiPrice: parseEther("0.001").toString(),
+          expirationTime: _expireTime,
+          // fees: [`${wallet.account.address}:100`],
+          options: {
+            "seaport-v1.5": {
+              useOffChainCancellation: true,
+            },
+          },
+        },
+      ],
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+      chainId: 5,
+    });
+  }
+
+  function handlePlaceBid() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    const _expireTime = "1695404031";
+
+    _client.actions.placeBid({
+      wallet,
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+      bids: [
+        {
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7",
+          orderKind: "seaport-v1.5",
+          orderbook: "reservoir",
+          weiPrice: parseEther("0.001").toString(),
+          expirationTime: _expireTime,
+          options: {
+            "seaport-v1.5": {
+              useOffChainCancellation: true,
+            },
+          },
+        },
+      ],
+      chainId: 5,
+    });
+  }
+
+  function handleCancelOffer() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    _client.actions.cancelOrder({
+      ids: ["0x9ef86dbf605cf5da9d8b927741771fe5c15364267d1e412cb857ff43d16c563b"], //ID burasi farkli
+      chainId: 5,
+      wallet,
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+      // options: {
+      //     maker:
+      //     token:
+      // }
+    });
+  }
+
+  function handleAcceptOffer() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    _client.actions.acceptOffer({
+      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:9", quantity: 1 }],
+      wallet,
+      chainId: 5,
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+    });
+  }
+
   return (
     <div className="flex flex-col border-r border-gray">
       <div className="flex flex-col overflow-hidden">
@@ -272,7 +407,22 @@ const LeftMenu = (props: any) => {
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
             </div>
           </div>
-          <h3 className="text-h3 text-white">{nft.name ? nft.name : nft?.tokenOrder ? "Bored Ape #" + nft?.tokenOrder : ""}</h3>
+          <Button className="btn-primary hover:bg-green hover:translate-x-7" onClick={handleAL}>
+            AL AL AL
+          </Button>
+          <Button className="btn-primary hover:bg-red hover:-translate-x-7" onClick={handleList}>
+            LIST LIST LIST
+          </Button>
+          <Button className="btn-primary hover:bg-black hover:text-white hover:translate-x-7" onClick={handlePlaceBid}>
+            PLACE A BID
+          </Button>
+          <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleCancelOffer}>
+            CANCEL OFFER
+          </Button>
+          <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleAcceptOffer}>
+            ACCEPT OFFER
+          </Button>
+
           {/* <div className="flex gap-5">
             <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
               <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">

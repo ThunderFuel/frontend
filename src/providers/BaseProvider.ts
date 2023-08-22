@@ -14,6 +14,8 @@ abstract class BaseProvider {
   abstract hasEnoughFunds(buyNowItemPrice?: any, walletAddress?: any, userWalletAddress?: any, totalAmount?: any): Promise<any>;
 
   abstract walletDisconnect(callbackFn: any): any;
+
+  abstract getBidBalance(contractAddress: any): any;
 }
 
 export default BaseProvider;

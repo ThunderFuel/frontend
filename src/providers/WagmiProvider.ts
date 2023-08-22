@@ -1,6 +1,7 @@
 import BaseProvider from "./BaseProvider";
 import userService from "../api/user/user.service";
 import * as wagmi from "@wagmi/core";
+import { connectors } from "index";
 
 class WagmiProvider extends BaseProvider {
   provider = wagmi;
@@ -30,14 +31,28 @@ class WagmiProvider extends BaseProvider {
     return +balance.formatted;
   }
 
+  async getBidBalance(contractAddress: any): Promise<any> {
+    const account = this.provider?.getAccount();
+    if (account.address === undefined) return false;
+
+    const balance = await this.provider?.fetchBalance({
+      address: account.address,
+      token: contractAddress,
+    });
+
+    return +balance.formatted;
+  }
+
   async getProvider(): Promise<any> {
     return "";
   }
 
-  async walletConnect(): Promise<any> {
+  async walletConnect(index?: number): Promise<any> {
+    if (index === undefined) return;
+
     try {
       const result = await this.provider?.connect({
-        connector: new wagmi.InjectedConnector(),
+        connector: connectors[index],
       });
       const user = await userService.userCreate({ walletAddress: result?.account });
 

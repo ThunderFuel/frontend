@@ -60,9 +60,9 @@ const ManageFunds = () => {
       <Button className="btn-secondary w-full">
         buy ETH <IconWallet />
       </Button>
-      <Button className="btn-secondary w-full">
+      <a className="btn first-letter:btn-secondary w-full" href="https://bridge.linea.build/" target="_blank" rel="noreferrer">
         Bridge to Linea <IconSwap />
-      </Button>
+      </a>
     </div>
   );
 

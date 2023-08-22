@@ -85,10 +85,9 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         >
           MANAGE FUNDS <IconArrowRight />
         </Button>
-        <Button className="btn btn-primary w-full">
-          Bridge to Linea
-          <IconSwap />
-        </Button>
+        <a className="btn first-letter:btn-secondary w-full" href="https://bridge.linea.build/" target="_blank" rel="noreferrer">
+          Bridge to Linea <IconSwap />
+        </a>
       </div>
     </div>
   );

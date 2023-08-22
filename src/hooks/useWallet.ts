@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
-import { useErrorModal } from "../pages/Layout/ErrorModal";
+// import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 
@@ -26,6 +26,13 @@ export const useWallet = () => {
 
     return null;
   };
+  const getBidBalance = async (contractAddress: any) => {
+    if (isConnected) {
+      return selectedGateway().getBidBalance(contractAddress);
+    }
+
+    return null;
+  };
 
   const walletConnectFuel = () => {
     setGatewayType(FUEL_TYPE.FUEL);
@@ -37,15 +44,15 @@ export const useWallet = () => {
 
     return walletConnect();
   };
-  const walletConnectWagmi = () => {
+  const walletConnectWagmi = (index = 0) => {
     setGatewayType(FUEL_TYPE.WAGMI);
 
-    return walletConnect();
+    return walletConnect(index);
   };
-  const walletConnect = async () => {
+  const walletConnect = async (index?: number) => {
     if (!isConnected) {
       try {
-        const { connect, user, wallet, fuelAddress, address } = await selectedGateway().walletConnect();
+        const { connect, user, wallet, fuelAddress, address } = await selectedGateway().walletConnect(index);
         dispatch(setIsConnected(connect));
         dispatch(setAddress(fuelAddress ?? address));
         dispatch(setUser(user));
@@ -53,7 +60,7 @@ export const useWallet = () => {
 
         return connect;
       } catch (e) {
-        useErrorModal(e);
+        // useErrorModal(e);
       }
     }
   };
@@ -78,5 +85,6 @@ export const useWallet = () => {
     walletConnectFuel,
     walletConnectFuelet,
     walletConnectWagmi,
+    getBidBalance,
   };
 };

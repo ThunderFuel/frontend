@@ -1,12 +1,13 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconContract, IconFuelWallet, IconFuelet, IconLightning } from "icons";
+import { IconArrowRight, IconCoinbase, IconFuelWallet, IconFuelet, IconLightning, IconMetamask, IconWalletConnect } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
 import { useFuelet } from "hooks/useFuelet";
 import { toggleWalletModal } from "store/walletSlice";
 import { useMetamask } from "hooks/useMetamask";
+import { useCoinbase } from "hooks/useCoinbase";
 
 export const ConnectWallet = () => {
   const { walletConnectFuelet, walletConnectFuel, walletConnectWagmi } = useWallet();
@@ -16,6 +17,7 @@ export const ConnectWallet = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuelet, fueletError, fueletLoading] = useFuelet();
   const [metamaskError] = useMetamask();
+  const [coinbaseError] = useCoinbase();
 
   return (
     <div className="flex flex-col h-full p-5 gap-y-5">
@@ -70,14 +72,14 @@ export const ConnectWallet = () => {
 
         <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
           <div className="flex items-center gap-x-2.5">
-            <IconContract className="w-8 h-8" />
+            <IconMetamask className="w-8 h-8" />
             <h6 className="text-head6 font-spaceGrotesk text-white">Metamask</h6>
           </div>
           {metamaskError === "" ? (
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
               onClick={() => {
-                walletConnectWagmi().then((res) => {
+                walletConnectWagmi(0).then((res) => {
                   if (res) {
                     dispatch(toggleWalletModal());
                   }
@@ -94,7 +96,52 @@ export const ConnectWallet = () => {
             </a>
           )}
         </div>
+        <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
+          <div className="flex items-center gap-x-2.5">
+            <IconWalletConnect />
+            <h6 className="text-head6 font-spaceGrotesk text-white">WalletConnect</h6>
+          </div>
+          <Button
+            className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
+            onClick={() => {
+              walletConnectWagmi(1).then((res) => {
+                if (res) {
+                  dispatch(toggleWalletModal());
+                }
+              });
+            }}
+          >
+            CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
+          </Button>
+        </div>
+        <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
+          <div className="flex items-center gap-x-2.5">
+            <IconCoinbase />
+            <h6 className="text-head6 font-spaceGrotesk text-white">Coinbase Wallet</h6>
+          </div>
+          {coinbaseError === "" ? (
+            <Button
+              className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
+              onClick={() => {
+                walletConnectWagmi(2).then((res) => {
+                  if (res) {
+                    dispatch(toggleWalletModal());
+                  }
+                });
+              }}
+            >
+              CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
+            </Button>
+          ) : (
+            <a href="https://chrome.google.com/webstore/detail/coinbase-wallet-extension/hnfanknocfeofbddgcijnmhnfnkdnaad" target="_blank" rel="noreferrer">
+              <Button className="btn-sm btn-secondary no-bg opacity-0 ease-in-out transform duration-300 group-hover:opacity-100">
+                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
+              </Button>
+            </a>
+          )}
+        </div>
       </div>
+
       <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">
         <IconLightning className="text-white w-5 h-5" />
         <div className="flex flex-col gap-y-[5px]">
