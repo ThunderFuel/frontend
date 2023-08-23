@@ -42,6 +42,13 @@ export const useWallet = () => {
 
     return walletConnect();
   };
+
+  const walletConnectGateway = (type: FUEL_TYPE) => {
+    console.log(type);
+    setGatewayType(type);
+
+    return walletConnect();
+  };
   const walletConnect = async () => {
     if (!isConnected) {
       try {
@@ -78,5 +85,6 @@ export const useWallet = () => {
     walletConnectFuel,
     walletConnectFuelet,
     walletConnectWagmi,
+    walletConnectGateway,
   };
 };

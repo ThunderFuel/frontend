@@ -7,9 +7,9 @@ const storage = useLocalStorage();
 const FuelGatewayType = "thunder_fuel_gateway_type";
 
 export enum FUEL_TYPE {
-  FUEL,
-  FUELET,
-  WAGMI,
+  FUEL = "fuel",
+  FUELET = "fuelet",
+  WAGMI = "wagmi",
 }
 
 let gatewayType: any = storage.getItem(FuelGatewayType);
@@ -30,7 +30,11 @@ export const useFuelExtension = () => {
 
   return {
     selectedGateway: () => {
-      return [fuel, fuelet, wagmi][gatewayType];
+      return {
+        [FUEL_TYPE.FUEL]: fuel,
+        [FUEL_TYPE.FUELET]: fuelet,
+        [FUEL_TYPE.WAGMI]: wagmi,
+      }[gatewayType as FUEL_TYPE];
     },
     setGatewayType,
     clearGatewayType,
