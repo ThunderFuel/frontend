@@ -34,7 +34,7 @@ class WagmiProvider extends BaseProvider {
     return "";
   }
 
-  async walletConnect(): Promise<any> {
+  async walletConnect(activeConnector?: any): Promise<any> {
     try {
       const result = await this.provider?.connect({
         connector: new wagmi.InjectedConnector(),

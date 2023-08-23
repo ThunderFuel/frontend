@@ -9,7 +9,7 @@ abstract class BaseProvider {
 
   abstract getBalance(walletAddress: any, userWalletAddress: any): Promise<any>;
 
-  abstract walletConnect(): Promise<any>;
+  abstract walletConnect(activeConnector?: number): Promise<any>;
 
   abstract hasEnoughFunds(buyNowItemPrice?: any, walletAddress?: any, userWalletAddress?: any, totalAmount?: any): Promise<any>;
 

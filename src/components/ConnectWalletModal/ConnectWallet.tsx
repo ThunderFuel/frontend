@@ -19,13 +19,21 @@ const WalletList = {
     name: "Fuelet",
     icon: IconFuelet,
   },
-  [FUEL_TYPE.WAGMI]: {
+  [FUEL_TYPE.WAGMI_METAMASK]: {
     name: "Metamask",
+    icon: IconContract,
+  },
+  [FUEL_TYPE.WAGMI_COINBASE]: {
+    name: "Coinbase",
+    icon: IconContract,
+  },
+  [FUEL_TYPE.WAGMI_WALLETCONNECT]: {
+    name: "WalletConnect",
     icon: IconContract,
   },
 };
 
-const ConnectWalletButton = ({ name, icon, type }: { name: string; icon: any; type: FUEL_TYPE }) => {
+const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: string; icon: any; type: FUEL_TYPE; activeConnector: number }) => {
   const { walletConnectGateway } = useWallet();
   const dispatch = useDispatch();
 
@@ -39,7 +47,9 @@ const ConnectWalletButton = ({ name, icon, type }: { name: string; icon: any; ty
   const activeWallet = {
     [FUEL_TYPE.FUEL]: { error: fuelError },
     [FUEL_TYPE.FUELET]: { error: fueletError },
-    [FUEL_TYPE.WAGMI]: { error: metamaskError },
+    [FUEL_TYPE.WAGMI_METAMASK]: { error: metamaskError },
+    [FUEL_TYPE.WAGMI_COINBASE]: { error: metamaskError },
+    [FUEL_TYPE.WAGMI_WALLETCONNECT]: { error: metamaskError },
   }[type as FUEL_TYPE];
 
   return (
@@ -52,7 +62,7 @@ const ConnectWalletButton = ({ name, icon, type }: { name: string; icon: any; ty
         <Button
           className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
           onClick={() => {
-            walletConnectGateway(type).then((res) => {
+            walletConnectGateway(type, activeConnector).then((res: any) => {
               if (res) {
                 dispatch(toggleWalletModal());
               }
@@ -78,10 +88,10 @@ export const ConnectWallet = () => {
   return (
     <div className="flex flex-col h-full p-5 gap-y-5">
       <div className="flex flex-col gap-y-2.5">
-        {walletList.map((item: FUEL_TYPE) => {
+        {walletList.map((item: FUEL_TYPE, activeIndex: number) => {
           const wallet = WalletList[item] as any;
 
-          return <ConnectWalletButton key={item} name={wallet.name} icon={wallet.icon} type={item} />;
+          return <ConnectWalletButton key={item} name={wallet.name} icon={wallet.icon} type={item} activeConnector={activeIndex} />;
         })}
       </div>
       <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">

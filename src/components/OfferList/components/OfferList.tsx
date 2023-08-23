@@ -214,8 +214,7 @@ const defaultHeaders: ITableHeader[] = [
     render: (item) => <span>{timeagoFormat(item?.createdAt)}</span>,
   },
 ];
-console.log(defaultHeaders);
-const OfferList = () => {
+const OfferList = ({ headers }: any) => {
   const { user } = useAppSelector((state) => state.wallet);
   const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers, bidBalance, getBidBalance, options } = useOfferContext();
   const isOffersMade = filterValue.offerType === 1;
@@ -233,7 +232,7 @@ const OfferList = () => {
         ) : null}
       </div>
       <div className="flex flex-col gap-3">
-        <Table headers={[]} items={getOffers} />
+        <Table headers={headers ?? defaultHeaders} items={getOffers} />
         {getOffers.map((item: any, k: any) => {
           if (isOffersMade) {
             return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} isOnHold={item.price > bidBalance} />;

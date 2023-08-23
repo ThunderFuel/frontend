@@ -27,32 +27,15 @@ export const useWallet = () => {
     return null;
   };
 
-  const walletConnectFuel = () => {
-    setGatewayType(FUEL_TYPE.FUEL);
-
-    return walletConnect();
-  };
-  const walletConnectFuelet = () => {
-    setGatewayType(FUEL_TYPE.FUELET);
-
-    return walletConnect();
-  };
-  const walletConnectWagmi = () => {
-    setGatewayType(FUEL_TYPE.WAGMI);
-
-    return walletConnect();
-  };
-
-  const walletConnectGateway = (type: FUEL_TYPE) => {
-    console.log(type);
+  const walletConnectGateway = (type: FUEL_TYPE, activeConnector: number) => {
     setGatewayType(type);
 
-    return walletConnect();
+    return walletConnect(activeConnector);
   };
-  const walletConnect = async () => {
+  const walletConnect = async (activeConnector?: number) => {
     if (!isConnected) {
       try {
-        const { connect, user, wallet, fuelAddress, address } = await selectedGateway().walletConnect();
+        const { connect, user, wallet, fuelAddress, address } = await selectedGateway().walletConnect(activeConnector);
         dispatch(setIsConnected(connect));
         dispatch(setAddress(fuelAddress ?? address));
         dispatch(setUser(user));
@@ -82,9 +65,6 @@ export const useWallet = () => {
     getBalance,
     hasEnoughFunds,
     getConnectionStatus,
-    walletConnectFuel,
-    walletConnectFuelet,
-    walletConnectWagmi,
     walletConnectGateway,
   };
 };
