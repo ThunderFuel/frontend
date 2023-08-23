@@ -500,7 +500,7 @@ body {
   --tw-text-opacity: 1;
 }
 
-.text-gray-light
+.text-gray-light,
 .drop #layout-header .search-result-container .search-group-item:hover {
   --tw-bg-opacity: 0.1;
 }
@@ -644,7 +644,7 @@ body {
 
 
 .drop-item-container.drop-fluid,
-.drop.drop-thunder {
+.drop.drop-fluid {
   --th-bg: 20 20 20;
   --th-bg-light: 20 20 20;
 }
@@ -656,3 +656,18 @@ body {
 .drop.drop-fluid .modalbase .btn-primary {
   color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
+
+.drop-item-container.drop-fuelet,
+.drop.drop-fuelet {
+  --th-bg: 30 30 34;
+  --th-bg-light: 30 30 34;
+}
+
+.drop.drop-fuelet #layout-header .group.relative div {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+
+.drop.drop-fuelet .modalbase .btn-primary {
+  color: rgb(var(--th-bg) / var(--tw-text-opacity));
+}
+

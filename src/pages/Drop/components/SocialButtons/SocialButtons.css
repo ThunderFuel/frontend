@@ -1,5 +1,5 @@
 .drop-share ul {
-  @apply border-white border-opacity-25;
+  @apply border-white border-opacity-25 p-0 m-0;
 
   background: rgba(84, 84, 84, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -7,5 +7,5 @@
 }
 
 .drop-share ul li {
-  @apply border-white border-opacity-25 text-white text-opacity-50;
+  @apply border-white border-opacity-25 text-white text-opacity-50 p-0;
 }
