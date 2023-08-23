@@ -4,16 +4,17 @@ import Img from "components/Img/Img";
 import EthereumPrice from "components/EthereumPrice";
 import NotFound from "components/NotFound";
 
-import { addressFormat, dateFormat } from "utils";
+import { addressFormat, dateFormat, timeagoFormat } from "utils";
 import Button from "components/Button";
 import { useOfferContext } from "../OfferContext";
 import clsx from "clsx";
-import { useProfile } from "../../../ProfileContext";
 import { Link } from "react-router-dom";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { OfferStatus } from "api/offer/offer.type";
 import { useAppSelector } from "store";
+import Table, { ITableHeader } from "../../Table";
+import LazyImg from "../../LazyImg";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
@@ -155,10 +156,67 @@ const OfferItem = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, isOnHold
     </div>
   );
 };
+
+const OfferCollectionItem = ({ item }: any) => {
+  return (
+    <div className="flex w-full items-center p-2.5 gap-2.5">
+      <LazyImg className="w-10 h-10 rounded-md" src={item.token.image} />
+      <h6 className="text-h6 text-white">{item.token.name ?? "-"}</h6>
+    </div>
+  );
+};
+
+const defaultHeaders: ITableHeader[] = [
+  {
+    key: "item",
+    text: `Item`,
+    width: "20%",
+    align: "flex-start",
+    sortValue: 1,
+    render: (item) => {
+      console.log(item);
+
+      return <OfferCollectionItem />;
+    },
+  },
+  {
+    key: "price",
+    text: "PRICE",
+    width: "20%",
+    align: "flex-end",
+    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" />,
+  },
+  {
+    key: "quantity",
+    text: `Quantity`,
+    width: "20%",
+    align: "flex-end",
+    sortValue: 1,
+    render: (item) => <span>{addressFormat(item?.fromUser?.walletAddress, 1)}</span>,
+    // renderHeader: (header) => <span>asasas</span>,
+  },
+  {
+    key: "to",
+    text: `TO`,
+    width: "20%",
+    align: "flex-end",
+    sortValue: 1,
+    render: (item) => <span>{addressFormat(item?.toUser?.walletAddress, 1)}</span>,
+  },
+
+  {
+    key: "date",
+    text: "DATE",
+    width: "20%",
+    align: "flex-end",
+    sortValue: 3,
+    render: (item) => <span>{timeagoFormat(item?.createdAt)}</span>,
+  },
+];
+console.log(defaultHeaders);
 const OfferList = () => {
-  const { options } = useProfile();
   const { user } = useAppSelector((state) => state.wallet);
-  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers, bidBalance, getBidBalance } = useOfferContext();
+  const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers, bidBalance, getBidBalance, options } = useOfferContext();
   const isOffersMade = filterValue.offerType === 1;
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
   const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
@@ -174,6 +232,7 @@ const OfferList = () => {
         ) : null}
       </div>
       <div className="flex flex-col gap-3">
+        <Table headers={[]} items={getOffers} />
         {getOffers.map((item: any, k: any) => {
           if (isOffersMade) {
             return <OfferItem key={`${item.id}_${k}`} item={item} onAcceptOffer={onAcceptOffer} onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} isOnHold={item.price > bidBalance} />;
