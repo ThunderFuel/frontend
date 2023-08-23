@@ -13,8 +13,9 @@ import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { OfferStatus } from "api/offer/offer.type";
 import { useAppSelector } from "store";
-import Table, { ITableHeader } from "../../Table";
-import LazyImg from "../../LazyImg";
+import Table, { ITableHeader } from "components/Table";
+import LazyImg from "components/LazyImg";
+import { useProfile } from "pages/Profile/ProfileContext";
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (

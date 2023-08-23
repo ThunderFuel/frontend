@@ -7,7 +7,7 @@ const Offer = (props: any) => {
   return (
     <OfferProvider value={props}>
       <div className="flex w-full h-full px-5">
-        {!props.option.hideSidebar && <SidebarFilter />}
+        {!props.option?.hideSidebar && <SidebarFilter />}
         <OfferList />
       </div>
     </OfferProvider>
