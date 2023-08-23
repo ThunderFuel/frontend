@@ -129,7 +129,6 @@ const Activity = ({ onBack }: { onBack: any }) => {
 
   const [activities, setActivities] = useState<any>([]);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  console.log(activities);
   const fetchActivities = async () => {
     const response = await collectionsService.getActivity({ page: 1, pageSize: 10, tokenId: selectedNFT.id });
     setActivities(response.data);

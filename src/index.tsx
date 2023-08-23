@@ -28,16 +28,16 @@ export const lineaWethaddress = "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f";
 
 export const connectors = [
   new MetaMaskConnector({ chains }),
-  new WalletConnectConnector({
-    chains,
-    options: {
-      projectId: "fbbe076e89456ef4f6f54493682058b9",
-    },
-  }),
   new CoinbaseWalletConnector({
     chains,
     options: {
       appName: "wagmi demo",
+    },
+  }),
+  new WalletConnectConnector({
+    chains,
+    options: {
+      projectId: "fbbe076e89456ef4f6f54493682058b9",
     },
   }),
 ];

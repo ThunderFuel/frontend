@@ -1,0 +1,7 @@
+{
+  "walletList": [
+    "wagmi_metamask",
+    "wagmi_coinbase",
+    "wagmi_walletconnect"
+  ]
+}

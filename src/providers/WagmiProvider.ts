@@ -47,12 +47,10 @@ class WagmiProvider extends BaseProvider {
     return "";
   }
 
-  async walletConnect(index?: number): Promise<any> {
-    if (index === undefined) return;
-
+  async walletConnect(activeConnector?: any): Promise<any> {
     try {
       const result = await this.provider?.connect({
-        connector: connectors[index],
+        connector: connectors[activeConnector],
       });
       const user = await userService.userCreate({ walletAddress: result?.account });
 
