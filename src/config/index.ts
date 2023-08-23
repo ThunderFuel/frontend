@@ -1,17 +1,20 @@
 import fuel from "./fuel.thundernft.market.json";
 import base from "./thundernft.market.json";
 
+const FUEL_URL = "fuel.thundernft.market";
+const WAGMI_URL = "thundernft.market";
+
 class Config {
   config: { [key: string]: any } = {};
 
   constructor() {
     const hostname = window.location.hostname;
-    if (hostname === "thundernft.market") {
+    this.config = base;
+    if (hostname === WAGMI_URL) {
       this.config = base;
-    } else if (hostname === "fuel.thundernft.market") {
+    } else if (hostname === FUEL_URL) {
       this.config = fuel;
     }
-    this.config = {};
   }
 
   getConfig(name = "") {
