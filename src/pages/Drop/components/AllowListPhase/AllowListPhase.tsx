@@ -91,7 +91,7 @@ const AllowListPhase = () => {
       <div className="allowlist-phase" key={i}>
         <div className={clsx("header", isExpired && "!border-b-0")}>
           <h5 className="text-h5">{phase.title ?? "Allowlist Phase"}</h5>
-          <Properties isAvailable={isAvailable} phase={isAvailable} isExpired={isExpired} startDate={startDate} remainingDrops={remainingDrops} />
+          <Properties isAvailable={isAvailable} phase={phase} isExpired={isExpired} startDate={startDate} remainingDrops={remainingDrops} />
         </div>
         <div className="body">
           {(isAvailable || isExpired) && infinityBlock ? <DroppedItem images={infinityBlock.images} /> : <RemainingTime startDate={startDate} />}
