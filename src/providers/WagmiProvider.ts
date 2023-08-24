@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
 import userService from "../api/user/user.service";
 import * as wagmi from "@wagmi/core";
