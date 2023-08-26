@@ -9,6 +9,10 @@ class FuelProvider extends BaseProvider {
     super();
   }
 
+  getProviderType() {
+    return "fuel";
+  }
+
   async getAccounts(): Promise<any> {
     try {
       const accounts = await this.provider?.accounts();

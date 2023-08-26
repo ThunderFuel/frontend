@@ -274,7 +274,7 @@ const LeftMenu = (props: any) => {
     const _client = getClient();
 
     _client.actions.buyToken({
-      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:5" }],
+      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:4" }],
       wallet,
       chainId: 5,
       onProgress: (steps: Execute["steps"]) => {
@@ -301,7 +301,7 @@ const LeftMenu = (props: any) => {
       wallet,
       listings: [
         {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:5",
           orderKind: "seaport-v1.5",
           orderbook: "reservoir",
           weiPrice: parseEther("0.001").toString(),
@@ -355,7 +355,7 @@ const LeftMenu = (props: any) => {
     });
   }
 
-  function handleCancelOffer() {
+  function handleCancelOrder() {
     const wallet = createWalletClient({
       account: user.walletAddress,
       chain: goerli,
@@ -408,16 +408,16 @@ const LeftMenu = (props: any) => {
             </div>
           </div>
           <Button className="btn-primary hover:bg-green hover:translate-x-7" onClick={handleAL}>
-            AL AL AL
+            BUY +
           </Button>
           <Button className="btn-primary hover:bg-red hover:-translate-x-7" onClick={handleList}>
-            LIST LIST LIST
+            LIST +
           </Button>
           <Button className="btn-primary hover:bg-black hover:text-white hover:translate-x-7" onClick={handlePlaceBid}>
-            PLACE A BID
+            PLACE A BID/MAKE OFFER +
           </Button>
-          <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleCancelOffer}>
-            CANCEL OFFER
+          <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleCancelOrder}>
+            CANCEL ORDER
           </Button>
           <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleAcceptOffer}>
             ACCEPT OFFER

@@ -16,6 +16,8 @@ abstract class BaseProvider {
   abstract walletDisconnect(callbackFn: any): any;
 
   abstract getBidBalance(contractAddress: any): any;
+
+  abstract getProviderType(): any;
 }
 
 export default BaseProvider;

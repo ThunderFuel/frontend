@@ -13,6 +13,10 @@ import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, 
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import userService from "api/user/user.service";
 import { FuelProvider } from "../../../api";
+import { createWalletClient, custom, parseEther } from "viem";
+import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
+import { goerli } from "wagmi/chains";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm transaction",
@@ -44,97 +48,176 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
   const [isFailed, setIsFailed] = useState(false);
+  const { getProviderType } = useWallet();
+
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
+
+  function handlePlaceBid() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    _client.actions
+      .placeBid({
+        wallet,
+        onProgress: (steps: Execute["steps"]) => {
+          const incompleteItems = steps.flatMap((item: any) => {
+            const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
+            if (incompleteSubItems.length > 0) {
+              return {
+                ...item,
+                items: incompleteSubItems,
+              };
+            }
+
+            return [];
+          });
+          if (incompleteItems.length === 0) setApproved(true);
+
+          const executableSteps = steps.filter((step) => step.items && step.items.length > 0);
+          if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
+
+          const stepCount = executableSteps.length;
+
+          let currentStepItem: NonNullable<Execute["steps"][0]["items"]>[0] | undefined;
+
+          const currentStepIndex = executableSteps.findIndex((step) => {
+            currentStepItem = step.items?.find((item: any) => item.status === "incomplete");
+
+            return currentStepItem;
+          });
+
+          const currentStep = currentStepIndex > -1 ? executableSteps[currentStepIndex] : executableSteps[stepCount - 1];
+
+          if (currentStepItem) {
+            setStepData({
+              totalSteps: stepCount,
+              stepProgress: currentStepIndex,
+              currentStep,
+              currentStepItem,
+            });
+          }
+        },
+        bids: [
+          {
+            token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7", //contractAddress
+            orderKind: "seaport-v1.5",
+            orderbook: "reservoir",
+            weiPrice: parseEther(checkoutPrice.toString()).toString(),
+            expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
+            options: {
+              "seaport-v1.5": {
+                useOffChainCancellation: true,
+              },
+            },
+          },
+        ],
+        chainId: 5,
+      })
+      .catch((e) => {
+        console.log(e);
+        setStartTransaction(false);
+      });
+  }
 
   const onComplete = () => {
-    nftdetailsService
-      .getLastIndex(1, user.id)
-      .then((res) => {
-        const order = {
-          isBuySide: true,
-          maker: user.walletAddress,
-          collection: selectedNFT.collection.contractAddress,
-          token_id: selectedNFT.tokenOrder,
-          price: toGwei(checkoutPrice).toNumber(),
-          amount: 1, //fixed
-          nonce: res.data + 1,
-          strategy: strategyFixedPriceContractId,
-          payment_asset: NativeAssetId,
-          expiration_range: formatTimeContract(checkoutExpireTime),
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-        };
+    const type = getProviderType();
+    if (type === "wagmi") handlePlaceBid();
+    else
+      nftdetailsService
+        .getLastIndex(1, user.id)
+        .then((res) => {
+          const order = {
+            isBuySide: true,
+            maker: user.walletAddress,
+            collection: selectedNFT.collection.contractAddress,
+            token_id: selectedNFT.tokenOrder,
+            price: toGwei(checkoutPrice).toNumber(),
+            amount: 1, //fixed
+            nonce: res.data + 1,
+            strategy: strategyFixedPriceContractId,
+            payment_asset: NativeAssetId,
+            expiration_range: formatTimeContract(checkoutExpireTime),
+            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          };
 
-        setContracts(contracts, FuelProvider);
+          setContracts(contracts, FuelProvider);
 
-        userService
-          .getBidBalance(user.id)
-          .then((res) => {
-            setCurrentBidBalance(res.data);
-            const _currentBidBalance = res.data;
-            if (_currentBidBalance < checkoutPrice) {
-              const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-              depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
-                .then((res) => {
-                  if (res.transactionResult.status.type === "success") {
-                    nftdetailsService
-                      .makeOffer({
-                        makerUserId: user.id,
-                        tokenId: selectedNFT.id,
-                        price: checkoutPrice,
-                        priceType: 0,
-                        expireTime: formatTimeBackend(checkoutExpireTime),
-                      })
-                      .then(() => {
-                        userService
-                          .updateBidBalance(user.id, Number(requiredBidAmount))
-                          .then(() => {
-                            setBidBalanceUpdated(true);
-                            setApproved(true);
-                          })
-                          .catch(() => setIsFailed(true));
-                      })
-                      .catch(() => setIsFailed(true));
-                  }
-                })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
-                });
-            } else
-              placeOrder(exchangeContractId, provider, wallet, order)
-                .then((res) => {
-                  if (res.transactionResult.status.type === "success") {
-                    nftdetailsService
-                      .makeOffer({
-                        makerUserId: user.id,
-                        tokenId: selectedNFT.id,
-                        price: checkoutPrice,
-                        priceType: 0,
-                        expireTime: formatTimeBackend(checkoutExpireTime),
-                      })
-                      .then(() => setApproved(true))
-                      .catch(() => setIsFailed(true));
-                  }
-                })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
-                });
-          })
-          .catch(() => setIsFailed(true));
-      })
-      .catch(() => setIsFailed(true));
+          userService
+            .getBidBalance(user.id)
+            .then((res) => {
+              setCurrentBidBalance(res.data);
+              const _currentBidBalance = res.data;
+              if (_currentBidBalance < checkoutPrice) {
+                const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
+                depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
+                  .then((res) => {
+                    if (res.transactionResult.status.type === "success") {
+                      nftdetailsService
+                        .makeOffer({
+                          makerUserId: user.id,
+                          tokenId: selectedNFT.id,
+                          price: checkoutPrice,
+                          priceType: 0,
+                          expireTime: formatTimeBackend(checkoutExpireTime),
+                        })
+                        .then(() => {
+                          userService
+                            .updateBidBalance(user.id, Number(requiredBidAmount))
+                            .then(() => {
+                              setBidBalanceUpdated(true);
+                              setApproved(true);
+                            })
+                            .catch(() => setIsFailed(true));
+                        })
+                        .catch(() => setIsFailed(true));
+                    }
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    if (
+                      e.message.includes("Request cancelled without user response!") ||
+                      e.message.includes("Error: User rejected the transaction!") ||
+                      e.message.includes("An unexpected error occurred")
+                    )
+                      setStartTransaction(false);
+                    else setIsFailed(true);
+                  });
+              } else
+                placeOrder(exchangeContractId, provider, wallet, order)
+                  .then((res) => {
+                    if (res.transactionResult.status.type === "success") {
+                      nftdetailsService
+                        .makeOffer({
+                          makerUserId: user.id,
+                          tokenId: selectedNFT.id,
+                          price: checkoutPrice,
+                          priceType: 0,
+                          expireTime: formatTimeBackend(checkoutExpireTime),
+                        })
+                        .then(() => setApproved(true))
+                        .catch(() => setIsFailed(true));
+                    }
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    if (
+                      e.message.includes("Request cancelled without user response!") ||
+                      e.message.includes("Error: User rejected the transaction!") ||
+                      e.message.includes("An unexpected error occurred")
+                    )
+                      setStartTransaction(false);
+                    else setIsFailed(true);
+                  });
+            })
+            .catch(() => setIsFailed(true));
+        })
+        .catch(() => setIsFailed(true));
   };
 
   React.useEffect(() => {
@@ -149,7 +232,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

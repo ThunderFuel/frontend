@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import * as timeago from "timeago.js";
 import { ContainerClient } from "@azure/storage-blob";
 import imageService from "../api/image/image.service";
+import config from "config";
 
 export const addressFormat = (address: any, type = 0) => {
   if (!address) {
@@ -175,3 +176,41 @@ export const formatTimeContract = (time: any) => {
 export const formatTimeBackend = (time: any) => {
   return Math.round(dayjs().add(time, "days").valueOf() / 1000);
 };
+
+export const checkHasEnoughBalance = (balance: any, amount: any) => {
+  const type = config.getConfig("type");
+  if (type === "wagmi") return balance >= amount;
+  else return balance / 1000000000 >= amount;
+};
+
+export const formatAmount = (amount: any) => {
+  const type = config.getConfig("type");
+  if (type === "wagmi") return amount;
+  else return toGwei(amount);
+};
+
+export async function activateInjectedProvider(providerName: any) {
+  const { ethereum } = window;
+
+  if (!ethereum?.providers) {
+    return undefined;
+  }
+
+  let provider;
+  switch (providerName) {
+    case "Coinbase":
+      provider = ethereum.providers.find(({ isCoinbaseWallet }: any) => isCoinbaseWallet);
+      break;
+    case "Metamask":
+      provider = ethereum.providers.find(({ isMetaMask }: any) => isMetaMask);
+      console.log(ethereum);
+
+      // ethereum.selectExtension("MetaMask");
+      ethereum.setProvider(provider.providers[0]);
+      console.log("YAVAS LOOOO");
+
+      break;
+    default:
+      return;
+  }
+}

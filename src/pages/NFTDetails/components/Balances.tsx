@@ -2,7 +2,6 @@ import userService from "api/user/user.service";
 import { IconRefresh } from "icons";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
-import { formatDisplayedNumber } from "utils";
 import EthereumPrice from "../../../components/EthereumPrice";
 
 const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance: () => void }) => {
@@ -26,7 +25,7 @@ const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance
           <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => onFetchBalance()} />
         </div>
         <div className="flex items-center">
-          <EthereumPrice price={formatDisplayedNumber(balance)} priceClassName="text-h6" />
+          <EthereumPrice price={balance} priceClassName="text-h6" />
         </div>
       </div>
       <div className="flex justify-between">

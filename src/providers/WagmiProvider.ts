@@ -10,6 +10,10 @@ class WagmiProvider extends BaseProvider {
     super();
   }
 
+  getProviderType() {
+    return "wagmi";
+  }
+
   async getAccounts(): Promise<any> {
     try {
       const account = this.provider?.getAccount();

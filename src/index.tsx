@@ -16,7 +16,7 @@ import { BrowserTracing } from "@sentry/tracing";
 
 import { WagmiConfig, createConfig, configureChains } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+// import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { createClient } from "@reservoir0x/reservoir-sdk";
@@ -28,12 +28,12 @@ export const lineaWethaddress = "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f";
 
 export const connectors = [
   new MetaMaskConnector({ chains }),
-  new CoinbaseWalletConnector({
-    chains,
-    options: {
-      appName: "wagmi demo",
-    },
-  }),
+  // new CoinbaseWalletConnector({
+  //   chains,
+  //   options: {
+  //     appName: "wagmi",
+  //   },
+  // }),
   new WalletConnectConnector({
     chains,
     options: {

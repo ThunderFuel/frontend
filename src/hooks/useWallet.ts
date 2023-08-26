@@ -66,6 +66,10 @@ export const useWallet = () => {
     }
   };
 
+  const getProviderType = () => {
+    return selectedGateway().getProviderType();
+  };
+
   return {
     walletConnect,
     walletDisconnect,
@@ -74,5 +78,6 @@ export const useWallet = () => {
     getConnectionStatus,
     walletConnectGateway,
     getBidBalance,
+    getProviderType,
   };
 };

@@ -14,6 +14,9 @@ import { contracts, exchangeContractId, provider, strategyAuctionContractId, str
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { NativeAssetId } from "fuels";
 import { FuelProvider } from "../../../api";
+import { createWalletClient, custom, parseEther } from "viem";
+import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
+import config from "config";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -45,113 +48,152 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = async () => {
-    try {
-      if (checkoutIsAuction) {
-        const res = await nftdetailsService.getLastIndex(2, user.id);
-        const order = [
-          {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: selectedNFT.collection.contractAddress,
-            token_id: selectedNFT.tokenOrder,
-            price: 1,
-            amount: 1,
-            nonce: res.data + 1,
-            strategy: strategyAuctionContractId,
-            payment_asset: NativeAssetId,
-            expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: {
-              extra_address_param: ZERO_B256,
-              extra_contract_param: ZERO_B256,
-              extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0,
+  function handleList() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      // chain: linea,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    const _expireTime = "1695404031";
+
+    _client.actions.listToken({
+      wallet,
+      listings: [
+        {
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
+          orderKind: "seaport-v1.5",
+          orderbook: "reservoir",
+          weiPrice: parseEther("0.001").toString(),
+          expirationTime: _expireTime,
+          // fees: [`${wallet.account.address}:100`],
+          options: {
+            "seaport-v1.5": {
+              useOffChainCancellation: true,
             },
           },
-        ];
+        },
+      ],
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+      chainId: 5,
+    });
+  }
 
-        setContracts(contracts, FuelProvider);
-
-        try {
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
-
-          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
-            await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
-            setApproved(true);
-          }
-        } catch (e) {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-        }
-      } else if (updateListing) {
-        const res = await nftdetailsService.getTokensIndex([selectedNFT?.id]);
-        const order = [
-          {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: selectedNFT.collection.contractAddress,
-            token_id: selectedNFT.tokenOrder,
-            price: toGwei(checkoutPrice).toNumber(),
-            amount: 1,
-            nonce: res.data[selectedNFT?.id],
-            strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
-            expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-          },
-        ];
-
-        setContracts(contracts, FuelProvider);
-
-        try {
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
-
-          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
-            await nftdetailsService.tokenUpdateListing([
-              {
-                tokenId: selectedNFT.id,
-                price: checkoutPrice,
-                expireTime: formatTimeBackend(checkoutExpireTime),
+  const onComplete = async () => {
+    try {
+      const type = config.getConfig("type");
+      if (type === "wagmi") handleList();
+      else {
+        if (checkoutIsAuction) {
+          const res = await nftdetailsService.getLastIndex(2, user.id);
+          const order = [
+            {
+              isBuySide: false,
+              maker: user.walletAddress,
+              collection: selectedNFT.collection.contractAddress,
+              token_id: selectedNFT.tokenOrder,
+              price: 1,
+              amount: 1,
+              nonce: res.data + 1,
+              strategy: strategyAuctionContractId,
+              payment_asset: NativeAssetId,
+              expiration_range: formatTimeContract(checkoutExpireTime),
+              extra_params: {
+                extra_address_param: ZERO_B256,
+                extra_contract_param: ZERO_B256,
+                extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0,
               },
-            ]);
-            setApproved(true);
+            },
+          ];
+
+          setContracts(contracts, FuelProvider);
+
+          try {
+            const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+
+            if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+              await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
+              setApproved(true);
+            }
+          } catch (e) {
+            handleTransactionError({ error: e, setStartTransaction, setIsFailed });
           }
-        } catch (e) {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-        }
-      } else {
-        const res = await nftdetailsService.getLastIndex(0, user.id);
-        const order = [
-          {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: selectedNFT.collection.contractAddress,
-            token_id: selectedNFT.tokenOrder,
-            price: toGwei(checkoutPrice).toNumber(),
-            amount: 1,
-            nonce: res.data + 1,
-            strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
-            expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-          },
-        ];
+        } else if (updateListing) {
+          const res = await nftdetailsService.getTokensIndex([selectedNFT?.id]);
+          const order = [
+            {
+              isBuySide: false,
+              maker: user.walletAddress,
+              collection: selectedNFT.collection.contractAddress,
+              token_id: selectedNFT.tokenOrder,
+              price: toGwei(checkoutPrice).toNumber(),
+              amount: 1,
+              nonce: res.data[selectedNFT?.id],
+              strategy: strategyFixedPriceContractId,
+              payment_asset: NativeAssetId,
+              expiration_range: formatTimeContract(checkoutExpireTime),
+              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+            },
+          ];
 
-        setContracts(contracts, FuelProvider);
+          setContracts(contracts, FuelProvider);
 
-        try {
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+          try {
+            const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
 
-          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
-            await nftdetailsService.tokenList([
-              {
-                tokenId: selectedNFT.id,
-                price: checkoutPrice,
-                expireTime: formatTimeBackend(checkoutExpireTime),
-              },
-            ]);
-            setApproved(true);
+            if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+              await nftdetailsService.tokenUpdateListing([
+                {
+                  tokenId: selectedNFT.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                },
+              ]);
+              setApproved(true);
+            }
+          } catch (e) {
+            handleTransactionError({ error: e, setStartTransaction, setIsFailed });
           }
-        } catch (e) {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+        } else {
+          const res = await nftdetailsService.getLastIndex(0, user.id);
+          const order = [
+            {
+              isBuySide: false,
+              maker: user.walletAddress,
+              collection: selectedNFT.collection.contractAddress,
+              token_id: selectedNFT.tokenOrder,
+              price: toGwei(checkoutPrice).toNumber(),
+              amount: 1,
+              nonce: res.data + 1,
+              strategy: strategyFixedPriceContractId,
+              payment_asset: NativeAssetId,
+              expiration_range: formatTimeContract(checkoutExpireTime),
+              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+            },
+          ];
+
+          setContracts(contracts, FuelProvider);
+
+          try {
+            const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+
+            if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+              await nftdetailsService.tokenList([
+                {
+                  tokenId: selectedNFT.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                },
+              ]);
+              setApproved(true);
+            }
+          } catch (e) {
+            handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+          }
         }
       }
     } catch (error) {

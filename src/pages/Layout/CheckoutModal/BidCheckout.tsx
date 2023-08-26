@@ -15,6 +15,10 @@ import { contracts, exchangeContractId, provider, strategyAuctionContractId, ZER
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
 import { FuelProvider } from "../../../api";
+import { createWalletClient, custom, parseEther } from "viem";
+import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
+import { goerli } from "wagmi/chains";
+import config from "config";
 
 const checkoutProcessTexts = {
   title1: "Confirm your bid",
@@ -49,59 +53,96 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = () => {
-    nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-      const order = {
-        isBuySide: true,
-        maker: user.walletAddress,
-        collection: selectedNFT.collection.contractAddress,
-        token_id: selectedNFT.tokenOrder,
-        price: toGwei(checkoutPrice).toNumber(),
-        amount: 1,
-        nonce: res.data[selectedNFT.id], //Auction bid de sabit tutabilirmisiz
-        strategy: strategyAuctionContractId,
-        payment_asset: NativeAssetId,
-        expiration_range: 1, // Bid de fixed verebiliriz - onemli degil
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-      };
-
-      setContracts(contracts, FuelProvider);
-
-      userService.getBidBalance(user.id).then((res) => {
-        setCurrentBidBalance(res.data);
-        const _currentBidBalance = res.data;
-        if (_currentBidBalance < checkoutPrice) {
-          const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
-            .then((res) => {
-              if (res.transactionResult.status.type === "success") {
-                nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
-                setApproved(true);
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-                setStartTransaction(false);
-              else setIsFailed(true);
-            });
-        } else
-          placeOrder(exchangeContractId, provider, wallet, order)
-            .then((res) => {
-              if (res.transactionResult.status.type === "success") {
-                nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-                setApproved(true);
-              }
-            })
-            .catch((e) => {
-              console.log(e);
-              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-                setStartTransaction(false);
-              else setIsFailed(true);
-            });
-      });
+  function handlePlaceBid() {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
     });
+
+    const _client = getClient();
+
+    const _expireTime = "1695404031";
+
+    _client.actions.placeBid({
+      wallet,
+      onProgress: (steps: Execute["steps"]) => {
+        console.log(steps);
+      },
+      bids: [
+        {
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7",
+          orderKind: "seaport-v1.5",
+          orderbook: "reservoir",
+          weiPrice: parseEther("0.001").toString(),
+          expirationTime: _expireTime,
+          options: {
+            "seaport-v1.5": {
+              useOffChainCancellation: true,
+            },
+          },
+        },
+      ],
+      chainId: 5,
+    });
+  }
+
+  const onComplete = () => {
+    const type = config.getConfig("type");
+    if (type === "wagmi") handlePlaceBid();
+    else
+      nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
+        const order = {
+          isBuySide: true,
+          maker: user.walletAddress,
+          collection: selectedNFT.collection.contractAddress,
+          token_id: selectedNFT.tokenOrder,
+          price: toGwei(checkoutPrice).toNumber(),
+          amount: 1,
+          nonce: res.data[selectedNFT.id], //Auction bid de sabit tutabilirmisiz
+          strategy: strategyAuctionContractId,
+          payment_asset: NativeAssetId,
+          expiration_range: 1, // Bid de fixed verebiliriz - onemli degil
+          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+        };
+
+        setContracts(contracts, FuelProvider);
+
+        userService.getBidBalance(user.id).then((res) => {
+          setCurrentBidBalance(res.data);
+          const _currentBidBalance = res.data;
+          if (_currentBidBalance < checkoutPrice) {
+            const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
+            depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
+              .then((res) => {
+                if (res.transactionResult.status.type === "success") {
+                  nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+                  userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
+                  setApproved(true);
+                }
+              })
+              .catch((e) => {
+                console.log(e);
+                if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                  setStartTransaction(false);
+                else setIsFailed(true);
+              });
+          } else
+            placeOrder(exchangeContractId, provider, wallet, order)
+              .then((res) => {
+                if (res.transactionResult.status.type === "success") {
+                  nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
+                  setApproved(true);
+                }
+              })
+              .catch((e) => {
+                console.log(e);
+                if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                  setStartTransaction(false);
+                else setIsFailed(true);
+              });
+        });
+      });
   };
 
   React.useEffect(() => {

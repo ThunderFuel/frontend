@@ -7,7 +7,7 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import RightMenu from "../components/RightMenu";
 import CartItem from "../components/CartItem";
 import { useWallet } from "hooks/useWallet";
-import { getDateFromExpirationTime, toGwei } from "utils";
+import { checkHasEnoughBalance, formatAmount, getDateFromExpirationTime, toGwei } from "utils";
 import Select, { ISelectOption } from "components/Select";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
@@ -72,7 +72,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   };
 
   const hasEnoughBalance = () => {
-    return balance / 1000000000 >= offer;
+    return checkHasEnoughBalance(balance, offer);
   };
 
   const bidBalanceControl = () => {
@@ -145,7 +145,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
         </div>
         <InputEthereum onChange={setoffer} value={offer} type="text" />
-        {balance < toGwei(offer) && (
+        {balance < formatAmount(offer) && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
