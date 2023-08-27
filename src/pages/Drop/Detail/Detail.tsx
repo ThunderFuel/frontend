@@ -56,7 +56,7 @@ const Detail = () => {
 
   return (
     <DropDetailProvider value={{ dropDetail }}>
-      <div className="flex flex-col gap-5 py-5">
+      <div className="flex flex-col gap-24 py-5">
         <div className="px-10 flex flex-col gap-5">
           <Title />
           <Banner />
