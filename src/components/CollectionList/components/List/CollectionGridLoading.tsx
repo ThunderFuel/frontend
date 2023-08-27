@@ -9,10 +9,10 @@ const CollectionGridLoading = ({ page }: { page?: number }) => {
   // const collectionItems = new Array(20).fill(1);
 
   const displayClass = useMemo(() => {
-    if (displayType === DisplayType.GRID4) {
+    if (displayType === DisplayType.GRID5) {
+      return "lg:grid-cols-5";
+    } else if (displayType === DisplayType.GRID4) {
       return "lg:grid-cols-4";
-    } else if (displayType === DisplayType.GRID3) {
-      return "lg:grid-cols-3";
     }
 
     return "lg:grid-cols-5";

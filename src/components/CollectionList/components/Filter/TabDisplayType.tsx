@@ -15,10 +15,10 @@ const TabDisplayType = () => {
         setDisplayType(selectedTab);
       }}
     >
-      <Tab.Item id={DisplayType.GRID4}>
+      <Tab.Item id={DisplayType.GRID5}>
         <IconGridExtend />
       </Tab.Item>
-      <Tab.Item id={DisplayType.GRID3}>
+      <Tab.Item id={DisplayType.GRID4}>
         <IconGrid />
       </Tab.Item>
       <Tab.Item id={DisplayType.LIST}>
