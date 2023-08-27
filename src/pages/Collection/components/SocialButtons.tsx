@@ -94,7 +94,7 @@ const SocialShareButton = ({ collection, user }: any) => {
   });
 
   return (
-    <li className="relative" ref={containerRef}>
+    <li className="relative z-10" ref={containerRef}>
       <div className={clsx("px-2 py-2 hover:text-white cursor-pointer", show ? "text-white bg-bg-light" : "text-gray-light")} onClick={() => setShow(!show)}>
         <IconShare />
       </div>
