@@ -61,19 +61,19 @@ const FixedPrice = () => {
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
-      <div className="flex pl-2 items-center text-bodyMd text-white gap-x-2 py-[10px]">
+      <div className="flex pl-2 items-center body-medium text-white gap-x-2 py-[10px]">
         <IconListed className="w-[19px]" />
         Sale ends in {days}d {hours}h {minutes}m
       </div>
       <div className="flex justify-between bg-bg-light mb-[1px] p-5 last:rounded-b last:mb-0">
         <div className="flex flex-col">
-          <span className="text-headlineMd font-bigShoulderDisplay text-gray-light">PRICE</span>
+          <span className="text-headline-02 text-gray-light">PRICE</span>
           <EthereumPrice priceClassName="text-h3 text-white" price={selectedNFT.price} fullPrice={true} />
         </div>
         {selectedNFT.lastSalePrice ? (
           <div className="flex h-fit items-center gap-x-[5px]">
             <IconCart width="18px" height="18px" color="#838383" />
-            <span className="text-bodySm font-spaceGrotesk text-gray-light">Last sale price {formatPrice(selectedNFT.lastSalePrice)} ETH</span>
+            <span className="body-small text-gray-light">Last sale price {formatPrice(selectedNFT.lastSalePrice)} ETH</span>
           </div>
         ) : (
           <></>
