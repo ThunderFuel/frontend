@@ -30,7 +30,7 @@ const SidebarFilter = ({ options, className, children, displayType, setDisplayTy
               </div>
             </div>
             <div className={clsx("flex-1 transition-all duration-300", show && "pl-16")}>
-              <div className="flex items-center justify-between border-b border-b-gray pb-5">
+              <div className="flex items-center justify-between border-b border-b-gray pb-4">
                 <h5 className="text-h5 text-white">Filters</h5>
                 <div className="icon-btn cursor-pointer" onClick={onToggle}>
                   <IconChevronDoubleLeft className="text-gray-light" />

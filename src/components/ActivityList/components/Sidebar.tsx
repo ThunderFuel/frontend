@@ -19,7 +19,7 @@ const Sidebar = ({ className = "w-[280px]" }: any) => {
   return (
     <SidebarFilterBase className={className}>
       <Collapse isOpen={true}>
-        <Collapse.Header>Event Types</Collapse.Header>
+        <Collapse.Header>Activity Type</Collapse.Header>
         <Collapse.Body>
           {Object.keys(filters).map((filterIndex: any) => {
             const filter = filters[filterIndex];

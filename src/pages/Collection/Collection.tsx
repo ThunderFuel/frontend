@@ -14,10 +14,24 @@ import ReadMore from "components/ReadMore";
 import { useAppSelector } from "store";
 import UseNavigate from "hooks/useNavigate";
 import Button from "components/Button";
-import { IconPencil } from "icons";
+import { IconFuelWallet, IconPencil } from "icons";
 import { PATHS } from "router/config/paths";
 
 const EDITABLE_USER = 708;
+
+const CollectionProvider = () => {
+  return (
+    <div className="flex text-h6 gap-1 items-center text-white">
+      <span className="text-gray-light">on</span>
+      <span className="flex gap-2.5 items-center">
+        Fuel
+        <span className="flex items-center justify-center bg-black border border-gray rounded-full w-7 h-7 p-1">
+          <IconFuelWallet />
+        </span>
+      </span>
+    </div>
+  );
+};
 const Collection = () => {
   const navigate = UseNavigate();
 
@@ -56,6 +70,7 @@ const Collection = () => {
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
                 <div className="flex gap-5">
                   <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
+                  <CollectionProvider />
                   {user.id === EDITABLE_USER && (
                     <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
                       EDIT COLLECTION <IconPencil />
