@@ -2,11 +2,12 @@ import React, { useMemo } from "react";
 import { useActivityContext } from "../ActivityContext";
 import NotFound from "../../NotFound";
 import Table, { ITableHeader } from "../../Table";
-import { addressFormat, timeagoFormat } from "utils";
+import { addressFormat, dateFormat, timeagoFormat } from "utils";
 import EthereumPrice from "../../EthereumPrice";
 import { IconHand } from "icons";
 import LazyImg from "../../LazyImg";
 import { useAppSelector } from "../../../store";
+import Tooltip from "../../Tooltip";
 
 const activityTypes: any = {
   Sales: "Sale",
@@ -114,7 +115,9 @@ const ActivityItems = (props: any) => {
       render: (item) => {
         return (
           <div className="pr-2.5 text-right">
-            <span className="body-medium text-white">{timeagoFormat(item.createdTimeStamp)}</span>
+            <Tooltip position="bottom right" hiddenArrow={true} content={dateFormat(item.createdTimeStamp, "MMM DD, HH:mm A Z")}>
+              <span className="body-medium text-white">{timeagoFormat(item.createdTimeStamp)}</span>
+            </Tooltip>
           </div>
         );
       },
