@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Carousel from "components/Carousel";
 import UseNavigate from "hooks/useNavigate";
-import { IconArrowRight, IconChevronLeft, IconChevronRight } from "icons";
+import { IconArrowRight, IconChevronLeft, IconChevronRight, IconWarning } from "icons";
 import marketplaceService from "api/marketplace/marketplace.service";
 import Button from "components/Button";
 
@@ -43,12 +43,18 @@ const HotDrops = () => {
 
   return (
     <div className="">
+      <div className="flex-center text-red border-y border-red py-1">
+        <IconWarning />
+        <div className="body-small">
+          Thunder is available on Linea network. Please check your wallet settings and <span className="underline">switch to Linea</span>.
+        </div>
+      </div>
       <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
         {items.map((item, k) => {
           return (
             <Carousel.Item key={k}>
-              <div className="flex min-h-[440px] w-full border-b border-gray">
-                <div className="flex flex-col justify-between px-10 py-5 border-r border-gray" style={{ width: "440px" }}>
+              <div className="flex min-h-[440px] w-full border-b border-gray bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${item.banner})` }}>
+                <div className="flex flex-col justify-between px-10 py-5 border-r border-gray bg-bg" style={{ width: "440px" }}>
                   <div className="flex flex-col gap-5">
                     <h2 className="text-h2 text-white">{item.name}</h2>
                   </div>
@@ -59,7 +65,7 @@ const HotDrops = () => {
                     </Button>
                   </div>
                 </div>
-                <div className="hotdrop-slide" style={{ backgroundImage: `url(${item.banner})` }} />
+                <div className="hotdrop-slide" />
               </div>
             </Carousel.Item>
           );
