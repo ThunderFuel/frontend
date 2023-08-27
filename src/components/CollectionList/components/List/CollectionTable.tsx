@@ -3,7 +3,7 @@ import Table, { ITableHeader } from "components/Table";
 import Checkbox from "components/CheckBox";
 import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
 import { useAppDispatch } from "store";
-import { addressFormat, dateFormat } from "utils";
+import { addressFormat, timeagoFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
 import EthereumPrice from "components/EthereumPrice";
@@ -14,17 +14,20 @@ import UseNavigate from "hooks/useNavigate";
 
 const Collection = ({ item }: { item: any }) => {
   return (
-    <div className="flex items-center gap-5 p-3.5 pl-0">
+    <div className="flex items-center gap-5 pl-0">
       <div className={clsx("min-w-[56px] max-w-[56px] aspect-square rounded-sm overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}>
         <Img className="h-full" alt={item.image} src={item.image} loading="lazy" />
       </div>
-      <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>
+      <div className="">
+        {item.collectionName && <div className="text-body text-gray-light text-overflow max-w-[130px]">{item.collectionName}</div>}
+        <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>
+      </div>
     </div>
   );
 };
 
 const UnSalableLabel = ({ children }: any) => {
-  return <span className="text-headline-01 uppercase text-gray-light pr-[7px]">{children}</span>;
+  return <span className="text-headline-01 uppercase text-gray-light pr-2">{children}</span>;
 };
 
 const CollectionTable = () => {
@@ -73,7 +76,7 @@ const CollectionTable = () => {
     },
     {
       key: "collection",
-      text: "Collection",
+      text: "Item",
       render: (item) => <Collection item={item} />,
     },
     {
@@ -97,7 +100,7 @@ const CollectionTable = () => {
       align: "flex-end",
       render: (item) => (
         <div
-          className="cell text-h6 text-gray-light hover:text-white hover:underline"
+          className="cell body-medium text-white hover:underline"
           onClick={() => {
             navigate(PATHS.USER, { userId: item?.userId });
           }}
@@ -112,9 +115,9 @@ const CollectionTable = () => {
       width: "20%",
       align: "flex-end",
       render: (item) => {
-        const listedTime = dateFormat(item.listedTime);
+        const listedTime = timeagoFormat(item.listedTime);
 
-        return <Table.Cell>{listedTime}</Table.Cell>;
+        return <div className="cell body-medium">{listedTime}</div>;
       },
     },
   ];
@@ -128,6 +131,7 @@ const CollectionTable = () => {
       headers={headers}
       items={collectionItems}
       onClick={onSelect}
+      containerFluidClassName={"!px-5"}
       isSelectedRow={(item) => item.isSelected}
     />
   );
