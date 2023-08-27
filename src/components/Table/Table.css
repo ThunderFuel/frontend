@@ -47,7 +47,7 @@
 }
 
 .table .tbody .tr-group:has(.after) .tr:not(.after) {
-  @apply border-b-0;
+  @apply border-b-0 rounded-b-none;
 }
 
 .table .tbody .tr.active {
@@ -65,5 +65,13 @@
 }
 
 .table .tbody .tr.after {
+  min-height: 14px;
+  transition: min-height;
+  @apply rounded-t-none p-0;
+  @apply duration-300;
   @apply -mt-2 border-t-0 rounded-b-lg;
+}
+
+.table .tbody .tr-group:hover .tr.after {
+  min-height: 50px;
 }

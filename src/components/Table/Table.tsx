@@ -124,9 +124,7 @@ const Table = ({
         </RowElement>
         {afterRow ? (
           <div key={`afterRow_${k.toString()}`} className={"tr after"}>
-            <td colSpan={headers.length} className="py-5 px-8 text-left">
-              {afterRow(item)}
-            </td>
+            <td colSpan={headers.length}>{afterRow(item)}</td>
           </div>
         ) : (
           <></>

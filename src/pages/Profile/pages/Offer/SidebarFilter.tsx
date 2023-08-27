@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import Collapse from "components/Collapse";
-import { useOfferContext } from "../OfferContext";
+import { useOfferContext } from "./OfferContext";
 import Checkbox from "components/CheckBox";
 import Radio from "components/Radio";
 
@@ -110,7 +110,7 @@ const SidebarFilter = () => {
   }, [offers, filterValue]);
 
   return (
-    <SidebarFilterBase className="w-[280px]">
+    <SidebarFilterBase className="w-[280px]" hiddenTabOffset={true}>
       {getFilterItems.map((filterItem: any, index: number) => {
         const Component = filterItem.component;
 

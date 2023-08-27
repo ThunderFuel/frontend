@@ -1,5 +1,5 @@
 import React from "react";
-import OfferList from "components/OfferList";
+import OfferList from "./OfferList";
 import { useProfile } from "../../ProfileContext";
 import { useAppDispatch } from "store";
 import useNavigate from "hooks/useNavigate";
@@ -10,6 +10,8 @@ import useToast from "hooks/useToast";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { PATHS } from "router/config/paths";
 import offerService from "api/offer/offer.service";
+import SidebarFilter from "./SidebarFilter";
+import OfferProvider from "./OfferContext";
 
 const Offer = () => {
   const { userInfo } = useProfile();
@@ -142,7 +144,14 @@ const Offer = () => {
     getBidBalance,
   };
 
-  return <OfferList {...contextValue} />;
+  return (
+    <OfferProvider value={contextValue}>
+      <div className="flex w-full h-full pl-5">
+        <SidebarFilter />
+        <OfferList />
+      </div>
+    </OfferProvider>
+  );
 };
 
 export default Offer;
