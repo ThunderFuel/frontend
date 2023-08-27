@@ -9,7 +9,7 @@ import collectionsService from "api/collections/collections.service";
 import ActivityItemDescription from "components/ActivityDescription";
 import ActivityList from "components/ActivityList/ActivityList";
 import { ITableHeader } from "components/Table";
-import { addressFormat, timeagoFormat } from "utils";
+import ActivityItems from "../../../components/ActivityList/components/ActivityItems";
 
 const ActivityType = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
@@ -101,8 +101,7 @@ const headers: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.fromUser?.walletAddress, 1)}</span>,
-    // renderHeader: (header) => <span>asasas</span>,
+    render: (item) => <ActivityItems.FromUser item={item} />,
   },
   {
     key: "to",
@@ -110,7 +109,7 @@ const headers: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.toUser?.walletAddress, 1)}</span>,
+    render: (item) => <ActivityItems.ToUser item={item} />,
   },
 
   {
@@ -119,8 +118,7 @@ const headers: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 3,
-    render: (item) => <span>{timeagoFormat(item?.createdAt)}</span>,
-    // renderHeader: (header) => <span>asasas</span>,
+    render: (item) => <ActivityItems.Time item={item} />,
   },
 ];
 
