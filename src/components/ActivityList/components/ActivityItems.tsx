@@ -85,7 +85,7 @@ const ActivityItems = (props: any) => {
     {
       key: "type",
       text: `TYPE`,
-      width: "12%",
+      width: "15%",
       align: "flex-start",
       render: (item) => <ActivityType item={item} />,
     },
