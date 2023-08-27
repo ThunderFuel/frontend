@@ -38,7 +38,7 @@
 }
 
 .table .tbody .tr {
-  @apply p-2.5;
+  @apply p-0;
   @apply flex flex-row items-center border border-gray rounded-lg;
 }
 
