@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import { ethers } from "ethers";
-import * as timeago from "timeago.js";
 import { ContainerClient } from "@azure/storage-blob";
 import imageService from "../api/image/image.service";
+
+export { timeagoFormat } from "./timeago";
 
 export const addressFormat = (address: any, type = 0) => {
   if (!address) {
@@ -86,10 +87,6 @@ export function toGwei(num: any) {
 export function randomIntFromInterval(min = 1, max = 11111111) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-export const timeagoFormat = (time: number | string) => {
-  return timeago.format(time);
-};
 
 export const uniqueArr = (array: any[]) => {
   return Array.from(new Set(array.map((item) => JSON.stringify(item)))).map((item) => JSON.parse(item));

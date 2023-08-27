@@ -83,6 +83,7 @@ const Activity = () => {
       onChangePagination={({ page }: any) => {
         setParams({ page: page });
       }}
+      bottomOffset={200}
     >
       <ActivityList containerClassName={"pl-10"} activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
     </InfiniteScroll>
