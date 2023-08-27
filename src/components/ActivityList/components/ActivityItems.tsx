@@ -92,7 +92,7 @@ const ActivityItems = (props: any) => {
     {
       key: "from",
       text: "from",
-      width: "15%",
+      width: "18%",
       align: "flex-end",
       sortValue: 2,
       render: (item) => <ActivityFromUser item={item} />,
@@ -100,7 +100,7 @@ const ActivityItems = (props: any) => {
     {
       key: "to",
       text: "to",
-      width: "15%",
+      width: "18%",
       align: "flex-end",
       sortValue: 2,
       render: (item) => <ActivityToUser item={item} />,
@@ -108,7 +108,7 @@ const ActivityItems = (props: any) => {
     {
       key: "date",
       text: "date",
-      width: "15%",
+      width: "18%",
       align: "flex-end",
       sortValue: 3,
       render: (item) => {
