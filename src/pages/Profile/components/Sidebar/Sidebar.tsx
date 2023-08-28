@@ -11,7 +11,6 @@ import { FollowType, useProfile } from "../../ProfileContext";
 const Sidebar = ({ isProfile = false }: any) => {
   const { userInfo, onSetSocialActiveTab } = useProfile();
   const ownedTokens = userInfo?.tokens ?? [];
-  const listedTokens = ownedTokens.filter((item: any) => item.salable);
 
   return (
     <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px]">
@@ -44,10 +43,10 @@ const Sidebar = ({ isProfile = false }: any) => {
                   onSetSocialActiveTab(FollowType.Follows);
                 }}
               >
-                {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
+                {numberFormat(ownedTokens.length)}
               </BoxGroupItem>
             </BoxGroup>
-            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio} </div>
+            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio}</div>
 
             {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
             {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}
