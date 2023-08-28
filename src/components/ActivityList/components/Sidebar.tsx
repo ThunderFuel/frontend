@@ -5,7 +5,7 @@ import SidebarFilterBase from "components/SidebarFilter";
 import Collapse from "components/Collapse/Collapse";
 import Radio from "components/Radio";
 
-const Sidebar = ({ className = "w-[280px]" }: any) => {
+const Sidebar = ({ className = "w-[280px]", hiddenTabOffset = false }: any) => {
   const { filters, onChangeSelectedFilter, selectedFilter } = useActivityContext();
 
   const onClick = (filterIndex: any) => {
@@ -17,7 +17,7 @@ const Sidebar = ({ className = "w-[280px]" }: any) => {
   };
 
   return (
-    <SidebarFilterBase className={className}>
+    <SidebarFilterBase className={className} hiddenTabOffset={hiddenTabOffset}>
       <Collapse isOpen={true}>
         <Collapse.Header>Activity Type</Collapse.Header>
         <Collapse.Body>
