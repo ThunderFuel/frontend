@@ -7,7 +7,7 @@ const Checkbox = (props: any, ref: any) => {
     <label
       className="checkbox"
       onClick={(e) => {
-        onClick();
+        onClick(e);
         e.preventDefault();
       }}
     >

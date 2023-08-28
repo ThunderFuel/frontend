@@ -57,6 +57,7 @@ const CollectionTable = () => {
     setSweep(0);
 
     if (options?.isProfile) {
+      console.log("tek tık");
       onToggleBulkListing(collection);
     } else {
       onToggleCart(collection);
@@ -71,7 +72,13 @@ const CollectionTable = () => {
         <div className="p-2">
           {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : (
-              <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
+              <Checkbox
+                checked={collection.isSelected}
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                  onSelect(collection);
+                }}
+              />
             )
           ) : null}
         </div>
