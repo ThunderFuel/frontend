@@ -42,7 +42,7 @@ const CollectionProperties = ({ volume, floor, listedCount, ownerCount, supplyCo
     <div>
       <ul className="inline-flex border border-gray rounded-md">
         {items.map((item) => (
-          <li key={item.name} className="flex flex-col gap-2 px-4 pt-3 pb-1 border-l border-l-gray first:border-none text-gray-light hover:text-white cursor-pointer">
+          <li key={item.name} className="flex flex-col gap-2 px-4 pt-3 pb-1 border-l border-l-gray first:border-none text-gray-light hover:text-white">
             <div className="text-headline-01 uppercase whitespace-nowrap">{item.name}</div>
             {item.component}
           </li>
