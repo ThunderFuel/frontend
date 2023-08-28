@@ -61,7 +61,7 @@ const FavoriteButton = ({ collection }: { collection: any }) => {
   );
 };
 
-const SocialShareButton = ({ collection, user }: any) => {
+const SocialShareButton = ({ collection, user, className = "right-0" }: any) => {
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLLIElement>(null);
   const shareTwitter = useShareTwitter();
@@ -99,7 +99,7 @@ const SocialShareButton = ({ collection, user }: any) => {
         <IconShare />
       </div>
       {show ? (
-        <ul className="absolute right-0 top-full mt-1 flex flex-col bg-bg border border-gray rounded-[4px] divide-y divide-gray overflow-hidden">
+        <ul className={clsx("absolute top-full mt-1 flex flex-col bg-bg border border-gray rounded-[4px] divide-y divide-gray overflow-hidden", className)}>
           {items.map((item, k) => {
             const Icon = item.icon;
 
@@ -121,12 +121,14 @@ const SocialButtons = ({
   user,
   disableShare = false,
   className,
+  shareDropdownClassName = "right-0",
 }: {
   socialMedias: { url: string; type: SocialTypes }[] | null;
   collection?: any;
   user?: any;
   disableShare?: boolean;
   className?: string;
+  shareDropdownClassName?: string;
 }) => {
   const iconList: any = {
     [SocialTypes.Website]: IconWeblink,
@@ -150,7 +152,7 @@ const SocialButtons = ({
       {!disableShare ? (
         <ul className="inline-flex border border-gray rounded-[4px]">
           {collection ? <FavoriteButton collection={collection} /> : null}
-          <SocialShareButton collection={collection} user={user} />
+          <SocialShareButton collection={collection} user={user} className={shareDropdownClassName} />
         </ul>
       ) : null}
     </div>

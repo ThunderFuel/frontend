@@ -57,7 +57,6 @@ const CollectionTable = () => {
     setSweep(0);
 
     if (options?.isProfile) {
-      console.log("tek tık");
       onToggleBulkListing(collection);
     } else {
       onToggleCart(collection);

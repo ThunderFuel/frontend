@@ -73,7 +73,7 @@ const LogoContainer = ({ userInfo }: any) => {
         </div>
         <div className="flex gap-2">
           <WalletDropdown walletAddress={userInfo?.walletAddress} />
-          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} />
+          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} shareDropdownClassName="left-0" />
         </div>
       </div>
     </div>
