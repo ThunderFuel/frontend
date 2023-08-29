@@ -13,9 +13,6 @@ import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, 
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import userService from "api/user/user.service";
 import { FuelProvider } from "../../../api";
-import { createWalletClient, custom, parseEther } from "viem";
-import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
-import { goerli } from "wagmi/chains";
 import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
@@ -48,86 +45,29 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
   const [isFailed, setIsFailed] = useState(false);
-  const { getProviderType } = useWallet();
+  const { getProviderType, handleMakeOffer } = useWallet();
 
   const [wagmiSteps, setWagmiSteps] = useState<any>([]);
   const [stepData, setStepData] = useState<any>([]);
 
-  function handlePlaceBid() {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      chain: goerli,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    _client.actions
-      .placeBid({
-        wallet,
-        onProgress: (steps: Execute["steps"]) => {
-          const incompleteItems = steps.flatMap((item: any) => {
-            const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
-            if (incompleteSubItems.length > 0) {
-              return {
-                ...item,
-                items: incompleteSubItems,
-              };
-            }
-
-            return [];
-          });
-          if (incompleteItems.length === 0) setApproved(true);
-
-          const executableSteps = steps.filter((step) => step.items && step.items.length > 0);
-          if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
-
-          const stepCount = executableSteps.length;
-
-          let currentStepItem: NonNullable<Execute["steps"][0]["items"]>[0] | undefined;
-
-          const currentStepIndex = executableSteps.findIndex((step) => {
-            currentStepItem = step.items?.find((item: any) => item.status === "incomplete");
-
-            return currentStepItem;
-          });
-
-          const currentStep = currentStepIndex > -1 ? executableSteps[currentStepIndex] : executableSteps[stepCount - 1];
-
-          if (currentStepItem) {
-            setStepData({
-              totalSteps: stepCount,
-              stepProgress: currentStepIndex,
-              currentStep,
-              currentStepItem,
-            });
-          }
-        },
-        bids: [
-          {
-            token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7", //contractAddress
-            orderKind: "seaport-v1.5",
-            orderbook: "reservoir",
-            weiPrice: parseEther(checkoutPrice.toString()).toString(),
-            expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
-            options: {
-              "seaport-v1.5": {
-                useOffChainCancellation: true,
-              },
-            },
-          },
-        ],
-        chainId: 5,
-      })
-      .catch((e) => {
-        console.log(e);
-        setStartTransaction(false);
-      });
-  }
-
   const onComplete = () => {
     const type = getProviderType();
-    if (type === "wagmi") handlePlaceBid();
+    if (type === "wagmi")
+      handleMakeOffer({
+        checkoutExpireTime,
+        checkoutPrice,
+        setApproved,
+        setWagmiSteps,
+        wagmiSteps,
+        setStepData,
+        user,
+        wallet,
+        setStartTransaction,
+        setIsFailed,
+        selectedNFT,
+        setBidBalanceUpdated,
+        setCurrentBidBalance,
+      });
     else
       nftdetailsService
         .getLastIndex(1, user.id)

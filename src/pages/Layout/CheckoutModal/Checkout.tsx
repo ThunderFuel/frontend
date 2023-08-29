@@ -9,16 +9,9 @@ import NotFound from "components/NotFound";
 import { IconDone, IconMilestone, IconSpinner, IconWarning } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { getCartTotal, removeAll, removeBuyNowItem } from "store/cartSlice";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { isObjectEmpty, toGwei } from "utils";
-
-import { bulkPurchase, executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
-import { NativeAssetId } from "fuels";
-import { FuelProvider } from "../../../api";
-import { createWalletClient, custom } from "viem";
-import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
-import { linea } from "wagmi/chains";
+import { isObjectEmpty } from "utils";
+import { notNeededStepIds } from "./components/CheckoutProcess";
+import { useWallet } from "hooks/useWallet";
 import config from "config";
 
 enum Status {
@@ -70,13 +63,15 @@ const CheckoutProcessItem = ({ title, description, status = Status.notStarted, i
   );
 };
 
-const CheckoutProcess = ({ onComplete, approved, failed }: { onComplete: () => void; approved: any; failed: any }) => {
+const CheckoutProcess = ({ stepData, wagmiSteps = [], onComplete, approved, failed }: { stepData?: any; wagmiSteps?: any; onComplete: () => void; approved: any; failed: any }) => {
   const [transactionStatus, setTransactionStatus] = useState({
     // confirmTransaction: Status.pending,
     waitingForApproval: Status.pending,
     purchaseConfirm: Status.notStarted,
   });
   const [partiallyFailed, setPartiallyFailed] = useState(false);
+  const isWagmi = config.getConfig("type") === "wagmi";
+
   const errorTitle = "Transaction failed";
   const errorDescription = "Transactions can fail due to network issues, gas fee increases, or because someone else bought the item before you.";
 
@@ -122,13 +117,40 @@ const CheckoutProcess = ({ onComplete, approved, failed }: { onComplete: () => v
     <div className="flex flex-col w-full ">
       <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
         {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title="Confirm transaction" description="Proceed in your wallet and confirm transaction" /> */}
-        <CheckoutProcessItem status={transactionStatus.waitingForApproval} title="Wait for approval" description="Waiting for transaction to be approved" />
-        <CheckoutProcessItem
-          status={partiallyFailed ? Status.error : transactionStatus.purchaseConfirm}
-          title={partiallyFailed ? errorTitle : "Purchase completed!"}
-          description={partiallyFailed ? errorDescription : "Congrats your purchase is completed."}
-          isLast={true}
-        />
+        {wagmiSteps.length > 0 ? (
+          <>
+            {wagmiSteps.map((step: any, idx: number) => {
+              if (notNeededStepIds.includes(step.id)) return;
+              else
+                return (
+                  <CheckoutProcessItem
+                    key={`CheckoutProcessItem${idx}`}
+                    status={step.items[0].status === "incomplete" ? Status.pending : Status.done}
+                    title={step.action}
+                    description={step.description}
+                  />
+                );
+            })}
+            <CheckoutProcessItem
+              isLast={true}
+              status={stepData?.currentStepItem?.status === "complete" ? Status.done : Status.notStarted}
+              title={"Purchase completed!"}
+              description={"Congrats your purchase is completed."}
+            />
+          </>
+        ) : isWagmi ? (
+          <></>
+        ) : (
+          <>
+            <CheckoutProcessItem status={transactionStatus.waitingForApproval} title="Wait for approval" description="Waiting for transaction to be approved" />
+            <CheckoutProcessItem
+              status={partiallyFailed ? Status.error : transactionStatus.purchaseConfirm}
+              title={partiallyFailed ? errorTitle : "Purchase completed!"}
+              description={partiallyFailed ? errorDescription : "Congrats your purchase is completed."}
+              isLast={true}
+            />
+          </>
+        )}
         {/* {partiallyFailed && (
           <div className="flex justify-center gap-x-2 p-2.5 border bg-bg-light border-gray rounded-[5px]">
             <div className="flex">
@@ -187,6 +209,7 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
 const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
+  const { handleCheckout } = useWallet();
   const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const [isFailed, setIsFailed] = useState(false);
@@ -198,140 +221,26 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
 
-  function handleBuy() {
-    const wallet = createWalletClient({
-      chain: linea,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    _client.actions.buyToken({
-      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:5" }],
-      wallet,
-      chainId: 5,
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-      options: {
-        partial: true,
-      },
-    });
-  }
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = async () => {
     const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
     try {
-      const type = config.getConfig("type");
-      if (type === "wagmi") handleBuy();
-      else
-        nftdetailsService.getTokensIndex(tokenIds).then((res) => {
-          if (!isObjectEmpty(buyNowItem)) {
-            const order = {
-              isBuySide: true,
-              taker: user.walletAddress,
-              maker: buyNowItem.userWalletAddress ?? buyNowItem.user.walletAddress,
-              nonce: res.data[tokenIds[0]],
-              price: toGwei(buyNowItem.price).toNumber(),
-              token_id: buyNowItem.tokenOrder,
-              collection: buyNowItem.contractAddress ?? buyNowItem.collection.contractAddress,
-              strategy: strategyFixedPriceContractId,
-              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-            };
-
-            setContracts(contracts, FuelProvider);
-
-            executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
-              .then((res) => {
-                if (res.transactionResult.status.type === "success")
-                  nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                    if (res.data) {
-                      setSuccessCheckout(res.data);
-                      setApproved(true);
-                      window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                    }
-                  });
-              })
-              .catch((e) => {
-                console.log(e);
-                if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-                  setStartTransaction(false);
-                else setIsFailed(true);
-              });
-          } else if (tokenIds.length === 1) {
-            const order = {
-              isBuySide: true,
-              taker: user.walletAddress,
-              maker: items[0].userWalletAddress,
-              nonce: res.data[items[0].id],
-              price: toGwei(items[0].price).toNumber(),
-              token_id: items[0].tokenOrder,
-              collection: items[0].contractAddress,
-              strategy: strategyFixedPriceContractId,
-              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-            };
-
-            setContracts(contracts, FuelProvider);
-
-            executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
-              .then((res) => {
-                if (res.transactionResult.status.type === "success")
-                  nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                    if (res.data) {
-                      setSuccessCheckout(res.data);
-                      setApproved(true);
-                      window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                    }
-                  });
-              })
-              .catch((e) => {
-                console.log(e);
-                if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-                  setStartTransaction(false);
-                else setIsFailed(true);
-              });
-          } else {
-            nftdetailsService.getTokensIndex(tokenIds).then((res) => {
-              const takerOrders = items.map((item: any) => {
-                return {
-                  isBuySide: true,
-                  taker: user.walletAddress,
-                  maker: item.userWalletAddress,
-                  nonce: res.data[item.id],
-                  price: toGwei(item.price).toNumber(),
-                  token_id: item.tokenOrder,
-                  collection: item.contractAddress,
-                  strategy: strategyFixedPriceContractId,
-                  extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-                };
-              });
-
-              setContracts(contracts, FuelProvider);
-
-              bulkPurchase(exchangeContractId, provider, wallet, takerOrders, NativeAssetId)
-                .then((res) => {
-                  if (res?.transactionResult.status.type === "success")
-                    nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                      if (res.data) {
-                        setSuccessCheckout(res.data);
-                        setApproved(true);
-                        window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                      }
-                    });
-                })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
-                });
-            });
-          }
-        });
+      handleCheckout({
+        setApproved: (val: any) => setApproved(val),
+        setWagmiSteps: (val: any) => setWagmiSteps(val),
+        wagmiSteps: wagmiSteps,
+        setStepData: (val: any) => setStepData(val),
+        buyNowItem: buyNowItem,
+        tokenIds: tokenIds,
+        setSuccessCheckout: (val: any) => setSuccessCheckout(val),
+        user: user,
+        items: items,
+        wallet: wallet,
+        setStartTransaction: (val: any) => setStartTransaction(val),
+        setIsFailed: (val: any) => setIsFailed(val),
+      });
     } catch (e) {
       console.log(e);
       setIsFailed(true);
@@ -359,7 +268,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

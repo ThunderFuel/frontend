@@ -18,6 +18,29 @@ abstract class BaseProvider {
   abstract getBidBalance(contractAddress: any): any;
 
   abstract getProviderType(): any;
+
+  abstract handleCheckout({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
+
+  abstract handleConfirmListing({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
+
+  abstract handleMakeOffer({
+    checkoutExpireTime,
+    checkoutPrice,
+    checkoutExpireTimesetApproved,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    buyNowItem,
+    tokenIds,
+    setSuccessCheckout,
+    user,
+    items,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+  }: any): any;
+
+  abstract hasEnoughBalance(balance: any, amount: any): any;
 }
 
 export default BaseProvider;

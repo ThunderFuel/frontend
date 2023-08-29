@@ -177,12 +177,6 @@ export const formatTimeBackend = (time: any) => {
   return Math.round(dayjs().add(time, "days").valueOf() / 1000);
 };
 
-export const checkHasEnoughBalance = (balance: any, amount: any) => {
-  const type = config.getConfig("type");
-  if (type === "wagmi") return balance >= amount;
-  else return balance / 1000000000 >= amount;
-};
-
 export const formatAmount = (amount: any) => {
   const type = config.getConfig("type");
   if (type === "wagmi") return amount;

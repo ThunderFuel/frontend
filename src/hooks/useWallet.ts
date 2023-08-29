@@ -15,6 +15,10 @@ export const useWallet = () => {
     return selectedGateway().hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
   };
 
+  const hasEnoughBalance = (balance: any, amount: any) => {
+    return selectedGateway().hasEnoughBalance(balance, amount);
+  };
+
   const getConnectionStatus = async () => {
     return selectedGateway()?.isConnected();
   };
@@ -70,6 +74,54 @@ export const useWallet = () => {
     return selectedGateway().getProviderType();
   };
 
+  const handleCheckout = ({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
+    return selectedGateway().handleCheckout({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
+  };
+
+  const handleConfirmListing = ({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
+    return selectedGateway().handleConfirmListing({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
+  };
+
+  const handleMakeOffer = ({
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    buyNowItem,
+    tokenIds,
+    setSuccessCheckout,
+    setApproved,
+    user,
+    items,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    selectedNFT,
+    setBidBalanceUpdated,
+    setCurrentBidBalance,
+    checkoutPrice,
+    checkoutExpireTime,
+  }: any) => {
+    return selectedGateway().handleMakeOffer({
+      checkoutExpireTime,
+      checkoutPrice,
+      setWagmiSteps,
+      wagmiSteps,
+      setStepData,
+      buyNowItem,
+      setApproved,
+      tokenIds,
+      setSuccessCheckout,
+      user,
+      items,
+      wallet,
+      setStartTransaction,
+      setIsFailed,
+      selectedNFT,
+      setBidBalanceUpdated,
+      setCurrentBidBalance,
+    });
+  };
+
   return {
     walletConnect,
     walletDisconnect,
@@ -79,5 +131,9 @@ export const useWallet = () => {
     walletConnectGateway,
     getBidBalance,
     getProviderType,
+    handleCheckout,
+    handleConfirmListing,
+    handleMakeOffer,
+    hasEnoughBalance,
   };
 };

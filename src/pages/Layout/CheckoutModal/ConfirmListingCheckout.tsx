@@ -14,9 +14,8 @@ import { contracts, exchangeContractId, provider, strategyAuctionContractId, str
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { NativeAssetId } from "fuels";
 import { FuelProvider } from "../../../api";
-import { createWalletClient, custom, parseEther } from "viem";
-import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
 import config from "config";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -44,49 +43,30 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const { checkoutPrice, checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
 
+  const { handleConfirmListing } = useWallet();
+
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  function handleList() {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      // chain: linea,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    const _expireTime = "1695404031";
-
-    _client.actions.listToken({
-      wallet,
-      listings: [
-        {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
-          orderKind: "seaport-v1.5",
-          orderbook: "reservoir",
-          weiPrice: parseEther("0.001").toString(),
-          expirationTime: _expireTime,
-          // fees: [`${wallet.account.address}:100`],
-          options: {
-            "seaport-v1.5": {
-              useOffChainCancellation: true,
-            },
-          },
-        },
-      ],
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-      chainId: 5,
-    });
-  }
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = async () => {
     try {
       const type = config.getConfig("type");
-      if (type === "wagmi") handleList();
+      if (type === "wagmi")
+        handleConfirmListing({
+          checkoutExpireTime,
+          checkoutPrice,
+          setWagmiSteps,
+          wagmiSteps,
+          setStepData,
+          user,
+          wallet,
+          setStartTransaction,
+          setIsFailed,
+        });
       else {
         if (checkoutIsAuction) {
           const res = await nftdetailsService.getLastIndex(2, user.id);
@@ -213,7 +193,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>
