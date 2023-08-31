@@ -40,6 +40,7 @@ export const checkoutSlice = createSlice({
     bulkListItems: [],
     bulkUpdateItems: [],
     cancelOfferItems: [],
+    cancelOrderIds: [],
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCheckoutComplete: () => {},
   },
@@ -76,6 +77,7 @@ export const checkoutSlice = createSlice({
       state.checkoutMintAmount = action.payload?.mintAmount;
       state.checkoutMintImage = action.payload?.mintImage;
       state.checkoutMintContractAddress = action.payload?.mintContractAddress;
+      state.cancelOrderIds = action.payload?.cancelOrderIds;
       state.onCheckoutComplete = action.payload?.onCheckoutComplete ?? noOp;
     },
     removeBulkItems: (state) => {

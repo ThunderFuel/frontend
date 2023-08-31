@@ -122,6 +122,80 @@ export const useWallet = () => {
     });
   };
 
+  const handleCancelOffer = ({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData });
+  };
+
+  const handleCancelListing = ({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleCancelListing({
+      user,
+      cancelOrderIds,
+      cancelOfferItems,
+      wallet,
+      setApproved,
+      setStartTransaction,
+      setIsFailed,
+      currentItem,
+      wagmiSteps,
+      setWagmiSteps,
+      setStepData,
+    });
+  };
+  const handleCancelAuction = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleCancelAuction({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+  };
+
+  const handleCancelAllOffersListings = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleCancelAllOffersListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+  };
+
+  const handleCancelAllOffers = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleCancelAllOffers({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+  };
+
+  const handleCancelAllListings = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleCancelAllListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+  };
+
+  const handlePlaceBid = ({
+    selectedNFT,
+    checkoutPrice,
+    user,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    setCurrentBidBalance,
+    setApproved,
+    setBidBalanceUpdated,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    checkoutExpireTime,
+  }: any) => {
+    return selectedGateway().handlePlaceBid({
+      selectedNFT,
+      checkoutPrice,
+      user,
+      wallet,
+      setStartTransaction,
+      setIsFailed,
+      setCurrentBidBalance,
+      setApproved,
+      setBidBalanceUpdated,
+      setWagmiSteps,
+      wagmiSteps,
+      setStepData,
+      checkoutExpireTime,
+    });
+  };
+
+  const handleAcceptOffer = ({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData });
+  };
+  const handleAcceptBid = () => {
+    return;
+  };
+
   return {
     walletConnect,
     walletDisconnect,
@@ -135,5 +209,14 @@ export const useWallet = () => {
     handleConfirmListing,
     handleMakeOffer,
     hasEnoughBalance,
+    handleCancelOffer,
+    handleCancelListing,
+    handleCancelAuction,
+    handleCancelAllOffersListings,
+    handleCancelAllOffers,
+    handleCancelAllListings,
+    handlePlaceBid,
+    handleAcceptOffer,
+    handleAcceptBid,
   };
 };

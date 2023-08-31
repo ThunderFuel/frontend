@@ -40,6 +40,47 @@ abstract class BaseProvider {
     setIsFailed,
   }: any): any;
 
+  abstract handlePlaceBid({
+    selectedNFT,
+    checkoutPrice,
+    user,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    setCurrentBidBalance,
+    setApproved,
+    setBidBalanceUpdated,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    checkoutExpireTime,
+  }: any): any;
+
+  abstract handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete }: any): any;
+
+  abstract handleAcceptBid({
+    selectedNFT,
+    checkoutPrice,
+    user,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    setCurrentBidBalance,
+    setApproved,
+    setBidBalanceUpdated,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    checkoutExpireTime,
+  }: any): any;
+
+  abstract handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleCancelListing({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleCancelAuction({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleCancelAllOffersListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleCancelAllOffers({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleCancelAllListings({ cancelOrderIds, wallet, user, setApproved, setIsFailed, setStartTransaction, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+
   abstract hasEnoughBalance(balance: any, amount: any): any;
 }
 

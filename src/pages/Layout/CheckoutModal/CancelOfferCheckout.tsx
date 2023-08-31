@@ -8,12 +8,8 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { cancelAllOrdersBySide, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import offerService from "api/offer/offer.service";
 import { CheckoutCartItems } from "./Checkout";
-import { FuelProvider } from "../../../api";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -37,45 +33,20 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 };
 
 const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
-  const { currentItem, cancelOfferItems } = useAppSelector((state) => state.checkout);
+  const { currentItem, cancelOfferItems, cancelOrderIds } = useAppSelector((state) => state.checkout);
   const { wallet, user } = useAppSelector((state) => state.wallet);
-
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const { handleCancelOffer } = useWallet();
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = () => {
-    setContracts(contracts, FuelProvider);
-    if (cancelOfferItems?.length > 0) {
-      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
-        .then((res) => {
-          if (res.transactionResult.status.type === "success") {
-            offerService.cancelAllOffer({ userId: user.id });
-            setApproved(true);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
-    } else {
-      offerService.getOffersIndex([currentItem.id]).then((res) => {
-        cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
-          .then((res) => {
-            if (res.transactionResult.status.type === "success") {
-              nftdetailsService.cancelOffer(currentItem.id);
-              setApproved(true);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-              setStartTransaction(false);
-            else setIsFailed(true);
-          });
-      });
+    try {
+      handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData });
+    } catch (e) {
+      setIsFailed(true);
     }
   };
 
@@ -91,7 +62,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

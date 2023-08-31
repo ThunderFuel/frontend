@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
 import userService from "../api/user/user.service";
 import * as wagmi from "@wagmi/core";
@@ -8,9 +9,119 @@ import { linea, goerli } from "wagmi/chains";
 import { formatTimeBackend } from "utils";
 
 class WagmiProvider extends BaseProvider {
+  handleAcceptBid({
+    selectedNFT,
+    checkoutPrice,
+    user,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    setCurrentBidBalance,
+    setApproved,
+    setBidBalanceUpdated,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    checkoutExpireTime,
+  }: any) {
+    throw new Error("Method not implemented.");
+  }
+  provider = wagmi;
+
+  constructor() {
+    super();
+  }
+
+  handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    const incompleteItems = steps.flatMap((item: any) => {
+      const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
+      if (incompleteSubItems.length > 0) {
+        return {
+          ...item,
+          items: incompleteSubItems,
+        };
+      }
+
+      return [];
+    });
+    if (incompleteItems.length === 0) setApproved(true);
+
+    const executableSteps = steps.filter((step: any) => step.items && step.items.length > 0);
+    if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
+
+    const stepCount = executableSteps.length;
+
+    let currentStepItem: NonNullable<Execute["steps"][0]["items"]>[0] | undefined;
+
+    const currentStepIndex = executableSteps.findIndex((step: any) => {
+      currentStepItem = step.items?.find((item: any) => item.status === "incomplete");
+
+      return currentStepItem;
+    });
+
+    const currentStep = currentStepIndex > -1 ? executableSteps[currentStepIndex] : executableSteps[stepCount - 1];
+
+    if (currentStepItem) {
+      setStepData({
+        totalSteps: stepCount,
+        stepProgress: currentStepIndex,
+        currentStep,
+        currentStepItem,
+      });
+    }
+  }
+
+  cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    _client.actions.cancelOrder({
+      ids: ["0x9ef86dbf605cf5da9d8b927741771fe5c15364267d1e412cb857ff43d16c563b"], //ID burasi farkli
+      // ids: cancelOrderIds,
+      chainId: 5,
+      wallet,
+      onProgress: (steps: Execute["steps"]) => {
+        this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+      },
+      // options: {
+      //     maker:
+      //     token:
+      // }
+    });
+  }
+
+  handleCancelOffer({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  }
+  handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  }
+  handleCancelAuction({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  }
+  handleCancelAllOffersListings({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  }
+  handleCancelAllOffers({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  }
+  handleCancelAllListings({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  }
+
   hasEnoughBalance(balance: any, amount: any) {
     return balance >= amount;
   }
+
+  getProviderType() {
+    return "wagmi";
+  }
+
   handleMakeOffer({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction }: any) {
     const wallet = createWalletClient({
       account: user.walletAddress,
@@ -24,42 +135,7 @@ class WagmiProvider extends BaseProvider {
       .placeBid({
         wallet,
         onProgress: (steps: Execute["steps"]) => {
-          const incompleteItems = steps.flatMap((item: any) => {
-            const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
-            if (incompleteSubItems.length > 0) {
-              return {
-                ...item,
-                items: incompleteSubItems,
-              };
-            }
-
-            return [];
-          });
-          if (incompleteItems.length === 0) setApproved(true);
-
-          const executableSteps = steps.filter((step) => step.items && step.items.length > 0);
-          if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
-
-          const stepCount = executableSteps.length;
-
-          let currentStepItem: NonNullable<Execute["steps"][0]["items"]>[0] | undefined;
-
-          const currentStepIndex = executableSteps.findIndex((step) => {
-            currentStepItem = step.items?.find((item: any) => item.status === "incomplete");
-
-            return currentStepItem;
-          });
-
-          const currentStep = currentStepIndex > -1 ? executableSteps[currentStepIndex] : executableSteps[stepCount - 1];
-
-          if (currentStepItem) {
-            setStepData({
-              totalSteps: stepCount,
-              stepProgress: currentStepIndex,
-              currentStep,
-              currentStepItem,
-            });
-          }
+          this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
         },
         bids: [
           {
@@ -83,14 +159,38 @@ class WagmiProvider extends BaseProvider {
       });
   }
 
-  provider = wagmi;
+  handlePlaceBid({ setWagmiSteps, setApproved, wagmiSteps, setStepData, user, checkoutExpireTime, checkoutPrice }: any) {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
 
-  constructor() {
-    super();
-  }
+    const _client = getClient();
 
-  getProviderType() {
-    return "wagmi";
+    const _expireTime = checkoutExpireTime;
+
+    _client.actions.placeBid({
+      wallet,
+      onProgress: (steps: Execute["steps"]) => {
+        this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+      },
+      bids: [
+        {
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7",
+          orderKind: "seaport-v1.5",
+          orderbook: "reservoir",
+          weiPrice: parseEther(checkoutPrice.toString()).toString(),
+          expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
+          options: {
+            "seaport-v1.5": {
+              useOffChainCancellation: true,
+            },
+          },
+        },
+      ],
+      chainId: 5,
+    });
   }
 
   handleConfirmListing({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
@@ -215,6 +315,25 @@ class WagmiProvider extends BaseProvider {
       },
       options: {
         partial: true,
+      },
+    });
+  }
+
+  handleAcceptOffer({ user, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    _client.actions.acceptOffer({
+      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:9", quantity: 1 }],
+      wallet,
+      chainId: 5,
+      onProgress: (steps: Execute["steps"]) => {
+        this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
       },
     });
   }

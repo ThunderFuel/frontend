@@ -242,7 +242,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         setIsFailed: (val: any) => setIsFailed(val),
       });
     } catch (e) {
-      console.log(e);
       setIsFailed(true);
     }
   };
