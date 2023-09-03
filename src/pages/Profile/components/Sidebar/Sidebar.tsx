@@ -13,11 +13,11 @@ const Sidebar = ({ isProfile = false }: any) => {
   const ownedTokens = userInfo?.tokens ?? [];
 
   return (
-    <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px]">
+    <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px] relative">
       <div className="sidebar-container">
         {isProfile ? <ButtonEdit /> : <ButtonFollow />}
         <CoverImage src={userInfo?.banner} />
-        <div className="p-5 relative text-white flex">
+        <div className="p-5 relative text-white flex sticky left-0 w-full" style={{ bottom: "var(--footerHeight)" }}>
           <div className="flex flex-col w-full">
             <LogoContainer userInfo={userInfo} />
             <BoxGroup className="mt-4">

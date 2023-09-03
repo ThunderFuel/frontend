@@ -59,7 +59,7 @@ const LogoContainer = ({ userInfo }: any) => {
   const walletAddress = addressFormat(userInfo?.walletAddress);
 
   return (
-    <div className="flex gap-5 w-full flex-col -mt-24">
+    <div className="flex gap-5 w-full flex-col">
       <Avatar image={userInfo?.image} userId={user?.id} className="w-[84px] h-[84px]" />
       <div className="flex flex-col gap-2.5 flex-1 text-gray-light">
         <div className="flex items-center gap-2">
