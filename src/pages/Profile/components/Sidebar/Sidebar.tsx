@@ -37,14 +37,7 @@ const Sidebar = ({ isProfile = false }: any) => {
               >
                 {numberFormat(userInfo?.follows?.length)}
               </BoxGroupItem>
-              <BoxGroupItem
-                header="Collected"
-                onClick={() => {
-                  onSetSocialActiveTab(FollowType.Follows);
-                }}
-              >
-                {numberFormat(ownedTokens.length)}
-              </BoxGroupItem>
+              <BoxGroupItem header="Collected">{numberFormat(ownedTokens.length)}</BoxGroupItem>
             </BoxGroup>
             <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio}</div>
 
