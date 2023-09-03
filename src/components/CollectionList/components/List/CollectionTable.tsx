@@ -107,7 +107,9 @@ const CollectionTable = () => {
       align: "flex-end",
       render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>No Sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
     },
-    {
+  ];
+  if (!options.isProfile) {
+    headers.push({
       key: "owner",
       text: "Owner",
       width: "20%",
@@ -122,19 +124,19 @@ const CollectionTable = () => {
           {item?.userName ?? addressFormat(item?.userWalletAddress ?? "")}
         </div>
       ),
-    },
-    {
-      key: "listedTime",
-      text: "Time Listed",
-      width: "20%",
-      align: "flex-end",
-      render: (item) => {
-        const listedTime = timeagoFormat(item.listedTime);
+    });
+  }
+  headers.push({
+    key: "listedTime",
+    text: "Time Listed",
+    width: "20%",
+    align: "flex-end",
+    render: (item) => {
+      const listedTime = timeagoFormat(item.listedTime);
 
-        return <div className="cell body-medium">{listedTime}</div>;
-      },
+      return <div className="cell body-medium">{listedTime}</div>;
     },
-  ];
+  });
 
   return (
     <Table
