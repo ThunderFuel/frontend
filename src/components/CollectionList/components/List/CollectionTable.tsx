@@ -132,9 +132,7 @@ const CollectionTable = () => {
     width: "20%",
     align: "flex-end",
     render: (item) => {
-      const listedTime = timeagoFormat(item.listedTime);
-
-      return <div className="cell body-medium">{listedTime}</div>;
+      return <div className="cell body-medium">{item.listedTime ? timeagoFormat(item.listedTime) : "-"}</div>;
     },
   });
 
