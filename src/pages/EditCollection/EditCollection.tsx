@@ -1,8 +1,8 @@
 import React from "react";
 
 import { AssetCollectionCoverImage1, AssetMockNFT1 } from "assets";
-import Input from "pages/Settings/pages/Profile/components/Input";
-import Textarea from "pages/Settings/pages/Profile/components/Textarea";
+import Input from "components/Input";
+import Textarea from "components/Textarea";
 import Socials from "pages/Settings/pages/Profile/components/Socials";
 import SetRoyalty from "./components/SetRoyalty";
 import Footer from "pages/Settings/components/Footer";

@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { IconWarning } from "../../icons";
+import InputError from "../InputError";
 
 interface IInput {
   icon?: React.ReactNode;
@@ -18,11 +18,7 @@ const Input = ({ className, containerClassName, icon, error, ...etc }: IInput, r
         <input ref={ref} className={clsx("input", "peer", className)} {...etc} />
         {icon}
       </div>
-      {error && (
-        <span className="text-red body-small flex items-center">
-          <IconWarning /> {error}
-        </span>
-      )}
+      {error && <InputError error={error} />}
     </>
   );
 };

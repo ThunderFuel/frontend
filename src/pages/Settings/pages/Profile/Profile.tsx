@@ -1,6 +1,4 @@
 import React from "react";
-
-import Input from "./components/Input";
 import Textarea from "./components/Textarea";
 // import Socials from "./components/Socials";
 import CoverImage from "./components/CoverImage";
@@ -15,6 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
+import InputLabel from "components/InputLabel";
 
 const MAX_LENGTH = 126;
 const schema = yup
@@ -90,9 +89,9 @@ const Profile = () => {
     <div className="flex flex-col gap-10 p-10 w-[500px]">
       <Controller control={control} name="image" render={({ field: { onChange, value } }) => <ProfileImage src={value} onChange={onChange} />} />
       <Controller control={control} name="banner" render={({ field: { onChange, value } }) => <CoverImage src={value} onChange={onChange} />} />
-      <Input labelClassName="text-white" label="Display Name" {...register("userName")} error={errors.userName?.message} />
+      <InputLabel labelClassName="text-white" label="Display Name" {...register("userName")} error={errors.userName?.message} />
       <Textarea label="Bio" placeholder="Tell about yourself!" {...register("bio")} maxLength={MAX_LENGTH} error={errors.bio?.message} length={watch("bio")?.length ?? 0} />
-      <Input labelClassName="text-white" label="Email" {...register("email")} helperText="Your e-mail address for notifications." error={errors.email?.message} />
+      <InputLabel labelClassName="text-white" label="Email" {...register("email")} helperText="Your e-mail address for notifications." error={errors.email?.message} />
       {/* <Socials value={userInfo.socialMedias ?? []} onChange={(value: any) => onChange("socialMedias", value)} /> */}
     </div>
   );
