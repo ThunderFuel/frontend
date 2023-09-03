@@ -139,6 +139,7 @@ body {
   .btn.btn-sm {
     @apply py-3 px-4;
     @apply text-headlineMd font-bigShoulderDisplay;
+    font-weight: 700;
   }
 
   .btn-wallet {
