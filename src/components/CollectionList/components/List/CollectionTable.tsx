@@ -10,18 +10,22 @@ import EthereumPrice from "components/EthereumPrice";
 import clsx from "clsx";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 import { PATHS } from "router/config/paths";
-import UseNavigate from "hooks/useNavigate";
+import UseNavigate, { getAbsolutePath } from "hooks/useNavigate";
 import { IconLink } from "icons";
+import { Link } from "react-router-dom";
 
 const Collection = ({ item }: { item: any }) => {
   return (
     <div className="flex items-center gap-5 pl-0 group">
-      <div className={clsx("relative min-w-[40px] max-w-[40px] aspect-square rounded-md overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}>
+      <Link
+        to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.id })}
+        className={clsx("relative min-w-[40px] max-w-[40px] aspect-square rounded-md overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}
+      >
         <Img className="h-full" alt={item.image} src={item.image} loading="lazy" />
         <div className="absolute top-0 left-0 bottom-0 right-0 flex-center bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <IconLink className="cursor-pointer text-white" />
         </div>
-      </div>
+      </Link>
       <div className="">
         {item.collectionName && <div className="text-body text-gray-light text-overflow max-w-[130px]">{item.collectionName}</div>}
         <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>

@@ -6,11 +6,11 @@ import { addressFormat, dateFormat, timeagoFormat } from "utils";
 import EthereumPrice from "../../EthereumPrice";
 import { IconHand } from "icons";
 import LazyImg from "../../LazyImg";
-import { useAppSelector } from "../../../store";
+import { useAppSelector } from "store";
 import Tooltip from "../../Tooltip";
 import { Link } from "react-router-dom";
-import { getAbsolutePath } from "../../../hooks/useNavigate";
-import { PATHS } from "../../../router/config/paths";
+import { getAbsolutePath } from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
 
 const activityTypes: any = {
   Sales: "Sale",
@@ -55,7 +55,11 @@ const ActivityFromUser = ({ item }: any) => {
     return <span className="body-medium text-green">you</span>;
   }
 
-  return <span className="body-medium text-white">{addressFormat(item.fromUser?.walletAddress)}</span>;
+  return (
+    <Link to={getAbsolutePath(PATHS.USER, { userId: item.fromUserId })} className="body-medium text-white hover:underline">
+      {item.fromUser?.userName ?? addressFormat(item.fromUser?.walletAddress)}
+    </Link>
+  );
 };
 const ActivityToUser = ({ item }: any) => {
   const { user } = useAppSelector((state) => state.wallet);
@@ -66,7 +70,11 @@ const ActivityToUser = ({ item }: any) => {
     return <span className="body-medium text-green">you</span>;
   }
 
-  return <span className="body-medium text-white">{addressFormat(item.toUser?.walletAddress)}</span>;
+  return (
+    <Link to={getAbsolutePath(PATHS.USER, { userId: item.toUserId })} className="body-medium text-white hover:underline">
+      {item.toUser?.userName ?? addressFormat(item.toUser?.walletAddress)}
+    </Link>
+  );
 };
 
 const ActivityTime = ({ item }: any) => {
