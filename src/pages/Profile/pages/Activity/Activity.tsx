@@ -10,7 +10,7 @@ const Activity = () => {
   const [activities, setActivities] = useState<any>([]);
   const [pagination, setPagination] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<any>(null);
+  const [currentFilter, setCurrentFilter] = useState<any>([]);
 
   const filters = collectionService.getActivityFilters();
 

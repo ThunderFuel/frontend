@@ -3,16 +3,19 @@ import clsx from "clsx";
 import { useActivityContext } from "../ActivityContext";
 import SidebarFilterBase from "components/SidebarFilter";
 import Collapse from "components/Collapse/Collapse";
-import Radio from "components/Radio";
+import Checkbox from "components/CheckBox";
 
 const Sidebar = ({ className = "w-[280px]", hiddenTabOffset = false }: any) => {
   const { filters, onChangeSelectedFilter, selectedFilter } = useActivityContext();
 
   const onClick = (filterIndex: any) => {
-    if (selectedFilter === filterIndex) {
-      onChangeSelectedFilter(null);
+    const indexOf = selectedFilter.indexOf(filterIndex);
+    if (indexOf > -1) {
+      selectedFilter.splice(indexOf, 1);
+      onChangeSelectedFilter(selectedFilter);
     } else {
-      onChangeSelectedFilter(filterIndex);
+      selectedFilter.push(filterIndex);
+      onChangeSelectedFilter(selectedFilter);
     }
   };
 
@@ -24,19 +27,19 @@ const Sidebar = ({ className = "w-[280px]", hiddenTabOffset = false }: any) => {
           {Object.keys(filters).map((filterIndex: any) => {
             const filter = filters[filterIndex];
             const Icon = filter.icon;
-            const isActive = filterIndex === selectedFilter;
+            const isActive = selectedFilter.includes(filterIndex);
 
             return (
               <div
                 key={filterIndex}
                 className={clsx("rounded-md gap-1 border border-gray text-gray-light items-center body-medium cursor-pointer hover:text-white", isActive ? "text-white bg-gray" : "bg-bg")}
               >
-                <Radio containerClassName={"w-full p-2.5"} defaultChecked={isActive} onClick={() => onClick(filterIndex)} name="activity-type">
+                <Checkbox containerClassName={"w-full p-2.5"} checked={isActive} onClick={() => onClick(filterIndex)} name="activity-type">
                   <div className="flex w-full">
                     <Icon className="w-5 h-5" />
                     {filter.name}
                   </div>
-                </Radio>
+                </Checkbox>
               </div>
             );
           })}

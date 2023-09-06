@@ -1,11 +1,12 @@
 import React from "react";
+import clsx from "clsx";
 
 const Checkbox = (props: any, ref: any) => {
-  const { className, children, onClick, ...etc } = props;
+  const { className, children, onClick, containerClassName, ...etc } = props;
 
   return (
     <label
-      className="checkbox"
+      className={clsx("checkbox", containerClassName)}
       onClick={(e) => {
         onClick(e);
         e.preventDefault();
