@@ -18,7 +18,7 @@ const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) =
   const items = collectionItems.slice(0, 5);
 
   return (
-    <ul className="py-2.5 px-4 flex gap-2">
+    <ul className="px-4 flex gap-2">
       {items.map((item, i) => (
         <li key={i} className="w-14 h-14 overflow-hidden">
           <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
