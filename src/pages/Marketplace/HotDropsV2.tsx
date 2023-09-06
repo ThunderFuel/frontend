@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Carousel from "components/Carousel";
 import UseNavigate from "hooks/useNavigate";
-import { IconArrowRight, IconChevronLeft, IconChevronRight, IconWarning } from "icons";
+import { IconArrowRight, IconChevronLeft, IconChevronRight } from "icons";
 import marketplaceService from "api/marketplace/marketplace.service";
 import Button from "components/Button";
 
@@ -43,12 +43,6 @@ const HotDrops = () => {
 
   return (
     <div className="">
-      <div className="flex-center text-red border-y border-red py-1">
-        <IconWarning />
-        <div className="body-small">
-          Thunder is available on Linea network. Please check your wallet settings and <span className="underline">switch to Linea</span>.
-        </div>
-      </div>
       <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
         {items.map((item, k) => {
           return (
