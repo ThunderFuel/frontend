@@ -27,7 +27,7 @@ const FooterBottom = React.memo(() => {
   return (
     <div className="flex items-center justify-between px-4">
       <div className="flex items-center border-r border-r-gray">
-        <div className="flex items-center gap-4 shrink-0 text-headline-01 border-r border-r-gray py-3 pr-4">
+        <div className="flex items-center gap-4 shrink-0 text-headline-01 border-r border-r-gray py-2 pr-4">
           <span className="flex items-center">
             <IconEthereum color="#838383" />
             <span className="text-white">${ethPrice}</span>
