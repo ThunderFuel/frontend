@@ -108,7 +108,7 @@ const CollectionTable = () => {
       render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>No Sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
     },
   ];
-  if (!options.isProfile) {
+  if (!options?.isProfile) {
     headers.push({
       key: "owner",
       text: "Owner",
