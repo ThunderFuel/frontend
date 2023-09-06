@@ -41,6 +41,7 @@ const Activity = () => {
     };
   };
   const fetchActivity = async (params = {}) => {
+    setActivities([]);
     const response = await getActivityItems({ page: 1, ...params });
     setActivities(response.data);
   };

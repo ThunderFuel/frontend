@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useActivityContext } from "../ActivityContext";
-import NotFound from "../../NotFound";
 import Table, { ITableHeader } from "../../Table";
 import { addressFormat, dateFormat, timeagoFormat } from "utils";
 import EthereumPrice from "../../EthereumPrice";
@@ -142,7 +141,6 @@ const ActivityItems = (props: any) => {
       {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-5 border-b border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
       <div className="flex flex-col gap-4">
         <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!px-5"} />
-        {!getActivities.length ? <NotFound /> : null}
       </div>
     </div>
   );

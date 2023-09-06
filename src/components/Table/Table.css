@@ -5,6 +5,7 @@
 
 .table .thead {
   @apply border-b border-solid border-gray bg-bg;
+  z-index: 1;
 }
 
 .table .thead .tr {
