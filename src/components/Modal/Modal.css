@@ -15,7 +15,8 @@
 }
 
 .cart {
-  @apply fixed flex w-screen h-screen justify-end items-start z-30 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+  @apply fixed flex w-screen h-screen justify-end items-start z-30 top-0 left-0 overflow-hidden;
+  @apply bg-gray bg-opacity-80;
 }
 
 .cart .modal {
