@@ -2,8 +2,8 @@ import React, { Dispatch, SetStateAction, useRef } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
-import { AssetLogo, AssetThunderText } from "assets";
-import { IconCart, IconHamburger, IconSearch, IconThunder2, IconWallet, IconWarning } from "icons";
+import { AssetLogo } from "assets";
+import { IconCart, IconHamburger, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
 
 import Search from "./components/Search/Search";
 
@@ -102,9 +102,9 @@ const Header = () => {
             <div className="border-y border-gray">
               <div className="header-container-fluid">
                 <div className="flex items-center gap-6 pr-6">
-                  <Link className="flex text-white gap-1" to={PATHS.MARKETPLACE}>
+                  <Link className="flex items-center text-white gap-1" to={PATHS.MARKETPLACE}>
                     <IconThunder2 className="w-14" />
-                    <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
+                    <IconThunderLogoText className="hidden lg:flex" />
                   </Link>
 
                   <Tab />

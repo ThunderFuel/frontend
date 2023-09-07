@@ -430,9 +430,9 @@ body {
 
   .table-row-skeleton:after {
     @apply absolute top-0 right-0 bottom-0 left-0;
+    @apply bg-mode-table-row-skeleton dark:bg-table-row-skeleton;
     border-radius: 5px;
     transform: translateX(-100%);
-    background-image: linear-gradient(90deg, rgba(37, 37, 37, 0) 0, rgba(37, 37, 37, 0.2) 20%, rgba(37, 37, 37, 0.5) 60%, rgba(37, 37, 37, 0));
     animation: shimmer 2s infinite;
     content: "";
     z-index: 3;
@@ -461,19 +461,30 @@ body {
 
 
 :root {
-  --th-white: 255 255 255;
-  --th-black: 0 0 0;
-  --th-bg-light: 26 26 26;
+  --th-black: 255 255 255;
   --th-bg-dark: 30 30 30;
-  --th-bg: 20 20 20;
   --th-gray-light: 131 131 131;
   --th-gray-dark: 73 70 80;
   --th-gray-100: 46 46 46;
-  --th-gray: 37 37 37;
   --th-green-light: 1 255 200;
-  --th-green: 214 255 126;
   --th-red: 230 64 64;
+
+  --th-white: 20 20 20;
+  --th-bg: 255 255 255;
+  --th-bg-light: 249 249 249;
+  --th-gray: 230 230 230;
+  --th-green: 127 186 0;
+  --th-orange: 242 145 0;
+}
+
+.dark:root {
+  --th-white: 255 255 255;
+  --th-bg: 20 20 20;
+  --th-bg-light: 26 26 26;
+  --th-gray: 37 37 37;
+  --th-green: 214 255 126;
   --th-orange: 230 144 64;
+  --th-black: 0 0 0;
 }
 
 .drop #layout-header {
