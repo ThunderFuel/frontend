@@ -25,7 +25,7 @@ const CollectionProvider = () => {
       <span className="text-gray-light">on</span>
       <span className="flex gap-2.5 items-center">
         Fuel
-        <span className="flex items-center justify-center bg-black border border-gray rounded-full w-7 h-7 p-1">
+        <span className="flex items-center justify-center border border-gray rounded-full w-7 h-7 p-1" style={{ backgroundColor: "black" }}>
           <IconFuelWallet />
         </span>
       </span>
