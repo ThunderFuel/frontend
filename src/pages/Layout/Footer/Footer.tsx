@@ -35,6 +35,8 @@ const FooterBottom = React.memo(() => {
       getData();
     }, IntervalValue);
 
+    setIsDarkModa(useLocalStorage().getItem(THUNDER_THEME_NAME) === "dark");
+
     return () => clearInterval(interval);
   }, []);
   const Icon = isDarkMode ? IconSun : IconMoon;
