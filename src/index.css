@@ -459,7 +459,6 @@ body {
   width: 560px !important;
 }
 
-
 :root {
   --th-black: 255 255 255;
   --th-bg-dark: 30 30 30;
@@ -477,6 +476,7 @@ body {
   --th-orange: 242 145 0;
 }
 
+.drop,
 .dark:root {
   --th-white: 255 255 255;
   --th-bg: 20 20 20;
@@ -549,6 +549,10 @@ body {
 
 .drop .search-group-item {
   --tw-bg-opacity: 0.1;
+}
+
+.drop-item-container {
+  --th-white: 255 255 255;
 }
 
 .drop-item-container.drop-primary,
@@ -693,4 +697,3 @@ body {
 .drop.drop-fuelet .modalbase .btn-primary {
   color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
-
