@@ -7,7 +7,7 @@ import Modal from "components/Modal";
 
 import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess } from "./components/CheckoutProcess";
+import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
 import { NativeAssetId } from "fuels";
@@ -17,6 +17,7 @@ import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/
 import offerService from "api/offer/offer.service";
 import userService from "api/user/user.service";
 import { FuelProvider } from "../../../api";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your offer",
@@ -48,8 +49,20 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [isFailed, setIsFailed] = useState(false);
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
+  const { handleUpdateOffer } = useWallet();
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = () => {
+    const cancelOrderIds = ["0x0176f68aaf471ba2d1f4a0f03c4d051a12a67be607fb75b63bfe8141fd28d4b6"];
+    try {
+      handleUpdateOffer({ cancelOrderIds, user, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData });
+    } catch (e) {
+      handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+    }
+
+    return;
+
     offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then((res) => {
       const order = {
         isBuySide: true,
@@ -124,7 +137,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

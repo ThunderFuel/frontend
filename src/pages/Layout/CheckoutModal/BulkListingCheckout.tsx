@@ -8,13 +8,11 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
-import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
+import { formatTimeContract, toGwei } from "utils";
 import { NativeAssetId } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
-import collectionsService from "api/collections/collections.service";
-import { FuelProvider } from "../../../api";
+import { useWallet } from "hooks/useWallet";
+import { ZERO_B256, strategyFixedPriceContractId } from "global-constants";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -40,6 +38,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
+  const { handleBulkListing } = useWallet();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -48,6 +47,8 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   let bulkListMakerOders = [] as any;
   let bulkUpdateMakerOders = [] as any;
   const promises = [] as any;
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const handleOrders = async ({ bulkListItems, bulkUpdateItems }: { bulkListItems: any; bulkUpdateItems: any }) => {
     const tokenIds = bulkUpdateItems.map((item: any) => item.tokenId); // for bulkupdate
@@ -100,53 +101,9 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
   const onComplete = async () => {
     try {
-      // FOR BACKEND
-      const _bulkListItems = bulkListItems.map((item: any) => {
-        return { ...item, expireTime: formatTimeBackend(item.expireTime) };
-      });
-      // FOR BACKEND
-      const _bulkUpdateItems = bulkUpdateItems.map((item: any) => {
-        return { ...item, expireTime: formatTimeBackend(item.expireTime) };
-      });
-
-      handleOrders({
-        bulkListItems,
-        bulkUpdateItems,
-      });
-
-      Promise.all(promises)
-        .then(async () => {
-          const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
-          setContracts(contracts, FuelProvider);
-
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders);
-
-          if (bulkPlaceOrderRes?.transactionResult.status.type === "success") {
-            if (bulkUpdateItems.length > 0) {
-              try {
-                await collectionsService.updateBulkListing(_bulkUpdateItems);
-              } catch (e) {
-                console.log("Error from updateBulkListing:", e);
-                setIsFailed(true);
-              }
-            }
-
-            if (bulkListItems.length > 0) {
-              try {
-                await collectionsService.bulkListing(_bulkListItems);
-              } catch (e) {
-                console.log("Error from bulkListing:", e);
-                setIsFailed(true);
-              }
-            }
-
-            setApproved(true);
-          }
-        })
-        .catch((e) => {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-        });
+      handleBulkListing({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
     } catch (e) {
+      console.log("11111", e);
       handleTransactionError({ error: e, setStartTransaction, setIsFailed });
     }
   };
@@ -163,7 +120,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

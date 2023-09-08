@@ -192,8 +192,21 @@ export const useWallet = () => {
   const handleAcceptOffer = ({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData }: any) => {
     return selectedGateway().handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData });
   };
+
   const handleAcceptBid = () => {
     return;
+  };
+
+  const handleBulkListing = ({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleBulkListing({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
+  };
+
+  const handleTransfer = ({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
+  };
+
+  const handleUpdateOffer = ({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+    selectedGateway().handleUpdateOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   return {
@@ -218,5 +231,8 @@ export const useWallet = () => {
     handlePlaceBid,
     handleAcceptOffer,
     handleAcceptBid,
+    handleBulkListing,
+    handleTransfer,
+    handleUpdateOffer,
   };
 };

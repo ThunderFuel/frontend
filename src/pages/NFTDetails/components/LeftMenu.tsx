@@ -330,7 +330,7 @@ const LeftMenu = (props: any) => {
 
     const _client = getClient();
 
-    const _expireTime = "1695404031";
+    const _expireTime = "1694274474";
 
     _client.actions.placeBid({
       wallet,
@@ -339,7 +339,7 @@ const LeftMenu = (props: any) => {
       },
       bids: [
         {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7",
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
           orderKind: "seaport-v1.5",
           orderbook: "reservoir",
           weiPrice: parseEther("0.001").toString(),

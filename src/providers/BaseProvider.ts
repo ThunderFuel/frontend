@@ -18,7 +18,7 @@ abstract class BaseProvider {
   abstract getBidBalance(contractAddress: any): any;
 
   abstract getProviderType(): any;
-
+  //interface yaz
   abstract handleCheckout({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
 
   abstract handleConfirmListing({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
@@ -73,6 +73,12 @@ abstract class BaseProvider {
     setStepData,
     checkoutExpireTime,
   }: any): any;
+
+  abstract handleBulkListing({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+
+  abstract handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
+
+  abstract handleUpdateOffer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
 
   abstract handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
   abstract handleCancelListing({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;

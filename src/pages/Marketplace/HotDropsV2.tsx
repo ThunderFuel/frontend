@@ -29,8 +29,6 @@ const HotDrops = () => {
         })
         .slice(0, 5);
 
-      console.log(items);
-
       setItems(items);
     } catch (e) {
       setItems([]);

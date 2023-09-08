@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
-import { NativeAssetId, ZeroBytes32 } from "fuels";
+import { NativeAssetId, ZeroBytes32, toB256 } from "fuels";
 import userService from "../api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeBackend, formatTimeContract, isObjectEmpty, toGwei } from "utils";
@@ -21,8 +21,87 @@ import { FuelProvider as _FuelProvider } from "../api";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import collectionsService from "api/collections/collections.service";
+import { safeTransferFrom } from "thunder-sdk/src/contracts/erc721";
 
 class FuelProvider extends BaseProvider {
+  provider = <Window["fuel"]>window.fuel;
+
+  constructor() {
+    super();
+  }
+
+  getProviderType() {
+    return "fuel";
+  }
+
+  handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
+    let tempAddress = "";
+    if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
+    const toAddress = tempAddress === "" ? address : tempAddress;
+    safeTransferFrom(selectedNFT.collection.contractAddress, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
+      .then(() => {
+        nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
+        setApproved(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+          setStartTransaction(false);
+        else setIsFailed(true);
+      });
+  }
+
+  handleUpdateOffer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) {
+    throw new Error("Method not implemented.");
+  }
+  async handleBulkListing({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
+    // FOR BACKEND
+    const _bulkListItems = bulkListItems.map((item: any) => {
+      return { ...item, expireTime: formatTimeBackend(item.expireTime) };
+    });
+    // FOR BACKEND
+    const _bulkUpdateItems = bulkUpdateItems.map((item: any) => {
+      return { ...item, expireTime: formatTimeBackend(item.expireTime) };
+    });
+
+    const { bulkListMakerOders, bulkUpdateMakerOders } = await handleOrders({
+      bulkListItems,
+      bulkUpdateItems,
+    });
+
+    Promise.all(promises)
+      .then(async () => {
+        const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
+        setContracts(contracts, _FuelProvider);
+
+        const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders);
+
+        if (bulkPlaceOrderRes?.transactionResult.status.type === "success") {
+          if (bulkUpdateItems.length > 0) {
+            try {
+              await collectionsService.updateBulkListing(_bulkUpdateItems);
+            } catch (e) {
+              console.log("Error from updateBulkListing:", e);
+              setIsFailed(true);
+            }
+          }
+
+          if (bulkListItems.length > 0) {
+            try {
+              await collectionsService.bulkListing(_bulkListItems);
+            } catch (e) {
+              console.log("Error from bulkListing:", e);
+              setIsFailed(true);
+            }
+          }
+
+          setApproved(true);
+        }
+      })
+      .catch((e) => {
+        handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+      });
+  }
   handleAcceptOffer({ wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete }: any) {
     offerService.getOffersIndex([currentItem.id]).then((res) => {
       const order = {
@@ -74,16 +153,6 @@ class FuelProvider extends BaseProvider {
   }: any) {
     throw new Error("Method not implemented.");
   }
-  provider = <Window["fuel"]>window.fuel;
-
-  constructor() {
-    super();
-  }
-
-  getProviderType() {
-    return "fuel";
-  }
-
   handleCancelOffer({ cancelOfferItems, wallet, user, setApproved, setStartTransaction, setIsFailed, currentItem }: any) {
     setContracts(contracts, _FuelProvider);
     if (cancelOfferItems?.length > 0) {

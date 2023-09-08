@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ConnectWallet from "components/ConnectWalletModal";
 import { useAppDispatch, useAppSelector } from "store";
 import { setIsConnected, toggleWalletModal } from "store/walletSlice";
@@ -10,16 +10,28 @@ const Index = () => {
   const dispatch = useAppDispatch();
   const { walletConnect, getConnectionStatus } = useWallet();
   const { show, isConnected } = useAppSelector((state) => state.wallet);
-  const { selectedGateway: fuel } = useFuelExtension();
+  const { selectedGateway } = useFuelExtension();
+  const [isAlreadyConnecting, setIsAlreadyReconnecting] = useState(false);
+
+  async function handleConnection() {
+    if (isConnected) return false;
+    const status = await getConnectionStatus();
+
+    if (status === "isReconnecting" && !isAlreadyConnecting) {
+      setIsAlreadyReconnecting(true);
+      setTimeout(async () => {
+        handleConnection();
+      }, 500);
+    } else if (status === true) {
+      const connected = await walletConnect();
+      if (connected) dispatch(setIsConnected(true));
+      else dispatch(setIsConnected(false));
+    }
+  }
 
   useEffect(() => {
-    getConnectionStatus().then((res) => {
-      if (res) {
-        dispatch(setIsConnected(res));
-        walletConnect();
-      }
-    });
-  }, [fuel()]);
+    handleConnection();
+  }, [selectedGateway()?.provider]);
 
   return isConnected ? <Wallet show={show} onClose={() => dispatch(toggleWalletModal())} /> : <ConnectWallet show={show} onClose={() => dispatch(toggleWalletModal())} />;
 };
