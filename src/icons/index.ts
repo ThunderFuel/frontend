@@ -106,3 +106,5 @@ export { ReactComponent as IconSun } from "./icon-sun.svg";
 export { ReactComponent as IconMoon } from "./icon-moon.svg";
 export { ReactComponent as IconHashtag } from "./icon-hashtag.svg";
 export { ReactComponent as IconThunderLogoText } from "./icon-thunder-logo-text.svg";
+export { ReactComponent as IconLoadingTable } from "./icon-loading-table.svg";
+export { ReactComponent as IconLoadingGrid } from "./icon-loading-grid.svg";

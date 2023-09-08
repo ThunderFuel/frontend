@@ -1,6 +1,6 @@
 import React from "react";
 import CollectionsItem from "../components/CollectionsItem";
-import { AssetCollectionCoverImage1, AssetEmptyCart, AssetMockNFT1 } from "assets";
+import { AssetCollectionCoverImage1, AssetEmptyCart } from "assets";
 
 const Collections = () => {
   return (
@@ -8,8 +8,8 @@ const Collections = () => {
       <img src={AssetEmptyCart} />
       <span className="text-bodyLg font-spaceGrotesk text-gray-light">You don’t have any collections.</span>
       <div className="flex gap-4">
-        <CollectionsItem coverImage={AssetCollectionCoverImage1} name="Genuine Undead" creatorImage={AssetMockNFT1} />
-        <CollectionsItem coverImage={AssetCollectionCoverImage1} name="Genuine Undead" creatorImage={AssetMockNFT1} />
+        <CollectionsItem coverImage={AssetCollectionCoverImage1} name="Genuine Undead" creatorImage={AssetCollectionCoverImage1} />
+        <CollectionsItem coverImage={AssetCollectionCoverImage1} name="Genuine Undead" creatorImage={AssetCollectionCoverImage1} />
       </div>
     </div>
   );

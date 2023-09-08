@@ -9,7 +9,6 @@ import CoverImage from "./components/CoverImage";
 import SocialButtons from "./components/SocialButtons";
 import CollectionProperties from "./components/CollectionProperties";
 import Tab from "./components/Tab";
-import { AssetLoadingCollectionLogo } from "assets";
 import ReadMore from "components/ReadMore";
 import { useAppSelector } from "store";
 import UseNavigate from "hooks/useNavigate";
@@ -63,7 +62,7 @@ const Collection = () => {
             <div className="flex gap-5 w-full">
               <div className="w-24">
                 <div className="w-[100px] h-[100px] overflow-hidden rounded-md aspect-square bg-gray">
-                  <Img className="w-full" src={collection?.image ?? AssetLoadingCollectionLogo} defaultImage={AssetLoadingCollectionLogo} alt="profile-image" />
+                  <Img className="w-full" src={collection?.image} alt="profile-image" />
                 </div>
               </div>
               <div className="flex flex-col w-full">
