@@ -1,3 +1,5 @@
+export const THUNDER_THEME_NAME = "thunder_theme";
+
 export const provider = "https://beta-3.fuel.network/graphql";
 export const ZERO_B256 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 

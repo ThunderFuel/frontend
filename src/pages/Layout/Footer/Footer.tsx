@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
 import etherscanService from "api/etherscan/etherscan.service";
 import { IconEthereum, IconGas, IconMoon, IconSun } from "icons";
+import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import { THUNDER_THEME_NAME } from "../../../global-constants";
 
 const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
@@ -19,8 +21,10 @@ const FooterBottom = React.memo(() => {
   const onChangeMode = () => {
     if (!isDarkMode) {
       document.documentElement.classList.add("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "light");
     }
     setIsDarkModa(!isDarkMode);
   };
