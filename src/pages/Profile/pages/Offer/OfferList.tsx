@@ -10,8 +10,6 @@ const OfferList = ({ headers }: any) => {
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
   const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
 
-  console.log(options?.isProfile);
-
   return (
     <div className="flex flex-col py-5 gap-5 flex-1">
       <div className="flex items-center justify-between px-5">

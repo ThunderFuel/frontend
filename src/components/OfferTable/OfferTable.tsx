@@ -35,14 +35,14 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
   return (
     <div className="grid grid-cols-2">
       <Button
-        className="btn-secondary btn-sm border-r-0"
+        className="btn-secondary btn-sm border-r-0 rounded-r-none"
         onClick={() => {
           onCancelOffer(item);
         }}
       >
         cancel offer <IconCircleRemoveWhite />
       </Button>
-      <Button className="btn-secondary btn-sm " onClick={() => onUpdateOffer(item)}>
+      <Button className="btn-secondary btn-sm rounded-l-none" onClick={() => onUpdateOffer(item)}>
         update offer <IconHand />
       </Button>
     </div>
@@ -102,26 +102,30 @@ const defaultHeaders: ITableHeader[] = [
     render: (item) => <span>{timeagoFormat(item?.createdAt)}</span>,
   },
 ];
+
+const usersBidBalance = {} as any;
 const AfterRow = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, getBidBalance }: any) => {
-  const [offerOwnerBidBalance, setOfferOwnerBidBalance] = React.useState(null as any);
+  const [offerOwnerBidBalance, setOfferOwnerBidBalance] = React.useState(usersBidBalance[item.makerUserId]);
+  if (usersBidBalance[item.makerUserId]) {
+    console.log(item.makerUserId, usersBidBalance[item.makerUserId]);
+  }
   const fetchBidBalance = async () => {
     try {
       const response = await getBidBalance(item.makerUserId);
-      setOfferOwnerBidBalance(response.data);
+      usersBidBalance[item.makerUserId] = response.data;
+
+      setOfferOwnerBidBalance(usersBidBalance[item.makerUserId]);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   React.useEffect(() => {
-    if (!item.isOfferMade && offerOwnerBidBalance === null) {
+    if (!item.isOfferMade && !usersBidBalance[item.makerUserId]) {
       fetchBidBalance();
     }
   }, []);
 
-  if (!item.isActiveOffer) {
-    return null;
-  }
   if (offerOwnerBidBalance < item.price && !item.isOfferMade) {
     return <OfferItemOnHold />;
   }
@@ -147,6 +151,10 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       items={items}
       containerFluidClassName={"!px-5"}
       afterRow={(item: any) => {
+        if (!item.isActiveOffer) {
+          return null;
+        }
+
         return <AfterRow item={item} {...afterRowParams} />;
       }}
     />
