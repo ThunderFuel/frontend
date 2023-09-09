@@ -10,18 +10,28 @@ const OfferList = ({ headers }: any) => {
   const label = `${getOffers.length} ${isOffersMade ? " offers made" : " offers receıved"}`;
   const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
 
+  console.log(options?.isProfile);
+
   return (
     <div className="flex flex-col py-5 gap-5 flex-1">
       <div className="flex items-center justify-between px-5">
         <div className="text-headline-02 text-gray-light uppercase">{label}</div>
-        {isOffersMade && hasActiveOffer && options.isProfile ? (
+        {isOffersMade && hasActiveOffer && options?.isProfile ? (
           <Button className="btn-secondary btn-sm" onClick={onCancelAllOffer}>
             cancel all offers <IconCircleRemoveWhite />
           </Button>
         ) : null}
       </div>
       <div className="flex flex-col gap-3">
-        <OfferTable headers={headers} items={getOffers} onCancelOffer={onCancelOffer} onAcceptOffer={onAcceptOffer} onUpdateOffer={onUpdateOffer} getBidBalance={getBidBalance} />
+        <OfferTable
+          headers={headers}
+          items={getOffers}
+          onCancelOffer={onCancelOffer}
+          onAcceptOffer={onAcceptOffer}
+          onUpdateOffer={onUpdateOffer}
+          getBidBalance={getBidBalance}
+          isProfile={options?.isProfile}
+        />
       </div>
     </div>
   );

@@ -43,6 +43,7 @@ const Offer = () => {
   }, [offers, filterValue]);
 
   const onChangeFilterValue = (value: any) => {
+    console.log(value);
     setFilterValue((prevState: any) => ({ ...prevState, ...value }));
   };
 
@@ -132,6 +133,9 @@ const Offer = () => {
   }, [userInfo]);
 
   const contextValue = {
+    options: {
+      isProfile: true,
+    },
     offers,
     getOffers,
     filterValue,

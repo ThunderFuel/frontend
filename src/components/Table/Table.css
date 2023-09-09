@@ -48,7 +48,7 @@
 }
 
 .table .tbody .tr-group:has(.after) .tr:not(.after) {
-  @apply border-b-0 rounded-b-none;
+  @apply border-b-0 rounded-b-none pb-0;
 }
 
 .table .tbody .tr.active {
@@ -66,13 +66,18 @@
 }
 
 .table .tbody .tr.after {
-  min-height: 14px;
-  transition: min-height;
-  @apply rounded-t-none p-0;
-  @apply duration-300;
-  @apply -mt-2 border-t-0 rounded-b-lg;
+  min-height: .5rem;
+  max-height: .5rem;
+  transition: max-height .4s ease-in-out;
+  @apply rounded-t-none p-0 overflow-hidden;
+  @apply border-t-0 rounded-b-lg;
+  @apply items-start;
+}
+
+.table .tbody .tr.after .after-container {
+  @apply py-2 px-2 w-full;
 }
 
 .table .tbody .tr-group:hover .tr.after {
-  min-height: 50px;
+  max-height: 10rem;
 }
