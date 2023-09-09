@@ -16,12 +16,23 @@ import {
   cancelAllOrders,
   approveAndExecuteOrder,
 } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
+import {
+  assetManagerContractId,
+  contracts,
+  exchangeContractId,
+  poolContractId,
+  provider,
+  strategyAuctionContractId,
+  strategyFixedPriceContractId,
+  transferManagerContractId,
+  ZERO_B256,
+} from "global-constants";
 import { FuelProvider as _FuelProvider } from "../api";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import collectionsService from "api/collections/collections.service";
 import { safeTransferFrom } from "thunder-sdk/src/contracts/erc721";
+import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
 
 class FuelProvider extends BaseProvider {
   provider = <Window["fuel"]>window.fuel;
@@ -32,6 +43,36 @@ class FuelProvider extends BaseProvider {
 
   getProviderType() {
     return "fuel";
+  }
+
+  async handleWithdraw({ wallet, amount, user, setIsDisabled }: any) {
+    try {
+      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
+        .then(() => {
+          userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
+        })
+        .catch((e) => {
+          console.log(e);
+          setIsDisabled(false);
+        });
+    } catch (e) {
+      console.log(e);
+      setIsDisabled(false);
+    }
+  }
+
+  async handleDeposit({ wallet, amount, user, setIsDisabled }: any) {
+    try {
+      await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId);
+      userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
+    } catch (e) {
+      console.log(e);
+      setIsDisabled(false);
+    }
+  }
+
+  handleUpdateListing({ selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
+    return;
   }
 
   handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
@@ -51,8 +92,67 @@ class FuelProvider extends BaseProvider {
       });
   }
 
-  handleUpdateOffer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) {
-    throw new Error("Method not implemented.");
+  handleUpdateOffer({ setBidBalanceUpdated, setCurrentBidBalance, currentItem, checkoutPrice, checkoutExpireTime, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
+    offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then((res) => {
+      const order = {
+        isBuySide: true,
+        maker: user.walletAddress,
+        collection: selectedNFT.collection.contractAddress,
+        token_id: selectedNFT.tokenOrder,
+        price: toGwei(checkoutPrice).toNumber(),
+        amount: 1, //fixed
+        nonce: res.data[selectedNFT?.bestOffer?.id],
+        strategy: strategyFixedPriceContractId,
+        payment_asset: NativeAssetId,
+        expiration_range: formatTimeContract(checkoutExpireTime),
+        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+      };
+
+      setContracts(contracts, _FuelProvider);
+
+      userService.getBidBalance(user.id).then((res) => {
+        const currentBidBalance = res.data;
+        setCurrentBidBalance(currentBidBalance);
+        if (currentBidBalance < checkoutPrice) {
+          const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
+          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
+            .then((res) => {
+              if (res.transactionResult.status.type === "success") {
+                nftdetailsService.tokenUpdateOffer({
+                  id: currentItem?.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                });
+                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
+                setApproved(true);
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                setStartTransaction(false);
+              else setIsFailed(true);
+            });
+        } else
+          placeOrder(exchangeContractId, provider, wallet, order)
+            .then((res) => {
+              if (res.transactionResult.status.type === "success") {
+                nftdetailsService.tokenUpdateOffer({
+                  id: currentItem?.id,
+                  price: checkoutPrice,
+                  expireTime: formatTimeBackend(checkoutExpireTime),
+                });
+                setApproved(true);
+              }
+            })
+            .catch((e) => {
+              console.log(e);
+              if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+                setStartTransaction(false);
+              else setIsFailed(true);
+            });
+      });
+    });
   }
   async handleBulkListing({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
     // FOR BACKEND
@@ -678,9 +778,10 @@ class FuelProvider extends BaseProvider {
     return balance?.toNumber() / 1000000000;
   }
 
-  async getBidBalance(): Promise<any> {
-    // userService.getBidBalance(userId).then((res) => console.log(res));
-    return "";
+  async getBidBalance({ user }: any): Promise<any> {
+    const result = await userService.getBidBalance(user.id);
+
+    return result.data;
   }
 
   async getProvider(): Promise<any> {

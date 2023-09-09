@@ -15,10 +15,14 @@ abstract class BaseProvider {
 
   abstract walletDisconnect(callbackFn: any): any;
 
-  abstract getBidBalance(contractAddress: any): any;
+  abstract getBidBalance({ contractAddress, user }: any): any;
 
   abstract getProviderType(): any;
   //interface yaz
+
+  abstract handleDeposit({ wallet, amount, user, setIsDisabled }: any): any;
+  abstract handleWithdraw({ wallet, amount, user, setIsDisabled }: any): any;
+
   abstract handleCheckout({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
 
   abstract handleConfirmListing({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
@@ -78,7 +82,23 @@ abstract class BaseProvider {
 
   abstract handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
 
-  abstract handleUpdateOffer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
+  abstract handleUpdateOffer({
+    setBidBalanceUpdated,
+    setCurrentBidBalance,
+    currentItem,
+    checkoutPrice,
+    checkoutExpireTime,
+    address,
+    selectedNFT,
+    wallet,
+    user,
+    setApproved,
+    setStartTransaction,
+    setIsFailed,
+    setWagmiSteps,
+    setStepData,
+  }: any): any;
+  abstract handleUpdateListing({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
 
   abstract handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
   abstract handleCancelListing({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;

@@ -7,8 +7,9 @@ import { createWalletClient, custom, parseEther } from "viem";
 import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
 import { linea, goerli } from "wagmi/chains";
 import { formatTimeBackend } from "utils";
-import { prepareWriteContract, writeContract, waitForTransaction, erc721ABI } from "@wagmi/core";
+import { prepareWriteContract, writeContract, waitForTransaction, erc721ABI, readContract } from "@wagmi/core";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
+import { goerliWethAddress, wethABI } from "global-constants";
 class WagmiProvider extends BaseProvider {
   provider = wagmi;
 
@@ -83,6 +84,59 @@ class WagmiProvider extends BaseProvider {
     }
   }
 
+  async handleWithdraw({ amount, setIsDisabled }: any) {
+    try {
+      const config = await prepareWriteContract({
+        address: goerliWethAddress,
+        abi: wethABI,
+        functionName: "withdraw",
+        args: [amount],
+      });
+
+      const { hash } = await writeContract(config);
+      const data = await waitForTransaction({
+        hash,
+      });
+
+      return data;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsDisabled(false);
+    }
+  }
+
+  async handleDeposit({ amount, setIsDisabled }: any) {
+    try {
+      const config = await prepareWriteContract({
+        address: goerliWethAddress,
+        abi: wethABI,
+        functionName: "deposit",
+        value: parseEther(amount.toString()),
+      });
+
+      const { hash } = await writeContract(config);
+      const data = await waitForTransaction({
+        hash,
+      });
+
+      return data;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsDisabled(false);
+    }
+  }
+
+  async handleUpdateListing({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) {
+    console.log("handleUpdateOffer");
+    // await this.handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
+    // console.log("after cancel listing");
+
+    // await this.handleConfirmListing({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction });
+    // console.log("after make offer");
+  }
+
   async handleTransfer({ selectedNFT, address, setStartTransaction, setIsFailed }: any) {
     try {
       const config = await prepareWriteContract({
@@ -116,7 +170,7 @@ class WagmiProvider extends BaseProvider {
     return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
   }
   handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
-    this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+    return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
   }
   handleCancelAuction({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
     this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
@@ -211,7 +265,7 @@ class WagmiProvider extends BaseProvider {
 
     const _client = getClient();
 
-    _client.actions.listToken({
+    return _client.actions.listToken({
       wallet,
       listings: [
         {
@@ -427,16 +481,15 @@ class WagmiProvider extends BaseProvider {
     return +balance.formatted;
   }
 
-  async getBidBalance(contractAddress: any): Promise<any> {
-    const account = this.provider?.getAccount();
-    if (account.address === undefined) return false;
-
-    const balance = await this.provider?.fetchBalance({
-      address: account.address,
-      token: contractAddress,
+  async getBidBalance({ contractAddress }: any): Promise<any> {
+    const data = await readContract({
+      address: goerliWethAddress,
+      abi: wethABI,
+      functionName: "balanceOf",
+      args: [contractAddress],
     });
 
-    return +balance.formatted;
+    return data;
   }
 
   async getProvider(): Promise<any> {
@@ -492,7 +545,6 @@ class WagmiProvider extends BaseProvider {
 
   isConnected(): any | undefined {
     const account = this.provider?.getAccount();
-    console.log(account);
     if (account.isReconnecting) return "isReconnecting";
     else if (account?.connector === undefined) return false;
     else return account?.isConnected;

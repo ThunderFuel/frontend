@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
-// import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 
@@ -24,15 +23,14 @@ export const useWallet = () => {
   };
 
   const getBalance = async () => {
-    if (isConnected) {
-      return selectedGateway().getBalance(getWalletAddress, user.walletAddress);
-    }
+    if (isConnected) return selectedGateway().getBalance(getWalletAddress, user.walletAddress);
 
     return null;
   };
-  const getBidBalance = async (contractAddress: any) => {
+
+  const getBidBalance = async ({ contractAddress, user }: any) => {
     if (isConnected) {
-      return selectedGateway().getBidBalance(contractAddress);
+      return selectedGateway().getBidBalance({ contractAddress, user });
     }
 
     return null;
@@ -72,6 +70,14 @@ export const useWallet = () => {
 
   const getProviderType = () => {
     return selectedGateway().getProviderType();
+  };
+
+  const handleDeposit = ({ wallet, amount, user, setIsDisabled }: any) => {
+    return selectedGateway().handleDeposit({ wallet, amount, user, setIsDisabled });
+  };
+
+  const handleWithdraw = ({ wallet, amount, user, setIsDisabled }: any) => {
+    return selectedGateway().handleWithdraw({ wallet, amount, user, setIsDisabled });
   };
 
   const handleCheckout = ({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
@@ -234,5 +240,7 @@ export const useWallet = () => {
     handleBulkListing,
     handleTransfer,
     handleUpdateOffer,
+    handleDeposit,
+    handleWithdraw,
   };
 };
