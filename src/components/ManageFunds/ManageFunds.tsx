@@ -67,8 +67,6 @@ const ManageFunds = () => {
 
   const renderBalances = useMemo(() => <Balances refresh={isDisabled} />, [isDisabled]);
 
-  console.log(amount, bidBalance);
-
   return (
     <Modal className="checkout" title="Manage Funds" footer={footer} onClose={() => dispatch(toggleManageFundsModal())} show={manageFundsShow}>
       <div className="flex flex-col p-5 gap-5">

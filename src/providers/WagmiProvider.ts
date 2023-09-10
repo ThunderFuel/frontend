@@ -3,7 +3,7 @@ import BaseProvider from "./BaseProvider";
 import userService from "../api/user/user.service";
 import * as wagmi from "@wagmi/core";
 import { connectors } from "index";
-import { createWalletClient, custom, parseEther } from "viem";
+import { createWalletClient, custom, formatEther, parseEther, parseGwei } from "viem";
 import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
 import { linea, goerli } from "wagmi/chains";
 import { formatTimeBackend } from "utils";
@@ -488,8 +488,7 @@ class WagmiProvider extends BaseProvider {
       functionName: "balanceOf",
       args: [contractAddress],
     });
-
-    return data;
+    if (typeof data === "bigint") return formatEther(data);
   }
 
   async getProvider(): Promise<any> {
