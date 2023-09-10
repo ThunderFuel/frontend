@@ -18,6 +18,7 @@ import { useIsMobile } from "hooks/useIsMobile";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
 import UseNavigate from "hooks/useNavigate";
+import { switchNetwork } from "@wagmi/core";
 
 const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
   return <span className="font-spaceGrotesk font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">{count}</span>;
@@ -85,6 +86,12 @@ const Header = () => {
     }
   };
 
+  async function handleSwitchNetwork() {
+    await switchNetwork({
+      chainId: 59144,
+    });
+  }
+
   React.useLayoutEffect(() => {
     setHeaderHeight();
     window.addEventListener("resize", () => setHeaderHeight());
@@ -116,7 +123,11 @@ const Header = () => {
             <div className="flex-center text-red border-y border-red py-1">
               <IconWarning />
               <div className="body-small">
-                Thunder is available on Linea network. Please check your wallet settings and <span className="underline cursor-pointer">switch to Linea</span>.
+                Thunder is available on Linea network. Please check your wallet settings and{" "}
+                <span className="underline cursor-pointer" onClick={handleSwitchNetwork}>
+                  switch to Linea
+                </span>
+                .
               </div>
             </div>
           </>
