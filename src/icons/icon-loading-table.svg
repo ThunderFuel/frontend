@@ -1,0 +1,16 @@
+<svg width="100%" height="100%" viewBox="0 0 1360 84" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0.5 8C0.5 3.85786 3.85786 0.5 8 0.5H1352C1356.14 0.5 1359.5 3.85787 1359.5 8V76C1359.5 80.1421 1356.14 83.5 1352 83.5H8.00004C3.8579 83.5 0.5 80.1421 0.5 76V8Z"
+          stroke="currentColor"/>
+    <circle cx="42" cy="42" r="24" fill="currentColor"/>
+    <rect x="444" y="28" width="80" height="28" rx="1" fill="currentColor"/>
+    <rect x="564" y="28" width="80" height="28" rx="1" fill="currentColor"/>
+    <rect x="684" y="28" width="80" height="28" rx="1" fill="currentColor"/>
+    <rect x="812" y="28" width="40" height="28" rx="1" fill="currentColor"/>
+    <rect x="932" y="10" width="64" height="64" rx="6" fill="currentColor"/>
+    <rect x="1004" y="10" width="64" height="64" rx="6" fill="currentColor"/>
+    <rect x="1076" y="10" width="64" height="64" rx="6" fill="currentColor"/>
+    <rect x="1148" y="10" width="64" height="64" rx="6" fill="currentColor"/>
+    <rect x="1220" y="10" width="64" height="64" rx="6" fill="currentColor"/>
+    <rect x="1312" y="32" width="20" height="20" rx="1" fill="currentColor"/>
+    <rect x="86" y="32" width="144" height="22" rx="1" fill="currentColor"/>
+</svg>

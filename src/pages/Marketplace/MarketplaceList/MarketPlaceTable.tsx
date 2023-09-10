@@ -3,13 +3,12 @@ import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
 import Img from "components/Img";
 
-import { IconDownRight, IconSortDown, IconSortUp, IconUpRight } from "icons";
+import { IconDownRight, IconLoadingTable, IconSortDown, IconSortUp, IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
-import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
@@ -18,11 +17,11 @@ const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) =
   const items = collectionItems.slice(0, 5);
 
   return (
-    <ul className="py-2.5 px-4 flex gap-2">
+    <ul className="px-4 flex gap-2">
       {items.map((item, i) => (
         <li key={i} className="w-14 h-14 overflow-hidden">
           <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
-            {item.image ? <Img src={item.image} alt={i.toString()} defaultImage={AssetCollectionItem0} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
+            {item.image ? <Img src={item.image} alt={i.toString()} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
           </Link>
         </li>
       ))}
@@ -48,7 +47,7 @@ Change.displayName = "Change";
 const MarketPlaceTableLoading = () => {
   return [1, 2, 3, 4, 5, 6].map((i, k) => (
     <div className="table-row-skeleton" key={`${i}_${k}`}>
-      <img alt="grid-skeleton-image" className="w-full" src={AssetLoadingTable} />
+      <IconLoadingTable className="w-full text-gray" />
     </div>
   ));
 };

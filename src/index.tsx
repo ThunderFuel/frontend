@@ -14,7 +14,7 @@ import LOCALES from "./locales";
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/browser";
 
-import { WagmiConfig, createConfig, configureChains } from "wagmi";
+import { configureChains, createConfig, mainnet, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 // import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";

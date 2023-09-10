@@ -9,6 +9,8 @@ import CheckoutModal from "./CheckoutModal";
 import ManageFunds from "components/ManageFunds";
 import Wallet from "components/Wallet";
 import ClosedBetaModal from "components/ClosedBetaModal";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { THUNDER_THEME_NAME } from "../../global-constants";
 
 interface Props {
   children: React.ReactNode;
@@ -17,8 +19,17 @@ interface Props {
 }
 
 const Layout = ({ children, ...etc }: Props) => {
+  React.useEffect(() => {
+    const theme = useLocalStorage().getItem(THUNDER_THEME_NAME);
+    if (theme === "dark" || (!(THUNDER_THEME_NAME in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
-    <main className={"bg-bg min-h-screen flex flex-col"}>
+    <main className="bg-bg min-h-screen flex flex-col">
       <Header />
       <MyCart />
       <Wallet />

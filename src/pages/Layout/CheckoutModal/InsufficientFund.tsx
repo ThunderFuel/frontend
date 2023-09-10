@@ -4,7 +4,7 @@ import Modal from "components/Modal";
 import EthereumPrice from "components/EthereumPrice";
 import { IconWarning } from "icons";
 import { useWallet } from "hooks/useWallet";
-import { formatDisplayedNumber, isObjectEmpty, formatPrice } from "utils";
+import { isObjectEmpty, formatPrice } from "utils";
 import { useAppSelector } from "store";
 import { Button as BSButton } from "react-bootstrap";
 
@@ -30,7 +30,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
     <div className="flex flex-col w-full h-full items-center">
       <div className="flex w-full py-2 px-5 justify-between border-b border-gray">
         <span className="text-h6 text-gray-light">Your Balance</span>
-        <EthereumPrice className="text-white" price={formatDisplayedNumber(balance)} />
+        <EthereumPrice className="text-white" price={balance} />
       </div>
       <div className="flex flex-col w-full gap-y-2.5 p-5">
         <BSButton target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`}>

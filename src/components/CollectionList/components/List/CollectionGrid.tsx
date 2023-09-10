@@ -8,10 +8,10 @@ const CollectionGrid = () => {
   const { displayType, collectionItems, options } = useCollectionListContext();
 
   const displayClass = useMemo(() => {
-    if (displayType === DisplayType.GRID4) {
+    if (displayType === DisplayType.GRID5) {
+      return "lg:grid-cols-5";
+    } else if (displayType === DisplayType.GRID4) {
       return "lg:grid-cols-4";
-    } else if (displayType === DisplayType.GRID3) {
-      return "lg:grid-cols-3";
     }
 
     return "lg:grid-cols-5";

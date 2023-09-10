@@ -6,8 +6,8 @@ import { getCartSelectedTokenOrderList } from "store/cartSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 export enum DisplayType {
-  GRID3 = "3",
   GRID4 = "4",
+  GRID5 = "5",
   LIST = "list",
 }
 
@@ -31,7 +31,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const bulkListingSelectedTokenOrderList = useSelector(getBulkListingSelectedTokenOrderList);
   const cartSelectedTokenOrderList = useSelector(getCartSelectedTokenOrderList);
 
-  const [displayType, setDisplayType] = useState(DisplayType.GRID4);
+  const [displayType, setDisplayType] = useState(DisplayType.GRID5);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
     switch (nextState.type) {
       case ParamsType.Reset: {

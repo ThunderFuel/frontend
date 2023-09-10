@@ -46,8 +46,16 @@ const Activity = () => {
     };
   };
   const fetchActivity = async () => {
-    const response = await getActivityItems();
-    setActivities(response.data);
+    if (!isLoading) {
+      setIsLoading(true);
+      setActivities([]);
+      try {
+        const response = await getActivityItems();
+        setActivities(response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const onChangePagination = async () => {
@@ -65,7 +73,6 @@ const Activity = () => {
 
   const onChangeFilterValue = ({ types }: any) => {
     setParams({ types });
-    fetchActivity();
   };
 
   React.useEffect(() => {
@@ -83,6 +90,7 @@ const Activity = () => {
       onChangePagination={({ page }: any) => {
         setParams({ page: page });
       }}
+      bottomOffset={200}
     >
       <ActivityList containerClassName={"pl-10"} activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
     </InfiniteScroll>

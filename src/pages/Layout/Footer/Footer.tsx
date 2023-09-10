@@ -1,10 +1,13 @@
 import React, { useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
 import etherscanService from "api/etherscan/etherscan.service";
-import { IconEthereum, IconGas, IconSun } from "icons";
+import { IconEthereum, IconGas, IconMoon, IconSun } from "icons";
+import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import { THUNDER_THEME_NAME } from "../../../global-constants";
 
 const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
+  const [isDarkMode, setIsDarkModa] = React.useState<boolean>(true);
   const [gasFee, setGasFee] = React.useState<any>(0);
   const [ethPrice, setEthPrice] = React.useState(0);
 
@@ -15,30 +18,44 @@ const FooterBottom = React.memo(() => {
     setGasFee(response.result.safeGasPrice);
   };
 
+  const onChangeMode = () => {
+    if (!isDarkMode) {
+      document.documentElement.classList.add("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "light");
+    }
+    setIsDarkModa(!isDarkMode);
+  };
+
   React.useEffect(() => {
     getData();
     const interval = setInterval(() => {
       getData();
     }, IntervalValue);
 
+    setIsDarkModa(useLocalStorage().getItem(THUNDER_THEME_NAME) === "dark");
+
     return () => clearInterval(interval);
   }, []);
+  const Icon = isDarkMode ? IconSun : IconMoon;
 
   return (
     <div className="flex items-center justify-between px-4">
       <div className="flex items-center border-r border-r-gray">
-        <div className="flex items-center gap-4 shrink-0 text-headline-01 border-r border-r-gray py-3 pr-4">
+        <div className="flex items-center gap-4 shrink-0 text-headline-01 border-r border-r-gray py-2 pr-4">
           <span className="flex items-center">
-            <IconEthereum color="#838383" />
+            <IconEthereum className="text-gray-light" />
             <span className="text-white">${ethPrice}</span>
           </span>
           <span className="flex items-center">
-            <IconGas className="mr-[6px]" />
+            <IconGas className="mr-[6px] text-gray-light" />
             <span className="text-white">{gasFee} GWEI</span>
           </span>
         </div>
-        <div className="px-3">
-          <IconSun className="text-white" />
+        <div className="px-3 cursor-pointer" onClick={onChangeMode}>
+          <Icon className="text-white" />
         </div>
       </div>
       <SocialMediaIcons />

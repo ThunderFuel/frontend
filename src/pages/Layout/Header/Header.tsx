@@ -2,8 +2,8 @@ import React, { Dispatch, SetStateAction, useRef } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
-import { AssetLogo, AssetThunderText } from "assets";
-import { IconCart, IconHamburger, IconSearch, IconThunder2, IconWallet } from "icons";
+import { AssetLogo } from "assets";
+import { IconCart, IconHamburger, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
 
 import Search from "./components/Search/Search";
 
@@ -98,20 +98,28 @@ const Header = () => {
     <header id="layout-header" className={clsx("sticky top-0 z-30 bg-bg")} ref={ref}>
       {!useIsMobile() ? (
         <>
-          <div className="border-y border-gray">
-            <div className="header-container-fluid">
-              <div className="flex items-center gap-6 pr-6">
-                <Link className="flex text-white gap-1" to={PATHS.MARKETPLACE}>
-                  <IconThunder2 className="w-14" />
-                  <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
-                </Link>
+          <>
+            <div className="border-y border-gray">
+              <div className="header-container-fluid">
+                <div className="flex items-center gap-6 pr-6">
+                  <Link className="flex items-center text-white gap-1" to={PATHS.MARKETPLACE}>
+                    <IconThunder2 className="w-14" />
+                    <IconThunderLogoText className="hidden lg:flex" />
+                  </Link>
 
-                <Tab />
-                <Search />
+                  <Tab />
+                  <Search />
+                </div>
+                <HeaderIconButtonGroup />
               </div>
-              <HeaderIconButtonGroup />
             </div>
-          </div>
+            <div className="flex-center text-red border-y border-red py-1">
+              <IconWarning />
+              <div className="body-small">
+                Thunder is available on Linea network. Please check your wallet settings and <span className="underline cursor-pointer">switch to Linea</span>.
+              </div>
+            </div>
+          </>
           <MobileSearch />
         </>
       ) : (

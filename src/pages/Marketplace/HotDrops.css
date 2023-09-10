@@ -1,5 +1,5 @@
 .hotdrop-slide {
   @apply w-full flex-1 h-full min-h-[440px];
   @apply bg-right bg-cover bg-no-repeat;
-  mask-image: linear-gradient(90deg, rgba(20, 20, 20, 0.00) 0%, #141414 100%);
+  @apply bg-mode-hotdrop dark:bg-hotdrop;
 }

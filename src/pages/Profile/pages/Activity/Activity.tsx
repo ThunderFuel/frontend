@@ -10,7 +10,7 @@ const Activity = () => {
   const [activities, setActivities] = useState<any>([]);
   const [pagination, setPagination] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<any>(null);
+  const [currentFilter, setCurrentFilter] = useState<any>([]);
 
   const filters = collectionService.getActivityFilters();
 
@@ -41,6 +41,7 @@ const Activity = () => {
     };
   };
   const fetchActivity = async (params = {}) => {
+    setActivities([]);
     const response = await getActivityItems({ page: 1, ...params });
     setActivities(response.data);
   };

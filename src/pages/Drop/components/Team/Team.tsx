@@ -5,7 +5,7 @@ import SocialButtons from "../SocialButtons";
 
 const TeamMember = ({ member }: any) => {
   return (
-    <div className="flex flex-col gap-5 border border-white border-opacity-10 rounded-md p-5">
+    <div className="flex flex-col border border-white border-opacity-10 rounded-md p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="w-[50px] h-[50px] rounded-full overflow-hidden">
@@ -20,7 +20,7 @@ const TeamMember = ({ member }: any) => {
           <SocialButtons socialMedias={member.socialMedias} />
         </div>
       </div>
-      <div className="body-medium text-white">{member.text}</div>
+      {member.text && <div className="body-medium text-white mt-5">{member.text}</div>}
     </div>
   );
 };
@@ -28,7 +28,7 @@ const Team = () => {
   const { dropDetail } = useDropDetailContext();
 
   return (
-    <div className="grid grid-cols-2 gap-5">
+    <div className="flex flex-col gap-5">
       {dropDetail.team.map((member: any, i: number) => (
         <TeamMember key={i} member={member} />
       ))}

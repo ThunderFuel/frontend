@@ -16,6 +16,7 @@ export enum DROP_STATUS {
 
 export const FLUID_DROP_IDS = [16, 17];
 export const FLUID_WALLET_COUNT = 20;
+export const FUELET_DROP_ID = 18;
 
 const THUNDER_CREATOR = {
   image: "https://cdn.thundernft.market/assets/drop/f330f6a4-37a8-4d28-9af2-5953fff928f1.png",
@@ -26,12 +27,26 @@ const FLUID_CREATOR = {
   name: "Fluid",
   image: "https://thassetstorage.blob.core.windows.net/assets/drop/f330f6a4-37a8-4d28-9af2-5953fffasd334.png",
 };
+const FUELET_CREATOR = {
+  name: "Fuelet",
+  image: "https://thassetstorage.blob.core.windows.net/assets/fuelet-logo.png",
+};
+
+function getCreator(dropId: any) {
+  const id = Number(dropId);
+  if (FLUID_DROP_IDS.includes(id)) {
+    return FLUID_CREATOR;
+  }
+  if (FUELET_DROP_ID === id) {
+    return FUELET_CREATOR;
+  }
+
+  return THUNDER_CREATOR;
+}
 
 function modifyResponseCreator(response: any) {
-  const id = response.data.id;
-  response.data.creator = FLUID_DROP_IDS.includes(Number(id)) ? FLUID_CREATOR : THUNDER_CREATOR;
-
-  console.log(response);
+  const dropId = response.data.id;
+  response.data.creator = getCreator(dropId);
 
   return response;
 }
@@ -57,7 +72,7 @@ export default {
   getDrops: async (params: any) => {
     const response = await ThunderURL.get<any[]>("v1/drop/drops", { params });
     response.data = response.data.map((item: any) => {
-      item.creator = FLUID_DROP_IDS.includes(Number(item.id)) ? FLUID_CREATOR : THUNDER_CREATOR;
+      item.creator = getCreator(item.id);
 
       return item;
     });

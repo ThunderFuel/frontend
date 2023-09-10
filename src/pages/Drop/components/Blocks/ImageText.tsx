@@ -13,7 +13,7 @@ const ImageText = (props: IImageText) => {
   return (
     <div className={clsx("flex gap-5", props.reverse ? "flex-row-reverse" : "")}>
       <Text title={props.title} text={props.text} />
-      <div className="flex-1" style={{ background: `url(${props.image})` }} />
+      <div className="flex-1 bg-contain bg-no-repeat bg-center" style={{ backgroundImage: `url(${props.image})` }} />
     </div>
   );
 };

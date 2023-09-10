@@ -59,7 +59,7 @@ const LogoContainer = ({ userInfo }: any) => {
   const walletAddress = addressFormat(userInfo?.walletAddress);
 
   return (
-    <div className="flex gap-5 w-full flex-col -mt-24">
+    <div className="flex gap-5 w-full flex-col">
       <Avatar image={userInfo?.image} userId={user?.id} className="w-[84px] h-[84px]" />
       <div className="flex flex-col gap-2.5 flex-1 text-gray-light">
         <div className="flex items-center gap-2">
@@ -73,7 +73,7 @@ const LogoContainer = ({ userInfo }: any) => {
         </div>
         <div className="flex gap-2">
           <WalletDropdown walletAddress={userInfo?.walletAddress} />
-          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} />
+          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} shareDropdownClassName="left-0" />
         </div>
       </div>
     </div>

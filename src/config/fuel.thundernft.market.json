@@ -3,5 +3,6 @@
   "walletList": [
     "fuel",
     "fuelet"
-  ]
+  ],
+  "baseURL":"https://api-thundernft.azurewebsites.net/"
 }

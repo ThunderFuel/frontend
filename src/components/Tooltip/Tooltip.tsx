@@ -4,16 +4,18 @@ import clsx from "clsx";
 
 interface ITooltip {
   children: React.ReactNode;
-  position?: "bottom" | "top" | null;
+  position?: string;
   content?: any;
+  hiddenArrow?: any;
+  contentClass?: any;
 }
 
-const Tooltip = ({ children, position = "top", content }: ITooltip) => {
+const Tooltip = ({ children, position = "top", content, contentClass, hiddenArrow = false }: ITooltip) => {
   return (
     <div className={clsx("tooltip", position)}>
       {children}
-      <div className="content">
-        {content} <span className="arrow" />
+      <div className={clsx("content", contentClass)}>
+        {content} {!hiddenArrow && <span className="arrow" />}
       </div>
     </div>
   );

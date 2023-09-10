@@ -39,6 +39,7 @@ export interface IUserResponse {
   follows: any[];
   id: number;
   likedTokens: null | any[];
+  bio: any;
 }
 
 export interface IFollowParams {

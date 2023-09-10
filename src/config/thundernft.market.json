@@ -4,5 +4,6 @@
     "wagmi_metamask",
     "wagmi_coinbase",
     "wagmi_walletconnect"
-  ]
+  ],
+  "baseURL":"https://thunder-evm.azurewebsites.net/"
 }

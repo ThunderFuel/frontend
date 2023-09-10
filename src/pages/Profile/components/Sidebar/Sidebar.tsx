@@ -11,14 +11,13 @@ import { FollowType, useProfile } from "../../ProfileContext";
 const Sidebar = ({ isProfile = false }: any) => {
   const { userInfo, onSetSocialActiveTab } = useProfile();
   const ownedTokens = userInfo?.tokens ?? [];
-  const listedTokens = ownedTokens.filter((item: any) => item.salable);
 
   return (
-    <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px]">
+    <div className="flex flex-col border-r border-gray min-w-[410px] max-w-[410px] relative">
       <div className="sidebar-container">
         {isProfile ? <ButtonEdit /> : <ButtonFollow />}
         <CoverImage src={userInfo?.banner} />
-        <div className="p-5 relative text-white flex">
+        <div className="p-5 relative text-white flex sticky left-0 w-full" style={{ bottom: "var(--footerHeight)" }}>
           <div className="flex flex-col w-full">
             <LogoContainer userInfo={userInfo} />
             <BoxGroup className="mt-4">
@@ -38,16 +37,9 @@ const Sidebar = ({ isProfile = false }: any) => {
               >
                 {numberFormat(userInfo?.follows?.length)}
               </BoxGroupItem>
-              <BoxGroupItem
-                header="Collected"
-                onClick={() => {
-                  onSetSocialActiveTab(FollowType.Follows);
-                }}
-              >
-                {numberFormat(listedTokens.length)}/{numberFormat(ownedTokens.length)}
-              </BoxGroupItem>
+              <BoxGroupItem header="Collected">{numberFormat(ownedTokens.length)}</BoxGroupItem>
             </BoxGroup>
-            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio} </div>
+            <div className="body-medium mt-5 min-h-[21px] text-overflow-3">{userInfo?.bio}</div>
 
             {/*userInfo?.lastOffer ? <BoxWithIconLastOffer lastOffer={userInfo.lastOffer} /> : null*/}
             {/*userInfo?.lastActivity ? <BoxWithIconLastActivity lastActivity={userInfo?.lastActivity} /> : null*/}

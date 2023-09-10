@@ -9,7 +9,7 @@ const Header = ({ children }: { children: any }) => {
   const { onSetShow, show, showIcon } = useCollapseContext();
 
   return (
-    <div className="p-4 text-h6 text-white flex justify-between items-center cursor-pointer" onClick={onSetShow}>
+    <div className="p-3 text-h6 text-white flex justify-between items-center cursor-pointer" onClick={onSetShow}>
       {children}
       {showIcon ? show ? <IconArrowUp /> : <IconArrowDown /> : null}
     </div>

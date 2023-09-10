@@ -105,7 +105,7 @@
 
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-  color: #fff;
+  color: #000;
   text-decoration: none;
   outline: 0;
 }

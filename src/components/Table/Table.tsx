@@ -83,6 +83,22 @@ const Table = ({
   actionButton,
   ...props
 }: ITable) => {
+  const _getAfterRow = (k: number, item: any) => {
+    if (!afterRow) {
+      return false;
+    }
+    const afterRowContent = afterRow(item);
+    if (!afterRowContent) {
+      return false;
+    }
+
+    return (
+      <div key={`afterRow_${k.toString()}`} className={"tr after"}>
+        <div className="after-container">{afterRowContent}</div>
+      </div>
+    );
+  };
+
   const _getHeaders = headers.map((header, i) => (
     <div className={clsx("th text-headline-01", thClassName)} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
       {header.renderHeader ? header.renderHeader(header) : header.text}
@@ -122,15 +138,7 @@ const Table = ({
             );
           })}
         </RowElement>
-        {afterRow ? (
-          <div key={`afterRow_${k.toString()}`} className={"tr after"}>
-            <td colSpan={headers.length} className="py-5 px-8 text-left">
-              {afterRow(item)}
-            </td>
-          </div>
-        ) : (
-          <></>
-        )}
+        {_getAfterRow(k, item)}
       </div>
     );
   });

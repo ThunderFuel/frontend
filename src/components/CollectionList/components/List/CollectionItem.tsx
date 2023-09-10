@@ -1,5 +1,5 @@
 import React from "react";
-import { IconAuction, IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
+import { IconAuction, IconBid, IconHand, IconHashtag, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "store";
 import { add as cartAdd, addBuyNowItem, remove as cartRemove, toggleCartModal } from "store/cartSlice";
@@ -62,7 +62,7 @@ HighestBid.displayName = "HighestBid";
 
 const StartingPrice = React.memo(({ startingPrice }: any) => {
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full justify-between items-center gap-1">
       <span className="uppercase text-headline-01 text-gray-light">starting price</span>
       <EthereumPrice className="text-white" price={startingPrice ?? 0} />
     </div>
@@ -78,6 +78,28 @@ const CollectionItemCheckbox = (props: any) => {
     </label>
   );
 };
+const CollectionTop = React.memo(({ top }: any) => {
+  let colorClassName = "text-gray";
+  if (top <= 1) {
+    colorClassName = "text-green";
+  } else if (top > 1 && top <= 10) {
+    colorClassName = "text-orange";
+  } else if (top > 10 && top <= 50) {
+    colorClassName = "text-white";
+  } else {
+    colorClassName = "text-gray";
+  }
+
+  return (
+    <div className={clsx("flex gap-1 items-center", colorClassName)}>
+      <div className="w-7 h-7 rounded-full flex-center bg-gray">
+        <IconHashtag />
+      </div>
+      <div className="headline-md">{top}</div>
+    </div>
+  );
+});
+CollectionTop.displayName = "CollectionTop";
 const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -184,7 +206,10 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         </div>
         <div className="p-2.5 flex items-center">
           {collection.salable ? (
-            <EthereumPrice className="text-white" price={collection.price ?? "-"} />
+            <div className="flex w-full justify-between">
+              <EthereumPrice className="text-white" price={collection.price ?? "-"} />
+              <CollectionTop top={1} />
+            </div>
           ) : collection.onAuction ? (
             collection.highestBidPrice ? (
               <HighestBid highestBid={collection.highestBidPrice} />

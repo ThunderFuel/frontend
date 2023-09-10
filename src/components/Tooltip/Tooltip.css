@@ -55,3 +55,15 @@
   border-color: transparent;
   @apply border-l-bg-light border-t-bg-light;
 }
+
+.tooltip.bottom .content {
+  top: initial;
+  margin-top: initial;
+  @apply top-full;
+}
+
+.tooltip.right .content {
+  left: inherit;
+  transform: none;
+  @apply right-0;
+}

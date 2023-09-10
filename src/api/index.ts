@@ -1,5 +1,6 @@
 import HttpClient from "./HttpClient";
 import { Provider } from "fuels";
+import config from "config";
 
-export const ThunderURL = new HttpClient(process.env.REACT_APP_API_URL as string);
+export const ThunderURL = new HttpClient(config.getConfig("baseURL"));
 export const FuelProvider = new Provider("https://beta-3.fuel.network/graphql");

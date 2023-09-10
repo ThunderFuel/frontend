@@ -3,28 +3,39 @@ import Table, { ITableHeader } from "components/Table";
 import Checkbox from "components/CheckBox";
 import { add as cartAdd, remove as cartRemove } from "store/cartSlice";
 import { useAppDispatch } from "store";
-import { addressFormat, dateFormat } from "utils";
+import { addressFormat, timeagoFormat } from "utils";
 import { useCollectionListContext } from "../../CollectionListContext";
 import Img from "components/Img";
 import EthereumPrice from "components/EthereumPrice";
 import clsx from "clsx";
 import { add as bulkListingAdd, remove as bulkListingRemove } from "store/bulkListingSlice";
 import { PATHS } from "router/config/paths";
-import UseNavigate from "hooks/useNavigate";
+import UseNavigate, { getAbsolutePath } from "hooks/useNavigate";
+import { IconLink } from "icons";
+import { Link } from "react-router-dom";
 
 const Collection = ({ item }: { item: any }) => {
   return (
-    <div className="flex items-center gap-5 p-3.5 pl-0">
-      <div className={clsx("min-w-[56px] max-w-[56px] aspect-square rounded-sm overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}>
+    <div className="flex items-center gap-5 pl-0 group">
+      <Link
+        to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.id })}
+        className={clsx("relative min-w-[40px] max-w-[40px] aspect-square rounded-md overflow-hidden flex-center bg-gray", item.isSelected ? "border border-white" : "")}
+      >
         <Img className="h-full" alt={item.image} src={item.image} loading="lazy" />
+        <div className="absolute top-0 left-0 bottom-0 right-0 flex-center bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <IconLink className="cursor-pointer text-white" />
+        </div>
+      </Link>
+      <div className="">
+        {item.collectionName && <div className="text-body text-gray-light text-overflow max-w-[130px]">{item.collectionName}</div>}
+        <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>
       </div>
-      <h6 className="text-h6 text-white">{item.name ?? item.tokenOrder}</h6>
     </div>
   );
 };
 
 const UnSalableLabel = ({ children }: any) => {
-  return <span className="text-headline-01 uppercase text-gray-light pr-[7px]">{children}</span>;
+  return <span className="text-headline-01 uppercase text-gray-light pr-2">{children}</span>;
 };
 
 const CollectionTable = () => {
@@ -61,19 +72,25 @@ const CollectionTable = () => {
       key: "selection",
       text: "",
       render: (collection) => (
-        <div className="p-6">
+        <div className="p-2">
           {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : (
-              <Checkbox checked={collection.isSelected} onClick={() => onSelect(collection)} />
+              <Checkbox
+                checked={collection.isSelected}
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                  onSelect(collection);
+                }}
+              />
             )
           ) : null}
         </div>
       ),
-      width: "64px",
+      width: "42px",
     },
     {
       key: "collection",
-      text: "Collection",
+      text: "Item",
       render: (item) => <Collection item={item} />,
     },
     {
@@ -90,14 +107,16 @@ const CollectionTable = () => {
       align: "flex-end",
       render: (item) => (item.lastSalePrice === null ? <UnSalableLabel>No Sale</UnSalableLabel> : <EthereumPrice price={item.lastSalePrice} />),
     },
-    {
+  ];
+  if (!options?.isProfile) {
+    headers.push({
       key: "owner",
       text: "Owner",
       width: "20%",
       align: "flex-end",
       render: (item) => (
         <div
-          className="cell text-h6 text-gray-light hover:text-white hover:underline"
+          className="cell body-medium text-white hover:underline"
           onClick={() => {
             navigate(PATHS.USER, { userId: item?.userId });
           }}
@@ -105,19 +124,17 @@ const CollectionTable = () => {
           {item?.userName ?? addressFormat(item?.userWalletAddress ?? "")}
         </div>
       ),
+    });
+  }
+  headers.push({
+    key: "listedTime",
+    text: "Time Listed",
+    width: "20%",
+    align: "flex-end",
+    render: (item) => {
+      return <div className="cell body-medium">{item.listedTime ? timeagoFormat(item.listedTime) : "-"}</div>;
     },
-    {
-      key: "listedTime",
-      text: "Time Listed",
-      width: "20%",
-      align: "flex-end",
-      render: (item) => {
-        const listedTime = dateFormat(item.listedTime);
-
-        return <Table.Cell>{listedTime}</Table.Cell>;
-      },
-    },
-  ];
+  });
 
   return (
     <Table
@@ -128,6 +145,7 @@ const CollectionTable = () => {
       headers={headers}
       items={collectionItems}
       onClick={onSelect}
+      containerFluidClassName={"!px-5"}
       isSelectedRow={(item) => item.isSelected}
     />
   );

@@ -11,7 +11,11 @@
   min-height: 410px;
   max-height: 410px;
   overflow: hidden;
-  mask-image: linear-gradient(180deg, #141414 19.50%, rgba(25, 25, 25, 0.00) 74.06%);
+  mask-image: linear-gradient(180deg, #141414 20%, rgba(25, 25, 25, 0) 100%);
+  background-origin: content-box;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 @media (max-height: 768px) {
