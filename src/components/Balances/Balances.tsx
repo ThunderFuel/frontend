@@ -18,8 +18,10 @@ const Balances = (refresh: any) => {
   }
 
   function fetchBidBalance() {
-    return 0;
-    // getBidBalance(lineaWethaddress).then((res) => console.log(res));
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      console.log({ res });
+      setBidBalance(res);
+    });
   }
 
   useEffect(() => {

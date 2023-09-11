@@ -90,7 +90,7 @@ class WagmiProvider extends BaseProvider {
         address: goerliWethAddress,
         abi: wethABI,
         functionName: "withdraw",
-        args: [amount],
+        args: [parseEther(amount.toString())],
       });
 
       const { hash } = await writeContract(config);
