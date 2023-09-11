@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
@@ -19,6 +19,8 @@ import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
 import UseNavigate from "hooks/useNavigate";
 import { switchNetwork } from "@wagmi/core";
+import { lineaChainId } from "global-constants";
+import { useWallet } from "hooks/useWallet";
 
 const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
   return <span className="font-spaceGrotesk font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">{count}</span>;
@@ -76,6 +78,16 @@ export interface HeaderProps {
 
 const Header = () => {
   const ref = useRef<any>(null);
+  const [isReconnecting, setIsReconnecting] = useState(false);
+  const { getConnectionStatus } = useWallet();
+  const { networkId } = useAppSelector((state) => state.wallet);
+
+  useEffect(() => {
+    getConnectionStatus().then((res) => {
+      if (res === "isReconnecting") setIsReconnecting(true);
+      else setIsReconnecting(false);
+    });
+  }, [networkId]);
 
   const setHeaderHeight = () => {
     const cssRoot = document.querySelector(":root");
@@ -120,16 +132,18 @@ const Header = () => {
                 <HeaderIconButtonGroup />
               </div>
             </div>
-            <div className="flex-center text-red border-y border-red py-1">
-              <IconWarning />
-              <div className="body-small">
-                Thunder is available on Linea network. Please check your wallet settings and{" "}
-                <span className="underline cursor-pointer" onClick={handleSwitchNetwork}>
-                  switch to Linea
-                </span>
-                .
+            {!isReconnecting && networkId !== lineaChainId && (
+              <div className="flex-center text-red border-y border-red py-1">
+                <IconWarning />
+                <div className="body-small">
+                  Thunder is available on Linea network. Please check your wallet settings and{" "}
+                  <span className="underline cursor-pointer" onClick={handleSwitchNetwork}>
+                    switch to Linea
+                  </span>
+                  .
+                </div>
               </div>
-            </div>
+            )}
           </>
           <MobileSearch />
         </>

@@ -10,11 +10,15 @@ import { formatTimeBackend } from "utils";
 import { prepareWriteContract, writeContract, waitForTransaction, erc721ABI, readContract } from "@wagmi/core";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import { goerliWethAddress, wethABI } from "global-constants";
+import { useDispatch } from "react-redux";
+import { setNetworkId } from "store/walletSlice";
 class WagmiProvider extends BaseProvider {
   provider = wagmi;
+  dispatch: any;
 
   constructor() {
     super();
+    this.dispatch = useDispatch();
   }
 
   private handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
@@ -508,9 +512,14 @@ class WagmiProvider extends BaseProvider {
 
         walletAddress = result?.account;
       }
+      const network = this.provider.getNetwork();
+
+      this.dispatch(setNetworkId(network.chain?.id));
       const user = await userService.userCreate({ walletAddress: walletAddress });
 
-      this.provider.watchNetwork((network) => console.log(network, "network changed"));
+      this.provider.watchNetwork((network) => {
+        this.dispatch(setNetworkId(network.chain?.id));
+      });
 
       return { user: user.data, address: walletAddress, connect: account?.isConnected, fuelAddress: null };
     } catch (e) {
