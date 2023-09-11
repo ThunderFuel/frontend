@@ -16,6 +16,7 @@ import { RightMenuType } from "store/NFTDetailsSlice";
 import floorService from "api/floor/floor.service";
 import EthereumPrice from "components/EthereumPrice";
 import { removeAll } from "../../../store/bulkListingSlice";
+import { useWallet } from "hooks/useWallet";
 
 const ListNFT = ({ onBack }: { onBack: any }) => {
   const { selectedNFT, presetPrice, rightMenuType } = useAppSelector((state) => state.nftdetails);
@@ -31,6 +32,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   const [duration, setDuration] = useState(selectExpirationDates[0]);
   const updateListing = rightMenuType === RightMenuType.UpdateListing;
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { getProviderType } = useWallet();
 
   const [isMultipleEdition, setIsMultipleEdition] = useState(false);
 
@@ -164,7 +166,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           </div>
         </div>
 
-        {!isMultipleEdition && (
+        {!isMultipleEdition && getProviderType() === "fuel" && (
           <Tab initTab={0} onChange={(value) => setisTimedAuction(!!value)}>
             <Tab.Item id={0} className="w-full">
               <div className="flex justify-center items-center gap-x-[10px] -my-2 p-1">
