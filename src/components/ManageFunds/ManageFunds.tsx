@@ -40,7 +40,7 @@ const ManageFunds = () => {
   }
 
   const footer = (
-    <div className="flex flex-col items-center p-5 gap-y-5">
+    <div className="flex flex-col items-center p-5 gap-2.5">
       <Button className="btn-secondary w-full">
         buy ETH <IconWallet />
       </Button>
@@ -98,11 +98,9 @@ const ManageFunds = () => {
               </div>
             )}
             {!isAddToPool && (
-              <div
-                className="flex gap-[5px] rounded-[5px] text-orange
-              "
-              >
-                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" /> <span className="text-bodySm">Offers don`t cancel when you withdraw. Manage your offers in your profile.</span>
+              <div className="flex gap-[5px] rounded-[5px] text-orange">
+                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
+                <span className="text-bodySm font-spaceGrotesk">Offers don`t cancel when you withdraw. Manage your offers in your profile.</span>
               </div>
             )}
             <Button
