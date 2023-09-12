@@ -76,16 +76,23 @@ export interface HeaderProps {
   showCartModal: Dispatch<SetStateAction<boolean>>;
 }
 
+export enum ConnectionStatus {
+  CONNECTED = "connected",
+  RECONNECTING = "isReconnecting",
+  NOT_CONNECTED = "",
+}
+
 const Header = () => {
   const ref = useRef<any>(null);
-  const [isReconnecting, setIsReconnecting] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState(ConnectionStatus.NOT_CONNECTED);
   const { getConnectionStatus } = useWallet();
   const { networkId } = useAppSelector((state) => state.wallet);
 
   useEffect(() => {
     getConnectionStatus().then((res) => {
-      if (res === "isReconnecting") setIsReconnecting(true);
-      else setIsReconnecting(false);
+      if (res === true) setConnectionStatus(ConnectionStatus.CONNECTED);
+      else if (res === "isReconnecting") setConnectionStatus(ConnectionStatus.RECONNECTING);
+      else setConnectionStatus(ConnectionStatus.NOT_CONNECTED);
     });
   }, [networkId]);
 
@@ -132,7 +139,7 @@ const Header = () => {
                 <HeaderIconButtonGroup />
               </div>
             </div>
-            {!isReconnecting && networkId !== lineaChainId && (
+            {connectionStatus === ConnectionStatus.CONNECTED && networkId !== lineaChainId && (
               <div className="flex-center text-red border-y border-red py-1">
                 <IconWarning />
                 <div className="body-small">
