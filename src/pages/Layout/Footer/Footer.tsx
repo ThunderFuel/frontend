@@ -84,7 +84,7 @@ const Footer = () => {
   }, [ref.current]);
 
   return (
-    <div className="bg-bg border-t border-t-gray sticky bottom-0 left-0 w-full z-20" ref={ref}>
+    <div className="bg-bg border-t border-t-gray fixed bottom-0 left-0 w-full z-20" ref={ref}>
       <FooterBottom />
     </div>
   );
