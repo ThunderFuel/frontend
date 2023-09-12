@@ -6,11 +6,11 @@ interface ICollectionProperties {
   floor: number;
   listedCount: number;
   ownerCount: number;
-  supplyCount?: number;
-  royaltyCount?: number;
+  supply?: number;
+  royalty?: number;
 }
 
-const CollectionProperties = ({ volume, floor, listedCount, ownerCount, supplyCount, royaltyCount }: ICollectionProperties) => {
+const CollectionProperties = ({ volume, floor, listedCount, ownerCount, supply, royalty }: ICollectionProperties) => {
   const items = [
     {
       name: "total volume",
@@ -30,11 +30,11 @@ const CollectionProperties = ({ volume, floor, listedCount, ownerCount, supplyCo
     },
     {
       name: "Supply",
-      component: <h4 className="text-h4 text-white">{supplyCount ?? 0}</h4>,
+      component: <h4 className="text-h4 text-white">{supply ?? 0}</h4>,
     },
     {
       name: "royalty",
-      component: <h4 className="text-h4 text-white">{royaltyCount ?? 0}%</h4>,
+      component: <h4 className="text-h4 text-white">{royalty ?? 0}%</h4>,
     },
   ];
 
