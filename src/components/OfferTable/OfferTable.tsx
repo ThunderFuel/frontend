@@ -4,7 +4,9 @@ import EthereumPrice from "../EthereumPrice";
 import { addressFormat, timeagoFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
-import { IconCircleRemoveWhite, IconHand, IconLikeHand } from "../../icons";
+import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand } from "../../icons";
+import { getAbsolutePath } from "../../hooks/useNavigate";
+import { PATHS } from "../../router/config/paths";
 
 interface IOfferTable {
   headers?: any[];
@@ -50,10 +52,19 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
 };
 const OfferCollectionItem = ({ item }: any) => {
   return (
-    <div className="flex w-full items-center gap-2.5">
+    <a href={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
       <LazyImg className="w-10 h-10 rounded-md" src={item?.tokenImage} />
       <h6 className="text-h6 text-white">{item?.tokenName ?? "-"}</h6>
-    </div>
+    </a>
+  );
+};
+
+const OfferExpiredTime = ({ item }: any) => {
+  return (
+    <span className="flex items-center gap-1 body-medium">
+      {timeagoFormat(item?.expireTime)}
+      <IconClock className="flex-shrink-0 w-4 h-4" />
+    </span>
   );
 };
 
@@ -81,7 +92,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.fromUser?.walletAddress, 1)}</span>,
+    render: (item) => <span>{addressFormat(item?.takerAddress, 1)}</span>,
     // renderHeader: (header) => <span>asasas</span>,
   },
   {
@@ -90,25 +101,21 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.toUser?.walletAddress, 1)}</span>,
+    render: (item) => <span>{addressFormat(item?.makerAddress, 1)}</span>,
   },
-
   {
     key: "date",
     text: "DATE",
     width: "20%",
     align: "flex-end",
     sortValue: 3,
-    render: (item) => <span>{timeagoFormat(item?.createdAt)}</span>,
+    render: (item) => <OfferExpiredTime item={item} />,
   },
 ];
 
 const usersBidBalance = {} as any;
 const AfterRow = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, getBidBalance }: any) => {
   const [offerOwnerBidBalance, setOfferOwnerBidBalance] = React.useState(usersBidBalance[item.makerUserId]);
-  if (usersBidBalance[item.makerUserId]) {
-    console.log(item.makerUserId, usersBidBalance[item.makerUserId]);
-  }
   const fetchBidBalance = async () => {
     try {
       const response = await getBidBalance(item.makerUserId);
@@ -151,7 +158,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       items={items}
       containerFluidClassName={"!px-5"}
       afterRow={(item: any) => {
-        if (!item.isActiveOffer) {
+        if (!item.isActiveOffer || !item.showAfterRow) {
           return null;
         }
 
@@ -161,4 +168,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
   );
 };
 
-export default OfferTable;
+export default Object.assign(OfferTable, {
+  OfferCollectionItem,
+  OfferExpiredTime,
+});
