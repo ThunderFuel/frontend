@@ -132,15 +132,6 @@ class WagmiProvider extends BaseProvider {
     }
   }
 
-  async handleUpdateListing({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) {
-    console.log("handleUpdateOffer");
-    // await this.handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
-    // console.log("after cancel listing");
-
-    // await this.handleConfirmListing({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction });
-    // console.log("after make offer");
-  }
-
   async handleTransfer({ selectedNFT, address, setStartTransaction, setIsFailed }: any) {
     try {
       const config = await prepareWriteContract({
@@ -189,7 +180,7 @@ class WagmiProvider extends BaseProvider {
     this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
   }
 
-  handleMakeOffer({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction }: any) {
+  async handleMakeOffer({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction }: any) {
     const wallet = createWalletClient({
       account: user.walletAddress,
       chain: goerli,
@@ -260,7 +251,11 @@ class WagmiProvider extends BaseProvider {
     });
   }
 
-  handleConfirmListing({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
+  async handleConfirmListing({ cancelOrderIds, updateListing, setStartTransaction, setIsFailed, checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
+    if (updateListing) {
+      await this.handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
+    }
+
     const wallet = createWalletClient({
       account: user.walletAddress,
       // chain: linea,
@@ -273,7 +268,7 @@ class WagmiProvider extends BaseProvider {
       wallet,
       listings: [
         {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:8",
           orderKind: "seaport-v1.5",
           orderbook: "reservoir",
           weiPrice: parseEther(checkoutPrice.toString()).toString(),

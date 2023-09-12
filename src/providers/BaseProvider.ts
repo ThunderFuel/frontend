@@ -98,7 +98,6 @@ abstract class BaseProvider {
     setWagmiSteps,
     setStepData,
   }: any): any;
-  abstract handleUpdateListing({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
 
   abstract handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
   abstract handleCancelListing({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;

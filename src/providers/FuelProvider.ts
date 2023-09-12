@@ -71,10 +71,6 @@ class FuelProvider extends BaseProvider {
     }
   }
 
-  handleUpdateListing({ selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
-    return;
-  }
-
   handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
     let tempAddress = "";
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);

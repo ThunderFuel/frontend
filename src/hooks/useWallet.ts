@@ -84,8 +84,42 @@ export const useWallet = () => {
     return selectedGateway().handleCheckout({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
   };
 
-  const handleConfirmListing = ({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
-    return selectedGateway().handleConfirmListing({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
+  const handleConfirmListing = ({
+    cancelOrderIds,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    buyNowItem,
+    tokenIds,
+    setSuccessCheckout,
+    user,
+    items,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    updateListing,
+    checkoutPrice,
+    checkoutExpireTime,
+    setApproved,
+  }: any) => {
+    return selectedGateway().handleConfirmListing({
+      setWagmiSteps,
+      wagmiSteps,
+      setStepData,
+      buyNowItem,
+      tokenIds,
+      setSuccessCheckout,
+      user,
+      items,
+      wallet,
+      setStartTransaction,
+      setIsFailed,
+      updateListing,
+      cancelOrderIds,
+      checkoutPrice,
+      checkoutExpireTime,
+      setApproved,
+    });
   };
 
   const handleMakeOffer = ({
