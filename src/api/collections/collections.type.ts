@@ -80,6 +80,8 @@ export interface CollectionResponse {
     url: string;
   }[];
   watched: boolean;
+  supply: number;
+  royalty: number;
 }
 
 export interface CollectionItemsRequest {

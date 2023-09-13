@@ -55,9 +55,9 @@ const Collection = () => {
 
   return (
     <>
-      <div className="container-fluid pt-10 pb-14">
+      <div className="container-fluid py-10">
         <div className="flex flex-col gap-5">
-          <CoverImage banner={collection?.banner} />
+          {collection?.banner && <CoverImage banner={collection?.banner} />}
           <div className="flex">
             <div className="flex gap-5 w-full">
               <div className="w-24">
@@ -80,7 +80,14 @@ const Collection = () => {
                 <ReadMore text={collection?.description ?? ""} characterLimit={150} />
               </div>
             </div>
-            <CollectionProperties floor={collection?.floor} volume={collection?.volume} listedCount={collection?.listedCount} ownerCount={collection?.ownerCount} />
+            <CollectionProperties
+              floor={collection?.floor}
+              volume={collection?.volume}
+              listedCount={collection?.listedCount}
+              ownerCount={collection?.ownerCount}
+              supply={collection?.supply}
+              royalty={collection?.royalty}
+            />
           </div>
         </div>
       </div>
