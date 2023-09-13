@@ -28,7 +28,13 @@ const Index = () => {
       <SelectedFilter />
 
       <div className={clsx("flex-1", isDisplayTypeList ? (options?.isUserPage ? "-mr-5" : "-mr-10") : "")}>
-        {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading page={pagination?.page} /> : <CollectionGrid />}
+        {isDisplayTypeList ? (
+          <CollectionTable />
+        ) : (
+          <>
+            <CollectionGrid>{isLoading ? <CollectionGridLoading /> : null}</CollectionGrid>
+          </>
+        )}
       </div>
 
       {options?.hideFooter ? null : options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}
