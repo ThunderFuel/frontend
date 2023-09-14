@@ -14,7 +14,7 @@ class Config {
 
   constructor() {
     const hostname = window.location.hostname;
-    this.config = fuel;
+    this.config = base;
     if (hostname === WAGMI_URL) {
       this.config = base;
     } else if (hostname === FUEL_URL) {
