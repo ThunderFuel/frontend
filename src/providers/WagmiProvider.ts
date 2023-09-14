@@ -9,7 +9,7 @@ import { linea, goerli } from "wagmi/chains";
 import { formatTimeBackend } from "utils";
 import { prepareWriteContract, writeContract, waitForTransaction, erc721ABI, readContract } from "@wagmi/core";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
-import { goerliWethAddress, wethABI } from "global-constants";
+import { erc1155ABI, goerliWethAddress, wethABI } from "global-constants";
 import { useDispatch } from "react-redux";
 import { setNetworkId } from "store/walletSlice";
 class WagmiProvider extends BaseProvider {
@@ -133,22 +133,38 @@ class WagmiProvider extends BaseProvider {
   }
 
   async handleTransfer({ selectedNFT, address, setStartTransaction, setIsFailed }: any) {
-    try {
+    const isMultiEdition = false;
+
+    if (isMultiEdition) {
       const config = await prepareWriteContract({
         address: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F",
-        abi: erc721ABI,
+        abi: erc1155ABI,
         functionName: "safeTransferFrom",
-        args: ["0xb7f3b58C66770C81AC1FCb70e5580ddA60Edb08C", "0xb1A7559274Bc1e92c355C7244255DC291AFEDB00", BigInt(11)],
+        // args: [from, to, id, amount, 0],
       });
 
       const { hash } = await writeContract(config);
-      console.log({ hash });
       const data = await waitForTransaction({
         hash,
       });
-      console.log({ data });
-    } catch (error) {
-      handleTransactionError({ error, setStartTransaction, setIsFailed });
+    } else {
+      try {
+        const config = await prepareWriteContract({
+          address: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F",
+          abi: erc721ABI,
+          functionName: "safeTransferFrom",
+          args: ["0xb7f3b58C66770C81AC1FCb70e5580ddA60Edb08C", "0xb1A7559274Bc1e92c355C7244255DC291AFEDB00", BigInt(11)],
+        });
+
+        const { hash } = await writeContract(config);
+        console.log({ hash });
+        const data = await waitForTransaction({
+          hash,
+        });
+        console.log({ data });
+      } catch (error) {
+        handleTransactionError({ error, setStartTransaction, setIsFailed });
+      }
     }
   }
 
