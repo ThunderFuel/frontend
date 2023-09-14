@@ -4,7 +4,7 @@ import CollectionItem from "./CollectionItem";
 import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 import NotFound from "../../../NotFound";
 
-const CollectionGrid = () => {
+const CollectionGrid = ({ children }: any) => {
   const { displayType, collectionItems, options } = useCollectionListContext();
 
   const displayClass = useMemo(() => {
@@ -24,6 +24,7 @@ const CollectionGrid = () => {
           {collectionItems.map((collection: any, i: number) => (
             <CollectionItem key={i} collection={collection} />
           ))}
+          {children}
         </div>
       )}
       {!collectionItems.length && (

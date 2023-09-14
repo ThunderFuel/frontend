@@ -1,4 +1,5 @@
 .carousel {
+  min-height: 440px;
   position: relative;
 }
 

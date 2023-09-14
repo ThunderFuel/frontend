@@ -9,6 +9,8 @@ import CollectionGridLoading from "./CollectionGridLoading";
 import CollectionProfileFooter from "./CollectionProfileFooter";
 import Button from "components/Button";
 import { IconCircleRemoveWhite } from "icons";
+import config from "../../../../config";
+import Config from "../../../Config";
 
 const Index = () => {
   const { isDisplayTypeList, pagination, isLoading, collectionItems, options, onCancelAllListings } = useCollectionListContext();
@@ -20,15 +22,23 @@ const Index = () => {
           {pagination?.itemsCount ?? collectionItems.length} {options?.itemLabel ?? "ITEMS"}
         </div>
         {options?.isProfile ? (
-          <Button className="btn-secondary btn-sm" onClick={onCancelAllListings}>
-            cancel all listings <IconCircleRemoveWhite />
-          </Button>
+          <Config show={!config.isHideAllCancelButtons()}>
+            <Button className="btn-secondary btn-sm" onClick={onCancelAllListings}>
+              cancel all listings <IconCircleRemoveWhite />
+            </Button>
+          </Config>
         ) : null}
       </div>
       <SelectedFilter />
 
       <div className={clsx("flex-1", isDisplayTypeList ? (options?.isUserPage ? "-mr-5" : "-mr-10") : "")}>
-        {isDisplayTypeList ? <CollectionTable /> : isLoading ? <CollectionGridLoading page={pagination?.page} /> : <CollectionGrid />}
+        {isDisplayTypeList ? (
+          <CollectionTable />
+        ) : (
+          <>
+            <CollectionGrid>{isLoading ? <CollectionGridLoading /> : null}</CollectionGrid>
+          </>
+        )}
       </div>
 
       {options?.hideFooter ? null : options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}

@@ -9,7 +9,7 @@ const ActivityList = (props: any) => {
     <ActivityProvider value={props}>
       <div className={clsx("flex", props.containerClassName)}>
         {!props.hideSidebar && <Sidebar hiddenTabOffset={true} />}
-        <ActivityItems hideTitle={props.hideTitle} headers={props.headers} />
+        <ActivityItems containerClassName={props.ActivityItemsContainerClassName} hideTitle={props.hideTitle} headers={props.headers} />
       </div>
     </ActivityProvider>
   );

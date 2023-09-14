@@ -113,6 +113,7 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
             tokenId: sold.tokenId,
           })),
           watched: responseItem.watched,
+          slug: responseItem.slug,
         } as MarketplaceTableItem;
       });
 

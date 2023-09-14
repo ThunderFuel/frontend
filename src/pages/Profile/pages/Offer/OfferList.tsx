@@ -3,6 +3,8 @@ import { IconCircleRemoveWhite } from "icons";
 import Button from "components/Button";
 import { useOfferContext } from "./OfferContext";
 import OfferTable from "components/OfferTable";
+import config from "../../../../config";
+import Config from "../../../../components/Config";
 
 const OfferList = ({ headers }: any) => {
   const { onCancelAllOffer, onAcceptOffer, onCancelOffer, onUpdateOffer, filterValue, getOffers, getBidBalance, options } = useOfferContext();
@@ -15,9 +17,11 @@ const OfferList = ({ headers }: any) => {
       <div className="flex items-center justify-between px-5">
         <div className="text-headline-02 text-gray-light uppercase">{label}</div>
         {isOffersMade && hasActiveOffer && options?.isProfile ? (
-          <Button className="btn-secondary btn-sm" onClick={onCancelAllOffer}>
-            cancel all offers <IconCircleRemoveWhite />
-          </Button>
+          <Config show={!config.isHideAllCancelButtons()}>
+            <Button className="btn-secondary btn-sm" onClick={onCancelAllOffer}>
+              cancel all offers <IconCircleRemoveWhite />
+            </Button>
+          </Config>
         ) : null}
       </div>
       <div className="flex flex-col gap-3">

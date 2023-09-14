@@ -121,6 +121,7 @@ const Offer = () => {
         isAccepted: item.status === OfferStatus.AcceptedOffer,
         isExpired: item.status === OfferStatus.ExpiredOffer,
         isCanceled: item.status === OfferStatus.Cancelled,
+        showAfterRow: item.makerUserId === userInfo.id || item.takerUserId === userInfo.id,
       }))
       .sort((a: any, b: any) => b.isActiveOffer - a.isActiveOffer);
     setOffers(data);

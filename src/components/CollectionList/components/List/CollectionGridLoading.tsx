@@ -1,31 +1,17 @@
-import React, { useMemo } from "react";
-import clsx from "clsx";
-import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
+import React from "react";
 import { IconLoadingGrid } from "icons";
 
-const CollectionGridLoading = ({ page }: { page?: number }) => {
-  const { displayType } = useCollectionListContext();
-  const collectionItems = new Array(20 * (page ?? 1)).fill(1);
-  // const collectionItems = new Array(20).fill(1);
-
-  const displayClass = useMemo(() => {
-    if (displayType === DisplayType.GRID5) {
-      return "lg:grid-cols-5";
-    } else if (displayType === DisplayType.GRID4) {
-      return "lg:grid-cols-4";
-    }
-
-    return "lg:grid-cols-5";
-  }, [displayType]);
+const CollectionGridLoading = () => {
+  const collectionItems = new Array(10).fill(1);
 
   return (
-    <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pl-5 pb-20", displayClass)}>
+    <>
       {collectionItems.map((i: number, k) => (
         <div className="grid-skeleton" key={`${i}_${k}`}>
           <IconLoadingGrid className="w-full text-gray" />
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

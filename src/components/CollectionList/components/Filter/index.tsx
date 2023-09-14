@@ -10,6 +10,7 @@ import { useCollectionListContext } from "../../CollectionListContext";
 import { ISelectOption } from "components/Select";
 import { useAppDispatch } from "store";
 import { sweepAdd } from "store/cartSlice";
+import config from "../../../../config";
 
 const Range = (props: any) => {
   return (
@@ -42,6 +43,8 @@ const Index = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
   const { options, setParams, collectionItems, sweep, setSweep, params } = useCollectionListContext();
   const [search, setSearch] = React.useState(params?.search ?? "");
+  const swapLimit = config.getConfig("collectionSwapLimit");
+
   const onRangeChange = (value: any) => {
     setSweep(value);
     const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable)].splice(0, value);
@@ -71,7 +74,7 @@ const Index = ({ className }: { className?: string }) => {
               </div>
               {options?.hiddenSweep ? null : (
                 <div className="w-5/12">
-                  <Range maxValue={5} value={sweep} onChange={onRangeChange} />
+                  <Range maxValue={swapLimit} value={sweep} onChange={onRangeChange} />
                 </div>
               )}
             </div>

@@ -6,7 +6,6 @@ import marketplaceService from "api/marketplace/marketplace.service";
 import Button from "components/Button";
 
 import "./HotDrops.css";
-import { PATHS } from "router/config/paths";
 
 const HotDrops = () => {
   const navigate = UseNavigate();
@@ -40,7 +39,7 @@ const HotDrops = () => {
   }, []);
 
   return (
-    <div className="">
+    <div className="min-h-[440px]">
       <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
         {items.map((item, k) => {
           return (
@@ -52,7 +51,7 @@ const HotDrops = () => {
                   </div>
                   <div className="flex flex-col gap-5">
                     <div className="body-medium text-white text-overflow-2">{item.description}</div>
-                    <Button className="uppercase btn-sm" onClick={() => navigate(PATHS.COLLECTION, { collectionId: item.id })}>
+                    <Button className="uppercase btn-sm" onClick={() => navigate.collectionNavigate(item.id, item.slug)}>
                       explore collectıon <IconArrowRight />
                     </Button>
                   </div>

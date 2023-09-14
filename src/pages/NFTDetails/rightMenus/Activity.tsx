@@ -141,13 +141,13 @@ const Activity = ({ onBack }: { onBack: any }) => {
 
     // const { icon, title, description } = formatActivityData(activity);
 
-    return <ActivityList hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />;
+    return <ActivityList ActivityItemsContainerClassName="!pt-0" hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />;
   }
 
   return (
     <RightMenu title="Activity" onBack={onBack}>
       <Filter setnotActiveFilters={setnotActiveFilters} />
-      <div className="flex flex-col mt-[10px] gap-y-[10px]">{renderItems()}</div>
+      <div className="flex flex-col gap-y-[10px]">{renderItems()}</div>
     </RightMenu>
   );
 };

@@ -5,5 +5,8 @@
     "wagmi_coinbase",
     "wagmi_walletconnect"
   ],
-  "baseURL":"https://thunder-evm.azurewebsites.net/"
+  "baseURL": "https://thunder-evm.azurewebsites.net/",
+  "collectionPathType": 1,
+  "collectionSwapLimit": 20,
+  "hideAllCancelButtons": true
 }

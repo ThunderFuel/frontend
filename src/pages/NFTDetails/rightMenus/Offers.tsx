@@ -10,14 +10,15 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
-import { addressFormat, dateFormat, timeagoFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
-import { OfferStatus } from "api/offer/offer.type";
 import clsx from "clsx";
 import userService from "api/user/user.service";
 import useToast from "hooks/useToast";
-import ActivityList from "components/ActivityList/ActivityList";
 import { ITableHeader } from "components/Table";
+import dayjs from "dayjs";
+import OfferTable from "components/OfferTable";
+import { OfferStatus } from "api/offer/offer.type";
 
 const Box = ({
   item,
@@ -123,20 +124,13 @@ const Box = ({
 
 const headers: ITableHeader[] = [
   {
-    key: "from",
-    text: `FROM`,
-    width: "24%",
+    key: "item",
+    text: `Item`,
     align: "flex-start",
     sortValue: 1,
-    render: (item) => (
-      <div className={`flex w-full items-center gap-x-[15px]  ${item.isExpired ? "opacity-50" : ""}`}>
-        <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
-        <div className="flex  flex-col gap-y-[10px]">
-          <span>{item.ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress, 1)} </span>
-        </div>
-      </div>
-    ),
-    // renderHeader: (header) => <span>asasas</span>,
+    render: (item) => {
+      return <OfferTable.OfferCollectionItem item={item} />;
+    },
   },
   {
     key: "price",
@@ -146,29 +140,29 @@ const headers: ITableHeader[] = [
     render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
   },
   {
-    key: "floor difference",
-    text: "FLOOR DIFFERENCE",
-    width: "28%",
+    key: "from",
+    text: `From`,
+    width: "20%",
     align: "flex-end",
-    sortValue: 2,
-    render: () => <span className="text-bodyMd font-spaceGrotesk">40% Below</span>,
-    // renderHeader: (header) => <span>asasas</span>,
+    sortValue: 1,
+    render: (item) => <span>{addressFormat(item?.makerAddress, 1)}</span>,
   },
   {
-    key: "expires",
-    text: "EXPIRES",
-    width: "24%",
+    key: "to",
+    text: `TO`,
+    width: "20%",
+    align: "flex-end",
+    sortValue: 1,
+    render: (item) => <span>{addressFormat(item?.takerAddress, 1)}</span>,
+  },
+  {
+    key: "expireTime",
+    text: "DATE",
+    width: "20%",
     align: "flex-end",
     sortValue: 3,
     render: (item) => {
-      console.log(item.expireTime);
-
-      return (
-        <span className="flex items-center gap-[5px] text-bodyMd font-spaceGrotesk">
-          {timeagoFormat(item.expireTime)}
-          <IconClock className="flex-shrink-0 w-[15px] h-[15px]" />
-        </span>
-      );
+      return <OfferTable.OfferExpiredTime item={item} />;
     },
   },
 ];
@@ -177,10 +171,6 @@ const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
-  const isOwner = () => {
-    return user.id === selectedNFT?.user?.id;
-  };
-
   const { nftId } = useParams();
   const [offers, setOffers] = useState<any>([]);
 
@@ -192,8 +182,13 @@ const Offers = ({ onBack }: { onBack: any }) => {
       isExpired: item.status === OfferStatus.ExpiredOffer,
       isCanceled: item.status === OfferStatus.Cancelled,
       isAccepted: item.status === OfferStatus.AcceptedOffer,
+      createdAt: dayjs(item.createdAt).valueOf(),
+      expireTime: dayjs(item.expireTime).valueOf(),
+      isOfferMade: item.makerUserId === user.id,
+      showAfterRow: item.makerUserId === user.id || item.takerUserId === user.id,
     }));
     setOffers(data);
+    console.log(data);
   };
 
   const MakeOfferButton = () => (
@@ -214,7 +209,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
-      <ActivityList hideTitle={true} actionButton={!isOwner() ? MakeOfferButton : null} noContainerFluid={true} hideSidebar={true} activities={offers} headers={headers} />
+      <OfferTable items={offers} headers={headers} />
     </RightMenu>
   );
 };
