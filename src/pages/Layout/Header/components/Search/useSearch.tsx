@@ -47,7 +47,7 @@ export const useSearch = () => {
     }
     recentItems.unshift(item);
     setItem(LocalStorageRecentSearchKey, uniqueArr(recentItems).slice(0, 5));
-    navigate(PATHS.COLLECTION, { collectionId: item.id });
+    navigate(PATHS.COLLECTION, { collectionId: item.slug });
     setShow(false);
   };
 

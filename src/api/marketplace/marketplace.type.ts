@@ -17,6 +17,7 @@ interface MarketplaceItemSold {
 export interface MarketplaceItemResponse extends Omit<CollectionResponse, "solds"> {
   solds: MarketplaceItemSold[];
   watched: boolean;
+  slug: string;
 }
 
 export interface MarketplaceTableItem {

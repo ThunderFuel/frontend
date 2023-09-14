@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import Button from "components/Button";
-import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconItems, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing, IconViews } from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing } from "icons";
 import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
@@ -249,6 +249,7 @@ const LeftMenu = (props: any) => {
       </Box>
     );
   }
+
   const isOwner = () => {
     return isConnected ? user?.id === nft?.user?.id : false;
   };
@@ -266,7 +267,7 @@ const LeftMenu = (props: any) => {
     <div className="flex flex-col border-r border-gray">
       <div className="flex flex-col overflow-hidden">
         <div className="container-fluid flex flex-col pt-5 pb-5 pr-10 border-b border-gray">
-          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: nft.collection.id })}>
+          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: nft.collection.slug })}>
             {nft?.collection?.image && <img src={nft.collection.image} className="w-6 rounded-[px]" alt="profile-image" />}
             <div className="flex flex-col w-full">
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
@@ -355,7 +356,7 @@ const LeftMenu = (props: any) => {
             <MakeOffer />
           )}
 
-          {JSON.stringify(nft.bestOffer) !== "null" && (
+          {!!nft.bestOffer && (
             <Box className="bg-bg-light justify-between pr-4">
               <div className="flex items-center gap-x-2.5">
                 <Avatar image={nft.bestOffer?.user?.image} userId={nft.bestOffer?.user?.id} className="w-8 h-8 rounded-full" />
@@ -439,7 +440,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-01 text-gray-light">CREATOR FEE</div>
-                  {nft.collection?.royaltyFee}%
+                  {nft?.royalty}%
                 </div>
               </Box>
             </div>

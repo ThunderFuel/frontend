@@ -136,7 +136,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     await addWatchList(data);
   };
   const rowElementProps = (item: any) => {
-    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };
+    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.slug }) };
   };
 
   return (
