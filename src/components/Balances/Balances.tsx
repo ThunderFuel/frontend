@@ -18,6 +18,7 @@ const Balances = (refresh: any) => {
   }
 
   function fetchBidBalance() {
+    if (user.walletAddress === undefined) return;
     getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
       console.log({ res });
       setBidBalance(res);
