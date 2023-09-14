@@ -407,7 +407,7 @@ const LeftMenu = (props: any) => {
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
             </div>
           </div>
-          <Button className="btn-primary hover:bg-green hover:translate-x-7" onClick={handleAL}>
+          {/* <Button className="btn-primary hover:bg-green hover:translate-x-7" onClick={handleAL}>
             BUY +
           </Button>
           <Button className="btn-primary hover:bg-red hover:-translate-x-7" onClick={handleList}>
@@ -421,7 +421,7 @@ const LeftMenu = (props: any) => {
           </Button>
           <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleAcceptOffer}>
             ACCEPT OFFER
-          </Button>
+          </Button> */}
 
           {/* <div className="flex gap-5">
             <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">

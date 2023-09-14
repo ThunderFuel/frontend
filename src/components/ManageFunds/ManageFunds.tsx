@@ -28,7 +28,6 @@ const ManageFunds = () => {
   }
   function fetchBidBalance() {
     getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
-      console.log({ res });
       setBidBalance(res);
     });
   }
