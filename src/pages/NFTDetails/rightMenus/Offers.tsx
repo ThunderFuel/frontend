@@ -160,12 +160,16 @@ const headers: ITableHeader[] = [
     width: "24%",
     align: "flex-end",
     sortValue: 3,
-    render: (item) => (
-      <span className="flex items-center gap-[5px] text-bodyMd font-spaceGrotesk">
-        {timeagoFormat(item.expireTime)}
-        <IconClock className="flex-shrink-0 w-[15px] h-[15px]" />
-      </span>
-    ),
+    render: (item) => {
+      console.log(item.expireTime);
+
+      return (
+        <span className="flex items-center gap-[5px] text-bodyMd font-spaceGrotesk">
+          {timeagoFormat(item.expireTime)}
+          <IconClock className="flex-shrink-0 w-[15px] h-[15px]" />
+        </span>
+      );
+    },
   },
 ];
 
@@ -174,7 +178,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const isOwner = () => {
-    return user.id === selectedNFT.user.id;
+    return user.id === selectedNFT?.user?.id;
   };
 
   const { nftId } = useParams();
@@ -210,7 +214,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
-      <ActivityList actionButton={!isOwner() ? MakeOfferButton : null} noTitle={true} noContainerFluid={true} hideSidebar={true} activities={offers} headers={headers} />
+      <ActivityList hideTitle={true} actionButton={!isOwner() ? MakeOfferButton : null} noContainerFluid={true} hideSidebar={true} activities={offers} headers={headers} />
     </RightMenu>
   );
 };

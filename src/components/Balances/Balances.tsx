@@ -3,7 +3,6 @@ import userService from "api/user/user.service";
 import EthereumPrice from "components/EthereumPrice";
 import { useWallet } from "hooks/useWallet";
 import { IconRefresh } from "icons";
-import { lineaWethaddress } from "index";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
 

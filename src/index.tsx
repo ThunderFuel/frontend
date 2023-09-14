@@ -24,8 +24,6 @@ import { goerli, linea, mainnet } from "wagmi/chains";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
 
-export const lineaWethaddress = "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f";
-
 export const connectors = [
   new MetaMaskConnector({ chains }),
   // new CoinbaseWalletConnector({

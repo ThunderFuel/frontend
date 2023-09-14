@@ -9,7 +9,7 @@ import { linea, goerli } from "wagmi/chains";
 import { formatTimeBackend } from "utils";
 import { prepareWriteContract, writeContract, waitForTransaction, erc721ABI, readContract } from "@wagmi/core";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
-import { erc1155ABI, goerliWethAddress, wethABI } from "global-constants";
+import { erc1155ABI, goerliWethAddress, lineaWethAddress, wethABI } from "global-constants";
 import { useDispatch } from "react-redux";
 import { setNetworkId } from "store/walletSlice";
 class WagmiProvider extends BaseProvider {
@@ -196,10 +196,10 @@ class WagmiProvider extends BaseProvider {
     this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
   }
 
-  async handleMakeOffer({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction }: any) {
+  async handleMakeOffer({ selectedNFT, checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction }: any) {
     const wallet = createWalletClient({
       account: user.walletAddress,
-      chain: goerli,
+      chain: linea,
       transport: custom(window.ethereum),
     });
 
@@ -213,11 +213,11 @@ class WagmiProvider extends BaseProvider {
         },
         bids: [
           {
-            token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10", //contractAddress
+            token: selectedNFT.id, //contractAddress
             orderKind: "seaport-v1.5",
             orderbook: "reservoir",
-            weiPrice: parseEther("0.0002").toString(),
-            expirationTime: "1694274474",
+            weiPrice: parseEther(checkoutPrice.toString()).toString(),
+            expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
             options: {
               "seaport-v1.5": {
                 useOffChainCancellation: true,
@@ -225,7 +225,7 @@ class WagmiProvider extends BaseProvider {
             },
           },
         ],
-        chainId: 5,
+        chainId: linea.id,
       })
       .catch((e) => {
         console.log(e);
@@ -498,7 +498,7 @@ class WagmiProvider extends BaseProvider {
 
   async getBidBalance({ contractAddress }: any): Promise<any> {
     const data = await readContract({
-      address: goerliWethAddress,
+      address: lineaWethAddress,
       abi: wethABI,
       functionName: "balanceOf",
       args: [contractAddress],

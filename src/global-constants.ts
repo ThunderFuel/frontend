@@ -29,6 +29,7 @@ export const contracts = {
 
 export const lineaChainId = 59144;
 export const goerliWethAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
+export const lineaWethAddress = "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f";
 
 export const erc1155ABI = [
   {
