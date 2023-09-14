@@ -3,5 +3,6 @@
     "fuel",
     "fuelet"
   ],
-  "baseURL":"https://api-thundernft.azurewebsites.net/"
+  "baseURL": "https://api-thundernft.azurewebsites.net/",
+  "collectionSwapLimit": 5
 }

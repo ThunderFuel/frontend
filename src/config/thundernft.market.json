@@ -6,5 +6,6 @@
   ],
   "baseURL": "https://thunder-evm.azurewebsites.net/",
   "collectionPathType": 1,
+  "collectionSwapLimit": 20,
   "hideAllCancelButtons": true
 }
