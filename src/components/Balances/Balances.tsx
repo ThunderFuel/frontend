@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import userService from "api/user/user.service";
 import EthereumPrice from "components/EthereumPrice";
 import { useWallet } from "hooks/useWallet";
@@ -6,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
 
 const Balances = (refresh: any) => {
-  const { getBalance } = useWallet();
+  const { getBalance, getBidBalance } = useWallet();
   const { user } = useAppSelector((state) => state.wallet);
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
@@ -16,7 +17,11 @@ const Balances = (refresh: any) => {
   }
 
   function fetchBidBalance() {
-    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+    if (user.walletAddress === undefined) return;
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      console.log({ res });
+      setBidBalance(res);
+    });
   }
 
   useEffect(() => {

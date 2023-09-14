@@ -7,16 +7,13 @@ import Tab from "components/Tab";
 import InfoBox from "pages/NFTDetails/components/InfoBox";
 import { useAppDispatch, useAppSelector } from "store";
 import { toggleManageFundsModal } from "store/walletSlice";
-import { ZERO_B256, assetManagerContractId, poolContractId, provider } from "global-constants";
-import { toGwei } from "utils";
-import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
-import userService from "api/user/user.service";
 import { IconInfo, IconMinus, IconPlus, IconSwap, IconWallet, IconWarning } from "icons";
 import { useWallet } from "hooks/useWallet";
+import { toGwei } from "utils";
 
 const ManageFunds = () => {
   const dispatch = useAppDispatch();
-  const { getBalance } = useWallet();
+  const { getBalance, handleDeposit, handleWithdraw, getBidBalance } = useWallet();
   const { wallet, user } = useAppSelector((state) => state.wallet);
   const { manageFundsShow } = useAppSelector((state) => state.wallet);
 
@@ -30,43 +27,32 @@ const ManageFunds = () => {
     getBalance().then((res) => setbalance(res ? res : 0));
   }
   function fetchBidBalance() {
-    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      setBidBalance(res);
+    });
   }
 
   function handleSwap() {
     setIsDisabled(true);
-    if (isAddToPool)
-      deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
-        .then(() => {
-          userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
-        })
-        .catch((e) => {
-          console.log(e);
-          setIsDisabled(false);
-        });
-    else
-      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
-        .then(() => {
-          userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
-        })
-        .catch((e) => {
-          console.log(e);
-          setIsDisabled(false);
-        });
+    if (isAddToPool) handleDeposit({ wallet, amount, user, setIsDisabled });
+    else handleWithdraw({ wallet, amount, user, setIsDisabled });
   }
 
   const footer = (
-    <div className="flex flex-col items-center p-5 gap-y-5">
+    <div className="flex flex-col items-center p-5 gap-2.5">
       <Button className="btn-secondary w-full">
         buy ETH <IconWallet />
       </Button>
-      <Button className="btn-secondary w-full">
+      <a className="btn first-letter:btn-secondary w-full" href="https://bridge.linea.build/" target="_blank" rel="noreferrer">
         Bridge to Linea <IconSwap />
-      </Button>
+      </a>
     </div>
   );
 
   React.useEffect(() => {
+    fetchBalance();
+    fetchBidBalance();
+
     return () => {
       setIsDisabled(false);
       setAmount(0);
@@ -104,18 +90,16 @@ const ManageFunds = () => {
           <div className="flex flex-col gap-y-2">
             <h6 className="text-h6 text-white"> {isAddToPool ? "Add To Bid Balance" : "Withdraw from Bid Balance"}</h6>
             <InputEthereum onChange={(value: any) => setAmount(value)} value={amount} />
-            {((isAddToPool && balance < toGwei(amount)) || (!isAddToPool && bidBalance < amount)) && (
+            {((isAddToPool && balance < amount) || (!isAddToPool && bidBalance < amount)) && (
               <div className="flex w-full items-center gap-x-[5px] text-red">
                 <IconWarning width="17px" />
                 <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds.</span>
               </div>
             )}
             {!isAddToPool && (
-              <div
-                className="flex gap-[5px] rounded-[5px] text-orange
-              "
-              >
-                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" /> <span className="text-bodySm">Offers don`t cancel when you withdraw. Manage your offers in your profile.</span>
+              <div className="flex gap-[5px] rounded-[5px] text-orange">
+                <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
+                <span className="text-bodySm font-spaceGrotesk">Offers don`t cancel when you withdraw. Manage your offers in your profile.</span>
               </div>
             )}
             <Button

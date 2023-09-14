@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { ethers } from "ethers";
 import { ContainerClient } from "@azure/storage-blob";
 import imageService from "../api/image/image.service";
+import config from "config";
 
 export { timeagoFormat } from "./timeago";
 
@@ -170,3 +171,35 @@ export const formatTimeContract = (time: any) => {
 export const formatTimeBackend = (time: any) => {
   return Math.round(dayjs().add(time, "days").valueOf() / 1000);
 };
+
+export const formatAmount = (amount: any) => {
+  const type = config.getConfig("type");
+  if (type === "wagmi") return amount;
+  else return toGwei(amount);
+};
+
+export async function activateInjectedProvider(providerName: any) {
+  const { ethereum } = window;
+
+  if (!ethereum?.providers) {
+    return undefined;
+  }
+
+  let provider;
+  switch (providerName) {
+    case "Coinbase":
+      provider = ethereum.providers.find(({ isCoinbaseWallet }: any) => isCoinbaseWallet);
+      break;
+    case "Metamask":
+      provider = ethereum.providers.find(({ isMetaMask }: any) => isMetaMask);
+      console.log(ethereum);
+
+      // ethereum.selectExtension("MetaMask");
+      ethereum.setProvider(provider.providers[0]);
+      console.log("YAVAS LOOOO");
+
+      break;
+    default:
+      return;
+  }
+}

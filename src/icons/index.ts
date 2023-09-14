@@ -108,3 +108,6 @@ export { ReactComponent as IconHashtag } from "./icon-hashtag.svg";
 export { ReactComponent as IconThunderLogoText } from "./icon-thunder-logo-text.svg";
 export { ReactComponent as IconLoadingTable } from "./icon-loading-table.svg";
 export { ReactComponent as IconLoadingGrid } from "./icon-loading-grid.svg";
+export { ReactComponent as IconMetamask } from "./icon-metamask.svg";
+export { ReactComponent as IconWalletConnect } from "./icon-walletconnect.svg";
+export { ReactComponent as IconCoinbase } from "./icon-coinbase.svg";

@@ -1,4 +1,5 @@
 {
+ "type":"wagmi",
   "walletList": [
     "wagmi_metamask",
     "wagmi_coinbase",

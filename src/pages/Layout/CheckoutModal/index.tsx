@@ -41,6 +41,8 @@ const Index = () => {
     }
   };
 
+  // return <ConfirmListingCheckout updateListing={true} show={true} onClose={onClose} />;
+
   switch (checkoutType) {
     case CheckoutType.MakeOffer:
       return <MakeOfferCheckout show={show} onClose={onClose} />;

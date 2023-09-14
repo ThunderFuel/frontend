@@ -12,33 +12,58 @@ import { initReactI18next } from "react-i18next";
 import LOCALES from "./locales";
 
 import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
+import { BrowserTracing } from "@sentry/browser";
 
-import { configureChains, createConfig, mainnet, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+// import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { createClient } from "@reservoir0x/reservoir-sdk";
+import { goerli, linea, mainnet } from "wagmi/chains";
 
-const { chains, publicClient, webSocketPublicClient } = configureChains([mainnet], [publicProvider()]);
+const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
+
+export const connectors = [
+  new MetaMaskConnector({ chains }),
+  // new CoinbaseWalletConnector({
+  //   chains,
+  //   options: {
+  //     appName: "wagmi",
+  //   },
+  // }),
+  new WalletConnectConnector({
+    chains,
+    options: {
+      projectId: "fbbe076e89456ef4f6f54493682058b9",
+    },
+  }),
+];
 
 const config = createConfig({
   autoConnect: true,
-  connectors: [
-    new MetaMaskConnector({ chains }),
-    // new CoinbaseWalletConnector({
-    //   chains,
-    //   options: {
-    //     appName: "wagmi",
-    //   },
-    // }),
-    // new WalletConnectConnector({
-    //   chains,
-    //   options: {
-    //     projectId: "...",
-    //   },
-    // }),
-  ],
+  connectors: connectors,
   publicClient,
   webSocketPublicClient,
+});
+
+createClient({
+  chains: [
+    {
+      id: 59144,
+      baseApiUrl: "https://api-linea.reservoir.tools",
+      active: true,
+      apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
+    },
+    {
+      id: 5,
+      baseApiUrl: "https://api-goerli.reservoir.tools/",
+      active: true,
+      apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
+    },
+  ],
+  source: "thundernft.market",
+  marketplaceFees: [`0x313A0A2338999cf88F3F7FF935fe9D9128FFB074:200`],
 });
 
 i18next.use(initReactI18next).init({
@@ -52,7 +77,12 @@ i18next.use(initReactI18next).init({
 
 Sentry.init({
   dsn: "https://88f305bbb3ef4cfe956e009220f8d481@o4504775680196608.ingest.sentry.io/4504775682293760",
-  integrations: [new BrowserTracing()],
+  integrations: [
+    new BrowserTracing(),
+    new Sentry.Integrations.Breadcrumbs({
+      console: false,
+    }),
+  ],
   tracesSampleRate: 1.0,
   ignoreErrors: [/^Cannot read properties of undefined (reading 'isConnected')$/],
 });

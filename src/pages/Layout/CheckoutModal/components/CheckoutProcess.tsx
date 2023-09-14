@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CheckoutProcessItem } from "./CheckoutProcessItem";
+import config from "config";
 
 enum Status {
   notStarted = "notStarted",
@@ -7,6 +8,8 @@ enum Status {
   done = "done",
   error = "error",
 }
+
+export const notNeededStepIds = ["currency-approval", "nft-approval"];
 
 export function handleTransactionError({ error, setStartTransaction, setIsFailed }: { error: any; setStartTransaction: (bool: boolean) => void; setIsFailed: (bool: boolean) => void }) {
   console.log(error);
@@ -17,7 +20,21 @@ export function handleTransactionError({ error, setStartTransaction, setIsFailed
   }
 }
 
-export const CheckoutProcess = ({ onComplete, data, approved, failed }: { onComplete: () => any; data: any; approved: any; failed: any }) => {
+export const CheckoutProcess = ({
+  stepData,
+  wagmiSteps = [],
+  onComplete,
+  data,
+  approved,
+  failed,
+}: {
+  stepData?: any;
+  wagmiSteps?: any;
+  onComplete: () => any;
+  data: any;
+  approved: any;
+  failed: any;
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
   const errorTitle = "Transaction failed";
@@ -28,6 +45,8 @@ export const CheckoutProcess = ({ onComplete, data, approved, failed }: { onComp
     purchaseConfirm: Status.notStarted,
   });
   const [partiallyFailed, setPartiallyFailed] = useState(false);
+  const type = config.getConfig("type");
+  const isWagmi = type === "wagmi";
 
   const onSetTransactionStatus = (state: any) => {
     setTransactionStatus((prevState) => ({
@@ -71,13 +90,35 @@ export const CheckoutProcess = ({ onComplete, data, approved, failed }: { onComp
     <div className="flex flex-col w-full ">
       <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
         {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title={title1} description={description1} /> */}
-        <CheckoutProcessItem status={transactionStatus.waitingForApproval} title={title2} description={description2} />
-        <CheckoutProcessItem
-          status={partiallyFailed ? Status.error : transactionStatus.purchaseConfirm}
-          title={partiallyFailed ? errorTitle : title3}
-          description={partiallyFailed ? errorDescription : description3}
-          isLast={true}
-        />
+        {wagmiSteps.length > 0 ? (
+          <>
+            {wagmiSteps.map((step: any, idx: number) => {
+              if (notNeededStepIds.includes(step.id)) return;
+              else
+                return (
+                  <CheckoutProcessItem
+                    key={`CheckoutProcessItem${idx}`}
+                    status={step.items[0].status === "incomplete" ? Status.pending : Status.done}
+                    title={step.action}
+                    description={step.description}
+                  />
+                );
+            })}
+            <CheckoutProcessItem isLast={true} status={stepData?.currentStepItem?.status === "complete" ? Status.done : Status.notStarted} title={title3} description={description3} />
+          </>
+        ) : isWagmi ? (
+          <></>
+        ) : (
+          <>
+            <CheckoutProcessItem status={transactionStatus.waitingForApproval} title={title2} description={description2} />
+            <CheckoutProcessItem
+              status={partiallyFailed ? Status.error : transactionStatus.purchaseConfirm}
+              title={partiallyFailed ? errorTitle : title3}
+              description={partiallyFailed ? errorDescription : description3}
+              isLast={true}
+            />
+          </>
+        )}
         {/* {partiallyFailed && (
           <div className="flex justify-center gap-x-2 p-2.5 border bg-bg-light border-gray rounded-[5px]">
             <div className="flex">

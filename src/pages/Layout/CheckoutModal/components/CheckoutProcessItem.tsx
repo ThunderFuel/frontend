@@ -23,7 +23,7 @@ export const CheckoutProcessItem = ({ title, description, status = Status.notSta
 
   return (
     <div className="flex items-center gap-x-[22px]">
-      <div className="flex h-full justify-start mt-1"> {icon[status]}</div>
+      <div className="flex h-full justify-start mt-1 text-white"> {icon[status]}</div>
       <div className="flex flex-col text-gray-light gap-2">
         <div className={clsx("text-h5 transition-all duration-300", isPending || isFailed || (isLast && status === Status.done) ? "text-white" : "")}>{title}</div>
         <div

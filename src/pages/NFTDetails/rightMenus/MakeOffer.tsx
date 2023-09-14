@@ -7,7 +7,7 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import RightMenu from "../components/RightMenu";
 import CartItem from "../components/CartItem";
 import { useWallet } from "hooks/useWallet";
-import { getDateFromExpirationTime, toGwei } from "utils";
+import { formatAmount, getDateFromExpirationTime, toGwei } from "utils";
 import Select, { ISelectOption } from "components/Select";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
@@ -45,7 +45,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user } = useAppSelector((state) => state.wallet);
 
-  const { getBalance } = useWallet();
+  const { getBalance, hasEnoughBalance } = useWallet();
   const [balance, setbalance] = useState<any>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
 
@@ -71,10 +71,6 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
     return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
-  const hasEnoughBalance = () => {
-    return balance / 1000000000 >= offer;
-  };
-
   const bidBalanceControl = () => {
     return <span className="font-bold whitespace-nowrap">{parseFloat((offer - bidBalance).toFixed(9))} ETH</span>;
   };
@@ -87,7 +83,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(offer) || !hasEnoughBalance() ? true : isButtonDisabled}
+          disabled={!isValidNumber(offer) || !hasEnoughBalance(balance, offer) ? true : isButtonDisabled}
           onClick={() => {
             setIsButtonDisabled(true);
             dispatch(
@@ -145,7 +141,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
         </div>
         <InputEthereum onChange={setoffer} value={offer} type="text" />
-        {balance < toGwei(offer) && (
+        {!hasEnoughBalance(balance, offer) && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>

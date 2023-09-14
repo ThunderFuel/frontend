@@ -1,12 +1,13 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconContract, IconFuelet, IconFuelWallet, IconLightning } from "icons";
+import { IconArrowRight, IconCoinbase, IconFuelWallet, IconFuelet, IconLightning, IconMetamask, IconWalletConnect } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
 import { useFuelet } from "hooks/useFuelet";
 import { toggleWalletModal } from "store/walletSlice";
 import { useMetamask } from "hooks/useMetamask";
+import { useCoinbase } from "hooks/useCoinbase";
 import config from "config";
 import { FUEL_TYPE } from "../../hooks/useFuelExtension";
 
@@ -21,15 +22,15 @@ const WalletList = {
   },
   [FUEL_TYPE.WAGMI_METAMASK]: {
     name: "Metamask",
-    icon: IconContract,
+    icon: IconMetamask,
   },
   [FUEL_TYPE.WAGMI_COINBASE]: {
     name: "Coinbase",
-    icon: IconContract,
+    icon: IconCoinbase,
   },
   [FUEL_TYPE.WAGMI_WALLETCONNECT]: {
     name: "WalletConnect",
-    icon: IconContract,
+    icon: IconWalletConnect,
   },
 };
 
@@ -42,14 +43,15 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: stri
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fuelet, fueletError, fueletLoading] = useFuelet();
   const [metamaskError] = useMetamask();
+  const [coinbaseError] = useCoinbase();
   const Icon = icon ?? IconFuelet;
 
   const activeWallet = {
     [FUEL_TYPE.FUEL]: { error: fuelError },
     [FUEL_TYPE.FUELET]: { error: fueletError },
     [FUEL_TYPE.WAGMI_METAMASK]: { error: metamaskError },
-    [FUEL_TYPE.WAGMI_COINBASE]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_WALLETCONNECT]: { error: metamaskError },
+    [FUEL_TYPE.WAGMI_COINBASE]: { error: coinbaseError },
   }[type as FUEL_TYPE];
 
   return (
@@ -94,6 +96,7 @@ export const ConnectWallet = () => {
           return <ConnectWalletButton key={item} name={wallet.name} icon={wallet.icon} type={item} activeConnector={activeIndex} />;
         })}
       </div>
+
       <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">
         <IconLightning className="text-white w-5 h-5" />
         <div className="flex flex-col gap-y-[5px]">
