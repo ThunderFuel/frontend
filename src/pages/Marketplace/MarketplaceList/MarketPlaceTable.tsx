@@ -12,6 +12,7 @@ import Collection from "./components/Collection";
 import { Link } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
+import config from "../../../config";
 
 const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) => {
   const items = collectionItems.slice(0, 5);
@@ -136,7 +137,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     await addWatchList(data);
   };
   const rowElementProps = (item: any) => {
-    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.slug }) };
+    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug : item.id }) };
   };
 
   return (

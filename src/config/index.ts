@@ -4,12 +4,17 @@ import base from "./thundernft.market.json";
 const FUEL_URL = "fuel.thundernft.market";
 const WAGMI_URL = "thundernft.market";
 
+enum PATH_TYPE {
+  ID,
+  SLUG,
+}
+
 class Config {
   config: { [key: string]: any } = {};
 
   constructor() {
     const hostname = window.location.hostname;
-    this.config = base;
+    this.config = fuel;
     if (hostname === WAGMI_URL) {
       this.config = base;
     } else if (hostname === FUEL_URL) {
@@ -19,6 +24,14 @@ class Config {
 
   getConfig(name = "") {
     return this.config[name] ?? "";
+  }
+
+  isCollectionPathSlug() {
+    return this.getConfig("collectionPathType") === PATH_TYPE.SLUG;
+  }
+
+  isHideAllCancelButtons() {
+    return !!this.getConfig("hideAllCancelButtons");
   }
 }
 

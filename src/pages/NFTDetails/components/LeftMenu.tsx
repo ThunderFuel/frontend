@@ -267,7 +267,7 @@ const LeftMenu = (props: any) => {
     <div className="flex flex-col border-r border-gray">
       <div className="flex flex-col overflow-hidden">
         <div className="container-fluid flex flex-col pt-5 pb-5 pr-10 border-b border-gray">
-          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: nft.collection.slug })}>
+          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate.collectionNavigate(nft.collection.id, nft.collection.slug)}>
             {nft?.collection?.image && <img src={nft.collection.image} className="w-6 rounded-[px]" alt="profile-image" />}
             <div className="flex flex-col w-full">
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
