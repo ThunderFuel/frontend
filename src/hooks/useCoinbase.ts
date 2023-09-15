@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
 
@@ -10,7 +10,7 @@ export function useCoinbase() {
     const onCoinbaseLoaded = () => {
       if (window.ethereum) {
         console.log("Ethereum support is available");
-        if (window.ethereum.providers.find(({ isCoinbaseWallet }: any) => isCoinbaseWallet)) {
+        if (window.ethereum.providers && window.ethereum.providers.find(({ isCoinbaseWallet }: any) => isCoinbaseWallet)) {
           console.log("Coinbase is active");
         } else {
           console.log("Coinbase is not available");
