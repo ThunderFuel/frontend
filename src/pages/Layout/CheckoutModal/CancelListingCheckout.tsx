@@ -33,8 +33,8 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { cancelOrderIds } = useAppSelector((state) => state.checkout);
-  const { wallet } = useAppSelector((state) => state.wallet);
+  const { cancelOrderIds, currentItem } = useAppSelector((state) => state.checkout);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
   const { handleCancelListing } = useWallet();
 
   const [approved, setApproved] = useState(false);
@@ -45,7 +45,7 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
 
   const onComplete = () => {
     try {
-      handleCancelListing({ cancelOrderIds, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
+      handleCancelListing({ user, selectedNFT, currentItem, cancelOrderIds, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
     } catch (e) {
       setIsFailed(true);
     }

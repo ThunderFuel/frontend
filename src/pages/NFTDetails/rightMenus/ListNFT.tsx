@@ -105,7 +105,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   };
 
   const calculateReceivingAmount = (price: any) => {
-    return price - (price * serviceFee) / 100 - (price * selectedNFT.collection?.royaltyFee) / 100;
+    return price - (price * serviceFee) / 100 - (price * selectedNFT.royalty ?? selectedNFT.collection?.royalty) / 100;
   };
 
   const fetchTopTrait = async () => {

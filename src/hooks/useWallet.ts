@@ -80,8 +80,8 @@ export const useWallet = () => {
     return selectedGateway().handleWithdraw({ wallet, amount, user, setIsDisabled });
   };
 
-  const handleCheckout = ({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
-    return selectedGateway().handleCheckout({ setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
+  const handleCheckout = ({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
+    return selectedGateway().handleCheckout({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
   };
 
   const handleConfirmListing = ({
@@ -101,6 +101,7 @@ export const useWallet = () => {
     checkoutPrice,
     checkoutExpireTime,
     setApproved,
+    selectedNFT,
   }: any) => {
     return selectedGateway().handleConfirmListing({
       setWagmiSteps,
@@ -119,6 +120,7 @@ export const useWallet = () => {
       checkoutPrice,
       checkoutExpireTime,
       setApproved,
+      selectedNFT,
     });
   };
 
@@ -166,9 +168,23 @@ export const useWallet = () => {
     return selectedGateway().handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData });
   };
 
-  const handleCancelListing = ({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any) => {
+  const handleCancelListing = ({
+    user,
+    selectedNFT,
+    cancelOrderIds,
+    cancelOfferItems,
+    wallet,
+    setApproved,
+    setStartTransaction,
+    setIsFailed,
+    currentItem,
+    wagmiSteps,
+    setWagmiSteps,
+    setStepData,
+  }: any) => {
     return selectedGateway().handleCancelListing({
       user,
+      selectedNFT,
       cancelOrderIds,
       cancelOfferItems,
       wallet,

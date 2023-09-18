@@ -46,8 +46,6 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = async () => {
-    const cancelOrderIds = ["0x8d6d3cf5b5fd680fc64c6811901a640ab2ef6e4ec0c3cfd8772261ffbbb4ea28"];
-
     try {
       handleConfirmListing({
         checkoutExpireTime,
@@ -64,9 +62,9 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         checkoutAuctionStartingPrice,
         setApproved,
         updateListing,
-        cancelOrderIds,
       });
     } catch (error) {
+      console.log(error);
       setIsFailed(true);
     }
   };
