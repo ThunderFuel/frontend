@@ -78,7 +78,25 @@ abstract class BaseProvider {
     checkoutExpireTime,
   }: any): any;
 
-  abstract handleBulkListing({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleBulkListing({
+    checkoutPrice,
+    checkoutExpireTime,
+    setApproved,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    user,
+    cancelOrderIds,
+    cancelOfferItems,
+    wallet,
+    setStartTransaction,
+    setIsFailed,
+    currentItem,
+    promises,
+    handleOrders,
+    bulkListItems,
+    bulkUpdateItems,
+  }: any): any;
 
   abstract handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any): any;
 
@@ -100,7 +118,7 @@ abstract class BaseProvider {
   }: any): any;
 
   abstract handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any): any;
-  abstract handleCancelListing({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
+  abstract handleCancelListing({ cancelOrderIds, currentItem, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
   abstract handleCancelAuction({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
   abstract handleCancelAllOffersListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;
   abstract handleCancelAllOffers({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any): any;

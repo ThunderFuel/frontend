@@ -7,7 +7,7 @@ import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { addressFormat, formatPrice } from "utils";
+import { addressFormat, compareAddresses, formatPrice } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -254,7 +254,7 @@ const LeftMenu = (props: any) => {
   }
 
   const isOwner = () => {
-    return isConnected ? user?.id === nft?.user?.id : false;
+    return isConnected ? compareAddresses(user?.id, nft?.user?.id) : false;
   };
   const isBestOfferOwner = () => {
     return isConnected ? (nft.bestOffer?.user?.walletAddress === user.walletAddress ? true : false) : false;
@@ -287,117 +287,6 @@ const LeftMenu = (props: any) => {
     });
   }
 
-  function handleList() {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      // chain: linea,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    const _expireTime = "1695404031";
-
-    _client.actions.listToken({
-      wallet,
-      listings: [
-        {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:5",
-          orderKind: "seaport-v1.5",
-          orderbook: "reservoir",
-          weiPrice: parseEther("0.001").toString(),
-          expirationTime: _expireTime,
-          // fees: [`${wallet.account.address}:100`],
-          options: {
-            "seaport-v1.5": {
-              useOffChainCancellation: true,
-            },
-          },
-        },
-      ],
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-      chainId: 5,
-    });
-  }
-
-  function handlePlaceBid() {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      chain: goerli,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    const _expireTime = "1694274474";
-
-    _client.actions.placeBid({
-      wallet,
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-      bids: [
-        {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
-          orderKind: "seaport-v1.5",
-          orderbook: "reservoir",
-          weiPrice: parseEther("0.001").toString(),
-          expirationTime: _expireTime,
-          options: {
-            "seaport-v1.5": {
-              useOffChainCancellation: true,
-            },
-          },
-        },
-      ],
-      chainId: 5,
-    });
-  }
-
-  function handleCancelOrder() {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      chain: goerli,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    _client.actions.cancelOrder({
-      ids: ["0x9ef86dbf605cf5da9d8b927741771fe5c15364267d1e412cb857ff43d16c563b"], //ID burasi farkli
-      chainId: 5,
-      wallet,
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-      // options: {
-      //     maker:
-      //     token:
-      // }
-    });
-  }
-
-  function handleAcceptOffer() {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      chain: goerli,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    _client.actions.acceptOffer({
-      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:9", quantity: 1 }],
-      wallet,
-      chainId: 5,
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-    });
-  }
-
   return (
     <div className="flex flex-col border-r border-gray">
       <div className="flex flex-col overflow-hidden">
@@ -408,22 +297,6 @@ const LeftMenu = (props: any) => {
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
             </div>
           </div>
-          {/* <Button className="btn-primary hover:bg-green hover:translate-x-7" onClick={handleAL}>
-            BUY +
-          </Button>
-          <Button className="btn-primary hover:bg-red hover:-translate-x-7" onClick={handleList}>
-            LIST +
-          </Button>
-          <Button className="btn-primary hover:bg-black hover:text-white hover:translate-x-7" onClick={handlePlaceBid}>
-            PLACE A BID/MAKE OFFER +
-          </Button>
-          <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleCancelOrder}>
-            CANCEL ORDER
-          </Button>
-          <Button className="btn-primary hover:bg-orange hover:-translate-x-7" onClick={handleAcceptOffer}>
-            ACCEPT OFFER
-          </Button> */}
-
           {/* <div className="flex gap-5">
             <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
               <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
@@ -445,7 +318,7 @@ const LeftMenu = (props: any) => {
             </div>
           </div> */}
         </div>
-        <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
+        <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray [&>*:nth-child(3)]:mt-10">
           <div className="flex gap-2.5">
             <div
               className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
@@ -458,11 +331,15 @@ const LeftMenu = (props: any) => {
             </div>
             <div className="flex items-center gap-2.5">
               <h6 className="text-h6 text-gray-light">
-                on <span className="text-white">{mockData.network}</span>
+                on <span className="text-white">{nft?.kind === "erc721" ? "Linea" : "Fuel"}</span>
               </h6>
-              <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
-                <IconFuelWallet className="w-[18px] h-[18px]" />
-              </div>
+              {nft?.kind === "erc721" ? (
+                <></>
+              ) : (
+                <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                  <IconFuelWallet className="w-[18px] h-[18px]" />
+                </div>
+              )}
             </div>
           </div>
           {/* <div className="flex items-center gap-4">
@@ -488,7 +365,7 @@ const LeftMenu = (props: any) => {
             </div>
           </div> */}
 
-          <div className="body-medium text-white mb-10">
+          <div className="body-medium text-white">
             <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 

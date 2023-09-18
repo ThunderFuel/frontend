@@ -12,6 +12,7 @@ import { handleTransactionError } from "pages/Layout/CheckoutModal/components/Ch
 import { erc1155ABI, goerliWethAddress, lineaWethAddress, wethABI } from "global-constants";
 import { useDispatch } from "react-redux";
 import { setNetworkId } from "store/walletSlice";
+import nftdetailsService from "api/nftdetails/nftdetails.service";
 class WagmiProvider extends BaseProvider {
   provider = wagmi;
   dispatch: any;
@@ -64,16 +65,15 @@ class WagmiProvider extends BaseProvider {
     try {
       const wallet = createWalletClient({
         account: user.walletAddress,
-        chain: goerli,
+        chain: linea,
         transport: custom(window.ethereum),
       });
 
       const _client = getClient();
 
       return _client.actions.cancelOrder({
-        // ids: ["0x9ef86dbf605cf5da9d8b927741771fe5c15364267d1e412cb857ff43d16c563b"], //ID burasi farkli
         ids: cancelOrderIds,
-        chainId: 5,
+        chainId: linea.id,
         wallet,
         onProgress: (steps: Execute["steps"]) => {
           this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
@@ -177,11 +177,14 @@ class WagmiProvider extends BaseProvider {
     console.log("after make offer");
   }
 
-  handleCancelOffer({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+  async handleCancelOffer({ user, cancelOrderIds, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
     return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
   }
-  handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
-    return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  async handleCancelListing({ user, selectedNFT, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
+    const { data } = await nftdetailsService.getListingOrderId({ id: selectedNFT.id });
+    const cancelOrderIds = [data?.id];
+
+    return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
   }
   handleCancelAuction({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
     this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
@@ -233,113 +236,70 @@ class WagmiProvider extends BaseProvider {
       });
   }
 
-  handlePlaceBid({ setWagmiSteps, setApproved, wagmiSteps, setStepData, user, checkoutExpireTime, checkoutPrice }: any) {
-    const wallet = createWalletClient({
-      account: user.walletAddress,
-      chain: goerli,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    const _expireTime = checkoutExpireTime;
-
-    _client.actions.placeBid({
-      wallet,
-      onProgress: (steps: Execute["steps"]) => {
-        this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
-      },
-      bids: [
-        {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7",
-          orderKind: "seaport-v1.5",
-          orderbook: "reservoir",
-          weiPrice: parseEther(checkoutPrice.toString()).toString(),
-          expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
-          options: {
-            "seaport-v1.5": {
-              useOffChainCancellation: true,
-            },
-          },
-        },
-      ],
-      chainId: 5,
-    });
-  }
-
-  async handleConfirmListing({ cancelOrderIds, updateListing, setStartTransaction, setIsFailed, checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
+  async handleConfirmListing({
+    cancelOrderIds,
+    selectedNFT,
+    updateListing,
+    setStartTransaction,
+    setIsFailed,
+    checkoutPrice,
+    checkoutExpireTime,
+    setApproved,
+    setWagmiSteps,
+    wagmiSteps,
+    setStepData,
+    user,
+    buyNowItem,
+    tokenIds,
+    setSuccessCheckout,
+    items,
+  }: any) {
     if (updateListing) {
-      await this.handleCancelListing({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
+      await this.handleCancelListing({ user, selectedNFT, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
     }
 
     const wallet = createWalletClient({
       account: user.walletAddress,
-      // chain: linea,
+      chain: linea,
       transport: custom(window.ethereum),
     });
 
     const _client = getClient();
 
-    return _client.actions.listToken({
-      wallet,
-      listings: [
-        {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:8",
-          orderKind: "seaport-v1.5",
-          orderbook: "reservoir",
-          weiPrice: parseEther(checkoutPrice.toString()).toString(),
-          expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
-          // fees: [`${wallet.account.address}:100`],
-          options: {
-            "seaport-v1.5": {
-              useOffChainCancellation: true,
+    return _client.actions
+      .listToken({
+        wallet,
+        listings: [
+          {
+            token: selectedNFT.id,
+            orderKind: "seaport-v1.5",
+            orderbook: "reservoir",
+            weiPrice: parseEther(checkoutPrice.toString()).toString(),
+            expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
+            // fees: [`${wallet.account.address}:100`],
+            options: {
+              "seaport-v1.5": {
+                useOffChainCancellation: true,
+              },
             },
           },
+        ],
+        onProgress: (steps: Execute["steps"]) => {
+          this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
         },
-      ],
-      onProgress: (steps: Execute["steps"]) => {
-        const incompleteItems = steps.flatMap((item: any) => {
-          const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
-          if (incompleteSubItems.length > 0) {
-            return {
-              ...item,
-              items: incompleteSubItems,
-            };
-          }
-
-          return [];
-        });
-        if (incompleteItems.length === 0) setApproved(true);
-
-        const executableSteps = steps.filter((step) => step.items && step.items.length > 0);
-        if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
-
-        const stepCount = executableSteps.length;
-
-        let currentStepItem: NonNullable<Execute["steps"][0]["items"]>[0] | undefined;
-
-        const currentStepIndex = executableSteps.findIndex((step) => {
-          currentStepItem = step.items?.find((item: any) => item.status === "incomplete");
-
-          return currentStepItem;
-        });
-
-        const currentStep = currentStepIndex > -1 ? executableSteps[currentStepIndex] : executableSteps[stepCount - 1];
-
-        if (currentStepItem) {
-          setStepData({
-            totalSteps: stepCount,
-            stepProgress: currentStepIndex,
-            currentStep,
-            currentStepItem,
-          });
-        }
-      },
-      chainId: 5,
-    });
+        chainId: linea.id,
+      })
+      .catch((e) => {
+        console.log(e);
+        setStartTransaction(false);
+      });
   }
 
-  handleCheckout({ setApproved, setWagmiSteps, wagmiSteps, setStepData }: any) {
+  handleCheckout({ tokenIds, setApproved, setWagmiSteps, wagmiSteps, setStepData, setStartTransaction }: any) {
+    const _tokens = tokenIds.map((id: any) => ({
+      token: id,
+    }));
+
     const wallet = createWalletClient({
       chain: linea,
       transport: custom(window.ethereum),
@@ -347,54 +307,22 @@ class WagmiProvider extends BaseProvider {
 
     const _client = getClient();
 
-    _client.actions.buyToken({
-      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:6" }], //contractAddress
-      wallet,
-      chainId: 5,
-      onProgress: (steps: Execute["steps"]) => {
-        const incompleteItems = steps.flatMap((item: any) => {
-          const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
-          if (incompleteSubItems.length > 0) {
-            return {
-              ...item,
-              items: incompleteSubItems,
-            };
-          }
-
-          return [];
-        });
-        if (incompleteItems.length === 0) setApproved(true);
-        console.log(incompleteItems);
-
-        const executableSteps = steps.filter((step) => step.items && step.items.length > 0);
-        if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
-        console.log(executableSteps);
-
-        const stepCount = executableSteps.length;
-
-        let currentStepItem: NonNullable<Execute["steps"][0]["items"]>[0] | undefined;
-
-        const currentStepIndex = executableSteps.findIndex((step) => {
-          currentStepItem = step.items?.find((item: any) => item.status === "incomplete");
-
-          return currentStepItem;
-        });
-
-        const currentStep = currentStepIndex > -1 ? executableSteps[currentStepIndex] : executableSteps[stepCount - 1];
-
-        if (currentStepItem) {
-          setStepData({
-            totalSteps: stepCount,
-            stepProgress: currentStepIndex,
-            currentStep,
-            currentStepItem,
-          });
-        }
-      },
-      options: {
-        partial: true,
-      },
-    });
+    _client.actions
+      .buyToken({
+        items: _tokens,
+        wallet,
+        chainId: linea.id,
+        onProgress: (steps: Execute["steps"]) => {
+          this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+        },
+        options: {
+          partial: true,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+        setStartTransaction(false);
+      });
   }
 
   handleAcceptOffer({ user, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
@@ -467,6 +395,39 @@ class WagmiProvider extends BaseProvider {
   }: any) {
     throw new Error("Method not implemented.");
   }
+  handlePlaceBid({ setWagmiSteps, setApproved, wagmiSteps, setStepData, user, checkoutExpireTime, checkoutPrice }: any) {
+    const wallet = createWalletClient({
+      account: user.walletAddress,
+      chain: goerli,
+      transport: custom(window.ethereum),
+    });
+
+    const _client = getClient();
+
+    const _expireTime = checkoutExpireTime;
+
+    _client.actions.placeBid({
+      wallet,
+      onProgress: (steps: Execute["steps"]) => {
+        this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+      },
+      bids: [
+        {
+          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:7",
+          orderKind: "seaport-v1.5",
+          orderbook: "reservoir",
+          weiPrice: parseEther(checkoutPrice.toString()).toString(),
+          expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
+          options: {
+            "seaport-v1.5": {
+              useOffChainCancellation: true,
+            },
+          },
+        },
+      ],
+      chainId: 5,
+    });
+  }
 
   hasEnoughBalance(balance: any, amount: any) {
     return balance >= amount;
@@ -475,6 +436,7 @@ class WagmiProvider extends BaseProvider {
   getProviderType() {
     return "wagmi";
   }
+
   async getAccounts(): Promise<any> {
     try {
       const account = this.provider?.getAccount();

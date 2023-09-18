@@ -10,7 +10,7 @@ import { remainingTime } from "./AuctionCountdown";
 import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { useWallet } from "hooks/useWallet";
-import { formatPrice } from "utils";
+import { compareAddresses, formatPrice } from "utils";
 import useToast from "hooks/useToast";
 
 const FixedPrice = () => {
@@ -31,7 +31,7 @@ const FixedPrice = () => {
   const { hasEnoughFunds } = useWallet();
 
   const isOwner = () => {
-    return user?.id === selectedNFT?.user?.id;
+    return compareAddresses(user?.id, selectedNFT?.user?.id);
   };
 
   const isItemAlreadyAdded = () => items.find((item) => item.uid === selectedNFT.uid);

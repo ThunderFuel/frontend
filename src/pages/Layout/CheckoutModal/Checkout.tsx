@@ -228,20 +228,21 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
     try {
       handleCheckout({
-        setApproved: (val: any) => setApproved(val),
-        setWagmiSteps: (val: any) => setWagmiSteps(val),
-        wagmiSteps: wagmiSteps,
-        setStepData: (val: any) => setStepData(val),
-        buyNowItem: buyNowItem,
-        tokenIds: tokenIds,
-        setSuccessCheckout: (val: any) => setSuccessCheckout(val),
-        user: user,
-        items: items,
-        wallet: wallet,
-        setStartTransaction: (val: any) => setStartTransaction(val),
-        setIsFailed: (val: any) => setIsFailed(val),
+        setApproved,
+        setWagmiSteps,
+        wagmiSteps,
+        setStepData,
+        buyNowItem,
+        tokenIds,
+        setSuccessCheckout,
+        user,
+        items,
+        wallet,
+        setStartTransaction,
+        setIsFailed,
       });
     } catch (e) {
+      console.log(e);
       setIsFailed(true);
     }
   };

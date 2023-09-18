@@ -4,6 +4,7 @@ import { IconOffer } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
+import { compareAddresses } from "utils";
 
 const MakeOffer = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +12,7 @@ const MakeOffer = () => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
 
   const isOwner = () => {
-    return user?.id === selectedNFT?.user?.id;
+    return compareAddresses(user?.id, selectedNFT?.user?.id);
   };
 
   return isOwner() ? (
