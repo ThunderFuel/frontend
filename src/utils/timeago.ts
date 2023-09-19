@@ -18,8 +18,6 @@ const stringFormat = [
 ];
 
 const localeFunc = (number: number, index: number): any => {
-  console.log(index, stringFormat[index]);
-
   return stringFormat[index];
 };
 timeago.register("thunder-format", localeFunc);

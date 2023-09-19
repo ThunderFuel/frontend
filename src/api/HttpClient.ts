@@ -21,6 +21,7 @@ export interface ApiResponse<T> extends AxiosResponse {
   data: T;
   hasError: boolean;
   message: any;
+  continuation: any;
 }
 
 export default class HttpClient {

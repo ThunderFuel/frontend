@@ -14,6 +14,7 @@ const Activity = () => {
       return { ...prevState, ...nextState };
     },
     {
+      continuation: null,
       collectionId,
       pageSize: 10,
       page: 1,
@@ -35,6 +36,7 @@ const Activity = () => {
     }));
 
     setPagination({
+      continuation: response.continuation,
       itemsCount: response.itemsCount,
       pageCount: response.pageCount,
       pageSize: response.pageSize,
@@ -59,7 +61,7 @@ const Activity = () => {
   };
 
   const onChangePagination = async () => {
-    if (params.page > 1) {
+    if (!!params.continuation || params.page > 1) {
       setIsLoading(true);
       try {
         const response = await getActivityItems();
@@ -81,16 +83,15 @@ const Activity = () => {
 
   useEffect(() => {
     onChangePagination();
-  }, [params.page]);
+  }, [params.page, params.continuation]);
 
   return (
     <InfiniteScroll
       isLoading={isLoading}
       pagination={pagination}
-      onChangePagination={({ page }: any) => {
-        setParams({ page: page });
+      onChangePagination={({ page, continuation }: any) => {
+        setParams({ page: page, continuation });
       }}
-      bottomOffset={200}
     >
       <ActivityList containerClassName={"pl-10"} activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
     </InfiniteScroll>
