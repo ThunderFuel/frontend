@@ -1,16 +1,20 @@
-import userService from "api/user/user.service";
 import { IconRefresh } from "icons";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
 import EthereumPrice from "../../../components/EthereumPrice";
+import { useWallet } from "hooks/useWallet";
 
 const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance: () => void }) => {
   const { user } = useAppSelector((state) => state.wallet);
+  const { getBidBalance } = useWallet();
 
   const [bidBalance, setBidBalance] = useState(0);
 
   function fetchBidBalance() {
-    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+    if (user.walletAddress === undefined) return;
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      setBidBalance(res);
+    });
   }
 
   useEffect(() => {

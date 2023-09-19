@@ -253,8 +253,8 @@ export const useWallet = () => {
     return;
   };
 
-  const handleBulkListing = ({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) => {
-    return selectedGateway().handleBulkListing({ promises, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
+  const handleBulkListing = ({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) => {
+    return selectedGateway().handleBulkListing({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
   };
 
   const handleTransfer = ({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) => {

@@ -71,18 +71,22 @@ class WagmiProvider extends BaseProvider {
 
       const _client = getClient();
 
-      return _client.actions.cancelOrder({
-        ids: cancelOrderIds,
-        chainId: linea.id,
-        wallet,
-        onProgress: (steps: Execute["steps"]) => {
-          this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
-        },
-        // options: {
-        //     maker:
-        //     token:
-        // }
-      });
+      return _client.actions
+        .cancelOrder({
+          ids: cancelOrderIds,
+          chainId: linea.id,
+          wallet,
+          onProgress: (steps: Execute["steps"]) => {
+            this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+          },
+          // options: {
+          //     maker:
+          //     token:
+          // }
+        })
+        .catch((error) => {
+          handleTransactionError({ error, setStartTransaction, setIsFailed });
+        });
     } catch (error) {
       handleTransactionError({ error, setStartTransaction, setIsFailed });
     }
@@ -177,8 +181,10 @@ class WagmiProvider extends BaseProvider {
     console.log("after make offer");
   }
 
-  async handleCancelOffer({ user, cancelOrderIds, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
-    return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+  async handleCancelOffer({ user, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction }: any) {
+    const cancelOrderIds = [currentItem?.id];
+
+    return this.cancelOrder({ user, cancelOrderIds, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction });
   }
   async handleCancelListing({ user, selectedNFT, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
     const { data } = await nftdetailsService.getListingOrderId({ id: selectedNFT.id });
@@ -207,6 +213,10 @@ class WagmiProvider extends BaseProvider {
     });
 
     const _client = getClient();
+
+    console.log(checkoutExpireTime, formatTimeBackend(checkoutExpireTime).toString());
+
+    return;
 
     return _client.actions
       .placeBid({
@@ -344,16 +354,16 @@ class WagmiProvider extends BaseProvider {
     });
   }
 
-  handleBulkListing({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
+  handleBulkListing({ checkoutPrice, checkoutExpireTime, bulkListItems, bulkUpdateItems, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
+    console.log(bulkListItems, bulkUpdateItems);
+
     const wallet = createWalletClient({
       account: user.walletAddress,
-      // chain: linea,
+      chain: linea,
       transport: custom(window.ethereum),
     });
 
     const _client = getClient();
-
-    return new Error("WAGMI PROVIDER HANDLE BULK LISTING");
 
     _client.actions.listToken({
       wallet,
@@ -374,10 +384,11 @@ class WagmiProvider extends BaseProvider {
       onProgress: (steps: Execute["steps"]) => {
         this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
       },
-      chainId: 5,
+      chainId: linea.id,
     });
   }
 
+  /// NOT NEEDED \\\
   handleAcceptBid({
     selectedNFT,
     checkoutPrice,
@@ -428,6 +439,7 @@ class WagmiProvider extends BaseProvider {
       chainId: 5,
     });
   }
+  /// NOT NEEDED \\\
 
   hasEnoughBalance(balance: any, amount: any) {
     return balance >= amount;
