@@ -214,10 +214,6 @@ class WagmiProvider extends BaseProvider {
 
     const _client = getClient();
 
-    console.log(checkoutExpireTime, formatTimeBackend(checkoutExpireTime).toString());
-
-    return;
-
     return _client.actions
       .placeBid({
         wallet,
