@@ -13,7 +13,12 @@ export const notNeededStepIds = ["currency-approval", "nft-approval"];
 
 export function handleTransactionError({ error, setStartTransaction, setIsFailed }: { error: any; setStartTransaction: (bool: boolean) => void; setIsFailed: (bool: boolean) => void }) {
   console.log(error);
-  if (error.message.includes("Request cancelled without user response!") || error.message.includes("Error: User rejected the transaction!") || error.message.includes("An unexpected error occurred")) {
+  if (
+    error.message.includes("User denied transaction signature.") ||
+    error.message.includes("Request cancelled without user response!") ||
+    error.message.includes("Error: User rejected the transaction!") ||
+    error.message.includes("An unexpected error occurred")
+  ) {
     setStartTransaction(false);
   } else {
     setIsFailed(true);

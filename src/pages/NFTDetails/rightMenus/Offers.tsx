@@ -10,7 +10,7 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { useParams } from "react-router";
 import EthereumPrice from "components/EthereumPrice";
 import Avatar from "components/Avatar";
-import { addressFormat, dateFormat } from "utils";
+import { addressFormat, compareAddresses, dateFormat } from "utils";
 import { toggleWalletModal } from "store/walletSlice";
 import clsx from "clsx";
 import userService from "api/user/user.service";
@@ -184,8 +184,8 @@ const Offers = ({ onBack }: { onBack: any }) => {
       isAccepted: item.status === OfferStatus.AcceptedOffer,
       createdAt: dayjs(item.createdAt).valueOf(),
       expireTime: dayjs(item.expireTime).valueOf(),
-      isOfferMade: item.makerUserId === user.id,
-      showAfterRow: item.makerUserId === user.id || item.takerUserId === user.id,
+      isOfferMade: compareAddresses(item.makerUserId, user.id),
+      showAfterRow: compareAddresses(item.makerUserId, user.id) || compareAddresses(item.takerUserId, user.id),
     }));
     setOffers(data);
     console.log(data);
@@ -209,7 +209,24 @@ const Offers = ({ onBack }: { onBack: any }) => {
 
   return (
     <RightMenu title="Offers" onBack={onBack}>
-      <OfferTable items={offers} headers={headers} />
+      <OfferTable
+        items={offers}
+        headers={headers}
+        onCancelOffer={(item: any) => {
+          dispatch(
+            setCheckout({
+              type: CheckoutType.CancelOffer,
+              item: item,
+              onCheckoutComplete: onBack,
+            })
+          );
+          dispatch(toggleCheckoutModal());
+        }}
+        // onAcceptOffer= {}
+        // onUpdateOffer={}
+        // isProfile={}
+        // getBidBalance={}
+      />
     </RightMenu>
   );
 };

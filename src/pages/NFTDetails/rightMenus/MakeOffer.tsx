@@ -45,7 +45,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user } = useAppSelector((state) => state.wallet);
 
-  const { getBalance, hasEnoughBalance } = useWallet();
+  const { getBalance, hasEnoughBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<any>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
 
@@ -59,7 +59,10 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
     getBalance().then((res) => setbalance(res ? res : 0));
   }
   function fetchBidBalance() {
-    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+    if (user.walletAddress === undefined) return;
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      setBidBalance(res);
+    });
   }
 
   useEffect(() => {
