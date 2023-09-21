@@ -101,7 +101,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
   const onComplete = async () => {
     try {
-      handleBulkListing({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
+      handleBulkListing({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
     } catch (e) {
       console.log("BulkListingCheckout", e);
       handleTransactionError({ error: e, setStartTransaction, setIsFailed });

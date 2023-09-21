@@ -350,8 +350,25 @@ class WagmiProvider extends BaseProvider {
     });
   }
 
-  handleBulkListing({ checkoutPrice, checkoutExpireTime, bulkListItems, bulkUpdateItems, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
-    console.log(bulkListItems, bulkUpdateItems);
+  handleBulkListing({ bulkListItems, bulkUpdateItems, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {
+    const listingObjectConstants = {
+      orderKind: "seaport-v1.5",
+      orderbook: "reservoir",
+      options: {
+        "seaport-v1.5": {
+          useOffChainCancellation: true,
+        },
+      },
+    };
+
+    const listings = bulkListItems.map((item: any) => {
+      return {
+        ...listingObjectConstants,
+        token: item.tokenId,
+        weiPrice: parseEther(item.price.toString()).toString(),
+        expirationTime: formatTimeBackend(item.expireTime).toString(),
+      };
+    });
 
     const wallet = createWalletClient({
       account: user.walletAddress,
@@ -363,20 +380,7 @@ class WagmiProvider extends BaseProvider {
 
     _client.actions.listToken({
       wallet,
-      listings: [
-        {
-          token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:10",
-          orderKind: "seaport-v1.5",
-          orderbook: "reservoir",
-          weiPrice: parseEther(checkoutPrice.toString()).toString(),
-          expirationTime: formatTimeBackend(checkoutExpireTime).toString(),
-          options: {
-            "seaport-v1.5": {
-              useOffChainCancellation: true,
-            },
-          },
-        },
-      ],
+      listings: listings,
       onProgress: (steps: Execute["steps"]) => {
         this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
       },
