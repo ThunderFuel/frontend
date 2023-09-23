@@ -331,23 +331,28 @@ class WagmiProvider extends BaseProvider {
       });
   }
 
-  handleAcceptOffer({ user, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+  async handleAcceptOffer({ currentItem, user, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction }: any) {
     const wallet = createWalletClient({
       account: user.walletAddress,
-      chain: goerli,
+      chain: linea,
       transport: custom(window.ethereum),
     });
 
     const _client = getClient();
 
-    _client.actions.acceptOffer({
-      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:9", quantity: 1 }],
-      wallet,
-      chainId: 5,
-      onProgress: (steps: Execute["steps"]) => {
-        this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
-      },
-    });
+    return _client.actions
+      .acceptOffer({
+        items: [{ token: currentItem.contractAddress + ":" + currentItem.tokenOrder, quantity: 1, orderId: currentItem.orderId }],
+        wallet,
+        chainId: linea.id,
+        onProgress: (steps: Execute["steps"]) => {
+          this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+        setStartTransaction(false);
+      });
   }
 
   handleBulkListing({ bulkListItems, bulkUpdateItems, setApproved, setWagmiSteps, wagmiSteps, setStepData, user }: any) {

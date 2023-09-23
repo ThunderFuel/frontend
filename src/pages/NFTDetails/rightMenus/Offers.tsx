@@ -222,7 +222,23 @@ const Offers = ({ onBack }: { onBack: any }) => {
           );
           dispatch(toggleCheckoutModal());
         }}
-        // onAcceptOffer= {}
+        onAcceptOffer={() => {
+          dispatch(
+            setCheckout({
+              type: CheckoutType.AcceptOffer,
+              item: {
+                ...selectedNFT.bestOffer,
+                contractAddress: selectedNFT.collection.contractAddress,
+                makerAddress: selectedNFT.bestOffer?.user?.walletAddress,
+                takerAddress: selectedNFT.user.walletAddress,
+                tokenOrder: selectedNFT.tokenOrder,
+                orderId: selectedNFT.tokenId,
+              },
+              price: selectedNFT.bestOffer?.price,
+            })
+          );
+          dispatch(toggleCheckoutModal());
+        }}
         // onUpdateOffer={}
         // isProfile={}
         // getBidBalance={}

@@ -414,10 +414,10 @@ const LeftMenu = (props: any) => {
                           item: {
                             ...selectedNFT.bestOffer,
                             contractAddress: selectedNFT.collection.contractAddress,
-                            makerAddress: selectedNFT.bestOffer.user.walletAddress,
+                            makerAddress: selectedNFT.bestOffer?.user?.walletAddress,
                             takerAddress: selectedNFT.user.walletAddress,
                             tokenOrder: selectedNFT.tokenOrder,
-                            tokenImage: selectedNFT.image,
+                            orderId: selectedNFT.tokenId,
                           },
                           price: selectedNFT.bestOffer?.price,
                           onCheckoutComplete: fetchCollection,
