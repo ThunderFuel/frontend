@@ -124,41 +124,35 @@ const Box = ({
 
 const headers: ITableHeader[] = [
   {
-    key: "item",
-    text: `Item`,
+    key: "from",
+    text: `From`,
+    width: "25%",
     align: "flex-start",
     sortValue: 1,
-    render: (item) => {
-      return <OfferTable.OfferCollectionItem item={item} />;
-    },
+    render: (item) => (
+      <span className="flex items-center gap-2.5">
+        <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerUserId, 1)}
+      </span>
+    ),
   },
   {
     key: "price",
     text: "PRICE",
-    width: "20%",
+    width: "25%",
     align: "flex-end",
     render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
   },
   {
-    key: "from",
-    text: `From`,
-    width: "20%",
+    key: "floor-difference",
+    text: "FLOOR DIFFERENCE",
+    width: "25%",
     align: "flex-end",
-    sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.makerAddress, 1)}</span>,
-  },
-  {
-    key: "to",
-    text: `TO`,
-    width: "20%",
-    align: "flex-end",
-    sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.takerAddress, 1)}</span>,
+    render: (item) => <span>-</span>,
   },
   {
     key: "expireTime",
     text: "DATE",
-    width: "20%",
+    width: "25%",
     align: "flex-end",
     sortValue: 3,
     render: (item) => {

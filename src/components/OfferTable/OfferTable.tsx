@@ -92,7 +92,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.takerAddress, 1)}</span>,
+    render: (item) => <span>{addressFormat(item?.takerUserId, 1)}</span>,
     // renderHeader: (header) => <span>asasas</span>,
   },
   {
@@ -101,7 +101,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.makerAddress, 1)}</span>,
+    render: (item) => <span>{addressFormat(item?.makerUserId, 1)}</span>,
   },
   {
     key: "date",
