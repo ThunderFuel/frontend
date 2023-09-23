@@ -52,11 +52,11 @@ const CheckoutProcessItem = ({ title, description, status = Status.notStarted, i
         <div
           className={clsx(
             "body-medium transition-all duration-300 overflow-hidden",
-            isPending ? "h-5 opacity-100" : "h-0 opacity-0",
+            isPending ? "h-10 opacity-100" : "h-0 opacity-0",
             isLast && (status === Status.done || status === Status.error) ? "h-auto opacity-100" : "h-0 opacity-0"
           )}
         >
-          {description}
+          <span className="">{description}</span>
         </div>
       </div>
     </div>
@@ -251,6 +251,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     if (!show && successCheckout) {
       if (!isObjectEmpty(buyNowItem)) dispatch(removeBuyNowItem());
       else dispatch(removeAll());
+      setWagmiSteps([]);
     }
   }, [show, successCheckout]);
 

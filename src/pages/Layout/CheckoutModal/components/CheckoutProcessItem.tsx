@@ -28,8 +28,8 @@ export const CheckoutProcessItem = ({ title, description, status = Status.notSta
         <div className={clsx("text-h5 transition-all duration-300", isPending || isFailed || (isLast && status === Status.done) ? "text-white" : "")}>{title}</div>
         <div
           className={clsx(
-            "body-medium transition-all duration-300 overflow-hidden",
-            isPending ? "h-5 opacity-100" : "h-0 opacity-0",
+            "body-medium transition-all duration-300",
+            isPending ? "h-[26px] opacity-100" : "h-0 opacity-0",
             isLast && (status === Status.done || status === Status.error) ? "h-auto opacity-100" : "h-0 opacity-0"
           )}
         >

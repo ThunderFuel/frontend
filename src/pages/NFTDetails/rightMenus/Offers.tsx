@@ -179,7 +179,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
       createdAt: dayjs(item.createdAt).valueOf(),
       expireTime: dayjs(item.expireTime).valueOf(),
       isOfferMade: compareAddresses(item.makerUserId, user.id),
-      showAfterRow: compareAddresses(item.makerUserId, user.id) || compareAddresses(item.takerUserId, user.id),
+      showAfterRow: compareAddresses(item.makerUserId, user.id) || compareAddresses(selectedNFT.user.id, user.id),
     }));
     setOffers(data);
     console.log(data);

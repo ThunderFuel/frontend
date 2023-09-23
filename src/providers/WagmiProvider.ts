@@ -301,7 +301,7 @@ class WagmiProvider extends BaseProvider {
       });
   }
 
-  handleCheckout({ tokenIds, setApproved, setWagmiSteps, wagmiSteps, setStepData, setStartTransaction }: any) {
+  handleCheckout({ tokenIds, setApproved, setWagmiSteps, wagmiSteps, setStepData, setStartTransaction, setSuccessCheckout }: any) {
     const _tokens = tokenIds.map((id: any) => ({
       token: id,
     }));
@@ -325,6 +325,7 @@ class WagmiProvider extends BaseProvider {
           partial: true,
         },
       })
+      .then(() => setSuccessCheckout(true))
       .catch((e) => {
         console.log(e);
         setStartTransaction(false);
