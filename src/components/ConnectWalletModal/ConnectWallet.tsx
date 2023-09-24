@@ -74,7 +74,7 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: stri
           CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
         </Button>
       ) : (
-        <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank" rel="noreferrer">
+        <a href={name === "Metamask" ? "https://metamask.io/download/" : name === "Coinbase" ? "https://coinbase.com/wallet/downloads" : ""} target="_blank" rel="noreferrer">
           <Button className="btn-sm btn-secondary no-bg">
             INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
           </Button>
