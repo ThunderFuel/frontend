@@ -92,12 +92,14 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     </div>
   );
 
+  console.log(user);
+
   return (
     <Modal className="cart" title="Wallet" onClose={onClose} show={show} footer={footer}>
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
         <Avatar image={user?.image} userId={user?.id} className="w-20 h-20" />
         <div className="flex flex-col gap-y-[11px] justify-end">
-          <h4 className="text-head4 text-white">{user?.userName ?? addressFormat(user?.walletAddress ?? "")}</h4>
+          <h4 className="text-head4 text-white">{user?.userName ?? addressFormat(user?.walletAddress ?? "", 1)}</h4>
           <div className="flex gap-x-2.5">
             <a
               target="_blank"
