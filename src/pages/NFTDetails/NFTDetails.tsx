@@ -49,10 +49,13 @@ const NFTDetails = () => {
     if (!isActive) {
       fetchCollection();
     }
+  }, [nftId, isConnected, isActive, show]);
+
+  useEffect(() => {
     if (!isConnected) {
       resetMenuState();
     }
-  }, [nftId, isConnected, isActive, show]);
+  }, [isConnected]);
 
   useEffect(() => {
     return () => {

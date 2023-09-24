@@ -8,6 +8,7 @@ import { toggleWalletModal } from "store/walletSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import useToast from "hooks/useToast";
 import userService from "api/user/user.service";
+import { compareAddresses } from "utils";
 
 const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const dispatch = useAppDispatch();
@@ -15,7 +16,7 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const isOwner = () => {
-    return user?.id === selectedNFT?.user?.id;
+    return compareAddresses(user?.id, selectedNFT?.user?.id);
   };
 
   return (

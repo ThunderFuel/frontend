@@ -257,7 +257,7 @@ const LeftMenu = (props: any) => {
     return isConnected ? compareAddresses(user?.id, nft?.user?.id) : false;
   };
   const isBestOfferOwner = () => {
-    return isConnected ? (nft.bestOffer?.user?.walletAddress === user.walletAddress ? true : false) : false;
+    return isConnected ? (compareAddresses(nft.bestOffer?.user?.walletAddress, user.walletAddress) ? true : false) : false;
   };
   const calculateAveragePrice = () => {
     const sum = multipleEditionBuyArray.reduce((acc, item) => acc + item.price, 0);
@@ -265,27 +265,6 @@ const LeftMenu = (props: any) => {
 
     return average;
   };
-
-  function handleAL() {
-    const wallet = createWalletClient({
-      chain: linea,
-      transport: custom(window.ethereum),
-    });
-
-    const _client = getClient();
-
-    _client.actions.buyToken({
-      items: [{ token: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F:4" }],
-      wallet,
-      chainId: 5,
-      onProgress: (steps: Execute["steps"]) => {
-        console.log(steps);
-      },
-      options: {
-        partial: true,
-      },
-    });
-  }
 
   return (
     <div className="flex flex-col border-r border-gray">
@@ -297,26 +276,6 @@ const LeftMenu = (props: any) => {
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
             </div>
           </div>
-          {/* <div className="flex gap-5">
-            <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
-              <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
-                <IconViews className="w-[17px] h-[17px]" />
-              </div>
-              {mockData.views} Views
-            </div>
-            <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
-              <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
-                <IconListed className="w-[17px] h-[17px]" />
-              </div>
-              {mockData.available + "/" + mockData.totalCount} Available
-            </div>
-            <div className="flex items-center text-white text-headlineMd font-bigShoulderDisplay gap-[5px] uppercase">
-              <div className="flex items-center bg-gray justify-center rounded-full w-6 h-6">
-                <IconItems className="w-[17px] h-[17px]" />
-              </div>
-              You have {mockData.userOwns}
-            </div>
-          </div> */}
         </div>
         <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray [&>*:nth-child(3)]:mt-10">
           <div className="flex gap-2.5">
