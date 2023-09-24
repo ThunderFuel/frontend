@@ -233,7 +233,9 @@ const Offers = ({ onBack }: { onBack: any }) => {
           );
           dispatch(toggleCheckoutModal());
         }}
-        // onUpdateOffer={}
+        onUpdateOffer={() => {
+          dispatch(setRightMenu(RightMenuType.UpdateOffer));
+        }}
         // isProfile={}
         // getBidBalance={}
       />
