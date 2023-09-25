@@ -10,7 +10,7 @@ import {
   UpdateBulkListingRequestItem,
   WatchListRequest,
 } from "./collections.type";
-import { IconBid, IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
+import { IconBid, IconHand, IconListingCancel, IconMarketBasket, IconOfferCancel, IconQuarry, IconTag, IconTelegram } from "icons";
 
 export enum ActivityFilters {
   Offers = 0,
@@ -19,6 +19,8 @@ export enum ActivityFilters {
   Transfers = 3,
   Listings = 4,
   Bids = 5,
+  OfferCancel = 6,
+  ListingCancel = 7,
 }
 
 export enum ChecklistStatus {
@@ -53,6 +55,8 @@ export default {
       [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transfers" },
       [ActivityFilters.Listings]: { icon: IconTag, name: "Listings" },
       [ActivityFilters.Bids]: { icon: IconBid, name: "Bids" },
+      [ActivityFilters.OfferCancel]: { icon: IconOfferCancel, name: "Offer Cancel" },
+      [ActivityFilters.ListingCancel]: { icon: IconListingCancel, name: "Listing Cancel" },
     };
   },
   addWatchList(data: WatchListRequest) {

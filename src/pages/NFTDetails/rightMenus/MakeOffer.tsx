@@ -7,11 +7,10 @@ import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSl
 import RightMenu from "../components/RightMenu";
 import CartItem from "../components/CartItem";
 import { useWallet } from "hooks/useWallet";
-import { formatAmount, getDateFromExpirationTime, toGwei } from "utils";
+import { getDateFromExpirationTime, toGwei } from "utils";
 import Select, { ISelectOption } from "components/Select";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
-import userService from "api/user/user.service";
 
 export const selectExpirationDates: ISelectOption[] = [
   {
@@ -58,6 +57,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   function fetchBalance() {
     getBalance().then((res) => setbalance(res ? res : 0));
   }
+
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
     getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
@@ -138,7 +138,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
     <RightMenu title="Make Offer" footer={footer} onBack={onBack}>
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-2">
-        <h6 className="text-head6 font-spaceGrotesk text-white">{isMultipleEdition ? "Enter Price per Item*" : "Enter Price*"}</h6>
+        <h6 className="text-h6 text-white">{isMultipleEdition ? "Enter Price per Item*" : "Enter Price*"}</h6>
         <div className="flex gap-[5px] text-bodySm text-gray-light">
           <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
           <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
@@ -173,9 +173,9 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           />
         </div>
       )}
-      <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk relative z-10">
+      <div className="flex flex-col gap-y-2 text-white text-h6 relative z-10">
         Set Expiration Date
-        <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
+        <div className="flex items-center gap-x-[5px] body-small text-gray-light">
           <IconInfo className="w-[17px] h-[17px]" />
           <span>Expires on </span> {getDateFromExpirationTime(expirationTime.value)}
         </div>
