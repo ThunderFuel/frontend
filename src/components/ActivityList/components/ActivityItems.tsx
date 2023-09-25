@@ -48,15 +48,15 @@ const ActivityCollectionItem = ({ item }: any) => {
 const ActivityFromUser = ({ item }: any) => {
   const { user } = useAppSelector((state) => state.wallet);
   if (!item.fromUserId) {
-    return <span className="body-medium text-gray-light">-</span>;
+    return <span className="text-h6 text-gray-light">-</span>;
   }
 
   if (user.id === item.fromUserId) {
-    return <span className="body-medium text-green">you</span>;
+    return <span className="text-h6 text-green">you</span>;
   }
 
   return (
-    <Link to={getAbsolutePath(PATHS.USER, { userId: item.fromUserId })} className="body-medium text-white hover:underline">
+    <Link to={getAbsolutePath(PATHS.USER, { userId: item.fromUserId })} className="text-h6 text-white hover:underline">
       {item.fromUser?.userName ?? addressFormat(item.fromUser?.walletAddress)}
     </Link>
   );
@@ -64,14 +64,14 @@ const ActivityFromUser = ({ item }: any) => {
 const ActivityToUser = ({ item }: any) => {
   const { user } = useAppSelector((state) => state.wallet);
   if (!item.toUserId) {
-    return <span className="body-medium text-gray-light">-</span>;
+    return <span className="text-h6 text-gray-light">-</span>;
   }
   if (user.id === item.toUserId) {
-    return <span className="body-medium text-green">you</span>;
+    return <span className="text-h6 text-green">you</span>;
   }
 
   return (
-    <Link to={getAbsolutePath(PATHS.USER, { userId: item.toUserId })} className="body-medium text-white hover:underline">
+    <Link to={getAbsolutePath(PATHS.USER, { userId: item.toUserId })} className="text-h6 text-white hover:underline">
       {item.toUser?.userName ?? addressFormat(item.toUser?.walletAddress)}
     </Link>
   );

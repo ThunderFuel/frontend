@@ -67,6 +67,9 @@ const OfferExpiredTime = ({ item }: any) => {
     </span>
   );
 };
+const OfferLabel = ({ children }: any) => {
+  return <span className="text-h6">{children}</span>;
+};
 
 const defaultHeaders: ITableHeader[] = [
   {
@@ -92,7 +95,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.takerUserId, 1)}</span>,
+    render: (item) => <OfferLabel>{addressFormat(item?.takerUserId, 1)}</OfferLabel>,
     // renderHeader: (header) => <span>asasas</span>,
   },
   {
@@ -101,7 +104,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <span>{addressFormat(item?.makerUserId, 1)}</span>,
+    render: (item) => <OfferLabel>{addressFormat(item?.makerUserId, 1)}</OfferLabel>,
   },
   {
     key: "date",
@@ -171,4 +174,5 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
 export default Object.assign(OfferTable, {
   OfferCollectionItem,
   OfferExpiredTime,
+  OfferLabel,
 });
