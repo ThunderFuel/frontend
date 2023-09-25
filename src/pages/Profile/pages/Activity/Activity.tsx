@@ -20,7 +20,7 @@ const Activity = () => {
       pageSize: 10,
       ...params,
     });
-    const data = response.data.map((item: any) => ({
+    const data = (response.data ?? []).map((item: any) => ({
       ...item,
       name: item.token.name,
       description: "",

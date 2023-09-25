@@ -25,7 +25,7 @@ const SidebarFilter = ({ options, className, children, displayType, setDisplayTy
         <div className={`sticky h-fit ${show ? "overflow-hidden" : ""}`} style={{ top: `calc(var(--headerHeight) + ${!hiddenTabOffset ? "68px" : "0px"})` }}>
           <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", !show ? "overflow-hidden overflow-y-auto" : "")}>
             <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
-              <div className="icon-btn bg-white fill-gray">
+              <div className="icon-btn dark:bg-white dark:text-gray text-gray-light">
                 <IconFilter />
               </div>
             </div>
