@@ -68,7 +68,7 @@ const OfferExpiredTime = ({ item }: any) => {
   );
 };
 const OfferLabel = ({ children }: any) => {
-  return <span className="text-h6">{children}</span>;
+  return <span className="body-medium">{children}</span>;
 };
 
 const defaultHeaders: ITableHeader[] = [
@@ -161,7 +161,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       items={items}
       containerFluidClassName={"!px-5"}
       afterRow={(item: any) => {
-        if (!item.isActiveOffer || !item.showAfterRow) {
+        if (!item.isActiveOffer || !item.showAfterRow || !isProfile) {
           return null;
         }
 

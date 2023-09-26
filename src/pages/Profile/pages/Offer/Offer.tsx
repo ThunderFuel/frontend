@@ -14,7 +14,7 @@ import SidebarFilter from "./SidebarFilter";
 import OfferProvider from "./OfferContext";
 
 const Offer = () => {
-  const { userInfo } = useProfile();
+  const { userInfo, options } = useProfile();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -43,7 +43,6 @@ const Offer = () => {
   }, [offers, filterValue]);
 
   const onChangeFilterValue = (value: any) => {
-    console.log(value);
     setFilterValue((prevState: any) => ({ ...prevState, ...value }));
   };
 
@@ -114,15 +113,19 @@ const Offer = () => {
       types: [0, 1, 2],
     });
     const data = response.data
-      .map((item: any) => ({
-        ...item,
-        isOfferMade: item.makerUserId === userInfo.id,
-        isActiveOffer: item.status === OfferStatus.ActiveOffer,
-        isAccepted: item.status === OfferStatus.AcceptedOffer,
-        isExpired: item.status === OfferStatus.ExpiredOffer,
-        isCanceled: item.status === OfferStatus.Cancelled,
-        showAfterRow: item.makerUserId === userInfo.id || item.takerUserId === userInfo.id,
-      }))
+      .map((item: any) => {
+        const isOfferMade = item.makerUserId.toLowerCase() == userInfo.id.toLowerCase();
+
+        return {
+          ...item,
+          isOfferMade: isOfferMade,
+          isActiveOffer: item.status === OfferStatus.ActiveOffer,
+          isAccepted: item.status === OfferStatus.AcceptedOffer,
+          isExpired: item.status === OfferStatus.ExpiredOffer,
+          isCanceled: item.status === OfferStatus.Cancelled,
+          showAfterRow: isOfferMade || item.takerUserId === userInfo.id,
+        };
+      })
       .sort((a: any, b: any) => b.isActiveOffer - a.isActiveOffer);
     setOffers(data);
   };
@@ -134,9 +137,7 @@ const Offer = () => {
   }, [userInfo]);
 
   const contextValue = {
-    options: {
-      isProfile: true,
-    },
+    options,
     offers,
     getOffers,
     filterValue,
