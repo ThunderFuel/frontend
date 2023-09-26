@@ -1,3 +1,3 @@
 .sidebar-h-screen {
-  height: calc(100vh - var(--headerHeight) - 68px);
+  height: calc(100vh - var(--headerHeight));
 }
