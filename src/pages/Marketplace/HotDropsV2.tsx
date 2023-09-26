@@ -19,14 +19,21 @@ const HotDrops = () => {
       });
       const items = response.data
         .map((responseItem) => {
+          const banners = responseItem.solds
+            .map((item) => item.token.image)
+            .filter((image) => !!image)
+            .slice(0, 3);
+
           return {
             description: responseItem.description,
             banner: responseItem.banner,
+            banners: banners,
             name: responseItem.name,
             id: responseItem.id,
           } as any;
         })
         .slice(0, 5);
+      console.log(items);
 
       setItems(items);
     } catch (e) {
@@ -56,7 +63,19 @@ const HotDrops = () => {
                     </Button>
                   </div>
                 </div>
-                <div className="hotdrop-slide" />
+                <div className="hotdrop-slide">
+                  {!item.banner && item.banners.length ? (
+                    <div className="overflow-hidden">
+                      <div className="min-h-[440px] grid grid-cols-3 -mx-40">
+                        {item.banners.map((image: string, index: number) => (
+                          <div className="bg-cover bg-center bg-no-repeat" key={`${index}_${image}`} style={{ backgroundImage: `url(${image})` }} />
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </Carousel.Item>
           );
