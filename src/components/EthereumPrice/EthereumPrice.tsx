@@ -9,7 +9,7 @@ const EmptyFragment = ({ children }: any) => {
   return <div>{children}</div>;
 };
 const EthereumPrice = ({ price, priceClassName, className, fullPrice, iconClassName }: { price: any; priceClassName?: string; className?: string; fullPrice?: boolean; iconClassName?: any }) => {
-  const priceValue = price || 0;
+  const priceValue = price ? (typeof price === "string" ? Number(price) : price) : 0;
   const lthMinLimit = priceValue > 0 && priceValue < MIN_LIMIT;
   const priceText = priceValue === 0 ? 0 : lthMinLimit ? "<0.0001" : formatPrice(price);
 
