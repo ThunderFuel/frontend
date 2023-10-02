@@ -40,7 +40,7 @@ const ActivityCollectionItem = ({ item }: any) => {
   return (
     <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
       <LazyImg className="w-10 h-10 rounded-md" src={item.token.image} />
-      <h6 className="text-h6 text-white text-overflow">{item.token.name ?? "-"}</h6>
+      <h6 className="text-h6 text-white text-overflow max-w-[200px]">{item.token.name ?? "-"}</h6>
     </Link>
   );
 };
