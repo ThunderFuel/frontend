@@ -9,7 +9,7 @@ enum Status {
   error = "error",
 }
 
-export const notNeededStepIds = ["currency-approval", "nft-approval"];
+export const notNeededStepIds = ["currency-approval"];
 
 export function handleTransactionError({ error, setStartTransaction, setIsFailed }: { error: any; setStartTransaction: (bool: boolean) => void; setIsFailed: (bool: boolean) => void }) {
   console.log(error);
@@ -91,6 +91,14 @@ export const CheckoutProcess = ({
     startTransactionProcess();
   }, [approved, failed]);
 
+  function hasPreviousIncompleteStep(idx: number) {
+    for (let index = 0; index < idx; index++) {
+      if (wagmiSteps[index]?.items[0].status === "incomplete") return true;
+    }
+
+    return false;
+  }
+
   return (
     <div className="flex flex-col w-full ">
       <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
@@ -103,7 +111,7 @@ export const CheckoutProcess = ({
                 return (
                   <CheckoutProcessItem
                     key={`CheckoutProcessItem${idx}`}
-                    status={step.items[0].status === "incomplete" ? Status.pending : Status.done}
+                    status={!hasPreviousIncompleteStep(idx) ? (step.items[0].status === "incomplete" ? Status.pending : Status.done) : Status.notStarted}
                     title={step.action}
                     description={step.description}
                   />
