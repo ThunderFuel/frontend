@@ -57,7 +57,7 @@ const ActivityFromUser = ({ item }: any) => {
 
   return (
     <Link to={getAbsolutePath(PATHS.USER, { userId: item.fromUserId })} className="text-h6 text-white hover:underline">
-      {item.fromUser?.userName ?? addressFormat(item.fromUser?.walletAddress)}
+      {item.fromUser?.userName ?? addressFormat(item.fromUser?.walletAddress, 1)}
     </Link>
   );
 };
@@ -72,7 +72,7 @@ const ActivityToUser = ({ item }: any) => {
 
   return (
     <Link to={getAbsolutePath(PATHS.USER, { userId: item.toUserId })} className="text-h6 text-white hover:underline">
-      {item.toUser?.userName ?? addressFormat(item.toUser?.walletAddress)}
+      {item.toUser?.userName ?? addressFormat(item.toUser?.walletAddress, 1)}
     </Link>
   );
 };
