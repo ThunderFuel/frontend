@@ -21,7 +21,7 @@ const Listings = ({ onBack }: { onBack: any }) => {
         <div className={`flex w-full items-center gap-x-[15px]  ${item.isExpired ? "opacity-50" : ""}`}>
           <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
           <div className="flex  flex-col gap-y-[10px]">
-            <span>{item.ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress, 1)} </span>
+            <span>{item.ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress)} </span>
           </div>
         </div>
       ),
