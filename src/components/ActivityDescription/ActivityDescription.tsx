@@ -13,17 +13,11 @@ interface IActivityItemDescription {
   price?: string;
   noTime?: boolean;
 }
+
 const ActivityItemDescription = React.memo(({ price, activityType, fromUserContractAddress, toUserContractAddress, createdTimeStamp, noTime = false }: IActivityItemDescription) => {
   const { user } = useAppSelector((state) => state.wallet);
   let activeTypeLabel = `${ActivityFilters[activityType]} by`;
   if (price) {
-    if (ActivityFilters.Bids === activityType) {
-      activeTypeLabel = `${renderToString(
-        <div className="inline-block">
-          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
-        </div>
-      )}bid placed by`;
-    }
     if (ActivityFilters.Listings === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">
@@ -59,9 +53,6 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
 
     return <div className="w-full text-head6" dangerouslySetInnerHTML={{ __html: text }} />;
   } else {
-    if (ActivityFilters.Bids === activityType) {
-      activeTypeLabel = `Bid placed by`;
-    }
     if (ActivityFilters.Listings === activityType) {
       activeTypeLabel = `Listed by`;
     }
@@ -82,7 +73,7 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
     const toUserContractAddressLabel = user.walletAddress === toUserContractAddress ? "you" : addressFormat(toUserContractAddress);
 
     let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel} to ${toUserContractAddressLabel}</span>, ${!noTime ? timeagoFormat(createdTimeStamp) : ""}`;
-    if ([ActivityFilters.Listings, ActivityFilters.Bids, ActivityFilters.Offers, ActivityFilters.Mints, ActivityFilters.Transfers].includes(activityType)) {
+    if ([ActivityFilters.Listings, ActivityFilters.Offers, ActivityFilters.Mints, ActivityFilters.Transfers].includes(activityType)) {
       text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel}</span>${!noTime ? ", " + timeagoFormat(createdTimeStamp) : ""}`;
     }
 

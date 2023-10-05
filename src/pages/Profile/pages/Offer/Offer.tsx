@@ -115,6 +115,7 @@ const Offer = () => {
     const data = response.data
       .map((item: any) => {
         const isOfferMade = item.makerUserId.toLowerCase() == userInfo.id.toLowerCase();
+        const isTakerMade = item.takerUserId.toLowerCase() == userInfo.id.toLowerCase();
 
         return {
           ...item,
@@ -123,7 +124,7 @@ const Offer = () => {
           isAccepted: item.status === OfferStatus.AcceptedOffer,
           isExpired: item.status === OfferStatus.ExpiredOffer,
           isCanceled: item.status === OfferStatus.Cancelled,
-          showAfterRow: isOfferMade || item.takerUserId === userInfo.id,
+          showAfterRow: isOfferMade || isTakerMade,
         };
       })
       .sort((a: any, b: any) => b.isActiveOffer - a.isActiveOffer);

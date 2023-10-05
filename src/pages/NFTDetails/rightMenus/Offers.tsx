@@ -131,7 +131,7 @@ const headers: ITableHeader[] = [
     sortValue: 1,
     render: (item) => (
       <span className="flex items-center gap-2.5">
-        <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerUserId, 1)}
+        <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerUserId)}
       </span>
     ),
   },

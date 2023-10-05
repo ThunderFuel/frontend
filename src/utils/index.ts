@@ -6,18 +6,12 @@ import config from "config";
 
 export { timeagoFormat } from "./timeago";
 
-export const addressFormat = (address: any, type = 0) => {
+export const addressFormat = (address: any) => {
   if (!address) {
     return "-";
   }
-  if (type === 0) {
-    const first6 = address.substring(0, 3);
-    const last4 = address.substring(address.length - 3);
 
-    return `${first6 + last4}`;
-  } else if (type === 1) {
-    return address.substring(0, 6);
-  }
+  return address.substring(0, 6);
 };
 
 export const openInNewTab = (url: string): void => {

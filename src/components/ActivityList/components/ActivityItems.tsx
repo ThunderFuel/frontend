@@ -28,19 +28,23 @@ const ActivityType = ({ item }: any) => {
   }, [item.type]);
 
   return (
-    <div className="flex items-center gap-2.5 pl-2.5">
-      <div className="flex-center h-8 w-8 rounded-full bg-gray">
+    <div className="flex items-center gap-2.5 px-2.5 flex-1">
+      <div className="flex-center h-8 basis-8 rounded-full bg-gray">
         <Icon />
       </div>
-      <h6 className="text-h6 text-overflow">{getType}</h6>
+      <div className="min-w-0 flex">
+        <h6 className="text-h6 text-overflow">{getType}</h6>
+      </div>
     </div>
   );
 };
 const ActivityCollectionItem = ({ item }: any) => {
   return (
     <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
-      <LazyImg className="w-10 h-10 rounded-md" src={item.token.image} />
-      <h6 className="text-h6 text-white text-overflow max-w-[200px]">{item.token.name ?? "-"}</h6>
+      <LazyImg className="w-10 h-10 rounded-md basis-10" src={item.token.image} />
+      <div className="min-w-0 flex">
+        <h6 className="text-h6 text-white text-overflow">{item.token.name ?? "-"}</h6>
+      </div>
     </Link>
   );
 };

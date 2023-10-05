@@ -95,7 +95,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <OfferLabel>{addressFormat(item?.takerUserId, 1)}</OfferLabel>,
+    render: (item) => <OfferLabel>{addressFormat(item?.takerUserId)}</OfferLabel>,
     // renderHeader: (header) => <span>asasas</span>,
   },
   {
@@ -104,7 +104,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <OfferLabel>{addressFormat(item?.makerUserId, 1)}</OfferLabel>,
+    render: (item) => <OfferLabel>{addressFormat(item?.makerUserId)}</OfferLabel>,
   },
   {
     key: "date",
