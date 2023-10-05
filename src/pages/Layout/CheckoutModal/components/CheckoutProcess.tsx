@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CheckoutProcessItem } from "./CheckoutProcessItem";
 import config from "config";
+import { IconInfo } from "icons";
+import { formatEther } from "viem";
 
 enum Status {
   notStarted = "notStarted",
@@ -101,12 +103,12 @@ export const CheckoutProcess = ({
 
   return (
     <div className="flex flex-col w-full ">
-      <div className=" flex flex-col p-5 gap-y-[25px]  border-gray">
+      <div className=" flex flex-col p-5 gap-y-[25px] border-gray">
         {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title={title1} description={description1} /> */}
         {wagmiSteps.length > 0 ? (
           <>
             {wagmiSteps.map((step: any, idx: number) => {
-              if (notNeededStepIds.includes(step.id)) return;
+              if (notNeededStepIds.includes(step.id) && step.items[0].status === "complete") return;
               else
                 return (
                   <CheckoutProcessItem
@@ -118,6 +120,17 @@ export const CheckoutProcess = ({
                 );
             })}
             <CheckoutProcessItem isLast={true} status={stepData?.currentStepItem?.status === "complete" ? Status.done : Status.notStarted} title={title3} description={description3} />
+            {wagmiSteps.filter((step: any) => step.id === "currency-wrapping").length > 0 && approved && (
+              <div className="flex gap-2 w-full p-2.5 border border-gray bg-bg-light rounded-[5px]">
+                <IconInfo className="text-orange" />
+                <div className="flex flex-col w-full gap-[5px]">
+                  <h6 className="text-h6 text-white">
+                    {formatEther(BigInt(parseInt(wagmiSteps.filter((step: any) => step.id === "currency-wrapping")[0].items[0].data.value, 16)))} ETH added to bid your balance.
+                  </h6>
+                  <span className="text-bodySm text-gray-light">In order to make this offer 0.2 ETH converted into wETH. You can always view and withdraw wETH from your bid balance.</span>
+                </div>
+              </div>
+            )}
           </>
         ) : isWagmi ? (
           <></>
