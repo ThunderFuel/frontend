@@ -199,11 +199,9 @@ export async function activateInjectedProvider(providerName: any) {
 }
 
 export function compareAddresses(address1: any, address2: any) {
-  if (address1 === undefined || address2 === undefined) return false;
+  if (address1 === undefined || address2 === undefined) {
+    return false;
+  }
 
-  const _address1 = typeof address1 === "string" ? address1.toLowerCase() : address1;
-  const _address2 = typeof address2 === "string" ? address2.toLowerCase() : address1;
-
-  if (_address1 === _address2) return true;
-  else return false;
+  return String(address1).toLowerCase() === String(address2).toLowerCase();
 }
