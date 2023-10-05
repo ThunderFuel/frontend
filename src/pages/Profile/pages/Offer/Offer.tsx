@@ -1,7 +1,7 @@
 import React from "react";
 import OfferList from "./OfferList";
 import { useProfile } from "../../ProfileContext";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import useNavigate from "hooks/useNavigate";
 import { OfferStatus } from "api/offer/offer.type";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
@@ -15,6 +15,7 @@ import OfferProvider from "./OfferContext";
 
 const Offer = () => {
   const { userInfo, options } = useProfile();
+  const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -114,8 +115,8 @@ const Offer = () => {
     });
     const data = response.data
       .map((item: any) => {
-        const isOfferMade = item.makerUserId.toLowerCase() == userInfo.id.toLowerCase();
-        const isTakerMade = item.takerUserId.toLowerCase() == userInfo.id.toLowerCase();
+        const isOfferMade = item.makerUserId.toLowerCase() == user.walletAddress.toLowerCase();
+        const isTakerMade = item.takerUserId.toLowerCase() == user.walletAddress.toLowerCase();
 
         return {
           ...item,

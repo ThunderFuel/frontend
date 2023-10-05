@@ -161,7 +161,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       items={items}
       containerFluidClassName={"!px-5"}
       afterRow={(item: any) => {
-        if (!item.isActiveOffer || !item.showAfterRow || !isProfile) {
+        if (!item.isActiveOffer || !item.showAfterRow) {
           return null;
         }
 

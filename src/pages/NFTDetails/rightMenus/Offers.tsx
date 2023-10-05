@@ -182,7 +182,6 @@ const Offers = ({ onBack }: { onBack: any }) => {
       showAfterRow: compareAddresses(item.makerUserId, user.id) || compareAddresses(selectedNFT.user.id, user.id),
     }));
     setOffers(data);
-    console.log(data);
   };
 
   const MakeOfferButton = () => (
