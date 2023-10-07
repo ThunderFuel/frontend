@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import Button from "components/Button";
-import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing } from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing } from "icons";
 import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
@@ -131,63 +131,28 @@ const FooterAuction = () => {
   );
 };
 
-const InputCount = ({ onChange, remainingAmount }: any) => {
-  const [value, setValue] = useState(1);
-  const onUpdateValue = (number: number) => {
-    const val = value + number;
-    if (val < 1 || val > remainingAmount) {
-      return false;
-    }
-
-    setValue(val);
-    onChange(number === 1 ? "add" : "remove");
-  };
-
-  return (
-    <div className="flex items-center text-white w-fit border border-white border-opacity-10 rounded-md">
-      <h3 className="w-16 text-center text-h3 border-r border-r-white border-opacity-10 py-1">{value}</h3>
-      <div className="flex flex-col items-center">
-        <span className="cursor-pointer px-5 py-1 border-b border-b-white border-opacity-10" onClick={() => onUpdateValue(1)}>
-          <IconPlus className={value >= remainingAmount ? "opacity-50" : ""} />
-        </span>
-        <span className="cursor-pointer px-5 py-1" onClick={() => onUpdateValue(-1)}>
-          <IconMinus className={value <= 1 ? "opacity-50" : ""} />
-        </span>
-      </div>
-    </div>
-  );
+const mockData = {
+  views: 22,
+  totalCount: 20,
+  available: 3,
+  userOwns: 2,
+  ownerPictures: [AssetMockNFT1, AssetMockNFT1, AssetMockNFT1],
+  ownerCount: 8,
+  network: "Fuel",
+  lastListing: { user: { userId: 1, userName: "okitoki", image: AssetMockNFT1 }, price: 1.5, address: "0x123456" },
+  listings: [
+    { ownerPicture: AssetMockNFT1, price: 1.5, address: "0x123456" },
+    { ownerPicture: AssetMockNFT1, price: 2, address: "0x123456" },
+    { ownerPicture: AssetMockNFT1, price: 3, address: "0x123456" },
+  ],
 };
 
 const LeftMenu = (props: any) => {
-  const mockData = {
-    views: 22,
-    totalCount: 20,
-    available: 3,
-    userOwns: 2,
-    ownerPictures: [AssetMockNFT1, AssetMockNFT1, AssetMockNFT1],
-    ownerCount: 8,
-    network: "Fuel",
-    lastListing: { user: { userId: 1, userName: "okitoki", image: AssetMockNFT1 }, price: 1.5, address: "0x123456" },
-    listings: [
-      { ownerPicture: AssetMockNFT1, price: 1.5, address: "0x123456" },
-      { ownerPicture: AssetMockNFT1, price: 2, address: "0x123456" },
-      { ownerPicture: AssetMockNFT1, price: 3, address: "0x123456" },
-    ],
-  };
   const { nft, fetchCollection } = props;
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const [multipleEditionBuyArray, setMultipleEditionBuyArray] = useState([mockData.listings[0]]);
-
-  const onChange = (action: any) => {
-    if (action === "add") {
-      setMultipleEditionBuyArray((prev) => [...prev, mockData.listings[prev.length]]);
-    } else if (action === "remove") {
-      setMultipleEditionBuyArray((prev) => prev.slice(0, prev.length - 1));
-    }
-  };
 
   function formatActivityData(activity: any) {
     const { activityType, toUser, fromUser, createdTimeStamp, price } = activity;
@@ -259,12 +224,8 @@ const LeftMenu = (props: any) => {
   const isBestOfferOwner = () => {
     return isConnected ? (compareAddresses(nft.bestOffer?.user?.walletAddress, user.walletAddress) ? true : false) : false;
   };
-  const calculateAveragePrice = () => {
-    const sum = multipleEditionBuyArray.reduce((acc, item) => acc + item.price, 0);
-    const average = sum / multipleEditionBuyArray.length;
 
-    return average;
-  };
+  const isMultipleEdition = nft.kind === "erc1155";
 
   return (
     <div className="flex flex-col border-r border-gray">
@@ -302,39 +263,37 @@ const LeftMenu = (props: any) => {
               )}
             </div>
           </div>
-          {/* <div className="flex items-center gap-4">
-            <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
-              <div className="flex relative w-16 h-8">
-                {mockData.ownerPictures.map((item, idx) => (
-                  <div className={clsx("absolute w-8 h-8", idx === 1 ? "left-4" : idx === 2 ? "left-8" : "")} key={`img+${idx}`}>
-                    <img src={item} className="w-8 h-8 rounded-full" />
-                  </div>
-                ))}
+          {isMultipleEdition && (
+            <div className="flex items-center gap-4">
+              <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
+                <div className="flex relative w-16 h-8">
+                  {mockData.ownerPictures.map((item, idx) => (
+                    <div className={clsx("absolute w-8 h-8", idx === 1 ? "left-4" : idx === 2 ? "left-8" : "")} key={`img+${idx}`}>
+                      <img src={item} className="w-8 h-8 rounded-full" />
+                    </div>
+                  ))}
+                </div>
+                <h6 className="text-h6 text-white">
+                  {mockData.ownerCount} <span className="text-gray-light">Owners</span>
+                </h6>
               </div>
-              <h6 className="text-h6 text-white">
-                {mockData.ownerCount} <span className="text-gray-light">Owners</span>
-              </h6>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <h6 className="text-h6 text-gray-light">
-                on <span className="text-white">{mockData.network}</span>
-              </h6>
-              <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
-                <IconFuelWallet className="w-[18px] h-[18px]" />
+              <div className="flex items-center gap-2.5">
+                <h6 className="text-h6 text-gray-light">
+                  on <span className="text-white">{mockData.network}</span>
+                </h6>
+                <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                  <IconFuelWallet className="w-[18px] h-[18px]" />
+                </div>
               </div>
             </div>
-          </div> */}
+          )}
 
           <div className="body-medium text-white">
             <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
-          {/* <InputCount onChange={onChange} remainingAmount={mockData.listings.length} listings={mockData.listings} /> */}
-          {/* <div className="flex gap-[5px] text-bodySm font-spaceGrotesk text-gray-light">
-            <IconInfo className="w-[18px] h-[18px]" /> {multipleEditionBuyArray.length} Edition{multipleEditionBuyArray.length > 1 ? "s" : ""} / Average Item Price: {calculateAveragePrice()}ETH
-          </div> */}
           {nft.salable ? (
-            <FixedPrice />
+            <FixedPrice isMultipleEdition={isMultipleEdition} />
           ) : nft.onAuction ? (
             <Auction />
           ) : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? (
@@ -391,7 +350,7 @@ const LeftMenu = (props: any) => {
             </Box>
           )}
           {renderLastActivity(nft.lastActivity)}
-          {/* {renderListing(mockData.lastListing)} */}
+          {isMultipleEdition && renderListing(mockData.lastListing)}
         </div>
         <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
           <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />
