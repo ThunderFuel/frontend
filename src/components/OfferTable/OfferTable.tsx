@@ -108,7 +108,7 @@ const defaultHeaders: ITableHeader[] = [
   },
   {
     key: "date",
-    text: "DATE",
+    text: "expires",
     width: "20%",
     align: "flex-end",
     sortValue: 3,
