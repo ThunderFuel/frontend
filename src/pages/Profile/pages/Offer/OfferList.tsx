@@ -26,6 +26,7 @@ const OfferList = ({ headers }: any) => {
       </div>
       <div className="flex flex-col gap-3">
         <OfferTable
+          isOffersMade={isOffersMade}
           headers={headers}
           items={getOffers}
           onCancelOffer={onCancelOffer}

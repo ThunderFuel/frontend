@@ -9,6 +9,7 @@ import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 
 interface IOfferTable {
+  isOffersMade?: boolean;
   headers?: any[];
   items: any[];
   onAcceptOffer?: any;
@@ -83,8 +84,8 @@ const defaultHeaders: ITableHeader[] = [
     },
   },
   {
-    key: "price",
-    text: "PRICE",
+    key: "topBid",
+    text: "top bid",
     width: "20%",
     align: "flex-end",
     render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" />,
@@ -146,7 +147,7 @@ const AfterRow = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, getBidBal
   return <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />;
 };
 
-const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance }: IOfferTable) => {
+const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade }: IOfferTable) => {
   const afterRowParams = {
     onAcceptOffer,
     onCancelOffer,
@@ -155,9 +156,22 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
     getBidBalance,
   };
 
+  const getHeaders = React.useMemo(() => {
+    if (headers) {
+      return headers;
+    }
+
+    return defaultHeaders.map((header) => {
+      return {
+        ...header,
+        text: header.key === "topBid" && isOffersMade ? "offer" : header.text,
+      };
+    });
+  }, [isOffersMade]);
+
   return (
     <Table
-      headers={headers ?? defaultHeaders}
+      headers={getHeaders}
       items={items}
       containerFluidClassName={"!px-5"}
       afterRow={(item: any) => {
