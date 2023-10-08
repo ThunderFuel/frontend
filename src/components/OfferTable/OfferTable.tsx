@@ -76,7 +76,7 @@ const defaultHeaders: ITableHeader[] = [
   {
     key: "item",
     text: `Item`,
-    width: "20%",
+    width: "40%",
     align: "flex-start",
     sortValue: 1,
     render: (item) => {
@@ -98,14 +98,6 @@ const defaultHeaders: ITableHeader[] = [
     sortValue: 1,
     render: (item) => <OfferLabel>{addressFormat(item?.takerUserId)}</OfferLabel>,
     // renderHeader: (header) => <span>asasas</span>,
-  },
-  {
-    key: "to",
-    text: `TO`,
-    width: "20%",
-    align: "flex-end",
-    sortValue: 1,
-    render: (item) => <OfferLabel>{addressFormat(item?.makerUserId)}</OfferLabel>,
   },
   {
     key: "date",
