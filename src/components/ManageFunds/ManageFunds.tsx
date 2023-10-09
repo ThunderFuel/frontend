@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from "store";
 import { toggleManageFundsModal } from "store/walletSlice";
 import { IconInfo, IconMinus, IconPlus, IconSwap, IconWallet, IconWarning } from "icons";
 import { useWallet } from "hooks/useWallet";
-import { toGwei } from "utils";
 
 const ManageFunds = () => {
   const dispatch = useAppDispatch();
@@ -66,6 +65,8 @@ const ManageFunds = () => {
 
   const renderBalances = useMemo(() => <Balances refresh={isDisabled} />, [isDisabled]);
 
+  console.log(balance, bidBalance);
+
   return (
     <Modal className="checkout" title="Manage Funds" footer={footer} onClose={() => dispatch(toggleManageFundsModal())} show={manageFundsShow}>
       <div className="flex flex-col p-5 gap-5">
@@ -103,7 +104,7 @@ const ManageFunds = () => {
               </div>
             )}
             <Button
-              disabled={isDisabled ? true : amount === 0 || amount === "" || typeof amount === "string" ? true : (isAddToPool && balance < toGwei(amount)) || (!isAddToPool && bidBalance < amount)}
+              disabled={isDisabled ? true : amount === 0 || amount === "" || typeof amount === "string" ? true : (isAddToPool && balance < amount) || (!isAddToPool && bidBalance < amount)}
               className="btn-secondary w-full mt-[2px]"
               onClick={handleSwap}
             >
