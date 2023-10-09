@@ -24,7 +24,12 @@ export default {
     return ThunderURL.post("v1/user", body);
   },
   userCreate({ walletAddress }: any) {
-    const data = { params: { address: typeof walletAddress === "object" ? walletAddress.toB256() : walletAddress, fuelAddress: walletAddress } };
+    const data = {
+      params: {
+        address: typeof walletAddress === "object" ? walletAddress.toB256() : walletAddress,
+        fuelAddress: walletAddress,
+      },
+    };
 
     return ThunderURL.post("v1/user/create", {}, data);
   },
@@ -42,5 +47,8 @@ export default {
   },
   updateBidBalance(userId: number, amount: number): Promise<ApiResponse<any>> {
     return ThunderURL.post("v1/user/updatebidbalance", {}, { params: { userId, amount } });
+  },
+  getUserCollections(data: any) {
+    return ThunderURL.post("v1/user/tokens", data);
   },
 };

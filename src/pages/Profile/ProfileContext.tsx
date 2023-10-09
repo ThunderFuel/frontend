@@ -32,7 +32,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
     try {
       const response = await userService.getUser({
         id: userId,
-        includes: [0, 1, 2, 3, 4],
+        includes: [0, 1, 2, 4],
       });
 
       setUserInfo(response.data as any);
