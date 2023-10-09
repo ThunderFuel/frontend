@@ -95,7 +95,7 @@ class WagmiProvider extends BaseProvider {
   async handleWithdraw({ amount, setIsDisabled }: any) {
     try {
       const config = await prepareWriteContract({
-        address: goerliWethAddress,
+        address: lineaWethAddress,
         abi: wethABI,
         functionName: "withdraw",
         args: [parseEther(amount.toString())],
@@ -117,7 +117,7 @@ class WagmiProvider extends BaseProvider {
   async handleDeposit({ amount, setIsDisabled }: any) {
     try {
       const config = await prepareWriteContract({
-        address: goerliWethAddress,
+        address: lineaWethAddress,
         abi: wethABI,
         functionName: "deposit",
         value: parseEther(amount.toString()),
