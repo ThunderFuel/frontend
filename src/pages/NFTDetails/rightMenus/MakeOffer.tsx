@@ -11,6 +11,7 @@ import { getDateFromExpirationTime, toGwei } from "utils";
 import Select, { ISelectOption } from "components/Select";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
+import { toggleManageFundsModal } from "store/walletSlice";
 
 export const selectExpirationDates: ISelectOption[] = [
   {
@@ -82,7 +83,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
       <Balances balance={balance} onFetchBalance={fetchBalance} />
       <div className="flex justify-end gap-x-3 px-5 py-5">
-        <Button className="btn-secondary">
+        <Button className="btn-secondary" onClick={() => dispatch(toggleManageFundsModal())}>
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button

@@ -12,6 +12,7 @@ import Select from "components/Select";
 import { selectExpirationDates } from "./MakeOffer";
 import Balances from "../components/Balances";
 import userService from "api/user/user.service";
+import { toggleManageFundsModal } from "store/walletSlice";
 
 const offerDescription =
   "When you’re placing a bid you need to add funds to your bid balance. Required amount will be automatically added to your bid balance. You can withdraw your bid balance anytime.";
@@ -56,7 +57,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
       <Balances balance={balance} onFetchBalance={fetchBalance} />
       <div className="flex justify-end gap-x-3 px-5 py-5">
-        <Button className="btn-secondary">
+        <Button className="btn-secondary" onClick={() => dispatch(toggleManageFundsModal())}>
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
