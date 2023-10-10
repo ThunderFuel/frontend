@@ -127,7 +127,10 @@ export const CheckoutProcess = ({
                   <h6 className="text-h6 text-white">
                     {formatEther(BigInt(parseInt(wagmiSteps.filter((step: any) => step.id === "currency-wrapping")[0].items[0].data.value, 16)))} ETH added to bid your balance.
                   </h6>
-                  <span className="text-bodySm text-gray-light">In order to make this offer 0.2 ETH converted into wETH. You can always view and withdraw wETH from your bid balance.</span>
+                  <span className="body-small text-gray-light">
+                    In order to make this offer {formatEther(BigInt(parseInt(wagmiSteps.filter((step: any) => step.id === "currency-wrapping")[0].items[0].data.value, 16)))} ETH converted into wETH.
+                    You can always view and withdraw wETH from your bid balance.
+                  </span>
                 </div>
               </div>
             )}
