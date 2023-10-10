@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import Button from "components/Button";
-import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing } from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconLinea, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing } from "icons";
 import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
@@ -255,7 +255,9 @@ const LeftMenu = (props: any) => {
                 on <span className="text-white">{nft?.kind === "erc721" ? "Linea" : "Fuel"}</span>
               </h6>
               {nft?.kind === "erc721" ? (
-                <></>
+                <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                  <IconLinea className="w-[18px] h-[18px]" />
+                </div>
               ) : (
                 <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
                   <IconFuelWallet className="w-[18px] h-[18px]" />
