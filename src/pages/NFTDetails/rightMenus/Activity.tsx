@@ -5,7 +5,7 @@ import Filter from "../components/Filter";
 import RightMenu from "../components/RightMenu";
 import EthereumPrice from "components/EthereumPrice";
 import { useAppSelector } from "store";
-import collectionsService from "api/collections/collections.service";
+import collectionsService, { ActivityFilters } from "api/collections/collections.service";
 import ActivityItemDescription from "components/ActivityDescription";
 import ActivityList from "components/ActivityList/ActivityList";
 import { ITableHeader } from "components/Table";
@@ -86,7 +86,6 @@ const headers: ITableHeader[] = [
 
       return <ActivityType title={title} description={description} Icon={icon} price={item.price} />;
     },
-    // renderHeader: (header) => <span>asasas</span>,
   },
   {
     key: "price",
@@ -137,8 +136,7 @@ const Activity = ({ onBack }: { onBack: any }) => {
   }, [selectedNFT]);
 
   function renderItems() {
-    const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType));
-
+    const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType) && item.activityType !== ActivityFilters.ListingCancel);
     // const { icon, title, description } = formatActivityData(activity);
 
     return <ActivityList ActivityItemsContainerClassName="!pt-0" hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />;
