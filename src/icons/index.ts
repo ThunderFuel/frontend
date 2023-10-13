@@ -113,3 +113,4 @@ export { ReactComponent as IconWalletConnect } from "./icon-walletconnect.svg";
 export { ReactComponent as IconCoinbase } from "./icon-coinbase.svg";
 export { ReactComponent as IconOfferCancel } from "./icon-offer-cancel.svg";
 export { ReactComponent as IconListingCancel } from "./icon-tag-cancel.svg";
+export { ReactComponent as IconLinea } from "./icon-linea.svg";

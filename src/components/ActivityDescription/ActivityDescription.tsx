@@ -32,6 +32,13 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
         </div>
       )}offer made by`;
     }
+    if (ActivityFilters.OfferCancel === activityType) {
+      activeTypeLabel = `${renderToString(
+        <div className="inline-block">
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+        </div>
+      )}offer canceled by`;
+    }
     if (ActivityFilters.Sales === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">
@@ -45,6 +52,7 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
     if (ActivityFilters.Mints === activityType) {
       activeTypeLabel = `Minted by`;
     }
+
     const fromUserContractAddressLabel = user.walletAddress === fromUserContractAddress ? "you" : addressFormat(fromUserContractAddress);
 
     let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel}</span>`;

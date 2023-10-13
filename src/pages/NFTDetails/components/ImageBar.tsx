@@ -6,6 +6,7 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import userService from "api/user/user.service";
 import { toggleWalletModal } from "store/walletSlice";
 import { useShareTwitter } from "hooks/useShareTwitter";
+import { compareAddresses } from "utils";
 
 const ImageBar = ({ nft, toggleFullscreen }: any) => {
   const dispatch = useAppDispatch();
@@ -14,7 +15,7 @@ const ImageBar = ({ nft, toggleFullscreen }: any) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const isOwner = () => {
-    return user?.id === nft?.user?.id;
+    return compareAddresses(user?.id, nft?.user?.id);
   };
 
   const handleLike = () => {
