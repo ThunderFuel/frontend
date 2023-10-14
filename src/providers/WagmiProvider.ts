@@ -136,12 +136,12 @@ class WagmiProvider extends BaseProvider {
     }
   }
 
-  async handleTransfer({ selectedNFT, address, setStartTransaction, setIsFailed }: any) {
-    const isMultiEdition = false;
+  async handleTransfer({ user, selectedNFT, address, setStartTransaction, setIsFailed }: any) {
+    const isMultiEdition = selectedNFT.kind === "erc1155";
 
     if (isMultiEdition) {
       const config = await prepareWriteContract({
-        address: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F",
+        address: selectedNFT.contractAddress,
         abi: erc1155ABI,
         functionName: "safeTransferFrom",
         // args: [from, to, id, amount, 0],
@@ -154,10 +154,10 @@ class WagmiProvider extends BaseProvider {
     } else {
       try {
         const config = await prepareWriteContract({
-          address: "0x421A81E5a1a07B85B4d9147Bc521E3485ff0CA2F",
+          address: selectedNFT.contractAddress,
           abi: erc721ABI,
           functionName: "safeTransferFrom",
-          args: ["0xb7f3b58C66770C81AC1FCb70e5580ddA60Edb08C", "0xb1A7559274Bc1e92c355C7244255DC291AFEDB00", BigInt(11)],
+          args: [user.walletAddress, address, BigInt(11)],
         });
 
         const { hash } = await writeContract(config);
@@ -172,18 +172,26 @@ class WagmiProvider extends BaseProvider {
     }
   }
 
-  async handleUpdateOffer({ checkoutPrice, checkoutExpireTime, user, setApproved, setStartTransaction, setWagmiSteps, setStepData, cancelOrderIds, wagmiSteps, setIsFailed }: any) {
-    console.log("handleUpdateOffer");
-    await this.handleCancelOffer({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
-    console.log("after cancel offer");
+  async handleUpdateOffer({
+    currentItem,
+    selectedNFT,
+    checkoutPrice,
+    checkoutExpireTime,
+    user,
+    setApproved,
+    setStartTransaction,
+    setWagmiSteps,
+    setStepData,
+    cancelOrderIds,
+    wagmiSteps,
+    setIsFailed,
+  }: any) {
+    await this.handleCancelOffer({ selectedNFT, currentItem, user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
 
-    await this.handleMakeOffer({ checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction });
-    console.log("after make offer");
+    await this.handleMakeOffer({ selectedNFT, checkoutPrice, checkoutExpireTime, setApproved, setWagmiSteps, wagmiSteps, setStepData, user, setStartTransaction });
   }
 
-  async handleCancelOffer({ user, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction }: any) {
-    const cancelOrderIds = [currentItem?.id];
-
+  async handleCancelOffer({ cancelOrderIds, user, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction }: any) {
     return this.cancelOrder({ user, cancelOrderIds, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction });
   }
   async handleCancelListing({ user, selectedNFT, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
@@ -213,6 +221,7 @@ class WagmiProvider extends BaseProvider {
     });
 
     const _client = getClient();
+    console.log(checkoutPrice);
 
     return _client.actions
       .placeBid({

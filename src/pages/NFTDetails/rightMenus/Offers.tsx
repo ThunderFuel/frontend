@@ -232,7 +232,12 @@ const Offers = ({ onBack }: { onBack: any }) => {
           );
           dispatch(toggleCheckoutModal());
         }}
-        onUpdateOffer={() => {
+        onUpdateOffer={(item: any) => {
+          dispatch(
+            setCheckout({
+              cancelOrderIds: [item.id],
+            })
+          );
           dispatch(setRightMenu(RightMenuType.UpdateOffer));
         }}
         // isProfile={}

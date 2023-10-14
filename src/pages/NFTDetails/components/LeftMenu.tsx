@@ -312,7 +312,7 @@ const LeftMenu = (props: any) => {
                   <span className="text-headline-01 text-gray-light">BEST OFFER</span>
                   <h6 className="text-h6 text-white">
                     <div className="inline-block">
-                      <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={formatPrice(nft.bestOffer?.price)} />
+                      <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={nft.bestOffer?.price} />
                     </div>
                     by{" "}
                     <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>
