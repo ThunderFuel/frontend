@@ -32,7 +32,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice, currentItem, checkoutExpireTime } = useAppSelector((state) => state.checkout);
+  const { checkoutPrice, currentItem, checkoutExpireTime, cancelOrderIds } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
@@ -45,7 +45,6 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = () => {
-    const cancelOrderIds = ["0x0176f68aaf471ba2d1f4a0f03c4d051a12a67be607fb75b63bfe8141fd28d4b6"];
     try {
       handleUpdateOffer({
         setBidBalanceUpdated,
@@ -62,6 +61,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         wagmiSteps,
         setWagmiSteps,
         setStepData,
+        selectedNFT,
       });
     } catch (e) {
       handleTransactionError({ error: e, setStartTransaction, setIsFailed });

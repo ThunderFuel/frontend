@@ -80,8 +80,8 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
               </span>
               {titleSlot}
             </div>
-            <div className="flex w-full items-center justify-between mt-2">
-              <span className="text-h6 text-gray-light">{text}</span>
+            <div className="flex w-full items-center justify-between text-h6 mt-2">
+              <span className="text-gray-light">{text}</span>
               {text === "Address" ? <>{price}</> : price !== "" && <EthereumPrice priceClassName="text-h6" price={price} />}
             </div>
             {hasError && (

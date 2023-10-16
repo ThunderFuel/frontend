@@ -15,7 +15,7 @@ const ActivityType = ({ title, description, Icon, price }: { title: string; desc
   return (
     <div className="flex items-center justify-between gap-[11px]">
       <div className="flex w-full gap-x-[10px]">
-        <div className="flex w-full max-w-[120px] items-center gap-x-[10px]">
+        <div className="flex w-full max-w-[120px] items-center gap-x-[10px] text-h6">
           <div className="h-fit w-fit rounded-full bg-gray p-[6px]">
             <Icon width="20px" height="20px" />
           </div>
