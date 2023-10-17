@@ -137,7 +137,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     await addWatchList(data);
   };
   const rowElementProps = (item: any) => {
-    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug : item.id }) };
+    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug ?? item.id : item.id }) };
   };
 
   return (
