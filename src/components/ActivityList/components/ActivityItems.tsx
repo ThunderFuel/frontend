@@ -20,6 +20,8 @@ const activityTypes: any = {
   Mints: "Mint",
   Transfers: "Transfer",
 };
+
+const priceExcludeActiveTypes = ["Transfers", "Mints"];
 const ActivityType = ({ item }: any) => {
   const Icon = item.typeIcon ?? IconHand;
 
@@ -113,7 +115,9 @@ const ActivityItems = (props: any) => {
       text: "PRICE",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.price} priceClassName="text-h6" />,
+      render: (item) => {
+        return <EthereumPrice price={item.price} priceClassName="text-h6" isNull={priceExcludeActiveTypes.includes(item.type)} />;
+      },
     },
     {
       key: "from",
