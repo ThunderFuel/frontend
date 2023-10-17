@@ -9,10 +9,11 @@
 
 .tooltip .content {
   visibility: hidden;
+  z-index: 1;
   @apply opacity-0;
   @apply transform ease-in duration-75;
   @apply mt-1;
-  @apply absolute top-full left-1/2 -translate-x-1/2;
+  @apply fixed top-full left-1/2 -translate-x-1/2;
   @apply text-head6 font-spaceGrotesk text-white;
   @apply bg-bg-light border border-gray rounded-md;
   @apply whitespace-nowrap;
@@ -44,7 +45,7 @@
 .tooltip.top .content {
   top: initial;
   margin-top: initial;
-  @apply bottom-full mb-1.5;
+  @apply mb-1.5 -translate-y-[125%];
 }
 
 .tooltip.top .content .arrow {
@@ -59,7 +60,7 @@
 .tooltip.bottom .content {
   top: initial;
   margin-top: initial;
-  @apply top-full;
+  @apply top-full translate-y-2/3;
 }
 
 .tooltip.right .content {
