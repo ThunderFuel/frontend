@@ -29,7 +29,7 @@ const EthereumPrice = ({
 
   const Component = lthMinLimit && !fullPrice ? Tooltip : EmptyFragment;
 
-  const text = isNull ? "-" : fullPrice ? price : priceText;
+  const text = isNull && !priceValue ? "-" : fullPrice ? price : priceText;
 
   return (
     <Component content={`${price} ETH`}>

@@ -57,7 +57,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       text: "floor prıce",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.floor} />,
+      render: (item) => <EthereumPrice isNull={true} price={item.floor} />,
     },
     {
       key: "topTrait",
@@ -71,7 +71,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       text: "lısted at",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.price} />,
+      render: (item) => <EthereumPrice isNull={true} price={item.price} />,
     },
     {
       key: "proceed",
