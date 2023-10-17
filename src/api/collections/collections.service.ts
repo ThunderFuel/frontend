@@ -53,8 +53,8 @@ export default {
       [ActivityFilters.Sales]: { icon: IconMarketBasket, name: "Sales" },
       [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transfers" },
       [ActivityFilters.Listings]: { icon: IconTag, name: "Listings" },
-      [ActivityFilters.OfferCancel]: { icon: IconOfferCancel, name: "Offer Cancel" },
-      [ActivityFilters.ListingCancel]: { icon: IconListingCancel, name: "Listing Cancel" },
+      [ActivityFilters.OfferCancel]: { icon: IconOfferCancel, name: "Offer Cancelled" },
+      [ActivityFilters.ListingCancel]: { icon: IconListingCancel, name: "Listing Cancelled" },
     };
   },
   addWatchList(data: WatchListRequest) {
