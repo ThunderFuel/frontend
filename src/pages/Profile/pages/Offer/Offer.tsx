@@ -91,6 +91,7 @@ const Offer = () => {
           type: CheckoutType.CancelOffer,
           item: item,
           price: item.price,
+          cancelOrderIds: [item.id],
           onCheckoutComplete: fetchOffers,
         })
       );

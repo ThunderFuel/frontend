@@ -210,7 +210,9 @@ const Offers = ({ onBack }: { onBack: any }) => {
             setCheckout({
               type: CheckoutType.CancelOffer,
               item: item,
+              price: item.price,
               onCheckoutComplete: onBack,
+              cancelOrderIds: [item.id],
             })
           );
           dispatch(toggleCheckoutModal());
