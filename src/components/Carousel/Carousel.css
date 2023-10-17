@@ -111,6 +111,11 @@
   outline: 0;
 }
 
+.dark .carousel-control-prev:hover,
+.dark .carousel-control-next:hover {
+  color: #ffffff;
+}
+
 .carousel-control-prev {
   left: 0;
 }
