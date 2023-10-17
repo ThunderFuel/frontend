@@ -33,7 +33,7 @@ NftImages.displayName = "NftImages";
 
 const Change = ({ change }: { change: any }) => {
   const isNull = change === 0 || change === null;
-  const text = !isNull ? `${change}%` : "-";
+  const text = !isNull ? `${change.toFixed(2)}%` : "-";
   const className = isNull ? "text-white" : change < 0 ? "text-red" : "text-green";
 
   return (
