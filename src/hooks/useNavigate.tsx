@@ -22,7 +22,7 @@ const UseNavigate = () => {
 
   return Object.assign(_navivate, {
     collectionNavigate: (id: any, slug: any) => {
-      _navivate(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? slug : id });
+      _navivate(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? slug ?? id : id });
     },
   });
 };

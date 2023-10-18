@@ -33,7 +33,7 @@ NftImages.displayName = "NftImages";
 
 const Change = ({ change }: { change: any }) => {
   const isNull = change === 0 || change === null;
-  const text = !isNull ? `${change}%` : "-";
+  const text = !isNull ? `${change.toFixed(2)}%` : "-";
   const className = isNull ? "text-white" : change < 0 ? "text-red" : "text-green";
 
   return (
@@ -137,7 +137,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     await addWatchList(data);
   };
   const rowElementProps = (item: any) => {
-    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug : item.id }) };
+    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug ?? item.id : item.id }) };
   };
 
   return (

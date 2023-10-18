@@ -9,12 +9,12 @@ const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
   const [isDarkMode, setIsDarkModa] = React.useState<boolean>(true);
   const [gasFee, setGasFee] = React.useState<any>(0);
-  const [ethPrice, setEthPrice] = React.useState(0);
+  const [ethPrice, setEthPrice] = React.useState<any>(0);
 
   const getData = async () => {
     const response = await etherscanService.getData();
 
-    setEthPrice(response.result.ethusd);
+    setEthPrice(parseFloat(response.result.ethusd).toFixed(2));
     setGasFee(response.result.safeGasPrice);
   };
 

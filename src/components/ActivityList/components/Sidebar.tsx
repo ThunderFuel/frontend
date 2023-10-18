@@ -35,7 +35,7 @@ const Sidebar = ({ className = "w-[280px]", hiddenTabOffset = false }: any) => {
                 className={clsx("rounded-md gap-1 border border-gray text-gray-light items-center body-medium cursor-pointer hover:text-white", isActive ? "text-white bg-gray" : "bg-bg")}
               >
                 <Checkbox containerClassName={"w-full p-2.5"} checked={isActive} onClick={() => onClick(index)} name="activity-type">
-                  <div className="flex w-full">
+                  <div className="flex w-full gap-1">
                     <Icon className="w-5 h-5" />
                     {filter.name}
                   </div>
