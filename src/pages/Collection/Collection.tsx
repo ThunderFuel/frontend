@@ -13,24 +13,29 @@ import ReadMore from "components/ReadMore";
 import { useAppSelector } from "store";
 import UseNavigate from "hooks/useNavigate";
 import Button from "components/Button";
-import { IconFuelWallet, IconPencil } from "icons";
+import { IconFuelWallet, IconLinea, IconPencil } from "icons";
 import { PATHS } from "router/config/paths";
+import { isObjectEmpty } from "utils";
 
 const EDITABLE_USER = 708;
 
-const CollectionProvider = () => {
-  return (
-    <div className="flex text-h6 gap-1 items-center text-white">
-      <span className="text-gray-light">on</span>
-      <span className="flex gap-2.5 items-center">
-        Fuel
-        <span className="flex items-center justify-center border border-gray rounded-full w-7 h-7 p-1" style={{ backgroundColor: "black" }}>
-          <IconFuelWallet />
-        </span>
-      </span>
-    </div>
-  );
-};
+export const CollectionProvider = ({ kind }: any) => (
+  <div className="flex items-center gap-2.5">
+    <h6 className="text-h6 text-gray-light">
+      on <span className="text-white">{kind ? "Linea" : "Fuel"}</span>
+    </h6>
+    {kind ? (
+      <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+        <IconLinea className="w-[18px] h-[18px]" />
+      </div>
+    ) : (
+      <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+        <IconFuelWallet className="w-[18px] h-[18px]" />
+      </div>
+    )}
+  </div>
+);
+
 const Collection = () => {
   const navigate = UseNavigate();
 
@@ -53,6 +58,8 @@ const Collection = () => {
     });
   }, [collectionId]);
 
+  console.log(collection.kind);
+
   return (
     <>
       <div className="container-fluid py-10">
@@ -69,7 +76,7 @@ const Collection = () => {
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
                 <div className="flex gap-5">
                   <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
-                  <CollectionProvider />
+                  {!isObjectEmpty(collection) && <CollectionProvider kind={collection?.kind} />}
                   {user.id === EDITABLE_USER && (
                     <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
                       EDIT COLLECTION <IconPencil />

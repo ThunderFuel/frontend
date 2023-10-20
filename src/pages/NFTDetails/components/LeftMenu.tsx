@@ -7,7 +7,7 @@ import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { addressFormat, compareAddresses, formatPrice } from "utils";
+import { addressFormat, compareAddresses, formatPrice, isObjectEmpty } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -23,6 +23,7 @@ import { AssetMockNFT1 } from "assets";
 import { createWalletClient, custom, parseEther } from "viem";
 import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
 import { goerli, linea } from "wagmi/chains";
+import { CollectionProvider } from "pages/Collection/Collection";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -225,7 +226,7 @@ const LeftMenu = (props: any) => {
     return isConnected ? (compareAddresses(nft.bestOffer?.user?.walletAddress, user.walletAddress) ? true : false) : false;
   };
 
-  const isMultipleEdition = nft.kind === "erc1155";
+  const isMultipleEdition = nft?.kind === "erc1155";
 
   return (
     <div className="flex flex-col border-r border-gray">
@@ -250,20 +251,7 @@ const LeftMenu = (props: any) => {
                 Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
               </h6>
             </div>
-            <div className="flex items-center gap-2.5">
-              <h6 className="text-h6 text-gray-light">
-                on <span className="text-white">{nft?.kind === "erc721" ? "Linea" : "Fuel"}</span>
-              </h6>
-              {nft?.kind === "erc721" ? (
-                <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
-                  <IconLinea className="w-[18px] h-[18px]" />
-                </div>
-              ) : (
-                <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
-                  <IconFuelWallet className="w-[18px] h-[18px]" />
-                </div>
-              )}
-            </div>
+            {!isObjectEmpty(nft) && <CollectionProvider kind={nft?.kind} />}
           </div>
           {isMultipleEdition && (
             <div className="flex items-center gap-4">

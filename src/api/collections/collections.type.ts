@@ -82,6 +82,7 @@ export interface CollectionResponse {
   watched: boolean;
   supply: number;
   royalty: number;
+  kind?: string;
 }
 
 export interface CollectionItemsRequest {
