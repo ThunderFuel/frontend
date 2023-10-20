@@ -109,7 +109,6 @@ const Box = ({
           <Button
             className="btn w-full btn-sm no-bg border-none text-white"
             onClick={() => {
-              dispatch(setYourCurrentOffer(item.price));
               dispatch(setRightMenu(RightMenuType.UpdateOffer));
             }}
           >
@@ -240,6 +239,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
               cancelOrderIds: [item.id],
             })
           );
+          dispatch(setYourCurrentOffer(item.price));
           dispatch(setRightMenu(RightMenuType.UpdateOffer));
         }}
         // isProfile={}

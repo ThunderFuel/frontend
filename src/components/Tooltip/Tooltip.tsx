@@ -15,8 +15,9 @@ const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenA
   const [elPosition, setElPosition] = useState<any>({});
   const onMouseEnter = () => {
     if (ref.current) {
-      const x = ref.current?.offsetLeft + ref.current.offsetWidth / 2;
-      const y = ref.current?.offsetTop;
+      const x = ref.current?.getBoundingClientRect().x + ref.current.offsetWidth / 2;
+      const y = ref.current?.getBoundingClientRect().y + ref.current?.getBoundingClientRect().height / 2 - 10;
+
       setElPosition({
         x,
         y,

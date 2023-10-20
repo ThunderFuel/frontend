@@ -1,3 +1,4 @@
+import EthereumPrice from "components/EthereumPrice";
 import { IconEthereum } from "icons";
 import React from "react";
 import { useAppSelector } from "store";
@@ -37,19 +38,17 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
               ? selectedNFT.highestBid && (
                   <>
                     <span className="text-gray-light">Highest Bid</span>
-                    <div className="flex items-center text-orange">
-                      {formatPrice(selectedNFT?.highestBid?.price) ?? "-"}
-                      <IconEthereum className="h-5 w-5" />
+                    <div className="flex text-orange">
+                      <EthereumPrice price={selectedNFT.highestBid?.price} priceClassName="text-head6" />
                     </div>
                   </>
                 )
               : selectedNFT.bestOffer && (
                   <>
                     <span className="text-gray-light">Best Offer</span>
-                    <div className="flex items-center text-orange">
-                      {formatPrice(selectedNFT?.bestOffer?.price) ?? "-"}
-                      <IconEthereum className="h-5 w-5" />
-                    </div>
+                    <span className="flex text-orange">
+                      <EthereumPrice price={selectedNFT.bestOffer?.price} priceClassName="text-head6" />
+                    </span>
                   </>
                 )}
           </div>
@@ -57,8 +56,7 @@ const CartItem = ({ selectedNFT }: { selectedNFT: any }) => {
             <div className="flex justify-between">
               <span className="text-gray-light">Your Current Offer</span>
               <div className="flex items-center text-green">
-                {formatPrice(yourCurrentOffer) ?? "-"}
-                <IconEthereum className="h-5 w-5" />
+                <EthereumPrice price={yourCurrentOffer} priceClassName="text-head6" />
               </div>
             </div>
           )}
