@@ -19,7 +19,7 @@ import { publicProvider } from "wagmi/providers/public";
 // import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { createClient } from "@reservoir0x/reservoir-sdk";
+import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
 import { goerli, linea, mainnet } from "wagmi/chains";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
@@ -49,19 +49,10 @@ const config = createConfig({
 
 createClient({
   chains: [
-    {
-      id: 59144,
-      baseApiUrl: "https://api-linea.reservoir.tools",
-      active: true,
-      apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
-    },
-    {
-      id: 5,
-      baseApiUrl: "https://api-goerli.reservoir.tools/",
-      active: true,
-      apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
-    },
+    { ...reservoirChains.linea, active: true },
+    { ...reservoirChains.goerli, active: true },
   ],
+  apiKey: "151eda75-a312-5fcd-bfac-cf3ea796cb28",
   source: "thundernft.market",
   marketplaceFees: [`0x313A0A2338999cf88F3F7FF935fe9D9128FFB074:200`],
 });

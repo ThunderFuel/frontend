@@ -60,7 +60,18 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
 
   const onComplete = () => {
     try {
-      handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
+      handleTransfer({
+        address,
+        selectedNFT,
+        wallet,
+        user,
+        setApproved,
+        setStartTransaction,
+        setIsFailed,
+        setWagmiSteps,
+        setStepData,
+        wagmiSteps,
+      });
     } catch (e) {
       handleTransactionError({ error: e, setStartTransaction, setIsFailed });
     }

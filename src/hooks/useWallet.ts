@@ -270,8 +270,20 @@ export const useWallet = () => {
     });
   };
 
-  const handleTransfer = ({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData }: any) => {
-    return selectedGateway().handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData });
+  const handleTransfer = ({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData, quantity, wagmiSteps }: any) => {
+    return selectedGateway().handleTransfer({
+      address,
+      selectedNFT,
+      wallet,
+      user,
+      setApproved,
+      setStartTransaction,
+      setIsFailed,
+      setWagmiSteps,
+      setStepData,
+      quantity,
+      wagmiSteps,
+    });
   };
 
   const handleUpdateOffer = ({
