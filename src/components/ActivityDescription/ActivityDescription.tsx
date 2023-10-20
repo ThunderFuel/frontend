@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivityFilters } from "api/collections/collections.service";
-import { addressFormat, formatPrice, timeagoFormat } from "utils";
+import { addressFormat, compareAddresses, timeagoFormat } from "utils";
 import { useAppSelector } from "store";
 import { renderToString } from "react-dom/server";
 import EthereumPrice from "components/EthereumPrice/EthereumPrice";
@@ -21,28 +21,35 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
     if (ActivityFilters.Listings === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">
-          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={price} priceClassName="text-head6" />
         </div>
       )}list by`;
+    }
+    if (ActivityFilters.ListingCancel === activityType) {
+      activeTypeLabel = `${renderToString(
+        <div className="inline-block">
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={price} priceClassName="text-head6" />
+        </div>
+      )}listing canceled by`;
     }
     if (ActivityFilters.Offers === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">
-          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={price} priceClassName="text-head6" />
         </div>
       )}offer made by`;
     }
     if (ActivityFilters.OfferCancel === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">
-          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={formatPrice(price)} priceClassName="text-head6" />
+          <EthereumPrice iconClassName="h-[20px] w-[20px]" price={price} priceClassName="text-head6" />
         </div>
       )}offer canceled by`;
     }
     if (ActivityFilters.Sales === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">
-          <EthereumPrice iconClassName="h-[18px] w-[18px]" price={formatPrice(price)} priceClassName="text-head6" />
+          <EthereumPrice iconClassName="h-[18px] w-[18px]" price={price} priceClassName="text-head6" />
         </div>
       )}sale by`;
     }
@@ -53,7 +60,7 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
       activeTypeLabel = `Minted by`;
     }
 
-    const fromUserContractAddressLabel = user.walletAddress === fromUserContractAddress ? "you" : addressFormat(fromUserContractAddress);
+    const fromUserContractAddressLabel = compareAddresses(user.walletAddress, fromUserContractAddress) ? "you" : addressFormat(fromUserContractAddress);
 
     let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel}</span>`;
 
@@ -63,6 +70,9 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
   } else {
     if (ActivityFilters.Listings === activityType) {
       activeTypeLabel = `Listed by`;
+    }
+    if (ActivityFilters.ListingCancel === activityType) {
+      activeTypeLabel = `Listing canceled by`;
     }
     if (ActivityFilters.Offers === activityType) {
       activeTypeLabel = `Offer made by`;
@@ -77,8 +87,8 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
       activeTypeLabel = `Minted by`;
     }
 
-    const fromUserContractAddressLabel = user.walletAddress === fromUserContractAddress ? "you" : addressFormat(fromUserContractAddress);
-    const toUserContractAddressLabel = user.walletAddress === toUserContractAddress ? "you" : addressFormat(toUserContractAddress);
+    const fromUserContractAddressLabel = compareAddresses(user.walletAddress, fromUserContractAddress) ? "you" : addressFormat(fromUserContractAddress);
+    const toUserContractAddressLabel = compareAddresses(user.walletAddress, toUserContractAddress) ? "you" : addressFormat(toUserContractAddress);
 
     let text = `<span>${activeTypeLabel} ${fromUserContractAddressLabel} to ${toUserContractAddressLabel}</span>, ${!noTime ? timeagoFormat(createdTimeStamp) : ""}`;
     if ([ActivityFilters.Listings, ActivityFilters.Offers, ActivityFilters.Mints, ActivityFilters.Transfers].includes(activityType)) {
