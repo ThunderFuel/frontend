@@ -30,7 +30,7 @@ const ActivityType = ({ item }: any) => {
 };
 const ActivityCollectionItem = ({ item }: any) => {
   return (
-    <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
+    <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5 pr-4">
       <LazyImg className="w-10 h-10 rounded-md basis-10" src={item.token.image} />
       <div className="min-w-0 flex">
         <h6 className="text-h6 text-white text-overflow">{item.token.name ?? "-"}</h6>
@@ -94,6 +94,7 @@ const ActivityItems = (props: any) => {
     {
       key: "item",
       text: `ITEM`,
+      width: "37%",
       align: "flex-start",
       sortValue: 1,
       render: (item) => <ActivityCollectionItem item={item} />,
