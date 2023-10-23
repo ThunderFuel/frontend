@@ -20,14 +20,19 @@ const Activity = () => {
       pageSize: 10,
       ...params,
     });
-    const data = (response.data ?? []).map((item: any) => ({
-      ...item,
-      name: item.token.name,
-      description: "",
-      image: item.token.image,
-      type: filters?.[item.activityType as ActivityFilters].name,
-      typeIcon: filters?.[item.activityType as ActivityFilters].icon,
-    }));
+    const data = (response.data ?? []).map((item: any) => {
+      const filter = filters?.[item.activityType as ActivityFilters] as any;
+
+      return {
+        ...item,
+        name: item.token.name,
+        description: "",
+        image: item.token.image,
+        type: filter.name,
+        subText: filter.subText,
+        typeIcon: filter.icon,
+      };
+    });
 
     setPagination({
       itemsCount: response.itemsCount,

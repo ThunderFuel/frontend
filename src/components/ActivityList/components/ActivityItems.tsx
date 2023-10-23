@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useActivityContext } from "../ActivityContext";
 import Table, { ITableHeader } from "../../Table";
 import { addressFormat, dateFormat, timeagoFormat } from "utils";
@@ -12,30 +12,18 @@ import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
 
-const activityTypes: any = {
-  Sales: "Sale",
-  Offers: "Offer",
-  Listings: "Listing",
-  Bids: "Bid",
-  Mints: "Mint",
-  Transfers: "Transfer",
-};
-
 const priceExcludeActiveTypes = ["Transfers", "Mints"];
 const ActivityType = ({ item }: any) => {
   const Icon = item.typeIcon ?? IconHand;
-
-  const getType: any = useMemo(() => {
-    return activityTypes[item.type] || item.type;
-  }, [item.type]);
 
   return (
     <div className="flex items-center gap-2.5 px-2.5 flex-1">
       <div className="flex-center h-8 basis-8 rounded-full bg-gray">
         <Icon />
       </div>
-      <div className="min-w-0 flex">
-        <h6 className="text-h6 text-overflow">{getType}</h6>
+      <div className="min-w-0 flex flex-col">
+        <h6 className="text-h6 text-overflow">{item.type}</h6>
+        {item.subText && <span className="body-small text-gray-light">{item.subText}</span>}
       </div>
     </div>
   );
