@@ -44,6 +44,9 @@ const CollectionTable = () => {
   const { collectionItems, setSweep, options } = useCollectionListContext();
 
   const onToggleCart = (collection: any) => {
+    if (!collection.salable) {
+      return false;
+    }
     if (!collection.isSelected) {
       dispatch(cartAdd(collection));
     } else {
