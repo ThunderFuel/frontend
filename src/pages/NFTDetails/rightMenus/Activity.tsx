@@ -10,6 +10,7 @@ import ActivityItemDescription from "components/ActivityDescription";
 import ActivityList from "components/ActivityList/ActivityList";
 import { ITableHeader } from "components/Table";
 import ActivityItems from "../../../components/ActivityList/components/ActivityItems";
+import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
 
 const ActivityType = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
@@ -123,23 +124,71 @@ const headers: ITableHeader[] = [
 
 const Activity = ({ onBack }: { onBack: any }) => {
   const [notActiveFilters, setnotActiveFilters] = useState<number[]>([]);
-
+  const [pagination, setPagination] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [activities, setActivities] = useState<any>([]);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const fetchActivities = async () => {
-    const response = await collectionsService.getActivity({ page: 1, pageSize: 10, tokenId: selectedNFT.id });
-    setActivities(response.data);
+  const [params, setParams] = React.useReducer(
+    (prevState: any, nextState: any) => {
+      return { ...prevState, ...nextState };
+    },
+    {
+      continuation: null,
+      tokenId: selectedNFT.id,
+      pageSize: 10,
+      page: 1,
+      type: null,
+    }
+  );
+
+  const getActivityItems = async () => {
+    const { data, ...pagination } = await collectionsService.getActivity(params);
+    setPagination(pagination);
+
+    return {
+      data,
+    };
   };
 
   useEffect(() => {
-    fetchActivities();
+    fetchActivity();
   }, [selectedNFT]);
+
+  const fetchActivity = async () => {
+    if (!isLoading) {
+      setIsLoading(true);
+      setActivities([]);
+      try {
+        const response = await getActivityItems();
+        setActivities(response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const onChangePagination = async () => {
+    if (!!params.continuation || params.page > 1) {
+      setIsLoading(true);
+      try {
+        const response = await getActivityItems();
+
+        setActivities((prevState: any[]) => [...prevState, ...(response.data as any)]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
   function renderItems() {
     const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType) && item.activityType !== ActivityFilters.ListingCancel);
     // const { icon, title, description } = formatActivityData(activity);
 
-    return <ActivityList ActivityItemsContainerClassName="!pt-0" hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />;
+    return (
+      <InfiniteScroll pagination={{}} onChangePagination={onChangePagination} isLoading={isLoading}>
+        <ActivityList ActivityItemsContainerClassName="!pt-0" hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />
+      </InfiniteScroll>
+    );
   }
 
   return (
