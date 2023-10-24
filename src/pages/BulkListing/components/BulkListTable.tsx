@@ -64,7 +64,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       text: "top traıt",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.topTrait} />,
+      render: (item) => <EthereumPrice isNull={true} price={item.topTrait} />,
     },
     {
       key: "listedAt",
