@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
@@ -18,9 +18,6 @@ import { useIsMobile } from "hooks/useIsMobile";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
 import UseNavigate from "hooks/useNavigate";
-import { switchNetwork } from "@wagmi/core";
-import { lineaChainId } from "global-constants";
-import { useWallet } from "hooks/useWallet";
 
 const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
   return <span className="font-spaceGrotesk font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">{count}</span>;
@@ -72,29 +69,17 @@ const HeaderIconButton = React.memo((props: any) => {
 });
 HeaderIconButton.displayName = "HeaderIconButton";
 
-export interface HeaderProps {
-  showCartModal: Dispatch<SetStateAction<boolean>>;
-}
-
-export enum ConnectionStatus {
-  CONNECTED = "connected",
-  RECONNECTING = "isReconnecting",
-  NOT_CONNECTED = "",
-}
+const HeaderWarning = () => {
+  return (
+    <div className="flex-center text-orange border-y border-orange py-1">
+      <IconWarning />
+      <div className="body-small">Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</div>
+    </div>
+  );
+};
 
 const Header = () => {
   const ref = useRef<any>(null);
-  const [connectionStatus, setConnectionStatus] = useState(ConnectionStatus.NOT_CONNECTED);
-  const { getConnectionStatus } = useWallet();
-  const { networkId } = useAppSelector((state) => state.wallet);
-
-  useEffect(() => {
-    getConnectionStatus().then((res) => {
-      if (res === true) setConnectionStatus(ConnectionStatus.CONNECTED);
-      else if (res === "isReconnecting") setConnectionStatus(ConnectionStatus.RECONNECTING);
-      else setConnectionStatus(ConnectionStatus.NOT_CONNECTED);
-    });
-  }, [networkId]);
 
   const setHeaderHeight = () => {
     const cssRoot = document.querySelector(":root");
@@ -104,12 +89,6 @@ const Header = () => {
       cssRoot.style.setProperty("--headerHeight", `${ref.current?.offsetHeight || 0}px`);
     }
   };
-
-  async function handleSwitchNetwork() {
-    await switchNetwork({
-      chainId: 59144,
-    });
-  }
 
   React.useLayoutEffect(() => {
     setHeaderHeight();
@@ -139,18 +118,7 @@ const Header = () => {
                 <HeaderIconButtonGroup />
               </div>
             </div>
-            {connectionStatus === ConnectionStatus.CONNECTED && networkId !== lineaChainId && (
-              <div className="flex-center text-red border-y border-red py-1">
-                <IconWarning />
-                <div className="body-small">
-                  Thunder is available on Linea network. Please check your wallet settings and{" "}
-                  <span className="underline cursor-pointer" onClick={handleSwitchNetwork}>
-                    switch to Linea
-                  </span>
-                  .
-                </div>
-              </div>
-            )}
+            <HeaderWarning />
           </>
           <MobileSearch />
         </>

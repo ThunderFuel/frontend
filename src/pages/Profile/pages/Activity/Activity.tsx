@@ -35,6 +35,7 @@ const Activity = () => {
     });
 
     setPagination({
+      continuation: response.continuation,
       itemsCount: response.itemsCount,
       pageCount: response.pageCount,
       pageSize: response.pageSize,
@@ -52,7 +53,7 @@ const Activity = () => {
   };
 
   const onChangePagination = async (params: any) => {
-    if (params.page > 1) {
+    if (params.page > 1 || !!params.continuation) {
       setIsLoading(true);
       try {
         const response = await getActivityItems({ page: params.page, ...currentFilter });
@@ -64,6 +65,7 @@ const Activity = () => {
     }
   };
   const onChangeFilterValue = (params: any) => {
+    console.log("sjadjasjdajs", params);
     setCurrentFilter(params);
     fetchActivity(params);
   };
