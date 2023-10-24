@@ -12,7 +12,7 @@ import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
 
-const priceExcludeActiveTypes = ["Transfers", "Mints"];
+export const PriceExcludeActiveTypes = ["Transfers", "Mints"];
 const ActivityType = ({ item }: any) => {
   const Icon = item.typeIcon ?? IconHand;
 
@@ -105,7 +105,7 @@ const ActivityItems = (props: any) => {
       width: "10%",
       align: "flex-end",
       render: (item) => {
-        return <EthereumPrice price={item.price} priceClassName="text-h6" isNull={priceExcludeActiveTypes.includes(item.type)} />;
+        return <EthereumPrice price={item.price} priceClassName="text-h6" isNull={PriceExcludeActiveTypes.includes(item.type)} />;
       },
     },
     {

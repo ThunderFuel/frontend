@@ -9,8 +9,8 @@ import collectionsService, { ActivityFilters } from "api/collections/collections
 import ActivityItemDescription from "components/ActivityDescription";
 import ActivityList from "components/ActivityList/ActivityList";
 import { ITableHeader } from "components/Table";
-import ActivityItems from "../../../components/ActivityList/components/ActivityItems";
-import InfiniteScroll from "../../../components/InfiniteScroll/InfiniteScroll";
+import ActivityItems, { PriceExcludeActiveTypes } from "components/ActivityList/components/ActivityItems";
+import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
 
 const ActivityType = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
@@ -93,7 +93,7 @@ const headers: ITableHeader[] = [
     text: "PRICE",
     width: "20%",
     align: "flex-end",
-    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" />,
+    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" isNull={PriceExcludeActiveTypes.includes(item.type)} />,
   },
   {
     key: "from",
