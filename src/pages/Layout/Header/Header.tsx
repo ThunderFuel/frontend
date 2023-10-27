@@ -73,7 +73,12 @@ const HeaderWarning = () => {
   return (
     <div className="flex-center text-orange border-y border-orange py-1">
       <IconWarning />
-      <div className="body-small">Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</div>
+      <div className="body-small flex gap-0.5">
+        <span>Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</span>
+        <a href="https://twitter.com/ThunderbyFuel/status/1717210636285882874?s=20" target="_blank" className="font-bold underline" rel="noreferrer">
+          Learn more.
+        </a>
+      </div>
     </div>
   );
 };
