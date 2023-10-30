@@ -171,6 +171,7 @@ const Activity = ({ onBack }: { onBack: any }) => {
     if (!!params.continuation || params.page > 1) {
       setIsLoading(true);
       try {
+        setParams({ continuation: params.continuation });
         const response = await getActivityItems();
 
         setActivities((prevState: any[]) => [...prevState, ...(response.data as any)]);
