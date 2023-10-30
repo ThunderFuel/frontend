@@ -1,9 +1,9 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { AssetLogo, AssetThunderText } from "assets";
-import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconWallet } from "icons";
+import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconWallet, IconWarning } from "icons";
 
 import SocialMediaIcons from "components/SocialMediaIcons";
 
@@ -123,9 +123,19 @@ const HeaderIconButton = React.memo((props: any) => {
 });
 HeaderIconButton.displayName = "HeaderIconButton";
 
-export interface HeaderProps {
-  showCartModal: Dispatch<SetStateAction<boolean>>;
-}
+const HeaderWarning = () => {
+  return (
+    <div className="flex-center text-orange border-y border-orange py-1">
+      <IconWarning />
+      <div className="body-small flex gap-0.5">
+        <span>Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</span>
+        <a href="https://twitter.com/ThunderbyFuel/status/1717210636285882874?s=20" target="_blank" className="font-bold underline" rel="noreferrer">
+          Learn more.
+        </a>
+      </div>
+    </div>
+  );
+};
 
 const Header = () => {
   const ref = useRef<any>(null);
@@ -166,6 +176,7 @@ const Header = () => {
               </div>
               <HeaderIconButtonGroup />
             </div>
+            <HeaderWarning />
           </div>
           <MobileSearch />
         </>
