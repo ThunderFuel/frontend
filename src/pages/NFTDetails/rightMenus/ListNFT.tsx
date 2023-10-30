@@ -105,7 +105,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
   };
 
   const calculateReceivingAmount = (price: any) => {
-    return price - (price * serviceFee) / 100 - (price * selectedNFT.royalty ?? selectedNFT.collection?.royalty) / 100;
+    return price - (price * serviceFee) / 100 - (price * selectedNFT.collection?.royalty) / 100;
   };
 
   const fetchTopTrait = async () => {
@@ -227,7 +227,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">Creator Earnings</div>
-                <div className={`${selectedNFT.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royaltyFee ? `${selectedNFT.collection?.royaltyFee} %` : "-"}</div>
+                <div className={`${selectedNFT.collection?.royalty ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royalty ? `${selectedNFT.collection?.royalty} %` : "-"}</div>
               </div>
               <div className="flex w-full justify-between">
                 <div className="text-gray-light">You’ll Receive</div>
@@ -262,7 +262,7 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">Creator Earnings</div>
-              <div className={`${selectedNFT.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royaltyFee ? `${selectedNFT.collection?.royaltyFee} %` : "-"}</div>
+              <div className={`${selectedNFT.collection?.royalty ? "" : "text-gray-light"}`}>{selectedNFT.collection?.royalty ? `${selectedNFT.collection?.royalty} %` : "-"}</div>
             </div>
             <div className="flex w-full justify-between">
               <div className="text-gray-light">You’ll Receive</div>

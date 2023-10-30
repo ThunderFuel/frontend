@@ -23,6 +23,8 @@ class WagmiProvider extends BaseProvider {
   }
 
   private handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+    console.log(steps);
+
     const incompleteItems = steps.flatMap((item: any) => {
       const incompleteSubItems = item.items.filter((subItem: any) => subItem.status === "incomplete");
       if (incompleteSubItems.length > 0) {

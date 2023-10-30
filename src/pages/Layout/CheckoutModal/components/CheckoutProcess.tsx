@@ -34,6 +34,8 @@ export const CheckoutProcess = ({
   data,
   approved,
   failed,
+  bulkListItems,
+  bulkUpdateItems,
 }: {
   stepData?: any;
   wagmiSteps?: any;
@@ -41,6 +43,8 @@ export const CheckoutProcess = ({
   data: any;
   approved: any;
   failed: any;
+  bulkListItems?: any;
+  bulkUpdateItems?: any;
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
@@ -95,10 +99,17 @@ export const CheckoutProcess = ({
 
   function hasPreviousIncompleteStep(idx: number) {
     for (let index = 0; index < idx; index++) {
+      if (wagmiSteps[index].items.length > 0) return !isAllItemsCompleted(wagmiSteps[index].items);
       if (wagmiSteps[index]?.items[0].status === "incomplete") return true;
     }
 
     return false;
+  }
+
+  function isAllItemsCompleted(items: any[]) {
+    const incompletedItems = items.filter((item: any) => item.status === "incomplete");
+
+    return incompletedItems.length === 0;
   }
 
   return (
@@ -113,9 +124,11 @@ export const CheckoutProcess = ({
                 return (
                   <CheckoutProcessItem
                     key={`CheckoutProcessItem${idx}`}
-                    status={!hasPreviousIncompleteStep(idx) ? (step.items[0].status === "incomplete" ? Status.pending : Status.done) : Status.notStarted}
+                    status={!hasPreviousIncompleteStep(idx) ? (!isAllItemsCompleted(step.items) ? Status.pending : Status.done) : Status.notStarted}
                     title={step.action}
                     description={step.description}
+                    bulkItems={step.id === "nft-approval" && (bulkListItems?.length > 0 || bulkUpdateItems?.length > 0) ? [...bulkListItems, ...bulkUpdateItems] : null}
+                    stepItems={step.items}
                   />
                 );
             })}
