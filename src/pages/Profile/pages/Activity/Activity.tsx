@@ -56,7 +56,11 @@ const Activity = () => {
     if (params.page > 1 || !!params.continuation) {
       setIsLoading(true);
       try {
-        const response = await getActivityItems({ page: params.page, ...currentFilter });
+        const response = await getActivityItems({
+          page: params.page,
+          continuation: params.continuation,
+          ...currentFilter,
+        });
 
         setActivities((prevState: any[]) => [...prevState, ...(response.data as any)]);
       } finally {
