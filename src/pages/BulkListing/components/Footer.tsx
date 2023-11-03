@@ -59,7 +59,7 @@ const Footer = ({ items, prices }: any) => {
   }, [expiredDateValue]);
 
   const getProceedPrice = React.useMemo(() => {
-    const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * 0.975, 0);
+    const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * (1 - (item.royalty + 2.5) / 100), 0);
 
     return formatPrice(totalProceedPrice);
   }, [bulkItems]);
