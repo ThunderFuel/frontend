@@ -144,7 +144,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
           <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
         </div>
-        <InputEthereum onChange={setoffer} value={offer} type="text" />
+        <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
         {!hasEnoughBalance(balance, offer) && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
