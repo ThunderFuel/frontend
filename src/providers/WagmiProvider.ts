@@ -140,67 +140,67 @@ class WagmiProvider extends BaseProvider {
 
   async handleTransfer({ user, quantity, selectedNFT, address, setStartTransaction, setIsFailed, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
     const isMultiEdition = selectedNFT.kind === "erc1155";
-    try {
-      const wallet = createWalletClient({
-        account: user.walletAddress,
-        chain: linea,
-        transport: custom(window.ethereum),
+    // try {
+    //   const wallet = createWalletClient({
+    //     account: user.walletAddress,
+    //     chain: linea,
+    //     transport: custom(window.ethereum),
+    //   });
+
+    //   const _client = getClient();
+
+    //   return _client.actions
+    //     .transferTokens({
+    //       to: address,
+    //       items: [
+    //         {
+    //           token: selectedNFT.id,
+    //           quantity: quantity ?? 1,
+    //         },
+    //       ],
+    //       wallet: wallet,
+    //       onProgress: (steps: Execute["steps"]) => {
+    //         this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+    //       },
+    //     })
+    //     .catch((error) => {
+    //       handleTransactionError({ error, setStartTransaction, setIsFailed });
+    //     });
+    // } catch (error) {
+    //   handleTransactionError({ error, setStartTransaction, setIsFailed });
+    // }
+
+    if (isMultiEdition) {
+      const config = await prepareWriteContract({
+        address: selectedNFT.contractAddress,
+        abi: erc1155ABI,
+        functionName: "safeTransferFrom",
+        // args: [from, to, id, amount, 0],
       });
 
-      const _client = getClient();
-
-      return _client.actions
-        .transferTokens({
-          to: address,
-          items: [
-            {
-              token: selectedNFT.id,
-              quantity: quantity ?? 1,
-            },
-          ],
-          wallet: wallet,
-          onProgress: (steps: Execute["steps"]) => {
-            this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
-          },
-        })
-        .catch((error) => {
-          handleTransactionError({ error, setStartTransaction, setIsFailed });
+      const { hash } = await writeContract(config);
+      const data = await waitForTransaction({
+        hash,
+      });
+    } else {
+      try {
+        const config = await prepareWriteContract({
+          address: selectedNFT.contractAddress,
+          abi: erc721ABI,
+          functionName: "safeTransferFrom",
+          args: [user.walletAddress, address, BigInt(selectedNFT.tokenOrder)],
         });
-    } catch (error) {
-      handleTransactionError({ error, setStartTransaction, setIsFailed });
+
+        const { hash } = await writeContract(config);
+        console.log({ hash });
+        const data = await waitForTransaction({
+          hash,
+        });
+        console.log({ data });
+      } catch (error) {
+        handleTransactionError({ error, setStartTransaction, setIsFailed });
+      }
     }
-
-    // if (isMultiEdition) {
-    //   const config = await prepareWriteContract({
-    //     address: selectedNFT.contractAddress,
-    //     abi: erc1155ABI,
-    //     functionName: "safeTransferFrom",
-    //     // args: [from, to, id, amount, 0],
-    //   });
-
-    //   const { hash } = await writeContract(config);
-    //   const data = await waitForTransaction({
-    //     hash,
-    //   });
-    // } else {
-    //   try {
-    //     const config = await prepareWriteContract({
-    //       address: selectedNFT.contractAddress,
-    //       abi: erc721ABI,
-    //       functionName: "safeTransferFrom",
-    //       args: [user.walletAddress, address, BigInt(selectedNFT.tokenOrder)],
-    //     });
-
-    //     const { hash } = await writeContract(config);
-    //     console.log({ hash });
-    //     const data = await waitForTransaction({
-    //       hash,
-    //     });
-    //     console.log({ data });
-    //   } catch (error) {
-    //     handleTransactionError({ error, setStartTransaction, setIsFailed });
-    //   }
-    // }
   }
 
   async handleUpdateOffer({
