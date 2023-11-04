@@ -197,6 +197,7 @@ class WagmiProvider extends BaseProvider {
           hash,
         });
         console.log({ data });
+        setApproved(true);
       } catch (error) {
         handleTransactionError({ error, setStartTransaction, setIsFailed });
       }

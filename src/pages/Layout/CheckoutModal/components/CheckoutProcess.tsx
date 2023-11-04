@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { CheckoutProcessItem } from "./CheckoutProcessItem";
-import config from "config";
 import { IconInfo } from "icons";
 import { formatEther } from "viem";
 
@@ -46,6 +45,7 @@ export const CheckoutProcess = ({
   bulkListItems?: any;
   bulkUpdateItems?: any;
 }) => {
+  console.log({ stepData, wagmiSteps, onComplete, data, approved, failed, bulkListItems, bulkUpdateItems });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
   const errorTitle = "Transaction failed";
@@ -56,8 +56,6 @@ export const CheckoutProcess = ({
     purchaseConfirm: Status.notStarted,
   });
   const [partiallyFailed, setPartiallyFailed] = useState(false);
-  const type = config.getConfig("type");
-  const isWagmi = type === "wagmi";
 
   const onSetTransactionStatus = (state: any) => {
     setTransactionStatus((prevState) => ({
@@ -148,8 +146,6 @@ export const CheckoutProcess = ({
               </div>
             )}
           </>
-        ) : isWagmi ? (
-          <></>
         ) : (
           <>
             <CheckoutProcessItem status={transactionStatus.waitingForApproval} title={title2} description={description2} />
