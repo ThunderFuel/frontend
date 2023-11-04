@@ -151,10 +151,16 @@ const Items = () => {
 
     fetchFilters();
 
-    window.addEventListener("CompleteCheckout", fetchFilters);
+    window.addEventListener("CompleteCheckout", () => {
+      fetchFilters();
+      fetchCollections();
+    });
 
     return () => {
-      window.addEventListener("CompleteCheckout", fetchFilters);
+      window.addEventListener("CompleteCheckout", () => {
+        fetchFilters();
+        fetchCollections();
+      });
     };
   }, [collectionId]);
 

@@ -58,8 +58,6 @@ const Collection = () => {
     });
   }, [collectionId]);
 
-  console.log(collection.kind);
-
   return (
     <>
       <div className="container-fluid py-10">

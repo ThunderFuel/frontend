@@ -3,7 +3,7 @@ import Button from "components/Button";
 import { IconArrowRight, IconShoppingCart, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
-import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { toggleWalletModal } from "store/walletSlice";
 
@@ -24,6 +24,12 @@ const CollectionFooter = () => {
     } else
       hasEnoughFunds().then((res: any) => {
         dispatch(setIsInsufficientBalance(!res));
+        dispatch(
+          setCheckout({
+            type: CheckoutType.Standard,
+            onCheckoutComplete: () => window.dispatchEvent(new CustomEvent("CompleteCheckout")),
+          })
+        );
         dispatch(toggleCheckoutModal());
       });
   };

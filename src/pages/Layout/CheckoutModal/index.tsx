@@ -28,6 +28,7 @@ const Index = () => {
     if (checkoutType === CheckoutType.None) dispatch(removeBuyNowItem());
 
     const isValidOnCheckoutComplete = [
+      CheckoutType.Standard,
       CheckoutType.BulkListing,
       CheckoutType.MakeOffer,
       CheckoutType.PlaceBid,
