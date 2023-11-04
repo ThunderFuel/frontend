@@ -45,7 +45,6 @@ export const CheckoutProcess = ({
   bulkListItems?: any;
   bulkUpdateItems?: any;
 }) => {
-  console.log({ stepData, wagmiSteps, onComplete, data, approved, failed, bulkListItems, bulkUpdateItems });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
   const errorTitle = "Transaction failed";
