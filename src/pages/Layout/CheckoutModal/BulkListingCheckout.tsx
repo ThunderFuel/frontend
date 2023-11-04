@@ -23,11 +23,11 @@ const checkoutProcessTexts = {
   description3: "Congrats, your NFT succesfully listed.",
 };
 
-const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
+const Footer = ({ approved, onDone }: { approved: boolean; onDone: any }) => {
   return (
     <div className={clsx("transition-all duration-300 overflow-hidden", approved ? "h-[96px] opacity-100" : "h-0 opacity-0")}>
       <div className={"flex w-full items-center justify-center p-5"}>
-        <Button className="w-full tracking-widest" onClick={() => onClose()}>
+        <Button className="w-full tracking-widest" onClick={onDone}>
           DONE
         </Button>
       </div>
@@ -35,7 +35,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   );
 };
 
-const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose: any; onDone: any }) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
@@ -161,7 +161,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       onClose={() => {
         onClose();
       }}
-      footer={<Footer approved={approved} onClose={onClose} />}
+      footer={<Footer approved={approved} onDone={onDone} />}
     >
       <div className="flex flex-col p-5">
         <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={""} approved={approved} />

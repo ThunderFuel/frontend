@@ -60,7 +60,7 @@ const Index = () => {
     case CheckoutType.ConfirmListing:
       return <ConfirmListingCheckout show={show} onClose={onClose} />;
     case CheckoutType.BulkListing:
-      return <BulkListingCheckout show={show} onClose={onClose} />;
+      return <BulkListingCheckout show={show} onClose={() => dispatch(toggleCheckoutModal())} onDone={onClose} />;
     case CheckoutType.UpdateListing:
       return <ConfirmListingCheckout updateListing={true} show={show} onClose={onClose} />;
     case CheckoutType.Transfer:
