@@ -62,6 +62,7 @@ const BulkListing = () => {
       floor: collectionFloor?.[item.collectionId],
       topTrait: topTraitByToken?.[item.id],
       proceedPrice: formatPrice((prices[item.uid] ?? 0) * (1 - (item.royalty + 2.5) / 100)),
+      royaltyPrice: formatPrice(((prices[item.uid] ?? 0) * item.royalty) / 100),
     }));
   }, [items, collectionFloor, topTraitByToken, prices]);
 

@@ -74,6 +74,18 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       render: (item) => <EthereumPrice isNull={true} price={item.price} />,
     },
     {
+      key: "royalty",
+      text: "royalty",
+      width: "10%",
+      align: "flex-end",
+      render: (item) => (
+        <div className="flex flex-col items-end">
+          <h5 className="text-h5 font-spaceGrotesk text-white"> {item?.royalty}%</h5>
+          <EthereumPrice priceClassName="text-bodySm font-spaceGrotesk text-gray-light" iconClassName="w-4 h-4" price={item?.royaltyPrice} />
+        </div>
+      ),
+    },
+    {
       key: "proceed",
       text: "proceed",
       align: "flex-end",
@@ -81,7 +93,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     },
     {
       key: "price",
-      text: "your prıce",
+      text: "your price",
       align: "flex-end",
       width: "250px",
       render: (item) => {

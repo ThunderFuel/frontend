@@ -66,29 +66,15 @@ const Footer = ({ items, prices }: any) => {
 
   return (
     <footer className="sticky bottom-0 border-y border-gray flex flex-col bg-bg">
-      <div className="px-5 py-2 flex flex-col gap-2 w-full text-gray-light">
-        <div className="flex items-center justify-between">
-          <h6 className="text-h6">Service Fee</h6>
-          <h6 className="text-h6 text-white">2.5%</h6>
-        </div>
-        <div className="flex items-center justify-between">
-          <h6 className="text-h6">Creator Earnings</h6>
-          <h6 className="text-h6 text-white">10%</h6>
-        </div>
-        <div className="flex items-center justify-between">
-          <h6 className="text-h6">You’ll Receive</h6>
-          <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
-        </div>
-      </div>
-      <div className="border-t border-gray flex justify-between px-5 py-4">
-        <div>
-          <div className="text-h6 text-white">Set Duration</div>
-          <div className="flex items-center body-small text-gray-light">
-            <IconInfo />
-            Expiration at {getExpiredDate}
+      <div className="p-5 flex gap-32 w-full text-gray-light">
+        <div className="flex gap-16 flex-shrink-0">
+          <div className="flex flex-col gap-2">
+            <div className="text-h6 text-white">Set Duration</div>
+            <div className="flex items-center body-small text-gray-light">
+              <IconInfo />
+              Expiration at {getExpiredDate}
+            </div>
           </div>
-        </div>
-        <div>
           <SelectExpiredDate
             value={expiredDateValue}
             onChange={(value: any) => {
@@ -96,6 +82,18 @@ const Footer = ({ items, prices }: any) => {
             }}
           />
         </div>
+        <div className="flex flex-col gap-2 w-full">
+          <div className="flex items-center justify-between">
+            <h6 className="text-h6">Service Fee</h6>
+            <h6 className="text-h6 text-white mr-2.5">2.5%</h6>
+          </div>
+          <div className="flex items-center justify-between">
+            <h6 className="text-h6">You’ll Receive</h6>
+            <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-gray p-5">
         <div className="flex gap-4 justify-end">
           <Button
             className="btn-secondary"
