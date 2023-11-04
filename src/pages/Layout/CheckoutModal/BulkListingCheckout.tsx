@@ -153,16 +153,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
   );
 
   return (
-    <Modal
-      backdropDisabled={true}
-      className="checkout"
-      title="Bulk Listing"
-      show={show}
-      onClose={() => {
-        onClose();
-      }}
-      footer={<Footer approved={approved} onDone={onDone} />}
-    >
+    <Modal backdropDisabled={true} className="checkout" title="Bulk Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onDone={onDone} />}>
       <div className="flex flex-col p-5">
         <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={""} approved={approved} />
       </div>
