@@ -1,5 +1,5 @@
 {
- "type":"wagmi",
+  "type": "wagmi",
   "walletList": [
     "wagmi_metamask",
     "wagmi_coinbase",
@@ -8,5 +8,11 @@
   "baseURL": "https://thunder-evm.azurewebsites.net/",
   "collectionPathType": 1,
   "collectionSwapLimit": 20,
-  "hideAllCancelButtons": true
+  "hideAllCancelButtons": true,
+  "userProfileIncludes": [
+    0,
+    1,
+    2,
+    4
+  ]
 }

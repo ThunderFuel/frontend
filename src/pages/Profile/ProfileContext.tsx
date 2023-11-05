@@ -6,6 +6,7 @@ import { contracts, exchangeContractId, provider, strategyFixedPriceContractId }
 import collectionsService from "api/collections/collections.service";
 import { useAppSelector } from "store";
 import { FuelProvider } from "api";
+import config from "../../config";
 
 export const enum FollowType {
   Followers = 0,
@@ -32,7 +33,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
     try {
       const response = await userService.getUser({
         id: userId,
-        includes: [0, 1, 2, 4],
+        includes: config.getConfig("userProfileIncludes"),
       });
 
       setUserInfo(response.data as any);
