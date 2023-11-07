@@ -104,11 +104,14 @@ const Collection = () => {
       pageSize: 20,
       ...filterParam,
     };
+    try {
+      const { data: collectionData, ...paginationData } = await userService.getUserCollections(data);
+      setPagination(paginationData);
 
-    const { data: collectionData, ...paginationData } = await userService.getUserCollections(data);
-    setPagination(paginationData);
-
-    return collectionData;
+      return collectionData;
+    } catch (e) {
+      return userInfo?.tokens ?? [];
+    }
   };
   const onChangePagination = async (params: any) => {
     if (!!params.continuation || params.page > 1) {

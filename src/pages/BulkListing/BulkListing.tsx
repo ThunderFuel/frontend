@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 import { useSelector } from "react-redux";
 import { getBulkListingTableItems } from "store/bulkListingSlice";
 import floorService from "api/floor/floor.service";
-import { formatPrice } from "utils";
 
 const BulkListing = () => {
   const items = useSelector(getBulkListingTableItems);
@@ -61,8 +60,8 @@ const BulkListing = () => {
       ...item,
       floor: collectionFloor?.[item.collectionId],
       topTrait: topTraitByToken?.[item.id],
-      proceedPrice: formatPrice((prices[item.uid] ?? 0) * (1 - (item.royalty + 2.5) / 100)),
-      royaltyPrice: formatPrice(((prices[item.uid] ?? 0) * item.royalty) / 100),
+      proceedPrice: (prices[item.uid] ?? 0) * (1 - (item.royalty + 2.5) / 100),
+      royaltyPrice: ((prices[item.uid] ?? 0) * item.royalty) / 100,
     }));
   }, [items, collectionFloor, topTraitByToken, prices]);
 

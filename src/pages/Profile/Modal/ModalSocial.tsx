@@ -12,6 +12,7 @@ import { addressFormat } from "utils";
 import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
 import NotFound from "components/NotFound";
+import config from "../../../config";
 
 const ModalTitle = () => {
   return <h6 className="text-h5 text-white">Social</h6>;
@@ -59,7 +60,7 @@ const ButtonFollow = ({ followerId }: any) => {
       if (isValid) {
         const response = await userService.getUser({
           id: user.id,
-          includes: [0, 1, 2, 3, 4],
+          includes: config.getConfig("userProfileIncludes"),
         });
         dispatch(setUser(response.data));
       }

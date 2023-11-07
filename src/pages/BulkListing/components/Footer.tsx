@@ -7,7 +7,6 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
-import { formatPrice } from "utils";
 import { CheckoutType, removeBulkItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { removeAll } from "store/bulkListingSlice";
 
@@ -59,9 +58,7 @@ const Footer = ({ items, prices }: any) => {
   }, [expiredDateValue]);
 
   const getProceedPrice = React.useMemo(() => {
-    const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * (1 - (item.royalty + 2.5) / 100), 0);
-
-    return formatPrice(totalProceedPrice);
+    return bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * (1 - (item.royalty + 2.5) / 100), 0);
   }, [bulkItems]);
 
   return (
