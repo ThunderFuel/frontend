@@ -19,6 +19,7 @@ import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 import { formatPrice } from "utils";
 import LazyImg from "../../../LazyImg";
+import NoContent from "../../../NoContent";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -100,6 +101,15 @@ const CollectionTop = React.memo(({ top }: any) => {
   );
 });
 CollectionTop.displayName = "CollectionTop";
+
+const CollectionImage = ({ image }: any) => {
+  if (!image) {
+    return <NoContent className="absolute" />;
+  }
+
+  return <LazyImg alt={image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={image} />;
+};
+
 const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -185,7 +195,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
     <div className={clsx(selectionDisabled ? "collection-item-create-page" : "")}>
       <Link
         to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: collection.id })}
-        className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
+        className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
           {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
@@ -193,10 +203,8 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
               <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
             ) : null
           ) : null}
-          <div className="w-full h-0 pb-[100%] relative bg-gray">
-            {collection.image !== null && (
-              <LazyImg alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
-            )}
+          <div className="w-full h-0 pb-full relative bg-gray">
+            <CollectionImage image={collection.image} />
           </div>
         </div>
         <div className="p-2.5 border-b border-b-gray">
@@ -221,7 +229,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
           )}
         </div>
         {collection.onAuction ? (
-          <div className="flex text-bodySm text-gray-light font-spaceGrotesk gap-[5px] p-2.5">
+          <div className="flex-center body-small text-gray-light gap-1 p-2.5">
             <IconAuction />
             Auction ends in {days}:{hours}:{minutes}
           </div>
