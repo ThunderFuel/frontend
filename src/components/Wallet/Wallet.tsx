@@ -94,8 +94,6 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     </div>
   );
 
-  console.log(`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${user?.walletAddress}`);
-
   return (
     <Modal className="cart" title="Wallet" onClose={onClose} show={show} footer={footer}>
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
