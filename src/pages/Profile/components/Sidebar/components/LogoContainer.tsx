@@ -7,6 +7,8 @@ import { useAppSelector } from "store";
 import { useClickOutside } from "hooks/useClickOutside";
 import clsx from "clsx";
 import useToast from "hooks/useToast";
+import { fueldExplorerLink, lineaExplorerLink } from "global-constants";
+import config from "config";
 
 const WalletDropdown = ({ walletAddress }: any) => {
   const [show, setShow] = React.useState(false);
@@ -23,7 +25,7 @@ const WalletDropdown = ({ walletAddress }: any) => {
     {
       text: "See on Block Explorer",
       onClick: () => {
-        openInNewTab(`https://fuellabs.github.io/block-explorer-v2/address/${walletAddress}`);
+        openInNewTab(`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${walletAddress}`);
         setShow(false);
       },
     },

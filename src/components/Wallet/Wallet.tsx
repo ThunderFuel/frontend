@@ -12,6 +12,8 @@ import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
 import { removeAll } from "store/bulkListingSlice";
 import { removeBulkItems } from "store/checkoutSlice";
+import config from "config";
+import { fueldExplorerLink, lineaExplorerLink } from "global-constants";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
@@ -92,6 +94,8 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     </div>
   );
 
+  console.log(`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${user?.walletAddress}`);
+
   return (
     <Modal className="cart" title="Wallet" onClose={onClose} show={show} footer={footer}>
       <div className="flex pl-5 pt-5 pb-[33px] gap-x-5 font-spaceGrotesk border-b border-gray">
@@ -102,7 +106,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <a
               target="_blank"
               rel="noreferrer"
-              href={`https://fuellabs.github.io/block-explorer-v2/address/${user?.walletAddress}`}
+              href={`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${user?.walletAddress}`}
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
             >
               <IconLink className="w-[15px] h-[15px]" />
