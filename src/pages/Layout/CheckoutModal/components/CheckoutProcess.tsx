@@ -26,6 +26,12 @@ export function handleTransactionError({ error, setStartTransaction, setIsFailed
   }
 }
 
+const updateListingSteps = [
+  { title: "Cancel Listing", description: "Cancel your previous listing first" },
+  { title: "Confirm new listing", description: "Proceed in your wallet and confirm the listing." },
+  { title: "Your NFT listed!", description: "Congrats, your NFT successfully listed." },
+];
+
 export const CheckoutProcess = ({
   stepData,
   wagmiSteps = [],
@@ -35,6 +41,7 @@ export const CheckoutProcess = ({
   failed,
   bulkListItems,
   bulkUpdateItems,
+  updateListing,
 }: {
   stepData?: any;
   wagmiSteps?: any;
@@ -44,6 +51,7 @@ export const CheckoutProcess = ({
   failed: any;
   bulkListItems?: any;
   bulkUpdateItems?: any;
+  updateListing?: any;
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { title1, title2, title3, description1, description2, description3 } = data;
@@ -113,7 +121,32 @@ export const CheckoutProcess = ({
     <div className="flex flex-col w-full ">
       <div className=" flex flex-col p-5 gap-y-[25px] border-gray">
         {/* <CheckoutProcessItem status={transactionStatus.confirmTransaction} title={title1} description={description1} /> */}
-        {wagmiSteps.length > 0 ? (
+        {updateListing ? (
+          wagmiSteps.length > 0 ? (
+            <>
+              <CheckoutProcessItem
+                status={wagmiSteps[0].id === "cancellation-signature" ? (wagmiSteps[0].items[0].status === "incomplete" ? Status.pending : Status.done) : Status.done}
+                title={updateListingSteps[0].title}
+                description={updateListingSteps[0].description}
+                stepItems={wagmiSteps[0].items}
+              />
+              <CheckoutProcessItem
+                status={wagmiSteps[0].id === "nft-approval" ? (!isAllItemsCompleted([...wagmiSteps[0].items, ...wagmiSteps[1].items]) ? Status.pending : Status.done) : Status.notStarted}
+                title={updateListingSteps[1].title}
+                description={updateListingSteps[1].description}
+                stepItems={wagmiSteps[0].items}
+              />
+              <CheckoutProcessItem
+                status={wagmiSteps.length > 1 && wagmiSteps[1].id === "order-signature" ? (wagmiSteps[1].items[0].status === "complete" ? Status.done : Status.notStarted) : Status.notStarted}
+                title={updateListingSteps[2].title}
+                description={updateListingSteps[2].description}
+                isLast={true}
+              />
+            </>
+          ) : (
+            <></>
+          )
+        ) : wagmiSteps.length > 0 ? (
           <>
             {wagmiSteps.map((step: any, idx: number) => {
               if (notNeededStepIds.includes(step.id) && step.items[0].status === "complete") return;
@@ -122,7 +155,7 @@ export const CheckoutProcess = ({
                   <CheckoutProcessItem
                     key={`CheckoutProcessItem${idx}`}
                     status={!hasPreviousIncompleteStep(idx) ? (!isAllItemsCompleted(step.items) ? Status.pending : Status.done) : Status.notStarted}
-                    title={step.action}
+                    title={updateListing ? "Cancel Listing" : step.action}
                     description={step.description}
                     bulkItems={step.id === "nft-approval" && (bulkListItems?.length > 0 || bulkUpdateItems?.length > 0) ? [...bulkListItems, ...bulkUpdateItems] : null}
                     stepItems={step.items}

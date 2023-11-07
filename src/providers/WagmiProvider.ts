@@ -22,7 +22,7 @@ class WagmiProvider extends BaseProvider {
     this.dispatch = useDispatch();
   }
 
-  private handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
+  private handleSteps({ updateListing, steps, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
     console.log(steps);
 
     const incompleteItems = steps.flatMap((item: any) => {
@@ -36,7 +36,7 @@ class WagmiProvider extends BaseProvider {
 
       return [];
     });
-    if (incompleteItems.length === 0) setApproved(true);
+    if (incompleteItems.length === 0 && !updateListing) setApproved(true);
 
     const executableSteps = steps.filter((step: any) => step.items && step.items.length > 0);
     if (wagmiSteps.length === 0) setWagmiSteps(executableSteps);
@@ -63,7 +63,7 @@ class WagmiProvider extends BaseProvider {
     }
   }
 
-  private async cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
+  private async cancelOrder({ updateListing, user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
     try {
       const wallet = createWalletClient({
         account: user.walletAddress,
@@ -79,7 +79,7 @@ class WagmiProvider extends BaseProvider {
           chainId: linea.id,
           wallet,
           onProgress: (steps: Execute["steps"]) => {
-            this.handleSteps({ steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
+            this.handleSteps({ updateListing, steps, setApproved, wagmiSteps, setWagmiSteps, setStepData });
           },
           // options: {
           //     maker:
@@ -88,6 +88,7 @@ class WagmiProvider extends BaseProvider {
         })
         .catch((error) => {
           handleTransactionError({ error, setStartTransaction, setIsFailed });
+          throw new Error("error");
         });
     } catch (error) {
       handleTransactionError({ error, setStartTransaction, setIsFailed });
@@ -226,11 +227,11 @@ class WagmiProvider extends BaseProvider {
   async handleCancelOffer({ cancelOrderIds, user, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction }: any) {
     return this.cancelOrder({ user, cancelOrderIds, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setStartTransaction });
   }
-  async handleCancelListing({ user, selectedNFT, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
+  async handleCancelListing({ updateListing, user, selectedNFT, currentItem, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed }: any) {
     const { data } = await nftdetailsService.getListingOrderId({ id: selectedNFT.id });
     const cancelOrderIds = [data?.id];
 
-    return this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
+    return this.cancelOrder({ updateListing, user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
   }
   handleCancelAuction({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {
     this.cancelOrder({ user, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData });
@@ -302,7 +303,11 @@ class WagmiProvider extends BaseProvider {
     items,
   }: any) {
     if (updateListing) {
-      await this.handleCancelListing({ user, selectedNFT, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
+      try {
+        await this.handleCancelListing({ updateListing, user, selectedNFT, cancelOrderIds, setApproved, wagmiSteps, setWagmiSteps, setStepData, setStartTransaction, setIsFailed });
+      } catch (error) {
+        return;
+      }
     }
 
     const wallet = createWalletClient({
