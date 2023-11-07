@@ -5,7 +5,7 @@ import clsx from "clsx";
 
 const NoContent = ({ className }: any) => {
   return (
-    <div className={clsx("flex flex-col items-center justify-center h-full w-full gap-4 bg-bg rounded-md", className)}>
+    <div className={clsx("flex flex-col items-center justify-center h-full w-full gap-4 bg-bg ", className)}>
       <IconStop className="w-10 h-10 text-gray-light" />
       <span className="font-Inter text-white" style={{ fontSize: "12px" }}>
         No content available.

@@ -18,6 +18,7 @@ import Img from "components/Img";
 import "./nftdetails.css";
 import FullScreenImage from "components/FullScreenImage";
 import Listings from "./rightMenus/Listings";
+import NoContent from "components/NoContent";
 
 const None = React.memo(() => {
   return <div />;
@@ -113,7 +114,11 @@ const NFTDetails = () => {
           <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
             <div className="flex justify-center image-height py-10">
               <div className="relative w-full image-width bg-gray rounded-md">
-                <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
+                {nft.image ? (
+                  <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
+                ) : (
+                  <NoContent className="rounded-md" />
+                )}
               </div>
               <ImageBar nft={nft} toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
             </div>
@@ -127,7 +132,7 @@ const NFTDetails = () => {
             }}
           />
         </div>
-        <FullScreenImage image={nft.image} onClose={() => setshowFullscreenImage(false)} show={showFullscreenImage} />
+        <FullScreenImage image={nft.image ?? ""} onClose={() => setshowFullscreenImage(false)} show={showFullscreenImage} />
       </div>
     </>
   );
