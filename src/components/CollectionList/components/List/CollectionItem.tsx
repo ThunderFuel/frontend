@@ -203,7 +203,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
               <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
             ) : null
           ) : null}
-          <div className="w-full h-0 pb-full relative bg-gray">
+          <div className="w-full h-0 pb-[100%] relative bg-gray">
             <CollectionImage image={collection.image} />
           </div>
         </div>
