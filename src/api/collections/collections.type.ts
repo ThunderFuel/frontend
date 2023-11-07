@@ -36,7 +36,7 @@ export interface CollectionItemResponse {
   isSelected: boolean;
   tokenAttributes: any[];
   collectionId: number;
-  image: string;
+  image: string | null;
   name: string;
   price: number;
   rarity: number;
