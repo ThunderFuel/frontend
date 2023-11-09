@@ -192,8 +192,6 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
     e.preventDefault();
   };
 
-  console.log(collection);
-
   return (
     <div className={clsx(selectionDisabled ? "collection-item-create-page" : "")}>
       <Link
