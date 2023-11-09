@@ -20,6 +20,7 @@ import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 import { formatPrice } from "utils";
 import LazyImg from "../../../LazyImg";
 import NoContent from "../../../NoContent";
+import config from "../../../../config";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -191,6 +192,8 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
     e.preventDefault();
   };
 
+  console.log(collection);
+
   return (
     <div className={clsx(selectionDisabled ? "collection-item-create-page" : "")}>
       <Link
@@ -200,7 +203,9 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         <div className="overflow-hidden relative">
           {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : !selectionDisabled ? (
-              <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
+              config.getConfig("type") === "wagmi" && collection.price !== null ? null : (
+                <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
+              )
             ) : null
           ) : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
