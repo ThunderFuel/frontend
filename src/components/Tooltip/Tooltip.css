@@ -1,10 +1,5 @@
 .tooltip {
-  @apply relative;
-}
-
-.tooltip:hover .content {
-  visibility: visible;
-  opacity: 1;
+  @apply relative cursor-pointer;
 }
 
 .tooltip .content {
