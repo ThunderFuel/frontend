@@ -9,10 +9,10 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
+import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { NativeAssetId } from "fuels";
+import { BaseAssetId } from "fuels";
 import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
@@ -58,8 +58,8 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             price: 1,
             amount: 1,
             nonce: res.data + 1,
-            strategy: strategyAuctionContractId,
-            payment_asset: NativeAssetId,
+            strategy: "", //auction yok ondan kalkti TODO
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(checkoutExpireTime),
             extra_params: {
               extra_address_param: ZERO_B256,
@@ -72,9 +72,9 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         setContracts(contracts, FuelProvider);
 
         try {
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
 
-          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
             await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
             setApproved(true);
           }
@@ -93,7 +93,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             amount: 1,
             nonce: res.data[selectedNFT?.id],
             strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(checkoutExpireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           },
@@ -102,9 +102,9 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         setContracts(contracts, FuelProvider);
 
         try {
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
 
-          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
             await nftdetailsService.tokenUpdateListing([
               {
                 tokenId: selectedNFT.id,
@@ -129,7 +129,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
             amount: 1,
             nonce: res.data + 1,
             strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(checkoutExpireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           },
@@ -138,9 +138,9 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         setContracts(contracts, FuelProvider);
 
         try {
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, order);
+          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
 
-          if (bulkPlaceOrderRes.transactionResult.status.type === "success") {
+          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
             await nftdetailsService.tokenList([
               {
                 tokenId: selectedNFT.id,

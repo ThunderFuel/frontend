@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.38.1
-  Forc version: 0.35.5
-  Fuel-Core version: 0.17.3
+  Fuels version: 0.57.0
+  Forc version: 0.44.0
+  Fuel-Core version: 0.20.4
 */
 
-import { Interface, Contract } from "fuels";
-import type { Provider, Account, AbstractAddress } from "fuels";
+import { Interface, Contract, ContractFactory } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
 import type { RoyaltyManagerAbi, RoyaltyManagerAbiInterface } from "../RoyaltyManagerAbi";
 
 const _abi = {
@@ -29,16 +29,16 @@ const _abi = {
     },
     {
       "typeId": 2,
-      "type": "enum Identity",
+      "type": "enum AccessError",
       "components": [
         {
-          "name": "Address",
-          "type": 10,
+          "name": "CannotReinitialized",
+          "type": 0,
           "typeArguments": null
         },
         {
-          "name": "ContractId",
-          "type": 11,
+          "name": "NotOwner",
+          "type": 0,
           "typeArguments": null
         }
       ],
@@ -46,6 +46,23 @@ const _abi = {
     },
     {
       "typeId": 3,
+      "type": "enum Identity",
+      "components": [
+        {
+          "name": "Address",
+          "type": 7,
+          "typeArguments": null
+        },
+        {
+          "name": "ContractId",
+          "type": 8,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 4,
       "type": "enum Option",
       "components": [
         {
@@ -55,52 +72,54 @@ const _abi = {
         },
         {
           "name": "Some",
-          "type": 4,
+          "type": 6,
           "typeArguments": null
         }
       ],
       "typeParameters": [
-        4
+        6
       ]
     },
     {
-      "typeId": 4,
+      "typeId": 5,
+      "type": "enum RoyaltyManagerErrors",
+      "components": [
+        {
+          "name": "OnlyOwner",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "Initialized",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "CallerMustBeOwnerOrAdmin",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "FeeHigherThanLimit",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "FeeLimitTooHigh",
+          "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 6,
       "type": "generic T",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 5,
-      "type": "str[19]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 6,
-      "type": "str[27]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
       "typeId": 7,
-      "type": "str[30]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 8,
-      "type": "str[42]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 9,
-      "type": "str[8]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 10,
       "type": "struct Address",
       "components": [
         {
@@ -112,7 +131,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 11,
+      "typeId": 8,
       "type": "struct ContractId",
       "components": [
         {
@@ -124,12 +143,63 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 12,
+      "typeId": 9,
       "type": "struct OwnershipRenounced",
       "components": [
         {
           "name": "previous_owner",
-          "type": 2,
+          "type": 3,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 10,
+      "type": "struct OwnershipSet",
+      "components": [
+        {
+          "name": "new_owner",
+          "type": 3,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 11,
+      "type": "struct OwnershipTransferred",
+      "components": [
+        {
+          "name": "new_owner",
+          "type": 3,
+          "typeArguments": null
+        },
+        {
+          "name": "previous_owner",
+          "type": 3,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 12,
+      "type": "struct RoyaltyInfo",
+      "components": [
+        {
+          "name": "collection",
+          "type": 8,
+          "typeArguments": null
+        },
+        {
+          "name": "receiver",
+          "type": 3,
+          "typeArguments": null
+        },
+        {
+          "name": "fee",
+          "type": 14,
           "typeArguments": null
         }
       ],
@@ -137,11 +207,11 @@ const _abi = {
     },
     {
       "typeId": 13,
-      "type": "struct OwnershipSet",
+      "type": "struct RoyaltyRegistryEvent",
       "components": [
         {
-          "name": "new_owner",
-          "type": 2,
+          "name": "royalty_info",
+          "type": 12,
           "typeArguments": null
         }
       ],
@@ -149,57 +219,6 @@ const _abi = {
     },
     {
       "typeId": 14,
-      "type": "struct OwnershipTransferred",
-      "components": [
-        {
-          "name": "new_owner",
-          "type": 2,
-          "typeArguments": null
-        },
-        {
-          "name": "previous_owner",
-          "type": 2,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 15,
-      "type": "struct RoyaltyInfo",
-      "components": [
-        {
-          "name": "collection",
-          "type": 11,
-          "typeArguments": null
-        },
-        {
-          "name": "receiver",
-          "type": 2,
-          "typeArguments": null
-        },
-        {
-          "name": "fee",
-          "type": 17,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 16,
-      "type": "struct RoyaltyRegistryEvent",
-      "components": [
-        {
-          "name": "royalty_info",
-          "type": 15,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 17,
       "type": "u64",
       "components": null,
       "typeParameters": null
@@ -211,7 +230,7 @@ const _abi = {
       "name": "get_royalty_fee_limit",
       "output": {
         "name": "",
-        "type": 17,
+        "type": 14,
         "typeArguments": null
       },
       "attributes": [
@@ -227,18 +246,18 @@ const _abi = {
       "inputs": [
         {
           "name": "collection",
-          "type": 11,
+          "type": 8,
           "typeArguments": null
         }
       ],
       "name": "get_royalty_info",
       "output": {
         "name": "",
-        "type": 3,
+        "type": 4,
         "typeArguments": [
           {
             "name": "",
-            "type": 15,
+            "type": 12,
             "typeArguments": null
           }
         ]
@@ -275,11 +294,11 @@ const _abi = {
       "name": "owner",
       "output": {
         "name": "",
-        "type": 3,
+        "type": 4,
         "typeArguments": [
           {
             "name": "",
-            "type": 2,
+            "type": 3,
             "typeArguments": null
           }
         ]
@@ -297,17 +316,17 @@ const _abi = {
       "inputs": [
         {
           "name": "collection",
-          "type": 11,
+          "type": 8,
           "typeArguments": null
         },
         {
           "name": "receiver",
-          "type": 2,
+          "type": 3,
           "typeArguments": null
         },
         {
           "name": "fee",
-          "type": 17,
+          "type": 14,
           "typeArguments": null
         }
       ],
@@ -349,7 +368,7 @@ const _abi = {
       "inputs": [
         {
           "name": "new_fee_limit",
-          "type": 17,
+          "type": 14,
           "typeArguments": null
         }
       ],
@@ -373,7 +392,7 @@ const _abi = {
       "inputs": [
         {
           "name": "new_owner",
-          "type": 2,
+          "type": 3,
           "typeArguments": null
         }
       ],
@@ -400,14 +419,14 @@ const _abi = {
       "loggedType": {
         "name": "",
         "type": 5,
-        "typeArguments": null
+        "typeArguments": []
       }
     },
     {
       "logId": 1,
       "loggedType": {
         "name": "",
-        "type": 13,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -415,31 +434,31 @@ const _abi = {
       "logId": 2,
       "loggedType": {
         "name": "",
-        "type": 8,
-        "typeArguments": null
+        "type": 10,
+        "typeArguments": []
       }
     },
     {
       "logId": 3,
       "loggedType": {
         "name": "",
-        "type": 8,
-        "typeArguments": null
+        "type": 5,
+        "typeArguments": []
       }
     },
     {
       "logId": 4,
       "loggedType": {
         "name": "",
-        "type": 7,
-        "typeArguments": null
+        "type": 5,
+        "typeArguments": []
       }
     },
     {
       "logId": 5,
       "loggedType": {
         "name": "",
-        "type": 16,
+        "type": 5,
         "typeArguments": []
       }
     },
@@ -447,15 +466,15 @@ const _abi = {
       "logId": 6,
       "loggedType": {
         "name": "",
-        "type": 9,
-        "typeArguments": null
+        "type": 13,
+        "typeArguments": []
       }
     },
     {
       "logId": 7,
       "loggedType": {
         "name": "",
-        "type": 12,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -463,31 +482,55 @@ const _abi = {
       "logId": 8,
       "loggedType": {
         "name": "",
-        "type": 9,
-        "typeArguments": null
+        "type": 2,
+        "typeArguments": []
       }
     },
     {
       "logId": 9,
       "loggedType": {
         "name": "",
-        "type": 6,
-        "typeArguments": null
+        "type": 9,
+        "typeArguments": []
       }
     },
     {
       "logId": 10,
       "loggedType": {
         "name": "",
-        "type": 9,
-        "typeArguments": null
+        "type": 2,
+        "typeArguments": []
       }
     },
     {
       "logId": 11,
       "loggedType": {
         "name": "",
-        "type": 14,
+        "type": 5,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 12,
+      "loggedType": {
+        "name": "",
+        "type": 2,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 13,
+      "loggedType": {
+        "name": "",
+        "type": 2,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 14,
+      "loggedType": {
+        "name": "",
+        "type": 11,
         "typeArguments": []
       }
     }
@@ -506,5 +549,14 @@ export class RoyaltyManagerAbi__factory {
     accountOrProvider: Account | Provider
   ): RoyaltyManagerAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as RoyaltyManagerAbi
+  }
+  static async deployContract(
+    bytecode: BytesLike,
+    wallet: Account,
+    options: DeployContractOptions = {}
+  ): Promise<RoyaltyManagerAbi> {
+    const factory = new ContractFactory(bytecode, _abi, wallet);
+    const contract = await factory.deployContract(options);
+    return contract as unknown as RoyaltyManagerAbi;
   }
 }

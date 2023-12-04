@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import clsx from "clsx";
 
@@ -8,9 +9,8 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyAuctionContractId } from "global-constants";
+import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { contracts } from "global-constants";
 import { FuelProvider } from "api";
 
 const checkoutProcessTexts = {
@@ -36,27 +36,27 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    setContracts(contracts, FuelProvider);
-    nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
-        .then(() => {
-          nftdetailsService.tokenCancelAuction(selectedNFT.id);
-          setApproved(true);
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
-    });
+    throw new Error("DAHA HAZIR DEGIL");
+    // setContracts(contracts, FuelProvider);
+    // nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
+    //   cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
+    //     .then(() => {
+    //       nftdetailsService.tokenCancelAuction(selectedNFT.id);
+    //       setApproved(true);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //       if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+    //         setStartTransaction(false);
+    //       else setIsFailed(true);
+    //     });
+    // });
   };
 
   React.useEffect(() => {

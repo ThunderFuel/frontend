@@ -8,9 +8,10 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { bulkCancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { FuelProvider } from "../../../api";
 import collectionsService from "api/collections/collections.service";
+import offerService from "api/offer/offer.service";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
@@ -43,21 +44,29 @@ const CancelAllListingCheckout = ({ show, onClose }: { show: boolean; onClose: a
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
     const params = { userId: user.id };
-
-    cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, false)
-      .then((res) => {
-        if (res.transactionResult.status.type === "success") {
-          collectionsService
-            .cancelAllListings(params)
-            .then(() => setApproved(true))
-            .catch(() => setIsFailed(true));
-        }
+    offerService
+      .getAllOfferandListingIndexes({
+        userId: user.id,
+        getListings: true,
+        getOffers: false,
       })
-      .catch((e) => {
-        console.log(e);
-        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-          setStartTransaction(false);
-        else setIsFailed(true);
+      .then((res) => {
+        const cancelOrders = res.data.listingIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: false }));
+        bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
+          .then((res) => {
+            if (res?.transactionResult.isStatusSuccess) {
+              collectionsService
+                .cancelAllListings(params)
+                .then(() => setApproved(true))
+                .catch(() => setIsFailed(true));
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+              setStartTransaction(false);
+            else setIsFailed(true);
+          });
       });
   };
 

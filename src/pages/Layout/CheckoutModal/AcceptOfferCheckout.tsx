@@ -9,8 +9,9 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
-import { approveAndExecuteOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
+import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { BaseAssetId } from "fuels";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
 import { FuelProvider } from "api";
@@ -59,9 +60,9 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
       setContracts(contracts, FuelProvider);
 
-      approveAndExecuteOrder(exchangeContractId, provider, wallet, order, transferManagerContractId)
+      executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
         .then((res) => {
-          if (res.transactionResult.status.type === "success") {
+          if (res.transactionResult.isStatusSuccess) {
             offerService.acceptOffer({ id: currentItem.id }).then(() => {
               userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
               onCheckoutComplete();

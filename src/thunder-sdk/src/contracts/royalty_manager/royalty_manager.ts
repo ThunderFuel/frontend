@@ -76,7 +76,7 @@ export async function getRoyaltyInfo(
         const _collection: ContractIdInput = { value: collection };
         const { value } = await contract.functions
             .get_royalty_info(_collection)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("RoyaltyManager: " + err);
@@ -110,7 +110,7 @@ export async function getRoyaltyFeeLimit(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_royalty_fee_limit()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("RoyaltyManager: " + err);
@@ -126,7 +126,7 @@ export async function owner(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .owner()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("RoyaltyManager: " + err);

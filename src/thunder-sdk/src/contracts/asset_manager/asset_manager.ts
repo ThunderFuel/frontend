@@ -1,6 +1,6 @@
 import { Provider, WalletUnlocked, WalletLocked, BigNumberish } from "fuels";
 import { AssetManagerAbi__factory } from "../../types/asset_manager";
-import { AssetManagerAbi, ContractIdInput, IdentityInput } from "../../types/asset_manager/AssetManagerAbi";
+import { AssetManagerAbi, AssetIdInput, IdentityInput } from "../../types/asset_manager/AssetManagerAbi";
 
 async function setup(
     contractId: string,
@@ -45,7 +45,7 @@ export async function addAsset(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet)
-        const _asset: ContractIdInput = { value: asset };
+        const _asset: AssetIdInput = { value: asset };
         const { transactionResult, transactionResponse } = await contract.functions
             .add_asset(_asset)
             .txParams({gasPrice: 1})
@@ -60,13 +60,12 @@ export async function removeAsset(
     contractId: string,
     provider: string,
     wallet: string | WalletLocked,
-    asset: string,
+    index: BigNumberish,
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _asset: ContractIdInput = { value: asset };
         const { transactionResult, transactionResponse } = await contract.functions
-            .remove_asset(_asset)
+            .remove_asset(index)
             .txParams({gasPrice: 1})
             .call();
         return { transactionResponse, transactionResult };
@@ -82,10 +81,10 @@ export async function isAssetSupported(
 ) {
     try {
         const contract = await setup(contractId, provider);
-        const _asset: ContractIdInput = { value: asset };
+        const _asset: AssetIdInput = { value: asset };
         const { value } = await contract.functions
             .is_asset_supported(_asset)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("AssetManager: " + err);
@@ -102,7 +101,7 @@ export async function getSupportedAsset(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_supported_asset(index)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("AssetManager: " + err);
@@ -118,7 +117,7 @@ export async function getCountSupportedAssets(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_count_supported_assets()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("AssetManager: " + err);
@@ -134,7 +133,7 @@ export async function owner(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .owner()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("AssetManager: " + err);

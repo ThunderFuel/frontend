@@ -8,7 +8,7 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { cancelAllOrders, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { bulkCancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { FuelProvider } from "../../../api";
 import offerService from "api/offer/offer.service";
 
@@ -43,21 +43,33 @@ const CancelAllOffersListingsCheckout = ({ show, onClose }: { show: boolean; onC
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
     const params = { userId: user.id };
-
-    cancelAllOrders(exchangeContractId, provider, wallet, strategyFixedPriceContractId)
-      .then((res) => {
-        if (res.transactionResult.status.type === "success") {
-          offerService
-            .cancelAllOfferAndListings(params)
-            .then(() => setApproved(true))
-            .catch(() => setIsFailed(true));
-        }
+    offerService
+      .getAllOfferandListingIndexes({
+        userId: user.id,
+        getListings: true,
+        getOffers: true,
       })
-      .catch((e) => {
-        console.log(e);
-        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-          setStartTransaction(false);
-        else setIsFailed(true);
+      .then((res) => {
+        const cancelOfferOrders = res.data.orderIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: true }));
+        const cancelListingOrders = res.data.listingIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: false }));
+
+        const allOrders = cancelOfferOrders.concat(cancelListingOrders);
+
+        bulkCancelOrder(exchangeContractId, provider, wallet, allOrders)
+          .then((res) => {
+            if (res?.transactionResult.isStatusSuccess) {
+              offerService
+                .cancelAllOfferAndListings(params)
+                .then(() => setApproved(true))
+                .catch(() => setIsFailed(true));
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+              setStartTransaction(false);
+            else setIsFailed(true);
+          });
       });
   };
 

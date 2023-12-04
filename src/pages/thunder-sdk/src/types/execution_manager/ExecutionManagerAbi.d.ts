@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.38.1
-  Forc version: 0.35.5
-  Fuel-Core version: 0.17.3
+  Fuels version: 0.57.0
+  Forc version: 0.44.0
+  Fuel-Core version: 0.20.4
 */
 
 import type {
@@ -22,6 +22,10 @@ import type {
 
 import type { Option, Enum } from "./common";
 
+export enum AccessErrorInput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
+export enum AccessErrorOutput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
+export enum ExecutionManagerErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', StrategyAlreadyWhitelisted = 'StrategyAlreadyWhitelisted', StrategyNotWhitelisted = 'StrategyNotWhitelisted', ZeroLengthVec = 'ZeroLengthVec', IndexOutOfBound = 'IndexOutOfBound' };
+export enum ExecutionManagerErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', StrategyAlreadyWhitelisted = 'StrategyAlreadyWhitelisted', StrategyNotWhitelisted = 'StrategyNotWhitelisted', ZeroLengthVec = 'ZeroLengthVec', IndexOutOfBound = 'IndexOutOfBound' };
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
 
@@ -55,7 +59,7 @@ interface ExecutionManagerAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'initialize', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'is_strategy_whitelisted', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'owner', values: []): Uint8Array;
-  encodeFunctionData(functionFragment: 'remove_strategy', values: [ContractIdInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'remove_strategy', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'renounce_ownership', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'transfer_ownership', values: [IdentityInput]): Uint8Array;
 
@@ -79,7 +83,7 @@ export class ExecutionManagerAbi extends Contract {
     initialize: InvokeFunction<[], void>;
     is_strategy_whitelisted: InvokeFunction<[strategy: ContractIdInput], boolean>;
     owner: InvokeFunction<[], Option<IdentityOutput>>;
-    remove_strategy: InvokeFunction<[strategy: ContractIdInput], void>;
+    remove_strategy: InvokeFunction<[index: BigNumberish], void>;
     renounce_ownership: InvokeFunction<[], void>;
     transfer_ownership: InvokeFunction<[new_owner: IdentityInput], void>;
   };

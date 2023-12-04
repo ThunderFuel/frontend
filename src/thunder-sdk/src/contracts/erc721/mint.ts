@@ -1,77 +1,110 @@
-import { BigNumberish, WalletLocked } from "fuels/*";
-import { mint, setApprovalForAll } from "./erc721";
+import { BigNumberish, Script, WalletUnlocked, Provider, Contract, WalletLocked } from "fuels"
+import { mint, bulkMint } from "./erc721"
+import { NFTContractAbi__factory } from "../../types/erc721/factories/NFTContractAbi__factory";
+import bytecode from "../../scripts/bulk_mint/binFile";
+import abi from "../../scripts/bulk_mint/out/bulk_mint-abi.json";
 
 const nfts = [
-  "0x985cfb25b18153750b51024e559670d093d81c97b22467a3cc849e211de055c3",
-  "0xb96d28549d1a22f716c76abd7052171d554d0b84c4c492f5cadf3eb6273ffac1",
-  "0x2027da4b620609162cae3e1f07802b0e59b1beff71269121395b27d652e20c10",
-  "0x8f1441f609b02de2c367e1c8c785e89d0dca1bd6fc1e2eccb9e982bf905791ce",
-  "0x7fdb57ceb8e72598fbccec06af601503840a3ed029a9dc5443dac76b998dc422",
-  "0x1b8b36002a10f1bbadd21a37deaf56387d80c57ef5a082418706fe519d998ceb",
-  "0xa52f7cf2641a2111b159dd4e5a693eb5789619893e7d6858c254f68ca9f77d68",
-  "0x5f083b2c1618e850a217cad0e397f7668d2cf01fb80d3240dc40584c76ab348e",
-  "0x84b0f13be0a36c063f13551cffbfd369b52f760045d0b2f7dd2a1f6d7a281ad3",
-  "0xc89c1755844c41da1382e2138d2d5ec962924b7647bbef065768cc480fd77a84",
-  "0x68b801425c556a76a7248f3708b4be7f3b3f1d1c289fa438f560c90b03dedf2a",
-  "0x99248fef2f354594d4d4b90f0edecddc3b548dec6cf77238d238bc57f6caa18f",
-  "0x5ef5f55ce97eaf1c861af2b92f6b2ae16fc3754cc1daeef276f9f1af084cfc0f",
-  "0xb7310b2b00e8ebaaea73cbe8304c5216df2471d551a7cf1d5c84bbf0de932e63",
-];
+    "0x64c592daf6e7d462e3b0e853d9d486637c4467e56bc98f796f69f646e0c29112",
+    "0xc555e61a2bf170e0c936cce39dc9f74d5012fbe017590a22f87c8232bb250337",
+    "0xe17eca5796410a89f2e58dcfccc092df277db7176b9dcd9462bfc18f7188086c",
+    "0xf15033a55f2c30dc8c6b0c482e14529ce005ade7eff21026f788ecad9fd98a50",
+    "0x3d43f31ab83880859271612119bdbd33a1e756fcac63bcdd9b009cd856cc7ea6",
+    "0x98da9c4c4e92f1f33420364b24aff58b7663f2dbab6d7bac28a619bc6bd96ff7",
+    "0x86542611da69927f60dbc60f37a202975464d0ab7965dad7c4c0ea641a6eb0e8",
+    "0x2f8d573bd76aafe9faac42137183ffb087ded18e8ef981ce193b36f3e60e9e9a",
+    "0x8f87508cd1c01cc48c73cfe42a678fec5134c98e94e36066ab7718fe7a28b10e",
+    "0xbaf8441e4e6746bdeb34723ca1a313b251e7e9823e7cf22cfcbbf9da2d6723ae",
+    "0x57ed061347e8ac94a5ff2a694bfecb50ad31e2bd5ee6dd66e54227b0b0f204bd",
+    "0x8e5269dced2e4aecea155e04d9617c88b03d2f5d7b7571ac4b7e378e6a6feb32",
+    "0x23125ecad3ecca99ecd31fe9cc22b3428d612df0d95c67ca892a58146854c31f",
+    "0xf0921e06690cb421345151635fa55460d1b6d9682a5704cce3fe59a35ce38afd"
+]
 
-const mintNFTs = async (contractId: string, amount: BigNumberish) => {
-  const provider = "https://beta-3.fuel.network/graphql";
-  const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307";
-  const wallet = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c";
-  const { transactionResult } = await mint(contractId, provider, wallet, amount, to, false);
-  return transactionResult.status.type;
-};
+type ContractIdInput = { value: string };
+type AddressInput = { value: string };
+type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
+type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
 
-const approve = async (contractId: string) => {
-  const provider = "https://beta-3.fuel.network/graphql";
-  const okanWallet = "0xda095454134996e62333131a81b77794f3edca42036dff09a51ca72ab6ebc1d2";
-  const okanWallet2 = "0x4e9f62e8c97d08266af1c554219d53696350a03b34dfbe2b4c86eb8493efb705";
-  const tm = "0x44f93062f0e8ce54973a1c9fe972a25e3845a798adf892059bfe67c3576a1f22";
+const beta4Testnet = new Provider("https://beta-4.fuel.network/graphql");
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-  const { transactionResult } = await setApprovalForAll(contractId, provider, okanWallet2, tm, true);
-  return transactionResult.status.type;
-};
+const mintNFTs = async (collection: string, amount: BigNumberish) => {
+    const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
+    const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
+    const wallet = new WalletUnlocked(privateKey, beta4Testnet);
+    const script = new Script(bytecode, abi, wallet);
 
-const main = async () => {
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const _contract = new Contract(collection, NFTContractAbi__factory.abi, beta4Testnet);
+    const _collection: ContractIdInput = { value: collection };
+    const _to: IdentityInput = { Address: { value: to } };
 
-  const failed: string[] = [];
+    const { transactionResult } = await script.functions
+        .main(_collection, _to, amount)
+        .txParams({gasPrice: 1})
+        .addContracts([_contract])
+        .call();
+    return transactionResult.isStatusSuccess;
+}
 
-  for (let i = 0; i < 14; i++) {
-    const nftContractId = nfts[i];
-    console.log("start");
-    const res = await mintNFTs(nftContractId, 1000);
-    console.log(res);
-    if (res === "failure") {
-      failed.push(nftContractId);
-      continue;
+const mintNFTs2 = async (collection: string, amount: number, n: number) => {
+    const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
+    const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
+
+    let startIndex = 0
+
+    for (let i=0; i<n; i++) {
+        const res = await bulkMint(collection, beta4Testnet.url, privateKey, to, startIndex, amount);
+        console.log(res?.transactionResult.isStatusSuccess)
+        startIndex += 10
+        await sleep(2000);
     }
-    await sleep(1500);
-  }
+}
 
-  if (failed.length != 0) {
-    for (let i = 0; i < failed.length; i++) {
-      const nftContractId = failed[i];
-      const res = await mintNFTs(nftContractId, 1000);
-      if (res === "success") {
-        const index = failed.indexOf(nftContractId);
-        failed.splice(index, 1);
-      }
-      await sleep(1500);
-    }
+// const main = async () => {
+//     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    if (failed.length == 0) return "success";
-  } else {
-    return "success";
-  }
+//     const failed: string[] = [];
 
-  return failed;
-};
+//     for (let i=0; i<14; i++) {
+//         const nftContractId = nfts[i]
+//         console.log("start")
+//         const res = await mintNFTs2(nftContractId, 10);
+//         console.log(res)
+//         if (!res) {
+//             failed.push(nftContractId);
+//             continue
+//         }
+//         await sleep(1500);
+//     }
 
-main()
-  .then((res) => console.log(res))
-  .catch((err) => console.log(err));
+//     if (failed.length != 0) {
+//         for (let i=0; i<failed.length; i++) {
+//             const nftContractId = failed[i]
+//             const res = await mintNFTs2(nftContractId, 10);
+//             if (!res) {
+//                 const index = failed.indexOf(nftContractId);
+//                 failed.splice(index, 1);
+//             }
+//             await sleep(1500);
+//         }
+
+//         if (failed.length == 0) return "success"
+//     } else {
+//         return "success"
+//     }
+
+//     return failed
+// }
+
+mintNFTs2(
+    "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
+    10,
+    5
+)
+.then((res) => console.log(res))
+.catch((err) => console.log(err))
+
+// main()
+//     .then((res) => console.log(res))
+//     .catch((err) => console.log(err))

@@ -4,11 +4,11 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.38.1
-  Forc version: 0.35.5
-  Fuel-Core version: 0.17.3
+  Fuels version: 0.57.0
+  Forc version: 0.44.0
+  Fuel-Core version: 0.20.4
 */
 
-export type { NFTAbi } from './NFTAbi';
+export type { NFTContractAbi } from './NFTContractAbi';
 
-export { NFTAbi__factory } from './factories/NFTAbi__factory';
+export { NFTContractAbi__factory } from './factories/NFTContractAbi__factory';
