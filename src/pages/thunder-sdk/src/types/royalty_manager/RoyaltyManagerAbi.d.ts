@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.38.1
-  Forc version: 0.35.5
-  Fuel-Core version: 0.17.3
+  Fuels version: 0.57.0
+  Forc version: 0.44.0
+  Fuel-Core version: 0.20.4
 */
 
 import type {
@@ -22,8 +22,12 @@ import type {
 
 import type { Option, Enum } from "./common";
 
+export enum AccessErrorInput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
+export enum AccessErrorOutput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
+export enum RoyaltyManagerErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', CallerMustBeOwnerOrAdmin = 'CallerMustBeOwnerOrAdmin', FeeHigherThanLimit = 'FeeHigherThanLimit', FeeLimitTooHigh = 'FeeLimitTooHigh' };
+export enum RoyaltyManagerErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', CallerMustBeOwnerOrAdmin = 'CallerMustBeOwnerOrAdmin', FeeHigherThanLimit = 'FeeHigherThanLimit', FeeLimitTooHigh = 'FeeLimitTooHigh' };
 
 export type AddressInput = { value: string };
 export type AddressOutput = AddressInput;

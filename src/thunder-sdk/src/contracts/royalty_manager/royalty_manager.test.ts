@@ -25,7 +25,7 @@ describe('RoyaltyManager', () => {
             PROVIDER.url,
             OWNER.privateKey
         );
-        expect(transactionResult?.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
     });
 
     it('should get owner', async () => {
@@ -50,7 +50,7 @@ describe('RoyaltyManager', () => {
             OWNER.privateKey,
             1000
         );
-        expect(transactionResult?.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
 
         const { value } = await RoyaltyManager.getRoyaltyFeeLimit(
             contract.id.toString(),
@@ -98,7 +98,7 @@ describe('RoyaltyManager', () => {
             true,
             500
         );
-        expect(transactionResult?.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
 
         const { value } = await RoyaltyManager.getRoyaltyInfo(
             contract.id.toString(),
@@ -159,7 +159,7 @@ describe('RoyaltyManager', () => {
             OWNER.privateKey,
             USER.address.toB256()
         );
-        expect(transactionResult?.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
 
         const { value } = await RoyaltyManager.owner(
             contract.id.toString(),

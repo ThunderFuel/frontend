@@ -8,10 +8,10 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { bulkPlaceOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, transferManagerContractId, ZERO_B256 } from "global-constants";
+import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { NativeAssetId } from "fuels";
+import { BaseAssetId } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import collectionsService from "api/collections/collections.service";
 import { FuelProvider } from "../../../api";
@@ -65,7 +65,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             amount: 1,
             nonce: res.data[item.tokenId],
             strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(item.expireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           };
@@ -86,7 +86,7 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             amount: 1,
             nonce: res.data + 1 + index,
             strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(item.expireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           };
@@ -116,12 +116,11 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
       Promise.all(promises)
         .then(async () => {
-          const bulkMakerOrders = bulkListMakerOders.concat(bulkUpdateMakerOders);
           setContracts(contracts, FuelProvider);
 
-          const bulkPlaceOrderRes = await bulkPlaceOrder(exchangeContractId, provider, wallet, transferManagerContractId, bulkMakerOrders);
+          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, bulkListMakerOders, bulkUpdateMakerOders);
 
-          if (bulkPlaceOrderRes?.transactionResult.status.type === "success") {
+          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
             if (bulkUpdateItems.length > 0) {
               try {
                 await collectionsService.updateBulkListing(_bulkUpdateItems);

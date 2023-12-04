@@ -24,7 +24,7 @@ describe('ExecutionManager', () => {
       contract.id.toString(),
       PROVIDER.url,
       OWNER.privateKey);
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
   });
 
   it('should get owner', async () => {
@@ -56,7 +56,7 @@ describe('ExecutionManager', () => {
       OWNER.privateKey,
       STRATEGY
     );
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
 
     const res = await ExecutionManager.getCountWhitelistedStrategy(contract.id.toString(), PROVIDER.url);
     expect(Number(res.value)).toBe(1);
@@ -101,7 +101,7 @@ describe('ExecutionManager', () => {
       OWNER.privateKey,
       STRATEGY
     );
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
 
     const res = await ExecutionManager.getCountWhitelistedStrategy(
       contract.id.toString(),
@@ -155,7 +155,7 @@ describe('ExecutionManager', () => {
       OWNER.privateKey,
       USER.address.toB256()
     );
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
 
     const { value } = await ExecutionManager.owner(contract.id.toString(), PROVIDER.url);
     expect(value?.Address?.value).toBe(USER.address.toB256());

@@ -10,7 +10,7 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { cancelAllOrdersBySide, cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import { CheckoutCartItems } from "./Checkout";
 import { FuelProvider } from "../../../api";
@@ -38,7 +38,7 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { currentItem, cancelOfferItems } = useAppSelector((state) => state.checkout);
-  const { wallet, user } = useAppSelector((state) => state.wallet);
+  const { wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -47,24 +47,25 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
     if (cancelOfferItems?.length > 0) {
-      cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
-        .then((res) => {
-          if (res.transactionResult.status.type === "success") {
-            offerService.cancelAllOffer({ userId: user.id });
-            setApproved(true);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
+      console.log("bakacazzz");
+      // bulkCancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
+      //   .then((res) => {
+      //     if (res.transactionResult.status.type === "success") {
+      //       offerService.cancelAllOffer({ userId: user.id });
+      //       setApproved(true);
+      //     }
+      //   })
+      //   .catch((e) => {
+      //     console.log(e);
+      //     if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+      //       setStartTransaction(false);
+      //     else setIsFailed(true);
+      //   });
     } else {
       offerService.getOffersIndex([currentItem.id]).then((res) => {
         cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
           .then((res) => {
-            if (res.transactionResult.status.type === "success") {
+            if (res.transactionResult.isStatusSuccess) {
               nftdetailsService.cancelOffer(currentItem.id);
               setApproved(true);
             }

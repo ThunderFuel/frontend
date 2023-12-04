@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Contract, ContractFactory, NativeAssetId, Provider, WalletUnlocked } from 'fuels';
+import { Contract, ContractFactory, BaseAssetId, Provider, WalletUnlocked } from 'fuels';
 import path from 'path';
 import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
 import * as AssetManager from './asset_manager';
@@ -24,7 +24,7 @@ describe('AssetManager', () => {
       PROVIDER.url,
       OWNER.privateKey
     );
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
   });
 
   it('should get owner', async () => {
@@ -46,7 +46,7 @@ describe('AssetManager', () => {
     const { value } = await AssetManager.isAssetSupported(
       contract.id.toString(),
       PROVIDER.url,
-      NativeAssetId
+      BaseAssetId
     );
     expect(value).toBe(false);
 
@@ -54,9 +54,9 @@ describe('AssetManager', () => {
       contract.id.toString(),
       PROVIDER.url,
       OWNER.privateKey,
-      NativeAssetId
+      BaseAssetId
     );
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
 
     const res = await AssetManager.getCountSupportedAssets(contract.id.toString(), PROVIDER.url);
     expect(Number(res.value)).toBe(1);
@@ -64,12 +64,12 @@ describe('AssetManager', () => {
     const res2 = await AssetManager.isAssetSupported(
       contract.id.toString(),
       PROVIDER.url,
-      NativeAssetId
+      BaseAssetId
     );
     expect(res2.value).toBe(true);
 
     const res3 = await AssetManager.getSupportedAsset(contract.id.toString(), PROVIDER.url, 0);
-    expect(res3.value?.value).toBe(NativeAssetId);
+    expect(res3.value?.value).toBe(BaseAssetId);
   });
 
   it('should not add the same asset again', async () => {
@@ -78,7 +78,7 @@ describe('AssetManager', () => {
         contract.id.toString(),
         PROVIDER.url,
         OWNER.privateKey,
-        NativeAssetId
+        BaseAssetId
       )
     }).rejects.toThrow();
   });
@@ -87,7 +87,7 @@ describe('AssetManager', () => {
     const { value } = await AssetManager.isAssetSupported(
       contract.id.toString(),
       PROVIDER.url,
-      NativeAssetId
+      BaseAssetId
     );
     expect(value).toBe(true);
 
@@ -95,9 +95,9 @@ describe('AssetManager', () => {
       contract.id.toString(),
       PROVIDER.url,
       OWNER.privateKey,
-      NativeAssetId
+      BaseAssetId
     );
-    expect(transactionResult?.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
 
     const res = await AssetManager.getCountSupportedAssets(contract.id.toString(), PROVIDER.url);
     expect(Number(res.value)).toBe(0);
@@ -105,7 +105,7 @@ describe('AssetManager', () => {
     const res2 = await AssetManager.isAssetSupported(
       contract.id.toString(),
       PROVIDER.url,
-      NativeAssetId
+      BaseAssetId
     );
     expect(res2.value).toBe(false);
   });
@@ -116,7 +116,7 @@ describe('AssetManager', () => {
         contract.id.toString(),
         PROVIDER.url,
         OWNER.privateKey,
-        NativeAssetId
+        BaseAssetId
       )
     }).rejects.toThrow();
   });
@@ -127,7 +127,7 @@ describe('AssetManager', () => {
         contract.id.toString(),
         PROVIDER.url,
         USER.privateKey,
-        NativeAssetId
+        BaseAssetId
       )
     }).rejects.toThrow();
 
@@ -136,7 +136,7 @@ describe('AssetManager', () => {
         contract.id.toString(),
         PROVIDER.url,
         USER.privateKey,
-        NativeAssetId
+        BaseAssetId
       )
     }).rejects.toThrow();
   });
@@ -148,7 +148,7 @@ describe('AssetManager', () => {
       OWNER.privateKey,
       USER.address.toB256()
     );
-    expect(transactionResult.status.type).toBe("success");
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
 
     const { value } = await AssetManager.owner(contract.id.toString(), PROVIDER.url);
     expect(value?.Address?.value).toBe(USER.address.toB256());

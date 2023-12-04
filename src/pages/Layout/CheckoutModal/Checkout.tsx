@@ -14,7 +14,7 @@ import { isObjectEmpty, toGwei } from "utils";
 
 import { bulkPurchase, executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
-import { NativeAssetId } from "fuels";
+import { BaseAssetId } from "fuels";
 import { FuelProvider } from "../../../api";
 
 enum Status {
@@ -213,9 +213,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
           setContracts(contracts, FuelProvider);
 
-          executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
+          executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
             .then((res) => {
-              if (res.transactionResult.status.type === "success")
+              if (res.transactionResult.isStatusSuccess)
                 nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                   if (res.data) {
                     setSuccessCheckout(res.data);
@@ -245,9 +245,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
           setContracts(contracts, FuelProvider);
 
-          executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
+          executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
             .then((res) => {
-              if (res.transactionResult.status.type === "success")
+              if (res.transactionResult.isStatusSuccess)
                 nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                   if (res.data) {
                     setSuccessCheckout(res.data);
@@ -280,9 +280,9 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
             setContracts(contracts, FuelProvider);
 
-            bulkPurchase(exchangeContractId, provider, wallet, takerOrders, NativeAssetId)
+            bulkPurchase(exchangeContractId, provider, wallet, takerOrders, BaseAssetId)
               .then((res) => {
-                if (res?.transactionResult.status.type === "success")
+                if (res?.transactionResult.isStatusSuccess)
                   nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                     if (res.data) {
                       setSuccessCheckout(res.data);

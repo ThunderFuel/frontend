@@ -7,8 +7,8 @@ import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { NativeAssetId } from "fuels";
+import { depositAndOffer, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { BaseAssetId } from "fuels";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import userService from "api/user/user.service";
@@ -52,13 +52,13 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         const order = {
           isBuySide: true,
           maker: user.walletAddress,
-          collection: selectedNFT.collection.contractAddress,
-          token_id: selectedNFT.tokenOrder,
+          collection: "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
+          token_id: 11,
           price: toGwei(checkoutPrice).toNumber(),
           amount: 1, //fixed
           nonce: res.data + 1,
           strategy: strategyFixedPriceContractId,
-          payment_asset: NativeAssetId,
+          payment_asset: BaseAssetId,
           expiration_range: formatTimeContract(checkoutExpireTime),
           extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
         };
@@ -72,9 +72,9 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             const _currentBidBalance = res.data;
             if (_currentBidBalance < checkoutPrice) {
               const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-              depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
+              depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, false)
                 .then((res) => {
-                  if (res.transactionResult.status.type === "success") {
+                  if (res.transactionResult.isStatusSuccess) {
                     nftdetailsService
                       .makeOffer({
                         makerUserId: user.id,
@@ -108,7 +108,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
             } else
               placeOrder(exchangeContractId, provider, wallet, order)
                 .then((res) => {
-                  if (res.transactionResult.status.type === "success") {
+                  if (res.transactionResult.isStatusSuccess) {
                     nftdetailsService
                       .makeOffer({
                         makerUserId: user.id,

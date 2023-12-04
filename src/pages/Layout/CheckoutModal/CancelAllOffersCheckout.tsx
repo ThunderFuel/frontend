@@ -8,7 +8,7 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { cancelAllOrdersBySide, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { setContracts, bulkCancelOrder } from "thunder-sdk/src/contracts/thunder_exchange";
 import { FuelProvider } from "../../../api";
 import offerService from "api/offer/offer.service";
 
@@ -43,21 +43,30 @@ const CancelAllOffers = ({ show, onClose }: { show: boolean; onClose: any }) => 
   const onComplete = () => {
     setContracts(contracts, FuelProvider);
     const params = { userId: user.id };
-
-    cancelAllOrdersBySide(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)
-      .then((res) => {
-        if (res.transactionResult.status.type === "success") {
-          offerService
-            .cancelAllOffer(params)
-            .then(() => setApproved(true))
-            .catch(() => setIsFailed(true));
-        }
+    offerService
+      .getAllOfferandListingIndexes({
+        userId: user.id,
+        getListings: false,
+        getOffers: true,
       })
-      .catch((e) => {
-        console.log(e);
-        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-          setStartTransaction(false);
-        else setIsFailed(true);
+      .then((res) => {
+        const cancelOrders = res.data.orderIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: true }));
+
+        bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
+          .then((res) => {
+            if (res?.transactionResult.isStatusSuccess) {
+              offerService
+                .cancelAllOffer(params)
+                .then(() => setApproved(true))
+                .catch(() => setIsFailed(true));
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+              setStartTransaction(false);
+            else setIsFailed(true);
+          });
       });
   };
 

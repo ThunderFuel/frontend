@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.38.1
-  Forc version: 0.35.5
-  Fuel-Core version: 0.17.3
+  Fuels version: 0.57.0
+  Forc version: 0.44.0
+  Fuel-Core version: 0.20.4
 */
 
 import type {
@@ -22,11 +22,17 @@ import type {
 
 import type { Option, Enum } from "./common";
 
+export enum AccessErrorInput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
+export enum AccessErrorOutput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
+export enum AssetManagerErrorsInput { Initialized = 'Initialized', OnlyOwner = 'OnlyOwner', AssetAlreadySupported = 'AssetAlreadySupported', AssetNotSupported = 'AssetNotSupported', ZeroLengthVec = 'ZeroLengthVec', IndexOutOfBound = 'IndexOutOfBound' };
+export enum AssetManagerErrorsOutput { Initialized = 'Initialized', OnlyOwner = 'OnlyOwner', AssetAlreadySupported = 'AssetAlreadySupported', AssetNotSupported = 'AssetNotSupported', ZeroLengthVec = 'ZeroLengthVec', IndexOutOfBound = 'IndexOutOfBound' };
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
 
 export type AddressInput = { value: string };
 export type AddressOutput = AddressInput;
+export type AssetIdInput = { value: string };
+export type AssetIdOutput = AssetIdInput;
 export type ContractIdInput = { value: string };
 export type ContractIdOutput = ContractIdInput;
 export type OwnershipRenouncedInput = { previous_owner: IdentityInput };
@@ -49,13 +55,13 @@ interface AssetManagerAbiInterface extends Interface {
     transfer_ownership: FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: 'add_asset', values: [ContractIdInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'add_asset', values: [AssetIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'get_count_supported_assets', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'get_supported_asset', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'initialize', values: []): Uint8Array;
-  encodeFunctionData(functionFragment: 'is_asset_supported', values: [ContractIdInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'is_asset_supported', values: [AssetIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'owner', values: []): Uint8Array;
-  encodeFunctionData(functionFragment: 'remove_asset', values: [ContractIdInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'remove_asset', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'renounce_ownership', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'transfer_ownership', values: [IdentityInput]): Uint8Array;
 
@@ -73,13 +79,13 @@ interface AssetManagerAbiInterface extends Interface {
 export class AssetManagerAbi extends Contract {
   interface: AssetManagerAbiInterface;
   functions: {
-    add_asset: InvokeFunction<[asset: ContractIdInput], void>;
+    add_asset: InvokeFunction<[asset: AssetIdInput], void>;
     get_count_supported_assets: InvokeFunction<[], BN>;
-    get_supported_asset: InvokeFunction<[index: BigNumberish], Option<ContractIdOutput>>;
+    get_supported_asset: InvokeFunction<[index: BigNumberish], Option<AssetIdOutput>>;
     initialize: InvokeFunction<[], void>;
-    is_asset_supported: InvokeFunction<[asset: ContractIdInput], boolean>;
+    is_asset_supported: InvokeFunction<[asset: AssetIdInput], boolean>;
     owner: InvokeFunction<[], Option<IdentityOutput>>;
-    remove_asset: InvokeFunction<[asset: ContractIdInput], void>;
+    remove_asset: InvokeFunction<[index: BigNumberish], void>;
     renounce_ownership: InvokeFunction<[], void>;
     transfer_ownership: InvokeFunction<[new_owner: IdentityInput], void>;
   };

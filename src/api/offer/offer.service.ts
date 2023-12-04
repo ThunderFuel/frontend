@@ -1,5 +1,6 @@
 import { ThunderURL } from "../index";
 import { ApiResponse } from "../HttpClient";
+import { OfferandListingIndexesRequest } from "./offer.type";
 
 export default {
   async getOffer(data: any): Promise<ApiResponse<any>> {
@@ -19,5 +20,8 @@ export default {
   },
   async cancelAllOfferAndListings(params: any): Promise<ApiResponse<any>> {
     return ThunderURL.put("v1/offer/cancelallofferandlisting", {}, { params });
+  },
+  async getAllOfferandListingIndexes(params: OfferandListingIndexesRequest): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/offer/getallofferandlistingindexes", { params });
   },
 };

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Contract, ContractFactory, Provider, WalletUnlocked, NativeAssetId } from 'fuels';
+import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId } from 'fuels';
 import path from 'path';
 import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";
 import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
@@ -38,10 +38,10 @@ describe('Pool', () => {
             assetManager.id.toString(),
             PROVIDER.url,
             OWNER.privateKey,
-            NativeAssetId
+            BaseAssetId
         );
-        expect(transactionResult?.status.type).toBe("success");
-        expect(result?.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
+        expect(result.isStatusSuccess).toBeTruthy();
     });
 
     it('should initialize', async () => {
@@ -52,7 +52,7 @@ describe('Pool', () => {
             EXCHANGE,
             assetManager.id.toB256()
         );
-        expect(transactionResult?.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
     });
 
     it('should not initialize again', async () => {
@@ -71,13 +71,13 @@ describe('Pool', () => {
         const { value: totalSupply } = await Pool.totalSupply(
             contract.id.toString(),
             PROVIDER.url,
-            NativeAssetId
+            BaseAssetId
         );
         const { value: balance } = await Pool.balanceOf(
             contract.id.toString(),
             PROVIDER.url,
             OWNER.address.toB256(),
-            NativeAssetId
+            BaseAssetId
         );
         expect(Number(totalSupply)).toBe(0);
         expect(Number(balance)).toBe(0);
@@ -87,21 +87,21 @@ describe('Pool', () => {
             PROVIDER.url,
             OWNER.privateKey,
             100,
-            NativeAssetId,
+            BaseAssetId,
             assetManager.id.toB256()
         );
-        expect(result.status.type).toBe("success");
+        expect(result.isStatusSuccess).toBeTruthy();
 
         const { value: postTotalSupply } = await Pool.totalSupply(
             contract.id.toString(),
             PROVIDER.url,
-            NativeAssetId
+            BaseAssetId
         );
         const { value: postBalance } = await Pool.balanceOf(
             contract.id.toString(),
             PROVIDER.url,
             OWNER.address.toB256(),
-            NativeAssetId
+            BaseAssetId
         );
         expect(Number(postTotalSupply)).toBe(100);
         expect(Number(postBalance)).toBe(100);
@@ -111,21 +111,21 @@ describe('Pool', () => {
             PROVIDER.url,
             USER.privateKey,
             100,
-            NativeAssetId,
+            BaseAssetId,
             assetManager.id.toB256()
         );
-        expect(resultUser.status.type).toBe("success");
+        expect(resultUser.isStatusSuccess).toBeTruthy();
 
         const { value: postTotalSupply2 } = await Pool.totalSupply(
             contract.id.toString(),
             PROVIDER.url,
-            NativeAssetId
+            BaseAssetId
         );
         const { value: postBalanceUser } = await Pool.balanceOf(
             contract.id.toString(),
             PROVIDER.url,
             USER.address.toB256(),
-            NativeAssetId
+            BaseAssetId
         );
         expect(Number(postTotalSupply2)).toBe(200);
         expect(Number(postBalanceUser)).toBe(100);
@@ -136,9 +136,9 @@ describe('Pool', () => {
             assetManager.id.toString(),
             PROVIDER.url,
             OWNER.privateKey,
-            NativeAssetId
+            BaseAssetId
         );
-        expect(result.status.type).toBe("success");
+        expect(result.isStatusSuccess).toBeTruthy();
 
         await expect(async () => {
             await Pool.deposit(
@@ -146,7 +146,7 @@ describe('Pool', () => {
                 PROVIDER.url,
                 OWNER.privateKey,
                 100,
-                NativeAssetId,
+                BaseAssetId,
                 assetManager.id.toB256()
             )
         }).rejects.toThrow();
@@ -159,7 +159,7 @@ describe('Pool', () => {
                 PROVIDER.url,
                 OWNER.privateKey,
                 101,
-                NativeAssetId,
+                BaseAssetId,
                 assetManager.id.toString()
             )
         }).rejects.toThrow();
@@ -169,7 +169,7 @@ describe('Pool', () => {
         const { value } = await AssetManager.isAssetSupported(
             assetManager.id.toString(),
             PROVIDER.url,
-            NativeAssetId
+            BaseAssetId
         );
         expect(value).toBeFalsy();
 
@@ -179,7 +179,7 @@ describe('Pool', () => {
                 PROVIDER.url,
                 OWNER.privateKey,
                 100,
-                NativeAssetId,
+                BaseAssetId,
                 assetManager.id.toString()
             )
         }).rejects.toThrow();
@@ -190,30 +190,30 @@ describe('Pool', () => {
             assetManager.id.toString(),
             PROVIDER.url,
             OWNER.privateKey,
-            NativeAssetId
+            BaseAssetId
         );
-        expect(result?.status.type).toBe("success");
+        expect(result.isStatusSuccess).toBeTruthy();
 
         const { transactionResult } = await Pool.withdraw(
             contract.id.toString(),
             PROVIDER.url,
             OWNER.privateKey,
             100,
-            NativeAssetId,
+            BaseAssetId,
             assetManager.id.toString()
         );
-        expect(transactionResult.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
 
         const { value: totalSupply } = await Pool.totalSupply(
             contract.id.toString(),
             PROVIDER.url,
-            NativeAssetId
+            BaseAssetId
         );
         const { value: balance } = await Pool.balanceOf(
             contract.id.toString(),
             PROVIDER.url,
             OWNER.address.toB256(),
-            NativeAssetId
+            BaseAssetId
         );
         expect(Number(totalSupply)).toBe(100);
         expect(Number(balance)).toBe(0);
@@ -224,7 +224,7 @@ describe('Pool', () => {
             contract.id.toString(),
             PROVIDER.url,
             USER.address.toB256(),
-            NativeAssetId
+            BaseAssetId
         );
         expect(Number(preBalance)).toBe(100);
 
@@ -234,18 +234,18 @@ describe('Pool', () => {
             USER.privateKey,
             assetManager.id.toB256()
         );
-        expect(result.status.type).toBe("success");
+        expect(result.isStatusSuccess).toBeTruthy();
 
         const { value: totalSupply } = await Pool.totalSupply(
             contract.id.toString(),
             PROVIDER.url,
-            NativeAssetId
+            BaseAssetId
         );
         const { value: balance } = await Pool.balanceOf(
             contract.id.toString(),
             PROVIDER.url,
             USER.address.toB256(),
-            NativeAssetId
+            BaseAssetId
         );
         expect(Number(totalSupply)).toBe(0);
         expect(Number(balance)).toBe(0);
@@ -259,7 +259,7 @@ describe('Pool', () => {
                 OWNER.privateKey,
                 OWNER.address.toB256(),
                 USER.address.toB256(),
-                NativeAssetId,
+                BaseAssetId,
                 100
             )
         }).rejects.toThrow();
@@ -283,7 +283,7 @@ describe('Pool', () => {
             OWNER.privateKey,
             ASSET
         );
-        expect(transactionResult.status.type).toBe("success");
+        expect(transactionResult.isStatusSuccess).toBeTruthy();
 
         const { value } = await Pool.getTransferManager(
             contract.id.toString(),

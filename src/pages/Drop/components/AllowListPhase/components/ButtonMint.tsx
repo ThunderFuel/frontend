@@ -48,6 +48,7 @@ const ButtonMint = ({ remainingDrops, mintImage, onMintComplete, mintContractAdd
           mintAmount: amount,
           mintImage: mintImage,
           mintContractAddress: mintContractAddress,
+          mintTokenId: 0,
           onCheckoutComplete: onMintComplete,
         })
       );

@@ -43,38 +43,6 @@ export async function initialize(
     }
 }
 
-export async function name(
-    contractId: string,
-    provider: string,
-) {
-    try {
-        const contract = await setup(contractId, provider);
-        const { value } = await contract.functions
-            .name()
-            .get();
-        return { value };
-    } catch(err: any) {
-        console.error("Pool: " + err);
-        return { err };
-    }
-}
-
-export async function symbol(
-    contractId: string,
-    provider: string,
-) {
-    try {
-        const contract = await setup(contractId, provider);
-        const { value } = await contract.functions
-            .symbol()
-            .get();
-        return { value };
-    } catch(err: any) {
-        console.error("Pool: " + err);
-        return { err };
-    }
-}
-
 export async function totalSupply(
     contractId: string,
     provider: string,
@@ -85,7 +53,7 @@ export async function totalSupply(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .total_supply(_asset)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Pool: " + err);
@@ -105,7 +73,7 @@ export async function balanceOf(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .balance_of(_account, _asset)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Pool: " + err);
@@ -234,7 +202,7 @@ export async function getTransferManager(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_asset_manager()
-            .get()
+            .simulate()
         return { value };
     } catch(err: any) {
         throw Error(`Pool. getTransferManager failed. Reason: ${err}`)
@@ -249,7 +217,7 @@ export async function getExchange(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_exchange()
-            .get()
+            .simulate()
         return { value };
     } catch(err: any) {
         throw Error(`Pool. getExchange failed. Reason: ${err}`)
@@ -264,7 +232,7 @@ export async function owner(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .owner()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Pool: " + err);

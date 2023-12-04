@@ -12,7 +12,7 @@ import { CheckoutProcess } from "./components/CheckoutProcess";
 import { addressFormat } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toB256 } from "fuels";
-import { safeTransferFrom } from "thunder-sdk/src/contracts/erc721";
+import { transfer } from "thunder-sdk/src/contracts/erc721";
 import { provider } from "global-constants";
 
 const checkoutProcessTexts = {
@@ -50,7 +50,7 @@ const Footer = ({ address, callback, animationStarted, onClose, approved }: { ap
 
 const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { wallet, user } = useAppSelector((state) => state.wallet);
+  const { wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
   const [address, setaddress] = useState("");
@@ -62,7 +62,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
     let tempAddress = "";
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
     const toAddress = tempAddress === "" ? address : tempAddress;
-    safeTransferFrom(selectedNFT.collection.contractAddress, provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
+    transfer(selectedNFT.collection.contractAddress, provider, wallet, toAddress, selectedNFT.tokenOrder, 1)
       .then(() => {
         nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
         setApproved(true);

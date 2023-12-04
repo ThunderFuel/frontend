@@ -10,10 +10,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
-import { NativeAssetId } from "fuels";
+import { BaseAssetId } from "fuels";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { depositAndPlaceOrder, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
+import { depositAndOffer, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import userService from "api/user/user.service";
 import { FuelProvider } from "../../../api";
@@ -60,7 +60,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         amount: 1, //fixed
         nonce: res.data[selectedNFT?.bestOffer?.id],
         strategy: strategyFixedPriceContractId,
-        payment_asset: NativeAssetId,
+        payment_asset: BaseAssetId,
         expiration_range: formatTimeContract(checkoutExpireTime),
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
@@ -72,9 +72,9 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         setCurrentBidBalance(currentBidBalance);
         if (currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
-          depositAndPlaceOrder(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), NativeAssetId)
+          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, true)
             .then((res) => {
-              if (res.transactionResult.status.type === "success") {
+              if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenUpdateOffer({
                   id: currentItem?.id,
                   price: checkoutPrice,
@@ -93,7 +93,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         } else
           placeOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
-              if (res.transactionResult.status.type === "success") {
+              if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenUpdateOffer({
                   id: currentItem?.id,
                   price: checkoutPrice,

@@ -30,6 +30,7 @@ Sentry.init({
   ignoreErrors: [/^Cannot read properties of undefined (reading 'isConnected')$/],
 });
 
+// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
