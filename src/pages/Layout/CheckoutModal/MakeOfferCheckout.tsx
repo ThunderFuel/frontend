@@ -52,8 +52,8 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         const order = {
           isBuySide: true,
           maker: user.walletAddress,
-          collection: "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
-          token_id: 11,
+          collection: selectedNFT.collection.contractAddress,
+          token_id: selectedNFT.tokenOrder,
           price: toGwei(checkoutPrice).toNumber(),
           amount: 1, //fixed
           nonce: res.data + 1,
