@@ -75,7 +75,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     <div className="flex mt-auto flex-col p-5 gap-y-2.5">
       <Balances />
       <div className="grid grid-cols-2 gap-x-2.5">
-        <a target="_blank" rel="noreferrer" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`} className="btn btn-primary w-full">
+        <a target="_blank" rel="noreferrer" href={`https://faucet-beta-4.fuel.network/?address=${user?.contractAddress ?? address}`} className="btn btn-primary w-full">
           GET TEST ETH <IconFaucet />
         </a>
         <Button
