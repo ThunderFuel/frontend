@@ -14,7 +14,7 @@ interface IInput {
 const Input = ({ className, containerClassName, icon, error, ...etc }: IInput, ref: any) => {
   return (
     <>
-      <div className={clsx("input-container flex flex-row items-center gap-2 px-4", "w-full lg:border lg:h-12 lg:rounded lg:border-gray", containerClassName)}>
+      <div className={clsx("input-container flex flex-row items-center gap-2 px-4", "w-full border lg:h-12 rounded-md lg:rounded border-gray", containerClassName)}>
         <input ref={ref} className={clsx("input", "peer", className)} {...etc} />
         {icon}
       </div>

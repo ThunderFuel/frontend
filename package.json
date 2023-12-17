@@ -43,7 +43,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false && react-scripts start",
     "build": "sh -ac '. .env.${REACT_APP_ENV}; node_modules/react-scripts/bin/react-scripts.js build'",
     "build:prod": "REACT_APP_ENV=production npm run build",
     "demo": "API_URL=http://musa.akkaya.com npm run build:prod",

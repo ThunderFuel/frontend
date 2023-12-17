@@ -30,6 +30,8 @@ interface IMarketplaceContext {
   sortingValue: any;
   sortingType: any;
   options: any;
+  mobileListType: any;
+  setMobileListType: any;
 }
 
 const dayValues = [
@@ -81,6 +83,7 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
   const [sortingValue, setSortingValue] = useState(0);
   const [sortingType, setSortingType] = useState("ASC");
+  const [mobileListType, setMobileListType] = useState("GRID");
 
   const getMarketplaceItems = async () => {
     if (isLoading) {
@@ -166,6 +169,8 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
     onChangeSortValue,
     sortingValue,
     sortingType,
+    mobileListType,
+    setMobileListType,
   };
 
   return (

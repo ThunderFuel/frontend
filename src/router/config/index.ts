@@ -53,6 +53,7 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.MARKETPLACE,
     component: Marketplace,
     layout: Layout,
+    isResponsive: true,
   },
   {
     path: PATHS.COLLECTION,

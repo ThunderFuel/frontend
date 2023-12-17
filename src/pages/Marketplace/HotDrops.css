@@ -1,5 +1,5 @@
 .hotdrop-slide {
-  @apply w-full flex-1 h-full min-h-[440px];
+  @apply w-full flex-1 h-full lg:min-h-[440px];
   @apply bg-right bg-cover bg-no-repeat;
-  @apply bg-mode-hotdrop dark:bg-hotdrop;
+  @apply lg:bg-mode-hotdrop lg:dark:bg-hotdrop;
 }

@@ -81,12 +81,12 @@
 
 .carousel-control-prev,
 .carousel-control-next {
+  @apply hidden lg:flex;
   width: 40px;
   position: absolute;
   top: 0;
   bottom: 0;
   z-index: 1;
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
@@ -146,7 +146,9 @@
 }
 
 .carousel-indicators {
-  @apply absolute -bottom-5 left-1/2 flex justify-center gap-1.5 -translate-x-1/2;
+  @apply w-full px-5;
+  @apply absolute -bottom-5 lg:left-1/2 justify-center gap-1.5 lg:-translate-x-1/2;
+  @apply grid grid-cols-5 lg:flex;
   z-index: 2;
 }
 
@@ -154,7 +156,7 @@
   box-sizing: content-box;
   text-indent: -999px;
   height: 5px;
-  @apply cursor-pointer w-6;
+  @apply cursor-pointer lg:w-6;
   @apply transition-all duration-500;
   @apply bg-gray;
   background-clip: padding-box;
@@ -167,7 +169,7 @@
 }
 
 .carousel-indicators .active {
-  @apply bg-white w-12;
+  @apply bg-white;
 }
 
 .carousel-caption {
