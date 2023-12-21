@@ -21,8 +21,16 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
 import { goerli, linea, mainnet } from "wagmi/chains";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
+
+export const litNodeClient = new LitNodeClient({
+  litNetwork: "cayenne",
+  debug: false,
+});
+
+litNodeClient.connect();
 
 export const connectors = [
   new MetaMaskConnector({ chains }),
@@ -78,6 +86,7 @@ Sentry.init({
   ignoreErrors: [/^Cannot read properties of undefined (reading 'isConnected')$/],
 });
 
+// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

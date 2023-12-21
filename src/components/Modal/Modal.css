@@ -53,7 +53,7 @@
 }
 
 .wallet .modal {
-  @apply flex flex-col h-full w-[400px] bg-bg rounded-none;
+  @apply flex flex-col h-full w-[440px] bg-bg rounded-none;
 }
 
 .wallet .modal .mhead {

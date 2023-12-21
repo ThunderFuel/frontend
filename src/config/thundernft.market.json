@@ -3,7 +3,9 @@
   "walletList": [
     "wagmi_metamask",
     "wagmi_coinbase",
-    "wagmi_walletconnect"
+    "wagmi_walletconnect",
+    "lit_google_auth",
+    "lit_discord_auth"
   ],
   "baseURL": "https://thunder-evm.azurewebsites.net/",
   "collectionPathType": 1,
