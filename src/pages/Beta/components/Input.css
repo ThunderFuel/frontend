@@ -1,9 +1,9 @@
 .beta-input {
-  width: 68px;
-  height: 68px;
+  height: 84px;
   border-radius: 8px;
   padding: 11px 11px;
   text-align: center;
+  color: white;
 
   @apply bg-bg border border-gray;
   @apply outline-none;
@@ -14,4 +14,9 @@
 
 .beta-input.entered {
   @apply bg-gray;
+}
+
+.beta-input.error {
+  border-color: red;
+  background-color: transparent;
 }

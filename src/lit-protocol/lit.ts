@@ -116,6 +116,18 @@ export async function authenticateWithWebAuthn(): Promise<AuthMethod | undefined
 }
 
 /**
+ * Get auth method object by validating Stytch JWT
+ */
+export async function authenticateWithStytch(accessToken: string, userId?: string) {
+  const provider = litAuthClient.initProvider(ProviderType.StytchOtp, {
+    appId: "project-test-2585ffd0-3599-4667-9dad-a4a496de5e2f",
+  });
+  const authMethod = await provider?.authenticate({ accessToken, userId });
+
+  return authMethod;
+}
+
+/**
  * Send OTP code to user
  */
 // export async function sendOTPCode(emailOrPhone: string) {

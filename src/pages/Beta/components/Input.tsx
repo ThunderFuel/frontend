@@ -3,11 +3,11 @@ import "./Input.css";
 import clsx from "clsx";
 
 const KeyBackspace = "Backspace";
-const Input = ({ value, onChange, ...etc }: any) => {
+const Input = ({ value, onChange, className = "beta", error = false, ...etc }: any) => {
   return (
     <input
       {...etc}
-      className={clsx("beta-input", value !== "" && "entered")}
+      className={clsx("beta-input", error ? "error" : "", className, value !== "" && "entered")}
       value={value}
       onKeyDown={(e) => {
         if ([KeyBackspace].includes(e.key)) {
@@ -29,7 +29,7 @@ const isNumber = function isNumber(value: any) {
   return "";
 };
 
-const InputContainer = ({ onChangeContainer }: any) => {
+const InputContainer = ({ onChangeContainer, inputClassName, error }: any) => {
   const codeArray = [0, 1, 2, 3, 4, 5];
   const [codes, setCodes] = React.useReducer(
     (prevState: any, nextState: any) => {
@@ -84,7 +84,7 @@ const InputContainer = ({ onChangeContainer }: any) => {
   return (
     <div className="grid grid-cols-6 gap-2">
       {codeArray.map((i) => (
-        <Input key={i} value={codes[i]} onChange={(value: any) => onChangeInput(i, value)} maxLength={1} />
+        <Input className={inputClassName} error={error} key={i} value={codes[i]} onChange={(value: any) => onChangeInput(i, value)} maxLength={1} />
       ))}
     </div>
   );

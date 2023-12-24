@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import React from "react";
 import clsx from "clsx";
 import InputError from "../InputError";
