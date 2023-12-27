@@ -82,25 +82,25 @@ export async function authenticateWithEthWallet(address?: string, signMessage?: 
 /**
  * Register new WebAuthn credential
  */
-// export async function registerWebAuthn(): Promise<IRelayPKP> {
-//   const provider = litAuthClient.initProvider<WebAuthnProvider>(ProviderType.WebAuthn);
-//   // Register new WebAuthn credential
-//   const options = await provider.register();
+export async function registerWebAuthn(): Promise<IRelayPKP> {
+  const provider = litAuthClient.initProvider<WebAuthnProvider>(ProviderType.WebAuthn);
+  // Register new WebAuthn credential
+  const options = await provider.register();
 
-//   // Verify registration and mint PKP through relay server
-//   const txHash = await provider.verifyAndMintPKPThroughRelayer(options);
-//   const response = await provider.relay.pollRequestUntilTerminalState(txHash);
-//   if (response.status !== "Succeeded") {
-//     throw new Error("Minting failed");
-//   }
-//   const newPKP: IRelayPKP = {
-//     tokenId: response.pkpTokenId,
-//     publicKey: response.pkpPublicKey,
-//     ethAddress: response.pkpEthAddress,
-//   };
+  // Verify registration and mint PKP through relay server
+  const txHash = await provider.verifyAndMintPKPThroughRelayer(options);
+  const response = await provider.relay.pollRequestUntilTerminalState(txHash);
+  if (response.status !== "Succeeded") {
+    throw new Error("Minting failed");
+  }
+  const newPKP: IRelayPKP = {
+    tokenId: response.pkpTokenId ?? "",
+    publicKey: response.pkpPublicKey ?? "",
+    ethAddress: response.pkpEthAddress ?? "",
+  };
 
-//   return newPKP;
-// }
+  return newPKP;
+}
 
 /**
  * Get auth method object by authenticating with a WebAuthn credential

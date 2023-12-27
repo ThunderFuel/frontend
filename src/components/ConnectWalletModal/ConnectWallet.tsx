@@ -10,7 +10,7 @@ import { useMetamask } from "hooks/useMetamask";
 import { useCoinbase } from "hooks/useCoinbase";
 import config from "config";
 import { FUEL_TYPE } from "../../hooks/useFuelExtension";
-import { authenticateWithStytch, getPKPs, mintPKP, signInWithDiscord, signInWithGoogle } from "lit-protocol/lit";
+import { authenticateWithStytch, authenticateWithWebAuthn, getPKPs, mintPKP, registerWebAuthn, signInWithDiscord, signInWithGoogle } from "lit-protocol/lit";
 import clsx from "clsx";
 import Input from "components/Input";
 import VerifyEmail from "./VerifyEmail";
@@ -22,12 +22,8 @@ import { useStytch } from "@stytch/react";
 import { AuthMethod } from "@lit-protocol/types";
 import userService from "api/user/user.service";
 import { AuthMethodType } from "@lit-protocol/types/src/lib/enums";
-
-const schema = yup
-  .object({
-    email: yup.string().email("invalid email"),
-  })
-  .required();
+import VerifyPhone from "./VerifyPhone";
+import VerifyPasskey from "./VerifyPasskey";
 
 const WalletList = {
   [FUEL_TYPE.FUEL]: {
@@ -63,30 +59,20 @@ const WalletList = {
 const SocialList = [
   {
     name: "Google",
+    key: "google",
     icon: IconGoogle,
   },
   {
     name: "Discord",
+    key: "discord",
     icon: IconDiscord,
   },
+  {
+    name: "Use A Passkey",
+    key: "passkey",
+    icon: IconArrowRight,
+  },
 ];
-
-const SocialButton = ({ name, icon }: any) => {
-  const Icon = icon;
-
-  return (
-    <Button
-      className="btn-secondary px-4 py-[14px] h-[60px] w-full rounded"
-      onClick={() => {
-        if (name == "Google") signInWithGoogle("http://localhost:3000/marketplace");
-        else if (name == "Discord") signInWithDiscord("http://localhost:3000/marketplace");
-        else return;
-      }}
-    >
-      <Icon className={clsx("w-[30px] h-[30px]", name === "Google" ? "h-[22.5px] w-[22.5px]" : name === "Discord" ? "text-[#738ADB]" : "")} />
-    </Button>
-  );
-};
 
 const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: string; icon: any; type: FUEL_TYPE; activeConnector: number }) => {
   const { walletConnectGateway } = useWallet();
@@ -148,19 +134,51 @@ export const ConnectWallet = () => {
   const dispatch = useDispatch();
   const walletList = config.getConfig("walletList");
   const [showVerifyEmail, setShowVerifyEmail] = useState(false);
+  const [showVerifyPhone, setShowVerifyPhone] = useState(false);
+  const [showVerifyPasskey, setShowVerifyPasskey] = useState(false);
   const [methodId, setMethodId] = useState<string>("");
   const [codeError, setCodeError] = useState(false);
+  const [isEmailSelected, setIsEmailSelected] = useState(true);
+  const schema = yup
+    .object({
+      email: isEmailSelected ? yup.string().email("invalid email").required() : yup.string(),
+      phonenumber: !isEmailSelected ? yup.string().required("invalid phone number") : yup.string(),
+    })
+    .required();
   const {
     getValues,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
   const stytchClient = useStytch();
 
+  const SocialButton = ({ item }: any) => {
+    const Icon = item.icon;
+    const name = item.name;
+    const key = item.key;
+
+    return (
+      <Button
+        className="btn-secondary px-4 py-3 h-10 w-full rounded text-headlineMd "
+        onClick={() => {
+          if (key == "google") signInWithGoogle("http://localhost:3000/marketplace");
+          else if (key == "discord") signInWithDiscord("http://localhost:3000/marketplace");
+          else if (key == "passkey") setShowVerifyPasskey(true);
+          else return;
+        }}
+      >
+        {name}
+        <Icon className={clsx("w-[18px] h-[18px]", name === "Google" ? "h-[13.5px] w-[13.5px]" : name === "Discord" ? "text-[#738ADB]" : "")} />
+      </Button>
+    );
+  };
+
   const onValid = (data: any) => {
+    console.log(isEmailSelected);
     sendPasscode(data);
   };
 
@@ -169,11 +187,24 @@ export const ConnectWallet = () => {
   };
 
   async function sendPasscode(data?: any) {
+    const _email = data ? data.email : getValues("email");
+    const _phonenumber = data ? data.phonenumber : getValues("phonenumber");
+    console.log(_email, _phonenumber);
+
     try {
-      const response = await stytchClient.otps.email.loginOrCreate(data ? data.email : getValues("email"));
+      let response;
+      if (_email) {
+        response = await stytchClient.otps.email.loginOrCreate(_email);
+        setShowVerifyEmail(true);
+      } else {
+        console.log(!_phonenumber.startsWith("+") ? `+${_phonenumber}` : _phonenumber);
+        response = await stytchClient.otps.sms.loginOrCreate(!_phonenumber.startsWith("+") ? `+${_phonenumber}` : _phonenumber);
+        setShowVerifyPhone(true);
+      }
       setMethodId(response.method_id);
-      setShowVerifyEmail(true);
     } catch (err) {
+      setShowVerifyPhone(false);
+      setShowVerifyEmail(false);
       console.log(err);
     }
   }
@@ -213,6 +244,25 @@ export const ConnectWallet = () => {
   }
 
   if (showVerifyEmail) return <VerifyEmail email={getValues("email")} error={codeError} setError={setCodeError} authenticate={authenticate} sendPasscode={sendPasscode} />;
+  else if (showVerifyPhone) return <VerifyPhone email={getValues("phonenumber")} error={codeError} setError={setCodeError} authenticate={authenticate} sendPasscode={sendPasscode} />;
+  else if (showVerifyPasskey)
+    return (
+      <VerifyPasskey
+        authenticate={async () => {
+          try {
+            // keychain i yoksa register olmali
+            // const newPKP = await registerWebAuthn();
+
+            const result = await authenticateWithWebAuthn();
+
+            console.log(result);
+          } catch (error) {
+            console.log(error);
+            setShowVerifyPasskey(false);
+          }
+        }}
+      />
+    );
   else
     return (
       <div className="flex flex-col h-full p-5 gap-[15px] overflow-y-scroll no-scrollbar">
@@ -222,10 +272,27 @@ export const ConnectWallet = () => {
             <span className="text-bodyMd text-gray-light font-spaceGrotesk">Choose a way to get you started quickly</span>
           </div>
           <div className="flex flex-col gap-2.5 border border-gray rounded-lg p-[15px]">
+            <div className="flex items-center justify-between w-full">
+              <h6 className="text-h6 text-white">{isEmailSelected ? "Email Address" : "Phone Number"}</h6>
+              <u
+                className="cursor-pointer text-bodySm text-white"
+                onClick={() => {
+                  reset();
+                  setIsEmailSelected((prev) => !prev);
+                }}
+              >
+                {isEmailSelected ? "Use Phone Number" : "Use Email Address"}{" "}
+              </u>
+            </div>
             <div className="flex items-center h-fit gap-6 border border-gray rounded-lg p-2.5">
-              <Input placeholder="Enter your e-mail address" containerClassName="!h-10 border-none !p-0" {...register("email")} error={errors.email?.message} />
+              <Input
+                placeholder={isEmailSelected ? "Enter your e-mail address" : "Enter your phone number"}
+                containerClassName="!h-10 border-none !p-0"
+                {...register(isEmailSelected ? "email" : "phonenumber")}
+                error={isEmailSelected ? errors.email?.message : errors.phonenumber?.message}
+              />
               <Button className="btn-primary h-10 btn-sm whitespace-nowrap" onClick={onHandleSubmit}>
-                get started
+                send code
               </Button>
             </div>
             <div className="flex items-center gap-2.5">
@@ -233,9 +300,9 @@ export const ConnectWallet = () => {
               <span className="whitespace-nowrap text-headline-01 !tracking-[2.4px] uppercase font-bigShoulderDisplay text-gray-light">or start with socials</span>
               <div className="h-[1px] bg-gray w-full"></div>
             </div>
-            <div className="flex gap-2.5">
-              {SocialList.map((item: any, index: number) => (
-                <SocialButton key={index} name={item.name} icon={item.icon} />
+            <div className="flex flex-col gap-2.5">
+              {SocialList.map((item: any) => (
+                <SocialButton key={item.key} item={item} />
               ))}
             </div>
           </div>
