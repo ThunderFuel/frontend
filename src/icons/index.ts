@@ -116,3 +116,4 @@ export { ReactComponent as IconListingCancel } from "./icon-list-cancel.svg";
 export { ReactComponent as IconLinea } from "./icon-linea.svg";
 export { ReactComponent as IconStop } from "./icon-icon120.svg";
 export { ReactComponent as IconGoogle } from "./icon-google.svg";
+export { ReactComponent as IconKey } from "./icon-key.svg";

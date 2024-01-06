@@ -248,14 +248,15 @@ export const ConnectWallet = () => {
   else if (showVerifyPasskey)
     return (
       <VerifyPasskey
-        authenticate={async () => {
+        authenticate={async (isRegister: boolean) => {
           try {
-            // keychain i yoksa register olmali
-            // const newPKP = await registerWebAuthn();
-
-            const result = await authenticateWithWebAuthn();
-
-            console.log(result);
+            if (isRegister) {
+              const newPKP = await registerWebAuthn();
+              console.log(newPKP);
+            } else {
+              const result = await authenticateWithWebAuthn();
+              console.log(result);
+            }
           } catch (error) {
             console.log(error);
             setShowVerifyPasskey(false);
