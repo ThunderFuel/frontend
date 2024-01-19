@@ -214,7 +214,7 @@ export async function mintPKP(authMethod: AuthMethod): Promise<IRelayPKP> {
   } else {
     // Mint PKP through relay server
 
-    txHash = await provider.mintPKPThroughRelayer(authMethod, { permittedAuthMethodScopes: [[AuthMethodScope.SignAnything]], addPkpEthAddressAsPermittedAddress: true });
+    txHash = await provider.mintPKPThroughRelayer(authMethod, { permittedAuthMethodScopes: [[AuthMethodScope.SignAnything]], addPkpEthAddressAsPermittedAddress: true, sendPkpToItself: true });
   }
 
   const response = await provider.relay.pollRequestUntilTerminalState(txHash);

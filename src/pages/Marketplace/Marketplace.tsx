@@ -77,7 +77,7 @@ const Marketplace = () => {
   const state = queryString.get("state");
   const provider = queryString.get("provider");
 
-  console.log(state, provider, id);
+  // console.log(state, provider, id);
 
   const { initSession, sessionSigs } = useSession();
 
@@ -100,46 +100,52 @@ const Marketplace = () => {
     const googleProvider = litAuthClient.initProvider<GoogleProvider>(ProviderType.Google, { redirectUri: "http://localhost:3000" });
 
     googleProvider.authenticate().then((authMethod) => {
-      console.log(authMethod);
+      // console.log(authMethod);
+
       // mintPKP({
       //   authMethodType: 6,
       //   accessToken: authMethod.accessToken,
+      // }).then(() => {
+      //   getPKPs(authMethod).then((pkps) => {
+      //     console.log(pkps);
+      //   });
       // });
+
       getPKPs(authMethod).then((pkps) => {
         console.log(pkps);
-
-        userService.userCreate({ walletAddress: pkps[1].ethAddress }).then((res: any) => {
+        userService.userCreate({ walletAddress: pkps[pkps.length - 1].ethAddress }).then((res: any) => {
           const { walletAddress } = res.data;
           dispatch(setIsConnected(true));
           dispatch(setAddress(walletAddress));
           dispatch(setUser(res.data));
           walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK, 3);
-
           // if (authMethod && pkps.length > 0) {
           //   initSession(authMethod, pkps[1]);
           // }
-
           googleProvider
             .getSessionSigs({
-              pkpPublicKey: pkps[0].publicKey,
+              pkpPublicKey: pkps[pkps.length - 1].publicKey,
               authMethod: authMethod,
               sessionSigsParams: {
-                chain: "goerli",
-                resourceAbilityRequests: [{ resource: new LitPKPResource(pkps[0].tokenId), ability: LitAbility.PKPSigning }],
+                chain: "ethereum",
+                resourceAbilityRequests: [
+                  {
+                    resource: new LitPKPResource("*"),
+                    ability: LitAbility.PKPSigning,
+                  },
+                ],
               },
             })
             .then((res) => {
               console.log(res);
-              const sessionSig = res;
+              const sessionSigs = res;
               // ==================== Setup ====================
               const pkpEthersWallet = new PKPEthersWallet({
-                controllerSessionSigs: sessionSig,
+                controllerSessionSigs: sessionSigs,
                 pkpPubKey: config.PKP_PUBKEY,
                 rpc: config.CHRONICLE_RPC,
               });
-
               pkpEthersWallet.init();
-
               // ==================== Test Logic ====================
               // Transaction to sign and send
               const from = config.PKP_ETH_ADDRESS;
@@ -147,7 +153,6 @@ const Marketplace = () => {
               const gasLimit = ethers.BigNumber.from("21000");
               const value = ethers.BigNumber.from("0");
               const data = "0x";
-
               // pkp-ethers signer will automatically add missing fields (nonce, chainId, gasPrice, gasLimit)
               const tx = {
                 from: from,
@@ -156,31 +161,22 @@ const Marketplace = () => {
                 value,
                 data,
               };
-
               // eth_sendTransaction parameters
               // Transaction - Object
               // Reference: https://ethereum.github.io/execution-apis/api-documentation/#eth_sendTransaction
               let txRes;
-
-              try {
-                ethRequestHandler({
-                  signer: pkpEthersWallet,
-                  payload: {
-                    method: "eth_sendTransaction",
-                    params: [tx],
-                  },
-                }).then((res) => {
-                  console.log(res);
+              ethRequestHandler({
+                signer: pkpEthersWallet,
+                payload: {
+                  method: "eth_sendTransaction",
+                  params: [tx],
+                },
+              })
+                .then((res) => {
+                  console.log("ethrequesthandler:", res);
                   txRes = res;
-                });
-              } catch (e: any) {
-                if (e.toString().includes("insufficient FPE funds")) {
-                  return console.log(`PKPEthersWallet should be able to send tx (insufficient FPE funds ❗️)`);
-                }
-
-                return console.log(`PKPEthersWallet should be able to send tx unexpected error: ${e.toString()}`);
-              }
-              console.log(txRes);
+                })
+                .catch((err) => console.log(err));
             })
             .catch((e) => console.log(e));
         });
