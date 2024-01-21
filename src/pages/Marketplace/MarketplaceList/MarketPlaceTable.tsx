@@ -1,7 +1,6 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
-import Img from "components/Img";
 
 import { IconDownRight, IconLoadingTable, IconSortDown, IconSortUp, IconUpRight } from "icons";
 import clsx from "clsx";
@@ -13,23 +12,7 @@ import { Link } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
 import config from "../../../config";
-
-const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) => {
-  const items = collectionItems.slice(0, 5);
-
-  return (
-    <ul className="px-4 flex gap-2">
-      {items.map((item, i) => (
-        <li key={i} className="w-14 h-14 overflow-hidden">
-          <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
-            {item.image ? <Img src={item.image} alt={i.toString()} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-});
-NftImages.displayName = "NftImages";
+import NftImages from "./components/NftImages";
 
 const Change = ({ change }: { change: any }) => {
   const isNull = change === 0 || change === null;

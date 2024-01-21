@@ -26,6 +26,7 @@ import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
+const isDevelopment = "development" === process.env.NODE_ENV;
 
 export const litNodeClient = new LitNodeClient({
   litNetwork: "cayenne",
@@ -76,17 +77,19 @@ i18next.use(initReactI18next).init({
   },
 });
 
-Sentry.init({
-  dsn: "https://88f305bbb3ef4cfe956e009220f8d481@o4504775680196608.ingest.sentry.io/4504775682293760",
-  integrations: [
-    new BrowserTracing(),
-    new Sentry.Integrations.Breadcrumbs({
-      console: false,
-    }),
-  ],
-  tracesSampleRate: 1.0,
-  ignoreErrors: [/^Cannot read properties of undefined (reading 'isConnected')$/],
-});
+if (!isDevelopment) {
+  Sentry.init({
+    dsn: "https://88f305bbb3ef4cfe956e009220f8d481@o4504775680196608.ingest.sentry.io/4504775682293760",
+    integrations: [
+      new BrowserTracing(),
+      new Sentry.Integrations.Breadcrumbs({
+        console: false,
+      }),
+    ],
+    tracesSampleRate: 1.0,
+    ignoreErrors: [/^Cannot read properties of undefined (reading 'isConnected')$/],
+  });
+}
 
 const stytch = new StytchUIClient("public-token-test-af22c4d3-1e8a-4fa5-a0fa-4c032e2a840a");
 

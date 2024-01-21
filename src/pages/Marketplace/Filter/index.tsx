@@ -1,10 +1,8 @@
 import React from "react";
-import { useIsMobile } from "hooks/useIsMobile";
-import MobileFilter from "./MobileFilter";
 import Filter from "./Filter";
 
 const Index = () => {
-  return useIsMobile() ? <MobileFilter /> : <Filter />;
+  return <Filter />;
 };
 
 export default Index;

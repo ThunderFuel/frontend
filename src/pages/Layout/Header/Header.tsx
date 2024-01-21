@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-
-import { AssetLogo } from "assets";
 import { IconCart, IconHamburger, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
 
 import Search from "./components/Search/Search";
@@ -14,7 +12,6 @@ import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
-import { useIsMobile } from "hooks/useIsMobile";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
 import UseNavigate from "hooks/useNavigate";
@@ -33,7 +30,7 @@ const HeaderIconButtonGroup = React.memo(() => {
   const { isConnected, user } = useAppSelector((state) => state.wallet);
 
   return (
-    <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
+    <div className="hidden lg:flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
@@ -71,7 +68,7 @@ HeaderIconButton.displayName = "HeaderIconButton";
 
 const HeaderWarning = () => {
   return (
-    <div className="flex-center text-orange border-y border-orange py-1">
+    <div className="hidden lg:flex-center text-orange border-y border-orange py-1">
       <IconWarning />
       <div className="body-small flex gap-0.5">
         <span>Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</span>
@@ -106,36 +103,25 @@ const Header = () => {
 
   return (
     <header id="layout-header" className={clsx("sticky top-0 z-30 bg-bg")} ref={ref}>
-      {!useIsMobile() ? (
+      <>
         <>
-          <>
-            <div className="border-y border-gray">
-              <div className="header-container-fluid">
-                <div className="flex items-center gap-6 pr-6">
-                  <Link className="flex items-center text-white gap-1" to={PATHS.MARKETPLACE}>
-                    <IconThunder2 className="w-14" />
-                    <IconThunderLogoText className="hidden lg:flex" />
-                  </Link>
-
-                  <Tab />
-                  <Search />
-                </div>
-                <HeaderIconButtonGroup />
+          <div className="border-y border-gray">
+            <div className="header-container-fluid">
+              <div className="flex items-center gap-5 lg:gap-6 flex-1 lg:pr-6">
+                <Link className="flex items-center text-white gap-1" to={PATHS.MARKETPLACE}>
+                  <IconThunder2 className="w-14" />
+                  <IconThunderLogoText className="hidden lg:flex" />
+                </Link>
+                <Tab />
+                <Search />
               </div>
-            </div>
-            <HeaderWarning />
-          </>
-          <MobileSearch />
-        </>
-      ) : (
-        <div className="border-y border-gray">
-          <div className="header-container-fluid">
-            <div className="flex items-center py-5">
-              <img src={AssetLogo} className="h-8" alt="logo" />
+              <HeaderIconButtonGroup />
             </div>
           </div>
-        </div>
-      )}
+          <HeaderWarning />
+        </>
+        <MobileSearch />
+      </>
     </header>
   );
 };

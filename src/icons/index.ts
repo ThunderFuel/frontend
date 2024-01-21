@@ -117,3 +117,7 @@ export { ReactComponent as IconLinea } from "./icon-linea.svg";
 export { ReactComponent as IconStop } from "./icon-icon120.svg";
 export { ReactComponent as IconGoogle } from "./icon-google.svg";
 export { ReactComponent as IconKey } from "./icon-key.svg";
+export { ReactComponent as IconHome } from "./icon-home.svg";
+export { ReactComponent as IconCollections } from "./icon-collections.svg";
+export { ReactComponent as IconDrops } from "./icon-drops.svg";
+export { ReactComponent as IconGridSmall } from "./icon-grid-small.svg";

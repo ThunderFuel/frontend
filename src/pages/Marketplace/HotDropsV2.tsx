@@ -51,8 +51,8 @@ const HotDrops = () => {
         {items.map((item, k) => {
           return (
             <Carousel.Item key={k}>
-              <div className="flex min-h-[440px] w-full border-b border-gray bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${item.banner})` }}>
-                <div className="flex flex-col justify-between px-10 py-5 border-r border-gray bg-bg" style={{ width: "440px" }}>
+              <div className="flex min-h-[440px] w-full border-b border-gray bg-[length:auto_190px] lg:bg-cover bg-top lg:bg-center bg-no-repeat" style={{ backgroundImage: `url(${item.banner})` }}>
+                <div className="flex flex-col justify-end lg:justify-between px-5 lg:px-10 py-5 border-r border-gray lg:bg-bg w-full lg:w-[440px] gap-10 lg:gap-0">
                   <div className="flex flex-col gap-5">
                     <h2 className="text-h2 text-white">{item.name}</h2>
                   </div>

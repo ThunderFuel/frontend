@@ -1,9 +1,14 @@
 import React, { useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
 import etherscanService from "api/etherscan/etherscan.service";
-import { IconEthereum, IconGas, IconMoon, IconSun } from "icons";
-import { useLocalStorage } from "../../../hooks/useLocalStorage";
-import { THUNDER_THEME_NAME } from "../../../global-constants";
+import { IconCart, IconCollections, IconDrops, IconEthereum, IconGas, IconHome, IconMoon, IconSun, IconWallet } from "icons";
+import { useLocalStorage } from "hooks/useLocalStorage";
+import { THUNDER_THEME_NAME } from "global-constants";
+import { useIsMobile } from "hooks/useIsMobile";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
+
+import "./Footer.css";
 
 const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
@@ -63,6 +68,62 @@ const FooterBottom = React.memo(() => {
   );
 });
 FooterBottom.displayName = "FooterBottom";
+
+const FooterMobileBottom = React.memo(() => {
+  const [initLocation, setInitLocation] = React.useState<any>(location.pathname);
+  const navigate = useNavigate();
+
+  const menus = [
+    {
+      icon: IconHome,
+      path: PATHS.MARKETPLACE,
+      onClick: () => {
+        navigate(PATHS.MARKETPLACE);
+        setInitLocation(PATHS.MARKETPLACE);
+      },
+    },
+    {
+      icon: IconCollections,
+      path: PATHS.RANKINGS,
+      onClick: () => {
+        navigate(PATHS.RANKINGS);
+        setInitLocation(PATHS.RANKINGS);
+      },
+    },
+    {
+      icon: IconDrops,
+      path: PATHS.DROPS,
+      onClick: () => {
+        navigate(PATHS.DROPS);
+        setInitLocation(PATHS.DROPS);
+      },
+    },
+    {
+      icon: IconWallet,
+      onClick: () => navigate(PATHS.DROPS),
+    },
+    {
+      icon: IconCart,
+      onClick: () => navigate(PATHS.DROPS),
+    },
+  ];
+
+  return (
+    <div className="mobile-nav">
+      {menus.map((menu, i) => {
+        const Icon = menu.icon ?? React.Fragment;
+
+        return (
+          <div key={i} onClick={menu.onClick} className={menu.path === initLocation ? "active" : ""}>
+            <Icon />
+          </div>
+        );
+      })}
+    </div>
+  );
+});
+FooterMobileBottom.displayName = "FooterMobileBottom";
+
 const Footer = () => {
   const ref = useRef<any>(null);
   const setFooterHeight = () => {
@@ -85,7 +146,7 @@ const Footer = () => {
 
   return (
     <div className="bg-bg border-t border-t-gray fixed bottom-0 left-0 w-full z-20" ref={ref}>
-      <FooterBottom />
+      {useIsMobile() ? <FooterMobileBottom /> : <FooterBottom />}
     </div>
   );
 };

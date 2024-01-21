@@ -3,8 +3,8 @@ import Img from "components/Img";
 
 const Collection = ({ image, title }: { image: any; title: string }) => {
   return (
-    <div className="px-4 flex items-center gap-5">
-      <div className="overflow-hidden rounded-full">
+    <div className="lg:px-4 flex items-center gap-5">
+      <div className="overflow-hidden rounded-lg lg:rounded-full">
         <Img src={image} className="w-12 h-12" />
       </div>
       <h6 className="text-h6 text-overflow max-w-[200px]">{title}</h6>

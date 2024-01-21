@@ -1,4 +1,4 @@
 .header-container-fluid {
   @apply pr-0 pl-5 lg:px-4;
-  @apply flex items-center justify-between;
+  @apply flex items-center lg:justify-between;
 }
