@@ -21,9 +21,19 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
 import { goerli, linea, mainnet } from "wagmi/chains";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import { StytchProvider } from "@stytch/react";
+import { StytchUIClient } from "@stytch/vanilla-js";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
 const isDevelopment = "development" === process.env.NODE_ENV;
+
+export const litNodeClient = new LitNodeClient({
+  litNetwork: "cayenne",
+  debug: false,
+});
+
+litNodeClient.connect();
 
 export const connectors = [
   new MetaMaskConnector({ chains }),
@@ -81,12 +91,17 @@ if (!isDevelopment) {
   });
 }
 
+const stytch = new StytchUIClient("public-token-test-af22c4d3-1e8a-4fa5-a0fa-4c032e2a840a");
+
+// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <WagmiConfig config={config}>
-        <Router />
-      </WagmiConfig>
+      <StytchProvider stytch={stytch}>
+        <WagmiConfig config={config}>
+          <Router />
+        </WagmiConfig>
+      </StytchProvider>
     </Provider>
     <ToastContainer />
   </React.StrictMode>,
