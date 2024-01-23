@@ -78,11 +78,13 @@ export const ROUTES: RouteConfig[] = [
     component: Login,
     layout: Layout,
     notLoggedIn: true,
+    isResponsive: true,
   },
   {
     path: PATHS.RANKINGS,
     component: Rankings,
     layout: Layout,
+    isResponsive: true,
   },
   {
     path: PATHS.NFT_DETAILS,

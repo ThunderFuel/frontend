@@ -1,7 +1,8 @@
 import React from "react";
+import { ConnectWallet } from "components/ConnectWalletModal/ConnectWallet";
 
 const Login = () => {
-  return <div>Login</div>;
+  return <ConnectWallet />;
 };
 
 export default Login;

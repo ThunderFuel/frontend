@@ -162,6 +162,13 @@ body {
     @apply border border-white border-opacity-10;
   }
 
+  .btn-connect {
+    @apply btn-sm h-10;
+    @apply ease-in-out transform duration-300 group-hover:opacity-100;
+    @apply lg:opacity-0;
+    @apply bg-bg border-bg-light text-white lg:bg-white lg:text-bg-light;
+  }
+
   .input {
     background: transparent;
     @apply body-medium w-full outline-none text-white placeholder-gray-light;

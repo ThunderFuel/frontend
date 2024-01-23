@@ -22,7 +22,7 @@ const Details = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<any>({
     resolver: yupResolver(schema),
   });
   const { fields, append } = useFieldArray({

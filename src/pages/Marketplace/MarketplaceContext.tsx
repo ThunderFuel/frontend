@@ -71,6 +71,11 @@ const filterValues = [
   },
 ];
 
+export enum MOBILE_LIST_TYPE {
+  GRID,
+  LIST,
+}
+
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; options?: any }) => {
@@ -83,7 +88,7 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
   const [sortingValue, setSortingValue] = useState(0);
   const [sortingType, setSortingType] = useState("ASC");
-  const [mobileListType, setMobileListType] = useState("GRID");
+  const [mobileListType, setMobileListType] = useState(MOBILE_LIST_TYPE.GRID);
 
   const getMarketplaceItems = async () => {
     if (isLoading) {

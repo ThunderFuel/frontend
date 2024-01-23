@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconCoinbase, IconDiscord, IconFuelWallet, IconFuelet, IconGoogle, IconLightning, IconMetamask, IconWallet, IconWalletConnect } from "icons";
+import { IconArrowRight, IconCoinbase, IconDiscord, IconFuelet, IconFuelWallet, IconGoogle, IconLightning, IconMetamask, IconWalletConnect } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
@@ -10,18 +10,16 @@ import { useMetamask } from "hooks/useMetamask";
 import { useCoinbase } from "hooks/useCoinbase";
 import config from "config";
 import { FUEL_TYPE } from "../../hooks/useFuelExtension";
-import { authenticateWithStytch, authenticateWithWebAuthn, getPKPs, mintPKP, registerWebAuthn, signInWithDiscord, signInWithGoogle } from "lit-protocol/lit";
+import { authenticateWithStytch, authenticateWithWebAuthn, getPKPs, registerWebAuthn, signInWithDiscord, signInWithGoogle } from "lit-protocol/lit";
 import clsx from "clsx";
 import Input from "components/Input";
 import VerifyEmail from "./VerifyEmail";
-import ChooseUsername from "./ChooseUsername";
 import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "schema";
 import { useForm } from "react-hook-form";
 import { useStytch } from "@stytch/react";
 import { AuthMethod } from "@lit-protocol/types";
 import userService from "api/user/user.service";
-import { AuthMethodType } from "@lit-protocol/types/src/lib/enums";
 import VerifyPhone from "./VerifyPhone";
 import VerifyPasskey from "./VerifyPasskey";
 
@@ -96,6 +94,20 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: stri
     [FUEL_TYPE.LIT_DISCORD_AUTH]: { error: metamaskError },
   }[type as FUEL_TYPE];
 
+  const onConnect = () => {
+    if (name == "Google") {
+      signInWithGoogle("http://localhost:3000/marketplace");
+    } else if (name == "Discord") {
+      signInWithDiscord("http://localhost:3000/marketplace");
+    } else {
+      walletConnectGateway(type, activeConnector).then((res: any) => {
+        if (res) {
+          dispatch(toggleWalletModal());
+        }
+      });
+    }
+  };
+
   return (
     <div className={`flex p-2.5 h-[60px] items-center justify-between border border-gray rounded-[5px] group`}>
       <div className="flex items-center gap-x-2.5">
@@ -103,19 +115,7 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: stri
         <h6 className="text-head6 font-spaceGrotesk text-white">{name}</h6>
       </div>
       {activeWallet.error === "" ? (
-        <Button
-          className="btn-sm h-10 opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
-          onClick={() => {
-            if (name == "Google") signInWithGoogle("http://localhost:3000/marketplace");
-            else if (name == "Discord") signInWithDiscord("http://localhost:3000/marketplace");
-            else
-              walletConnectGateway(type, activeConnector).then((res: any) => {
-                if (res) {
-                  dispatch(toggleWalletModal());
-                }
-              });
-          }}
-        >
+        <Button className="btn-connect" onClick={onConnect}>
           CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
         </Button>
       ) : (
@@ -171,7 +171,7 @@ export const ConnectWallet = () => {
           else return;
         }}
       >
-        {name}
+        <span className="hidden lg:flex">{name}</span>
         <Icon className={clsx("w-[18px] h-[18px]", name === "Google" ? "h-[13.5px] w-[13.5px]" : name === "Discord" ? "text-[#738ADB]" : "")} />
       </Button>
     );
@@ -301,7 +301,7 @@ export const ConnectWallet = () => {
               <span className="whitespace-nowrap text-headline-01 !tracking-[2.4px] uppercase font-bigShoulderDisplay text-gray-light">or start with socials</span>
               <div className="h-[1px] bg-gray w-full"></div>
             </div>
-            <div className="flex flex-col gap-2.5">
+            <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2.5">
               {SocialList.map((item: any) => (
                 <SocialButton key={item.key} item={item} />
               ))}
