@@ -18,3 +18,5 @@ export const contracts = {
   exchange: "0xfb7fc3829b13b134c3ec0431fb5ce5536f79e4872d4f83ba184045f64b5a9de3",
   erc721: "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
 };
+
+export const DISCORD_URL = "https://discord.com/invite/thundermarket";
