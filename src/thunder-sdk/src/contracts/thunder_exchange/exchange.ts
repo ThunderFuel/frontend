@@ -151,10 +151,10 @@ async function setup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<ThunderExchangeAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return ThunderExchangeAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -169,10 +169,10 @@ async function poolSetup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<PoolAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return PoolAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -187,10 +187,10 @@ async function erc721Setup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<NFTContractAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return NFTContractAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -249,7 +249,7 @@ async function _placeSellOrder(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const _order = _convertToInput(order);
 
         const assetId = ReceiptMintCoder.getAssetId(order.collection, _order.token_id);
@@ -284,7 +284,7 @@ async function _placeBuyOrder(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const _order = _convertToInput(order);
 
         let strategy: Contract;
@@ -314,7 +314,7 @@ export async function updateOrder(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const _order = _convertToInput(order);
 
         let strategy: Contract;
@@ -350,7 +350,7 @@ export async function depositAndOffer(
     try {
         const contract = await setup(contractId, provider, wallet);
         const coin: CoinQuantityLike = { amount: requiredBidAmount, assetId: assetId };
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const _order = _convertToInput(order);
 
         let strategy: Contract;
@@ -389,7 +389,7 @@ export async function bulkListing(
     let calls: FunctionInvocationScope<any[], any>[] = [];
 
     const contract = await setup(contractId, provider, wallet);
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider);
     const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
     const _contracts = [pool, executionManager, assetManager, _contract]
 
@@ -464,7 +464,7 @@ export async function cancelOrder(
         isBuySide ?
             side = SideInput.Buy :
             side = SideInput.Sell;
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
         const _strategy: ContractIdInput = { value: strategy };
 
@@ -579,7 +579,7 @@ async function _executeBuyOrder(
     assetId: string,
 ) {
     try {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
         const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
 
@@ -609,7 +609,7 @@ async function _executeSellOrder(
     order: TakerOrderInput,
 ) {
     try {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
 
         const assetId = ReceiptMintCoder.getAssetId(order.collection.value, order.token_id);
@@ -646,7 +646,7 @@ export async function bulkPurchase(
         let calls: FunctionInvocationScope<any[], any>[] = [];
 
         const contract = await setup(contractId, provider, wallet);
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
         const _contracts = [pool, executionManager, assetManager, _contract, strategyFixedPrice, royaltyManager]
 

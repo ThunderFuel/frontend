@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
 import type { StrategyAuctionAbi, StrategyAuctionAbiInterface } from "../StrategyAuctionAbi";
 
 const _abi = {
@@ -35,16 +35,16 @@ const _abi = {
     },
     {
       "typeId": 3,
-      "type": "enum Identity",
+      "type": "enum AccessError",
       "components": [
         {
-          "name": "Address",
-          "type": 21,
+          "name": "CannotReinitialized",
+          "type": 0,
           "typeArguments": null
         },
         {
-          "name": "ContractId",
-          "type": 22,
+          "name": "NotOwner",
+          "type": 0,
           "typeArguments": null
         }
       ],
@@ -52,6 +52,23 @@ const _abi = {
     },
     {
       "typeId": 4,
+      "type": "enum Identity",
+      "components": [
+        {
+          "name": "Address",
+          "type": 9,
+          "typeArguments": null
+        },
+        {
+          "name": "ContractId",
+          "type": 11,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 5,
       "type": "enum Option",
       "components": [
         {
@@ -61,16 +78,16 @@ const _abi = {
         },
         {
           "name": "Some",
-          "type": 6,
+          "type": 8,
           "typeArguments": null
         }
       ],
       "typeParameters": [
-        6
+        8
       ]
     },
     {
-      "typeId": 5,
+      "typeId": 6,
       "type": "enum Side",
       "components": [
         {
@@ -87,97 +104,80 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 6,
+      "typeId": 7,
+      "type": "enum StrategyAuctionErrors",
+      "components": [
+        {
+          "name": "OnlyOwner",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "Initialized",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "ExchangeAlreadyInitialized",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "OrderCancelledOrExpired",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "FeeTooHigh",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "CallerMustBeTheExchange",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "ItemIsNotOnAuction",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "OwnerCanNotPlaceBid",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "BidMustBeHigherThanPreviousOne",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "BidMustBeNonZero",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "BidMustBeHigherThanStartingPrice",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "ItemIsAlreadyOnAuction",
+          "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 8,
       "type": "generic T",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 7,
-      "type": "str[19]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 8,
-      "type": "str[21]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
       "typeId": 9,
-      "type": "str[22]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 10,
-      "type": "str[23]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 11,
-      "type": "str[27]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 12,
-      "type": "str[29]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 13,
-      "type": "str[31]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 14,
-      "type": "str[34]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 15,
-      "type": "str[35]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 16,
-      "type": "str[37]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 17,
-      "type": "str[38]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 18,
-      "type": "str[47]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 19,
-      "type": "str[53]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 20,
-      "type": "str[8]",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 21,
       "type": "struct Address",
       "components": [
         {
@@ -189,7 +189,19 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 22,
+      "typeId": 10,
+      "type": "struct AssetId",
+      "components": [
+        {
+          "name": "value",
+          "type": 1,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 11,
       "type": "struct ContractId",
       "components": [
         {
@@ -201,7 +213,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 23,
+      "typeId": 12,
       "type": "struct ExecutionResult",
       "components": [
         {
@@ -211,211 +223,211 @@ const _abi = {
         },
         {
           "name": "collection",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         },
         {
           "name": "token_id",
-          "type": 30,
+          "type": 1,
           "typeArguments": null
         },
         {
           "name": "amount",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "payment_asset",
-          "type": 22,
+          "type": 10,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 24,
+      "typeId": 13,
       "type": "struct ExtraParams",
       "components": [
         {
           "name": "extra_address_param",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "extra_contract_param",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         },
         {
           "name": "extra_u64_param",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 25,
+      "typeId": 14,
       "type": "struct MakerOrder",
       "components": [
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         },
         {
           "name": "maker",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "collection",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         },
         {
           "name": "token_id",
-          "type": 30,
+          "type": 1,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "amount",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "nonce",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "strategy",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         },
         {
           "name": "payment_asset",
-          "type": 22,
+          "type": 10,
           "typeArguments": null
         },
         {
           "name": "start_time",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "end_time",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "extra_params",
-          "type": 24,
+          "type": 13,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 26,
+      "typeId": 15,
       "type": "struct OwnershipRenounced",
       "components": [
         {
           "name": "previous_owner",
-          "type": 3,
+          "type": 4,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 27,
+      "typeId": 16,
       "type": "struct OwnershipSet",
       "components": [
         {
           "name": "new_owner",
-          "type": 3,
+          "type": 4,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 28,
+      "typeId": 17,
       "type": "struct OwnershipTransferred",
       "components": [
         {
           "name": "new_owner",
-          "type": 3,
+          "type": 4,
           "typeArguments": null
         },
         {
           "name": "previous_owner",
-          "type": 3,
+          "type": 4,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 29,
+      "typeId": 18,
       "type": "struct TakerOrder",
       "components": [
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         },
         {
           "name": "taker",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "maker",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "nonce",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "price",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "token_id",
-          "type": 30,
+          "type": 1,
           "typeArguments": null
         },
         {
           "name": "collection",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         },
         {
           "name": "strategy",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         },
         {
           "name": "extra_params",
-          "type": 24,
+          "type": 13,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 30,
+      "typeId": 19,
       "type": "u64",
       "components": null,
       "typeParameters": null
@@ -426,70 +438,17 @@ const _abi = {
       "inputs": [
         {
           "name": "maker",
-          "type": 21,
-          "typeArguments": null
-        }
-      ],
-      "name": "cancel_all_orders",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "maker",
-          "type": 21,
-          "typeArguments": null
-        },
-        {
-          "name": "side",
-          "type": 5,
-          "typeArguments": null
-        }
-      ],
-      "name": "cancel_all_orders_by_side",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        }
-      ]
-    },
-    {
-      "inputs": [
-        {
-          "name": "maker",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "nonce",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         }
       ],
@@ -513,14 +472,14 @@ const _abi = {
       "inputs": [
         {
           "name": "order",
-          "type": 29,
+          "type": 18,
           "typeArguments": null
         }
       ],
       "name": "execute_order",
       "output": {
         "name": "",
-        "type": 23,
+        "type": 12,
         "typeArguments": null
       },
       "attributes": [
@@ -538,7 +497,7 @@ const _abi = {
       "name": "get_exchange",
       "output": {
         "name": "",
-        "type": 22,
+        "type": 11,
         "typeArguments": null
       },
       "attributes": [
@@ -554,28 +513,28 @@ const _abi = {
       "inputs": [
         {
           "name": "user",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "nonce",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         }
       ],
       "name": "get_maker_order_of_user",
       "output": {
         "name": "",
-        "type": 4,
+        "type": 5,
         "typeArguments": [
           {
             "name": "",
-            "type": 25,
+            "type": 14,
             "typeArguments": null
           }
         ]
@@ -593,19 +552,19 @@ const _abi = {
       "inputs": [
         {
           "name": "user",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         }
       ],
       "name": "get_min_order_nonce_of_user",
       "output": {
         "name": "",
-        "type": 30,
+        "type": 19,
         "typeArguments": null
       },
       "attributes": [
@@ -621,19 +580,19 @@ const _abi = {
       "inputs": [
         {
           "name": "user",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         }
       ],
       "name": "get_order_nonce_of_user",
       "output": {
         "name": "",
-        "type": 30,
+        "type": 19,
         "typeArguments": null
       },
       "attributes": [
@@ -650,7 +609,7 @@ const _abi = {
       "name": "get_protocol_fee",
       "output": {
         "name": "",
-        "type": 30,
+        "type": 19,
         "typeArguments": null
       },
       "attributes": [
@@ -666,7 +625,7 @@ const _abi = {
       "inputs": [
         {
           "name": "exchange",
-          "type": 22,
+          "type": 11,
           "typeArguments": null
         }
       ],
@@ -690,17 +649,17 @@ const _abi = {
       "inputs": [
         {
           "name": "maker",
-          "type": 21,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "nonce",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         },
         {
           "name": "side",
-          "type": 5,
+          "type": 6,
           "typeArguments": null
         }
       ],
@@ -724,11 +683,11 @@ const _abi = {
       "name": "owner",
       "output": {
         "name": "",
-        "type": 4,
+        "type": 5,
         "typeArguments": [
           {
             "name": "",
-            "type": 3,
+            "type": 4,
             "typeArguments": null
           }
         ]
@@ -752,7 +711,7 @@ const _abi = {
       "inputs": [
         {
           "name": "order",
-          "type": 25,
+          "type": 14,
           "typeArguments": null
         }
       ],
@@ -793,8 +752,32 @@ const _abi = {
     {
       "inputs": [
         {
+          "name": "exchange_contract",
+          "type": 11,
+          "typeArguments": null
+        }
+      ],
+      "name": "set_exchange",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
           "name": "fee",
-          "type": 30,
+          "type": 19,
           "typeArguments": null
         }
       ],
@@ -818,11 +801,35 @@ const _abi = {
       "inputs": [
         {
           "name": "new_owner",
-          "type": 3,
+          "type": 4,
           "typeArguments": null
         }
       ],
       "name": "transfer_ownership",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "order",
+          "type": 14,
+          "typeArguments": null
+        }
+      ],
+      "name": "update_order",
       "output": {
         "name": "",
         "type": 0,
@@ -844,64 +851,64 @@ const _abi = {
       "logId": 0,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 1,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 2,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 3,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 4,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 5,
       "loggedType": {
         "name": "",
-        "type": 11,
-        "typeArguments": null
+        "type": 16,
+        "typeArguments": []
       }
     },
     {
       "logId": 6,
       "loggedType": {
         "name": "",
-        "type": 11,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 7,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
@@ -909,14 +916,14 @@ const _abi = {
       "loggedType": {
         "name": "",
         "type": 7,
-        "typeArguments": null
+        "typeArguments": []
       }
     },
     {
       "logId": 9,
       "loggedType": {
         "name": "",
-        "type": 27,
+        "type": 7,
         "typeArguments": []
       }
     },
@@ -924,209 +931,216 @@ const _abi = {
       "logId": 10,
       "loggedType": {
         "name": "",
-        "type": 17,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 11,
       "loggedType": {
         "name": "",
-        "type": 16,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 12,
       "loggedType": {
         "name": "",
-        "type": 13,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 13,
       "loggedType": {
         "name": "",
-        "type": 14,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 14,
       "loggedType": {
         "name": "",
-        "type": 19,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 15,
       "loggedType": {
         "name": "",
-        "type": 12,
-        "typeArguments": null
+        "type": 15,
+        "typeArguments": []
       }
     },
     {
       "logId": 16,
       "loggedType": {
         "name": "",
-        "type": 18,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 12,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 18,
       "loggedType": {
         "name": "",
-        "type": 18,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 8,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 11,
-        "typeArguments": null
+        "type": 3,
+        "typeArguments": []
       }
     },
     {
       "logId": 21,
       "loggedType": {
         "name": "",
-        "type": 10,
-        "typeArguments": null
+        "type": 17,
+        "typeArguments": []
       }
     },
     {
       "logId": 22,
       "loggedType": {
         "name": "",
-        "type": 15,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 23,
       "loggedType": {
         "name": "",
-        "type": 8,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 24,
       "loggedType": {
         "name": "",
-        "type": 11,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 25,
       "loggedType": {
         "name": "",
-        "type": 10,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 26,
       "loggedType": {
         "name": "",
-        "type": 15,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 27,
       "loggedType": {
         "name": "",
-        "type": 20,
-        "typeArguments": null
+        "type": 7,
+        "typeArguments": []
       }
     },
     {
       "logId": 28,
       "loggedType": {
         "name": "",
-        "type": 26,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 29,
-      "loggedType": {
-        "name": "",
-        "type": 20,
-        "typeArguments": null
-      }
-    },
-    {
-      "logId": 30,
-      "loggedType": {
-        "name": "",
-        "type": 9,
-        "typeArguments": null
-      }
-    },
-    {
-      "logId": 31,
-      "loggedType": {
-        "name": "",
-        "type": 20,
-        "typeArguments": null
-      }
-    },
-    {
-      "logId": 32,
-      "loggedType": {
-        "name": "",
-        "type": 28,
+        "type": 7,
         "typeArguments": []
       }
     }
   ],
   "messagesTypes": [],
   "configurables": []
-}
+};
+
+const _storageSlots: StorageSlot[] = [
+  {
+    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbaf",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "b48b753af346966d0d169c0b2e3234611f65d5cfdb57c7b6e7cd6ca93707bee0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c1",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+];
 
 export class StrategyAuctionAbi__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
+
+  static readonly storageSlots = _storageSlots;
+
   static createInterface(): StrategyAuctionAbiInterface {
     return new Interface(_abi) as unknown as StrategyAuctionAbiInterface
   }
+
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): StrategyAuctionAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as StrategyAuctionAbi
   }
+
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<StrategyAuctionAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
-    const contract = await factory.deployContract(options);
+
+    const { storageSlots } = StrategyAuctionAbi__factory;
+
+    const contract = await factory.deployContract({
+      storageSlots,
+      ...options,
+    });
+
     return contract as unknown as StrategyAuctionAbi;
   }
 }

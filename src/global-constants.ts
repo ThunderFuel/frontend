@@ -1,4 +1,7 @@
-export const provider = "https://beta-4.fuel.network/graphql";
+export const provider = "https://beta-5.fuel.network/graphql";
+export const FUEL_FAUCET_URL = "https://faucet-beta-5.fuel.network";
+export const FUEL_EXPLORER_URL = "https://app.fuel.network/";
+
 export const ZERO_B256 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 export const exchangeContractId = "0xfb7fc3829b13b134c3ec0431fb5ce5536f79e4872d4f83ba184045f64b5a9de3";

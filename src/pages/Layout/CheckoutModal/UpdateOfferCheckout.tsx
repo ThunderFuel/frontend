@@ -10,13 +10,12 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 
-import { BaseAssetId } from "fuels";
+import { BaseAssetId, Provider } from "fuels";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import { depositAndOffer, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import userService from "api/user/user.service";
-import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your offer",
@@ -50,7 +49,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
 
   const onComplete = () => {
-    offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then((res) => {
+    offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then(async (res) => {
       const order = {
         isBuySide: true,
         maker: user.walletAddress,
@@ -64,8 +63,9 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         expiration_range: formatTimeContract(checkoutExpireTime),
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
       };
+      const _provider = await Provider.create(provider);
 
-      setContracts(contracts, FuelProvider);
+      setContracts(contracts, _provider);
 
       userService.getBidBalance(user.id).then((res) => {
         const currentBidBalance = res.data;

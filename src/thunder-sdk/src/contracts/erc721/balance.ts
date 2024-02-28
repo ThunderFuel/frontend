@@ -1,21 +1,23 @@
 import { Wallet, WalletUnlocked, CoinQuantity, Contract, Provider} from 'fuels';
 import { ThunderExchangeAbi__factory } from "../../types/thunder_exchange/factories/ThunderExchangeAbi__factory"
 
-const provider = new Provider("https://beta-4.fuel.network/graphql")
 
 const seller = async (address: string, assetId: string) => {
+    const provider = await Provider.create("https://beta-5.fuel.network/graphql")
     const wallet = Wallet.fromAddress(address, provider);
     const balance = await wallet.getBalance(assetId);
     console.log(`Seller Balance: ${Number(balance)}`)
 }
 
 const buyer = async (address: string, assetId: string) => {
+    const provider = await Provider.create("https://beta-5.fuel.network/graphql")
     const wallet = Wallet.fromAddress(address, provider);
     const balance = await wallet.getBalance(assetId);
     console.log(`Buyer Balance: ${Number(balance)}`)
 }
 
 const contract = async (id: string, assetId: string) => {
+    const provider = await Provider.create("https://beta-5.fuel.network/graphql")
     const c = new Contract(id, ThunderExchangeAbi__factory.abi, provider)
     const balance = await c.getBalance(assetId);
     console.log(`Contract Balance: ${Number(balance)}`)

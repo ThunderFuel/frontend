@@ -13,7 +13,7 @@ import { contracts, exchangeContractId, provider, strategyFixedPriceContractId }
 import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import offerService from "api/offer/offer.service";
 import { CheckoutCartItems } from "./Checkout";
-import { FuelProvider } from "../../../api";
+import { Provider } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm cancelling your offer",
@@ -44,8 +44,10 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = () => {
-    setContracts(contracts, FuelProvider);
+  const onComplete = async () => {
+    const _provider = await Provider.create(provider);
+
+    setContracts(contracts, _provider);
     if (cancelOfferItems?.length > 0) {
       console.log("bakacazzz");
       // bulkCancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, true)

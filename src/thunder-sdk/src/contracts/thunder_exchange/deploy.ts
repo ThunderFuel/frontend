@@ -26,10 +26,10 @@ let strategyAuction: Contract;
 let exchange: Contract;
 let contracts: Exchange.Contracts;
 
-const localTestnet = new Provider('http://127.0.0.1:4000/graphql');
-const beta4Testnet = new Provider("https://beta-4.fuel.network/graphql");
+const testnet = "https://beta-5.fuel.network/graphql";
 
-const main = async (provider: Provider) => {
+const main = async (_provider: string) => {
+    const provider = await Provider.create(_provider)
     const OWNER = new WalletUnlocked("0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c", provider);
     const RECIPIENT = new WalletUnlocked("0x976e5c3fa620092c718d852ca703b6da9e3075b9f2ecb8ed42d9f746bf26aafb", provider);
 
@@ -277,6 +277,6 @@ const main = async (provider: Provider) => {
     await deployAll()
 }
 
-main(beta4Testnet)
+main(testnet)
     .then((res) => { return res })
     .catch((err) => console.log(err));

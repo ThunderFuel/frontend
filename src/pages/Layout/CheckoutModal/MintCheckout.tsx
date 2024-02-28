@@ -10,7 +10,6 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, provider } from "global-constants";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { FuelProvider } from "../../../api";
 import { mint, bulkMint } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";

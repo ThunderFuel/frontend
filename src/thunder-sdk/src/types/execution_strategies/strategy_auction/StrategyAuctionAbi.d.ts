@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import type {
@@ -22,34 +22,38 @@ import type {
 
 import type { Option, Enum } from "./common";
 
+export enum AccessErrorInput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
+export enum AccessErrorOutput { CannotReinitialized = 'CannotReinitialized', NotOwner = 'NotOwner' };
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
 export enum SideInput { Buy = 'Buy', Sell = 'Sell' };
 export enum SideOutput { Buy = 'Buy', Sell = 'Sell' };
+export enum StrategyAuctionErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', ExchangeAlreadyInitialized = 'ExchangeAlreadyInitialized', OrderCancelledOrExpired = 'OrderCancelledOrExpired', FeeTooHigh = 'FeeTooHigh', CallerMustBeTheExchange = 'CallerMustBeTheExchange', ItemIsNotOnAuction = 'ItemIsNotOnAuction', OwnerCanNotPlaceBid = 'OwnerCanNotPlaceBid', BidMustBeHigherThanPreviousOne = 'BidMustBeHigherThanPreviousOne', BidMustBeNonZero = 'BidMustBeNonZero', BidMustBeHigherThanStartingPrice = 'BidMustBeHigherThanStartingPrice', ItemIsAlreadyOnAuction = 'ItemIsAlreadyOnAuction' };
+export enum StrategyAuctionErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', ExchangeAlreadyInitialized = 'ExchangeAlreadyInitialized', OrderCancelledOrExpired = 'OrderCancelledOrExpired', FeeTooHigh = 'FeeTooHigh', CallerMustBeTheExchange = 'CallerMustBeTheExchange', ItemIsNotOnAuction = 'ItemIsNotOnAuction', OwnerCanNotPlaceBid = 'OwnerCanNotPlaceBid', BidMustBeHigherThanPreviousOne = 'BidMustBeHigherThanPreviousOne', BidMustBeNonZero = 'BidMustBeNonZero', BidMustBeHigherThanStartingPrice = 'BidMustBeHigherThanStartingPrice', ItemIsAlreadyOnAuction = 'ItemIsAlreadyOnAuction' };
 
 export type AddressInput = { value: string };
 export type AddressOutput = AddressInput;
+export type AssetIdInput = { value: string };
+export type AssetIdOutput = AssetIdInput;
 export type ContractIdInput = { value: string };
 export type ContractIdOutput = ContractIdInput;
-export type ExecutionResultInput = { is_executable: boolean, collection: ContractIdInput, token_id: BigNumberish, amount: BigNumberish, payment_asset: ContractIdInput };
-export type ExecutionResultOutput = { is_executable: boolean, collection: ContractIdOutput, token_id: BN, amount: BN, payment_asset: ContractIdOutput };
+export type ExecutionResultInput = { is_executable: boolean, collection: ContractIdInput, token_id: string, amount: BigNumberish, payment_asset: AssetIdInput };
+export type ExecutionResultOutput = { is_executable: boolean, collection: ContractIdOutput, token_id: string, amount: BN, payment_asset: AssetIdOutput };
 export type ExtraParamsInput = { extra_address_param: AddressInput, extra_contract_param: ContractIdInput, extra_u64_param: BigNumberish };
 export type ExtraParamsOutput = { extra_address_param: AddressOutput, extra_contract_param: ContractIdOutput, extra_u64_param: BN };
-export type MakerOrderInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: BigNumberish, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: ContractIdInput, start_time: BigNumberish, end_time: BigNumberish, extra_params: ExtraParamsInput };
-export type MakerOrderOutput = { side: SideOutput, maker: AddressOutput, collection: ContractIdOutput, token_id: BN, price: BN, amount: BN, nonce: BN, strategy: ContractIdOutput, payment_asset: ContractIdOutput, start_time: BN, end_time: BN, extra_params: ExtraParamsOutput };
+export type MakerOrderInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, start_time: BigNumberish, end_time: BigNumberish, extra_params: ExtraParamsInput };
+export type MakerOrderOutput = { side: SideOutput, maker: AddressOutput, collection: ContractIdOutput, token_id: string, price: BN, amount: BN, nonce: BN, strategy: ContractIdOutput, payment_asset: AssetIdOutput, start_time: BN, end_time: BN, extra_params: ExtraParamsOutput };
 export type OwnershipRenouncedInput = { previous_owner: IdentityInput };
 export type OwnershipRenouncedOutput = { previous_owner: IdentityOutput };
 export type OwnershipSetInput = { new_owner: IdentityInput };
 export type OwnershipSetOutput = { new_owner: IdentityOutput };
 export type OwnershipTransferredInput = { new_owner: IdentityInput, previous_owner: IdentityInput };
 export type OwnershipTransferredOutput = { new_owner: IdentityOutput, previous_owner: IdentityOutput };
-export type TakerOrderInput = { side: SideInput, taker: AddressInput, maker: AddressInput, nonce: BigNumberish, price: BigNumberish, token_id: BigNumberish, collection: ContractIdInput, strategy: ContractIdInput, extra_params: ExtraParamsInput };
-export type TakerOrderOutput = { side: SideOutput, taker: AddressOutput, maker: AddressOutput, nonce: BN, price: BN, token_id: BN, collection: ContractIdOutput, strategy: ContractIdOutput, extra_params: ExtraParamsOutput };
+export type TakerOrderInput = { side: SideInput, taker: AddressInput, maker: AddressInput, nonce: BigNumberish, price: BigNumberish, token_id: string, collection: ContractIdInput, strategy: ContractIdInput, extra_params: ExtraParamsInput };
+export type TakerOrderOutput = { side: SideOutput, taker: AddressOutput, maker: AddressOutput, nonce: BN, price: BN, token_id: string, collection: ContractIdOutput, strategy: ContractIdOutput, extra_params: ExtraParamsOutput };
 
 interface StrategyAuctionAbiInterface extends Interface {
   functions: {
-    cancel_all_orders: FunctionFragment;
-    cancel_all_orders_by_side: FunctionFragment;
     cancel_order: FunctionFragment;
     execute_order: FunctionFragment;
     get_exchange: FunctionFragment;
@@ -62,12 +66,12 @@ interface StrategyAuctionAbiInterface extends Interface {
     owner: FunctionFragment;
     place_order: FunctionFragment;
     renounce_ownership: FunctionFragment;
+    set_exchange: FunctionFragment;
     set_protocol_fee: FunctionFragment;
     transfer_ownership: FunctionFragment;
+    update_order: FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: 'cancel_all_orders', values: [AddressInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'cancel_all_orders_by_side', values: [AddressInput, SideInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'cancel_order', values: [AddressInput, BigNumberish, SideInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'execute_order', values: [TakerOrderInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'get_exchange', values: []): Uint8Array;
@@ -80,11 +84,11 @@ interface StrategyAuctionAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'owner', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'place_order', values: [MakerOrderInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'renounce_ownership', values: []): Uint8Array;
+  encodeFunctionData(functionFragment: 'set_exchange', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_protocol_fee', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'transfer_ownership', values: [IdentityInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'update_order', values: [MakerOrderInput]): Uint8Array;
 
-  decodeFunctionData(functionFragment: 'cancel_all_orders', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'cancel_all_orders_by_side', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'cancel_order', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'execute_order', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'get_exchange', data: BytesLike): DecodedValue;
@@ -97,15 +101,15 @@ interface StrategyAuctionAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'owner', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'place_order', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'renounce_ownership', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'set_exchange', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_protocol_fee', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'transfer_ownership', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'update_order', data: BytesLike): DecodedValue;
 }
 
 export class StrategyAuctionAbi extends Contract {
   interface: StrategyAuctionAbiInterface;
   functions: {
-    cancel_all_orders: InvokeFunction<[maker: AddressInput], void>;
-    cancel_all_orders_by_side: InvokeFunction<[maker: AddressInput, side: SideInput], void>;
     cancel_order: InvokeFunction<[maker: AddressInput, nonce: BigNumberish, side: SideInput], void>;
     execute_order: InvokeFunction<[order: TakerOrderInput], ExecutionResultOutput>;
     get_exchange: InvokeFunction<[], ContractIdOutput>;
@@ -118,7 +122,9 @@ export class StrategyAuctionAbi extends Contract {
     owner: InvokeFunction<[], Option<IdentityOutput>>;
     place_order: InvokeFunction<[order: MakerOrderInput], void>;
     renounce_ownership: InvokeFunction<[], void>;
+    set_exchange: InvokeFunction<[exchange_contract: ContractIdInput], void>;
     set_protocol_fee: InvokeFunction<[fee: BigNumberish], void>;
     transfer_ownership: InvokeFunction<[new_owner: IdentityInput], void>;
+    update_order: InvokeFunction<[order: MakerOrderInput], void>;
   };
 }

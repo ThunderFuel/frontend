@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Fuel, FuelConnector } from "@fuel-wallet/sdk";
 import { useState, useEffect } from "react";
 
 const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
@@ -6,21 +7,31 @@ const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
 export function useFuel() {
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
-  const [fuel, setFuel] = useState<Window["fuel"]>(globalWindow.fuel);
+  const [fuel, setFuel] = useState<any>();
+  const _fuel = new Fuel();
+
+  async function hasConnector() {
+    console.log("sa");
+    const hasConnector = await _fuel.hasConnector();
+
+    if (hasConnector) {
+      setFuel(_fuel);
+      setError("");
+    } else setError("No connector found");
+  }
 
   useEffect(() => {
-    const onFuelLoaded = () => {
-      setFuel(window.fuel);
-    };
-    if (window.fuel) {
-      onFuelLoaded();
-    } else {
-      setError("Extension is not installed");
+    hasConnector();
+    function handleConnector(currentConnector: FuelConnector) {
+      setFuel(_fuel);
+      setError("");
     }
-    document.addEventListener("FuelLoaded", onFuelLoaded);
+    _fuel.on(_fuel.events.currentConnector, handleConnector);
 
-    return () => document.removeEventListener("FuelLoaded", onFuelLoaded);
-  }, []);
+    return () => {
+      _fuel.off(_fuel.events.currentConnector, handleConnector);
+    };
+  }, [fuel]);
 
-  return [fuel as NonNullable<Window["fuel"]>, error, isLoading] as const;
+  return [fuel, error, isLoading] as const;
 }

@@ -10,11 +10,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { BaseAssetId } from "fuels";
+import { BaseAssetId, Provider } from "fuels";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
-import { FuelProvider } from "api";
 
 const checkoutProcessTexts = {
   title1: "Confirm offer",
@@ -45,7 +44,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    offerService.getOffersIndex([currentItem.id]).then((res) => {
+    offerService.getOffersIndex([currentItem.id]).then(async (res) => {
       const order = {
         isBuySide: false,
         taker: currentItem.takerAddress,
@@ -58,7 +57,9 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      setContracts(contracts, FuelProvider);
+      const _provider = await Provider.create(provider);
+
+      setContracts(contracts, _provider);
 
       executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
         .then((res) => {

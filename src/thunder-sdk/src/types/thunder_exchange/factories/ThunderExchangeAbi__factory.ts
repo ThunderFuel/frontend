@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
 import type { ThunderExchangeAbi, ThunderExchangeAbiInterface } from "../ThunderExchangeAbi";
 
 const _abi = {
@@ -1098,14 +1098,14 @@ const _abi = {
       },
       "attributes": [
         {
+          "name": "payable",
+          "arguments": []
+        },
+        {
           "name": "storage",
           "arguments": [
             "read"
           ]
-        },
-        {
-          "name": "payable",
-          "arguments": []
         }
       ]
     }
@@ -1251,7 +1251,7 @@ const _abi = {
       "logId": 17,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 15,
         "typeArguments": []
       }
     },
@@ -1267,7 +1267,7 @@ const _abi = {
       "logId": 19,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1275,7 +1275,7 @@ const _abi = {
       "logId": 20,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 19,
         "typeArguments": []
       }
     },
@@ -1291,7 +1291,7 @@ const _abi = {
       "logId": 22,
       "loggedType": {
         "name": "",
-        "type": 15,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1307,7 +1307,7 @@ const _abi = {
       "logId": 24,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1315,7 +1315,7 @@ const _abi = {
       "logId": 25,
       "loggedType": {
         "name": "",
-        "type": 19,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1371,7 +1371,7 @@ const _abi = {
       "logId": 32,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 16,
         "typeArguments": []
       }
     },
@@ -1379,7 +1379,7 @@ const _abi = {
       "logId": 33,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1387,7 +1387,7 @@ const _abi = {
       "logId": 34,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1395,7 +1395,7 @@ const _abi = {
       "logId": 35,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 18,
         "typeArguments": []
       }
     },
@@ -1403,7 +1403,7 @@ const _abi = {
       "logId": 36,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1411,7 +1411,7 @@ const _abi = {
       "logId": 37,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1419,7 +1419,7 @@ const _abi = {
       "logId": 38,
       "loggedType": {
         "name": "",
-        "type": 6,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1427,7 +1427,7 @@ const _abi = {
       "logId": 39,
       "loggedType": {
         "name": "",
-        "type": 16,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1451,7 +1451,7 @@ const _abi = {
       "logId": 42,
       "loggedType": {
         "name": "",
-        "type": 18,
+        "type": 2,
         "typeArguments": []
       }
     },
@@ -1483,7 +1483,7 @@ const _abi = {
       "logId": 46,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 20,
         "typeArguments": []
       }
     },
@@ -1491,7 +1491,7 @@ const _abi = {
       "logId": 47,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1499,7 +1499,7 @@ const _abi = {
       "logId": 48,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1507,7 +1507,7 @@ const _abi = {
       "logId": 49,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1515,7 +1515,7 @@ const _abi = {
       "logId": 50,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1523,7 +1523,7 @@ const _abi = {
       "logId": 51,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1531,7 +1531,7 @@ const _abi = {
       "logId": 52,
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1539,7 +1539,7 @@ const _abi = {
       "logId": 53,
       "loggedType": {
         "name": "",
-        "type": 20,
+        "type": 6,
         "typeArguments": []
       }
     },
@@ -1563,62 +1563,6 @@ const _abi = {
       "logId": 56,
       "loggedType": {
         "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 57,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 58,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 59,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 60,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 61,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 62,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 63,
-      "loggedType": {
-        "name": "",
         "type": 17,
         "typeArguments": []
       }
@@ -1626,26 +1570,109 @@ const _abi = {
   ],
   "messagesTypes": [],
   "configurables": []
-}
+};
+
+const _storageSlots: StorageSlot[] = [
+  {
+    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbaf",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "6294951dcb0a9111a517be5cf4785670ff4e166fb5ab9c33b17e6881b48e964f",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "6294951dcb0a9111a517be5cf4785670ff4e166fb5ab9c33b17e6881b48e9650",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "7f91d1a929dce734e7f930bbb279ccfccdb5474227502ea8845815c74bd930a7",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "7f91d1a929dce734e7f930bbb279ccfccdb5474227502ea8845815c74bd930a8",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "8a89a0cce819e0426e565819a9a98711329087da5a802fb16edd223c47fa44ef",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "8a89a0cce819e0426e565819a9a98711329087da5a802fb16edd223c47fa44f0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "94b2b70d20da552763c7614981b2a4d984380d7ed4e54c01b28c914e79e44bd5",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "94b2b70d20da552763c7614981b2a4d984380d7ed4e54c01b28c914e79e44bd6",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "a9203bbb8366ca9d708705dce980acbb54d44fb753370ffe4c7d351b46b2abbc",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "b48b753af346966d0d169c0b2e3234611f65d5cfdb57c7b6e7cd6ca93707bee0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "b48b753af346966d0d169c0b2e3234611f65d5cfdb57c7b6e7cd6ca93707bee1",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "c5e69153be998bc6f957aeb6f8fd46a0e9c5bc2d3dff421a73e02f64a3012fbb",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c1",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+];
 
 export class ThunderExchangeAbi__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
+
+  static readonly storageSlots = _storageSlots;
+
   static createInterface(): ThunderExchangeAbiInterface {
     return new Interface(_abi) as unknown as ThunderExchangeAbiInterface
   }
+
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): ThunderExchangeAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as ThunderExchangeAbi
   }
+
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<ThunderExchangeAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
-    const contract = await factory.deployContract(options);
+
+    const { storageSlots } = ThunderExchangeAbi__factory;
+
+    const contract = await factory.deployContract({
+      storageSlots,
+      ...options,
+    });
+
     return contract as unknown as ThunderExchangeAbi;
   }
 }

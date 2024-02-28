@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
 import type { NFTContractAbi, NFTContractAbiInterface } from "../NFTContractAbi";
 
 const _abi = {
@@ -32,7 +32,7 @@ const _abi = {
       "type": "enum BurnError",
       "components": [
         {
-          "name": "NotEnoughTokens",
+          "name": "NotEnoughCoins",
           "type": 0,
           "typeArguments": null
         }
@@ -445,6 +445,12 @@ const _abi = {
       },
       "attributes": [
         {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        },
+        {
           "name": "doc-comment",
           "arguments": [
             " Returns the name of the asset, such as “Ether”."
@@ -599,12 +605,6 @@ const _abi = {
           "arguments": [
             " ```"
           ]
-        },
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
         }
       ]
     },
@@ -629,12 +629,6 @@ const _abi = {
         ]
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -790,6 +784,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
         }
       ]
     },
@@ -802,12 +802,6 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -933,6 +927,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
         }
       ]
     },
@@ -957,12 +957,6 @@ const _abi = {
         ]
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -1135,6 +1129,12 @@ const _abi = {
           "name": "doc-comment",
           "arguments": [
             " ```"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
           ]
         }
       ]
@@ -1853,7 +1853,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " This function is an artifact of the SetTokenAttributes ABI definition,"
+            " This function is an artifact of the SetAssetAttributes ABI definition,"
           ]
         },
         {
@@ -2025,7 +2025,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " use token::SetTokenAttributes;"
+            " use token::SetAssetAttributes;"
           ]
         },
         {
@@ -2055,7 +2055,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            "     let set_abi = abi(SetTokenAttributes, contract_id);"
+            "     let set_abi = abi(SetAssetAttributes, contract_id);"
           ]
         },
         {
@@ -2245,7 +2245,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " use token::SetTokenAttributes;"
+            " use token::SetAssetAttributes;"
           ]
         },
         {
@@ -2275,7 +2275,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            "     let set_abi = abi(SetTokenAttributes, contract_id);"
+            "     let set_abi = abi(SetAssetAttributes, contract_id);"
           ]
         },
         {
@@ -2470,7 +2470,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " use token::metdata::SetTokenMetadata;"
+            " use token::metdata::SetAssetMetadata;"
           ]
         },
         {
@@ -2488,7 +2488,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            "     let set_abi = abi(SetTokenMetadata, contract_id);"
+            "     let set_abi = abi(SetAssetMetadata, contract_id);"
           ]
         },
         {
@@ -2599,26 +2599,45 @@ const _abi = {
   ],
   "messagesTypes": [],
   "configurables": []
-}
+};
+
+const _storageSlots: StorageSlot[] = [
+  {
+    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+];
 
 export class NFTContractAbi__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
+
+  static readonly storageSlots = _storageSlots;
+
   static createInterface(): NFTContractAbiInterface {
     return new Interface(_abi) as unknown as NFTContractAbiInterface
   }
+
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): NFTContractAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as NFTContractAbi
   }
+
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<NFTContractAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
-    const contract = await factory.deployContract(options);
+
+    const { storageSlots } = NFTContractAbi__factory;
+
+    const contract = await factory.deployContract({
+      storageSlots,
+      ...options,
+    });
+
     return contract as unknown as NFTContractAbi;
   }
 }

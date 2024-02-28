@@ -23,7 +23,7 @@ export const ConnectWallet = () => {
             <IconFuelWallet />
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
-          {fuelError === "" ? (
+          {fuelError === "" && fuel ? (
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
               onClick={() => walletConnectFuel().then((res) => res ?? dispatch(toggleWalletModal()))}
