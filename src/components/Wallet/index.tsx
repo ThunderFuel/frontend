@@ -8,7 +8,7 @@ import { useFuelExtension } from "hooks/useFuelExtension";
 
 const Index = () => {
   const dispatch = useAppDispatch();
-  const { walletConnect, getConnectionStatus } = useWallet();
+  const { getConnectionStatus } = useWallet();
   const { show, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedGateway: fuel } = useFuelExtension();
 
@@ -16,7 +16,7 @@ const Index = () => {
     getConnectionStatus().then((res) => {
       if (res) {
         dispatch(setIsConnected(res));
-        walletConnect();
+        // walletConnect();
       }
     });
   }, [fuel()]);

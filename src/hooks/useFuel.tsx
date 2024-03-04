@@ -11,7 +11,6 @@ export function useFuel() {
   const _fuel = new Fuel();
 
   async function hasConnector() {
-    console.log("sa");
     const hasConnector = await _fuel.hasConnector();
 
     if (hasConnector) {
@@ -21,6 +20,7 @@ export function useFuel() {
   }
 
   useEffect(() => {
+    if (fuel) return;
     hasConnector();
     function handleConnector(currentConnector: FuelConnector) {
       setFuel(_fuel);
