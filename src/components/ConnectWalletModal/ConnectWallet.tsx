@@ -31,15 +31,16 @@ export const ConnectWallet = () => {
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
-            <a href="https://chrome.google.com/webstore/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok" target="_blank" rel="noreferrer">
-              <Button className="btn-sm btn-secondary no-bg">
-                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
-              </Button>
-            </a>
+            <span className="text-h6 text-gray-light flex-center animate-pulse white">Temporarily Unavailable</span>
+            // <a href="https://chrome.google.com/webstore/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok" target="_blank" rel="noreferrer">
+            //   <Button className="btn-sm btn-secondary no-bg">
+            //     INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
+            //   </Button>
+            // </a>
           )}
         </div>
 
-        <div className={`flex px-2.5 py-4 h-[77px] justify-between bg-bg-light border border-gray rounded-[5px] group`}>
+        <div className={`flex px-2.5 py-4 justify-between bg-bg-light border border-gray rounded-[5px] group`}>
           <div className="flex items-center gap-x-2.5">
             <IconFuelet className="w-8 h-8" />
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuelet</h6>
@@ -58,11 +59,12 @@ export const ConnectWallet = () => {
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
-            <a href="https://chrome.google.com/webstore/detail/fuelet-wallet/bifidjkcdpgfnlbcjpdkdcnbiooooblg" target="_blank" rel="noreferrer">
-              <Button className="btn-sm btn-secondary no-bg">
-                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
-              </Button>
-            </a>
+            <span className="text-h6 text-gray-light flex-center animate-pulse">Temporarily Unavailable</span>
+            // <a href="https://chrome.google.com/webstore/detail/fuelet-wallet/bifidjkcdpgfnlbcjpdkdcnbiooooblg" target="_blank" rel="noreferrer">
+            //   <Button className="btn-sm btn-secondary no-bg">
+            //     INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
+            //   </Button>
+            // </a>
           )}
         </div>
       </div>
