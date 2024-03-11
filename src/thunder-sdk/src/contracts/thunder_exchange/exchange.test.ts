@@ -2,23 +2,23 @@ import fs from "fs";
 import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId, sleep } from "fuels";
 import path from "path";
 
-import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";
-import { ExecutionManagerAbi__factory } from "../../types/execution_manager/factories/ExecutionManagerAbi__factory";
-import { RoyaltyManagerAbi__factory } from "../../types/royalty_manager/factories/RoyaltyManagerAbi__factory";
-import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
-// import { TransferSelectorAbi__factory } from "../../types/transfer_selector/factories/TransferSelectorAbi__factory";
-// import { TransferManagerAbi__factory } from "../../types/transfer_manager/factories/TransferManagerAbi__factory";
-// import { NFTAbi__factory } from "../../types/erc721/factories/NFTAbi__factory";
-import { StrategyFixedPriceSaleAbi__factory } from "../../types/execution_strategies/strategy_fixed_price_sale/factories/StrategyFixedPriceSaleAbi__factory";
-import { ThunderExchangeAbi__factory } from "../../types/thunder_exchange/factories/ThunderExchangeAbi__factory";
+// import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";
+// import { ExecutionManagerAbi__factory } from "../../types/execution_manager/factories/ExecutionManagerAbi__factory";
+// import { RoyaltyManagerAbi__factory } from "../../types/royalty_manager/factories/RoyaltyManagerAbi__factory";
+// import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
+// // import { TransferSelectorAbi__factory } from "../../types/transfer_selector/factories/TransferSelectorAbi__factory";
+// // import { TransferManagerAbi__factory } from "../../types/transfer_manager/factories/TransferManagerAbi__factory";
+// // import { NFTAbi__factory } from "../../types/erc721/factories/NFTAbi__factory";
+// import { StrategyFixedPriceSaleAbi__factory } from "../../types/execution_strategies/strategy_fixed_price_sale/factories/StrategyFixedPriceSaleAbi__factory"
+// import { ThunderExchangeAbi__factory } from "../../types/thunder_exchange/factories/ThunderExchangeAbi__factory";
 
-import * as Pool from "../pool";
-import * as ExecutionManager from "../execution_manager";
-import * as RoyaltyManager from "../royalty_manager";
-import * as AssetManager from "../asset_manager";
-import * as ERC721 from "../erc721";
-import * as Strategy from "../execution_strategies";
-import * as Exchange from "./exchange";
+// import * as Pool from '../pool';
+// import * as ExecutionManager from '../execution_manager';
+// import * as RoyaltyManager from '../royalty_manager';
+// import * as AssetManager from '../asset_manager';
+// import * as ERC721 from '../erc721';
+// import * as Strategy from '../execution_strategies';
+// import * as Exchange from './exchange';
 
 // let pool: Contract;
 // let executionManager: Contract;

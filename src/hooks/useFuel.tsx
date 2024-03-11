@@ -1,36 +1,65 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Fuel, FuelConnector } from "@fuel-wallet/sdk";
+import { getFuel } from "index";
 import { useState, useEffect } from "react";
 
-const globalWindow = typeof window !== "undefined" ? window : ({} as Window);
+export const FuelConnectorName = "Fuel Wallet";
 
 export function useFuel() {
   const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(true);
-  const [fuel, setFuel] = useState<any>();
-  const _fuel = new Fuel();
+  const [isLoading, setIsLoading] = useState(false);
+  const [fuel, setFuel] = useState<any>(getFuel());
 
-  async function hasConnector() {
-    const hasConnector = await _fuel.hasConnector();
+  async function handleConnector() {
+    setIsLoading(true);
+    if (!fuel) {
+      setFuel(undefined);
+      setError("Fuel Wallet is not installed!");
+      setIsLoading(false);
 
-    if (hasConnector) {
-      setFuel(_fuel);
+      return;
+    }
+
+    try {
+      const hasConnector = await fuel.hasConnector();
+
+      // Extensions are disabled or not installed
+      if (!hasConnector) {
+        setFuel(undefined);
+        setIsLoading(false);
+
+        return;
+      }
+
+      const connectors = await fuel.connectors();
+
+      if (connectors.length === 0) {
+        setFuel(undefined);
+        setError("Fuel Wallet is not installed!");
+        setIsLoading(false);
+
+        return;
+      }
+
+      const fuelConnector = connectors.find((item: any) => item.name === FuelConnectorName);
+
+      if (!fuelConnector?.installed) {
+        setFuel(undefined);
+        setError("Fuel Wallet is not installed!");
+        setIsLoading(false);
+
+        return;
+      }
+
       setError("");
-    } else setError("No connector found");
+      setIsLoading(false);
+    } catch (error) {
+      setFuel(undefined);
+      setError("Fuel wallet error");
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
-    if (fuel) return;
-    hasConnector();
-    function handleConnector(currentConnector: FuelConnector) {
-      setFuel(_fuel);
-      setError("");
-    }
-    _fuel.on(_fuel.events.currentConnector, handleConnector);
-
-    return () => {
-      _fuel.off(_fuel.events.currentConnector, handleConnector);
-    };
+    handleConnector();
   }, [fuel]);
 
   return [fuel, error, isLoading] as const;

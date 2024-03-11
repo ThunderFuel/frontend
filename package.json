@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@azure/storage-blob": "^12.14.0",
-    "@fuel-ts/wallet": "^0.73.0",
     "@fuel-wallet/sdk": "^0.15.2",
     "@hookform/resolvers": "^3.0.0",
     "@reduxjs/toolkit": "^1.8.1",
@@ -17,7 +16,7 @@
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
     "ethers": "^5.7.2",
-    "fuels": "^0.76.0",
+    "fuels": "^0.75.0",
     "i18next": "^21.6.15",
     "ics": "^3.1.0",
     "react": "^18.0.0",
