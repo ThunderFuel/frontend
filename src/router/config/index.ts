@@ -72,6 +72,7 @@ export const ROUTES: RouteConfig[] = [
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.LOGIN,

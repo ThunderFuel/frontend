@@ -60,11 +60,11 @@ const Collection = () => {
 
   return (
     <>
-      <div className="container-fluid py-10">
-        <div className="flex flex-col gap-5">
+      <div className="lg:container-fluid lg:py-10 mb-5 lg:mb-0">
+        <div className="flex flex-col lg:gap-5">
           {collection?.banner && <CoverImage banner={collection?.banner} />}
-          <div className="flex">
-            <div className="flex gap-5 w-full">
+          <div className="flex flex-col px-5 lg:p-0 lg:flex-row -mt-10 lg:mt-0 gap-5 lg:gap-0">
+            <div className="flex flex-col lg:flex-row gap-5 w-full">
               <div className="w-24">
                 <div className="w-[100px] h-[100px] overflow-hidden rounded-md aspect-square bg-gray">
                   <Img className="w-full" src={collection?.image} alt="profile-image" />
@@ -73,8 +73,10 @@ const Collection = () => {
               <div className="flex flex-col w-full">
                 <h3 className="text-h3 text-white">{collection?.name}</h3>
                 <div className="flex gap-5">
-                  <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
-                  {!isObjectEmpty(collection) && <CollectionProvider kind={collection?.kind} />}
+                  <div className="hidden lg:block flex gap-5">
+                    <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
+                    {!isObjectEmpty(collection) && <CollectionProvider kind={collection?.kind} />}
+                  </div>
                   {user.id === EDITABLE_USER && (
                     <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>
                       EDIT COLLECTION <IconPencil />
