@@ -14,8 +14,7 @@ import { isObjectEmpty, toGwei } from "utils";
 
 import { bulkPurchase, executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
-import { BaseAssetId } from "fuels";
-import { FuelProvider } from "../../../api";
+import { BaseAssetId, Provider } from "fuels";
 
 enum Status {
   notStarted = "notStarted",
@@ -196,8 +195,10 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = async () => {
     const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
+    const _provider = await Provider.create(provider);
+
     try {
-      nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+      nftdetailsService.getTokensIndex(tokenIds).then(async (res) => {
         if (!isObjectEmpty(buyNowItem)) {
           const order = {
             isBuySide: true,
@@ -211,7 +212,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           };
 
-          setContracts(contracts, FuelProvider);
+          setContracts(contracts, _provider);
 
           executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
             .then((res) => {
@@ -243,7 +244,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
           };
 
-          setContracts(contracts, FuelProvider);
+          setContracts(contracts, _provider);
 
           executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
             .then((res) => {
@@ -278,7 +279,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
               };
             });
 
-            setContracts(contracts, FuelProvider);
+            setContracts(contracts, _provider);
 
             bulkPurchase(exchangeContractId, provider, wallet, takerOrders, BaseAssetId)
               .then((res) => {

@@ -8,11 +8,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { depositAndOffer, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { BaseAssetId } from "fuels";
+import { BaseAssetId, Provider } from "fuels";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
 import userService from "api/user/user.service";
-import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm transaction",
@@ -48,7 +47,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const onComplete = () => {
     nftdetailsService
       .getLastIndex(1, user.id)
-      .then((res) => {
+      .then(async (res) => {
         const order = {
           isBuySide: true,
           maker: user.walletAddress,
@@ -63,7 +62,9 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
           extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
         };
 
-        setContracts(contracts, FuelProvider);
+        const _provider = await Provider.create(provider);
+
+        setContracts(contracts, _provider);
 
         userService
           .getBidBalance(user.id)

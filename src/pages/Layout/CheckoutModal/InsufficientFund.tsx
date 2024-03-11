@@ -7,6 +7,7 @@ import { useWallet } from "hooks/useWallet";
 import { formatDisplayedNumber, isObjectEmpty, formatPrice } from "utils";
 import { useAppSelector } from "store";
 import { Button as BSButton } from "react-bootstrap";
+import { FUEL_FAUCET_URL } from "global-constants";
 
 const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { getBalance } = useWallet();
@@ -33,7 +34,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
         <EthereumPrice className="text-white" price={formatDisplayedNumber(balance)} />
       </div>
       <div className="flex flex-col w-full gap-y-2.5 p-5">
-        <BSButton target="_blank" rel="noreferrer" as="a" href={`https://faucet-beta-3.fuel.network/?address=${user?.contractAddress ?? address}`}>
+        <BSButton target="_blank" rel="noreferrer" as="a" href={`${FUEL_FAUCET_URL}/?address=${user?.contractAddress ?? address}`}>
           ADD FUNDS
         </BSButton>
         <Button className="btn-secondary" onClick={onClose}>

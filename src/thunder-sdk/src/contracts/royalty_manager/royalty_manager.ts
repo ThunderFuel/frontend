@@ -7,10 +7,10 @@ async function setup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<RoyaltyManagerAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider)
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return RoyaltyManagerAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -53,7 +53,7 @@ export async function registerRoyaltyInfo(
             _receiver = { ContractId: { value: receiver } };
         const contract = await setup(contractId, provider, wallet);
         const _collection: ContractIdInput = { value: collection };
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const _collectionContract = new Contract(collection, RoyaltyManagerAbi__factory.abi, _provider);
         const { transactionResult, transactionResponse } = await contract.functions
             .register_royalty_info(_collection, _receiver, fee)

@@ -11,7 +11,6 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts } from "global-constants";
-import { FuelProvider } from "api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling auction",

@@ -4,30 +4,32 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import type {
   BigNumberish,
   BN,
+  Bytes,
   BytesLike,
   Contract,
   DecodedValue,
   FunctionFragment,
   Interface,
   InvokeFunction,
+  StdString,
 } from 'fuels';
 
 import type { Option, Enum } from "./common";
 
-export enum BurnErrorInput { NotEnoughTokens = 'NotEnoughTokens' };
-export enum BurnErrorOutput { NotEnoughTokens = 'NotEnoughTokens' };
+export enum BurnErrorInput { NotEnoughCoins = 'NotEnoughCoins' };
+export enum BurnErrorOutput { NotEnoughCoins = 'NotEnoughCoins' };
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
-export type MetadataInput = Enum<{ B256: string, Bytes: BytesInput, Int: BigNumberish, String: StringInput }>;
-export type MetadataOutput = Enum<{ B256: string, Bytes: BytesOutput, Int: BN, String: StringOutput }>;
+export type MetadataInput = Enum<{ B256: string, Bytes: Bytes, Int: BigNumberish, String: StdString }>;
+export type MetadataOutput = Enum<{ B256: string, Bytes: Bytes, Int: BN, String: StdString }>;
 export enum MintErrorInput { CannotMintMoreThanOneNFTWithSubId = 'CannotMintMoreThanOneNFTWithSubId', MaxNFTsMinted = 'MaxNFTsMinted', NFTAlreadyMinted = 'NFTAlreadyMinted' };
 export enum MintErrorOutput { CannotMintMoreThanOneNFTWithSubId = 'CannotMintMoreThanOneNFTWithSubId', MaxNFTsMinted = 'MaxNFTsMinted', NFTAlreadyMinted = 'NFTAlreadyMinted' };
 export enum SetErrorInput { ValueAlreadySet = 'ValueAlreadySet' };
@@ -37,14 +39,10 @@ export type AddressInput = { value: string };
 export type AddressOutput = AddressInput;
 export type AssetIdInput = { value: string };
 export type AssetIdOutput = AssetIdInput;
-export type BytesInput = { buf: RawBytesInput, len: BigNumberish };
-export type BytesOutput = { buf: RawBytesOutput, len: BN };
 export type ContractIdInput = { value: string };
 export type ContractIdOutput = ContractIdInput;
 export type RawBytesInput = { ptr: BigNumberish, cap: BigNumberish };
 export type RawBytesOutput = { ptr: BN, cap: BN };
-export type StringInput = { bytes: BytesInput };
-export type StringOutput = { bytes: BytesOutput };
 
 interface NFTContractAbiInterface extends Interface {
   functions: {
@@ -69,11 +67,11 @@ interface NFTContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'total_supply', values: [AssetIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'burn', values: [string, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'mint', values: [IdentityInput, string, BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'metadata', values: [AssetIdInput, StringInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'metadata', values: [AssetIdInput, StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_decimals', values: [AssetIdInput, BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'set_name', values: [AssetIdInput, StringInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'set_symbol', values: [AssetIdInput, StringInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'set_metadata', values: [AssetIdInput, StringInput, MetadataInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'set_name', values: [AssetIdInput, StdString]): Uint8Array;
+  encodeFunctionData(functionFragment: 'set_symbol', values: [AssetIdInput, StdString]): Uint8Array;
+  encodeFunctionData(functionFragment: 'set_metadata', values: [AssetIdInput, StdString, MetadataInput]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'decimals', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'name', data: BytesLike): DecodedValue;
@@ -93,16 +91,16 @@ export class NFTContractAbi extends Contract {
   interface: NFTContractAbiInterface;
   functions: {
     decimals: InvokeFunction<[asset: AssetIdInput], Option<number>>;
-    name: InvokeFunction<[asset: AssetIdInput], Option<StringOutput>>;
-    symbol: InvokeFunction<[asset: AssetIdInput], Option<StringOutput>>;
+    name: InvokeFunction<[asset: AssetIdInput], Option<StdString>>;
+    symbol: InvokeFunction<[asset: AssetIdInput], Option<StdString>>;
     total_assets: InvokeFunction<[], BN>;
     total_supply: InvokeFunction<[asset: AssetIdInput], Option<BN>>;
     burn: InvokeFunction<[sub_id: string, amount: BigNumberish], void>;
     mint: InvokeFunction<[recipient: IdentityInput, sub_id: string, amount: BigNumberish], void>;
-    metadata: InvokeFunction<[asset: AssetIdInput, key: StringInput], Option<MetadataOutput>>;
+    metadata: InvokeFunction<[asset: AssetIdInput, key: StdString], Option<MetadataOutput>>;
     set_decimals: InvokeFunction<[asset: AssetIdInput, decimals: BigNumberish], void>;
-    set_name: InvokeFunction<[asset: AssetIdInput, name: StringInput], void>;
-    set_symbol: InvokeFunction<[asset: AssetIdInput, symbol: StringInput], void>;
-    set_metadata: InvokeFunction<[asset: AssetIdInput, key: StringInput, metadata: MetadataInput], void>;
+    set_name: InvokeFunction<[asset: AssetIdInput, name: StdString], void>;
+    set_symbol: InvokeFunction<[asset: AssetIdInput, symbol: StdString], void>;
+    set_metadata: InvokeFunction<[asset: AssetIdInput, key: StdString, metadata: MetadataInput], void>;
   };
 }

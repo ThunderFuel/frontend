@@ -15,10 +15,10 @@ let strategyFixedPrice: Contract;
 let strategyAuction: Contract;
 let contracts: Exchange.Contracts;
 
-const localTestnet = new Provider('http://127.0.0.1:4000/graphql');
-const beta3Testnet = new Provider("https://beta-3.fuel.network/graphql");
+const testnet = "https://beta-5.fuel.network/graphql";
 
-const main = async (provider: Provider) => {
+const main = async (_provider: string) => {
+    const provider = await Provider.create(_provider)
     const OWNER = new WalletUnlocked("0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c", provider);
     const EXCHANGE = "0x88ccf5f44f586bc962e5f2a6945fa1b0b0309d79606660a05bb6d5d8fb4b3db9";
     const EM = "0xbaad27814dcfca96d88c209e80e4a5cc6fbaac6e07ba1ef75ca0fdbe54878f06";
@@ -175,6 +175,6 @@ const main = async (provider: Provider) => {
 //     console.log(res.transactionResult.isStatusSuccess)
 // }
 
-main(beta3Testnet)
+main(testnet)
     .then((res) => { return res })
     .catch((err) => console.log(err));

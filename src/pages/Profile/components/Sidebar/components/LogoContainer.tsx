@@ -7,6 +7,7 @@ import { useAppSelector } from "store";
 import { useClickOutside } from "hooks/useClickOutside";
 import clsx from "clsx";
 import useToast from "hooks/useToast";
+import { FUEL_EXPLORER_URL } from "global-constants";
 
 const WalletDropdown = ({ walletAddress }: any) => {
   const [show, setShow] = React.useState(false);
@@ -23,7 +24,7 @@ const WalletDropdown = ({ walletAddress }: any) => {
     {
       text: "See on Block Explorer",
       onClick: () => {
-        openInNewTab(`https://fuellabs.github.io/block-explorer-v2/address/${walletAddress}`);
+        openInNewTab(`${FUEL_EXPLORER_URL}/account/${walletAddress}`);
         setShow(false);
       },
     },

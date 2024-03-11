@@ -9,9 +9,9 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
 import { bulkCancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { FuelProvider } from "../../../api";
 import collectionsService from "api/collections/collections.service";
 import offerService from "api/offer/offer.service";
+import { Provider } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
@@ -41,8 +41,10 @@ const CancelAllListingCheckout = ({ show, onClose }: { show: boolean; onClose: a
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = () => {
-    setContracts(contracts, FuelProvider);
+  const onComplete = async () => {
+    const _provider = await Provider.create(provider);
+
+    setContracts(contracts, _provider);
     const params = { userId: user.id };
     offerService
       .getAllOfferandListingIndexes({

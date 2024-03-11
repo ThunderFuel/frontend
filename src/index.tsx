@@ -12,7 +12,17 @@ import { initReactI18next } from "react-i18next";
 import LOCALES from "./locales";
 
 import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
+import { Fuel, FuelWalletConnector } from "@fuel-wallet/sdk";
+
+const FuelWalletInstance = new Fuel({ connectors: [new FuelWalletConnector()] });
+const FueletWalletInstance = undefined as any;
+
+export const getFuel = () => {
+  return FuelWalletInstance;
+};
+export const getFuelet = () => {
+  return FueletWalletInstance;
+};
 
 i18next.use(initReactI18next).init({
   resources: LOCALES,
@@ -25,7 +35,7 @@ i18next.use(initReactI18next).init({
 
 Sentry.init({
   dsn: "https://88f305bbb3ef4cfe956e009220f8d481@o4504775680196608.ingest.sentry.io/4504775682293760",
-  integrations: [new BrowserTracing()],
+  integrations: [new Sentry.Integrations.Breadcrumbs({ console: false })],
   tracesSampleRate: 1.0,
   ignoreErrors: [/^Cannot read properties of undefined (reading 'isConnected')$/],
 });

@@ -9,10 +9,10 @@ async function setup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<PoolAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider)
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return PoolAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -64,13 +64,14 @@ export async function totalSupply(
 export async function balanceOf(
     contractId: string,
     provider: string,
+    wallet: string | WalletLocked,
     account: string,
     asset: string,
 ) {
     try {
         const _account: IdentityInput = { Address: { value: account } };
         const _asset: ContractIdInput = { value: asset };
-        const contract = await setup(contractId, provider);
+        const contract = await setup(contractId, provider, wallet);
         const { value } = await contract.functions
             .balance_of(_account, _asset)
             .simulate();
@@ -92,7 +93,7 @@ export async function deposit(
     try {
         const contract = await setup(contractId, provider, wallet);
         const coin: CoinQuantityLike = { amount: amount, assetId: assetId };
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
         const { transactionResponse, transactionResult } = await contract.functions
             .deposit()
@@ -117,7 +118,7 @@ export async function withdraw(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _asset: ContractIdInput = { value: assetId };
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
         const { transactionResponse, transactionResult } = await contract.functions
             .withdraw(_asset, amount)
@@ -138,7 +139,7 @@ export async function withdrawAll(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
         const { transactionResponse, transactionResult } = await contract.functions
             .withdraw_all()

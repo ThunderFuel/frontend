@@ -12,8 +12,7 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { BaseAssetId } from "fuels";
-import { FuelProvider } from "../../../api";
+import { BaseAssetId, Provider } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -46,6 +45,8 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = async () => {
+    const _provider = await Provider.create(provider);
+
     try {
       if (checkoutIsAuction) {
         const res = await nftdetailsService.getLastIndex(2, user.id);
@@ -69,7 +70,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           },
         ];
 
-        setContracts(contracts, FuelProvider);
+        setContracts(contracts, _provider);
 
         try {
           const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
@@ -99,7 +100,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           },
         ];
 
-        setContracts(contracts, FuelProvider);
+        setContracts(contracts, _provider);
 
         try {
           const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
@@ -135,7 +136,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
           },
         ];
 
-        setContracts(contracts, FuelProvider);
+        setContracts(contracts, _provider);
 
         try {
           const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);

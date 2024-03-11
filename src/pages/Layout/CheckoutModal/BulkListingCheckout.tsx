@@ -11,10 +11,9 @@ import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
 import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { BaseAssetId } from "fuels";
+import { BaseAssetId, Provider } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import collectionsService from "api/collections/collections.service";
-import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -116,7 +115,9 @@ const BulkListingCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
       Promise.all(promises)
         .then(async () => {
-          setContracts(contracts, FuelProvider);
+          const _provider = await Provider.create(provider);
+
+          setContracts(contracts, _provider);
 
           const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, bulkListMakerOders, bulkUpdateMakerOders);
 

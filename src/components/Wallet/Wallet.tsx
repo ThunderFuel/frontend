@@ -12,6 +12,8 @@ import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
 import { removeAll } from "store/bulkListingSlice";
 import { removeBulkItems } from "store/checkoutSlice";
+import { FUEL_EXPLORER_URL, FUEL_FAUCET_URL } from "global-constants";
+import { useLocalStorage } from "hooks/useLocalStorage";
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
@@ -75,7 +77,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     <div className="flex mt-auto flex-col p-5 gap-y-2.5">
       <Balances />
       <div className="grid grid-cols-2 gap-x-2.5">
-        <a target="_blank" rel="noreferrer" href={`https://faucet-beta-4.fuel.network/?address=${user?.contractAddress ?? address}`} className="btn btn-primary w-full">
+        <a target="_blank" rel="noreferrer" href={`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}`} className="btn btn-primary w-full">
           GET TEST ETH <IconFaucet />
         </a>
         <Button
@@ -101,7 +103,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <a
               target="_blank"
               rel="noreferrer"
-              href={`https://fuellabs.github.io/block-explorer-v2/address/${user?.walletAddress}`}
+              href={`${FUEL_EXPLORER_URL}/account/${user?.walletAddress}`}
               className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
             >
               <IconLink className="w-[15px] h-[15px]" />
@@ -115,6 +117,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
                 dispatch(setUser({}));
                 dispatch(removeAll());
                 dispatch(removeBulkItems());
+                useLocalStorage().removeItem("connected_account");
                 onClose();
               }}
             >

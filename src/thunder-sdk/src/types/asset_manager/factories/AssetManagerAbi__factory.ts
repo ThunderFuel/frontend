@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
 import type { AssetManagerAbi, AssetManagerAbiInterface } from "../AssetManagerAbi";
 
 const _abi = {
@@ -531,26 +531,53 @@ const _abi = {
   ],
   "messagesTypes": [],
   "configurables": []
-}
+};
+
+const _storageSlots: StorageSlot[] = [
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c1",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+];
 
 export class AssetManagerAbi__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
+
+  static readonly storageSlots = _storageSlots;
+
   static createInterface(): AssetManagerAbiInterface {
     return new Interface(_abi) as unknown as AssetManagerAbiInterface
   }
+
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): AssetManagerAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as AssetManagerAbi
   }
+
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<AssetManagerAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
-    const contract = await factory.deployContract(options);
+
+    const { storageSlots } = AssetManagerAbi__factory;
+
+    const contract = await factory.deployContract({
+      storageSlots,
+      ...options,
+    });
+
     return contract as unknown as AssetManagerAbi;
   }
 }

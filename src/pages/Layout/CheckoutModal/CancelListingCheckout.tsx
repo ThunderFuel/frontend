@@ -11,7 +11,7 @@ import { CheckoutProcess } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
 import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { FuelProvider } from "../../../api";
+import { Provider } from "fuels";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
@@ -42,8 +42,10 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = () => {
-    setContracts(contracts, FuelProvider);
+  const onComplete = async () => {
+    const _provider = await Provider.create(provider);
+
+    setContracts(contracts, _provider);
 
     nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
       cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)

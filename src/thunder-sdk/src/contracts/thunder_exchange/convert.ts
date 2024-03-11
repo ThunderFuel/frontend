@@ -1,11 +1,22 @@
-import { Address } from 'fuels';
+import { Address, Provider, WalletUnlocked } from 'fuels';
 
 const main = async (addr: string) => {
-    const a = Address.fromString(addr)
-    return a.toB256()
+    const a = Address.fromB256(addr)
+    return a.toAddress()
 }
 
-main("fuel1svadn9j2tvevvzvdlk9pfy830y8uv3v7ywds0d6rw9s87gdz6vrsmedewm")
-    .then((res) => {
-        console.log(res)
-    })
+const owner = async() => {
+    const provider = await Provider.create("https://beta-5.fuel.network/graphql")
+    const b = new WalletUnlocked("0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c", provider)
+    return b.address.toB256()
+}
+
+// main("0xfb7fc3829b13b134c3ec0431fb5ce5536f79e4872d4f83ba184045f64b5a9de3")
+//     .then((res) => {
+//         console.log(res)
+//     })
+
+owner()
+.then((res) => {
+    console.log(res)
+})

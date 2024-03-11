@@ -4,13 +4,13 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.57.0
-  Forc version: 0.44.0
-  Fuel-Core version: 0.20.4
+  Fuels version: 0.73.0
+  Forc version: 0.49.2
+  Fuel-Core version: 0.22.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
 import type { StrategyFixedPriceSaleAbi, StrategyFixedPriceSaleAbiInterface } from "../StrategyFixedPriceSaleAbi";
 
 const _abi = {
@@ -960,38 +960,69 @@ const _abi = {
         "type": 7,
         "typeArguments": []
       }
-    },
-    {
-      "logId": 18,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
     }
   ],
   "messagesTypes": [],
   "configurables": []
-}
+};
+
+const _storageSlots: StorageSlot[] = [
+  {
+    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbaf",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "b48b753af346966d0d169c0b2e3234611f65d5cfdb57c7b6e7cd6ca93707bee0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c0",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c1",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  {
+    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "value": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+];
 
 export class StrategyFixedPriceSaleAbi__factory {
-  static readonly abi = _abi
+  static readonly abi = _abi;
+
+  static readonly storageSlots = _storageSlots;
+
   static createInterface(): StrategyFixedPriceSaleAbiInterface {
     return new Interface(_abi) as unknown as StrategyFixedPriceSaleAbiInterface
   }
+
   static connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): StrategyFixedPriceSaleAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as StrategyFixedPriceSaleAbi
   }
+
   static async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<StrategyFixedPriceSaleAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
-    const contract = await factory.deployContract(options);
+
+    const { storageSlots } = StrategyFixedPriceSaleAbi__factory;
+
+    const contract = await factory.deployContract({
+      storageSlots,
+      ...options,
+    });
+
     return contract as unknown as StrategyFixedPriceSaleAbi;
   }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconFuelWallet, IconFuelet, IconLightning } from "icons";
+import { IconArrowRight, IconFuelWallet, IconFuelet, IconLightning, IconSpinner } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
@@ -23,7 +23,11 @@ export const ConnectWallet = () => {
             <IconFuelWallet />
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuel Wallet</h6>
           </div>
-          {fuelError === "" ? (
+          {fuelLoading ? (
+            <div className="flex-center h-[43px]">
+              <IconSpinner className="animate-[spin_3s_linear_infinite]" />
+            </div>
+          ) : fuelError === "" && fuel ? (
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
               onClick={() => walletConnectFuel().then((res) => res ?? dispatch(toggleWalletModal()))}
@@ -31,12 +35,12 @@ export const ConnectWallet = () => {
               CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
             </Button>
           ) : (
-            <span className="text-h6 text-gray-light flex-center animate-pulse white">Temporarily Unavailable</span>
-            // <a href="https://chrome.google.com/webstore/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok" target="_blank" rel="noreferrer">
-            //   <Button className="btn-sm btn-secondary no-bg">
-            //     INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
-            //   </Button>
-            // </a>
+            // <span className="text-h6 text-gray-light flex-center animate-pulse white">Temporarily Unavailable</span>
+            <a href="https://chrome.google.com/webstore/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok" target="_blank" rel="noreferrer">
+              <Button className="btn-sm btn-secondary no-bg">
+                INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
+              </Button>
+            </a>
           )}
         </div>
 
@@ -45,7 +49,11 @@ export const ConnectWallet = () => {
             <IconFuelet className="w-8 h-8" />
             <h6 className="text-head6 font-spaceGrotesk text-white">Fuelet</h6>
           </div>
-          {fueletError === "" ? (
+          {fueletLoading ? (
+            <div className="flex-center h-[43px]">
+              <IconSpinner className="animate-[spin_3s_linear_infinite]" />
+            </div>
+          ) : fueletError === "" && fuelet ? (
             <Button
               className="btn-sm opacity-0 ease-in-out transform duration-300 group-hover:opacity-100 text-bg-light"
               onClick={() => {

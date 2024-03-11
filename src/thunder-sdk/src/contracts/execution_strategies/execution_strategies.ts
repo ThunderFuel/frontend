@@ -12,10 +12,10 @@ async function setup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<StrategyFixedPriceSaleAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return StrategyFixedPriceSaleAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {

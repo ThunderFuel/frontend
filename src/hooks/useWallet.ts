@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
 import { ZeroBytes32 } from "fuels";
-import { useErrorModal } from "../pages/Layout/ErrorModal";
 import { useSelector } from "react-redux";
 import userService from "api/user/user.service";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
+import { useLocalStorage } from "./useLocalStorage";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
@@ -25,6 +25,13 @@ export const useWallet = () => {
   };
 
   const getConnectionStatus = async () => {
+    if (!fuel()) return false;
+
+    const hasConnector = await fuel().hasConnector();
+    if (!hasConnector) {
+      return false;
+    }
+
     return fuel()?.isConnected();
   };
 
@@ -57,46 +64,55 @@ export const useWallet = () => {
     }
   };
 
-  const walletConnectFuel = () => {
+  const walletConnectFuel = async () => {
     setGatewayType(FUEL_TYPE.FUEL);
+    // await fuel().selectConnector(FuelConnectorName);
 
     return walletConnect();
   };
-  const walletConnectFuelet = () => {
+  const walletConnectFuelet = async () => {
     setGatewayType(FUEL_TYPE.FUELET);
+    // await fuel().selectConnector(FueletConnectorName);
 
     return walletConnect();
   };
   const walletConnect = async () => {
-    if (!isConnected) {
-      try {
-        await fuel()
-          .connect()
-          .then((connected: any) => {
-            getAccounts().then((fuelAddress) => {
-              dispatch(setAddress(fuelAddress));
-              if (fuelAddress !== null)
-                fuel()
-                  .getWallet(fuelAddress)
-                  .then((wallet: any) => {
-                    if (wallet !== null) {
-                      userService.userCreate({ walletAddress: wallet.address }).then((user) => {
-                        dispatch(setUser(user.data));
-                        dispatch(setWallet(wallet));
-                      });
-                    }
-                  });
-              dispatch(setIsConnected(connected));
+    try {
+      await fuel()
+        .connect()
+        .then((connected: any) => {
+          if (!connected) return;
+          getAccounts().then((fuelAddress) => {
+            dispatch(setAddress(fuelAddress));
+            if (fuelAddress !== null)
+              fuel()
+                .getWallet(fuelAddress)
+                .then((wallet: any) => {
+                  if (wallet !== null) {
+                    userService.userCreate({ walletAddress: wallet.address }).then((user) => {
+                      useLocalStorage().setItem("connected_account", user.data);
+                      dispatch(setUser(user.data));
+                      dispatch(setWallet(wallet));
+                    });
+                  }
+                });
+            dispatch(setIsConnected(connected));
 
-              return connected;
-            });
+            return connected;
           });
-      } catch (e) {
-        useErrorModal(e);
-      }
-    }
+        })
+        .catch(() => {
+          useLocalStorage().removeItem("connected_account");
+          dispatch(setUser({}));
+          dispatch(setWallet({}));
+          walletDisconnect();
+          // console.log(e?.message);
+        });
+    } catch (e) {
+      // useErrorModal(e);
 
-    return isConnected;
+      return false;
+    }
   };
 
   const walletDisconnect = async () => {
