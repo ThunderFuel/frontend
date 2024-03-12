@@ -36,19 +36,21 @@ const CollectionFooter = () => {
 
   return (
     <div className="sticky border-t border-t-gray bg-bg z-20 bottom-0">
-      <div className="flex items-center justify-between py-3">
-        <div className="flex gap-2 text-headline-02 text-gray-light pl-5">
+      <div className="flex items-center justify-between py-3 px-5 lg:px-0">
+        <div className="flex gap-2 text-headline-02 text-gray-light">
           <IconShoppingCart />
-          <span>YOUR CART</span>
+          <span className="hidden lg:flex">YOUR CART</span>
         </div>
         <div className="flex gap-3">
           <Button
-            className="btn-secondary uppercase"
+            className="btn-secondary uppercase px-4"
             onClick={() => {
               dispatch(removeAll());
             }}
           >
-            Clear {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"}
+            <span className="hidden lg:flex">
+              Clear {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"}
+            </span>
             <IconTrash />
           </Button>
           <Button className="uppercase" onClick={onToggleCheckoutModal}>

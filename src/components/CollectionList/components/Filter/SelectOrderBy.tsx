@@ -31,6 +31,7 @@ const SelectOrderBy = (props: any) => {
   return (
     <div>
       <Select
+        className="hidden lg:flex"
         options={options}
         value={value}
         onChange={(option) => {

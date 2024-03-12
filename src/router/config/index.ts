@@ -63,6 +63,7 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.COLLECTION_ITEMS,
         component: CollectionItems,
+        isResponsive: true,
       },
       {
         path: PATHS.COLLECTION_ACTIVITY,

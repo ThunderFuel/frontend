@@ -20,7 +20,7 @@ const CollectionGrid = ({ children }: any) => {
   return (
     <>
       {collectionItems.length > 0 && (
-        <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "pl-5")}>
+        <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:pl-5")}>
           {collectionItems.map((collection: any, i: number) => (
             <CollectionItem key={i} collection={collection} />
           ))}

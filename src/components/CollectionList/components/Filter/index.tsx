@@ -69,11 +69,11 @@ const Index = ({ className }: { className?: string }) => {
         <div className="flex items-center justify-between text-white gap-5">
           <div className="flex items-center w-full">
             <div className="flex flex-1">
-              <div className={clsx("py-2.5 pr-5 flex-1 border-r border-r-gray", options?.hiddenSweep ? "w-full" : "w-7/12")}>
+              <div className={clsx("py-2.5 pr-5 flex-1 lg:border-r lg:border-r-gray", options?.hiddenSweep ? "w-full" : "w-7/12")}>
                 <InputSearch placeholder="Search ID or name" value={search} onKeyPress={onKeyPress} onChange={(e: any) => setSearch(e.target.value)} />
               </div>
               {options?.hiddenSweep ? null : (
-                <div className="w-5/12">
+                <div className="w-5/12 hidden lg:flex">
                   <Range maxValue={swapLimit} value={sweep} onChange={onRangeChange} />
                 </div>
               )}

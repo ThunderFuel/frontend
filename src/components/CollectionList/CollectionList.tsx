@@ -8,7 +8,7 @@ const CollectionList = (props: any) => {
   return (
     <CollectionListProvider value={props}>
       <Filter />
-      <div className="container-fluid flex">
+      <div className="lg:container-fluid flex">
         <SideBar />
         <List />
       </div>
