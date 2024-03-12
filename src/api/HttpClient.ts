@@ -30,7 +30,7 @@ export default class HttpClient {
 
   constructor(baseURL: string, options: HttpClientOptions = {}) {
     const { requestInterceptors = [], responseInterceptors = [], headers = {}, ...rest } = options;
-    headers.apikey = "9e2b5f87-d413-4c6a-befa-12f0a36dc8c7";
+    // headers.apikey = "9e2b5f87-d413-4c6a-befa-12f0a36dc8c7";
     this.CancelToken = axios.CancelToken;
 
     this.axios = axios.create({
