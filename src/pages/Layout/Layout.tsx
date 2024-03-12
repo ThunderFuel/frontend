@@ -11,6 +11,7 @@ import Wallet from "components/Wallet";
 import ClosedBetaModal from "components/ClosedBetaModal";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { THUNDER_THEME_NAME } from "../../global-constants";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 interface Props {
   children: React.ReactNode;
@@ -36,7 +37,7 @@ const Layout = ({ children, ...etc }: Props) => {
       <ManageFunds />
       <ClosedBetaModal />
       {children}
-      {etc?.hiddenFooter ? null : <Footer />}
+      {etc?.hiddenFooter && !useIsMobile() ? null : <Footer />}
 
       <ErrorModal />
       <CheckoutModal />
