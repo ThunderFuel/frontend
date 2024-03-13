@@ -31,11 +31,7 @@ export default class HttpClient {
 
   constructor(baseURL: string, options: HttpClientOptions = {}) {
     const { requestInterceptors = [], responseInterceptors = [], headers = {}, ...rest } = options;
-    const authToken = useAuthToken.getAuthTokenFromLocalStorage();
     headers.apikey = "9e2b5f87-d413-4c6a-befa-12f0a36dc8c7";
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`;
-    }
 
     this.CancelToken = axios.CancelToken;
 
