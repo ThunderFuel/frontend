@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.73.0
-  Forc version: 0.49.2
-  Fuel-Core version: 0.22.0
+  Fuels version: 0.75.0
+  Forc version: 0.50.0
+  Fuel-Core version: 0.22.1
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
@@ -72,12 +72,12 @@ const _abi = {
         },
         {
           "name": "Int",
-          "type": 16,
+          "type": 18,
           "typeArguments": null
         },
         {
           "name": "String",
-          "type": 15,
+          "type": 16,
           "typeArguments": null
         }
       ],
@@ -183,7 +183,7 @@ const _abi = {
         },
         {
           "name": "len",
-          "type": 16,
+          "type": 18,
           "typeArguments": null
         }
       ],
@@ -212,7 +212,7 @@ const _abi = {
         },
         {
           "name": "cap",
-          "type": 16,
+          "type": 18,
           "typeArguments": null
         }
       ],
@@ -220,6 +220,25 @@ const _abi = {
     },
     {
       "typeId": 15,
+      "type": "struct RawVec",
+      "components": [
+        {
+          "name": "ptr",
+          "type": 9,
+          "typeArguments": null
+        },
+        {
+          "name": "cap",
+          "type": 18,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [
+        8
+      ]
+    },
+    {
+      "typeId": 16,
       "type": "struct String",
       "components": [
         {
@@ -231,13 +250,38 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 16,
+      "typeId": 17,
+      "type": "struct Vec",
+      "components": [
+        {
+          "name": "buf",
+          "type": 15,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 8,
+              "typeArguments": null
+            }
+          ]
+        },
+        {
+          "name": "len",
+          "type": 18,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [
+        8
+      ]
+    },
+    {
+      "typeId": 18,
       "type": "u64",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 17,
+      "typeId": 19,
       "type": "u8",
       "components": null,
       "typeParameters": null
@@ -259,7 +303,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 17,
+            "type": 19,
             "typeArguments": null
           }
         ]
@@ -438,18 +482,12 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 15,
+            "type": 16,
             "typeArguments": null
           }
         ]
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -605,6 +643,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
         }
       ]
     },
@@ -623,7 +667,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 15,
+            "type": 16,
             "typeArguments": null
           }
         ]
@@ -798,10 +842,16 @@ const _abi = {
       "name": "total_assets",
       "output": {
         "name": "",
-        "type": 16,
+        "type": 18,
         "typeArguments": null
       },
       "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -927,12 +977,6 @@ const _abi = {
           "arguments": [
             " ```"
           ]
-        },
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
         }
       ]
     },
@@ -951,7 +995,7 @@ const _abi = {
         "typeArguments": [
           {
             "name": "",
-            "type": 16,
+            "type": 18,
             "typeArguments": null
           }
         ]
@@ -1148,7 +1192,7 @@ const _abi = {
         },
         {
           "name": "amount",
-          "type": 16,
+          "type": 18,
           "typeArguments": null
         }
       ],
@@ -1368,7 +1412,7 @@ const _abi = {
         },
         {
           "name": "amount",
-          "type": 16,
+          "type": 18,
           "typeArguments": null
         }
       ],
@@ -1379,13 +1423,6 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read",
-            "write"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -1589,6 +1626,13 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
         }
       ]
     },
@@ -1601,7 +1645,7 @@ const _abi = {
         },
         {
           "name": "key",
-          "type": 15,
+          "type": 16,
           "typeArguments": null
         }
       ],
@@ -1618,6 +1662,12 @@ const _abi = {
         ]
       },
       "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -1785,12 +1835,6 @@ const _abi = {
           "arguments": [
             " ```"
           ]
-        },
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
         }
       ]
     },
@@ -1803,7 +1847,7 @@ const _abi = {
         },
         {
           "name": "decimals",
-          "type": 17,
+          "type": 19,
           "typeArguments": null
         }
       ],
@@ -1814,12 +1858,6 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "write"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -1885,6 +1923,12 @@ const _abi = {
           "arguments": [
             " * When the function is called."
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
         }
       ]
     },
@@ -1897,7 +1941,7 @@ const _abi = {
         },
         {
           "name": "name",
-          "type": 15,
+          "type": 16,
           "typeArguments": null
         }
       ],
@@ -1908,6 +1952,12 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
+        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -2093,12 +2143,6 @@ const _abi = {
           "arguments": [
             " ```"
           ]
-        },
-        {
-          "name": "storage",
-          "arguments": [
-            "write"
-          ]
         }
       ]
     },
@@ -2111,7 +2155,7 @@ const _abi = {
         },
         {
           "name": "symbol",
-          "type": 15,
+          "type": 16,
           "typeArguments": null
         }
       ],
@@ -2122,12 +2166,6 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "write"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -2313,6 +2351,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
         }
       ]
     },
@@ -2325,7 +2369,7 @@ const _abi = {
         },
         {
           "name": "key",
-          "type": 15,
+          "type": 16,
           "typeArguments": null
         },
         {
@@ -2529,6 +2573,41 @@ const _abi = {
           ]
         }
       ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "recipient",
+          "type": 3,
+          "typeArguments": null
+        },
+        {
+          "name": "sub_ids",
+          "type": 17,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 1,
+              "typeArguments": null
+            }
+          ]
+        }
+      ],
+      "name": "bulk_mint",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "storage",
+          "arguments": [
+            "read",
+            "write"
+          ]
+        }
+      ]
     }
   ],
   "loggedTypes": [
@@ -2593,6 +2672,22 @@ const _abi = {
       "loggedType": {
         "name": "",
         "type": 7,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 8,
+      "loggedType": {
+        "name": "",
+        "type": 5,
+        "typeArguments": []
+      }
+    },
+    {
+      "logId": 9,
+      "loggedType": {
+        "name": "",
+        "type": 5,
         "typeArguments": []
       }
     }

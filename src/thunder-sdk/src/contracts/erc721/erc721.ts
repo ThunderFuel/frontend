@@ -72,6 +72,40 @@ export async function bulkMint(
     startIndex: number,
     amount: number,
 ) {
+    let subIDs = [];
+
+    const zeroX = "0x";
+    const contract = await setup(contractId, provider, wallet);
+
+    for (let i=startIndex; i<(startIndex + amount); i++) {
+        const fill0 = i.toString().padStart(64, "0")
+        const stringSubId = fill0.padStart(66, zeroX)
+        subIDs.push(stringSubId);
+    }
+
+    if (subIDs.length === 0) return null;
+
+    try {
+        const { minGasPrice } = contract.provider.getGasConfig();
+        const _to: IdentityInput = { Address: { value: to } };
+        const { transactionResult, transactionResponse } = await contract.functions
+            .bulk_mint(_to, subIDs)
+            .txParams({gasPrice: minGasPrice})
+            .call();
+        return { transactionResponse, transactionResult };
+    } catch(err: any) {
+        throw Error(`ERC721: bulkMint failed. Reason: ${err}`);
+    }
+}
+
+export async function bulkMintWithMulticall(
+    contractId: string,
+    provider: string,
+    wallet: string | WalletLocked,
+    to: string,
+    startIndex: number,
+    amount: number,
+) {
     let calls: FunctionInvocationScope<any[], any>[] = [];
 
     const zeroX = "0x";
@@ -90,6 +124,7 @@ export async function bulkMint(
     if (calls.length === 0) return null;
 
     try {
+        const { minGasPrice } = contract.provider.getGasConfig();
         const { transactionResult, transactionResponse } = await contract.multiCall(calls)
             .txParams({gasPrice: 1})
             .call();

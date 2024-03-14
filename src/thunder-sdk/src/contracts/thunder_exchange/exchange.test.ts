@@ -1,6 +1,6 @@
-import fs from "fs";
-import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId, sleep } from "fuels";
-import path from "path";
+import fs from 'fs';
+import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId, sleep } from 'fuels';
+import path from 'path';
 
 // import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";
 // import { ExecutionManagerAbi__factory } from "../../types/execution_manager/factories/ExecutionManagerAbi__factory";

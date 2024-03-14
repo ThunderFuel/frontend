@@ -1,8 +1,8 @@
-import fs from "fs";
-import { Contract, ContractFactory, BaseAssetId, Provider, WalletUnlocked } from "fuels";
-import path from "path";
+import fs from 'fs';
+import { Contract, ContractFactory, BaseAssetId, Provider, WalletUnlocked } from 'fuels';
+import path from 'path';
 import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
-import * as AssetManager from "./asset_manager";
+import * as AssetManager from './asset_manager';
 
 // let contract: Contract;
 

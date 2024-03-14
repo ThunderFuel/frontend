@@ -112,7 +112,7 @@ const main = async (_provider: string) => {
             royaltyManager: "0x2a08b7c9a7133fa52a1505897975e0e5a6ff7cb385e16c0d551152de7ecca47e",
             assetManager: "0xa0732def1afa51e5fe6d8ada46824fbe794b2959e901875b219055b80a076891",
             strategyFixedPrice: strategyFixedPrice.id.toB256(),
-            //strategyAuction: strategyAuction.id.toB256(),
+            strategyAuction: strategyAuction.id.toB256(),
         }
         Exchange.setContracts(contracts, provider);
         console.log([contracts, EXCHANGE])

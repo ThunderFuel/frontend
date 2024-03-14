@@ -44,7 +44,8 @@ const main = async (_provider: string) => {
         // Deploy Exchange
         const exchangeBytecode = readFileSync(path.join(__dirname, '../../bin-files/thunder_exchange.bin'));
         const exchangeFactory = new ContractFactory(exchangeBytecode, ThunderExchangeAbi__factory.abi, OWNER);
-        exchange = await exchangeFactory.deployContract({gasPrice: 1});
+        const { minGasPrice: gasPrice } = provider.getGasConfig();
+        exchange = await exchangeFactory.deployContract({gasPrice});
         console.log(`Exchange contract id: ${exchange.id.toB256()}`)
         await sleep(1500);
 
@@ -70,10 +71,10 @@ const main = async (_provider: string) => {
         await sleep(1500);
 
         // // Deploy Strategy Auction
-        // const strategyAuctionBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_auction.bin'));
-        // const strategyAuctionFactory = new ContractFactory(strategyAuctionBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        // strategyAuction = await strategyAuctionFactory.deployContract({gasPrice: 1});
-        // console.log(`StrategyAuction contract id: ${strategyAuction.id.toB256()}`)
+        const strategyAuctionBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_auction.bin'));
+        const strategyAuctionFactory = new ContractFactory(strategyAuctionBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
+        strategyAuction = await strategyAuctionFactory.deployContract({gasPrice: 1});
+        console.log(`StrategyAuction contract id: ${strategyAuction.id.toB256()}`)
         // await sleep(1500);
 
         // Deploy Execution Manager
@@ -198,23 +199,23 @@ const main = async (_provider: string) => {
         await sleep(3500);
 
         // // Initialize Strategy Auction
-        // const { transactionResult: auctionInit } = await Strategy.initialize(
-        //     strategyAuction.id.toString(),
-        //     provider.url,
-        //     OWNER.privateKey,
-        //     exchange.id.toB256(),
-        // );
-        // console.log(`auction init: ${auctionInit?.isStatusSuccess}`)
-        // await sleep(3500);
+        const { transactionResult: auctionInit } = await Strategy.initialize(
+            strategyAuction.id.toString(),
+            provider.url,
+            OWNER.privateKey,
+            exchange.id.toB256(),
+        );
+        console.log(`auction init: ${auctionInit?.isStatusSuccess}`)
+        await sleep(3500);
 
-        // const { transactionResult: auctionSetFeeTx } = await Strategy.setProtocolFee(
-        //     strategyAuction.id.toString(),
-        //     provider.url,
-        //     OWNER.privateKey,
-        //     250
-        // );
-        // console.log(`auction set fee: ${auctionSetFeeTx?.isStatusSuccess}`)
-        // await sleep(3500);
+        const { transactionResult: auctionSetFeeTx } = await Strategy.setProtocolFee(
+            strategyAuction.id.toString(),
+            provider.url,
+            OWNER.privateKey,
+            250
+        );
+        console.log(`auction set fee: ${auctionSetFeeTx?.isStatusSuccess}`)
+        await sleep(3500);
 
         // Initialize Execution Manager
         const { transactionResult: executionManagerInit } = await ExecutionManager.initialize(
@@ -234,14 +235,14 @@ const main = async (_provider: string) => {
         console.log(`add fixed price strategy: ${addFixedPrice.isStatusSuccess}`)
         await sleep(4000);
 
-        // const { transactionResult: addAuction } = await ExecutionManager.addStrategy(
-        //     executionManager.id.toString(),
-        //     provider.url,
-        //     OWNER.privateKey,
-        //     strategyAuction.id.toB256()
-        // );
-        // console.log(`add auction strategy: ${addAuction.isStatusSuccess}`)
-        // await sleep(4000);
+        const { transactionResult: addAuction } = await ExecutionManager.addStrategy(
+            executionManager.id.toString(),
+            provider.url,
+            OWNER.privateKey,
+            strategyAuction.id.toB256()
+        );
+        console.log(`add auction strategy: ${addAuction.isStatusSuccess}`)
+        await sleep(4000);
 
         // Initialize Royalty Manager
         const { transactionResult: rmInit } = await RoyaltyManager.initialize(
@@ -267,7 +268,7 @@ const main = async (_provider: string) => {
             royaltyManager: royaltyManager.id.toB256(),
             assetManager: assetManager.id.toB256(),
             strategyFixedPrice: strategyFixedPrice.id.toB256(),
-            //strategyAuction: "0x0000000000000000000000000000000000000000000000000000000000000000",
+            strategyAuction: strategyAuction.id.toB256(),
         }
         Exchange.setContracts(contracts, provider);
         console.log([contracts, exchange.id.toB256()])

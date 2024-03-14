@@ -14,7 +14,7 @@ const bulkCancel = async (startNonce: number, endNonce: number) => {
         royaltyManager: "0xb16fa86555ad029b8522dd3cc4fba9b2eea759ccdb04ed4cfdb33c9aeb4593d0",
         assetManager: "0xa75ab28ceb06c3b912fffa3252bd8420b19f81e24aceae48190c0dc6a1b47bd9",
         strategyFixedPrice: "0x903a69c7350170df05dfe4b7159a61bb5cf15923b98855162687b10a3c88223b",
-        //strategyAuction: strategyAuction.id.toB256(),
+        strategyAuction: "0x9b68a29813a329fa9c4d270a7c19081e369d332075ebb357a9fcb40824d88654",
     }
     const _provider = await Provider.create(provider)
     setContracts(contracts, _provider);

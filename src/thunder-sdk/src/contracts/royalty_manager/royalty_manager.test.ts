@@ -1,8 +1,8 @@
-import fs from "fs";
-import { Contract, ContractFactory, Provider, WalletUnlocked } from "fuels";
-import path from "path";
+import fs from 'fs';
+import { Contract, ContractFactory, Provider, WalletUnlocked } from 'fuels';
+import path from 'path';
 import { RoyaltyManagerAbi__factory } from "../../types/royalty_manager/factories/RoyaltyManagerAbi__factory";
-import * as RoyaltyManager from "./royalty_manager";
+import * as RoyaltyManager from './royalty_manager';
 
 // let contract: Contract
 

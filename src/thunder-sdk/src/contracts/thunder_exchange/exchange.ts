@@ -70,7 +70,7 @@ export type Contracts = {
     royaltyManager: string,
     assetManager: string,
     strategyFixedPrice: string,
-    //strategyAuction: string,
+    strategyAuction: string,
 }
 
 let pool: Contract;
@@ -78,7 +78,7 @@ let executionManager: Contract;
 let royaltyManager: Contract;
 let assetManager: Contract;
 let strategyFixedPrice: Contract;
-//let strategyAuction: Contract;
+let strategyAuction: Contract;
 
 export function setContracts(
     contracts: Contracts,
@@ -89,7 +89,7 @@ export function setContracts(
     royaltyManager = new Contract(contracts.royaltyManager, RoyaltyManagerAbi__factory.abi, provider);
     assetManager = new Contract(contracts.assetManager, AssetManagerAbi__factory.abi, provider);
     strategyFixedPrice = new Contract(contracts.strategyFixedPrice, StrategyFixedPriceSaleAbi__factory.abi, provider);
-    //strategyAuction = new Contract(contracts.strategyAuction, StrategyAuctionAbi__factory.abi, provider);
+    strategyAuction = new Contract(contracts.strategyAuction, StrategyAuctionAbi__factory.abi, provider);
 }
 
 function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
@@ -253,7 +253,6 @@ async function _placeSellOrder(
         const _order = _convertToInput(order);
 
         const assetId = ReceiptMintCoder.getAssetId(order.collection, _order.token_id);
-        //console.log(assetId)
         const asset: CoinQuantityLike = { amount: order.amount, assetId: assetId };
 
         let strategy: Contract;

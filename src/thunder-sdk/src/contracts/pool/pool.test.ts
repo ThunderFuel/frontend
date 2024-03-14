@@ -1,10 +1,10 @@
-import fs from "fs";
-import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId } from "fuels";
-import path from "path";
+import fs from 'fs';
+import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId } from 'fuels';
+import path from 'path';
 import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";
 import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
-import * as Pool from "./pool";
-import * as AssetManager from "../asset_manager";
+import * as Pool from './pool';
+import * as AssetManager from '../asset_manager';
 
 // let contract: Contract
 // let assetManager: Contract;
@@ -292,3 +292,4 @@ import * as AssetManager from "../asset_manager";
 //         expect(value.value).toBe(ASSET);
 //     });
 // });
+

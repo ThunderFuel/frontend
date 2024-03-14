@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.73.0
-  Forc version: 0.49.2
-  Fuel-Core version: 0.22.0
+  Fuels version: 0.75.0
+  Forc version: 0.50.0
+  Fuel-Core version: 0.22.1
 */
 
 import type {
@@ -22,7 +22,7 @@ import type {
   StdString,
 } from 'fuels';
 
-import type { Option, Enum } from "./common";
+import type { Option, Enum, Vec } from "./common";
 
 export enum BurnErrorInput { NotEnoughCoins = 'NotEnoughCoins' };
 export enum BurnErrorOutput { NotEnoughCoins = 'NotEnoughCoins' };
@@ -58,6 +58,7 @@ interface NFTContractAbiInterface extends Interface {
     set_name: FunctionFragment;
     set_symbol: FunctionFragment;
     set_metadata: FunctionFragment;
+    bulk_mint: FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: 'decimals', values: [AssetIdInput]): Uint8Array;
@@ -72,6 +73,7 @@ interface NFTContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'set_name', values: [AssetIdInput, StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_symbol', values: [AssetIdInput, StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_metadata', values: [AssetIdInput, StdString, MetadataInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'bulk_mint', values: [IdentityInput, Vec<string>]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'decimals', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'name', data: BytesLike): DecodedValue;
@@ -85,6 +87,7 @@ interface NFTContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'set_name', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_symbol', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_metadata', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'bulk_mint', data: BytesLike): DecodedValue;
 }
 
 export class NFTContractAbi extends Contract {
@@ -102,5 +105,6 @@ export class NFTContractAbi extends Contract {
     set_name: InvokeFunction<[asset: AssetIdInput, name: StdString], void>;
     set_symbol: InvokeFunction<[asset: AssetIdInput, symbol: StdString], void>;
     set_metadata: InvokeFunction<[asset: AssetIdInput, key: StdString, metadata: MetadataInput], void>;
+    bulk_mint: InvokeFunction<[recipient: IdentityInput, sub_ids: Vec<string>], void>;
   };
 }

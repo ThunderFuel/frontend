@@ -5,20 +5,19 @@ import bytecode from "../../scripts/bulk_mint/binFile";
 import abi from "../../scripts/bulk_mint/out/bulk_mint-abi.json";
 
 const nfts = [
-    "0xb6ddceeb0aba222bb6384bd4fc26c8744e7aeed0a310fc8d22939a80bc21ba5a",
-    "0x1ab17d22a61f44c2bb9a6dd203b969643ab0000c24752f006b997e8ff7d04b51",
-    "0x83dd9cfa1e94119fbe86cf87a1dae2512569b52d628667a5d1307f48abc055bb",
-    "0x848c5b8cd1b9f16d3993397d12f43368f8523aa06c8f154479c064ce49be0360",
-    "0x22b73385b8540575c95de0ba66aec6b828b5dfd8e105a5ca55a7f6906f2f576b",
-    "0xfa43ff6b090cc14b11a4ff103f2478dc6a66a0f25e40674cacf039b40a8bd268",
-    "0x737b24549d6710a21ead349d6e94fcf1cb752a47f11d14ab5a96f7ccce23db22",
-    "0x4941326770372032c516a2b2dbe9cb3240c9dff1c54de3e3236087737b2dceda",
-    "0xc055509f28707a2071b354a4240d43514b26587f8788fc432caf85aa51b78e07",
-    "0x617ff226ce12c85704f12a941c804507074295eb423f09f113a524c69eafb6fa",
-    "0x8050db82991599d9410034d6faac2536f83553457561722ce9642d0dc524d2d7",
-    "0x1fa01ce2c38d346dc934ba5c3c93e94b99df6c3bed7d91a893fc0ca959c3ddbe",
-    "0x24b02ecf10c1acaaf93019a02fa200d8fd50baa0703bc6e5f22e72f0aa6b6bf0",
-    "0xfa995d626b09e83074517d5a219f91e8b343f648f3b72726db23ac4be3bd07b7"
+    "0xf32598dd721c22a8de733787261fac218a33f989ae05616b15d7612de37cdfe7",
+    "0x9eae614c5393a46c27204b639e8672442c6b845165940e299ac8e5c37668fd97",
+    "0xd1f024422f806d021199f2286d52068715439a4af750085dcdf045c767b17203",
+    "0x1b2add35516a0895d4c59e05f196165da272dcb9d32ca4dcd3f2cf2453a20e73",
+    "0x89feaa70cb271f5dcf4af504ba5e592db9caf0e4fcf807f15fdb48d10c5b9e82",
+    "0x9a66ccd6ed81fa5e1b1d2a1df2643f01240c5c8ca1b98732cc320b928573b65c",
+    "0x59ec40eb701778acdb911a019e91bd29ce5436e0485d7b412e352931efefa366",
+    "0xc7ff410ef10f5162ceebb3999e18ffff0657ce909b342e4f27292b2b4ae040a2",
+    "0x039a7cb658abf2c71bcbf3413d2b12b1cf7bd839de5457b6bc9b8da3808b25ea",
+    "0xce6d6d599ac50de590dd9b9a13a28463319403718444fb5d358676521833595b",
+    "0xdade4a9ef8ec3a38d10823c539dba9ca1cc07e90138be2ab971892f2c2bc552a",
+    "0xf00fbcb8adcbbe642edc9b1a2df3fd3798157c3af7e40c1ae73bd0def362f220",
+    "0x3b24330bd1e1354ea0c14948d0e58334b9921c28a0394e26d2f26054e024c662",
 ]
 
 type ContractIdInput = { value: string };
@@ -40,12 +39,12 @@ const mintNFTs = async (collection: string, amount: BigNumberish) => {
     const _collection: ContractIdInput = { value: collection };
     const _to: IdentityInput = { Address: { value: to } };
 
-    const { transactionResult } = await script.functions
+    const res = await script.functions
         .main(_collection, _to, amount)
         .txParams({gasPrice: 1})
         .addContracts([_contract])
         .call();
-    return transactionResult.isStatusSuccess;
+    return res.transactionResult.isStatusSuccess
 }
 
 const mintNFTs2 = async (collection: string, amount: number, n: number) => {
@@ -54,13 +53,13 @@ const mintNFTs2 = async (collection: string, amount: number, n: number) => {
     const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
     const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
 
-    let startIndex = 110 // next time 220
+    let startIndex = 180 // next time 270
 
     for (let i=0; i<n; i++) {
         const res = await bulkMint(collection, testnet.url, privateKey, to, startIndex, amount);
         console.log(res?.transactionResult.isStatusSuccess)
-        startIndex += 10
-        await sleep(3000);
+        startIndex += amount
+        await sleep(2500);
     }
 }
 
@@ -101,13 +100,24 @@ const mintNFTs2 = async (collection: string, amount: number, n: number) => {
 // }
 
 mintNFTs2(
-    nfts[11],
-    10,
-    11
+    nfts[12],
+    9,
+    10
 )
 .then((res) => console.log(res))
 .catch((err) => console.log(err))
 
-// main()
+// const mintBatch = async () => {
+//     for (let i=0; i<nfts.length; i++) {
+//         await mintNFTs2(
+//             nfts[i],
+//             9,
+//             10
+//         )
+//         console.log(`collection ${i}: done`)
+//     }
+// }
+
+// mintNFTs2()
 //     .then((res) => console.log(res))
 //     .catch((err) => console.log(err))

@@ -47,6 +47,6 @@ const main = async (_provider: string, n: number) => {
     //await initialize(provider);
 }
 
-main(testnet, 14)
+main(testnet, 13)
     .then((res) => { return res })
     .catch((err) => console.log(err));

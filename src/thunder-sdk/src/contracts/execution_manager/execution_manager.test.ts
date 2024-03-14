@@ -1,8 +1,8 @@
-import fs from "fs";
-import { Contract, ContractFactory, Provider, WalletUnlocked } from "fuels";
-import path from "path";
+import fs from 'fs';
+import { Contract, ContractFactory, Provider, WalletUnlocked } from 'fuels';
+import path from 'path';
 import { ExecutionManagerAbi__factory } from "../../types/execution_manager/factories/ExecutionManagerAbi__factory";
-import * as ExecutionManager from "./execution_manager";
+import * as ExecutionManager from './execution_manager';
 
 // let contract: Contract;
 
