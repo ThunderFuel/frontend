@@ -251,7 +251,7 @@ const LeftMenu = (props: any) => {
                 Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
               </h6>
             </div>
-            {!isObjectEmpty(nft) && <CollectionProvider kind={nft?.kind} />}
+            {/* {!isObjectEmpty(nft) && <CollectionProvider kind={nft?.kind} />} */}
           </div>
           {isMultipleEdition && (
             <div className="flex items-center gap-4">

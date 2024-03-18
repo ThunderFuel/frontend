@@ -234,6 +234,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   const onComplete = async () => {
     const tokenIds = !isObjectEmpty(buyNowItem) ? [buyNowItem.id] : items.map((item: any) => item.id);
+
     try {
       handleCheckout({
         setApproved,

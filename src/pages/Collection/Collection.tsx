@@ -16,6 +16,7 @@ import Button from "components/Button";
 import { IconFuelWallet, IconLinea, IconPencil } from "icons";
 import { PATHS } from "router/config/paths";
 import { isObjectEmpty } from "utils";
+import config from "config";
 
 const EDITABLE_USER = 708;
 
@@ -75,7 +76,7 @@ const Collection = () => {
                 <div className="flex gap-5">
                   <div className="hidden lg:block flex gap-5">
                     <SocialButtons socialMedias={collection?.socialMedias} collection={collection} />
-                    {!isObjectEmpty(collection) && <CollectionProvider kind={collection?.kind} />}
+                    {config.getConfig("type") === "fuel" ? <></> : !isObjectEmpty(collection) && <CollectionProvider kind={collection?.kind} />}
                   </div>
                   {user.id === EDITABLE_USER && (
                     <Button className="btn-secondary btn-sm h-10" onClick={() => navigate(PATHS.COLLECTION_EDIT, { collectionId: collectionId })}>

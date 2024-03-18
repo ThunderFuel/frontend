@@ -145,7 +145,7 @@ const CollectionTable = () => {
       className="border-t border-t-gray"
       theadClassName={"sticky"}
       theadStyle={{ top: "calc(var(--headerHeight) + 68px)" }}
-      rowClassName={"cursor-pointer"}
+      rowClassName={"cursor-pointer !h-[60px]"}
       headers={headers}
       items={collectionItems}
       onClick={onSelect}

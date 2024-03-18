@@ -7,10 +7,10 @@ async function setup(
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<ExecutionManagerAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider)
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider)
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return ExecutionManagerAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -60,13 +60,12 @@ export async function removeStrategy(
     contractId: string,
     provider: string,
     wallet: string | WalletLocked,
-    strategy: string,
+    index: BigNumberish,
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _strategy: ContractIdInput = { value: strategy };
         const { transactionResult, transactionResponse } = await contract.functions
-            .remove_strategy(_strategy)
+            .remove_strategy(index)
             .txParams({gasPrice: 1})
             .call();
         return { transactionResponse, transactionResult };
@@ -85,7 +84,7 @@ export async function isStrategyWhitelisted(
         const _strategy: ContractIdInput = { value: strategy };
         const { value } = await contract.functions
             .is_strategy_whitelisted(_strategy)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         return { err };
@@ -101,7 +100,7 @@ export async function getWhitelistedStrategy(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_whitelisted_strategy(index)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         return { err };
@@ -116,7 +115,7 @@ export async function getCountWhitelistedStrategy(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_count_whitelisted_strategies()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         return { err };
@@ -131,7 +130,7 @@ export async function owner(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .owner()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         return { err };

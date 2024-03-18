@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "components/Button";
-import { IconArrowRight, IconCoinbase, IconDiscord, IconFuelet, IconFuelWallet, IconGoogle, IconLightning, IconMetamask, IconWalletConnect } from "icons";
+import { IconArrowRight, IconCoinbase, IconDiscord, IconFuelet, IconFuelWallet, IconGoogle, IconLightning, IconSpinner, IconMetamask, IconWalletConnect } from "icons";
 import { useWallet } from "hooks/useWallet";
 import { useFuel } from "hooks/useFuel";
 import { useDispatch } from "react-redux";
@@ -31,6 +31,7 @@ const WalletList = {
   [FUEL_TYPE.FUELET]: {
     name: "Fuelet",
     icon: IconFuelet,
+    unavailable: true,
   },
   [FUEL_TYPE.WAGMI_METAMASK]: {
     name: "Metamask",
@@ -72,7 +73,7 @@ const SocialList = [
   },
 ];
 
-const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: string; icon: any; type: FUEL_TYPE; activeConnector: number }) => {
+const ConnectWalletButton = ({ name, icon, type, activeConnector, unavailable }: { name: string; icon: any; type: FUEL_TYPE; activeConnector: number; unavailable?: boolean }) => {
   const { walletConnectGateway } = useWallet();
   const dispatch = useDispatch();
 
@@ -85,8 +86,8 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: stri
   const Icon = icon ?? IconFuelet;
 
   const activeWallet = {
-    [FUEL_TYPE.FUEL]: { error: fuelError },
-    [FUEL_TYPE.FUELET]: { error: fueletError },
+    [FUEL_TYPE.FUEL]: { error: fuelError, isLoading: fuelLoading },
+    [FUEL_TYPE.FUELET]: { error: fueletError, isLoading: fueletLoading },
     [FUEL_TYPE.WAGMI_METAMASK]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_WALLETCONNECT]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_COINBASE]: { error: coinbaseError },
@@ -109,17 +110,35 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector }: { name: stri
   };
 
   return (
-    <div className={`flex p-2.5 h-[60px] items-center justify-between border border-gray rounded-[5px] group`}>
+    <div className={`flex p-2.5 h-[60px] items-center justify-between border border-gray  bg-bg-light rounded-[5px] group`}>
       <div className="flex items-center gap-x-2.5">
         <Icon className={clsx("w-8 h-8", name === "Google" ? "h-[22.5px] w-[22.5px]" : name === "Discord" ? "text-[#738ADB]" : "")} />
         <h6 className="text-head6 font-spaceGrotesk text-white">{name}</h6>
       </div>
-      {activeWallet.error === "" ? (
+      {activeWallet.isLoading ? (
+        <div className="flex-center h-[43px]">
+          <IconSpinner className="text-white animate-[spin_3s_linear_infinite]" />
+        </div>
+      ) : unavailable ? (
+        <span className="text-h6 text-gray-light flex-center animate-pulse white">Temporarily Unavailable</span>
+      ) : activeWallet.error === "" ? (
         <Button className="btn-connect" onClick={onConnect}>
           CONNECT <IconArrowRight className="w-[18px] h-[18px]" />
         </Button>
       ) : (
-        <a href={name === "Metamask" ? "https://metamask.io/download/" : name === "Coinbase" ? "https://coinbase.com/wallet/downloads" : ""} target="_blank" rel="noreferrer">
+        <a
+          href={
+            name === "Metamask"
+              ? "https://metamask.io/download/"
+              : name === "Coinbase"
+              ? "https://coinbase.com/wallet/downloads"
+              : name === "Fuel"
+              ? "https://chrome.google.com/webstore/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok"
+              : ""
+          }
+          target="_blank"
+          rel="noreferrer"
+        >
           <Button className="btn-secondary btn-sm no-bg h-10">
             INSTALL <IconArrowRight className="w-[18px] h-[18px]" />
           </Button>
@@ -267,7 +286,7 @@ export const ConnectWallet = () => {
   else
     return (
       <div className="flex flex-col h-full p-5 gap-[15px] overflow-y-scroll no-scrollbar">
-        <div className="flex flex-col gap-[18px]">
+        {/* <div className="flex flex-col gap-[18px]">
           <div className="flex flex-col gap-[5px]">
             <h5 className="text-head5 font-spaceGrotesk text-white">Login/Sign up</h5>
             <span className="text-bodyMd text-gray-light font-spaceGrotesk">Choose a way to get you started quickly</span>
@@ -293,7 +312,7 @@ export const ConnectWallet = () => {
                 error={isEmailSelected ? errors.email?.message : errors.phonenumber?.message}
               />
               <Button className="btn-primary h-10 btn-sm whitespace-nowrap" onClick={onHandleSubmit}>
-                send code
+                send codef
               </Button>
             </div>
             <div className="flex items-center gap-2.5">
@@ -307,15 +326,15 @@ export const ConnectWallet = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="h-[1px] bg-gray w-full flex-shrink-0" />
+        {/* <div className="h-[1px] bg-gray w-full flex-shrink-0" /> */}
 
         <div className="flex flex-col gap-[18px]">
-          <div className="flex flex-col gap-[5px]">
+          {/* <div className="flex flex-col gap-[5px]">
             <h5 className="text-head5 font-spaceGrotesk text-white">Connect your wallet</h5>
             <span className="text-bodyMd text-gray-light font-spaceGrotesk">Use your existing wallet to login</span>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-2.5">
             {walletList.map((item: FUEL_TYPE, activeIndex: number) => {
@@ -323,26 +342,26 @@ export const ConnectWallet = () => {
 
               if (item === FUEL_TYPE.LIT_GOOGLE_AUTH || item === FUEL_TYPE.LIT_DISCORD_AUTH) return <></>;
 
-              return <ConnectWalletButton key={item} name={wallet.name} icon={wallet.icon} type={item} activeConnector={activeIndex} />;
+              return <ConnectWalletButton key={item} name={wallet.name} icon={wallet.icon} type={item} activeConnector={activeIndex} unavailable={wallet.unavailable} />;
             })}
           </div>
         </div>
 
-        {config.getConfig("type") === "fuel" ? (
-          <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">
-            <IconLightning className="text-white w-5 h-5" />
-            <div className="flex flex-col gap-y-[5px]">
-              <h6 className="text-head6 font-spaceGrotesk text-white">New to Fuel?</h6>
-              <p className="text-bodyMd font-spaceGrotesk text-gray-light">Fuel is the fastest execution layer for the modular blockchain stack.</p>
-              <a className="text-bodyMd font-spaceGrotesk text-white underline" href="https://www.fuel.network/" target="_blank" rel="noreferrer">
-                Learn More
-              </a>
+        <div className="flex flex-col gap-4 mt-auto">
+          {config.getConfig("type") === "fuel" ? (
+            <div className="flex p-[15px] gap-x-[15px] bg-gray border border-gray rounded-md mt-auto">
+              <IconFuelWallet className="flex-shrink-0 w-6 h-6" />
+              <div className="flex flex-col gap-y-[5px]">
+                <h6 className="text-head6 font-spaceGrotesk text-white">New to Fuel?</h6>
+                <p className="text-bodyMd font-spaceGrotesk text-gray-light">Fuel is the fastest execution layer for the modular blockchain stack.</p>
+                <a className="text-bodyMd font-spaceGrotesk text-white underline" href="https://www.fuel.network/" target="_blank" rel="noreferrer">
+                  Learn More
+                </a>
+              </div>
             </div>
-          </div>
-        ) : (
-          <></>
-        )}
-        <div className="mt-auto">
+          ) : (
+            <></>
+          )}
           <span className="text-bodyMd text-gray-light">
             By connecting your wallet, you agree to our <u className="text-white cursor-pointer">Terms of Service</u> and our <u className="text-white cursor-pointer">Privacy Policy.</u>
           </span>

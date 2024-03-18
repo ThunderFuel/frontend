@@ -12,6 +12,17 @@ import { initReactI18next } from "react-i18next";
 import LOCALES from "./locales";
 
 import * as Sentry from "@sentry/react";
+import { Fuel, FuelWalletConnector } from "@fuel-wallet/sdk";
+
+const FuelWalletInstance = new Fuel({ connectors: [new FuelWalletConnector()] });
+const FueletWalletInstance = undefined as any;
+
+export const getFuel = () => {
+  return FuelWalletInstance;
+};
+export const getFuelet = () => {
+  return FueletWalletInstance;
+};
 import { BrowserTracing } from "@sentry/browser";
 
 import { configureChains, createConfig, WagmiConfig } from "wagmi";

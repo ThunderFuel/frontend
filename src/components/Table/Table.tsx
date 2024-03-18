@@ -31,6 +31,7 @@ export interface ITable {
   thClassName?: string;
   afterRow?: any;
   actionButton?: any;
+  ButtonBelowHeader?: any;
 }
 
 const TableNotFound = React.memo(() => {
@@ -81,6 +82,7 @@ const Table = ({
   thClassName,
   afterRow,
   actionButton,
+  ButtonBelowHeader,
   ...props
 }: ITable) => {
   const _getAfterRow = (k: number, item: any) => {
@@ -151,6 +153,7 @@ const Table = ({
             <div className="tr">{_getHeaders}</div>
           </div>
         </div>
+        {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
         {actionButton && actionButton()}
         <div data-testid="tableBody" className={clsx("tbody container-fluid", containerFluidClassName)}>
           {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}

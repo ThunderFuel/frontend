@@ -1,31 +1,34 @@
 export const THUNDER_THEME_NAME = "thunder_theme";
 
-export const provider = "https://beta-3.fuel.network/graphql";
+export const provider = "https://beta-5.fuel.network/graphql";
+export const FUEL_FAUCET_URL = "https://faucet-beta-5.fuel.network";
+export const FUEL_EXPLORER_URL = "https://app.fuel.network/";
+
 export const ZERO_B256 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
-export const exchangeContractId = "0x88ccf5f44f586bc962e5f2a6945fa1b0b0309d79606660a05bb6d5d8fb4b3db9";
-export const assetManagerContractId = "0xa0732def1afa51e5fe6d8ada46824fbe794b2959e901875b219055b80a076891";
-export const poolContractId = "0x4fd8c3335fcb9daf317a0a0bff373735cb0b73b297f657eced288174fe9b504c";
-export const strategyFixedPriceContractId = "0xfb692ed3f7410dc287d10e42efb2c4a2ed6c910c192237a8053bc977a5cd73e5";
-export const strategyAuctionContractId = "0x7a6f0b6e7a181cb0d21b99e4703eb706dbc00fa385726af5e7124dde4d286276";
-export const executionManagerContractId = "0xbaad27814dcfca96d88c209e80e4a5cc6fbaac6e07ba1ef75ca0fdbe54878f06";
-export const transferManagerContractId = "0x44f93062f0e8ce54973a1c9fe972a25e3845a798adf892059bfe67c3576a1f22";
-export const transferSelectorContractId = "0xbb55fd1eac8df688b719ddfc2374d911db743523e13d81ded77100a4e0ae1277";
-export const royaltyManagerContractId = "0x2a08b7c9a7133fa52a1505897975e0e5a6ff7cb385e16c0d551152de7ecca47e";
-export const ERC721ContractId = "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa";
+export const poolContractId = "0x8dad4bc41accf5c8a4d326ba513c7bccba075c4906ef1826f2cbf7409514a112";
+export const executionManagerContractId = "0x0bc0b9787481eea6bde1396600d1bc00a7e26018c9433d5a6c79fbe9e2d51aa1";
+export const royaltyManagerContractId = "0xf855df441b733d49ee9d738138ec38567fde35dbbb1ef08dac3c8e4f3e4a7908";
+export const assetManagerContractId = "0xe2591588f3dfaeb28053d6d509f16053272b9c58481bdd504dd7cb537a3504f0";
+export const strategyFixedPriceContractId = "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f";
+export const strategyAuctionContractId = "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f";
+export const exchangeContractId = "0xc5fbe89423bc290215a184f4e607e39340ef475b27f5b761fb9fa873bc937700";
+export const ERC721ContractId = "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74";
+
+// StrategyAuction contract id: 0x9b68a29813a329fa9c4d270a7c19081e369d332075ebb357a9fcb40824d88654
 
 export const contracts = {
-  pool: "0x4fd8c3335fcb9daf317a0a0bff373735cb0b73b297f657eced288174fe9b504c",
-  executionManager: "0xbaad27814dcfca96d88c209e80e4a5cc6fbaac6e07ba1ef75ca0fdbe54878f06",
-  royaltyManager: "0x2a08b7c9a7133fa52a1505897975e0e5a6ff7cb385e16c0d551152de7ecca47e",
-  assetManager: "0xa0732def1afa51e5fe6d8ada46824fbe794b2959e901875b219055b80a076891",
-  transferSelector: "0xbb55fd1eac8df688b719ddfc2374d911db743523e13d81ded77100a4e0ae1277",
-  transferManager: "0x44f93062f0e8ce54973a1c9fe972a25e3845a798adf892059bfe67c3576a1f22",
-  strategyFixedPrice: "0xfb692ed3f7410dc287d10e42efb2c4a2ed6c910c192237a8053bc977a5cd73e5",
-  strategyAuction: "0x7a6f0b6e7a181cb0d21b99e4703eb706dbc00fa385726af5e7124dde4d286276",
-  exchange: "0x88ccf5f44f586bc962e5f2a6945fa1b0b0309d79606660a05bb6d5d8fb4b3db9",
-  erc721: "0x2a5b42c6e92ac8aad4ac0b9fbc582b3f291d66dbe983fc27f228bf2298ff9baa",
+  pool: "0x8dad4bc41accf5c8a4d326ba513c7bccba075c4906ef1826f2cbf7409514a112",
+  executionManager: "0x0bc0b9787481eea6bde1396600d1bc00a7e26018c9433d5a6c79fbe9e2d51aa1",
+  royaltyManager: "0xf855df441b733d49ee9d738138ec38567fde35dbbb1ef08dac3c8e4f3e4a7908",
+  assetManager: "0xe2591588f3dfaeb28053d6d509f16053272b9c58481bdd504dd7cb537a3504f0",
+  strategyFixedPrice: "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f",
+  strategyAuction: "0x9b68a29813a329fa9c4d270a7c19081e369d332075ebb357a9fcb40824d88654",
+  // exchange: "0xc5fbe89423bc290215a184f4e607e39340ef475b27f5b761fb9fa873bc937700",
+  // erc721: "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
 };
+
+export const DISCORD_URL = "https://discord.com/invite/thundermarket";
 
 export const lineaChainId = 59144;
 export const goerliWethAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";

@@ -29,6 +29,8 @@ const Layout = ({ children, ...etc }: Props) => {
     }
   }, []);
 
+  const isMobile = useIsMobile();
+
   return (
     <main className="bg-bg min-h-screen flex flex-col">
       <Header />
@@ -37,7 +39,7 @@ const Layout = ({ children, ...etc }: Props) => {
       <ManageFunds />
       <ClosedBetaModal />
       {children}
-      {etc?.hiddenFooter && !useIsMobile() ? null : <Footer />}
+      {etc?.hiddenFooter && !isMobile ? null : <Footer />}
 
       <ErrorModal />
       <CheckoutModal />

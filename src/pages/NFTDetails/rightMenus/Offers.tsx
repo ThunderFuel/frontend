@@ -130,7 +130,7 @@ const headers: ITableHeader[] = [
     sortValue: 1,
     render: (item) => (
       <span className="flex items-center gap-2.5">
-        <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerUserId)}
+        <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerAddress)}
       </span>
     ),
   },
@@ -204,6 +204,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
       <OfferTable
         items={offers}
         headers={headers}
+        ButtonBelowHeader={compareAddresses(selectedNFT.user.id, user.id) ? undefined : MakeOfferButton}
         onCancelOffer={(item: any) => {
           dispatch(
             setCheckout({

@@ -22,8 +22,8 @@ class Config {
     }
   }
 
-  getConfig(name = "") {
-    return this.config[name] ?? "";
+  getConfig(fieldName = "") {
+    return this.config[fieldName] ?? "";
   }
 
   isCollectionPathSlug() {

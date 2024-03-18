@@ -138,7 +138,7 @@ const ActivityItems = (props: any) => {
     <div className={clsx("flex flex-col flex-1 py-5", props.containerClassName)}>
       {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-5 border-b border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
       <div className="flex flex-col gap-4">
-        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!px-5"} />
+        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!px-5"} rowClassName={"!h-[60px]"} />
       </div>
     </div>
   );

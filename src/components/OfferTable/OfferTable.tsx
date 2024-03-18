@@ -4,7 +4,7 @@ import EthereumPrice from "../EthereumPrice";
 import { addressFormat, timeagoFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
-import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand } from "../../icons";
+import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconOffer } from "../../icons";
 import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 
@@ -17,12 +17,13 @@ interface IOfferTable {
   onUpdateOffer?: any;
   isProfile?: any;
   getBidBalance?: any;
+  ButtonBelowHeader?: any;
 }
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
   return (
-    <Button className="btn-secondary btn-sm w-full" onClick={() => onAcceptOffer(item)}>
-      accept offer <IconLikeHand />
+    <Button className="btn-secondary btn-sm w-full border-none no-bg !p-0" onClick={() => onAcceptOffer(item)}>
+      accept offer <IconOffer className="w-[18px] h-[18px]" />
     </Button>
   );
 };
@@ -139,7 +140,7 @@ const AfterRow = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, getBidBal
   return <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />;
 };
 
-const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade }: IOfferTable) => {
+const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade, ButtonBelowHeader }: IOfferTable) => {
   const afterRowParams = {
     onAcceptOffer,
     onCancelOffer,
@@ -166,6 +167,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       headers={getHeaders}
       items={items}
       containerFluidClassName={"!px-5"}
+      ButtonBelowHeader={ButtonBelowHeader}
       afterRow={(item: any) => {
         if (!item.isActiveOffer || !item.showAfterRow) {
           return null;

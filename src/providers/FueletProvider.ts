@@ -1,7 +1,8 @@
 import FuelProvider from "./FuelProvider";
+import { useFuelet } from "hooks/useFuelet";
 
 class FueletProvider extends FuelProvider {
-  provider = <Window["fuelet"]>window.fuelet;
+  provider = useFuelet()[0];
 }
 
 export default FueletProvider;

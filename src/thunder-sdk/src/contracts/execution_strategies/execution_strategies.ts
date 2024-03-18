@@ -1,16 +1,21 @@
 import { Provider, WalletUnlocked, WalletLocked, BigNumberish } from "fuels";
-import { StrategyFixedPriceSaleAbi__factory } from "../../types/execution_strategies/strategy_fixed_price_sale";
-import { StrategyFixedPriceSaleAbi, ContractIdInput, AddressInput, IdentityInput, SideInput } from "../../types/execution_strategies/strategy_fixed_price_sale/StrategyFixedPriceSaleAbi";
+import { StrategyFixedPriceSaleAbi__factory, StrategyFixedPriceSaleAbi } from "../../types/execution_strategies/strategy_fixed_price_sale";
+//import { StrategyFixedPriceSaleAbi, ContractIdInput, AddressInput, IdentityInput, SideInput } from "../../types/execution_strategies/strategy_fixed_price_sale/StrategyFixedPriceSaleAbi";
+type AddressInput = { value: string };
+type ContractIdInput = { value: string };
+type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
+type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+enum SideInput { Buy = 'Buy', Sell = 'Sell' };
 
 async function setup(
     contractId: string,
     provider: string,
     wallet?: string | WalletLocked,
 ): Promise<StrategyFixedPriceSaleAbi> {
-    const _provider = new Provider(provider);
+    const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
-        const _provider = new Provider(provider);
+        const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return StrategyFixedPriceSaleAbi__factory.connect(contractId, walletUnlocked);
     } else if (wallet && typeof wallet !== "string") {
@@ -67,7 +72,7 @@ export async function getProtocolFee(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_protocol_fee()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -83,7 +88,7 @@ export async function getExchange(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_exchange()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -94,6 +99,7 @@ export async function getExchange(
 export async function getMakerOrderOfUser(
     contractId: string,
     provider: string,
+    privateKey: string,
     user: string,
     nonce: BigNumberish,
     isBuyOrder: boolean,
@@ -101,13 +107,13 @@ export async function getMakerOrderOfUser(
     try {
         let side: SideInput;
         isBuyOrder?
-            side = { Buy: [] } :
-            side = { Sell: [] };
+            side = SideInput.Buy :
+            side = SideInput.Sell;
         const _user: AddressInput = { value: user };
-        const contract = await setup(contractId, provider);
+        const contract = await setup(contractId, provider, privateKey);
         const { value } = await contract.functions
             .get_maker_order_of_user(_user, nonce, side)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -125,13 +131,13 @@ export async function isValidOrder(
     try {
         let side: SideInput;
         isBuyOrder?
-            side = { Buy: [] } :
-            side = { Sell: [] };
+            side = SideInput.Buy :
+            side = SideInput.Sell;
         const _user: AddressInput = { value: user };
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .is_valid_order(_user, nonce, side)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -142,19 +148,20 @@ export async function isValidOrder(
 export async function getOrderNonceOfUser(
     contractId: string,
     provider: string,
+    private_key: string,
     user: string,
     isBuyOrder: boolean,
 ) {
     try {
         let side: SideInput;
         isBuyOrder?
-            side = { Buy: [] } :
-            side = { Sell: [] };
+            side = SideInput.Buy :
+            side = SideInput.Sell;
         const _user: AddressInput = { value: user };
-        const contract = await setup(contractId, provider);
+        const contract = await setup(contractId, provider, private_key);
         const { value } = await contract.functions
             .get_order_nonce_of_user(_user, side)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -171,13 +178,13 @@ export async function getMinOrderNonceOfUser(
     try {
         let side: SideInput;
         isBuyOrder?
-            side = { Buy: [] } :
-            side = { Sell: [] };
+            side = SideInput.Buy :
+            side = SideInput.Sell;
         const _user: AddressInput = { value: user };
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_min_order_nonce_of_user(_user, side)
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -193,7 +200,7 @@ export async function owner(
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .owner()
-            .get();
+            .simulate();
         return { value };
     } catch(err: any) {
         console.error("Strategy: " + err);

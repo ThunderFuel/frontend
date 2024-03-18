@@ -32,8 +32,7 @@ const Settings = () => {
     append: appendProperty,
     remove: removeProperty,
   } = useFieldArray({
-    control,
-    name: "properties",
+    name: "",
   });
 
   const {
@@ -41,7 +40,6 @@ const Settings = () => {
     append: appendLevel,
     remove: removeLevel,
   } = useFieldArray({
-    control,
     name: "levels",
   });
 

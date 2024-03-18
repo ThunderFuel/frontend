@@ -9,13 +9,12 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
-import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyAuctionContractId, ZERO_B256 } from "global-constants";
-import { NativeAssetId } from "fuels";
+import { executeOrder } from "thunder-sdk/src/contracts/thunder_exchange";
+import { exchangeContractId, provider, ZERO_B256 } from "global-constants";
+import { BaseAssetId } from "fuels";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { FuelProvider } from "../../../api";
 
 const checkoutProcessTexts = {
   title1: "Confirm bid",
@@ -48,7 +47,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = () => {
-    nftdetailsService.getAuctionIndex([selectedNFT?.id]).then((res) => {
+    nftdetailsService.getAuctionIndex([selectedNFT?.id]).then(async (res) => {
       const order = {
         isBuySide: false,
         taker: user.walletAddress,
@@ -57,15 +56,13 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         price: toGwei(checkoutPrice).toNumber(),
         collection: selectedNFT.collection.contractAddress,
         token_id: selectedNFT.tokenOrder,
-        strategy: strategyAuctionContractId,
+        strategy: "", //TODO strategyid vardi ama kaldirildi auction
         extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      setContracts(contracts, FuelProvider);
-
-      executeOrder(exchangeContractId, provider, wallet, order, NativeAssetId)
+      executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
         .then((res) => {
-          if (res.transactionResult.status.type === "success") {
+          if (res.transactionResult.isStatusSuccess) {
             offerService.acceptOffer({ id: currentItem?.id });
             userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
             setApproved(true);

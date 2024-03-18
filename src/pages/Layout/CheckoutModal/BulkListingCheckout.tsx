@@ -9,7 +9,7 @@ import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeContract, toGwei } from "utils";
-import { NativeAssetId } from "fuels";
+import { BaseAssetId } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import { useWallet } from "hooks/useWallet";
 import { ZERO_B256, strategyFixedPriceContractId } from "global-constants";
@@ -66,7 +66,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
             amount: 1,
             nonce: res.data[item.tokenId],
             strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(item.expireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           };
@@ -87,7 +87,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
             amount: 1,
             nonce: res.data + 1 + index,
             strategy: strategyFixedPriceContractId,
-            payment_asset: NativeAssetId,
+            payment_asset: BaseAssetId,
             expiration_range: formatTimeContract(item.expireTime),
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           };

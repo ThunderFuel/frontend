@@ -219,7 +219,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
           {collection.salable ? (
             <div className="flex w-full justify-between">
               <EthereumPrice className="text-white" price={collection.price ?? "-"} />
-              <CollectionTop top={1} />
+              {config.getConfig("type") === "fuel" ? <></> : <CollectionTop top={1} />}
             </div>
           ) : collection.onAuction ? (
             collection.highestBidPrice ? (

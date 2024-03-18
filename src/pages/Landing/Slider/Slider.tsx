@@ -9,6 +9,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../../router/config/paths";
+import { DISCORD_URL } from "global-constants";
 
 AOS.init({ duration: 600 });
 
@@ -31,7 +32,7 @@ const Slider = () => {
               GO TO MARKETPLACE
               <IconArrowRight />
             </Button>
-            <Button className="btn-secondary" onClick={() => openInNewTab("https://discord.gg/thundernftmarket")}>
+            <Button className="btn-secondary" onClick={() => openInNewTab(DISCORD_URL)}>
               joın communıty
               <IconDiscord />
             </Button>

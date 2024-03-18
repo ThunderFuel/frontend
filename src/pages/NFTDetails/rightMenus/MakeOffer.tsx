@@ -12,6 +12,7 @@ import Select, { ISelectOption } from "components/Select";
 import InputEthereum from "components/InputEthereum";
 import Balances from "../components/Balances";
 import { toggleManageFundsModal } from "store/walletSlice";
+import config from "config";
 
 export const selectExpirationDates: ISelectOption[] = [
   {
@@ -142,7 +143,11 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
         <h6 className="text-h6 text-white">{isMultipleEdition ? "Enter Price per Item*" : "Enter Price*"}</h6>
         <div className="flex gap-[5px] text-bodySm text-gray-light">
           <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
-          <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
+          {config.getConfig("type") === "fuel" ? (
+            <span>When you’re placing a bid required amount will be automatically added to your bid balance.</span>
+          ) : (
+            <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step.</span>
+          )}
         </div>
         <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
         {!hasEnoughBalance(balance, offer) && (

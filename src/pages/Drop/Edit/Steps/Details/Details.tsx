@@ -18,7 +18,6 @@ const schema = yup
 const Details = () => {
   const { onNextStep } = useWizard();
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -26,7 +25,6 @@ const Details = () => {
     resolver: yupResolver(schema),
   });
   const { fields, append } = useFieldArray({
-    control,
     name: "payouts",
   });
 

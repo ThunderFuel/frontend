@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import clsx from "clsx";
 
@@ -9,8 +10,7 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, provider } from "global-constants";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { FuelProvider } from "../../../api";
-import { mint } from "thunder-sdk/src/contracts/erc721";
+import { mint, bulkMint } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
@@ -61,32 +61,34 @@ const MintCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [mintedNFT, setMintedNFT] = useState({} as any);
 
   const onComplete = () => {
-    setContracts(contracts, FuelProvider);
-    mint(contractAddress, provider, wallet, checkoutMintAmount, user.walletAddress, false)
-      .then((res) => {
-        console.log(res);
-        if (res?.transactionResult.status.type === "success") {
-          const _tokenIds = res.logs.map((item) => item.token_id.toNumber());
-          collectionsService
-            .mint({
-              contractAddress,
-              walletAddress: user.walletAddress,
-              fuelWalletAddress: walletAddress,
-              tokenIds: _tokenIds,
-            })
-            .then((res) => {
-              setMintedNFT(res.data.tokens[0]);
-              setApproved(true);
-              onCheckoutComplete();
-            });
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-          setStartTransaction(false);
-        else setIsFailed(true);
-      });
+    throw new Error("DAHA HAZIR DEGIL");
+
+    // setContracts(contracts, FuelProvider);
+    // mint(contractAddress, provider, wallet, checkoutMintAmount, user.walletAddress, false)
+    //   .then((res) => {
+    //     console.log(res);
+    //     if (res?.transactionResult.isStatusSuccess) {
+    //       const _tokenIds = res.logs.map((item) => item.token_id.toNumber());
+    //       collectionsService
+    //         .mint({
+    //           contractAddress,
+    //           walletAddress: user.walletAddress,
+    //           fuelWalletAddress: walletAddress,
+    //           tokenIds: _tokenIds,
+    //         })
+    //         .then((res) => {
+    //           setMintedNFT(res.data.tokens[0]);
+    //           setApproved(true);
+    //           onCheckoutComplete();
+    //         });
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //     if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+    //       setStartTransaction(false);
+    //     else setIsFailed(true);
+    //   });
   };
 
   React.useEffect(() => {

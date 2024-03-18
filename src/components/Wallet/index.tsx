@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ConnectWallet from "components/ConnectWalletModal";
 import { useAppDispatch, useAppSelector } from "store";
-import { setIsConnected, toggleWalletModal } from "store/walletSlice";
+import { setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
 import Wallet from "./Wallet";
 import { useWallet } from "hooks/useWallet";
 import { useFuelExtension } from "hooks/useFuelExtension";
+import { useLocalStorage } from "hooks/useLocalStorage";
 
 const Index = () => {
   const dispatch = useAppDispatch();
-  const { walletConnect, getConnectionStatus } = useWallet();
+  const { getConnectionStatus, walletConnect } = useWallet();
   const { show, isConnected } = useAppSelector((state) => state.wallet);
   const { selectedGateway } = useFuelExtension();
-  const [isAlreadyConnecting, setIsAlreadyReconnecting] = useState(false);
 
   async function handleConnection() {
-    if (isConnected) return false;
     const status = await getConnectionStatus();
+    const userData = useLocalStorage().getItem("connected_account");
 
-    if (status === "isReconnecting" && !isAlreadyConnecting) {
-      setIsAlreadyReconnecting(true);
-      setTimeout(async () => {
-        handleConnection();
-      }, 500);
-    } else if (status === true) {
+    if (status && userData) {
+      dispatch(setUser(userData));
+      dispatch(setIsConnected(true));
       const connected = await walletConnect();
       if (connected) dispatch(setIsConnected(true));
       else dispatch(setIsConnected(false));
+    } else {
+      useLocalStorage().removeItem("connected_account");
     }
   }
 

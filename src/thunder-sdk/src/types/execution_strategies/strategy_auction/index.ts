@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.38.1
-  Forc version: 0.35.5
-  Fuel-Core version: 0.17.3
+  Fuels version: 0.75.0
+  Forc version: 0.50.0
+  Fuel-Core version: 0.22.1
 */
 
 export type { StrategyAuctionAbi } from './StrategyAuctionAbi';

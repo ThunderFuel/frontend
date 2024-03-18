@@ -13,7 +13,7 @@ const ConnectWalletModal = ({ show, onClose }: { show: boolean; onClose: any }) 
   }, [show]);
 
   return (
-    <Modal className="wallet" title="Connect" onClose={onClose} show={show}>
+    <Modal className="wallet" title="Connect Your Wallet" onClose={onClose} show={show}>
       <ConnectWallet />
     </Modal>
   );

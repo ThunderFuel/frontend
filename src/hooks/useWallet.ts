@@ -50,9 +50,11 @@ export const useWallet = () => {
         dispatch(setUser(user));
         dispatch(setWallet(wallet));
 
-        return connect;
+        return true;
       } catch (e) {
         // useErrorModal(e);
+
+        return false;
       }
     }
   };
@@ -165,7 +167,19 @@ export const useWallet = () => {
   };
 
   const handleCancelOffer = ({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return selectedGateway().handleCancelOffer({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData });
+    return selectedGateway().handleCancelOffer({
+      user,
+      cancelOrderIds,
+      cancelOfferItems,
+      wallet,
+      setApproved,
+      setStartTransaction,
+      setIsFailed,
+      currentItem,
+      wagmiSteps,
+      setWagmiSteps,
+      setStepData,
+    });
   };
 
   const handleCancelListing = ({
