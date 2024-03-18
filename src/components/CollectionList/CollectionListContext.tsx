@@ -32,6 +32,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const dispatch = useDispatch();
   const bulkListingSelectedTokenOrderList = useSelector(getBulkListingSelectedTokenOrderList);
   const cartSelectedTokenOrderList = useSelector(getCartSelectedTokenOrderList);
+  const [mobileFilterIsOpen, setMobileFilterIsOpen] = useState(false);
 
   const [displayType, setDisplayType] = useState(isMobile ? DisplayType.GRID4 : DisplayType.GRID5);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
@@ -100,6 +101,13 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     }
   }, [cartSelectedTokenOrderList]);
 
+  const showMobileFilter = () => {
+    setMobileFilterIsOpen(true);
+  };
+  const hideMobileFilter = () => {
+    setMobileFilterIsOpen(false);
+  };
+
   const contextValue = {
     ...value,
     displayType,
@@ -115,6 +123,9 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     setSweep,
     onCancelAllListings,
     isMobile,
+    mobileFilterIsOpen,
+    showMobileFilter,
+    hideMobileFilter,
   };
 
   return <CollectionListContext.Provider value={contextValue}>{children}</CollectionListContext.Provider>;

@@ -11,6 +11,7 @@ import { ISelectOption } from "components/Select";
 import { useAppDispatch } from "store";
 import { sweepAdd } from "store/cartSlice";
 import config from "../../../../config";
+import Button from "../../../Button";
 
 const Range = (props: any) => {
   return (
@@ -41,7 +42,7 @@ const KEY_ENTER = "Enter";
 
 const Index = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
-  const { options, setParams, collectionItems, sweep, setSweep, params } = useCollectionListContext();
+  const { options, setParams, collectionItems, sweep, setSweep, params, showMobileFilter } = useCollectionListContext();
   const [search, setSearch] = React.useState(params?.search ?? "");
   const swapLimit = config.getConfig("collectionSwapLimit");
 
@@ -68,6 +69,7 @@ const Index = ({ className }: { className?: string }) => {
       <div className={clsx(className ? className : "container-fluid")}>
         <div className="flex items-center justify-between text-white gap-5">
           <div className="flex items-center w-full">
+            <Button onClick={showMobileFilter}>1bc</Button>
             <div className="flex flex-1">
               <div className={clsx("py-2.5 pr-5 flex-1 lg:border-r lg:border-r-gray", options?.hiddenSweep ? "w-full" : "w-7/12")}>
                 <InputSearch placeholder="Search ID or name" value={search} onKeyPress={onKeyPress} onChange={(e: any) => setSearch(e.target.value)} />

@@ -20,7 +20,7 @@ const SidebarFilter = ({ options, className, children, displayType, setDisplayTy
   };
 
   return (
-    <div className="hidden lg:flex justify-end">
+    <div className="flex justify-end">
       <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : className)}>
         <div className={`sticky h-fit ${show ? "overflow-hidden" : ""}`} style={{ top: `calc(var(--headerHeight) + ${!hiddenTabOffset ? "68px" : "0px"})` }}>
           <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", !show ? "overflow-hidden overflow-y-auto" : "")}>
