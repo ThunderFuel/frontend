@@ -74,7 +74,7 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
   const SidebarComponent = isMobile ? MobileSidebarFilter : SidebarFilterBase;
 
   return (
-    <SidebarComponent options={options} className={className} displayType={displayType} setDisplayType={setDisplayType} isOpen={mobileFilterIsOpen} onClose={hideMobileFilter}>
+    <SidebarComponent options={options} className={className} displayType={displayType} setDisplayType={setDisplayType} isOpen={mobileFilterIsOpen} onClose={hideMobileFilter} params={params}>
       <React.Fragment>
         {getFilter.map((item: any, i: number) => {
           const DynamicComponent = item.dynamicComponent;

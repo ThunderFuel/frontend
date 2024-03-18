@@ -3,7 +3,9 @@ import { IconArrowRight, IconCancel, IconClose } from "icons";
 import Button from "../Button";
 import clsx from "clsx";
 
-const MobileSidebarFilter = ({ children, isOpen, onClose }: any) => {
+const MobileSidebarFilter = ({ children, isOpen, onClose, params }: any) => {
+  const paramsLength = Object.keys(params).length;
+
   return (
     <div className={clsx(isOpen ? "translate-x-0" : "-translate-x-full", "transition-all duration-300 bg-bg fixed top-0 left-0 z-[100] w-full overflow-hidden overflow-y-scroll h-full")}>
       <div className="flex flex-col gap-5 p-5">
@@ -15,15 +17,18 @@ const MobileSidebarFilter = ({ children, isOpen, onClose }: any) => {
         </div>
         <div className="flex flex-col gap-4">{children}</div>
       </div>
-      <div className="bg-bg fixed flex gap-4 bottom-0 w-full border-t border-t-gray p-4">
-        <Button className="btn-secondary flex-1" onClick={onClose}>
-          Cancel <IconCancel />
-        </Button>
-
-        <Button className="flex-1">
-          Apply
-          <IconArrowRight />
-        </Button>
+      <div className="bg-bg sticky flex flex-center gap-4 bottom-0 w-full border-t border-t-gray p-4">
+        <div className="">
+          <Button className="btn-secondary" onClick={onClose}>
+            Cancel <IconCancel />
+          </Button>
+        </div>
+        <div className="flex-1">
+          <Button className="w-full" onClick={onClose}>
+            Apply {paramsLength} Filters
+            <IconArrowRight />
+          </Button>
+        </div>
       </div>
     </div>
   );
