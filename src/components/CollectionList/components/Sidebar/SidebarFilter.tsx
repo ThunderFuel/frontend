@@ -8,7 +8,7 @@ import RangeInput from "./components/RangeInput";
 import { useCollectionListContext } from "../../CollectionListContext";
 
 import CollectionCheckboxList from "./components/CollectionCheckboxList";
-import SidebarFilterBase from "components/SidebarFilter";
+import SidebarFilterBase, { MobileSidebarFilter } from "components/SidebarFilter";
 
 enum FilterComponentType {
   Input = 0,
@@ -20,7 +20,7 @@ enum FilterComponentType {
 }
 
 const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
-  const { displayType, setDisplayType, filters, params, setParams, deleteParams, options } = useCollectionListContext();
+  const { displayType, setDisplayType, filters, params, setParams, deleteParams, options, isMobile, mobileFilterIsOpen, hideMobileFilter } = useCollectionListContext();
 
   const onChange = (name: any, value: any, type: number) => {
     if (Array.isArray(value) && !value.length) {
@@ -71,8 +71,10 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
     return [tmpAttributeFilter, tmpFilter.sort((a, b) => a.order - b.order).reverse()];
   }, [filters, params]);
 
+  const SidebarComponent = isMobile ? MobileSidebarFilter : SidebarFilterBase;
+
   return (
-    <SidebarFilterBase options={options} className={className} displayType={displayType} setDisplayType={setDisplayType}>
+    <SidebarComponent options={options} className={className} displayType={displayType} setDisplayType={setDisplayType} isOpen={mobileFilterIsOpen} onClose={hideMobileFilter}>
       <React.Fragment>
         {getFilter.map((item: any, i: number) => {
           const DynamicComponent = item.dynamicComponent;
@@ -114,7 +116,7 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
           );
         })}
       </React.Fragment>
-    </SidebarFilterBase>
+    </SidebarComponent>
   );
 };
 
