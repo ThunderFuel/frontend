@@ -118,6 +118,7 @@ export const ROUTES: RouteConfig[] = [
         component: ProfileLiked,
       },
     ],
+    isResponsive: true,
   },
   {
     path: PATHS.BULK_LISTING,

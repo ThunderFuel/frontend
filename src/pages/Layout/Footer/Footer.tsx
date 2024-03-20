@@ -100,7 +100,7 @@ const FooterMobileBottom = React.memo(() => {
     },
     {
       icon: IconWallet,
-      onClick: () => navigate(PATHS.DROPS),
+      onClick: () => navigate(PATHS.LOGIN),
     },
     {
       icon: IconCart,

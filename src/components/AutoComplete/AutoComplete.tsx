@@ -1,6 +1,7 @@
 import React from "react";
 import InputSearch from "../InputSearch";
 import clsx from "clsx";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const Group = ({ children, title }: { title: any; children: React.ReactNode }) => {
   return (
@@ -30,20 +31,32 @@ const Item = ({ item, className, ...etc }: { className?: string; item: any; [key
 
 const AutoCompleteRoot = (props: any, ref: any) => {
   const { children, className, show, ...etc } = props;
+  const [customStyle, setCustomStyle] = React.useState({});
+  React.useEffect(() => {
+    if (ref.current) {
+      const { offsetLeft } = ref.current;
+      setCustomStyle({
+        width: `${window.innerWidth}px`,
+        height: `${window.innerHeight}px`,
+        marginTop: "1px",
+        left: `${offsetLeft * -1}px`,
+      });
+    }
+  }, [ref, show]);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={clsx("relative", className)}>
       <InputSearch {...etc} className={props.inputClassName} />
       {show && (
-        <div className="relative">
-          <div
-            className={clsx(
-              "search-result-container absolute overflow-hidden z-10",
-              "lg:no-scrollbar lg:overflow-y-auto lg:w-full lg:max-h-[430px] bg-bg-light lg:border border-gray lg:rounded-md lg:mt-2"
-            )}
-          >
-            {children}
-          </div>
+        <div
+          className={clsx(
+            "search-result-container absolute overflow-hidden overflow-y-scroll z-10",
+            "top-full left-0 bg-bg",
+            "lg:no-scrollbar lg:overflow-y-auto lg:w-full lg:max-h-[430px] lg:bg-bg-light lg:border border-gray lg:rounded-md lg:mt-2"
+          )}
+          style={customStyle}
+        >
+          {children}
         </div>
       )}
     </div>

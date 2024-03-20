@@ -285,7 +285,7 @@ export const ConnectWallet = () => {
     );
   else
     return (
-      <div className="flex flex-col h-full p-5 gap-[15px] overflow-y-scroll no-scrollbar">
+      <div className="flex flex-col h-full p-5 gap-4 overflow-y-scroll no-scrollbar">
         {/* <div className="flex flex-col gap-[18px]">
           <div className="flex flex-col gap-[5px]">
             <h5 className="text-head5 font-spaceGrotesk text-white">Login/Sign up</h5>
