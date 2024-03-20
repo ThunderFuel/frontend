@@ -157,7 +157,7 @@ body {
   .btn-icon {
     background: transparent;
     @apply p-0;
-    @apply w-10 h-10 rounded-md flex-center;
+    @apply w-12 h-12 lg:w-10 lg:h-10 rounded-md flex-center;
     @apply transition-none hover:gap-0 hover:px-0;
     @apply border border-white border-opacity-10;
   }
