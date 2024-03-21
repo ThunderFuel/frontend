@@ -154,23 +154,28 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.USER_OWNED,
         component: ProfileCollection,
+        isResponsive: true,
       },
       {
         path: PATHS.USER_ACTIVITY,
         component: ProfileActivity,
+        isResponsive: true,
       },
       {
         path: PATHS.USER_OFFER,
         component: ProfileOffer,
+        isResponsive: true,
       },
       {
         path: PATHS.USER_LIKED,
         component: ProfileLiked,
+        isResponsive: true,
       },
     ],
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.BETA,

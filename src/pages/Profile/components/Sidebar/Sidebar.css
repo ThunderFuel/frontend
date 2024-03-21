@@ -6,10 +6,9 @@
 }
 
 .profile-cover-image {
-  @apply relative bg-gray transition-all;
-  width: 410px;
-  min-height: 410px;
-  max-height: 410px;
+  @apply relative bg-gray transition-all w-full;
+  min-height: 430px;
+  max-height: 430px;
   overflow: hidden;
   mask-image: linear-gradient(180deg, #141414 20%, rgba(25, 25, 25, 0) 100%);
   background-origin: content-box;

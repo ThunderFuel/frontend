@@ -11,7 +11,7 @@ export const addressFormat = (address: any) => {
     return "-";
   }
 
-  return address.substring(0, 6);
+  return String(address).substring(0, 6);
 };
 
 export const openInNewTab = (url: string): void => {

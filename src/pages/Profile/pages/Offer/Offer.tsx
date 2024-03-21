@@ -117,8 +117,8 @@ const Offer = () => {
     const data = response.data
       .map((item: any) => {
         const wallerAddress = String(user.walletAddress).toLowerCase();
-        const isOfferMade = item.makerUserId.toLowerCase() == wallerAddress;
-        const isTakerMade = item.takerUserId.toLowerCase() == wallerAddress;
+        const isOfferMade = String(item.makerUserId).toLowerCase() == wallerAddress;
+        const isTakerMade = String(item.takerUserId).toLowerCase() == wallerAddress;
 
         return {
           ...item,

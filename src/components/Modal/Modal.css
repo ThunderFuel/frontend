@@ -1,13 +1,13 @@
 .modalbase {
-  @apply fixed flex w-screen h-screen justify-center items-center z-20 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)] z-50;
+  @apply fixed flex w-screen h-screen justify-center items-end lg:items-center z-20 top-0 left-0 overflow-hidden z-50 bg-gray bg-opacity-80;
 }
 
 .modalbase .modal {
-  @apply flex flex-col w-[335px] bg-bg rounded-lg;
+  @apply flex flex-col w-[335px] bg-bg rounded-t-2xl lg:rounded-lg;
 }
 
 .modalbase .modal .mhead {
-  @apply container flex justify-between items-center p-5 border-b border-gray;
+  @apply container flex justify-between items-center p-4 lg:p-5 border-b border-gray;
 }
 
 .modalbase .modal .mhead .mtitle {
