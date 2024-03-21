@@ -136,6 +136,7 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.SETTINGS_PROFILE,
         component: SettingsProfile,
+        isResponsive: true,
       },
       {
         path: PATHS.SETTINGS_NOTIFICATION,
@@ -145,6 +146,7 @@ export const ROUTES: RouteConfig[] = [
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.USER,

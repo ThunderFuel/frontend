@@ -86,7 +86,7 @@ const Profile = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col gap-10 p-10 w-[500px]">
+    <div className="flex flex-col gap-10 lg:p-10 lg:w-[500px]">
       <Controller control={control} name="image" render={({ field: { onChange, value } }) => <ProfileImage src={value} onChange={onChange} />} />
       <Controller control={control} name="banner" render={({ field: { onChange, value } }) => <CoverImage src={value} onChange={onChange} />} />
       <InputLabel labelClassName="text-white" label="Display Name" {...register("userName")} error={errors.userName?.message} />
