@@ -4,13 +4,13 @@
 
 .tooltip .content {
   visibility: hidden;
-  z-index: 1;
+  z-index: 9999;
   @apply opacity-0;
   @apply transform ease-in duration-75;
   @apply mt-1;
   @apply fixed top-full left-1/2 -translate-x-1/2;
-  @apply text-head6 font-spaceGrotesk text-white;
-  @apply bg-bg-light border border-gray rounded-md;
+  @apply text-bodySm font-spaceGrotesk text-white;
+  @apply bg-bg-light border border-gray rounded-[5px];
   @apply whitespace-nowrap;
   @apply p-2.5;
 }
