@@ -116,7 +116,8 @@ body {
   }
 
   .btn {
-    @apply flex gap-2 py-4 px-6 items-center justify-center;
+    @apply flex gap-2 lg:py-4 lg:px-6 items-center justify-center;
+    @apply py-3 px-4;
     @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
     @apply button-animation;
     @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none disabled:border-none;
