@@ -11,7 +11,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-[320px] border-r border-gray">
+    <div className="w-full lg:w-[320px] lg:border-r lg:border-gray">
       <ul className="">
         {menus.map((menu) => {
           const isActive = activeMenu === menu.link;
