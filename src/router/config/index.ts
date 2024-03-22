@@ -71,7 +71,7 @@ export const ROUTES: RouteConfig[] = [
       },
     ],
     layoutProps: {
-      hiddenFooter: true,
+      hiddenFooter: false,
     },
     isResponsive: true,
   },
