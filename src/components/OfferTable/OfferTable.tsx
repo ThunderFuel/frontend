@@ -1,7 +1,7 @@
 import React from "react";
 import Table, { ITableHeader } from "../Table/Table";
 import EthereumPrice from "../EthereumPrice";
-import { addressFormat } from "utils";
+import { addressFormat, dateFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
 import { IconCircleRemoveWhite, IconClock, IconHand, IconOffer } from "../../icons";
@@ -9,6 +9,7 @@ import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 import { expiresInFormat } from "utils/timeago";
 import clsx from "clsx";
+import Tooltip from "components/Tooltip";
 
 interface IOfferTable {
   isOffersMade?: boolean;
@@ -65,10 +66,12 @@ const OfferCollectionItem = ({ item }: any) => {
 
 const OfferExpiredTime = ({ item }: any) => {
   return (
-    <span className={clsx("flex items-center gap-1 body-medium", item.isExpired ? "text-gray-light" : "text-white")}>
-      {item.isExpired ? "Expired" : expiresInFormat(item?.expireTime)}
-      <IconClock className="flex-shrink-0 w-4 h-4" />
-    </span>
+    <Tooltip position="top" hiddenArrow={true} content={dateFormat(item.expireTime, "MMM DD, HH:mm A Z")}>
+      <span className={clsx("flex items-center gap-1 body-medium", item.isExpired ? "text-gray-light" : "text-white")}>
+        {item.isExpired ? "Expired" : expiresInFormat(item?.expireTime)}
+        <IconClock className="flex-shrink-0 w-4 h-4" />
+      </span>
+    </Tooltip>
   );
 };
 const OfferLabel = ({ children }: any) => {
