@@ -7,7 +7,7 @@ const ActivityList = (props: any) => {
   return (
     <ActivityProvider value={props}>
       <div className="pl-5 flex h-full">
-        <Sidebar className="w-60" hiddenTabOffset={true} />
+        <Sidebar className="w-64" hiddenTabOffset={true} />
         <ActivityItems />
       </div>
     </ActivityProvider>
