@@ -626,7 +626,10 @@ class FuelProvider extends BaseProvider {
       }
     });
   }
-  handleMakeOffer({ setApproved, selectedNFT, setBidBalanceUpdated, setCurrentBidBalance, checkoutPrice, checkoutExpireTime, user, wallet, setStartTransaction, setIsFailed }: any) {
+  async handleMakeOffer({ setApproved, selectedNFT, setBidBalanceUpdated, setCurrentBidBalance, checkoutPrice, checkoutExpireTime, user, wallet, setStartTransaction, setIsFailed }: any) {
+    const _provider = await this.getProvider();
+    setContracts(contracts, _provider);
+
     nftdetailsService
       .getLastIndex(1, user.id)
       .then((res) => {
