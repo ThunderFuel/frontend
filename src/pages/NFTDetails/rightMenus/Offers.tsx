@@ -19,6 +19,8 @@ import { ITableHeader } from "components/Table";
 import dayjs from "dayjs";
 import OfferTable from "components/OfferTable";
 import { OfferStatus } from "api/offer/offer.type";
+import { getAbsolutePath } from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
 
 const Box = ({
   item,
@@ -128,11 +130,13 @@ const headers: ITableHeader[] = [
     width: "25%",
     align: "flex-start",
     sortValue: 1,
-    render: (item) => (
-      <span className="flex text-h6 items-center gap-2.5">
-        <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerAddress)}
-      </span>
-    ),
+    render: (item) => {
+      return (
+        <a href={getAbsolutePath(PATHS.USER, { userId: item.makerUserId })} className="flex text-h6 items-center gap-2.5">
+          <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerAddress)}
+        </a>
+      );
+    },
   },
   {
     key: "price",
