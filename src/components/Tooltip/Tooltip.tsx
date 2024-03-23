@@ -18,7 +18,13 @@ const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenA
     if (ref.current && refContent.current) {
       const x = ref.current?.getBoundingClientRect().x + ref.current.offsetWidth / 2;
       const y = ref.current?.getBoundingClientRect().y + ref.current?.getBoundingClientRect().height / 2 - 10;
-      refContent.current.style.left = `${x}px`;
+
+      const windowWidth = window.innerWidth;
+      const contentwidth = refContent.current?.clientWidth;
+      const isOffScreen = Math.floor(x) + contentwidth / 2 >= windowWidth;
+      const offScreenWidth = contentwidth / 2 - (windowWidth - Math.floor(x)); //Ekranin disinda kalan alan
+
+      refContent.current.style.left = `${x + (isOffScreen ? -(offScreenWidth + 10) : 0)}px`; // +10 content ile ekran kenari arasina bosluk eklemek icin
       refContent.current.style.top = `${y}px`;
     }
   };
