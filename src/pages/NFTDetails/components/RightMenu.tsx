@@ -46,7 +46,7 @@ const RightMenu = ({
 
   return (
     <div id="rightMenu" className={`flex flex-col border-l border-gray transition-all duration-1000 ease-in-out ${className}`} style={{ height: "calc(100vh - var(--headerHeight))" }}>
-      <div className="flex border-b border-gray text-white p-5 text-head5 gap-x-5">
+      <div className="flex border-b border-gray text-white p-5 text-h5 gap-x-5">
         <IconBack onClick={onBack} className="cursor-pointer w-8 h-8" />
         {title}
       </div>
