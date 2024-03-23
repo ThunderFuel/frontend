@@ -1,12 +1,14 @@
 import React from "react";
 import Table, { ITableHeader } from "../Table/Table";
 import EthereumPrice from "../EthereumPrice";
-import { addressFormat, timeagoFormat } from "utils";
+import { addressFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
-import { IconCircleRemoveWhite, IconClock, IconHand, IconLikeHand, IconOffer } from "../../icons";
+import { IconCircleRemoveWhite, IconClock, IconHand, IconOffer } from "../../icons";
 import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
+import { expiresInFormat } from "utils/timeago";
+import clsx from "clsx";
 
 interface IOfferTable {
   isOffersMade?: boolean;
@@ -63,8 +65,8 @@ const OfferCollectionItem = ({ item }: any) => {
 
 const OfferExpiredTime = ({ item }: any) => {
   return (
-    <span className="flex items-center gap-1 body-medium">
-      {timeagoFormat(item?.expireTime)}
+    <span className={clsx("flex items-center gap-1 body-medium", item.isExpired ? "text-gray-light" : "text-white")}>
+      {item.isExpired ? "Expired" : expiresInFormat(item?.expireTime)}
       <IconClock className="flex-shrink-0 w-4 h-4" />
     </span>
   );

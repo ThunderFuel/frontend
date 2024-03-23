@@ -150,7 +150,7 @@ const headers: ITableHeader[] = [
   },
   {
     key: "expireTime",
-    text: "DATE",
+    text: "EXPIRES",
     width: "25%",
     align: "flex-end",
     sortValue: 3,
