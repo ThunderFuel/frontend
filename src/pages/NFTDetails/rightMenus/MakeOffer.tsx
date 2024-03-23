@@ -141,7 +141,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
       <CartItem selectedNFT={selectedNFT} />
       <div className="flex flex-col gap-2">
         <h6 className="text-h6 text-white">{isMultipleEdition ? "Enter Price per Item*" : "Enter Price*"}</h6>
-        <div className="flex gap-[5px] text-bodySm text-gray-light">
+        <div className="flex gap-[5px] body-small text-gray-light">
           <IconInfo className="flex-shrink-0 w-[17px] h-[17px]" />
           {config.getConfig("type") === "fuel" ? (
             <span>When you’re placing a bid required amount will be automatically added to your bid balance.</span>
