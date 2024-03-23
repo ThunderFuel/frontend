@@ -142,7 +142,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex items-center justify-between text-gray-light">
         <span className="text-headline-01 uppercase">wallet</span>
         <div className="flex gap-2.5">
-          <span className="text-body-medium">{formatAddress(user?.walletAddress)}</span>
+          <span className="body-medium">{formatAddress(user?.walletAddress)}</span>
           <IconDots />
         </div>
       </div>
