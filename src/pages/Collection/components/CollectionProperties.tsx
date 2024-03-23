@@ -7,7 +7,7 @@ interface ICollectionProperties {
   floor: number;
   listedCount: number;
   ownerCount: number;
-  supply?: number;
+  supply: number;
   royalty?: number;
 }
 
@@ -25,7 +25,7 @@ const CollectionProperties = ({ volume, floor, listedCount, ownerCount, supply, 
     },
     {
       name: "lısted",
-      component: <h4 className="text-h4 text-white">{listedCount}</h4>,
+      component: <h4 className="text-h4 text-white">{((listedCount / supply) * 100).toFixed(2)}%</h4>,
       className: "border-b border-b-gray lg:border-b-none",
     },
     {
