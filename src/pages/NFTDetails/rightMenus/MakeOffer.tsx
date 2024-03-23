@@ -44,7 +44,7 @@ export const selectExpirationDates: ISelectOption[] = [
 const MakeOffer = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const { getBalance, hasEnoughBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<any>(0);
@@ -150,7 +150,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           )}
         </div>
         <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
-        {!hasEnoughBalance(balance, offer) && (
+        {!hasEnoughBalance(balance, offer) && offer !== "" && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>

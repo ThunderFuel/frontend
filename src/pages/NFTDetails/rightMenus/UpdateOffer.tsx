@@ -91,7 +91,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
           <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
         </div>
         <InputPrice onChange={setoffer} value={offer} type="text" />
-        {!hasEnoughBalance(balance, offer) && (
+        {!hasEnoughBalance(balance, offer) && offer !== "" && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
