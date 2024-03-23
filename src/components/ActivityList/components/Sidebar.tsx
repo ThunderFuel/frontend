@@ -30,10 +30,7 @@ const Sidebar = ({ className = "w-[280px]", hiddenTabOffset = false }: any) => {
             const isActive = selectedFilter.includes(index);
 
             return (
-              <div
-                key={filterIndex}
-                className={clsx("rounded-md gap-1 border border-gray text-gray-light items-center body-medium cursor-pointer hover:text-white", isActive ? "text-white bg-gray" : "bg-bg")}
-              >
+              <div key={filterIndex} className={clsx("rounded-md gap-1 border border-gray text-white items-center body-medium cursor-pointer hover:text-white", isActive ? "bg-gray" : "bg-bg")}>
                 <Checkbox containerClassName={"w-full p-2.5"} checked={isActive} onClick={() => onClick(index)} name="activity-type">
                   <div className="flex w-full gap-1">
                     <Icon className="w-5 h-5" />
