@@ -123,3 +123,4 @@ export { ReactComponent as IconDrops } from "./icon-drops.svg";
 export { ReactComponent as IconGridSmall } from "./icon-grid-small.svg";
 export { ReactComponent as IconMobileFilter } from "./icon-mobile-filter.svg";
 export { ReactComponent as IconOrder } from "./icon-order.svg";
+export { ReactComponent as IconCopy } from "./icon-copy.svg";

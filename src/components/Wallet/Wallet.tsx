@@ -2,20 +2,74 @@ import React, { useEffect, useState } from "react";
 import Modal from "components/Modal";
 import { useAppDispatch, useAppSelector } from "store";
 import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
-import { IconActivity, IconArrowRight, IconChevronRight, IconDots, IconEthereum, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconSwap, IconWallet } from "icons";
+import { IconActivity, IconArrowRight, IconChevronRight, IconCopy, IconDots, IconEthereum, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
 import Button from "components/Button";
-import Balances from "components/Balances";
 import { useWallet } from "hooks/useWallet";
-import { addressFormat } from "utils";
+import { addressFormat, clipboardCopy, openInNewTab } from "utils";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
 import { removeAll } from "store/bulkListingSlice";
 import { removeBulkItems } from "store/checkoutSlice";
-import { FUEL_EXPLORER_URL, FUEL_FAUCET_URL, fueldExplorerLink, lineaExplorerLink } from "global-constants";
+import { FUEL_FAUCET_URL, fueldExplorerLink, lineaExplorerLink } from "global-constants";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import config from "config";
-import EthereumPrice from "components/EthereumPrice";
+import useToast from "hooks/useToast";
+import { useClickOutside } from "hooks/useClickOutside";
+import clsx from "clsx";
+
+const WalletDropdown = ({ walletAddress, onLogout }: any) => {
+  const [show, setShow] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const items = [
+    {
+      text: "Copy Address",
+      icon: IconCopy,
+      onClick: () => {
+        clipboardCopy(walletAddress);
+        useToast().success("Copied to clipboard.");
+        setShow(false);
+      },
+    },
+    {
+      text: "See on Block Explorer",
+      icon: IconLink,
+      onClick: () => {
+        openInNewTab(`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${walletAddress}`);
+        setShow(false);
+      },
+    },
+    {
+      text: "Logout",
+      icon: IconLogout,
+      onClick: () => {
+        onLogout();
+        setShow(false);
+      },
+    },
+  ];
+  useClickOutside(containerRef, () => {
+    setShow(false);
+  });
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <IconDots className={clsx("cursor-pointer hover:text-white", show ? "text-white" : "text-gray-light")} onClick={() => setShow(!show)} />
+      {show ? (
+        <ul className="absolute top-full right-0 mt-1 flex flex-col bg-bg border border-gray rounded divide-y divide-gray overflow-hidden">
+          {items.map((item, k) => {
+            return (
+              <li key={k} onClick={item.onClick} className="flex items-center text-white hover:bg-bg-light gap-7 py-[14px] pr-3 pl-4 w-full justify-between cursor-pointer">
+                <span className="flex body-medium whitespace-nowrap">{item.text}</span>
+                <item.icon className="w-5 h-5" />
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+    </div>
+  );
+};
 
 const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
@@ -137,13 +191,23 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     return firstPart + "..." + secondPart;
   }
 
+  function handleLogout() {
+    walletDisconnect();
+    dispatch(setIsConnected(false));
+    dispatch(setUser({}));
+    dispatch(removeAll());
+    dispatch(removeBulkItems());
+    useLocalStorage().removeItem("connected_account");
+    onClose();
+  }
+
   const WalletBalances = () => (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-center justify-between text-gray-light">
         <span className="text-headline-01 uppercase">wallet</span>
-        <div className="flex gap-2.5">
+        <div className="flex items-center gap-2.5">
           <span className="body-medium">{formatAddress(user?.walletAddress)}</span>
-          <IconDots />
+          <WalletDropdown walletAddress={user?.walletAddress} onLogout={handleLogout} />
         </div>
       </div>
       <div className="flex flex-col border border-gray rounded-lg">
@@ -193,18 +257,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <h6 className="flex items-center gap text-h6 text-gray-light">
               {balance.toFixed(5)} <IconEthereum />
             </h6>
-            <div
-              className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
-              onClick={() => {
-                walletDisconnect();
-                dispatch(setIsConnected(false));
-                dispatch(setUser({}));
-                dispatch(removeAll());
-                dispatch(removeBulkItems());
-                useLocalStorage().removeItem("connected_account");
-                onClose();
-              }}
-            >
+            <div className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light" onClick={handleLogout}>
               <IconLogout className="w-[15px] h-[15px]" />
               Logout
             </div>
