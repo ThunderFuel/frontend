@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import "./Table.css";
 import NotFound from "../NotFound/NotFound";
+import { useIsMobile } from "hooks/useIsMobile";
 
 export interface ITableHeader {
   key: string;
@@ -11,6 +12,8 @@ export interface ITableHeader {
   width?: string;
   align?: string;
   sortValue?: any;
+  minWidth?: any;
+  isHidden?: any;
 }
 
 export interface ITable {
@@ -85,6 +88,7 @@ const Table = ({
   ButtonBelowHeader,
   ...props
 }: ITable) => {
+  const isMobile = useIsMobile();
   const _getAfterRow = (k: number, item: any) => {
     if (!afterRow) {
       return false;
@@ -100,12 +104,18 @@ const Table = ({
       </div>
     );
   };
+  const filteredHeaders = headers.filter((h) => !h.isHidden);
 
-  const _getHeaders = headers.map((header, i) => (
-    <div className={clsx("th text-headline-01", thClassName)} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
-      {header.renderHeader ? header.renderHeader(header) : header.text}
-    </div>
-  ));
+  const _getHeaders = filteredHeaders.map((header, i) => {
+    const width = isMobile ? header.minWidth || "100px" : header.width;
+    const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
+
+    return (
+      <div className={clsx("th text-headline-01", thClassName)} style={style} key={`th_${header.key.toString()}_${i}`}>
+        {header.renderHeader ? header.renderHeader(header) : header.text}
+      </div>
+    );
+  });
   const _getItems = items.map((item, k) => {
     const RowElement = rowElement ?? TableRow;
 
@@ -113,7 +123,7 @@ const Table = ({
       <div className="tr-group" key={`parentRow_${k.toString()}`}>
         {item.beforeRow ? (
           <div className="tr" key={`beforeRow_${k.toString()}`}>
-            <td colSpan={headers.length} className="py-5 px-8 text-left">
+            <td colSpan={filteredHeaders.length} className="py-5 px-8 text-left">
               {item.beforeRow}
             </td>
           </div>
@@ -130,11 +140,13 @@ const Table = ({
           className={clsx("tr", rowClassName, isSelectedRow && isSelectedRow(item) ? "active" : "")}
           key={`row_${k.toString()}`}
         >
-          {headers.map((header) => {
+          {filteredHeaders.map((header) => {
             const key = `cell_${header.key}_${k.toString()}`;
+            const width = isMobile ? header.minWidth || "100px" : header.width;
+            const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
 
             return (
-              <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={key}>
+              <div className="td" style={style} key={key}>
                 {header.render ? header.render(item) : <TableCell>{item[header.key]}</TableCell>}
               </div>
             );
@@ -146,16 +158,16 @@ const Table = ({
   });
 
   return (
-    <div>
-      <div className={clsx("table", className)} {...props}>
+    <div className="overflow-hidden overflow-x-scroll">
+      <div className={clsx("fuel-table", className)} {...props}>
         <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
-          <div className={clsx("container-fluid", containerFluidClassName)}>
+          <div className={clsx("lg:container-fluid", containerFluidClassName)}>
             <div className="tr">{_getHeaders}</div>
           </div>
         </div>
         {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
         {actionButton && actionButton()}
-        <div data-testid="tableBody" className={clsx("tbody container-fluid", containerFluidClassName)}>
+        <div data-testid="tableBody" className={clsx("tbody lg:container-fluid", containerFluidClassName)}>
           {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
         </div>
         <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>

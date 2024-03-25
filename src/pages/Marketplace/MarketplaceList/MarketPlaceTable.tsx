@@ -13,6 +13,7 @@ import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
 import config from "../../../config";
 import NftImages from "./components/NftImages";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const Change = ({ change }: { change: any }) => {
   const isNull = change === 0 || change === null;
@@ -59,13 +60,19 @@ const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: an
   );
 };
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
+  const isMobile = useIsMobile();
   const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue, sortingType, options } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
       key: "collection",
       text: "COLLECTION",
-      render: (item) => <Collection image={item.image} title={item.collection} />,
+      minWidth: "200px",
+      render: (item) => (
+        <Collection image={item.image} title={item.collection}>
+          {isMobile && <Favorite item={item} onChange={onAddWatchList} />}
+        </Collection>
+      ),
     },
     {
       key: "volume",
@@ -113,6 +120,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       width: "5%",
       align: "center",
       render: (item) => <Favorite item={item} onChange={onAddWatchList} />,
+      isHidden: isMobile,
     },
   ];
 
@@ -129,7 +137,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       loadingTemplate={MarketPlaceTableLoading}
       rowElementProps={rowElementProps}
       rowElement={Link}
-      theadClassName={"sticky z-10"}
+      theadClassName={"lg:sticky z-10"}
       theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
       headers={headers}
       items={items}

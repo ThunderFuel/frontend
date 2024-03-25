@@ -1,74 +1,79 @@
-.table {
+.fuel-table {
   @apply w-full;
-  @apply flex flex-col gap-2.5;
+  @apply table lg:flex flex-col gap-2.5;
 }
 
-.table .thead {
+.fuel-table .thead {
   @apply border-b border-solid border-gray bg-bg;
   z-index: 1;
 }
 
-.table .thead .tr {
-  @apply flex items-center;
+.fuel-table .thead,
+.fuel-table .tbody {
+  @apply table-row-group lg:flex;
 }
 
-.table .thead .tr .th {
+.fuel-table .thead .tr {
+  @apply table-row lg:flex items-center;
+}
+
+.fuel-table .thead .tr .th {
   flex: 1;
-  @apply flex py-2.5 pl-2.5 text-gray-light uppercase;
+  @apply table-cell lg:flex py-2.5 pl-2.5 text-gray-light uppercase;
 }
 
-.table .thead .tr .th:nth-child(2) {
+.fuel-table .thead .tr .th:nth-child(2) {
   @apply pr-[7px];
 }
 
-.table .thead .tr .th:nth-child(4) {
+.fuel-table .thead .tr .th:nth-child(4) {
   @apply pr-[7px];
 }
 
-.table .thead .tr .th:nth-child(5) {
+.fuel-table .thead .tr .th:nth-child(5) {
   @apply pr-[14px];
 }
 
-.table .thead .tr .th:first-child .cell {
+.fuel-table .thead .tr .th:first-child .cell {
   @apply -mx-4;
 }
 
-.table .tbody {
+.fuel-table .tbody {
   /* @apply py-5; */
   @apply flex flex-col gap-2;
 }
 
-.table .tbody .tr {
+.fuel-table .tbody .tr {
   @apply p-2.5;
-  @apply flex flex-row items-center border border-gray rounded-lg;
+  @apply table lg:flex flex-row items-center border border-gray rounded-lg;
 }
 
-.table .tbody .tr-group:hover .tr {
+.fuel-table .tbody .tr-group:hover .tr {
   @apply bg-bg-light;
   @apply !border-b;
 }
 
-.table .tbody .tr-group:has(.after) .tr:not(.after) {
+.fuel-table .tbody .tr-group:has(.after) .tr:not(.after) {
   @apply border-b-0 rounded-b-none pb-0;
   /* transition: padding 0.2s ease-in-out; */
   @apply hover:pb-2.5;
 }
 
-.table .tbody .tr.active {
+.fuel-table .tbody .tr.active {
   @apply bg-gray;
 }
 
-.table .tbody .tr .td {
+.fuel-table .tbody .tr .td {
   flex: 1;
-  @apply flex text-white;
+  @apply table-cell lg:flex text-white;
 }
 
-.table .tbody .tr .td .cell {
+.fuel-table .tbody .tr .td .cell {
   @apply p-3.5 overflow-hidden;
   @apply whitespace-nowrap overflow-ellipsis;
 }
 
-.table .tbody .tr.after {
+.fuel-table .tbody .tr.after {
   min-height: 0.5rem;
   max-height: 0.5rem;
   transition: max-height 0.4s ease-in-out;
@@ -77,10 +82,10 @@
   @apply items-start;
 }
 
-.table .tbody .tr.after .after-container {
+.fuel-table .tbody .tr.after .after-container {
   @apply py-2 px-2 w-full;
 }
 
-.table .tbody .tr-group:hover .tr.after {
+.fuel-table .tbody .tr-group:hover .tr.after {
   max-height: 10rem;
 }
