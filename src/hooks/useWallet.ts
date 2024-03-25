@@ -56,7 +56,7 @@ export const useWallet = () => {
 
         return false;
       }
-    }
+    } else return true;
   };
 
   const walletDisconnect = async () => {

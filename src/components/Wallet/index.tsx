@@ -19,8 +19,8 @@ const Index = () => {
 
     if (status && userData) {
       dispatch(setUser(userData));
-      dispatch(setIsConnected(true));
       const connected = await walletConnect();
+
       if (connected) dispatch(setIsConnected(true));
       else dispatch(setIsConnected(false));
     } else {
@@ -29,6 +29,8 @@ const Index = () => {
   }
 
   useEffect(() => {
+    if (selectedGateway() === undefined || isConnected) return;
+
     handleConnection();
   }, [selectedGateway()?.provider]);
 
