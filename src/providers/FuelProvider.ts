@@ -471,7 +471,7 @@ class FuelProvider extends BaseProvider {
       ];
 
       try {
-        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
+        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, [], order);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           await nftdetailsService.tokenUpdateListing([
