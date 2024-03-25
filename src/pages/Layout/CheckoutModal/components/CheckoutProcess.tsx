@@ -144,7 +144,15 @@ export const CheckoutProcess = ({
               />
             </>
           ) : (
-            <></>
+            <>
+              <CheckoutProcessItem status={transactionStatus.waitingForApproval} title={title2} description={description2} />
+              <CheckoutProcessItem
+                status={partiallyFailed ? Status.error : transactionStatus.purchaseConfirm}
+                title={partiallyFailed ? errorTitle : title3}
+                description={partiallyFailed ? errorDescription : description3}
+                isLast={true}
+              />
+            </>
           )
         ) : wagmiSteps.length > 0 ? (
           <>
