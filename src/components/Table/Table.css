@@ -96,3 +96,10 @@
   @apply border-r border-r-gray lg:border-none;
   @apply px-5 lg:px-0;
 }
+.fuel-table .thead .tr .th:last-child{
+  @apply px-5 lg:px-0;
+}
+
+.fuel-table-container {
+  @apply overflow-hidden overflow-x-scroll lg:overflow-auto border-t border-gray lg:border-none;
+}

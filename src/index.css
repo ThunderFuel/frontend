@@ -36,6 +36,10 @@ body {
     @apply text-head6 font-spaceGrotesk;
   }
 
+  .text-h7 {
+    @apply text-head7 font-spaceGrotesk;
+  }
+
   .body-large {
     @apply text-bodyLg font-spaceGrotesk;
   }

@@ -34,7 +34,7 @@ const EthereumPrice = ({
   return (
     <Component content={`${price} ETH`}>
       <div className={clsx("flex items-center", className)}>
-        <h6 className={clsx(priceClassName ? priceClassName : "text-h5", !price && "text-gray-light")}>{text}</h6>
+        <h6 className={clsx(priceClassName ? priceClassName : "text-h6 lg:text-h5", !price && "text-gray-light")}>{text}</h6>
         {!isNull && <IconEthereum className={clsx("text-gray-light", iconClassName)} />}
       </div>
     </Component>

@@ -14,6 +14,7 @@ export interface ITableHeader {
   sortValue?: any;
   minWidth?: any;
   isHidden?: any;
+  className?: any;
 }
 
 export interface ITable {
@@ -60,8 +61,8 @@ const TableLoading = ({ colSpan, template: Template }: { colSpan: number; templa
   );
 };
 
-const TableCell = ({ children }: { children: React.ReactNode }) => {
-  return <div className="cell text-h6">{children}</div>;
+const TableCell = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return <div className={clsx("cell text-h6", className)}>{children}</div>;
 };
 
 const TableRow = ({ children, ...etc }: any) => {
@@ -111,7 +112,7 @@ const Table = ({
     const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
 
     return (
-      <div className={clsx("th text-headline-01", thClassName)} style={style} key={`th_${header.key.toString()}_${i}`}>
+      <div className={clsx("th text-headline-01", thClassName, header.className)} style={style} key={`th_${header.key.toString()}_${i}`}>
         {header.renderHeader ? header.renderHeader(header) : header.text}
       </div>
     );
@@ -146,7 +147,7 @@ const Table = ({
             const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
 
             return (
-              <div className="td" style={style} key={key}>
+              <div className={clsx("td", header.className)} style={style} key={key}>
                 {header.render ? header.render(item) : <TableCell>{item[header.key]}</TableCell>}
               </div>
             );
@@ -158,21 +159,23 @@ const Table = ({
   });
 
   return (
-    <div className="overflow-hidden overflow-x-scroll lg:overflow-none border-y border-gray lg:border-none">
-      <div className={clsx("fuel-table", className)} {...props}>
-        <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
-          <div className={clsx("lg:container-fluid", containerFluidClassName)}>
-            <div className="tr">{_getHeaders}</div>
+    <>
+      <div className="fuel-table-container">
+        <div className={clsx("fuel-table", className)} {...props}>
+          <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
+            <div className={clsx("lg:container-fluid", containerFluidClassName)}>
+              <div className="tr">{_getHeaders}</div>
+            </div>
+          </div>
+          {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
+          {actionButton && actionButton()}
+          <div data-testid="tableBody" className={clsx("tbody lg:container-fluid", containerFluidClassName)}>
+            {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
           </div>
         </div>
-        {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
-        {actionButton && actionButton()}
-        <div data-testid="tableBody" className={clsx("tbody lg:container-fluid", containerFluidClassName)}>
-          {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
-        </div>
-        <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
       </div>
-    </div>
+      <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
+    </>
   );
 };
 

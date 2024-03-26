@@ -35,8 +35,8 @@ const Select = ({ options, value, onChange, direction = "bottom", className }: I
 
   return (
     <div className={clsx("relative", className)} ref={containerRef}>
-      <div className="flex-center p-3 gap-3 border border-gray bg-bg-light rounded-md cursor-pointer" onClick={onToggle}>
-        <span className="body-medium text-white text-overflow">{value?.text}</span>
+      <div className="flex-center p-3 gap-3 border border-gray bg-bg-light rounded-md cursor-pointer text-white " onClick={onToggle}>
+        <span className="body-medium text-overflow">{value?.text}</span>
         <IconArrowDown className={clsx("transition-all duration-300", show && "rotate-180")} />
       </div>
       <div

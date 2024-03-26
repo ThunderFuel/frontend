@@ -21,8 +21,8 @@ const Change = ({ change }: { change: any }) => {
   const className = isNull ? "text-white" : change < 0 ? "text-red" : "text-green";
 
   return (
-    <div className="flex items-center">
-      <h5 className={clsx("text-h5", className)}>{text}</h5>
+    <div className="flex items-center lg:justify-start justify-end">
+      <h5 className={clsx("text-h6 lg:text-h5", className)}>{text}</h5>
       {!isNull ? change < 0 ? <IconDownRight className={className} /> : <IconUpRight className={className} /> : <></>}
     </div>
   );
@@ -53,7 +53,7 @@ const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: an
   const onClick = () => onChangeSortValue(header.sortValue);
 
   return (
-    <div className={clsx("flex-center gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
+    <div className={clsx("flex items-center lg:justify-center justify-end gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
       {header.text}
       <SortHeaderIcon sortingType={sortingValue === header.sortValue ? sortingType : null} />
     </div>
@@ -81,15 +81,16 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       minWidth: "150px",
       sortValue: 1,
-      render: (item) => <EthereumPrice price={item.volume} />,
+      className: "text-right",
+      render: (item) => <EthereumPrice price={item.volume} className="justify-end" />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "change",
       text: "CHANGE",
       width: "10%",
-      minWidth: "150px",
       align: "flex-end",
+      className: "text-right",
       render: (item) => <Change change={item.change} />,
     },
     {
@@ -99,7 +100,8 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       align: "flex-end",
       minWidth: "150px",
       sortValue: 2,
-      render: (item) => <EthereumPrice price={item.floor} />,
+      className: "text-right",
+      render: (item) => <EthereumPrice price={item.floor} className="justify-end lg:justify-start" />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
@@ -107,8 +109,9 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "SALES",
       width: "10%",
       align: "flex-end",
+      className: "text-right",
       sortValue: 3,
-      render: (item) => <div className="cell text-h5">{item.sales}</div>,
+      render: (item) => <Table.Cell>{item.sales}</Table.Cell>,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
