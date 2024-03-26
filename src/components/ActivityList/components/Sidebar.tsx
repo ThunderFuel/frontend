@@ -4,9 +4,13 @@ import { useActivityContext } from "../ActivityContext";
 import SidebarFilterBase from "components/SidebarFilter";
 import Collapse from "components/Collapse/Collapse";
 import Checkbox from "components/CheckBox";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const Sidebar = ({ className = "w-[280px]", hiddenTabOffset = false }: any) => {
   const { filters, onChangeSelectedFilter, selectedFilter } = useActivityContext();
+  if (useIsMobile()) {
+    return null;
+  }
 
   const onClick = (filterIndex: any) => {
     const indexOf = selectedFilter.indexOf(filterIndex);

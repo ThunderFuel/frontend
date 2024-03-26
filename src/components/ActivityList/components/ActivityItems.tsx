@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
+import { useIsMobile } from "hooks/useIsMobile";
 
 export const PriceExcludeActiveTypes = ["Transfers", "Mints"];
 const ActivityType = ({ item }: any) => {
@@ -42,15 +43,15 @@ const ActivityCollectionItem = ({ item }: any) => {
 const ActivityFromUser = ({ item }: any) => {
   const { user } = useAppSelector((state) => state.wallet);
   if (!item.fromUserId) {
-    return <span className="text-bodyMd font-spaceGrotesk text-gray-light">-</span>;
+    return <span className="body-medium text-gray-light">-</span>;
   }
 
   if (user.id === item.fromUserId) {
-    return <span className="text-bodyMd font-spaceGrotesk text-green">you</span>;
+    return <span className="body-medium text-green">you</span>;
   }
 
   return (
-    <Link to={getAbsolutePath(PATHS.USER, { userId: item.fromUserId })} className="text-bodyMd font-spaceGrotesk text-white hover:underline">
+    <Link to={getAbsolutePath(PATHS.USER, { userId: item.fromUserId })} className="body-medium text-white hover:underline">
       {item.fromUser?.userName ?? addressFormat(item.fromUser?.walletAddress)}
     </Link>
   );
@@ -58,14 +59,14 @@ const ActivityFromUser = ({ item }: any) => {
 const ActivityToUser = ({ item }: any) => {
   const { user } = useAppSelector((state) => state.wallet);
   if (!item.toUserId) {
-    return <span className="text-bodyMd font-spaceGrotesk text-gray-light">-</span>;
+    return <span className="body-medium text-gray-light">-</span>;
   }
   if (user.id === item.toUserId) {
-    return <span className="text-bodyMd font-spaceGrotesk text-green">you</span>;
+    return <span className="body-medium text-green">you</span>;
   }
 
   return (
-    <Link to={getAbsolutePath(PATHS.USER, { userId: item.toUserId })} className="text-bodyMd font-spaceGrotesk text-white hover:underline">
+    <Link to={getAbsolutePath(PATHS.USER, { userId: item.toUserId })} className="body-medium text-white hover:underline">
       {item.toUser?.userName ?? addressFormat(item.toUser?.walletAddress)}
     </Link>
   );
@@ -82,6 +83,7 @@ const ActivityTime = ({ item }: any) => {
 };
 
 const ActivityItems = (props: any) => {
+  const isMobile = useIsMobile();
   const { getActivities, pagination } = useActivityContext();
   const defaultHeader: ITableHeader[] = [
     {
@@ -90,12 +92,14 @@ const ActivityItems = (props: any) => {
       width: "18%",
       align: "flex-start",
       render: (item) => <ActivityType item={item} />,
+      isHidden: isMobile,
     },
     {
       key: "item",
       text: `ITEM`,
       width: "27%",
       align: "flex-start",
+      minWidth: "240px",
       sortValue: 1,
       render: (item) => <ActivityCollectionItem item={item} />,
     },
@@ -135,11 +139,9 @@ const ActivityItems = (props: any) => {
   ];
 
   return (
-    <div className={clsx("flex flex-col flex-1 py-5", props.containerClassName)}>
-      {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-5 border-b border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
-      <div className="flex flex-col gap-4">
-        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!px-5"} rowClassName={"!h-[60px]"} />
-      </div>
+    <div className={clsx("flex flex-col flex-1 pt-4 pb-16 lg:py-5", props.containerClassName)}>
+      {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
+      <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!lg:px-5"} rowClassName={"!h-[60px]"} />
     </div>
   );
 };

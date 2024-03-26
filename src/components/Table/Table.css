@@ -101,5 +101,5 @@
 }
 
 .fuel-table-container {
-  @apply overflow-hidden overflow-x-scroll lg:overflow-auto border-t border-gray lg:border-none;
+  @apply overflow-hidden overflow-x-scroll lg:overflow-clip border-t border-gray lg:border-none;
 }
