@@ -19,19 +19,17 @@
 
 .fuel-table .thead .tr .th {
   flex: 1;
-  @apply table-cell lg:flex py-2.5 pl-2.5 text-gray-light uppercase;
+  @apply py-2.5;
+  @apply table-cell lg:flex lg:py-2.5 lg:pl-2.5 text-gray-light uppercase;
 }
 
-.fuel-table .thead .tr .th:nth-child(2) {
-  @apply pr-[7px];
-}
-
+.fuel-table .thead .tr .th:nth-child(2),
 .fuel-table .thead .tr .th:nth-child(4) {
-  @apply pr-[7px];
+  @apply pr-2;
 }
 
 .fuel-table .thead .tr .th:nth-child(5) {
-  @apply pr-[14px];
+  @apply pr-3;
 }
 
 .fuel-table .thead .tr .th:first-child .cell {
@@ -40,12 +38,12 @@
 
 .fuel-table .tbody {
   /* @apply py-5; */
-  @apply flex flex-col gap-2;
+  @apply flex flex-col lg:gap-2;
 }
 
 .fuel-table .tbody .tr {
-  @apply p-2.5;
-  @apply table lg:flex flex-row items-center border border-gray rounded-lg;
+  @apply lg:p-2.5;
+  @apply table lg:flex flex-row items-center border-b lg:border border-gray lg:rounded-lg;
 }
 
 .fuel-table .tbody .tr-group:hover .tr {
@@ -88,4 +86,10 @@
 
 .fuel-table .tbody .tr-group:hover .tr.after {
   max-height: 10rem;
+}
+
+.fuel-table .thead .tr .th:first-child,
+.fuel-table .tbody .tr .td:first-child{
+  @apply sticky lg:relative left-0 bg-bg;
+  @apply border-r border-r-gray lg:border-none;
 }
