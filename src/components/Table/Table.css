@@ -64,6 +64,7 @@
 
 .fuel-table .tbody .tr .td {
   flex: 1;
+  vertical-align: middle;
   @apply table-cell lg:flex text-white;
 }
 
@@ -93,4 +94,5 @@
 .fuel-table .tbody .tr .td:first-child{
   @apply sticky lg:relative left-0 bg-bg;
   @apply border-r border-r-gray lg:border-none;
+  @apply px-5 lg:px-0;
 }

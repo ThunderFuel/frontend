@@ -79,6 +79,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: `VOLUME (${dayTabValue?.text})`,
       width: "10%",
       align: "flex-end",
+      minWidth: "150px",
       sortValue: 1,
       render: (item) => <EthereumPrice price={item.volume} />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
@@ -87,6 +88,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       key: "change",
       text: "CHANGE",
       width: "10%",
+      minWidth: "150px",
       align: "flex-end",
       render: (item) => <Change change={item.change} />,
     },
@@ -95,6 +97,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "FLOOR",
       width: "10%",
       align: "flex-end",
+      minWidth: "150px",
       sortValue: 2,
       render: (item) => <EthereumPrice price={item.floor} />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
@@ -113,6 +116,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "LAST SOLD",
       render: (item) => <NftImages collectionItems={item.collectionItems} />,
       width: "350px",
+      minWidth: "200px",
     },
     {
       key: "favorite",
@@ -132,17 +136,19 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
   };
 
   return (
-    <Table
-      loading={isLoading}
-      loadingTemplate={MarketPlaceTableLoading}
-      rowElementProps={rowElementProps}
-      rowElement={Link}
-      theadClassName={"lg:sticky z-10"}
-      theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
-      headers={headers}
-      items={items}
-      footer={!options.hideFooter ? items.length >= 10 ? <Footer /> : null : null}
-    />
+    <div className="py-5 lg:py-0">
+      <Table
+        loading={isLoading}
+        loadingTemplate={MarketPlaceTableLoading}
+        rowElementProps={rowElementProps}
+        rowElement={Link}
+        theadClassName={"lg:sticky z-10"}
+        theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
+        headers={headers}
+        items={items}
+        footer={!options.hideFooter ? items.length >= 10 ? <Footer /> : null : null}
+      />
+    </div>
   );
 };
 
