@@ -158,7 +158,7 @@ const Table = ({
   });
 
   return (
-    <div className="overflow-hidden overflow-x-scroll">
+    <div className="overflow-hidden overflow-x-scroll lg:overflow-none border-y border-gray lg:border-none">
       <div className={clsx("fuel-table", className)} {...props}>
         <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
           <div className={clsx("lg:container-fluid", containerFluidClassName)}>
