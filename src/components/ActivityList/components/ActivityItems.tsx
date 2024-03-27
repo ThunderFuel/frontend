@@ -108,8 +108,9 @@ const ActivityItems = (props: any) => {
       text: "PRICE",
       width: "10%",
       align: "flex-end",
+      className: "text-right",
       render: (item) => {
-        return <EthereumPrice price={item.price} priceClassName="text-h6" isNull={PriceExcludeActiveTypes.includes(item.type)} />;
+        return <EthereumPrice price={item.price} className="justify-end" isNull={PriceExcludeActiveTypes.includes(item.type)} />;
       },
     },
     {
@@ -117,6 +118,7 @@ const ActivityItems = (props: any) => {
       text: "from",
       width: "15%",
       align: "flex-end",
+      className: "text-right",
       sortValue: 2,
       render: (item) => <ActivityFromUser item={item} />,
     },
@@ -125,6 +127,7 @@ const ActivityItems = (props: any) => {
       text: "to",
       width: "15%",
       align: "flex-end",
+      className: "text-right",
       sortValue: 2,
       render: (item) => <ActivityToUser item={item} />,
     },
@@ -133,6 +136,7 @@ const ActivityItems = (props: any) => {
       text: "date",
       width: "15%",
       align: "flex-end",
+      className: "text-right",
       sortValue: 3,
       render: (item) => <ActivityTime item={item} />,
     },

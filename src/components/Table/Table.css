@@ -95,6 +95,7 @@
   @apply sticky lg:relative left-0 bg-bg;
   @apply border-r border-r-gray lg:border-none;
   @apply px-5 lg:px-0;
+  z-index: 1;
 }
 .fuel-table .thead .tr .th:last-child{
   @apply px-5 lg:px-0;

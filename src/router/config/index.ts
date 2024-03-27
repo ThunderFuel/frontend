@@ -68,6 +68,7 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.COLLECTION_ACTIVITY,
         component: CollectionActivity,
+        isResponsive: true,
       },
     ],
     layoutProps: {
