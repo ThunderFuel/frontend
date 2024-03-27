@@ -12,6 +12,7 @@ import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import clsx from "clsx";
 import { useIsMobile } from "hooks/useIsMobile";
+import MobileSidebar from "./MobileSidebar";
 
 export const PriceExcludeActiveTypes = ["Transfers", "Mints"];
 const ActivityType = ({ item }: any) => {
@@ -30,9 +31,17 @@ const ActivityType = ({ item }: any) => {
   );
 };
 const ActivityCollectionItem = ({ item }: any) => {
+  const isMobile = useIsMobile();
+  const Icon = item.typeIcon ?? IconHand;
+
   return (
-    <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5 mr-4">
-      <LazyImg className="w-10 h-10 rounded-md basis-10" src={item.token.image} />
+    <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5 py-3">
+      <div className="relative">
+        <LazyImg className="w-10 h-10 rounded-md basis-10" src={item.token.image} />
+        <div className="flex-center lg:hidden absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 bg-gray rounded-full w-6 h-6 p-0.5">
+          <Icon className="" />
+        </div>
+      </div>
       <div className="min-w-0 flex">
         <h6 className="text-h6 text-white text-overflow">{item.token.name ?? "-"}</h6>
       </div>
@@ -143,10 +152,13 @@ const ActivityItems = (props: any) => {
   ];
 
   return (
-    <div className={clsx("flex flex-col flex-1 pt-4 pb-16 lg:py-5", props.containerClassName)}>
-      {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
-      <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!lg:px-5"} rowClassName={"!h-[60px]"} />
-    </div>
+    <>
+      {useIsMobile() ? <MobileSidebar /> : null}
+      <div className={clsx("flex flex-col flex-1 lg:pt-4 pb-16 lg:py-5", props.containerClassName)}>
+        {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
+        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!lg:px-5"} rowClassName={"!h-[60px]"} />
+      </div>
+    </>
   );
 };
 

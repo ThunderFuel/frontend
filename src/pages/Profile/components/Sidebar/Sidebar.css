@@ -1,8 +1,7 @@
 .sidebar-container {
-  @apply sticky;
+  @apply lg:sticky;
+  @apply lg:min-h-[585px] lg:sidebar-container-height;
   top: var(--headerHeight);
-  height: calc(100vh - var(--headerHeight) - var(--footerHeight));
-  min-height: 585px;
 }
 
 .profile-cover-image {

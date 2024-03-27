@@ -13,6 +13,7 @@ import { PATHS } from "router/config/paths";
 import UseNavigate, { getAbsolutePath } from "hooks/useNavigate";
 import { IconLink } from "icons";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "../../../../hooks/useIsMobile";
 
 const Collection = ({ item }: { item: any }) => {
   return (
@@ -90,11 +91,13 @@ const CollectionTable = () => {
         </div>
       ),
       width: "42px",
+      isHidden: useIsMobile(),
     },
     {
       key: "collection",
       text: "Item",
       render: (item) => <Collection item={item} />,
+      minWidth: "200px",
     },
     {
       key: "price",
@@ -141,17 +144,19 @@ const CollectionTable = () => {
   });
 
   return (
-    <Table
-      className="border-t border-t-gray"
-      theadClassName={"sticky"}
-      theadStyle={{ top: "calc(var(--headerHeight) + 68px)" }}
-      rowClassName={"cursor-pointer !h-[60px]"}
-      headers={headers}
-      items={collectionItems}
-      onClick={onSelect}
-      containerFluidClassName={"!px-5"}
-      isSelectedRow={(item) => item.isSelected}
-    />
+    <div className="-mx-5 lg:mx-0">
+      <Table
+        className="border-t border-t-gray"
+        theadClassName={"lg:sticky"}
+        theadStyle={{ top: "calc(var(--headerHeight) + 68px)" }}
+        rowClassName={"cursor-pointer !h-[60px]"}
+        headers={headers}
+        items={collectionItems}
+        onClick={onSelect}
+        containerFluidClassName={"!lg:px-5"}
+        isSelectedRow={(item) => item.isSelected}
+      />
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ const Index = () => {
   const { isDisplayTypeList, pagination, isLoading, collectionItems, options, onCancelAllListings } = useCollectionListContext();
 
   return (
-    <div className={"flex flex-col flex-1 pt-5 gap-5"}>
+    <div className={"lg:flex lg:flex-col lg:flex-1 pt-5 gap-5"}>
       <div className="flex flex-col gap-5 px-5 lg:px-0">
         <div className="flex items-center justify-between">
           <div className={clsx("text-headline-02 text-gray-light", !options?.hiddenSidebar && "lg:pl-5")}>
@@ -32,7 +32,7 @@ const Index = () => {
         </div>
         <SelectedFilter />
 
-        <div className={clsx("flex-1", isDisplayTypeList ? (options?.isUserPage ? "-mr-5" : "-mr-10") : "")}>
+        <div className={clsx("lg:flex-1", isDisplayTypeList ? (options?.isUserPage ? "-mr-5" : "lg:-mr-10") : "")}>
           {isDisplayTypeList ? <CollectionTable /> : <CollectionGrid>{isLoading ? <CollectionGridLoading /> : null}</CollectionGrid>}
         </div>
       </div>
