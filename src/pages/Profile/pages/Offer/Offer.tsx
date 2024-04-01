@@ -12,12 +12,14 @@ import { PATHS } from "router/config/paths";
 import offerService from "api/offer/offer.service";
 import SidebarFilter from "./SidebarFilter";
 import OfferProvider from "./OfferContext";
+import { useIsMobile } from "../../../../hooks/useIsMobile";
 
 const Offer = () => {
   const { userInfo, options } = useProfile();
   const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const [offers, setOffers] = React.useState([] as any);
   const [filterValue, setFilterValue] = React.useState({
@@ -156,8 +158,8 @@ const Offer = () => {
 
   return (
     <OfferProvider value={contextValue}>
-      <div className="flex w-full h-full pl-5">
-        <SidebarFilter />
+      <div className="flex w-full h-full lg:pl-5">
+        {!isMobile ? <SidebarFilter /> : null}
         <OfferList />
       </div>
     </OfferProvider>

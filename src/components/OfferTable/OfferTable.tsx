@@ -84,6 +84,7 @@ const defaultHeaders: ITableHeader[] = [
     text: `Item`,
     width: "40%",
     align: "flex-start",
+    minWidth: "200px",
     sortValue: 1,
     render: (item) => {
       return <OfferCollectionItem item={item} />;
@@ -171,7 +172,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
     <Table
       headers={getHeaders}
       items={items}
-      containerFluidClassName={"!px-5"}
+      containerFluidClassName={"!lg:px-5"}
       ButtonBelowHeader={ButtonBelowHeader}
       afterRow={(item: any) => {
         if (!item.isActiveOffer || !item.showAfterRow) {

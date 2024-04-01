@@ -13,7 +13,7 @@ const OfferList = ({ headers }: any) => {
   const hasActiveOffer = getOffers.some((offer: any) => offer.isActiveOffer);
 
   return (
-    <div className="flex flex-col py-5 gap-5 flex-1">
+    <div className="w-full flex flex-col lg:flex-1 pt-5 gap-5">
       <div className="flex items-center justify-between px-5">
         <div className="text-headline-02 text-gray-light uppercase">{label}</div>
         {isOffersMade && hasActiveOffer && options?.isProfile ? (
