@@ -6,7 +6,6 @@ import { useActivityContext } from "../ActivityContext";
 
 const MobileSidebar = () => {
   const { filters, onChangeSelectedFilter, selectedFilter } = useActivityContext();
-  console.log(selectedFilter);
   const options = Object.keys(filters).map((filterIndex: any) => {
     return {
       ...filters[filterIndex],

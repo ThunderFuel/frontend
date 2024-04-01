@@ -110,7 +110,7 @@ const SidebarFilter = () => {
   }, [offers, filterValue]);
 
   return (
-    <SidebarFilterBase className="flex w-60" hiddenTabOffset={true}>
+    <SidebarFilterBase className="w-60" hiddenTabOffset={true}>
       {getFilterItems.map((filterItem: any, index: number) => {
         const Component = filterItem.component;
 
