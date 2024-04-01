@@ -1,5 +1,5 @@
 .mobile-nav {
-  @apply grid grid-cols-5 divide-x divide-gray;
+  @apply grid divide-x divide-gray;
 }
 
 .mobile-nav > div {
@@ -7,7 +7,7 @@
 }
 
 .mobile-nav > div.active {
-  @apply text-white;
+  @apply text-white bg-bg-light;
 }
 
 .mobile-nav > div.active:after {

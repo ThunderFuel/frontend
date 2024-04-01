@@ -481,6 +481,10 @@ body {
     background: white !important;
     height: 2px !important;
   }
+
+  .bg-transparent {
+    background: transparent;
+  }
 }
 
 .Toastify__toast-container {

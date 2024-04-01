@@ -92,7 +92,7 @@
 
 .fuel-table .thead .tr .th:first-child,
 .fuel-table .tbody .tr .td:first-child{
-  @apply sticky lg:relative left-0 bg-bg;
+  @apply sticky lg:relative left-0 bg-bg lg:bg-transparent;
   @apply border-r border-r-gray lg:border-none;
   @apply px-5 lg:px-0;
   z-index: 1;

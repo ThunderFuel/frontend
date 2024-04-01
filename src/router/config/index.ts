@@ -105,18 +105,22 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.PROFILE_OWNED,
         component: ProfileCollection,
+        isResponsive: true,
       },
       {
         path: PATHS.PROFILE_ACTIVITY,
         component: ProfileActivity,
+        isResponsive: true,
       },
       {
         path: PATHS.PROFILE_OFFER,
         component: ProfileOffer,
+        isResponsive: true,
       },
       {
         path: PATHS.PROFILE_LIKED,
         component: ProfileLiked,
+        isResponsive: true,
       },
     ],
     isResponsive: true,

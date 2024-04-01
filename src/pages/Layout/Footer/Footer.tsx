@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
 import etherscanService from "api/etherscan/etherscan.service";
-import { IconCart, IconCollections, IconDrops, IconEthereum, IconGas, IconHome, IconMoon, IconSun, IconWallet } from "icons";
+import { IconCart, IconCollections, IconDrops, IconEthereum, IconGas, IconHome, IconMoon, IconSun, IconWallet, IconWalletConnect } from "icons";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { THUNDER_THEME_NAME } from "global-constants";
 import { useIsMobile } from "hooks/useIsMobile";
@@ -9,6 +9,9 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 
 import "./Footer.css";
+import clsx from "clsx";
+import { useAppSelector } from "store";
+import Avatar from "components/Avatar";
 
 const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
@@ -71,6 +74,7 @@ FooterBottom.displayName = "FooterBottom";
 
 const FooterMobileBottom = React.memo(() => {
   const [initLocation, setInitLocation] = React.useState<any>(location.pathname);
+  const { isConnected, user } = useAppSelector((state) => state.wallet);
   const navigate = useNavigate();
 
   const menus = [
@@ -103,19 +107,28 @@ const FooterMobileBottom = React.memo(() => {
       onClick: () => navigate(PATHS.LOGIN),
     },
     {
+      path: PATHS.PROFILE,
+      icon: IconWalletConnect,
+      onClick: () => {
+        navigate(PATHS.PROFILE);
+        setInitLocation(PATHS.PROFILE);
+      },
+      isHidden: !isConnected,
+    },
+    {
       icon: IconCart,
       onClick: () => navigate(PATHS.DROPS),
     },
-  ];
+  ].filter((item) => !item.isHidden);
 
   return (
-    <div className="mobile-nav">
+    <div className={clsx("mobile-nav", `grid-cols-${menus.length}`)}>
       {menus.map((menu, i) => {
         const Icon = menu.icon ?? React.Fragment;
 
         return (
           <div key={i} onClick={menu.onClick} className={menu.path === initLocation ? "active" : ""}>
-            <Icon />
+            {menu.path === PATHS.PROFILE ? <Avatar image={user?.image} userId={user?.id} className="w-6 h-6" /> : <Icon />}
           </div>
         );
       })}
