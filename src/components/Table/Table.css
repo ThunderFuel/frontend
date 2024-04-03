@@ -43,13 +43,16 @@
 }
 
 .fuel-table .tbody .tr {
-  @apply lg:p-2.5;
-  @apply table lg:flex flex-row items-center border-b lg:border border-gray lg:rounded-lg;
+  @apply p-2.5;
+  @apply lg:flex flex-row items-center border-b lg:border border-gray lg:rounded-lg;
 }
 
 .fuel-table .tbody .tr-group:hover .tr {
-  @apply bg-bg-light;
+  @apply bg-bg lg:bg-bg-light;
   @apply !border-b;
+}
+.fuel-table .tbody .tr-group:hover .tr .td {
+  @apply !bg-bg;
 }
 
 .fuel-table .tbody .tr-group:has(.after) .tr:not(.after) {
@@ -78,12 +81,12 @@
   max-height: 0.5rem;
   transition: max-height 0.4s ease-in-out;
   @apply rounded-t-none p-0 overflow-hidden;
-  @apply border-t-0 rounded-b-lg;
+  @apply border-t-0;
   @apply items-start;
 }
 
 .fuel-table .tbody .tr.after .after-container {
-  @apply py-2 px-2 w-full;
+  @apply px-4 py-3 lg:py-2 lg:px-2 w-full;
 }
 
 .fuel-table .tbody .tr-group:hover .tr.after {
@@ -91,13 +94,13 @@
 }
 
 .fuel-table .thead .tr .th:first-child,
-.fuel-table .tbody .tr .td:first-child{
+.fuel-table .tbody .tr .td:first-child {
   @apply sticky lg:relative left-0 bg-bg lg:bg-transparent;
   @apply border-r border-r-gray lg:border-none;
   @apply px-5 lg:px-0;
   z-index: 1;
 }
-.fuel-table .thead .tr .th:last-child{
+.fuel-table .thead .tr .th:last-child {
   @apply px-5 lg:px-0;
 }
 

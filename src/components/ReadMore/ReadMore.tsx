@@ -6,7 +6,7 @@ const ReadMore = ({ text, characterLimit }: { text: string; characterLimit: numb
   const textIsLonger = text.length > characterLimit;
 
   return (
-    <div className="flex mt-2.5 w-11/12 items-end body-medium text-white">
+    <div className="flex lg:mt-2.5 w-11/12 items-end body-medium text-white">
       <p className="inline w-full">
         {!textIsLonger ? (
           text

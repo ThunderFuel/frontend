@@ -21,6 +21,7 @@ import OfferTable from "components/OfferTable";
 import { OfferStatus } from "api/offer/offer.type";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const Box = ({
   item,
@@ -164,12 +165,51 @@ const headers: ITableHeader[] = [
   },
 ];
 
+const mobileHeaders: ITableHeader[] = [
+  {
+    key: "from",
+    text: `From`,
+    width: "25%",
+    align: "flex-start",
+    minWidth: "200px",
+    className: "!bg-bg-light",
+    sortValue: 1,
+    render: (item) => {
+      return (
+        <a href={getAbsolutePath(PATHS.USER, { userId: item.makerUserId })} className="flex text-h6 items-center gap-2.5">
+          <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerAddress)}
+        </a>
+      );
+    },
+  },
+  {
+    key: "price",
+    text: "PRICE",
+    width: "35%",
+    align: "flex-end",
+    minWidth: "130px",
+
+    className: "text-right !bg-bg-light",
+    render: (item) => <EthereumPrice className="justify-end" price={item.price} priceClassName="text-h6" />,
+  },
+  {
+    key: "floor-difference",
+    text: "FLOOR",
+    width: "35%",
+    align: "flex-end",
+    minWidth: "145px",
+    className: "text-right !bg-bg-light px-5",
+    render: (item) => <span>-</span>,
+  },
+];
+
 const Offers = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const { nftId } = useParams();
   const [offers, setOffers] = useState<any>([]);
+  const isMobile = useIsMobile();
 
   const fetchOffers = async () => {
     const response = await nftdetailsService.getOffers({ tokenId: selectedNFT.id, page: 1, pageSize: 10 });
@@ -203,7 +243,53 @@ const Offers = ({ onBack }: { onBack: any }) => {
     fetchOffers();
   }, [nftId]);
 
-  return (
+  return isMobile ? (
+    <OfferTable
+      items={offers}
+      headers={mobileHeaders}
+      ButtonBelowHeader={compareAddresses(selectedNFT.user.id, user.id) ? undefined : MakeOfferButton}
+      onCancelOffer={(item: any) => {
+        dispatch(
+          setCheckout({
+            type: CheckoutType.CancelOffer,
+            item: item,
+            price: item.price,
+            onCheckoutComplete: onBack,
+            cancelOrderIds: [item.id],
+          })
+        );
+        dispatch(toggleCheckoutModal());
+      }}
+      onAcceptOffer={() => {
+        dispatch(
+          setCheckout({
+            type: CheckoutType.AcceptOffer,
+            item: {
+              ...selectedNFT.bestOffer,
+              contractAddress: selectedNFT.collection.contractAddress,
+              makerAddress: selectedNFT.bestOffer?.user?.walletAddress,
+              takerAddress: selectedNFT.user.walletAddress,
+              tokenOrder: selectedNFT.tokenOrder,
+              orderId: selectedNFT.tokenId,
+            },
+            price: selectedNFT.bestOffer?.price,
+          })
+        );
+        dispatch(toggleCheckoutModal());
+      }}
+      onUpdateOffer={(item: any) => {
+        dispatch(
+          setCheckout({
+            cancelOrderIds: [item.id],
+          })
+        );
+        dispatch(setYourCurrentOffer(item.price));
+        dispatch(setRightMenu(RightMenuType.UpdateOffer));
+      }}
+      // isProfile={}
+      // getBidBalance={}
+    />
+  ) : (
     <RightMenu title="Offers" onBack={onBack}>
       <OfferTable
         items={offers}

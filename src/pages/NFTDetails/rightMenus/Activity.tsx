@@ -11,6 +11,7 @@ import ActivityList from "components/ActivityList/ActivityList";
 import { ITableHeader } from "components/Table";
 import ActivityItems, { PriceExcludeActiveTypes } from "components/ActivityList/components/ActivityItems";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const ActivityType = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
@@ -80,7 +81,9 @@ const headers: ITableHeader[] = [
     key: "type",
     text: `TYPE`,
     width: "20%",
+    minWidth: "200px",
     align: "flex-start",
+    className: "!bg-bg-light",
     sortValue: 1,
     render: (item) => {
       const { icon, title, description } = formatActivityData(item);
@@ -93,13 +96,15 @@ const headers: ITableHeader[] = [
     text: "PRICE",
     width: "20%",
     align: "flex-end",
-    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" isNull={PriceExcludeActiveTypes.includes(item.type)} />,
+    className: "text-right !bg-bg-light",
+    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" className="justify-end" isNull={PriceExcludeActiveTypes.includes(item.type)} />,
   },
   {
     key: "from",
     text: `FROM`,
     width: "20%",
     align: "flex-end",
+    className: "text-right !bg-bg-light",
     sortValue: 1,
     render: (item) => <ActivityItems.FromUser item={item} />,
   },
@@ -108,6 +113,7 @@ const headers: ITableHeader[] = [
     text: `TO`,
     width: "20%",
     align: "flex-end",
+    className: "text-right !bg-bg-light",
     sortValue: 1,
     render: (item) => <ActivityItems.ToUser item={item} />,
   },
@@ -117,6 +123,7 @@ const headers: ITableHeader[] = [
     text: "DATE",
     width: "20%",
     align: "flex-end",
+    className: "text-right !bg-bg-light",
     sortValue: 3,
     render: (item) => <ActivityItems.Time item={item} />,
   },
@@ -128,6 +135,7 @@ const Activity = ({ onBack }: { onBack: any }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activities, setActivities] = useState<any>([]);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const isMobile = useIsMobile();
   const [params, setParams] = React.useReducer(
     (prevState: any, nextState: any) => {
       return { ...prevState, ...nextState };
@@ -181,18 +189,41 @@ const Activity = ({ onBack }: { onBack: any }) => {
     }
   };
 
+  const onChangeFilterValue = ({ types }: any) => {
+    setParams({ types });
+  };
+
+  React.useEffect(() => {
+    fetchActivity();
+  }, [params]);
+
   function renderItems() {
     const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType) && item.activityType !== ActivityFilters.ListingCancel);
     // const { icon, title, description } = formatActivityData(activity);
+    const filters = collectionsService.getActivityFilters();
 
     return (
       <InfiniteScroll pagination={{}} onChangePagination={onChangePagination} isLoading={isLoading}>
-        <ActivityList ActivityItemsContainerClassName="!pt-0" hideTitle={true} containerClassName="flex" hideSidebar={true} activities={_activities} headers={headers} />
+        <ActivityList
+          ActivityItemsContainerClassName="!pt-0"
+          hideTitle={true}
+          containerClassName="flex flex-col"
+          hideSidebar={true}
+          activities={_activities}
+          headers={headers}
+          filters={filters}
+          onChangeFilterValue={onChangeFilterValue}
+        />
       </InfiniteScroll>
     );
   }
 
-  return (
+  return isMobile ? (
+    <div className="flex flex-col gap-y-[10px]">
+      <span className="text-headline-02 text-gray-light border-b border-gray py-2.5 px-4 uppercase">{activities.length} activities</span>
+      {renderItems()}
+    </div>
+  ) : (
     <RightMenu title="Activity" onBack={onBack}>
       <Filter setnotActiveFilters={setnotActiveFilters} />
       <div className="flex flex-col gap-y-[10px]">{renderItems()}</div>

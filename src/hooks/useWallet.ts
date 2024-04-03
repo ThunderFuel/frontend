@@ -15,7 +15,7 @@ export const useWallet = () => {
   };
 
   const hasEnoughBalance = (balance: any, amount: any) => {
-    return selectedGateway().hasEnoughBalance(balance, amount);
+    return selectedGateway()?.hasEnoughBalance(balance, amount);
   };
 
   const getConnectionStatus = async () => {

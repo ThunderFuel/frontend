@@ -154,7 +154,7 @@ const ActivityItems = (props: any) => {
   return (
     <>
       {useIsMobile() ? <MobileSidebar /> : null}
-      <div className={clsx("flex flex-col flex-1 lg:pt-4 pb-16 lg:py-5", props.containerClassName)}>
+      <div className={clsx("flex flex-col flex-1 lg:pt-4 lg:pb-16 lg:py-5", props.containerClassName)}>
         {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
         <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!lg:px-5"} rowClassName={"!h-[60px]"} />
       </div>

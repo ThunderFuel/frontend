@@ -19,14 +19,24 @@ import "./nftdetails.css";
 import FullScreenImage from "components/FullScreenImage";
 import Listings from "./rightMenus/Listings";
 import NoContent from "components/NoContent";
+import { useIsMobile } from "hooks/useIsMobile";
+const body = document.querySelector("body");
 
 const None = React.memo(() => {
   return <div />;
 });
 None.displayName = "None";
+
+export const Image = ({ nft }: any) =>
+  nft.image ? (
+    <Img src={nft.image} className="lg:absolute lg:top-1/2 lg:left-1/2 lg:transform lg:-translate-y-1/2 lg:-translate-x-1/2 h-full max-h-full max-w-full" />
+  ) : (
+    <NoContent className="rounded-md" />
+  );
+
 const NFTDetails = () => {
   const { nftId } = useParams();
-
+  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { rightMenuType } = useAppSelector((state) => state.nftdetails);
   const { isConnected } = useAppSelector((state) => state.wallet);
@@ -41,6 +51,14 @@ const NFTDetails = () => {
     setNft(response.data);
     dispatch(setSelectedNFT(response.data));
   };
+
+  useEffect(() => {
+    if (isActive && body) {
+      body.style.overflow = "hidden";
+    } else if (body) {
+      body.style.overflow = "auto";
+    }
+  }, [isActive]);
 
   useEffect(() => {
     setIsActive(rightMenuType !== RightMenuType.None);
@@ -106,25 +124,23 @@ const NFTDetails = () => {
 
   return (
     <>
-      <div className="relative flex justify-between container-nftdetails">
-        <div className="w-[42%]">
+      <div className="flex flex-col relative lg:flex-row lg:justify-between container-nftdetails">
+        <div className="lg:w-[42%] pb-[56px] lg:pb-0">
           <LeftMenu nft={nft} fetchCollection={fetchCollection} />
         </div>
-        <div className={clsx("absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
-          <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
-            <div className="flex justify-center image-height py-10">
-              <div className="relative w-full image-width bg-gray rounded-md">
-                {nft.image ? (
-                  <Img src={nft.image} className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  h-full max-h-full max-w-full" />
-                ) : (
-                  <NoContent className="rounded-md" />
-                )}
+        {!isMobile && (
+          <div className={clsx("lg:absolute right-0 top-0 h-full z-20 bg-bg-light w-[58%] duration-300 transform", isActive && "-translate-x-[72.4%]")}>
+            <div className="sticky z-20" style={{ top: "var(--headerHeight)" }}>
+              <div className="flex justify-center image-height py-10">
+                <div className="relative w-full image-width bg-gray rounded-md">
+                  <Image nft={nft} />
+                </div>
+                <ImageBar nft={nft} toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
               </div>
-              <ImageBar nft={nft} toggleFullscreen={() => setshowFullscreenImage((prev) => !prev)} />
             </div>
           </div>
-        </div>
-        <div className="w-[42%]" id="rightMenuWrapper">
+        )}
+        <div className="lg:w-[42%]" id="rightMenuWrapper">
           <Component
             onBack={() => {
               resetMenuState();

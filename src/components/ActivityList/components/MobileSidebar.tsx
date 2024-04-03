@@ -48,7 +48,7 @@ const MobileSidebar = () => {
   };
 
   return (
-    <div className="px-5 py-2.5">
+    <div className="p-2.5 lg:px-5 lg:py-2.5">
       <Dropdown options={options} onClick={onClick} isToggle={true} renderItem={renderItem} hideBorder={true} className="w-full gap-1 p-3">
         <div className="flex gap-3 border border-gray rounded text-white w-full justify-start px-3 py-2.5">
           <IconMobileFilter />

@@ -6,22 +6,22 @@ const CollapseContext = React.createContext({} as any);
 const useCollapseContext = () => React.useContext(CollapseContext);
 
 const Header = ({ children }: { children: any }) => {
-  const { onSetShow, show, showIcon } = useCollapseContext();
+  const { onSetShow, show, showIcon, headerBorder } = useCollapseContext();
 
   return (
-    <div className="p-3 text-h6 text-white flex justify-between items-center cursor-pointer" onClick={onSetShow}>
+    <div className={clsx("p-3 text-h6 text-white flex justify-between items-center cursor-pointer", headerBorder && show ? "border-b border-gray" : "")} onClick={onSetShow}>
       {children}
       {showIcon ? show ? <IconArrowUp /> : <IconArrowDown /> : null}
     </div>
   );
 };
-const Body = ({ children }: { children: any }) => {
+const Body = ({ children, containerClassName }: { children: any; containerClassName?: string }) => {
   const { show } = useCollapseContext();
   if (!show) {
     return null;
   }
 
-  return <div className="flex flex-col gap-2 p-4 pt-1">{children}</div>;
+  return <div className={clsx("flex flex-col gap-2 p-4 pt-1", containerClassName)}>{children}</div>;
 };
 const Collapse = ({
   children,
@@ -29,12 +29,14 @@ const Collapse = ({
   className,
   onOpenCallBack,
   showIcon = true,
+  headerBorder = false,
 }: {
   children: any;
   isOpen?: boolean;
   className?: string;
   onOpenCallBack?: (show: any) => void;
   showIcon?: boolean;
+  headerBorder?: boolean;
 }) => {
   const [show, setShow] = React.useState<boolean>(isOpen);
   const onSetShow = () => {
@@ -51,6 +53,7 @@ const Collapse = ({
           show,
           onSetShow,
           showIcon,
+          headerBorder,
         }}
       >
         {children}

@@ -46,7 +46,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
 
   return (
     <Modal backdropDisabled={true} className="checkout" title="Insufficient Funds" footer={footer} onClose={onClose} show={show}>
-      <div className="flex justify-center gap-x-5 py-8 px-6">
+      <div className="flex justify-center gap-x-5 py-8 px-[15px] lg:px-6">
         <div className="flex mt-0.5">
           <IconWarning className="text-red" />
         </div>
