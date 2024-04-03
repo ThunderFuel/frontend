@@ -1,5 +1,6 @@
 import React from "react";
 import Select, { ISelectOption } from "components/Select";
+import clsx from "clsx";
 
 export const selectExpirationDates: ISelectOption[] = [
   {
@@ -28,12 +29,12 @@ export const selectExpirationDates: ISelectOption[] = [
   },
 ];
 
-const SelectExpiredDate = ({ value, onChange }: any) => {
+const SelectExpiredDate = ({ value, onChange, className }: any) => {
   if (!value) {
     onChange(selectExpirationDates[0]);
   }
 
-  return <Select className="w-72" options={selectExpirationDates} onChange={onChange} value={value ?? selectExpirationDates[0]} direction={"top"} />;
+  return <Select className={clsx("w-72", className)} options={selectExpirationDates} onChange={onChange} value={value ?? selectExpirationDates[0]} direction={"top"} />;
 };
 
 export default SelectExpiredDate;

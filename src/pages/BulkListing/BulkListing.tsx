@@ -71,30 +71,30 @@ const BulkListing = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="px-32 border-b border-gray">
-        <div className="border-x border-gray py-16 px-10">
-          <h2 className="text-h2 text-white">Bulk Listing</h2>
+      <div className="px-5 lg:px-32 border-b border-gray">
+        <div className="py-5 lg:border-x lg:border-gray lg:py-16 lg:px-10">
+          <h2 className="text-h3 lg:text-h2 text-white">Bulk Listing</h2>
         </div>
       </div>
-      <div className="px-32">
-        <div className="border-x border-gray h-full">
-          <div className="px-5 py-2.5 flex items-center justify-between">
-            <h6 className="text-h6 text-gray-light">{getItems.length} Items</h6>
-            <div className="flex items-center gap-5">
-              <div className="flex gap-3">
-                <Button className="btn-secondary btn-sm uppercase w-[240px]" onClick={onSetTopFloorPrice}>
+      <div className="pb-14 lg:px-32">
+        <div className="lg:border-x border-gray h-full">
+          <div className="px-5 py-3 lg:py-2.5 flex items-center justify-between">
+            <h6 className="hidden lg:flex text-h6 text-gray-light">{getItems.length} Items</h6>
+            <div className="flex items-center gap-2.5 lg:gap-5">
+              <div className="flex gap-2.5 lg:gap-3">
+                <Button className="btn-secondary btn-sm uppercase lg:w-[240px]" onClick={onSetTopFloorPrice}>
                   Set Floor Price
                 </Button>
-                <Button className="btn-secondary btn-sm uppercase w-[240px]" onClick={onTopTraitPrice}>
+                <Button className="btn-secondary btn-sm uppercase lg:w-[240px]" onClick={onTopTraitPrice}>
                   set top traıt price
                 </Button>
               </div>
-              <div className="w-32">
+              <div className="w-20 lg:w-32">
                 <InputEthereum onChange={onChangeBulkPrice} />
               </div>
             </div>
           </div>
-          <div className="border-t border-gray pb-32">
+          <div className="border-t border-gray lg:pb-32">
             <BulkListTable items={getItems} onUpdatePrice={onUpdatePrice} prices={prices} />;
           </div>
           <Footer items={getItems} prices={prices} />
