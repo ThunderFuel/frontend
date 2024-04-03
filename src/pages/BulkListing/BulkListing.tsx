@@ -7,8 +7,10 @@ import Footer from "./components/Footer";
 import { useSelector } from "react-redux";
 import { getBulkListingTableItems } from "store/bulkListingSlice";
 import floorService from "api/floor/floor.service";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const BulkListing = () => {
+  const isMobile = useIsMobile();
   const items = useSelector(getBulkListingTableItems);
   const [collectionFloor, setCollectionFloor] = useState({} as any);
   const [topTraitByToken, setTopTraitByToken] = useState({} as any);
@@ -83,14 +85,14 @@ const BulkListing = () => {
             <div className="flex items-center gap-2.5 lg:gap-5">
               <div className="flex gap-2.5 lg:gap-3">
                 <Button className="btn-secondary btn-sm uppercase lg:w-[240px]" onClick={onSetTopFloorPrice}>
-                  Set Floor Price
+                  {isMobile ? "Floor Price" : "Set Floor Price"}
                 </Button>
                 <Button className="btn-secondary btn-sm uppercase lg:w-[240px]" onClick={onTopTraitPrice}>
-                  set top traıt price
+                  {isMobile ? "top traıt price" : "set top traıt price"}
                 </Button>
               </div>
-              <div className="w-20 lg:w-32">
-                <InputEthereum onChange={onChangeBulkPrice} />
+              <div className="w-[92px] lg:w-32">
+                <InputEthereum className="h-10" onChange={onChangeBulkPrice} />
               </div>
             </div>
           </div>
