@@ -120,6 +120,9 @@ const FooterMobileBottom = React.memo(() => {
       onClick: () => navigate(PATHS.DROPS),
     },
   ].filter((item) => !item.isHidden);
+  React.useEffect(() => {
+    setInitLocation(location.pathname);
+  }, [location.pathname]);
 
   return (
     <div className={clsx("mobile-nav", `grid-cols-${menus.length}`)}>
