@@ -74,8 +74,9 @@ const BulkListing = () => {
   return (
     <div className="flex flex-col">
       <div className="px-5 lg:px-32 border-b border-gray">
-        <div className="py-5 lg:border-x lg:border-gray lg:py-16 lg:px-10">
+        <div className="flex items-center justify-between py-5 lg:border-x lg:border-gray lg:py-16 lg:px-10">
           <h2 className="text-h3 lg:text-h2 text-white">Bulk Listing</h2>
+          <h6 className="lg:hidden text-h6 text-gray-light">{getItems.length} Items</h6>
         </div>
       </div>
       <div className="pb-14 lg:px-32">
@@ -96,8 +97,8 @@ const BulkListing = () => {
               </div>
             </div>
           </div>
-          <div className="border-t border-gray lg:pb-32">
-            <BulkListTable items={getItems} onUpdatePrice={onUpdatePrice} prices={prices} />;
+          <div className="lg:border-t border-gray lg:pb-32">
+            <BulkListTable items={getItems} onUpdatePrice={onUpdatePrice} prices={prices} />
           </div>
           <Footer items={getItems} prices={prices} />
         </div>
