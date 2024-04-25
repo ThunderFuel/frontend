@@ -1,3 +1,5 @@
+import { FUEL_TYPE } from "hooks/useFuelExtension";
+
 abstract class BaseProvider {
   abstract provider: any;
 
@@ -9,7 +11,7 @@ abstract class BaseProvider {
 
   abstract getBalance(walletAddress: any, userWalletAddress: any): Promise<any>;
 
-  abstract walletConnect(activeConnector?: number): Promise<any>;
+  abstract walletConnect(activeConnector?: number, type?: FUEL_TYPE): Promise<any>;
 
   abstract hasEnoughFunds(buyNowItemPrice?: any, walletAddress?: any, userWalletAddress?: any, totalAmount?: any): Promise<any>;
 

@@ -39,12 +39,12 @@ export const useWallet = () => {
   const walletConnectGateway = (type: FUEL_TYPE, activeConnector: number) => {
     setGatewayType(type);
 
-    return walletConnect(activeConnector);
+    return walletConnect(activeConnector, type);
   };
-  const walletConnect = async (activeConnector?: number) => {
+  const walletConnect = async (activeConnector?: number, type?: any) => {
     if (!isConnected) {
       try {
-        const { connect, user, wallet, fuelAddress, address } = await selectedGateway().walletConnect(activeConnector);
+        const { connect, user, wallet, fuelAddress, address } = await selectedGateway().walletConnect(activeConnector, type);
         dispatch(setIsConnected(connect));
         dispatch(setAddress(fuelAddress ?? address));
         dispatch(setUser(user));

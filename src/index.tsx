@@ -12,16 +12,15 @@ import { initReactI18next } from "react-i18next";
 import LOCALES from "./locales";
 
 import * as Sentry from "@sentry/react";
-import { Fuel, FuelWalletConnector } from "@fuel-wallet/sdk";
+import { Fuel } from "@fuel-wallet/sdk";
 
-const FuelWalletInstance = new Fuel({ connectors: [new FuelWalletConnector()] });
-const FueletWalletInstance = undefined as any;
+export const FuelInstance = new Fuel();
 
 export const getFuel = () => {
-  return FuelWalletInstance;
+  return FuelInstance;
 };
 export const getFuelet = () => {
-  return FueletWalletInstance;
+  return FuelInstance;
 };
 import { BrowserTracing } from "@sentry/browser";
 

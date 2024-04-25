@@ -14,6 +14,7 @@ import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
 import { getFuel } from "index";
 import { useFuel } from "hooks/useFuel";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { FUEL_TYPE } from "hooks/useFuelExtension";
 
 class FuelProvider extends BaseProvider {
   provider = useFuel()[0];
@@ -809,8 +810,19 @@ class FuelProvider extends BaseProvider {
     return _provider;
   }
 
-  async walletConnect(): Promise<any> {
+  async walletConnect(activeConnector: any, type: FUEL_TYPE): Promise<any> {
     try {
+      let _type = "";
+
+      if (type === "fuelet") _type = "Fuelet Wallet";
+      else _type = "Fuel Wallet";
+
+      try {
+        await this.provider?.selectConnector(_type);
+      } catch (error) {
+        return;
+      }
+
       const connect = await this.provider?.connect();
       if (!connect) {
         throw new Error("Not Connected");
