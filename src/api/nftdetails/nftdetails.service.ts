@@ -63,4 +63,7 @@ export default {
   async getAuctionIndex(data: any[]): Promise<ApiResponse<any>> {
     return await ThunderURL.post("/v1/token/getauctionindex", data, {});
   },
+  async getListingOrderId(params: any): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/offer/getListingByTokenId", { params });
+  },
 };

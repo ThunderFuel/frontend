@@ -7,6 +7,8 @@ import { IconDots } from "icons";
 import { useClickOutside } from "hooks/useClickOutside";
 import { useDispatch } from "react-redux";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import Config from "components/Config";
+import config from "config";
 
 const routes = [
   { path: PATHS.PROFILE_OWNED, name: "Owned" },
@@ -109,7 +111,7 @@ const Tab = () => {
 
   return (
     <div className="border-b border-gray relative z-[21]">
-      <div className="inline-flex -my-[1px]">
+      <div className="flex lg:inline-flex -my-[1px]">
         <TabBase
           initTab={initTab}
           className="secondary"
@@ -124,7 +126,9 @@ const Tab = () => {
               {route.name}
             </TabBase.Item>
           ))}
-          <TabMoreDropdowns />
+          <Config show={!config.isHideAllCancelButtons()}>
+            <TabMoreDropdowns />
+          </Config>
         </TabBase>
       </div>
     </div>

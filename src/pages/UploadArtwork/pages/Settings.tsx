@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputLabel from "components/InputLabel";
-import Label from "components/Label";
-import UploadFile from "components/UploadFile";
 import { EventWizardSubmit, useWizard } from "components/Wizard/WizardContext";
-import { IconTrash, IconWeblink } from "icons";
+import { IconTrash } from "icons";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as yup from "yup";
 import LabelWithToggle from "components/LabelWithToggle";
 import Input from "components/Input";
-import SocialButtons from "pages/Collection/components/SocialButtons";
 
 const schema = yup
   .object({
@@ -27,7 +23,7 @@ const Settings = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<any>({
     resolver: yupResolver(schema),
   });
 

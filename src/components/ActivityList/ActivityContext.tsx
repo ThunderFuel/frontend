@@ -6,15 +6,18 @@ interface IActivityContext {
   selectedFilter: any;
   filters: any;
   pagination: any;
+  actionButton?: any;
 }
 
 export const ActivityContext = createContext<IActivityContext>({} as any);
 const ActivityProvider = ({ value, children }: { value: any; children: ReactNode }) => {
-  const [selectedFilter, setSelectedFilter] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState([]);
   const onChangeSelectedFilter = (filterType: any) => {
-    setSelectedFilter(filterType);
+    const types = filterType.map((item: any) => parseInt(item));
 
-    const params = filterType !== null ? { types: [parseInt(filterType)] } : {};
+    setSelectedFilter(types);
+
+    const params = filterType.length ? { types } : {};
     value.onChangeFilterValue(params);
   };
 

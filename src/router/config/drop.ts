@@ -11,11 +11,17 @@ export default [
     path: PATHS.DROPS,
     component: Drops,
     layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
   {
     path: PATHS.DROP_DETAIL,
     component: DropDetail,
     layout: Layout,
+    layoutProps: {
+      hiddenFooter: true,
+    },
   },
   {
     path: PATHS.DROP_EDIT,

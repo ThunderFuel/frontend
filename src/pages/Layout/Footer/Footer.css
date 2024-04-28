@@ -1,0 +1,22 @@
+.mobile-nav {
+  @apply grid divide-x divide-gray;
+}
+
+.mobile-nav > div {
+  @apply relative flex-center py-4 text-gray-light;
+}
+
+.mobile-nav > div.active {
+  @apply text-white bg-bg-light;
+}
+
+.mobile-nav > div.active:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 2px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-color: #D9D9D9;
+}

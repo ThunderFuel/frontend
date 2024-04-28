@@ -14,6 +14,7 @@ const Activity = () => {
       return { ...prevState, ...nextState };
     },
     {
+      continuation: null,
       collectionId,
       pageSize: 10,
       page: 1,
@@ -25,16 +26,22 @@ const Activity = () => {
 
   const getActivityItems = async () => {
     const response = await collectionService.getActivity(params);
-    const data = response.data.map((item: any) => ({
-      ...item,
-      name: item.token.name,
-      description: "",
-      image: item.token.image,
-      type: filters?.[item.activityType as ActivityFilters].name,
-      typeIcon: filters?.[item.activityType as ActivityFilters].icon,
-    }));
+    const data = (response.data ?? []).map((item: any) => {
+      const filter = filters?.[item.activityType as ActivityFilters] as any;
+
+      return {
+        ...item,
+        name: item.token.name,
+        description: "",
+        image: item.token.image,
+        type: filter.name,
+        subText: filter.subText,
+        typeIcon: filter.icon,
+      };
+    });
 
     setPagination({
+      continuation: response.continuation,
       itemsCount: response.itemsCount,
       pageCount: response.pageCount,
       pageSize: response.pageSize,
@@ -46,12 +53,20 @@ const Activity = () => {
     };
   };
   const fetchActivity = async () => {
-    const response = await getActivityItems();
-    setActivities(response.data);
+    if (!isLoading) {
+      setIsLoading(true);
+      setActivities([]);
+      try {
+        const response = await getActivityItems();
+        setActivities(response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   const onChangePagination = async () => {
-    if (params.page > 1) {
+    if (!!params.continuation || params.page > 1) {
       setIsLoading(true);
       try {
         const response = await getActivityItems();
@@ -65,7 +80,6 @@ const Activity = () => {
 
   const onChangeFilterValue = ({ types }: any) => {
     setParams({ types });
-    fetchActivity();
   };
 
   React.useEffect(() => {
@@ -74,17 +88,17 @@ const Activity = () => {
 
   useEffect(() => {
     onChangePagination();
-  }, [params.page]);
+  }, [params.page, params.continuation]);
 
   return (
     <InfiniteScroll
       isLoading={isLoading}
       pagination={pagination}
-      onChangePagination={({ page }: any) => {
-        setParams({ page: page });
+      onChangePagination={({ page, continuation }: any) => {
+        setParams({ page: page, continuation });
       }}
     >
-      <ActivityList activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
+      <ActivityList containerClassName={"lg:pl-10"} activities={activities} pagination={pagination} filters={filters} onChangeFilterValue={onChangeFilterValue} />;
     </InfiniteScroll>
   );
 };

@@ -1,5 +1,9 @@
 import React from "react";
 import Select, { ISelectOption } from "components/Select";
+import Dropdown from "components/Dropdown";
+import { useIsMobile } from "hooks/useIsMobile";
+import { IconOrder } from "icons";
+import Button from "components/Button";
 
 const options: ISelectOption[] = [
   {
@@ -24,13 +28,28 @@ const options: ISelectOption[] = [
   },
 ];
 
+const MobileSelectOrderBy = (props: any) => {
+  return (
+    <Dropdown options={options} onClick={props.onClick}>
+      <Button className="btn-icon text-white">
+        <IconOrder />
+      </Button>
+    </Dropdown>
+  );
+};
+
 const SelectOrderBy = (props: any) => {
   const defaultOption = options.find((option) => option.value === props.value) ?? options[0];
   const [value, setValue] = React.useState(defaultOption);
 
+  if (useIsMobile()) {
+    return <MobileSelectOrderBy onClick={(option: any) => props?.onChange(option)}></MobileSelectOrderBy>;
+  }
+
   return (
     <div>
       <Select
+        className="flex"
         options={options}
         value={value}
         onChange={(option) => {

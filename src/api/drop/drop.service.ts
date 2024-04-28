@@ -1,7 +1,7 @@
 import { ThunderURL } from "../index";
 
 export enum BLOCK_TYPE {
-  Infinity,
+  InfinityBlock,
   ImageText,
   SingleImage,
   VideoText,
@@ -60,7 +60,7 @@ export default {
       },
     });
     response.data.blocks = response.data.blocks.map((block: any) => {
-      if (block.type === BLOCK_TYPE.Infinity) {
+      if (block.type === BLOCK_TYPE.InfinityBlock) {
         block.hidden = true;
       }
 

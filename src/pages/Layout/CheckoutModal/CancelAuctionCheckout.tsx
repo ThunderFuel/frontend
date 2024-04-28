@@ -9,8 +9,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts } from "global-constants";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling auction",
@@ -35,27 +34,22 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
+  const { cancelOrderIds } = useAppSelector((state) => state.checkout);
+  const { handleCancelAuction } = useWallet();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = () => {
-    throw new Error("DAHA HAZIR DEGIL");
-    // setContracts(contracts, FuelProvider);
-    // nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-    //   cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
-    //     .then(() => {
-    //       nftdetailsService.tokenCancelAuction(selectedNFT.id);
-    //       setApproved(true);
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //       if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-    //         setStartTransaction(false);
-    //       else setIsFailed(true);
-    //     });
-    // });
+    try {
+      handleCancelAuction({ cancelOrderIds, selectedNFT, wallet, setApproved, setStepData, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps });
+    } catch (e) {
+      setIsFailed(true);
+    }
   };
 
   React.useEffect(() => {
@@ -70,7 +64,7 @@ const CancelAuctionCheckout = ({ show, onClose }: { show: boolean; onClose: any 
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

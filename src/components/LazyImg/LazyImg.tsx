@@ -18,7 +18,7 @@ const LazyImg = ({ src, ...etc }: any) => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [ref.current]);
 
   return <Img {...etc} src={AssetDefaultImageBg} ref={ref} />;
 };

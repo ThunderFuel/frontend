@@ -29,7 +29,7 @@ const Item = (props: TabItemProps) => {
   };
 
   return (
-    <li onClick={onClick} className={clsx(props.className)}>
+    <li onClick={onClick} className={props.className}>
       <span className={isActive ? "active" : ""}>{props.children}</span>
     </li>
   );

@@ -9,6 +9,7 @@ import Modal from "components/Modal";
 import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your bid",
@@ -33,67 +34,39 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice } = useAppSelector((state) => state.checkout);
+  const { checkoutPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
+  const { user, wallet } = useAppSelector((state) => state.wallet);
+  const { handlePlaceBid } = useWallet();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
   const [isFailed, setIsFailed] = useState(false);
 
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
+
   const onComplete = () => {
-    throw new Error("DAHA HAZIR DEGIL");
-    // nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-    //   const order = {
-    //     isBuySide: true,
-    //     maker: user.walletAddress,
-    //     collection: selectedNFT.collection.contractAddress,
-    //     token_id: selectedNFT.tokenOrder,
-    //     price: toGwei(checkoutPrice).toNumber(),
-    //     amount: 1,
-    //     nonce: res.data[selectedNFT.id], //Auction bid de sabit tutabilirmisiz
-    //     strategy: strategyAuctionContractId,
-    //     payment_asset: BaseAssetId,
-    //     expiration_range: 1, // Bid de fixed verebiliriz - onemli degil
-    //     extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-    //   };
-    //   setContracts(contracts, FuelProvider);
-    //   userService.getBidBalance(user.id).then((res) => {
-    //     setCurrentBidBalance(res.data);
-    //     const _currentBidBalance = res.data;
-    //     if (_currentBidBalance < checkoutPrice) {
-    //       const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-    //       depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, false)
-    //         .then((res) => {
-    //           if (res.transactionResult.isStatusSuccess) {
-    //             nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-    //             userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
-    //             setApproved(true);
-    //           }
-    //         })
-    //         .catch((e) => {
-    //           console.log(e);
-    //           if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-    //             setStartTransaction(false);
-    //           else setIsFailed(true);
-    //         });
-    //     } else
-    //       placeOrder(exchangeContractId, provider, wallet, order)
-    //         .then((res) => {
-    //           if (res.transactionResult.isStatusSuccess) {
-    //             nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-    //             setApproved(true);
-    //           }
-    //         })
-    //         .catch((e) => {
-    //           console.log(e);
-    //           if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-    //             setStartTransaction(false);
-    //           else setIsFailed(true);
-    //         });
-    //   });
-    // });
+    try {
+      handlePlaceBid({
+        selectedNFT,
+        checkoutPrice,
+        user,
+        wallet,
+        setStartTransaction,
+        setIsFailed,
+        setCurrentBidBalance,
+        setApproved,
+        setBidBalanceUpdated,
+        setWagmiSteps,
+        wagmiSteps,
+        setStepData,
+        checkoutExpireTime,
+      });
+    } catch (error) {
+      setIsFailed(true);
+    }
   };
 
   React.useEffect(() => {
@@ -108,7 +81,7 @@ const BidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

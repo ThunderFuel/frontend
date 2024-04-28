@@ -33,7 +33,7 @@ export const useTabContextProvider = (reducer: typeof tabReducer, initial: TabSt
   );
 
   useEffect(() => {
-    changeActiveTab(props.initTab);
+    dispatch({ id: props.initTab, type: Action.ChangeActiveTab });
   }, [props.initTab]);
 
   return {

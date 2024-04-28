@@ -8,14 +8,16 @@ const Footer = React.memo(() => {
   const navigate = useNavigate();
 
   return (
-    <Button
-      className="btn-secondary btn-sm w-full"
-      onClick={() => {
-        navigate(PATHS.RANKINGS);
-      }}
-    >
-      view all <IconArrowRight />
-    </Button>
+    <div className="pt-2.5 lg:pt-0">
+      <Button
+        className="btn-secondary btn-sm w-full"
+        onClick={() => {
+          navigate(PATHS.RANKINGS);
+        }}
+      >
+        view all <IconArrowRight />
+      </Button>
+    </div>
   );
 });
 

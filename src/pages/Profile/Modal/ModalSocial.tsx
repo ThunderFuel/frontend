@@ -12,13 +12,14 @@ import { addressFormat } from "utils";
 import userService from "api/user/user.service";
 import { setUser } from "store/walletSlice";
 import NotFound from "components/NotFound";
+import config from "../../../config";
 
 const ModalTitle = () => {
   return <h6 className="text-h5 text-white">Social</h6>;
 };
 const ModalFooter = ({ onClose }: any) => {
   return (
-    <div className="p-5">
+    <div className="p-4 lg:p-5">
       <Button className="btn-secondary w-full" onClick={onClose}>
         Close
       </Button>
@@ -59,7 +60,7 @@ const ButtonFollow = ({ followerId }: any) => {
       if (isValid) {
         const response = await userService.getUser({
           id: user.id,
-          includes: [0, 1, 2, 3, 4],
+          includes: config.getConfig("userProfileIncludes"),
         });
         dispatch(setUser(response.data));
       }
@@ -118,7 +119,7 @@ const ModalSocial = () => {
 
   return (
     <Modal show={socialActiveTab !== null} onClose={onClose} title="Social" modalTitle={<ModalTitle />} footer={<ModalFooter onClose={onClose} />} bodyClassName="!w-[480px] max-h-[90%]">
-      <div className="flex flex-col p-5 gap-5">
+      <div className="flex flex-col p-4 gap-4 lg:p-5 lg:gap-5">
         <Tab initTab={socialActiveTab} onChange={onSetSocialActiveTab} />
         <div className="flex flex-col w-full gap-2">
           {activeItems?.[socialActiveTab]?.map((item: any, k: number) => {

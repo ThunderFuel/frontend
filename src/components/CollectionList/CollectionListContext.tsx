@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBulkListingSelectedTokenOrderList } from "store/bulkListingSlice";
 import { getCartSelectedTokenOrderList } from "store/cartSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export enum DisplayType {
-  GRID3 = "3",
   GRID4 = "4",
+  GRID5 = "5",
   LIST = "list",
 }
 
@@ -26,12 +27,14 @@ interface ICollectionListContext {
 export const CollectionListContext = createContext<ICollectionListContext>({} as any);
 
 const CollectionListProvider = ({ value, children }: { value: ICollectionListContext; children: ReactNode }) => {
+  const isMobile = useIsMobile();
   const location = useLocation();
   const dispatch = useDispatch();
   const bulkListingSelectedTokenOrderList = useSelector(getBulkListingSelectedTokenOrderList);
   const cartSelectedTokenOrderList = useSelector(getCartSelectedTokenOrderList);
+  const [mobileFilterIsOpen, setMobileFilterIsOpen] = useState(false);
 
-  const [displayType, setDisplayType] = useState(DisplayType.GRID4);
+  const [displayType, setDisplayType] = useState(isMobile ? DisplayType.GRID4 : DisplayType.GRID5);
   const [params, setParams] = useReducer((prevState: any, nextState: any) => {
     switch (nextState.type) {
       case ParamsType.Reset: {
@@ -98,6 +101,13 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     }
   }, [cartSelectedTokenOrderList]);
 
+  const showMobileFilter = () => {
+    setMobileFilterIsOpen(true);
+  };
+  const hideMobileFilter = () => {
+    setMobileFilterIsOpen(false);
+  };
+
   const contextValue = {
     ...value,
     displayType,
@@ -112,6 +122,10 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
     setDisplayType,
     setSweep,
     onCancelAllListings,
+    isMobile,
+    mobileFilterIsOpen,
+    showMobileFilter,
+    hideMobileFilter,
   };
 
   return <CollectionListContext.Provider value={contextValue}>{children}</CollectionListContext.Provider>;

@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import Button from "components/Button";
-import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconListed, IconToken, IconUpdateListing } from "icons";
+import { IconAccept, IconArrowRight, IconCancel, IconDocument, IconFee, IconFuelWallet, IconInfo, IconLinea, IconListed, IconMinus, IconPlus, IconToken, IconUpdateListing } from "icons";
 import React, { SVGProps, useEffect, useState } from "react";
 import { PATHS } from "router/config/paths";
 import { useAppDispatch, useAppSelector } from "store";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
-import { addressFormat, formatPrice } from "utils";
+import { addressFormat, compareAddresses, formatPrice, isObjectEmpty } from "utils";
 import Auction from "./Auction";
 import BestOffer from "./BestOffer";
 import FixedPrice from "./FixedPrice";
@@ -18,6 +19,20 @@ import ReadMore from "components/ReadMore";
 import ActivityItemDescription from "components/ActivityDescription";
 import collectionService, { ActivityFilters } from "api/collections/collections.service";
 import EthereumPrice from "components/EthereumPrice/EthereumPrice";
+import { AssetMockNFT1 } from "assets";
+import { createWalletClient, custom, parseEther } from "viem";
+import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
+import { goerli, linea } from "wagmi/chains";
+import { CollectionProvider } from "pages/Collection/Collection";
+import { useIsMobile } from "hooks/useIsMobile";
+import { Image } from "../NFTDetails";
+import Activity from "../rightMenus/Activity";
+import SecondMakeOffer from "../rightMenus/MakeOffer";
+import Collapse from "components/Collapse";
+import Dropdown from "components/Dropdown";
+import Offers from "../rightMenus/Offers";
+import ImageBar from "./ImageBar";
+import Offer from "pages/Profile/pages/Offer";
 
 const Box = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return <div className={clsx("group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray", className)}>{children}</div>;
@@ -51,8 +66,9 @@ const Footer = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="flex justify-end px-5 py-5 text-h6 text-white">
+    <div className="flex p-[15px] lg:justify-end lg:p-5 text-h6 text-white">
       <Button
+        className="w-full lg:w-fit"
         onClick={() => {
           dispatch(setRightMenu(RightMenuType.ListNFT));
         }}
@@ -72,9 +88,9 @@ const FooterListed = () => {
   }, [show]);
 
   return (
-    <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
+    <div className="flex p-[15px] lg:justify-end lg:p-5 gap-3 text-h6 text-white">
       <Button
-        className="btn-secondary"
+        className="btn-secondary w-full lg:w-fit"
         disabled={isButtonDisabled}
         onClick={() => {
           setIsButtonDisabled(true);
@@ -90,6 +106,7 @@ const FooterListed = () => {
         <IconCancel />
       </Button>
       <Button
+        className="w-full lg:w-fit"
         onClick={() => {
           dispatch(setRightMenu(RightMenuType.UpdateListing));
         }}
@@ -109,9 +126,9 @@ const FooterAuction = () => {
   }, [show]);
 
   return (
-    <div className="flex justify-end px-5 py-5 gap-x-3 text-h6 text-white">
+    <div className="flex justify-center p-[15px] lg:justify-end lg:p-5 gap-3 text-h6 text-white">
       <Button
-        className="btn-secondary"
+        className="btn-secondary w-full lg:w-fit"
         disabled={isButtonDisabled}
         onClick={() => {
           setIsButtonDisabled(true);
@@ -126,8 +143,25 @@ const FooterAuction = () => {
   );
 };
 
+const mockData = {
+  views: 22,
+  totalCount: 20,
+  available: 3,
+  userOwns: 2,
+  ownerPictures: [AssetMockNFT1, AssetMockNFT1, AssetMockNFT1],
+  ownerCount: 8,
+  network: "Fuel",
+  lastListing: { user: { userId: 1, userName: "okitoki", image: AssetMockNFT1 }, price: 1.5, address: "0x123456" },
+  listings: [
+    { ownerPicture: AssetMockNFT1, price: 1.5, address: "0x123456" },
+    { ownerPicture: AssetMockNFT1, price: 2, address: "0x123456" },
+    { ownerPicture: AssetMockNFT1, price: 3, address: "0x123456" },
+  ],
+};
+
 const LeftMenu = (props: any) => {
   const { nft, fetchCollection } = props;
+  const isMobile = useIsMobile();
   const navigate = UseNavigate();
   const dispatch = useAppDispatch();
   const { user, isConnected } = useAppSelector((state) => state.wallet);
@@ -172,100 +206,238 @@ const LeftMenu = (props: any) => {
       </BoxWithIcon>
     );
   }
+
+  function renderListing(lastListing: any) {
+    if (lastListing === undefined || lastListing === null) return;
+
+    return (
+      <Box className="bg-bg-light justify-between pr-4">
+        <div className="flex items-center gap-x-2.5">
+          <Avatar image={lastListing?.user?.image} userId={lastListing?.user?.userId} className="w-8 h-8 rounded-full" />
+          <div className="flex flex-col gap-y-[5px]">
+            <span className="text-headline-01 text-gray-light">LISTINGS</span>
+            <h6 className="text-h6 text-white">
+              <div className="inline-block">
+                <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={formatPrice(lastListing?.price)} />
+              </div>
+              by <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>{isBestOfferOwner() ? "you" : lastListing?.user?.userName ?? addressFormat(lastListing?.address)}</span>
+            </h6>
+          </div>
+        </div>
+        <div className="flex gap-x-2.5">
+          <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Listings))} />
+        </div>
+      </Box>
+    );
+  }
+
   const isOwner = () => {
-    return isConnected ? user?.id === nft?.user?.id : false;
+    return isConnected ? compareAddresses(user?.id, nft?.user?.id) : false;
   };
   const isBestOfferOwner = () => {
-    return isConnected ? (nft.bestOffer?.user?.walletAddress === user.walletAddress ? true : false) : false;
+    return isConnected ? (compareAddresses(nft.bestOffer?.user?.walletAddress, user.walletAddress) ? true : false) : false;
+  };
+
+  const isMultipleEdition = nft?.kind === "erc1155";
+
+  const BestOfferBox = ({ bestOffer }: any) =>
+    isMobile ? (
+      <div className="flex-1 order-2 bg-bg-light rounded-[5px]">
+        <Collapse isOpen={false} headerBorder={true}>
+          <Collapse.Header>
+            <div className="flex items-center gap-2.5">
+              <Avatar image={bestOffer?.user?.image} userId={bestOffer?.user?.id} className="w-8 h-8 rounded-full" />
+              <div className="flex flex-col gap-y-[5px]">
+                <span className="text-headline-01 text-gray-light">BEST OFFER</span>
+                <h6 className="text-h6 text-white">
+                  <div className="inline-block">
+                    <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={bestOffer?.price} />
+                  </div>
+                  by{" "}
+                  <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>
+                    {isBestOfferOwner() ? "you" : bestOffer?.user?.userName ?? addressFormat(bestOffer?.user?.walletAddress)}
+                  </span>
+                  {/* {bestOffer?.user?.userName ?? addressFormat(bestOffer?.user?.walletAddress)} */}
+                </h6>
+              </div>
+            </div>
+          </Collapse.Header>
+          <Collapse.Body containerClassName="!p-0">
+            <Offers onBack={undefined} />
+            {/* <Offer /> */}
+          </Collapse.Body>
+        </Collapse>
+      </div>
+    ) : (
+      <div className="group flex items-center w-full py-4 pl-2.5 gap-x-2.5 rounded-[5px] border border-gray flex-1 order-2 lg:order-0 bg-bg-light justify-between pr-4">
+        <div className="flex items-center gap-x-2.5">
+          <Avatar image={bestOffer?.user?.image} userId={bestOffer?.user?.id} className="w-8 h-8 rounded-full" />
+          <div className="flex flex-col gap-y-[5px]">
+            <span className="text-headline-01 text-gray-light">BEST OFFER</span>
+            <h6 className="text-h6 text-white">
+              <div className="inline-block">
+                <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={bestOffer?.price} />
+              </div>
+              by{" "}
+              <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>{isBestOfferOwner() ? "you" : bestOffer?.user?.userName ?? addressFormat(bestOffer?.user?.walletAddress)}</span>
+              {/* {bestOffer?.user?.userName ?? addressFormat(bestOffer?.user?.walletAddress)} */}
+            </h6>
+          </div>
+        </div>
+        <div className="flex gap-x-2.5">
+          <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Offers))} />
+          {isOwner() && (
+            <HoverButton
+              Icon={IconAccept}
+              text="ACCEPT"
+              onClick={() => {
+                dispatch(
+                  setCheckout({
+                    type: CheckoutType.AcceptOffer,
+                    item: {
+                      ...selectedNFT.bestOffer,
+                      contractAddress: selectedNFT.collection.contractAddress,
+                      makerAddress: selectedNFT.bestOffer?.user?.walletAddress,
+                      takerAddress: selectedNFT.user.walletAddress,
+                      tokenOrder: selectedNFT.tokenOrder,
+                      orderId: selectedNFT.tokenId,
+                    },
+                    price: selectedNFT.bestOffer?.price,
+                    onCheckoutComplete: fetchCollection,
+                  })
+                );
+                dispatch(toggleCheckoutModal());
+              }}
+            />
+          )}
+        </div>
+      </div>
+    );
+
+  const LastActivityBox = ({ lastActivity }: any) => {
+    const filters = collectionService.getActivityFilters();
+    const TypeIcon = filters[lastActivity?.activityType as ActivityFilters]?.icon;
+
+    return (
+      <div className="flex-1 order-2 lg:order-0">
+        {isMobile ? (
+          <div className="flex-1 order-2 bg-bg-light rounded-[5px]">
+            <Collapse isOpen={false} headerBorder={true}>
+              <Collapse.Header>
+                <div className="flex gap-2.5">
+                  <div className="h-fit rounded-full bg-gray p-[6px]">
+                    <TypeIcon className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex flex-col w-full gap-y-[5px]">
+                    <div className="flex w-full items-center justify-between pr-4">
+                      <div className="flex flex-col gap-y-[5px]">
+                        <div className="text-headline-01 text-gray-light">LAST ACTIVITY</div>
+                        <span className="text-white">{formatActivityData(lastActivity)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Collapse.Header>
+              <Collapse.Body containerClassName="!p-0">
+                <div className="flex-1 order-2">
+                  <Activity onBack={undefined} />
+                </div>
+              </Collapse.Body>
+            </Collapse>
+          </div>
+        ) : (
+          renderLastActivity(lastActivity)
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="flex flex-col border-r border-gray">
       <div className="flex flex-col overflow-hidden">
         <div className="container-fluid flex flex-col pt-5 pb-5 pr-10 border-b border-gray">
-          <div className="flex items-center gap-2 mb-[5px] cursor-pointer" onClick={() => navigate(PATHS.COLLECTION, { collectionId: nft.collection.id })}>
-            {nft?.collection?.image && <img src={nft.collection.image} className="w-6 rounded-[px]" alt="profile-image" />}
-            <div className="flex flex-col w-full">
+          <div className="flex items-center justify-between w-full mb-[5px]">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate.collectionNavigate(nft.collection.id, nft.collection.slug)}>
+              {nft?.collection?.image && <img src={nft.collection.image} className="w-6 rounded-[px]" alt="profile-image" />}
               <h6 className="text-h6 text-gray-light">{nft?.collection?.name}</h6>
+            </div>
+            <div className="flex">
+              <ImageBar nft={nft} />
             </div>
           </div>
           <h3 className="text-h3 text-white">{nft.name ? nft.name : nft?.tokenOrder ? "Bored Ape #" + nft?.tokenOrder : ""}</h3>
         </div>
-        <div className="container-fluid flex flex-col gap-y-2.5 pt-5 pb-5 pr-10 border-b border-gray">
-          <div
-            className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5"
-            onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
-          >
-            <Avatar image={nft?.user?.image} userId={nft?.user?.id} className={"w-8 h-8"} />
-            <h6 className="text-h6 text-gray-light">
-              Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
-            </h6>
+
+        {isMobile && <Image nft={nft} />}
+
+        <div className="container-fluid flex flex-col gap-5 lg:gap-2.5 pt-5 pb-5 pr-10 lg:border-b lg:border-gray">
+          <div className="flex gap-2.5 order-1 lg:order-0">
+            <div
+              className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center lg:border lg:border-gray rounded-[5px] lg:py-2.5 lg:pl-2.5 lg:pr-5"
+              onClick={() => navigate(PATHS.USER, { userId: nft?.user?.id })}
+            >
+              <Avatar image={nft?.user?.image} userId={nft?.user?.id} className="w-8 h-8" />
+              <h6 className="text-h6 text-gray-light">
+                Owned by <span className={clsx(isOwner() ? "text-green" : "text-white")}>{isOwner() ? "you" : nft?.user?.userName ?? addressFormat(nft?.user?.walletAddress)}</span>
+              </h6>
+            </div>
+            {/* {!isObjectEmpty(nft) && <CollectionProvider kind={nft?.kind} />} */}
           </div>
 
-          <div className="body-medium text-white mb-2.5">
+          {isMultipleEdition && (
+            <div className="flex items-center gap-4">
+              <div className="hover:bg-bg-light cursor-pointer flex w-fit gap-2 items-center border border-gray rounded-[5px] py-2.5 pl-2.5 pr-5">
+                <div className="flex relative w-16 h-8">
+                  {mockData.ownerPictures.map((item, idx) => (
+                    <div className={clsx("absolute w-8 h-8", idx === 1 ? "left-4" : idx === 2 ? "left-8" : "")} key={`img+${idx}`}>
+                      <img src={item} className="w-8 h-8 rounded-full" />
+                    </div>
+                  ))}
+                </div>
+                <h6 className="text-h6 text-white">
+                  {mockData.ownerCount} <span className="text-gray-light">Owners</span>
+                </h6>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <h6 className="text-h6 text-gray-light">
+                  on <span className="text-white">{mockData.network}</span>
+                </h6>
+                <div className="flex items-center justify-center w-7 h-7 bg-bg border border-gray rounded-full">
+                  <IconFuelWallet className="w-[18px] h-[18px]" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="body-medium text-white order-2 lg:order-1">
             <ReadMore text={nft?.description !== null && nft?.description !== "" ? nft?.description : nft?.collection?.description ?? ""} characterLimit={150} />
           </div>
 
-          {nft.salable ? (
-            <FixedPrice />
-          ) : nft.onAuction ? (
-            <Auction />
-          ) : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? (
-            <BestOffer fetchCollection={fetchCollection} />
-          ) : (
-            <MakeOffer />
-          )}
+          <div className="flex-1 order-0 lg:order-2">
+            {nft.salable ? (
+              <FixedPrice isMultipleEdition={isMultipleEdition} />
+            ) : nft.onAuction ? (
+              <Auction />
+            ) : JSON.stringify(nft.bestOffer) !== "undefined" && JSON.stringify(nft.bestOffer) !== "null" ? (
+              <BestOffer fetchCollection={fetchCollection} />
+            ) : (
+              <MakeOffer />
+            )}
+          </div>
 
-          {JSON.stringify(nft.bestOffer) !== "null" && (
-            <Box className="bg-bg-light justify-between pr-4">
-              <div className="flex items-center gap-x-2.5">
-                <Avatar image={nft.bestOffer?.user?.image} userId={nft.bestOffer?.user?.id} className="w-8 h-8 rounded-full" />
-                <div className="flex flex-col gap-y-[5px]">
-                  <span className="text-headline-01 text-gray-light">BEST OFFER</span>
-                  <h6 className="text-h6 text-white">
-                    <div className="inline-block">
-                      <EthereumPrice iconClassName="h-[20px] w-[20px]" priceClassName="text-h6" price={formatPrice(nft.bestOffer?.price)} />
-                    </div>
-                    by{" "}
-                    <span className={clsx(isBestOfferOwner() ? "text-green" : "text-white")}>
-                      {isBestOfferOwner() ? "you" : nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)}
-                    </span>
-                    {/* {nft.bestOffer?.user?.userName ?? addressFormat(nft.bestOffer?.user?.walletAddress)} */}
-                  </h6>
-                </div>
-              </div>
-              <div className="flex gap-x-2.5">
-                <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Offers))} />
-                {isOwner() && (
-                  <HoverButton
-                    Icon={IconAccept}
-                    text="ACCEPT"
-                    onClick={() => {
-                      dispatch(
-                        setCheckout({
-                          type: CheckoutType.AcceptOffer,
-                          item: {
-                            ...selectedNFT.bestOffer,
-                            contractAddress: selectedNFT.collection.contractAddress,
-                            makerAddress: selectedNFT.bestOffer.user.walletAddress,
-                            takerAddress: selectedNFT.user.walletAddress,
-                            tokenOrder: selectedNFT.tokenOrder,
-                            tokenImage: selectedNFT.image,
-                          },
-                          price: selectedNFT.bestOffer?.price,
-                          onCheckoutComplete: fetchCollection,
-                        })
-                      );
-                      dispatch(toggleCheckoutModal());
-                    }}
-                  />
-                )}
-              </div>
-            </Box>
-          )}
-          {renderLastActivity(nft.lastActivity)}
+          {!!nft.bestOffer && <BestOfferBox bestOffer={nft.bestOffer} />}
+
+          {nft.lastActivity && <LastActivityBox lastActivity={nft.lastActivity} />}
+
+          {isMultipleEdition && renderListing(mockData.lastListing)}
+
+          {/* {isMobile && (
+            <div className="flex-1 order-2 ">
+              <SecondMakeOffer onBack={undefined} />
+            </div>
+          )} */}
         </div>
-        <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 border-b border-gray text-h6 text-white">
+        <div className="container-fluid flex flex-col gap-y-5 pt-5 pb-5 pr-10 lg:border-b lg:border-gray text-h6 text-white">
           <MetadataTable metadata={nft.tokenAttributes ?? []} traitfloors={nft.traitFloors ?? []} />
           <div className="flex flex-col gap-y-2.5">
             <div className="flex flex-row gap-x-2.5">
@@ -299,7 +471,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-01 text-gray-light">CREATOR FEE</div>
-                  {nft.collection?.royaltyFee}%
+                  {nft?.royalty}%
                 </div>
               </Box>
             </div>
@@ -337,7 +509,7 @@ const LeftMenu = (props: any) => {
           </div>
         </div> */}
       </div>
-      <footer className={clsx("sticky bottom-0 w-full mt-auto border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
+      <footer className={clsx("sticky bottom-[56px] z-50 lg:bottom-0 w-full  border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
         {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
       </footer>
     </div>

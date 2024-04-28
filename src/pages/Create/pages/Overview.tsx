@@ -1,5 +1,5 @@
 import React from "react";
-import { AssetCreateImage1, AssetMockNFT1 } from "assets";
+import { AssetCreateImage1 } from "assets";
 import Button from "components/Button";
 import { IconArrowRight, IconToken } from "icons";
 import EthereumPrice from "components/EthereumPrice";
@@ -37,7 +37,7 @@ const Overview = () => {
 
   const mockCollection = {
     name: "HE SOLD???",
-    image: AssetMockNFT1,
+    image: AssetCreateImage1,
     price: 0.24,
 
     id: 0,

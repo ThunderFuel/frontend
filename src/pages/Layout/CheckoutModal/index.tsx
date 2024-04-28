@@ -28,6 +28,7 @@ const Index = () => {
     if (checkoutType === CheckoutType.None) dispatch(removeBuyNowItem());
 
     const isValidOnCheckoutComplete = [
+      CheckoutType.Standard,
       CheckoutType.BulkListing,
       CheckoutType.MakeOffer,
       CheckoutType.PlaceBid,
@@ -41,6 +42,8 @@ const Index = () => {
     }
   };
 
+  // return <ConfirmListingCheckout updateListing={true} show={true} onClose={onClose} />;
+  console.log(checkoutType);
   switch (checkoutType) {
     case CheckoutType.MakeOffer:
       return <MakeOfferCheckout show={show} onClose={onClose} />;
@@ -57,7 +60,7 @@ const Index = () => {
     case CheckoutType.ConfirmListing:
       return <ConfirmListingCheckout show={show} onClose={onClose} />;
     case CheckoutType.BulkListing:
-      return <BulkListingCheckout show={show} onClose={onClose} />;
+      return <BulkListingCheckout show={show} onClose={() => dispatch(toggleCheckoutModal())} onDone={onClose} />;
     case CheckoutType.UpdateListing:
       return <ConfirmListingCheckout updateListing={true} show={show} onClose={onClose} />;
     case CheckoutType.Transfer:

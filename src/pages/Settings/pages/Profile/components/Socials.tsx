@@ -2,9 +2,9 @@ import React from "react";
 import Label from "./Label";
 import HelperText from "./HelperText";
 import clsx from "clsx";
-import { IconDiscord, IconSocial3Dots, IconTwitter, IconWeblink } from "../../../../../icons";
-import Input from "./Input";
-import { SocialTypes } from "../../../../../api/collections/collections.type";
+import { IconDiscord, IconSocial3Dots, IconTwitter, IconWeblink } from "icons";
+import { SocialTypes } from "api/collections/collections.type";
+import InputLabelBase from "components/InputLabel";
 
 const InputLabel = ({ className, containerClassName, icon, children, ...etc }: any) => {
   return (
@@ -73,7 +73,7 @@ const Socials = ({ value, onChange }: any) => {
           })}
         </div>
       </div>
-      <Input label="Website" placeholder="yourwebsite.io" value={webSite?.url} onChange={onChangeWebsite} icon={<IconWeblink className="text-gray-light" />} />
+      <InputLabelBase label="Website" placeholder="yourwebsite.io" value={webSite?.url} onChange={onChangeWebsite} icon={<IconWeblink className="text-gray-light" />} />
     </>
   );
 };

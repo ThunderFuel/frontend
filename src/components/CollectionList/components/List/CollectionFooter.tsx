@@ -3,7 +3,7 @@ import Button from "components/Button";
 import { IconArrowRight, IconShoppingCart, IconTrash } from "icons";
 import { useAppDispatch, useAppSelector } from "store";
 import { removeAll } from "store/cartSlice";
-import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { toggleWalletModal } from "store/walletSlice";
 
@@ -24,25 +24,33 @@ const CollectionFooter = () => {
     } else
       hasEnoughFunds().then((res: any) => {
         dispatch(setIsInsufficientBalance(!res));
+        dispatch(
+          setCheckout({
+            type: CheckoutType.Standard,
+            onCheckoutComplete: () => window.dispatchEvent(new CustomEvent("CompleteCheckout")),
+          })
+        );
         dispatch(toggleCheckoutModal());
       });
   };
 
   return (
-    <div className="sticky bottom-0 border-t border-t-gray bg-bg z-20">
-      <div className="flex items-center justify-between py-3">
-        <div className="flex gap-2 text-headline-02 text-gray-light pl-5">
+    <div className="sticky border-t border-t-gray bg-bg z-20 bottom-0" style={{ bottom: "calc(var(--footerHeight))" }}>
+      <div className="flex items-center justify-between py-3 px-5 lg:px-0">
+        <div className="flex gap-2 text-headline-02 text-gray-light lg:pl-5">
           <IconShoppingCart />
-          <span>YOUR CART</span>
+          <span className="hidden lg:flex">YOUR CART</span>
         </div>
         <div className="flex gap-3">
           <Button
-            className="btn-secondary uppercase"
+            className="btn-secondary uppercase px-4"
             onClick={() => {
               dispatch(removeAll());
             }}
           >
-            Clear {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"}
+            <span className="hidden lg:flex">
+              Clear {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"}
+            </span>
             <IconTrash />
           </Button>
           <Button className="uppercase" onClick={onToggleCheckoutModal}>

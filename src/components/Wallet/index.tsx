@@ -9,25 +9,30 @@ import { useLocalStorage } from "hooks/useLocalStorage";
 
 const Index = () => {
   const dispatch = useAppDispatch();
-  const { getConnectionStatus } = useWallet();
+  const { getConnectionStatus, walletConnect } = useWallet();
   const { show, isConnected } = useAppSelector((state) => state.wallet);
-  const { selectedGateway: fuel } = useFuelExtension();
-  const { walletConnect } = useWallet();
+  const { selectedGateway } = useFuelExtension();
+
+  async function handleConnection() {
+    const status = await getConnectionStatus();
+    const userData = useLocalStorage().getItem("connected_account");
+
+    if (status && userData) {
+      dispatch(setUser(userData));
+      const connected = await walletConnect();
+
+      if (connected) dispatch(setIsConnected(true));
+      else dispatch(setIsConnected(false));
+    } else {
+      useLocalStorage().removeItem("connected_account");
+    }
+  }
 
   useEffect(() => {
-    if (!fuel()) return;
+    if (selectedGateway() === undefined || isConnected) return;
 
-    getConnectionStatus().then((res) => {
-      const userData = useLocalStorage().getItem("connected_account");
-      if (res && userData) {
-        dispatch(setUser(userData));
-        dispatch(setIsConnected(true));
-        walletConnect();
-      } else {
-        useLocalStorage().removeItem("connected_account");
-      }
-    });
-  }, [fuel()]);
+    handleConnection();
+  }, [selectedGateway()?.provider]);
 
   return isConnected ? <Wallet show={show} onClose={() => dispatch(toggleWalletModal())} /> : <ConnectWallet show={show} onClose={() => dispatch(toggleWalletModal())} />;
 };

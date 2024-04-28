@@ -2,74 +2,81 @@ import React, { useState } from "react";
 import CollectionList from "../components/CollectionList";
 import userService from "api/user/user.service";
 import { useProfile } from "../ProfileContext";
+import { CollectionItemsRequest } from "api/collections/collections.type";
+import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
 
 const options = {
   hiddenSweep: true,
 };
-const Collection = () => {
-  const { userInfo, options: profileOptions } = useProfile();
-  const [filter, setFilter] = React.useState([] as any);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [collectionItems, setCollectionItems] = useState(userInfo?.tokens);
+
+const getInitParams = () => {
   const initParams = {
     Status: { type: 3, value: "6" },
     sortingType: 1,
   };
-  const onChangeFilter = (params: any) => {
-    setIsLoading(true);
+  try {
+    const queryString = new URLSearchParams(window.location.search);
+    const queryFilterArr = JSON.parse(decodeURIComponent(queryString.get("filter") as string));
+
+    return {
+      ...initParams,
+      ...queryFilterArr,
+    };
+  } catch (e) {
+    return initParams;
+  }
+};
+const Collection = () => {
+  const { userInfo, options: profileOptions } = useProfile();
+  const [filter, setFilter] = React.useState([] as any);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [collectionItems, setCollectionItems] = useState<any>([]);
+  const [pagination, setPagination] = useState<any>({});
+  const initParams = getInitParams();
+
+  const onChangeFilter = async (params: any) => {
+    const { sortingType, search, ...etcParams } = params;
+
     try {
-      setCollectionItems([]);
+      const selectedFilter = Object.keys(etcParams).map((paramKey) => {
+        const name = paramKey;
+        const type = params[paramKey].type;
+        let value = params[paramKey].value;
+        const selecteds = Array.isArray(params[paramKey].value) ? params[paramKey].value : [];
+        if (params[paramKey]?.value?.min || params[paramKey]?.value?.max) {
+          value = `${params[paramKey].value.min ?? ""}-${params[paramKey].value.max ?? ""}`;
+        } else if (selecteds.length) {
+          value = "";
+        }
 
-      let tmpCollectionItems: any = userInfo.tokens;
-      Object.entries(params).forEach(([key, item]: any) => {
-        if (key === "search") {
-          tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => String(collectionItem.name).toLowerCase().search(item) > -1);
-        }
-        if (key === "Status" && item?.type === 3) {
-          tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => {
-            if (item.value === "1") {
-              return collectionItem.salable;
-            } else if (item.value === "2") {
-              return collectionItem.onAuction;
-            } else if (item.value === "3") {
-              return !collectionItem.salable && !collectionItem.onAuction;
-            } else if (item.value === "4") {
-              return collectionItem.hasOffer;
-            } else if (item.value === "6") {
-              return true;
-            }
-          });
-        }
-        if (key === "Collections" && item?.type === 6) {
-          tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => item.value.includes(collectionItem.collectionId.toString()));
-        }
+        return {
+          name,
+          type,
+          selecteds,
+          value,
+        };
       });
-      tmpCollectionItems = tmpCollectionItems.sort((a: any, b: any) => {
-        if (params.sortingType === 1) {
-          const aPrice = a.price ?? 99;
-          const bPrice = b.price ?? 99;
+      if (search?.length) {
+        selectedFilter.push({
+          name: "",
+          type: 0,
+          value: search,
+          selecteds: [],
+        });
+      }
 
-          return aPrice - bPrice;
-        } else if (params.sortingType === 2) {
-          const aPrice = a.price ?? 0;
-          const bPrice = b.price ?? 0;
-
-          return bPrice - aPrice;
-        } else if (params.sortingType === 3) {
-          return a.listedTimeUnix - b.listedTimeUnix;
-        } else if (params.sortingType === 4) {
-          return a.higeshtSalePrice - b.higeshtSalePrice;
-        }
-
-        return a.lowestSalePrice - b.lowestSalePrice;
+      await fetchCollections({
+        sortingType,
+        page: 1,
+        items: selectedFilter,
       });
-      setCollectionItems(tmpCollectionItems);
+
+      window.requestParams = {
+        selectedFilter,
+        sortingType,
+      };
     } catch (e) {
       console.log(e);
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
     }
   };
 
@@ -83,6 +90,60 @@ const Collection = () => {
     } finally {
       setIsLoading(false);
     }
+
+    await onChangeFilter(initParams);
+  };
+
+  const getCollectionItems = async (filterParam: any = {}) => {
+    if (!userInfo.id) {
+      return [];
+    }
+    const data: CollectionItemsRequest = {
+      userId: userInfo.id,
+      page: pagination.pageNumber,
+      pageSize: 20,
+      ...filterParam,
+    };
+    try {
+      const { data: collectionData, ...paginationData } = await userService.getUserCollections(data);
+      setPagination(paginationData);
+
+      return collectionData;
+    } catch (e) {
+      return userInfo?.tokens ?? [];
+    }
+  };
+  const onChangePagination = async (params: any) => {
+    if (!!params.continuation || params.page > 1) {
+      setIsLoading(true);
+      try {
+        const { selectedFilter, sortingType } = window.requestParams;
+        const collectionData = await getCollectionItems({
+          items: selectedFilter,
+          page: params.page,
+          continuation: params.continuation,
+          sortingType,
+        });
+
+        setCollectionItems((prevState: any) => [...prevState, ...(collectionData as any)]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+  const fetchCollections = async (filter: any = {}) => {
+    if (isLoading) {
+      return false;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const collectionData = await getCollectionItems(filter);
+      setCollectionItems(collectionData);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   React.useEffect(() => {
@@ -92,7 +153,16 @@ const Collection = () => {
   }, [userInfo]);
 
   return (
-    <CollectionList isLoading={isLoading} collectionItems={collectionItems} initParams={initParams} filterItems={filter} options={{ ...options, ...profileOptions }} onChangeFilter={onChangeFilter} />
+    <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={onChangePagination}>
+      <CollectionList
+        isLoading={isLoading}
+        collectionItems={collectionItems}
+        initParams={initParams}
+        filterItems={filter}
+        options={{ ...options, ...profileOptions }}
+        onChangeFilter={onChangeFilter}
+      />
+    </InfiniteScroll>
   );
 };
 

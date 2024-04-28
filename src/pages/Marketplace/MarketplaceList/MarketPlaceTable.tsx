@@ -1,44 +1,28 @@
 import React from "react";
 import Table, { ITableHeader } from "components/Table";
 import EthereumPrice from "components/EthereumPrice";
-import Img from "components/Img";
 
-import { IconDownRight, IconSortDown, IconSortUp, IconUpRight } from "icons";
+import { IconDownRight, IconLoadingTable, IconSortDown, IconSortUp, IconUpRight } from "icons";
 import clsx from "clsx";
 import { useMarketplace } from "../MarketplaceContext";
 import Favorite from "./components/Favorite";
 import Footer from "./components/Footer";
 import Collection from "./components/Collection";
-import { AssetCollectionItem0, AssetLoadingTable } from "assets";
 import { Link } from "react-router-dom";
 import { PATHS } from "router/config/paths";
 import { getAbsolutePath } from "hooks/useNavigate";
-
-const NftImages = React.memo(({ collectionItems }: { collectionItems: any[] }) => {
-  const items = collectionItems.slice(0, 5);
-
-  return (
-    <ul className="py-2.5 px-4 flex gap-2">
-      {items.map((item, i) => (
-        <li key={i} className="w-14 h-14 overflow-hidden">
-          <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
-            {item.image ? <Img src={item.image} alt={i.toString()} defaultImage={AssetCollectionItem0} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-});
-NftImages.displayName = "NftImages";
+import config from "../../../config";
+import NftImages from "./components/NftImages";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const Change = ({ change }: { change: any }) => {
   const isNull = change === 0 || change === null;
-  const text = !isNull ? `${change}%` : "-";
+  const text = !isNull ? `${change.toFixed(2)}%` : "-";
   const className = isNull ? "text-white" : change < 0 ? "text-red" : "text-green";
 
   return (
-    <div className="flex items-center">
-      <h5 className={clsx("text-h5", className)}>{text}</h5>
+    <div className="flex items-center lg:justify-start justify-end">
+      <h5 className={clsx("text-h6 lg:text-h5", className)}>{text}</h5>
       {!isNull ? change < 0 ? <IconDownRight className={className} /> : <IconUpRight className={className} /> : <></>}
     </div>
   );
@@ -48,7 +32,7 @@ Change.displayName = "Change";
 const MarketPlaceTableLoading = () => {
   return [1, 2, 3, 4, 5, 6].map((i, k) => (
     <div className="table-row-skeleton" key={`${i}_${k}`}>
-      <img alt="grid-skeleton-image" className="w-full" src={AssetLoadingTable} />
+      <IconLoadingTable className="w-full text-gray" />
     </div>
   ));
 };
@@ -69,28 +53,36 @@ const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: an
   const onClick = () => onChangeSortValue(header.sortValue);
 
   return (
-    <div className={clsx("flex-center gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
+    <div className={clsx("flex items-center lg:justify-center justify-end gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
       {header.text}
       <SortHeaderIcon sortingType={sortingValue === header.sortValue ? sortingType : null} />
     </div>
   );
 };
 const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
+  const isMobile = useIsMobile();
   const { dayTabValue, addWatchList, isLoading, onChangeSortValue, sortingValue, sortingType, options } = useMarketplace();
 
   const headers: ITableHeader[] = [
     {
       key: "collection",
       text: "COLLECTION",
-      render: (item) => <Collection image={item.image} title={item.collection} />,
+      minWidth: "200px",
+      render: (item) => (
+        <Collection image={item.image} title={item.collection}>
+          {isMobile && <Favorite item={item} onChange={onAddWatchList} />}
+        </Collection>
+      ),
     },
     {
       key: "volume",
       text: `VOLUME (${dayTabValue?.text})`,
       width: "10%",
       align: "flex-end",
+      minWidth: "150px",
       sortValue: 1,
-      render: (item) => <EthereumPrice price={item.volume} />,
+      className: "text-right",
+      render: (item) => <EthereumPrice price={item.volume} className="justify-end" />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
@@ -98,6 +90,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "CHANGE",
       width: "10%",
       align: "flex-end",
+      className: "text-right",
       render: (item) => <Change change={item.change} />,
     },
     {
@@ -105,8 +98,10 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "FLOOR",
       width: "10%",
       align: "flex-end",
+      minWidth: "150px",
       sortValue: 2,
-      render: (item) => <EthereumPrice price={item.floor} />,
+      className: "text-right",
+      render: (item) => <EthereumPrice price={item.floor} className="justify-end lg:justify-start" />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
@@ -114,8 +109,9 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "SALES",
       width: "10%",
       align: "flex-end",
+      className: "text-right",
       sortValue: 3,
-      render: (item) => <div className="cell text-h5">{item.sales}</div>,
+      render: (item) => <Table.Cell>{item.sales}</Table.Cell>,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
@@ -123,6 +119,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       text: "LAST SOLD",
       render: (item) => <NftImages collectionItems={item.collectionItems} />,
       width: "350px",
+      minWidth: "200px",
     },
     {
       key: "favorite",
@@ -130,6 +127,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       width: "5%",
       align: "center",
       render: (item) => <Favorite item={item} onChange={onAddWatchList} />,
+      isHidden: isMobile,
     },
   ];
 
@@ -137,21 +135,23 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
     await addWatchList(data);
   };
   const rowElementProps = (item: any) => {
-    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: item.id }) };
+    return { to: getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug ?? item.id : item.id }) };
   };
 
   return (
-    <Table
-      loading={isLoading}
-      loadingTemplate={MarketPlaceTableLoading}
-      rowElementProps={rowElementProps}
-      rowElement={Link}
-      theadClassName={"sticky z-10"}
-      theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
-      headers={headers}
-      items={items}
-      footer={!options.hideFooter ? items.length >= 10 ? <Footer /> : null : null}
-    />
+    <div className="py-5 lg:py-0">
+      <Table
+        loading={isLoading}
+        loadingTemplate={MarketPlaceTableLoading}
+        rowElementProps={rowElementProps}
+        rowElement={Link}
+        theadClassName={"lg:sticky z-10"}
+        theadStyle={{ top: "calc(var(--headerHeight) - 1px)" }}
+        headers={headers}
+        items={items}
+        footer={!options.hideFooter ? items.length >= 10 ? <Footer /> : null : null}
+      />
+    </div>
   );
 };
 

@@ -1,17 +1,17 @@
 import dayjs from "dayjs";
 import { ethers } from "ethers";
-import * as timeago from "timeago.js";
 import { ContainerClient } from "@azure/storage-blob";
 import imageService from "../api/image/image.service";
+import config from "config";
+
+export { timeagoFormat } from "./timeago";
 
 export const addressFormat = (address: any) => {
   if (!address) {
     return "-";
   }
-  const first6 = address.substring(0, 6);
-  const last4 = address.substring(address.length - 4);
 
-  return first6 + "..." + last4;
+  return String(address).substring(0, 6);
 };
 
 export const openInNewTab = (url: string): void => {
@@ -82,10 +82,6 @@ export function toGwei(num: any) {
 export function randomIntFromInterval(min = 1, max = 11111111) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-export const timeagoFormat = (time: number | string) => {
-  return timeago.format(time);
-};
 
 export const uniqueArr = (array: any[]) => {
   return Array.from(new Set(array.map((item) => JSON.stringify(item)))).map((item) => JSON.parse(item));
@@ -169,3 +165,43 @@ export const formatTimeContract = (time: any) => {
 export const formatTimeBackend = (time: any) => {
   return Math.round(dayjs().add(time, "days").valueOf() / 1000);
 };
+
+export const formatAmount = (amount: any) => {
+  const type = config.getConfig("type");
+  if (type === "wagmi") return amount;
+  else return toGwei(amount);
+};
+
+export async function activateInjectedProvider(providerName: any) {
+  const { ethereum } = window;
+
+  if (!ethereum?.providers) {
+    return undefined;
+  }
+
+  let provider;
+  switch (providerName) {
+    case "Coinbase":
+      provider = ethereum.providers.find(({ isCoinbaseWallet }: any) => isCoinbaseWallet);
+      break;
+    case "Metamask":
+      provider = ethereum.providers.find(({ isMetaMask }: any) => isMetaMask);
+      console.log(ethereum);
+
+      // ethereum.selectExtension("MetaMask");
+      ethereum.setProvider(provider.providers[0]);
+      console.log("YAVAS LOOOO");
+
+      break;
+    default:
+      return;
+  }
+}
+
+export function compareAddresses(address1: any, address2: any) {
+  if (address1 === undefined || address2 === undefined) {
+    return false;
+  }
+
+  return String(address1).toLowerCase() === String(address2).toLowerCase();
+}

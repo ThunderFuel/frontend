@@ -8,12 +8,9 @@ import Modal from "components/Modal";
 import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import Input from "components/Input";
-import { CheckoutProcess } from "./components/CheckoutProcess";
+import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import { addressFormat } from "utils";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { Provider, toB256 } from "fuels";
-import { transfer } from "thunder-sdk/src/contracts/erc721";
-import { provider } from "global-constants";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm transferring your NFT",
@@ -50,32 +47,34 @@ const Footer = ({ address, callback, animationStarted, onClose, approved }: { ap
 
 const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { wallet } = useAppSelector((state) => state.wallet);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
+  const { handleTransfer } = useWallet();
 
   const [approved, setApproved] = useState(false);
   const [address, setaddress] = useState("");
   const [startTransaction, setStartTransaction] = useState(false);
   const [showTransactionAnimation, setshowTransactionAnimation] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
-  const onComplete = async () => {
-    let tempAddress = "";
-    if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
-    const toAddress = tempAddress === "" ? address : tempAddress;
-
-    const _provider = await Provider.create(provider);
-
-    transfer(selectedNFT.collection.contractAddress, _provider, wallet, toAddress, selectedNFT.tokenOrder, 1)
-      .then(() => {
-        nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
-        setApproved(true);
-      })
-      .catch((e) => {
-        console.log(e);
-        if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-          setStartTransaction(false);
-        else setIsFailed(true);
+  const onComplete = () => {
+    try {
+      handleTransfer({
+        address,
+        selectedNFT,
+        wallet,
+        user,
+        setApproved,
+        setStartTransaction,
+        setIsFailed,
+        setWagmiSteps,
+        setStepData,
+        wagmiSteps,
       });
+    } catch (e) {
+      handleTransactionError({ error: e, setStartTransaction, setIsFailed });
+    }
   };
 
   React.useEffect(() => {
@@ -91,7 +90,7 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

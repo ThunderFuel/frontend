@@ -7,12 +7,8 @@ import Modal from "components/Modal";
 
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { bulkListing, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
-import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import { BaseAssetId, Provider } from "fuels";
+import { CheckoutProcess } from "./components/CheckoutProcess";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -40,122 +36,35 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const { checkoutPrice, checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
 
+  const { handleConfirmListing } = useWallet();
+
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
+
   const onComplete = async () => {
-    const _provider = await Provider.create(provider);
-
     try {
-      if (checkoutIsAuction) {
-        const res = await nftdetailsService.getLastIndex(2, user.id);
-        const order = [
-          {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: selectedNFT.collection.contractAddress,
-            token_id: selectedNFT.tokenOrder,
-            price: 1,
-            amount: 1,
-            nonce: res.data + 1,
-            strategy: "", //auction yok ondan kalkti TODO
-            payment_asset: BaseAssetId,
-            expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: {
-              extra_address_param: ZERO_B256,
-              extra_contract_param: ZERO_B256,
-              extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0,
-            },
-          },
-        ];
-
-        setContracts(contracts, _provider);
-
-        try {
-          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
-
-          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
-            await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
-            setApproved(true);
-          }
-        } catch (e) {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-        }
-      } else if (updateListing) {
-        const res = await nftdetailsService.getTokensIndex([selectedNFT?.id]);
-        const order = [
-          {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: selectedNFT.collection.contractAddress,
-            token_id: selectedNFT.tokenOrder,
-            price: toGwei(checkoutPrice).toNumber(),
-            amount: 1,
-            nonce: res.data[selectedNFT?.id],
-            strategy: strategyFixedPriceContractId,
-            payment_asset: BaseAssetId,
-            expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-          },
-        ];
-
-        setContracts(contracts, _provider);
-
-        try {
-          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
-
-          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
-            await nftdetailsService.tokenUpdateListing([
-              {
-                tokenId: selectedNFT.id,
-                price: checkoutPrice,
-                expireTime: formatTimeBackend(checkoutExpireTime),
-              },
-            ]);
-            setApproved(true);
-          }
-        } catch (e) {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-        }
-      } else {
-        const res = await nftdetailsService.getLastIndex(0, user.id);
-        const order = [
-          {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: selectedNFT.collection.contractAddress,
-            token_id: selectedNFT.tokenOrder,
-            price: toGwei(checkoutPrice).toNumber(),
-            amount: 1,
-            nonce: res.data + 1,
-            strategy: strategyFixedPriceContractId,
-            payment_asset: BaseAssetId,
-            expiration_range: formatTimeContract(checkoutExpireTime),
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
-          },
-        ];
-
-        setContracts(contracts, _provider);
-
-        try {
-          const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
-
-          if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
-            await nftdetailsService.tokenList([
-              {
-                tokenId: selectedNFT.id,
-                price: checkoutPrice,
-                expireTime: formatTimeBackend(checkoutExpireTime),
-              },
-            ]);
-            setApproved(true);
-          }
-        } catch (e) {
-          handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-        }
-      }
+      handleConfirmListing({
+        checkoutExpireTime,
+        checkoutPrice,
+        setWagmiSteps,
+        wagmiSteps,
+        setStepData,
+        user,
+        wallet,
+        setStartTransaction,
+        setIsFailed,
+        selectedNFT,
+        checkoutIsAuction,
+        checkoutAuctionStartingPrice,
+        setApproved,
+        updateListing,
+      });
     } catch (error) {
+      console.log(error);
       setIsFailed(true);
     }
   };
@@ -172,7 +81,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess updateListing={updateListing} stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

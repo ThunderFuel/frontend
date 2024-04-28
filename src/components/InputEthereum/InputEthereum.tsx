@@ -26,7 +26,7 @@ const InputEthereum = (props: any) => {
     }
   };
 
-  return <Input {...etc} maxLength="15" onChange={handleChange} icon={<IconEthereum className="text-gray-light peer-focus:text-white" />} />;
+  return <Input {...etc} maxLength={etc.maxLength ?? "15"} onChange={handleChange} icon={<IconEthereum className="text-gray-light peer-focus:text-white" />} />;
 };
 
 export default InputEthereum;

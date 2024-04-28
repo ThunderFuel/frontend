@@ -30,6 +30,8 @@ interface IMarketplaceContext {
   sortingValue: any;
   sortingType: any;
   options: any;
+  mobileListType: any;
+  setMobileListType: any;
 }
 
 const dayValues = [
@@ -69,6 +71,11 @@ const filterValues = [
   },
 ];
 
+export enum MOBILE_LIST_TYPE {
+  GRID,
+  LIST,
+}
+
 export const MarketplaceContext = createContext<IMarketplaceContext>({} as any);
 
 const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; options?: any }) => {
@@ -77,10 +84,11 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
 
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<MarketplaceTableItem[]>([]);
-  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[4]);
+  const [dayTabValue, setDayTabValue] = useState<TextValue>(dayValues[0]);
   const [filterTabValue, setFilterTabValue] = useState<TextValue>(filterValues[0]);
   const [sortingValue, setSortingValue] = useState(0);
   const [sortingType, setSortingType] = useState("ASC");
+  const [mobileListType, setMobileListType] = useState(MOBILE_LIST_TYPE.GRID);
 
   const getMarketplaceItems = async () => {
     if (isLoading) {
@@ -93,8 +101,8 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
         type: filterTabValue?.value,
         filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
         userId: user?.id,
-        sortingValue,
-        sortingType,
+        // sortingValue,
+        // sortingType,
         page: 1,
         pageSize: 10,
       });
@@ -113,6 +121,7 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
             tokenId: sold.tokenId,
           })),
           watched: responseItem.watched,
+          slug: responseItem.slug,
         } as MarketplaceTableItem;
       });
 
@@ -165,6 +174,8 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
     onChangeSortValue,
     sortingValue,
     sortingType,
+    mobileListType,
+    setMobileListType,
   };
 
   return (

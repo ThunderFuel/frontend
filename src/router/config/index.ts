@@ -53,6 +53,7 @@ export const ROUTES: RouteConfig[] = [
     path: PATHS.MARKETPLACE,
     component: Marketplace,
     layout: Layout,
+    isResponsive: true,
   },
   {
     path: PATHS.COLLECTION,
@@ -62,26 +63,31 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.COLLECTION_ITEMS,
         component: CollectionItems,
+        isResponsive: true,
       },
       {
         path: PATHS.COLLECTION_ACTIVITY,
         component: CollectionActivity,
+        isResponsive: true,
       },
     ],
     layoutProps: {
-      hiddenFooter: true,
+      hiddenFooter: false,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.LOGIN,
     component: Login,
     layout: Layout,
     notLoggedIn: true,
+    isResponsive: true,
   },
   {
     path: PATHS.RANKINGS,
     component: Rankings,
     layout: Layout,
+    isResponsive: true,
   },
   {
     path: PATHS.NFT_DETAILS,
@@ -90,6 +96,7 @@ export const ROUTES: RouteConfig[] = [
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.PROFILE,
@@ -99,23 +106,25 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.PROFILE_OWNED,
         component: ProfileCollection,
+        isResponsive: true,
       },
       {
         path: PATHS.PROFILE_ACTIVITY,
         component: ProfileActivity,
+        isResponsive: true,
       },
       {
         path: PATHS.PROFILE_OFFER,
         component: ProfileOffer,
+        isResponsive: true,
       },
       {
         path: PATHS.PROFILE_LIKED,
         component: ProfileLiked,
+        isResponsive: true,
       },
     ],
-    layoutProps: {
-      hiddenFooter: true,
-    },
+    isResponsive: true,
   },
   {
     path: PATHS.BULK_LISTING,
@@ -124,6 +133,7 @@ export const ROUTES: RouteConfig[] = [
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.SETTINGS,
@@ -133,6 +143,7 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.SETTINGS_PROFILE,
         component: SettingsProfile,
+        isResponsive: true,
       },
       {
         path: PATHS.SETTINGS_NOTIFICATION,
@@ -142,6 +153,7 @@ export const ROUTES: RouteConfig[] = [
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.USER,
@@ -151,23 +163,28 @@ export const ROUTES: RouteConfig[] = [
       {
         path: PATHS.USER_OWNED,
         component: ProfileCollection,
+        isResponsive: true,
       },
       {
         path: PATHS.USER_ACTIVITY,
         component: ProfileActivity,
+        isResponsive: true,
       },
       {
         path: PATHS.USER_OFFER,
         component: ProfileOffer,
+        isResponsive: true,
       },
       {
         path: PATHS.USER_LIKED,
         component: ProfileLiked,
+        isResponsive: true,
       },
     ],
     layoutProps: {
       hiddenFooter: true,
     },
+    isResponsive: true,
   },
   {
     path: PATHS.BETA,

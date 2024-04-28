@@ -31,7 +31,7 @@ const Tab = ({ userId }: any) => {
 
   return (
     <div className="border-b border-gray">
-      <div className="inline-flex -my-[1px]">
+      <div className="flex lg:inline-flex -my-[1px]">
         <TabBase
           initTab={initTab}
           className="secondary"

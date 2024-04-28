@@ -1,49 +1,109 @@
-.table {
+.fuel-table {
   @apply w-full;
+  @apply table lg:flex flex-col gap-2.5;
 }
 
-.table .thead {
+.fuel-table .thead {
   @apply border-b border-solid border-gray bg-bg;
-}
-.table .thead .tr {
-  @apply flex items-center;
+  z-index: 1;
 }
 
-.table .thead .tr .th {
+.fuel-table .thead,
+.fuel-table .tbody {
+  @apply table-row-group lg:flex;
+}
+
+.fuel-table .thead .tr {
+  @apply table-row lg:flex items-center;
+}
+
+.fuel-table .thead .tr .th {
   flex: 1;
-  @apply flex py-4 pl-4 text-gray-light uppercase;
-}
-.table .thead .tr .th:nth-child(2) {
-  @apply pr-[7px];
-}
-.table .thead .tr .th:nth-child(4) {
-  @apply pr-[7px];
+  @apply py-2.5;
+  @apply table-cell lg:flex lg:py-2.5 lg:pl-2.5 text-gray-light uppercase;
+  @apply border-b border-gray  lg:border-none;
 }
 
-.table .thead .tr .th:nth-child(5) {
-  @apply pr-[14px];
+.fuel-table .thead .tr .th:nth-child(2),
+.fuel-table .thead .tr .th:nth-child(4) {
+  @apply pr-2;
 }
 
-.table .thead .tr .th:first-child .cell {
+.fuel-table .thead .tr .th:nth-child(5) {
+  @apply pr-3;
+}
+
+.fuel-table .thead .tr .th:first-child .cell {
   @apply -mx-4;
 }
 
-.table .tbody {
-  @apply py-5;
-  @apply flex flex-col gap-2;
+.fuel-table .tbody {
+  /* @apply py-5; */
+  @apply flex flex-col lg:gap-2;
 }
-.table .tbody .tr {
-  @apply flex flex-row items-center border border-gray rounded-lg;
-  @apply hover:bg-bg-light;
+
+.fuel-table .tbody .tr {
+  @apply p-2.5;
+  @apply lg:flex flex-row items-center border-b lg:border border-gray lg:rounded-lg;
 }
-.table .tbody .tr.active {
+
+.fuel-table .tbody .tr-group:hover .tr {
+  @apply bg-bg lg:bg-bg-light;
+  @apply !border-b;
+}
+.fuel-table .tbody .tr-group:hover .tr .td {
+  @apply !bg-bg;
+}
+
+.fuel-table .tbody .tr-group:has(.after) .tr:not(.after) {
+  @apply border-b-0 rounded-b-none pb-0;
+  /* transition: padding 0.2s ease-in-out; */
+  @apply hover:pb-2.5;
+}
+
+.fuel-table .tbody .tr.active {
   @apply bg-gray;
 }
-.table .tbody .tr .td {
+
+.fuel-table .tbody .tr .td {
   flex: 1;
-  @apply flex text-white;
+  vertical-align: middle;
+  @apply table-cell lg:flex text-white;
 }
-.table .tbody .tr .td .cell {
+
+.fuel-table .tbody .tr .td .cell {
   @apply p-3.5 overflow-hidden;
   @apply whitespace-nowrap overflow-ellipsis;
+}
+
+.fuel-table .tbody .tr.after {
+  min-height: 0.5rem;
+  max-height: 0.5rem;
+  transition: max-height 0.4s ease-in-out;
+  @apply rounded-t-none p-0 overflow-hidden;
+  @apply border-t-0;
+  @apply items-start;
+}
+
+.fuel-table .tbody .tr.after .after-container {
+  @apply px-4 py-3 lg:py-2 lg:px-2 w-full;
+}
+
+.fuel-table .tbody .tr-group:hover .tr.after {
+  max-height: 10rem;
+}
+
+.fuel-table .thead .tr .th:first-child,
+.fuel-table .tbody .tr .td:first-child {
+  @apply sticky lg:relative left-0 bg-bg lg:bg-transparent;
+  @apply border-r border-r-gray lg:border-none;
+  @apply px-5 lg:px-0;
+  z-index: 1;
+}
+.fuel-table .thead .tr .th:last-child {
+  @apply px-5 lg:px-0;
+}
+
+.fuel-table-container {
+  @apply overflow-hidden overflow-x-scroll lg:overflow-clip border-t border-gray lg:border-none;
 }

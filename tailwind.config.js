@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: "class",
   content: ["./src/**/*.tsx", "./public/index.html"],
   theme: {
     container: {
@@ -28,6 +29,10 @@ module.exports = {
     extend: {
       backgroundImage: {
         "landing-slider-bg": "url('/src/assets/landing/landing-slider-bg.svg')",
+        hotdrop: "linear-gradient(270deg, rgba(20, 20, 20, 0.00) 0%, #141414 100%)",
+        "mode-hotdrop": "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFFFFF 100%)",
+        "table-row-skeleton": "linear-gradient(90deg, rgba(37, 37, 37, 0) 0, rgba(37, 37, 37, 0.2) 20%, rgba(37, 37, 37, 0.5) 60%, rgba(37, 37, 37, 0))",
+        "mode-table-row-skeleton": "linear-gradient(90deg, rgba(230, 230, 230, 0) 0, rgba(230, 230, 230, 0.2) 20%, rgba(230, 230, 230, 0.5) 60%, rgba(230, 230, 230, 0))",
       },
       screens: {
         xs: "475px",
@@ -77,6 +82,13 @@ module.exports = {
           fontWeight: "600",
         },
       ],
+      head7: [
+        "14px",
+        {
+          lineHeight: "18px",
+          fontWeight: "700",
+        },
+      ],
       bodyLg: [
         "18px",
         {
@@ -85,14 +97,14 @@ module.exports = {
         },
       ],
       bodyMd: [
-        "16px",
+        "15px",
         {
           lineHeight: "21px",
           fontWeight: "300",
         },
       ],
       bodySm: [
-        "13px",
+        "14px",
         {
           lineHeight: "18px",
           fontWeight: "400",

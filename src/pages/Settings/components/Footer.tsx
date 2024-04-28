@@ -16,10 +16,10 @@ const Footer = () => {
   };
 
   return (
-    <div className="sticky bottom-0 bg-bg px-32 border-t border-gray">
-      <div className="flex border-x border-gray">
-        <div className="w-[320px] border-r border-gray" />
-        <div className="flex px-10 py-5 gap-2.5">
+    <div className="sticky bottom-14 lg:bottom-0 bg-bg lg:px-32 border-t border-gray">
+      <div className="flex lg:border-x lg:border-gray">
+        <div className="lg:w-[320px] lg:border-r lg:border-gray" />
+        <div className="grid grid-cols-2 gap-3 p-4 lg:flex flex-1 lg:px-10 lg:py-5 lg:gap-2.5">
           <Button className="" onClick={onSubmit}>
             SAVE CHANGES <IconPencil />
           </Button>

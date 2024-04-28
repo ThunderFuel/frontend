@@ -1,0 +1,16 @@
+{
+  "type": "fuel",
+  "walletList": [
+    "fuel",
+    "fuelet"
+  ],
+  "baseURL": "https://api-thundernft.azurewebsites.net/",
+  "collectionSwapLimit": 5,
+  "userProfileIncludes": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
+}

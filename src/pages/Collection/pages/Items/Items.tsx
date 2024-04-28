@@ -128,11 +128,16 @@ const Items = () => {
   };
 
   const onChangePagination = async (params: any) => {
-    if (params.page > 1) {
+    if (!!params.continuation || params.page > 1) {
       setIsLoading(true);
       try {
         const { selectedFilter, sortingType } = window.requestParams;
-        const collectionData = await getCollectionItems({ items: selectedFilter, page: params.page, sortingType });
+        const collectionData = await getCollectionItems({
+          items: selectedFilter,
+          page: params.page,
+          continuation: params.continuation,
+          sortingType,
+        });
 
         setCollections((prevState) => [...prevState, ...(collectionData as any)]);
       } finally {
@@ -146,10 +151,16 @@ const Items = () => {
 
     fetchFilters();
 
-    window.addEventListener("CompleteCheckout", fetchFilters);
+    window.addEventListener("CompleteCheckout", () => {
+      fetchFilters();
+      fetchCollections();
+    });
 
     return () => {
-      window.addEventListener("CompleteCheckout", fetchFilters);
+      window.addEventListener("CompleteCheckout", () => {
+        fetchFilters();
+        fetchCollections();
+      });
     };
   }, [collectionId]);
 

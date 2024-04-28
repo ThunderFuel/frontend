@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import userService from "api/user/user.service";
 import EthereumPrice from "components/EthereumPrice";
 import { useWallet } from "hooks/useWallet";
 import { IconRefresh } from "icons";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "store";
-import { formatDisplayedNumber } from "utils";
 
 const Balances = (refresh: any) => {
-  const { getBalance } = useWallet();
+  const { getBalance, getBidBalance } = useWallet();
   const { user } = useAppSelector((state) => state.wallet);
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
@@ -17,7 +17,11 @@ const Balances = (refresh: any) => {
   }
 
   function fetchBidBalance() {
-    userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
+    if (user.walletAddress === undefined) return;
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      console.log({ res });
+      setBidBalance(res);
+    });
   }
 
   useEffect(() => {
@@ -37,7 +41,7 @@ const Balances = (refresh: any) => {
             }}
           />
         </div>
-        <EthereumPrice price={formatDisplayedNumber(balance)} priceClassName="text-head3 text-white" />
+        <EthereumPrice price={balance} priceClassName="text-head3 text-white" />
       </div>
       <div className="w-[1px] bg-gray"></div>
       <div className="flex w-full p-4 flex-col ">

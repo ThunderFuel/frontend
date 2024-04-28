@@ -1,26 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { SVGProps, useEffect, useState } from "react";
 import { IconBid, IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
 import Filter from "../components/Filter";
 import RightMenu from "../components/RightMenu";
 import EthereumPrice from "components/EthereumPrice";
 import { useAppSelector } from "store";
-import collectionsService from "api/collections/collections.service";
+import collectionsService, { ActivityFilters } from "api/collections/collections.service";
 import ActivityItemDescription from "components/ActivityDescription";
+import ActivityList from "components/ActivityList/ActivityList";
+import { ITableHeader } from "components/Table";
+import ActivityItems, { PriceExcludeActiveTypes } from "components/ActivityList/components/ActivityItems";
+import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
+import { useIsMobile } from "hooks/useIsMobile";
 
-const CustomBox = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
+const ActivityType = ({ title, description, Icon, price }: { title: string; description: string; Icon: React.FC<SVGProps<SVGSVGElement>>; price?: number }) => {
   return (
-    <div className="flex flex-col border border-gray rounded-lg text-head6 font-spaceGrotesk text-white">
-      <div className="flex items-center justify-between p-[15px] gap-x-[11px]">
-        <div className="flex w-full gap-x-[10px]">
-          <div className="flex w-full max-w-[120px] items-center gap-x-[10px]">
-            <div className="h-fit w-fit rounded-full bg-gray p-[6px]">
-              <Icon width="20px" height="20px" />
-            </div>
-            {title}
+    <div className="flex items-center justify-between gap-[11px]">
+      <div className="flex w-full gap-x-[10px]">
+        <div className="flex w-full max-w-[120px] items-center gap-x-[10px] text-h6">
+          <div className="h-fit w-fit rounded-full bg-gray p-[6px]">
+            <Icon width="20px" height="20px" />
           </div>
-          <div className="text-bodyMd w-full">{description}</div>
+          {title}
         </div>
-        {price && <EthereumPrice price={price} />}
       </div>
     </div>
   );
@@ -74,35 +76,157 @@ function formatActivityData(data: any): { icon: any; title: string; description:
   }
 }
 
+const headers: ITableHeader[] = [
+  {
+    key: "type",
+    text: `TYPE`,
+    width: "20%",
+    minWidth: "200px",
+    align: "flex-start",
+    className: "!bg-bg-light",
+    sortValue: 1,
+    render: (item) => {
+      const { icon, title, description } = formatActivityData(item);
+
+      return <ActivityType title={title} description={description} Icon={icon} price={item.price} />;
+    },
+  },
+  {
+    key: "price",
+    text: "PRICE",
+    width: "20%",
+    align: "flex-end",
+    className: "text-right !bg-bg-light",
+    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" className="justify-end" isNull={PriceExcludeActiveTypes.includes(item.type)} />,
+  },
+  {
+    key: "from",
+    text: `FROM`,
+    width: "20%",
+    align: "flex-end",
+    className: "text-right !bg-bg-light",
+    sortValue: 1,
+    render: (item) => <ActivityItems.FromUser item={item} />,
+  },
+  {
+    key: "to",
+    text: `TO`,
+    width: "20%",
+    align: "flex-end",
+    className: "text-right !bg-bg-light",
+    sortValue: 1,
+    render: (item) => <ActivityItems.ToUser item={item} />,
+  },
+
+  {
+    key: "date",
+    text: "DATE",
+    width: "20%",
+    align: "flex-end",
+    className: "text-right !bg-bg-light",
+    sortValue: 3,
+    render: (item) => <ActivityItems.Time item={item} />,
+  },
+];
+
 const Activity = ({ onBack }: { onBack: any }) => {
   const [notActiveFilters, setnotActiveFilters] = useState<number[]>([]);
-
+  const [pagination, setPagination] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [activities, setActivities] = useState<any>([]);
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
+  const isMobile = useIsMobile();
+  const [params, setParams] = React.useReducer(
+    (prevState: any, nextState: any) => {
+      return { ...prevState, ...nextState };
+    },
+    {
+      continuation: null,
+      tokenId: selectedNFT.id,
+      pageSize: 10,
+      page: 1,
+      type: null,
+    }
+  );
 
-  const fetchActivities = async () => {
-    const response = await collectionsService.getActivity({ page: 1, pageSize: 10, tokenId: selectedNFT.id });
-    setActivities(response.data);
+  const getActivityItems = async () => {
+    const { data, ...pagination } = await collectionsService.getActivity(params);
+    setPagination(pagination);
+
+    return {
+      data,
+    };
   };
 
   useEffect(() => {
-    fetchActivities();
+    fetchActivity();
   }, [selectedNFT]);
 
+  const fetchActivity = async () => {
+    if (!isLoading) {
+      setIsLoading(true);
+      setActivities([]);
+      try {
+        const response = await getActivityItems();
+        setActivities(response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const onChangePagination = async () => {
+    if (!!params.continuation || params.page > 1) {
+      setIsLoading(true);
+      try {
+        setParams({ continuation: params.continuation });
+        const response = await getActivityItems();
+
+        setActivities((prevState: any[]) => [...prevState, ...(response.data as any)]);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const onChangeFilterValue = ({ types }: any) => {
+    setParams({ types });
+  };
+
+  React.useEffect(() => {
+    fetchActivity();
+  }, [params]);
+
   function renderItems() {
-    return activities.map((activity: any, index: any) => {
-      if (notActiveFilters.includes(activity.activityType)) return;
+    const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType) && item.activityType !== ActivityFilters.ListingCancel);
+    // const { icon, title, description } = formatActivityData(activity);
+    const filters = collectionsService.getActivityFilters();
 
-      const { icon, title, description } = formatActivityData(activity);
-
-      return <CustomBox key={index} title={title} description={description} Icon={icon} price={activity.price} />;
-    });
+    return (
+      <InfiniteScroll pagination={{}} onChangePagination={onChangePagination} isLoading={isLoading}>
+        <ActivityList
+          ActivityItemsContainerClassName="!pt-0"
+          hideTitle={true}
+          containerClassName="flex flex-col"
+          hideSidebar={true}
+          activities={_activities}
+          headers={headers}
+          filters={filters}
+          onChangeFilterValue={onChangeFilterValue}
+        />
+      </InfiniteScroll>
+    );
   }
 
-  return (
+  return isMobile ? (
+    <div className="flex flex-col gap-y-[10px]">
+      <span className="text-headline-02 text-gray-light border-b border-gray py-2.5 px-4 uppercase">{activities.length} activities</span>
+      {renderItems()}
+    </div>
+  ) : (
     <RightMenu title="Activity" onBack={onBack}>
       <Filter setnotActiveFilters={setnotActiveFilters} />
-      <div className="flex flex-col mt-[10px] gap-y-[10px]">{renderItems()}</div>
+      <div className="flex flex-col gap-y-[10px]">{renderItems()}</div>
     </RightMenu>
   );
 };

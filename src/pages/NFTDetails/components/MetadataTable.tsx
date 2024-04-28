@@ -12,6 +12,8 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
+  if (metadata?.length === 0) return <></>;
+
   const isOwner = () => {
     return isConnected ? user?.id === selectedNFT?.user?.id : false;
   };

@@ -7,6 +7,7 @@ import Img from "components/Img";
 import { useAppDispatch } from "store";
 import { toggleSelectedUID } from "store/bulkListingSlice";
 import clsx from "clsx";
+import { useIsMobile } from "../../../hooks/useIsMobile";
 
 const Collection = ({ item }: any) => {
   return (
@@ -22,11 +23,96 @@ const Collection = ({ item }: any) => {
   );
 };
 
+const MobileCollection = ({ item, onSelect, prices, onUpdatePrice }: any) => {
+  return (
+    <div className="flex items-center justify-between gap-2.5 px-4 py-2.5">
+      <div className="flex items-center gap-2.5 flex-1">
+        <Checkbox
+          checked={item.isChecked}
+          onClick={() => {
+            onSelect(item);
+          }}
+        />
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 overflow-hidden rounded-md">
+            <Img src={item?.image} className="w-full" />
+          </div>
+          <div className="flex-1 w-full">
+            <div className="body-medium text-gray-light">{item?.collectionName}</div>
+            <h6 className="text-h6 text-white">{item?.name}</h6>
+          </div>
+        </div>
+      </div>
+      <div>
+        <InputEthereum
+          className="w-[92px] lg:w-auto h-10"
+          placeholder="0"
+          value={prices?.[item.uid]}
+          onChange={(value: any) => {
+            onUpdatePrice(item.uid, value);
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const MobileTableRow = ({ item }: any) => {
+  return (
+    <>
+      <div className="grid grid-cols-5 px-5 py-2.5 border-b border-gray text-gray-light">
+        <div className="text-headline-01 uppercase">floor</div>
+        <div className="text-headline-01 uppercase">top trait</div>
+        <div className="text-headline-01 uppercase">listed at</div>
+        <div className="text-headline-01 uppercase">loyalty</div>
+        <div className="text-headline-01 uppercase">proceed</div>
+      </div>
+      <div className="grid grid-cols-5 px-5 py-2.5 text-white">
+        <div className="text-headline-01 uppercase">
+          <EthereumPrice price={item.floor} />
+        </div>
+        <div className="text-headline-01 uppercase">
+          <EthereumPrice price={item.topTrait} />
+        </div>
+        <div className="text-headline-01 uppercase">
+          <EthereumPrice price={item.price} />
+        </div>
+        <div className="text-headline-01 uppercase">
+          <h5 className="text-h6"> {item?.royalty}%</h5>
+        </div>
+        <div className="text-headline-01 uppercase">
+          <EthereumPrice className={clsx(item?.proceedPrice && "text-green")} price={item?.proceedPrice} />
+        </div>
+      </div>
+    </>
+  );
+};
+const MobileTable = ({ items, onSelect, onUpdatePrices, prices }: any) => {
+  return (
+    <div className="flex flex-col gap-4">
+      {items.map((item: any, index: number) => {
+        return (
+          <div key={index} className="flex flex-col border-y border-gray">
+            <div className="border-b border-gray">
+              <MobileCollection item={item} onSelect={onSelect} prices={prices} onUpdatePrices={onUpdatePrices} />
+            </div>
+            <MobileTableRow item={item} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
+  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const onSelect = (selectedItem: any) => {
     dispatch(toggleSelectedUID(selectedItem));
   };
+
+  if (isMobile) {
+    return <MobileTable items={items} onSelect={onSelect} onUpdatePrice={onUpdatePrice} prices={prices} />;
+  }
 
   const headers: ITableHeader[] = [
     {
@@ -57,21 +143,33 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
       text: "floor prıce",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.floor} />,
+      render: (item) => <EthereumPrice isNull={true} price={item.floor} />,
     },
     {
       key: "topTrait",
       text: "top traıt",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.topTrait} />,
+      render: (item) => <EthereumPrice isNull={true} price={item.topTrait} />,
     },
     {
       key: "listedAt",
       text: "lısted at",
       width: "10%",
       align: "flex-end",
-      render: (item) => <EthereumPrice price={item.price} />,
+      render: (item) => <EthereumPrice isNull={true} price={item.price} />,
+    },
+    {
+      key: "royalty",
+      text: "royalty",
+      width: "10%",
+      align: "flex-end",
+      render: (item) => (
+        <div className="flex flex-col items-end">
+          <h5 className="text-h5 font-spaceGrotesk text-white"> {item?.royalty}%</h5>
+          <EthereumPrice priceClassName="text-bodySm font-spaceGrotesk text-gray-light" iconClassName="w-4 h-4" price={item?.royaltyPrice} />
+        </div>
+      ),
     },
     {
       key: "proceed",
@@ -81,7 +179,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     },
     {
       key: "price",
-      text: "your prıce",
+      text: "your price",
       align: "flex-end",
       width: "250px",
       render: (item) => {

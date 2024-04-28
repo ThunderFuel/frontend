@@ -4,6 +4,7 @@
 
 :root {
   --headerHeight: 1px;
+  --footerHeight: 1px;
 }
 
 body {
@@ -33,6 +34,10 @@ body {
 
   .text-h6 {
     @apply text-head6 font-spaceGrotesk;
+  }
+
+  .text-h7 {
+    @apply text-head7 font-spaceGrotesk;
   }
 
   .body-large {
@@ -68,6 +73,15 @@ body {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    overflow-wrap: anywhere;
+  }
+
+  .text-overflow-2 {
+    @apply text-ellipsis overflow-hidden flex-1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow-wrap: anywhere;
   }
 
   .container-fluid {
@@ -98,6 +112,10 @@ body {
   .flex-center {
     @apply flex items-center justify-center;
   }
+
+  .sidebar-container-height{
+    height: calc(100vh - var(--headerHeight) - var(--footerHeight));
+  }
 }
 
 @layer components {
@@ -106,7 +124,8 @@ body {
   }
 
   .btn {
-    @apply flex gap-2 py-4 px-6 items-center justify-center;
+    @apply flex gap-2 lg:py-4 lg:px-6 items-center justify-center;
+    @apply py-3 px-4;
     @apply text-button font-bigShoulderDisplay text-gray border bg-white rounded-md uppercase;
     @apply button-animation;
     @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none disabled:border-none;
@@ -114,7 +133,8 @@ body {
 
   .btn.btn-secondary {
     @apply text-white bg-bg border-gray;
-    @apply disabled:text-gray-light;
+    @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none disabled:border-none;
+
   }
 
   .btn.btn-secondary.no-bg {
@@ -126,8 +146,9 @@ body {
   }
 
   .btn.btn-sm {
-    @apply py-[11.5px] px-4;
-    @apply text-headlineMd;
+    @apply py-3 px-4;
+    @apply text-headlineMd font-bigShoulderDisplay;
+    font-weight: 700;
   }
 
   .btn-wallet {
@@ -145,9 +166,16 @@ body {
   .btn-icon {
     background: transparent;
     @apply p-0;
-    @apply w-10 h-10 rounded-md flex-center;
+    @apply w-12 h-12 lg:w-10 lg:h-10 rounded-md flex-center;
     @apply transition-none hover:gap-0 hover:px-0;
     @apply border border-white border-opacity-10;
+  }
+
+  .btn-connect {
+    @apply btn-sm h-10;
+    @apply ease-in-out transform duration-300 group-hover:opacity-100;
+    @apply lg:opacity-0;
+    @apply bg-bg border-bg-light text-white lg:bg-white lg:text-bg-light;
   }
 
   .input {
@@ -193,13 +221,25 @@ body {
     @apply border border-gray;
   }
 
+  .tab.mobile-tab {
+    @apply lg:hidden;
+  }
+
+  .tab.mobile-tab li {
+  }
+
+  .tab.mobile-tab li span {
+    @apply p-0 flex items-center justify-center;
+    @apply w-10 h-10;
+  }
+
   .tab li {
     @apply block flex-1 border-r border-r-gray last:border-r-0;
   }
 
   .tab li span {
     @apply block font-bigShoulderDisplay text-headlineMd cursor-pointer text-gray-light uppercase text-center;
-    @apply px-5 py-[11.5px];
+    @apply px-5 py-3;
     @apply whitespace-nowrap;
   }
 
@@ -401,7 +441,7 @@ body {
     @apply absolute top-0 right-0 bottom-0 left-0;
     border-radius: 5px;
     transform: translateX(-100%);
-    background-image: linear-gradient(90deg, rgba(37, 37, 37, 0) 0, rgba(37, 37, 37, 0.2) 20%, rgba(37, 37, 37, 0.5) 60%, rgba(37, 37, 37, 0));
+    @apply bg-mode-table-row-skeleton dark:bg-table-row-skeleton;
     animation: shimmer 2s infinite;
     content: "";
     z-index: 3;
@@ -418,9 +458,9 @@ body {
 
   .table-row-skeleton:after {
     @apply absolute top-0 right-0 bottom-0 left-0;
+    @apply bg-mode-table-row-skeleton dark:bg-table-row-skeleton;
     border-radius: 5px;
     transform: translateX(-100%);
-    background-image: linear-gradient(90deg, rgba(37, 37, 37, 0) 0, rgba(37, 37, 37, 0.2) 20%, rgba(37, 37, 37, 0.5) 60%, rgba(37, 37, 37, 0));
     animation: shimmer 2s infinite;
     content: "";
     z-index: 3;
@@ -441,27 +481,42 @@ body {
     background: white !important;
     height: 2px !important;
   }
+
+  .bg-transparent {
+    background: transparent;
+  }
 }
 
 .Toastify__toast-container {
   width: 560px !important;
 }
 
-
 :root {
-  --th-white: 255 255 255;
-  --th-black: 0 0 0;
-  --th-bg-light: 26 26 26;
+  --th-black: 255 255 255;
   --th-bg-dark: 30 30 30;
-  --th-bg: 20 20 20;
   --th-gray-light: 131 131 131;
   --th-gray-dark: 73 70 80;
   --th-gray-100: 46 46 46;
-  --th-gray: 37 37 37;
   --th-green-light: 1 255 200;
-  --th-green: 214 255 126;
   --th-red: 230 64 64;
-  --th-orange: 230 144 64;
+
+  --th-white: 20 20 20;
+  --th-bg: 255 255 255;
+  --th-bg-light: 249 249 249;
+  --th-gray: 230 230 230;
+  --th-green: 127 186 0;
+  --th-orange: 242 145 0;
+}
+
+.drop,
+.dark:root {
+  --th-white: 255 255 255;
+  --th-bg: 20 20 20;
+  --th-bg-light: 26 26 26;
+  --th-gray: 37 37 37;
+  --th-green: 214 255 126;
+  --th-orange: 255 209 92;
+  --th-black: 0 0 0;
 }
 
 .drop #layout-header {
@@ -526,6 +581,10 @@ body {
 
 .drop .search-group-item {
   --tw-bg-opacity: 0.1;
+}
+
+.drop-item-container {
+  --th-white: 255 255 255;
 }
 
 .drop-item-container.drop-primary,
@@ -670,4 +729,3 @@ body {
 .drop.drop-fuelet .modalbase .btn-primary {
   color: rgb(var(--th-bg) / var(--tw-text-opacity));
 }
-

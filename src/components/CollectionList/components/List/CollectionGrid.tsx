@@ -4,14 +4,14 @@ import CollectionItem from "./CollectionItem";
 import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 import NotFound from "../../../NotFound";
 
-const CollectionGrid = () => {
+const CollectionGrid = ({ children }: any) => {
   const { displayType, collectionItems, options } = useCollectionListContext();
 
   const displayClass = useMemo(() => {
-    if (displayType === DisplayType.GRID4) {
+    if (displayType === DisplayType.GRID5) {
+      return "lg:grid-cols-5";
+    } else if (displayType === DisplayType.GRID4) {
       return "lg:grid-cols-4";
-    } else if (displayType === DisplayType.GRID3) {
-      return "lg:grid-cols-3";
     }
 
     return "lg:grid-cols-5";
@@ -20,10 +20,11 @@ const CollectionGrid = () => {
   return (
     <>
       {collectionItems.length > 0 && (
-        <div className={clsx("grid grid-cols-1 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "pl-5")}>
+        <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:pl-5")}>
           {collectionItems.map((collection: any, i: number) => (
             <CollectionItem key={i} collection={collection} />
           ))}
+          {children}
         </div>
       )}
       {!collectionItems.length && (

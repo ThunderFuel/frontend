@@ -7,10 +7,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { setContracts, bulkCancelOrder } from "thunder-sdk/src/contracts/thunder_exchange";
-import offerService from "api/offer/offer.service";
-import { Provider } from "fuels";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
@@ -35,41 +32,17 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelAllOffers = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { wallet, user } = useAppSelector((state) => state.wallet);
+  const { cancelOrderIds } = useAppSelector((state) => state.checkout);
+  const { handleCancelAllOffers } = useWallet();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
-  const onComplete = async () => {
-    const _provider = await Provider.create(provider);
-
-    setContracts(contracts, _provider);
-    const params = { userId: user.id };
-    offerService
-      .getAllOfferandListingIndexes({
-        userId: user.id,
-        getListings: false,
-        getOffers: true,
-      })
-      .then((res) => {
-        const cancelOrders = res.data.orderIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: true }));
-
-        bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
-          .then((res) => {
-            if (res?.transactionResult.isStatusSuccess) {
-              offerService
-                .cancelAllOffer(params)
-                .then(() => setApproved(true))
-                .catch(() => setIsFailed(true));
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-            if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-              setStartTransaction(false);
-            else setIsFailed(true);
-          });
-      });
+  const onComplete = () => {
+    handleCancelAllOffers({ user, wallet, setApproved, setStartTransaction, setIsFailed, cancelOrderIds, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   React.useEffect(() => {
@@ -84,7 +57,7 @@ const CancelAllOffers = ({ show, onClose }: { show: boolean; onClose: any }) => 
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

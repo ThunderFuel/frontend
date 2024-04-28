@@ -7,7 +7,8 @@ import { useAppSelector } from "store";
 import { useClickOutside } from "hooks/useClickOutside";
 import clsx from "clsx";
 import useToast from "hooks/useToast";
-import { FUEL_EXPLORER_URL } from "global-constants";
+import { fueldExplorerLink, lineaExplorerLink } from "global-constants";
+import config from "config";
 
 const WalletDropdown = ({ walletAddress }: any) => {
   const [show, setShow] = React.useState(false);
@@ -24,7 +25,7 @@ const WalletDropdown = ({ walletAddress }: any) => {
     {
       text: "See on Block Explorer",
       onClick: () => {
-        openInNewTab(`${FUEL_EXPLORER_URL}/account/${walletAddress}`);
+        openInNewTab(`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${walletAddress}`);
         setShow(false);
       },
     },
@@ -60,7 +61,7 @@ const LogoContainer = ({ userInfo }: any) => {
   const walletAddress = addressFormat(userInfo?.walletAddress);
 
   return (
-    <div className="flex gap-5 w-full">
+    <div className="flex gap-5 w-full flex-col">
       <Avatar image={userInfo?.image} userId={user?.id} className="w-[84px] h-[84px]" />
       <div className="flex flex-col gap-2.5 flex-1 text-gray-light">
         <div className="flex items-center gap-2">
@@ -74,7 +75,7 @@ const LogoContainer = ({ userInfo }: any) => {
         </div>
         <div className="flex gap-2">
           <WalletDropdown walletAddress={userInfo?.walletAddress} />
-          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} />
+          <SocialButtons socialMedias={userInfo?.socialMedias ?? []} user={userInfo} shareDropdownClassName="left-0" />
         </div>
       </div>
     </div>

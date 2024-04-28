@@ -76,7 +76,7 @@ const AllowListPhase = () => {
     return null;
   }
 
-  const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.Infinity);
+  const infinityBlock = dropDetail.blocks.find((block: any) => block.type === BLOCK_TYPE.InfinityBlock);
   const _image = infinityBlock.images[0];
 
   return dropDetail?.allowListPhase.map((phase: any, i: number) => {

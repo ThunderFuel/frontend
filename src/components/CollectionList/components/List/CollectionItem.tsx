@@ -1,5 +1,5 @@
 import React from "react";
-import { IconAuction, IconBid, IconHand, IconMarketBasket, IconThunderSmall } from "icons";
+import { IconAuction, IconBid, IconHand, IconHashtag, IconMarketBasket, IconThunderSmall } from "icons";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "store";
 import { add as cartAdd, addBuyNowItem, remove as cartRemove, toggleCartModal } from "store/cartSlice";
@@ -19,6 +19,8 @@ import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 import { formatPrice } from "utils";
 import LazyImg from "../../../LazyImg";
+import NoContent from "../../../NoContent";
+import config from "../../../../config";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -62,7 +64,7 @@ HighestBid.displayName = "HighestBid";
 
 const StartingPrice = React.memo(({ startingPrice }: any) => {
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full justify-between items-center gap-1">
       <span className="uppercase text-headline-01 text-gray-light">starting price</span>
       <EthereumPrice className="text-white" price={startingPrice ?? 0} />
     </div>
@@ -78,6 +80,37 @@ const CollectionItemCheckbox = (props: any) => {
     </label>
   );
 };
+const CollectionTop = React.memo(({ top }: any) => {
+  let colorClassName = "text-gray";
+  if (top <= 1) {
+    colorClassName = "text-green";
+  } else if (top > 1 && top <= 10) {
+    colorClassName = "text-orange";
+  } else if (top > 10 && top <= 50) {
+    colorClassName = "text-white";
+  } else {
+    colorClassName = "text-gray";
+  }
+
+  return (
+    <div className={clsx("flex gap-1 items-center", colorClassName)}>
+      <div className="w-7 h-7 rounded-full flex-center bg-gray">
+        <IconHashtag />
+      </div>
+      <div className="headline-md">{top}</div>
+    </div>
+  );
+});
+CollectionTop.displayName = "CollectionTop";
+
+const CollectionImage = ({ image }: any) => {
+  if (!image) {
+    return <NoContent className="absolute" />;
+  }
+
+  return <LazyImg alt={image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={image} />;
+};
+
 const CollectionItem = ({ collection, selectionDisabled }: { collection: CollectionItemResponse; selectionDisabled?: boolean }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -163,18 +196,18 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
     <div className={clsx(selectionDisabled ? "collection-item-create-page" : "")}>
       <Link
         to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: collection.id })}
-        className={clsx("group block relative  overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
+        className={clsx("group block relative overflow-hidden border rounded-md hover:bg-bg-light", collection.isSelected ? "border-white" : "border-gray")}
       >
         <div className="overflow-hidden relative">
-          {options?.isProfile || (!collection?.isOwnCollectionItem && collection.salable) ? (
+          {options?.isProfile || (!isOwnCollectionItem && collection.salable) ? (
             collection.onAuction ? null : !selectionDisabled ? (
-              <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
+              config.getConfig("type") === "wagmi" && collection.price !== null ? null : (
+                <CollectionItemCheckbox checked={collection.isSelected} onClick={onSelect} />
+              )
             ) : null
           ) : null}
           <div className="w-full h-0 pb-[100%] relative bg-gray">
-            {collection.image !== null && (
-              <LazyImg alt={collection.image} className="absolute w-full object-contain h-full transition-all duration-300 group-hover:scale-[110%]" src={collection.image} />
-            )}
+            <CollectionImage image={collection.image} />
           </div>
         </div>
         <div className="p-2.5 border-b border-b-gray">
@@ -184,7 +217,10 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
         </div>
         <div className="p-2.5 flex items-center">
           {collection.salable ? (
-            <EthereumPrice className="text-white" price={collection.price ?? "-"} />
+            <div className="flex w-full justify-between">
+              <EthereumPrice className="text-white" price={collection.price ?? "-"} />
+              {config.getConfig("type") === "fuel" ? <></> : <CollectionTop top={1} />}
+            </div>
           ) : collection.onAuction ? (
             collection.highestBidPrice ? (
               <HighestBid highestBid={collection.highestBidPrice} />
@@ -196,7 +232,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
           )}
         </div>
         {collection.onAuction ? (
-          <div className="flex text-bodySm text-gray-light font-spaceGrotesk gap-[5px] p-2.5">
+          <div className="flex-center body-small text-gray-light gap-1 p-2.5">
             <IconAuction />
             Auction ends in {days}:{hours}:{minutes}
           </div>

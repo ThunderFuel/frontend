@@ -1,13 +1,7 @@
 import React from "react";
-import Img from "components/Img/Img";
-import { AssetDefaultImageBg } from "assets";
 
 const CoverImage = ({ src }: any) => {
-  return (
-    <div className="profile-cover-image border-r">
-      <Img src={src} defaultImage={AssetDefaultImageBg} className="w-full" />
-    </div>
-  );
+  return <div className="profile-cover-image lg:border-r lg:border-r-gray" style={{ backgroundImage: `url(${src})` }}></div>;
 };
 
 export default CoverImage;

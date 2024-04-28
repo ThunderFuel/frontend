@@ -20,7 +20,7 @@ const Blocks = () => {
         return <VideoText key={k} image={block.image} video={block.video} title={block.title} text={block.text} reverse={block.reverse} />;
       case BLOCK_TYPE.SingleImage:
         return <SingleImage key={k} image={block.image} />;
-      case BLOCK_TYPE.Infinity:
+      case BLOCK_TYPE.InfinityBlock:
         return <InfiniteGallery key={k} images={block.images} hidden={block.hidden} />;
       case BLOCK_TYPE.SingleVideo:
         return <SingleVideo key={k} image={block.image} video={block.video} />;

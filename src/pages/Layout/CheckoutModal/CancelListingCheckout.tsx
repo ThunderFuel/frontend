@@ -8,10 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId } from "global-constants";
-import { cancelOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { Provider } from "fuels";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm your canceling listing",
@@ -36,32 +33,22 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { wallet } = useAppSelector((state) => state.wallet);
+  const { cancelOrderIds, currentItem } = useAppSelector((state) => state.checkout);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
+  const { handleCancelListing } = useWallet();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
-  const onComplete = async () => {
-    const _provider = await Provider.create(provider);
-
-    setContracts(contracts, _provider);
-
-    nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
-        .then((res) => {
-          if (res.transactionResult.isStatusSuccess) {
-            nftdetailsService.tokenCancelList(selectedNFT.id);
-            setApproved(true);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
-    });
+  const onComplete = () => {
+    try {
+      handleCancelListing({ user, selectedNFT, currentItem, cancelOrderIds, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
+    } catch (e) {
+      setIsFailed(true);
+    }
   };
 
   React.useEffect(() => {
@@ -76,7 +63,7 @@ const CancelListingCheckout = ({ show, onClose }: { show: boolean; onClose: any 
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

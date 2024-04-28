@@ -10,7 +10,7 @@ const Activity = () => {
   const [activities, setActivities] = useState<any>([]);
   const [pagination, setPagination] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState<any>(null);
+  const [currentFilter, setCurrentFilter] = useState<any>([]);
 
   const filters = collectionService.getActivityFilters();
 
@@ -20,16 +20,22 @@ const Activity = () => {
       pageSize: 10,
       ...params,
     });
-    const data = response.data.map((item: any) => ({
-      ...item,
-      name: item.token.name,
-      description: "",
-      image: item.token.image,
-      type: filters?.[item.activityType as ActivityFilters].name,
-      typeIcon: filters?.[item.activityType as ActivityFilters].icon,
-    }));
+    const data = (response.data ?? []).map((item: any) => {
+      const filter = filters?.[item.activityType as ActivityFilters] as any;
+
+      return {
+        ...item,
+        name: item.token.name,
+        description: "",
+        image: item.token.image,
+        type: filter.name,
+        subText: filter.subText,
+        typeIcon: filter.icon,
+      };
+    });
 
     setPagination({
+      continuation: response.continuation,
       itemsCount: response.itemsCount,
       pageCount: response.pageCount,
       pageSize: response.pageSize,
@@ -41,15 +47,20 @@ const Activity = () => {
     };
   };
   const fetchActivity = async (params = {}) => {
+    setActivities([]);
     const response = await getActivityItems({ page: 1, ...params });
     setActivities(response.data);
   };
 
   const onChangePagination = async (params: any) => {
-    if (params.page > 1) {
+    if (params.page > 1 || !!params.continuation) {
       setIsLoading(true);
       try {
-        const response = await getActivityItems({ page: params.page, ...currentFilter });
+        const response = await getActivityItems({
+          page: params.page,
+          continuation: params.continuation,
+          ...currentFilter,
+        });
 
         setActivities((prevState: any[]) => [...prevState, ...(response.data as any)]);
       } finally {
@@ -58,6 +69,7 @@ const Activity = () => {
     }
   };
   const onChangeFilterValue = (params: any) => {
+    console.log("sjadjasjdajs", params);
     setCurrentFilter(params);
     fetchActivity(params);
   };

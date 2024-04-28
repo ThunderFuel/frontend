@@ -8,10 +8,10 @@ interface IInfiniteScroll {
   bottomOffset?: any;
 }
 
-const InfiniteScroll = ({ children, pagination, onChangePagination, isLoading, bottomOffset = 100 }: IInfiniteScroll) => {
+const InfiniteScroll = ({ children, pagination, onChangePagination, isLoading, bottomOffset = 200 }: IInfiniteScroll) => {
   const onPageChange = () => {
     const nextPage = (pagination?.pageNumber ?? 0) + 1;
-    if (pagination?.pageCount >= nextPage) {
+    if (pagination?.continuation || pagination?.pageCount >= nextPage) {
       pagination.page = nextPage;
       onChangePagination(pagination);
     }

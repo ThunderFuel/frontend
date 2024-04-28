@@ -1,20 +1,16 @@
 .tooltip {
-  @apply relative;
-}
-
-.tooltip:hover .content {
-  visibility: visible;
-  opacity: 1;
+  @apply relative cursor-pointer;
 }
 
 .tooltip .content {
   visibility: hidden;
+  z-index: 9999;
   @apply opacity-0;
   @apply transform ease-in duration-75;
   @apply mt-1;
-  @apply absolute top-full left-1/2 -translate-x-1/2;
-  @apply text-head6 font-spaceGrotesk text-white;
-  @apply bg-bg-light border border-gray rounded-md;
+  @apply fixed top-full left-1/2 -translate-x-1/2;
+  @apply text-bodySm font-spaceGrotesk text-white;
+  @apply bg-bg-light border border-gray rounded-[5px];
   @apply whitespace-nowrap;
   @apply p-2.5;
 }
@@ -44,7 +40,7 @@
 .tooltip.top .content {
   top: initial;
   margin-top: initial;
-  @apply bottom-full mb-1.5;
+  @apply mb-1.5 -translate-y-[125%];
 }
 
 .tooltip.top .content .arrow {
@@ -54,4 +50,16 @@
 .tooltip.top .content .arrow:after {
   border-color: transparent;
   @apply border-l-bg-light border-t-bg-light;
+}
+
+.tooltip.bottom .content {
+  top: initial;
+  margin-top: initial;
+  @apply top-full translate-y-2/3;
+}
+
+.tooltip.right .content {
+  left: inherit;
+  transform: none;
+  @apply right-0;
 }

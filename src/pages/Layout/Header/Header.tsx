@@ -1,15 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-
-import { AssetLogo, AssetThunderText } from "assets";
-import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconWallet, IconWarning } from "icons";
-
-import SocialMediaIcons from "components/SocialMediaIcons";
-
+import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
 import Search from "./components/Search/Search";
-
 import "./Header.css";
 import { useAppDispatch, useAppSelector } from "store";
 import { onToggle } from "store/mobileSearchSlice";
@@ -17,13 +10,13 @@ import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
-import { useIsMobile } from "hooks/useIsMobile";
-import etherscanService from "api/etherscan/etherscan.service";
-import { useDispatch } from "react-redux";
-import { toggleClosedBetaModal } from "store/commonSlice";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
 import UseNavigate from "hooks/useNavigate";
+import SocialMediaIcons from "components/SocialMediaIcons";
+import { useDispatch } from "react-redux";
+import etherscanService from "api/etherscan/etherscan.service";
+import { toggleClosedBetaModal } from "store/commonSlice";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -88,7 +81,7 @@ const HeaderIconButtonGroup = React.memo(() => {
   const { isConnected, user } = useAppSelector((state) => state.wallet);
 
   return (
-    <div className="flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
+    <div className="hidden lg:flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
       <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
         <IconSearch />
       </HeaderIconButton>
@@ -126,10 +119,10 @@ HeaderIconButton.displayName = "HeaderIconButton";
 
 const HeaderWarning = () => {
   return (
-    <div className="flex-center text-orange border-y border-orange py-1">
+    <div className="hidden lg:flex-center text-orange border-y border-orange py-1">
       <IconWarning />
       <div className="body-small flex gap-0.5">
-        <span>Thunder is transitioning to Fuel Beta-5 Testnet. All transactions are currently on hold. Patience ⚡</span>
+        <span>Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</span>
         <a href="https://twitter.com/ThunderbyFuel/status/1717210636285882874?s=20" target="_blank" className="font-bold underline" rel="noreferrer">
           Learn more.
         </a>
@@ -161,35 +154,26 @@ const Header = () => {
 
   return (
     <header id="layout-header" className={clsx("sticky top-0 z-30 bg-bg")} ref={ref}>
-      {!useIsMobile() ? (
+      <>
         <>
-          <HeaderTop />
           <div className="border-y border-gray">
             <div className="header-container-fluid">
-              <div className="flex items-center gap-6 pr-6">
-                <Link className="flex text-white gap-1" to={PATHS.MARKETPLACE}>
+              <div className="flex items-center gap-5 lg:gap-6 flex-1 lg:pr-6">
+                <Link className="flex items-center text-white gap-1" to={PATHS.MARKETPLACE}>
                   <IconThunder2 className="w-14" />
-                  <img className="hidden lg:flex" src={AssetThunderText} alt={AssetThunderText} />
+                  <IconThunderLogoText className="hidden lg:flex" />
                 </Link>
-
-                <Search />
                 <Tab />
+                <Search />
               </div>
               <HeaderIconButtonGroup />
             </div>
             {/* <HeaderWarning /> */}
           </div>
-          <MobileSearch />
+          {/* <HeaderWarning /> */}
         </>
-      ) : (
-        <div className="border-y border-gray">
-          <div className="header-container-fluid">
-            <div className="flex items-center py-5">
-              <img src={AssetLogo} className="h-8" alt="logo" />
-            </div>
-          </div>
-        </div>
-      )}
+        <MobileSearch />
+      </>
     </header>
   );
 };

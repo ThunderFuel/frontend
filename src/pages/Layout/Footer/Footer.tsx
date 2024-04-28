@@ -1,74 +1,168 @@
-import React from "react";
+import React, { useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
-import { AssetLogo } from "assets";
+import etherscanService from "api/etherscan/etherscan.service";
+import { IconCart, IconCollections, IconDrops, IconEthereum, IconGas, IconHome, IconMoon, IconSun, IconWallet, IconWalletConnect } from "icons";
+import { useLocalStorage } from "hooks/useLocalStorage";
+import { THUNDER_THEME_NAME } from "global-constants";
+import { useIsMobile } from "hooks/useIsMobile";
+import useNavigate from "hooks/useNavigate";
+import { PATHS } from "router/config/paths";
 
-const Footer = () => {
+import "./Footer.css";
+import clsx from "clsx";
+import { useAppSelector } from "store";
+import Avatar from "components/Avatar";
+
+const IntervalValue = 600000;
+const FooterBottom = React.memo(() => {
+  const [isDarkMode, setIsDarkModa] = React.useState<boolean>(true);
+  const [gasFee, setGasFee] = React.useState<any>(0);
+  const [ethPrice, setEthPrice] = React.useState<any>(0);
+
+  const getData = async () => {
+    const response = await etherscanService.getData();
+
+    setEthPrice(parseFloat(response.result.ethusd).toFixed(2));
+    setGasFee(response.result.safeGasPrice);
+  };
+
+  const onChangeMode = () => {
+    if (!isDarkMode) {
+      document.documentElement.classList.add("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "light");
+    }
+    setIsDarkModa(!isDarkMode);
+  };
+
+  React.useEffect(() => {
+    getData();
+    const interval = setInterval(() => {
+      getData();
+    }, IntervalValue);
+
+    setIsDarkModa(useLocalStorage().getItem(THUNDER_THEME_NAME) === "dark");
+
+    return () => clearInterval(interval);
+  }, []);
+  const Icon = isDarkMode ? IconSun : IconMoon;
+
   return (
-    <div className="mt-auto flex flex-col lg:justify-center bg-bg-light w-full py-5 lg:py-10">
-      <div className="px-4">
-        {/* <div className="border-b border-b-gray pb-10 mb-5">
-        <div className="container">
-          <div className="lg:flex lg:items-start lg:justify-between">
-            <div className="flex flex-col items-start lg:justify-center justify-start text-white">
-              <h4 className="text-head4 font-spaceGrotesk">Subscribe to our newsletter</h4>
-              <span className="text-bodyMd font-spaceGrotesk flex max-w-[335px] lg:max-w-[440px] mt-2 mb-7">
-                Newsworthy headlines from across the metaverse, delivered straight to your inbox every week.
-              </span>
-              <div className="flex bg-bg items-center justify-between max-w-[335px] lg:max-w-[400px] w-full rounded-lg pl-5 pr-2.5 py-2.5">
-                <input
-                  className="text-gray-light h-[19px] text-bodyMd max-w-[192px] lg:max-w-[257px]"
-                  type={"email"}
-                  placeholder="E-mail Address"
-                  style={{ background: "none", outline: "none" }}
-                />
-                <Button className="text-headlineMd py-3 px-4">SUBSCRIBE</Button>
-              </div>
-            </div>
-            <div className="h-[1px] bg-gray my-[40px] lg:hidden" />
-            <div className="flex flex-wrap gap-x-[55px] lg:gap-x-[160px] gap-y-[28px] lg:pt-3 lg:flex-nowrap ">
-              <div className="flex flex-col max-w-[140px] gap-3">
-                <h5 className="text-headline-drop-primary text-gray-light mb-2">MARKETPLACE</h5>
-                <a className="text-headline-drop-primary text-white">EXPLORE</a>
-                <a className="text-headline-drop-primary text-white">SELL</a>
-                <a className="text-headline-drop-primary text-white">CREATE</a>
-              </div>
-              <div className="flex flex-col max-w-[140px] gap-3">
-                <h5 className="text-headline-drop-primary text-gray-light mb-2">MY ACCOUNT</h5>
-                <a className="text-headline-drop-primary text-white">PROFILE</a>
-                <a className="text-headline-drop-primary text-white">FAVORITES</a>
-                <a className="text-headline-drop-primary text-white">MY COLLECTIONS</a>
-                <a className="text-headline-drop-primary text-white">SETTINGS</a>
-              </div>
-              <div className="flex flex-col w-[140px] gap-3">
-                <h5 className="text-headline-drop-primary text-gray-light mb-2">COMPANY</h5>
-                <a className="text-headline-drop-primary text-white">ABOUT</a>
-                <a className="text-headline-drop-primary text-white">CAREERS</a>
-              </div>
-            </div>
-          </div>
+    <div className="flex items-center justify-between px-4">
+      <div className="flex items-center border-r border-r-gray">
+        <div className="flex items-center gap-4 shrink-0 text-headline-01 border-r border-r-gray py-2 pr-4">
+          <span className="flex items-center">
+            <IconEthereum className="text-gray-light" />
+            <span className="text-white">${ethPrice}</span>
+          </span>
+          <span className="flex items-center">
+            <IconGas className="mr-[6px] text-gray-light" />
+            <span className="text-white">{gasFee} GWEI</span>
+          </span>
         </div>
-      </div> */}
-
-        <div className="flex gap-y-10 lg:gap-y-0 lg:flex-row justify-between">
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 items-center justify-center">
-            <a href="/">
-              <img src={AssetLogo} className="h-8" alt="logo" />
-            </a>
-            {/* <div className="flex flex-col items-center lg:flex-row gap-6">
-            <h5 className="text-headline-drop-primary text-gray-light">EXPLORE</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">SELL</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">CREATE</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">SETTINGS</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">PRROFILE</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">TERMS</h5>
-            <h5 className="text-headline-drop-primary text-gray-light">SERVICES</h5>
-          </div> */}
-          </div>
-          <div className="flex justify-center">
-            <SocialMediaIcons />
-          </div>
+        <div className="px-3 cursor-pointer" onClick={onChangeMode}>
+          <Icon className="text-white" />
         </div>
       </div>
+      <SocialMediaIcons />
+    </div>
+  );
+});
+FooterBottom.displayName = "FooterBottom";
+
+const FooterMobileBottom = React.memo(() => {
+  const [initLocation, setInitLocation] = React.useState<any>(location.pathname);
+  const { isConnected, user } = useAppSelector((state) => state.wallet);
+  const navigate = useNavigate();
+
+  const menus = [
+    {
+      icon: IconHome,
+      path: PATHS.MARKETPLACE,
+      onClick: () => {
+        navigate(PATHS.MARKETPLACE);
+        setInitLocation(PATHS.MARKETPLACE);
+      },
+    },
+    {
+      icon: IconCollections,
+      path: PATHS.RANKINGS,
+      onClick: () => {
+        navigate(PATHS.RANKINGS);
+        setInitLocation(PATHS.RANKINGS);
+      },
+    },
+    {
+      icon: IconDrops,
+      path: PATHS.DROPS,
+      onClick: () => {
+        navigate(PATHS.DROPS);
+        setInitLocation(PATHS.DROPS);
+      },
+    },
+    {
+      icon: IconWallet,
+      onClick: () => navigate(PATHS.LOGIN),
+    },
+    {
+      path: PATHS.PROFILE,
+      icon: IconWalletConnect,
+      onClick: () => {
+        navigate(PATHS.PROFILE);
+        setInitLocation(PATHS.PROFILE);
+      },
+      isHidden: !isConnected,
+    },
+    {
+      icon: IconCart,
+      onClick: () => navigate(PATHS.DROPS),
+    },
+  ].filter((item) => !item.isHidden);
+  React.useEffect(() => {
+    setInitLocation(location.pathname);
+  }, [location.pathname]);
+
+  return (
+    <div className={clsx("mobile-nav", `grid-cols-${menus.length}`)}>
+      {menus.map((menu, i) => {
+        const Icon = menu.icon ?? React.Fragment;
+
+        return (
+          <div key={i} onClick={menu.onClick} className={menu.path === initLocation ? "active" : ""}>
+            {menu.path === PATHS.PROFILE ? <Avatar image={user?.image} userId={user?.id} className="w-6 h-6" /> : <Icon />}
+          </div>
+        );
+      })}
+    </div>
+  );
+});
+FooterMobileBottom.displayName = "FooterMobileBottom";
+
+const Footer = () => {
+  const ref = useRef<any>(null);
+  const setFooterHeight = () => {
+    const cssRoot = document.querySelector(":root");
+    if (cssRoot) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      cssRoot.style.setProperty("--footerHeight", `${ref.current?.offsetHeight || 0}px`);
+    }
+  };
+
+  React.useLayoutEffect(() => {
+    setFooterHeight();
+    window.addEventListener("resize", () => setFooterHeight());
+
+    return () => {
+      window.removeEventListener("resize", () => setFooterHeight());
+    };
+  }, [ref.current]);
+
+  return (
+    <div className="bg-bg border-t border-t-gray fixed bottom-0 left-0 w-full z-20" ref={ref}>
+      {useIsMobile() ? <FooterMobileBottom /> : <FooterBottom />}
     </div>
   );
 };

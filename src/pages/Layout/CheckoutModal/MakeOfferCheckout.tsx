@@ -6,12 +6,7 @@ import Modal from "components/Modal";
 import { IconInfo, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { depositAndOffer, placeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { BaseAssetId, Provider } from "fuels";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
-import { formatTimeBackend, formatTimeContract, toGwei } from "utils";
-import userService from "api/user/user.service";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm transaction",
@@ -43,99 +38,31 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [bidBalanceUpdated, setBidBalanceUpdated] = useState(false);
   const [currentBidBalance, setCurrentBidBalance] = useState(0);
   const [isFailed, setIsFailed] = useState(false);
+  const { handleMakeOffer } = useWallet();
+
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = () => {
-    nftdetailsService
-      .getLastIndex(1, user.id)
-      .then(async (res) => {
-        const order = {
-          isBuySide: true,
-          maker: user.walletAddress,
-          collection: selectedNFT.collection.contractAddress,
-          token_id: selectedNFT.tokenOrder,
-          price: toGwei(checkoutPrice).toNumber(),
-          amount: 1, //fixed
-          nonce: res.data + 1,
-          strategy: strategyFixedPriceContractId,
-          payment_asset: BaseAssetId,
-          expiration_range: formatTimeContract(checkoutExpireTime),
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
-        };
-
-        const _provider = await Provider.create(provider);
-
-        setContracts(contracts, _provider);
-
-        userService
-          .getBidBalance(user.id)
-          .then((res) => {
-            setCurrentBidBalance(res.data);
-            const _currentBidBalance = res.data;
-            if (_currentBidBalance < checkoutPrice) {
-              const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-              depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, false)
-                .then((res) => {
-                  if (res.transactionResult.isStatusSuccess) {
-                    nftdetailsService
-                      .makeOffer({
-                        makerUserId: user.id,
-                        tokenId: selectedNFT.id,
-                        price: checkoutPrice,
-                        priceType: 0,
-                        expireTime: formatTimeBackend(checkoutExpireTime),
-                      })
-                      .then(() => {
-                        userService
-                          .updateBidBalance(user.id, Number(requiredBidAmount))
-                          .then(() => {
-                            setBidBalanceUpdated(true);
-                            setApproved(true);
-                          })
-                          .catch(() => setIsFailed(true));
-                      })
-                      .catch(() => setIsFailed(true));
-                  }
-                })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
-                });
-            } else
-              placeOrder(exchangeContractId, provider, wallet, order)
-                .then((res) => {
-                  if (res.transactionResult.isStatusSuccess) {
-                    nftdetailsService
-                      .makeOffer({
-                        makerUserId: user.id,
-                        tokenId: selectedNFT.id,
-                        price: checkoutPrice,
-                        priceType: 0,
-                        expireTime: formatTimeBackend(checkoutExpireTime),
-                      })
-                      .then(() => setApproved(true))
-                      .catch(() => setIsFailed(true));
-                  }
-                })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
-                });
-          })
-          .catch(() => setIsFailed(true));
-      })
-      .catch(() => setIsFailed(true));
+    try {
+      handleMakeOffer({
+        checkoutExpireTime,
+        checkoutPrice,
+        setApproved,
+        setWagmiSteps,
+        wagmiSteps,
+        setStepData,
+        user,
+        wallet,
+        setStartTransaction,
+        setIsFailed,
+        selectedNFT,
+        setBidBalanceUpdated,
+        setCurrentBidBalance,
+      });
+    } catch (error) {
+      setIsFailed(true);
+    }
   };
 
   React.useEffect(() => {
@@ -150,7 +77,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

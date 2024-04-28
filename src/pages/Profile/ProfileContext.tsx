@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useContext } from "react";
 import { IUserResponse } from "api/user/user.type";
 import userService from "api/user/user.service";
+import config from "../../config";
 
 export const enum FollowType {
   Followers = 0,
@@ -26,7 +27,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
     try {
       const response = await userService.getUser({
         id: userId,
-        includes: [0, 1, 2, 3, 4],
+        includes: config.getConfig("userProfileIncludes"),
       });
 
       setUserInfo(response.data as any);

@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import "./Table.css";
 import NotFound from "../NotFound/NotFound";
+import { useIsMobile } from "hooks/useIsMobile";
 
 export interface ITableHeader {
   key: string;
@@ -11,6 +12,9 @@ export interface ITableHeader {
   width?: string;
   align?: string;
   sortValue?: any;
+  minWidth?: any;
+  isHidden?: any;
+  className?: any;
 }
 
 export interface ITable {
@@ -28,6 +32,10 @@ export interface ITable {
   onClick?: (item: any) => void;
   containerFluidClassName?: string;
   loadingTemplate?: any;
+  thClassName?: string;
+  afterRow?: any;
+  actionButton?: any;
+  ButtonBelowHeader?: any;
 }
 
 const TableNotFound = React.memo(() => {
@@ -53,8 +61,8 @@ const TableLoading = ({ colSpan, template: Template }: { colSpan: number; templa
   );
 };
 
-const TableCell = ({ children }: { children: React.ReactNode }) => {
-  return <div className="cell text-h6">{children}</div>;
+const TableCell = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return <div className={clsx("cell text-h6", className)}>{children}</div>;
 };
 
 const TableRow = ({ children, ...etc }: any) => {
@@ -75,21 +83,48 @@ const Table = ({
   rowElementProps,
   loadingTemplate,
   containerFluidClassName,
+  thClassName,
+  afterRow,
+  actionButton,
+  ButtonBelowHeader,
   ...props
 }: ITable) => {
-  const _getHeaders = headers.map((header, i) => (
-    <div className={clsx("th text-headline-01")} style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={`th_${header.key.toString()}_${i}`}>
-      {header.renderHeader ? header.renderHeader(header) : header.text}
-    </div>
-  ));
+  const isMobile = useIsMobile();
+  const _getAfterRow = (k: number, item: any) => {
+    if (!afterRow) {
+      return false;
+    }
+    const afterRowContent = afterRow(item);
+    if (!afterRowContent) {
+      return false;
+    }
+
+    return (
+      <div key={`afterRow_${k.toString()}`} className={"tr after"}>
+        <div className="after-container">{afterRowContent}</div>
+      </div>
+    );
+  };
+  const filteredHeaders = headers.filter((h) => !h.isHidden);
+
+  const _getHeaders = filteredHeaders.map((header, i) => {
+    const width = isMobile ? header.minWidth || "100px" : header.width;
+    const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
+
+    return (
+      <div className={clsx("th text-headline-01", thClassName, header.className)} style={style} key={`th_${header.key.toString()}_${i}`}>
+        {header.renderHeader ? header.renderHeader(header) : header.text}
+      </div>
+    );
+  });
   const _getItems = items.map((item, k) => {
     const RowElement = rowElement ?? TableRow;
 
     return (
-      <React.Fragment key={`parentRow_${k.toString()}`}>
+      <div className="tr-group" key={`parentRow_${k.toString()}`}>
         {item.beforeRow ? (
           <div className="tr" key={`beforeRow_${k.toString()}`}>
-            <td colSpan={headers.length} className="py-5 px-8 text-left">
+            <td colSpan={filteredHeaders.length} className="py-5 px-8 text-left">
               {item.beforeRow}
             </td>
           </div>
@@ -106,43 +141,41 @@ const Table = ({
           className={clsx("tr", rowClassName, isSelectedRow && isSelectedRow(item) ? "active" : "")}
           key={`row_${k.toString()}`}
         >
-          {headers.map((header) => {
+          {filteredHeaders.map((header) => {
             const key = `cell_${header.key}_${k.toString()}`;
+            const width = isMobile ? header.minWidth || "100px" : header.width;
+            const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
 
             return (
-              <div className="td" style={{ maxWidth: header.width, minWidth: header.width, justifyContent: header.align }} key={key}>
+              <div className={clsx("td", header.className)} style={style} key={key}>
                 {header.render ? header.render(item) : <TableCell>{item[header.key]}</TableCell>}
               </div>
             );
           })}
         </RowElement>
-        {item.afterRow ? (
-          <div key={`afterRow_${k.toString()}`} className={"tr"}>
-            <td colSpan={headers.length} className="py-5 px-8 text-left">
-              {item.afterRow}
-            </td>
-          </div>
-        ) : (
-          <></>
-        )}
-      </React.Fragment>
+        {_getAfterRow(k, item)}
+      </div>
     );
   });
 
   return (
-    <div>
-      <div className={clsx("table", className)} {...props}>
-        <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
-          <div className={clsx("container-fluid", containerFluidClassName)}>
-            <div className="tr">{_getHeaders}</div>
+    <>
+      <div className="fuel-table-container">
+        <div className={clsx("fuel-table", className)} {...props}>
+          <div data-testid="tableHeader" className={clsx("thead", theadClassName)} style={{ ...theadStyle }}>
+            <div className={clsx("lg:container-fluid", containerFluidClassName)}>
+              <div className="tr">{_getHeaders}</div>
+            </div>
+          </div>
+          {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
+          {actionButton && actionButton()}
+          <div data-testid="tableBody" className={clsx("tbody lg:container-fluid", containerFluidClassName)}>
+            {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
           </div>
         </div>
-        <div data-testid="tableBody" className={clsx("tbody container-fluid", containerFluidClassName)}>
-          {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
-        </div>
-        <div className="container-fluid">{props.footer && <div className={clsx("tfoot")}>{props.footer}</div>}</div>
       </div>
-    </div>
+      {props.footer && <div className={clsx("tfoot", "container-fluid")}>{props.footer}</div>}
+    </>
   );
 };
 

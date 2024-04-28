@@ -7,7 +7,6 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
-import { formatPrice } from "utils";
 import { CheckoutType, removeBulkItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { removeAll } from "store/bulkListingSlice";
 
@@ -59,44 +58,41 @@ const Footer = ({ items, prices }: any) => {
   }, [expiredDateValue]);
 
   const getProceedPrice = React.useMemo(() => {
-    const totalProceedPrice = bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * 0.975, 0);
-
-    return formatPrice(totalProceedPrice);
+    return bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * (1 - (item.royalty + 2.5) / 100), 0);
   }, [bulkItems]);
 
   return (
     <footer className="sticky bottom-0 border-y border-gray flex flex-col bg-bg">
-      <div className="px-5 py-2 flex flex-col gap-2 w-full text-gray-light">
-        <div className="flex items-center justify-between">
-          <h6 className="text-h6">Service Fee</h6>
-          <h6 className="text-h6 text-white">2.5%</h6>
-        </div>
-        <div className="flex items-center justify-between">
-          <h6 className="text-h6">Creator Earnings</h6>
-          <h6 className="text-h6 text-white">10%</h6>
-        </div>
-        <div className="flex items-center justify-between">
-          <h6 className="text-h6">You’ll Receive</h6>
-          <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
-        </div>
-      </div>
-      <div className="border-t border-gray flex justify-between px-5 py-4">
-        <div>
-          <div className="text-h6 text-white">Set Duration</div>
-          <div className="flex items-center body-small text-gray-light">
-            <IconInfo />
-            Expiration at {getExpiredDate}
+      <div className="lg:p-5 flex flex-col lg:flex-row lg:gap-32 w-full text-gray-light">
+        <div className="py-2.5 px-3 lg:p-0 flex gap-2 lg:gap-16 flex-shrink-0 justify-between">
+          <div className="flex flex-col gap-2">
+            <div className="text-h6 text-white">Set Duration</div>
+            <div className="flex items-center body-small text-gray-light">
+              <IconInfo />
+              Expiration at {getExpiredDate}
+            </div>
           </div>
-        </div>
-        <div>
           <SelectExpiredDate
+            className="w-auto"
             value={expiredDateValue}
             onChange={(value: any) => {
               setExpiredDateValue(value);
             }}
           />
         </div>
-        <div className="flex gap-4 justify-end">
+        <div className="py-2.5 px-3 lg:p-0 flex flex-col gap-2 w-full border-t border-t-gray">
+          <div className="flex items-center justify-between">
+            <h6 className="text-h6">Service Fee</h6>
+            <h6 className="text-h6 text-white mr-2.5">2.5%</h6>
+          </div>
+          <div className="flex items-center justify-between">
+            <h6 className="text-h6">You’ll Receive</h6>
+            <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-gray p-4 lg:p-5">
+        <div className="grid grid-cols-2 lg:flex gap-3 lg:gap-4 justify-end">
           <Button
             className="btn-secondary"
             onClick={() => {

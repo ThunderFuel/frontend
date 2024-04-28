@@ -75,7 +75,7 @@ const MyCart = () => {
                   text="Price"
                   name={i.name ?? i.tokenOrder}
                   price={i.price}
-                  image={i.image}
+                  image={i.image ?? ""}
                   id={i.id}
                   uid={i.uid}
                   isRemovable={true}

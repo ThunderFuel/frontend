@@ -14,8 +14,8 @@ const Tab = () => {
 
   return (
     <div className="border-y border-y-gray">
-      <div className="container-fluid">
-        <div className="inline-flex -m-[1px]">
+      <div className="lg:container-fluid">
+        <div className="flex lg:inline-flex -m-[1px]">
           <TabBase
             initTab={initTab}
             className="secondary"

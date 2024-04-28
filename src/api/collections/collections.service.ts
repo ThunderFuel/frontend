@@ -10,7 +10,7 @@ import {
   UpdateBulkListingRequestItem,
   WatchListRequest,
 } from "./collections.type";
-import { IconBid, IconHand, IconMarketBasket, IconQuarry, IconTag, IconTelegram } from "icons";
+import { IconHand, IconListingCancel, IconMarketBasket, IconOfferCancel, IconQuarry, IconTag, IconTelegram } from "icons";
 
 export enum ActivityFilters {
   Offers = 0,
@@ -18,7 +18,8 @@ export enum ActivityFilters {
   Sales = 2,
   Transfers = 3,
   Listings = 4,
-  Bids = 5,
+  OfferCancel = 5,
+  ListingCancel = 6,
 }
 
 export enum ChecklistStatus {
@@ -47,12 +48,13 @@ export default {
   },
   getActivityFilters() {
     return {
-      [ActivityFilters.Offers]: { icon: IconHand, name: "Offers" },
-      [ActivityFilters.Mints]: { icon: IconQuarry, name: "Mints" },
-      [ActivityFilters.Sales]: { icon: IconMarketBasket, name: "Sales" },
-      [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transfers" },
-      [ActivityFilters.Listings]: { icon: IconTag, name: "Listings" },
-      [ActivityFilters.Bids]: { icon: IconBid, name: "Bids" },
+      [ActivityFilters.Offers]: { icon: IconHand, name: "Offer" },
+      [ActivityFilters.Mints]: { icon: IconQuarry, name: "Mint" },
+      [ActivityFilters.Sales]: { icon: IconMarketBasket, name: "Sale" },
+      [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transfer" },
+      [ActivityFilters.Listings]: { icon: IconTag, name: "Listing" },
+      [ActivityFilters.OfferCancel]: { icon: IconOfferCancel, name: "Offer Cancelled", subText: "Cancelled" },
+      [ActivityFilters.ListingCancel]: { icon: IconListingCancel, name: "Listing Cancelled", subText: "Cancelled" },
     };
   },
   addWatchList(data: WatchListRequest) {

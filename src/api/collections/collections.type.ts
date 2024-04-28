@@ -36,7 +36,7 @@ export interface CollectionItemResponse {
   isSelected: boolean;
   tokenAttributes: any[];
   collectionId: number;
-  image: string;
+  image: string | null;
   name: string;
   price: number;
   rarity: number;
@@ -80,6 +80,9 @@ export interface CollectionResponse {
     url: string;
   }[];
   watched: boolean;
+  supply: number;
+  royalty: number;
+  kind?: string;
 }
 
 export interface CollectionItemsRequest {

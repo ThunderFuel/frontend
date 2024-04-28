@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IconBid, IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
+import Tooltip from "components/Tooltip";
 
 const filterItemsData = [
   { icon: IconOffer, text: "Offers", type: 0 },
@@ -19,23 +20,23 @@ function renderFilterItems(onChange: any) {
     const [active, setActive] = useState(true);
 
     return (
-      <div
-        key={i.text}
-        className={`flex items-center cursor-pointer p-[10px] gap-x-1 border border-gray rounded-[5px] ${!active ? "bg-opacity-0 text-gray-light hover:text-white" : "bg-gray text-white"}`}
-        onClick={() => {
-          setActive(!active);
-          onChange((prevArray: number[]) => (prevArray.includes(i.type) ? prevArray.filter((item) => item !== i.type) : [...prevArray, i.type]));
-        }}
-      >
-        <i.icon className="w-5 h-5" />
-        {i.text}
-      </div>
+      <Tooltip key={i.text} content={i.text} hiddenArrow={true} contentClass="!mt-3 !py-1.5 !px-2 !bg-bg">
+        <div
+          className={`flex items-center cursor-pointer px-2 h-10 border border-gray rounded-full ${!active ? "bg-opacity-0 text-gray-light hover:text-white" : "bg-gray text-white"}`}
+          onClick={() => {
+            setActive(!active);
+            onChange((prevArray: number[]) => (prevArray.includes(i.type) ? prevArray.filter((item) => item !== i.type) : [...prevArray, i.type]));
+          }}
+        >
+          <i.icon className="w-5 h-5" />
+        </div>
+      </Tooltip>
     );
   });
 }
 
 const Filter: React.FC<OtherProps> = ({ setnotActiveFilters }) => {
-  return <div className="flex flex-wrap gap-[10px]">{renderFilterItems(setnotActiveFilters)}</div>;
+  return <div className="flex px-5 py-[15px] gap-[5px] border-b border-gray">{renderFilterItems(setnotActiveFilters)}</div>;
 };
 
 export default Filter;

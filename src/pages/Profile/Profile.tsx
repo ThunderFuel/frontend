@@ -10,13 +10,13 @@ import ConnectWalletScreen from "components/ConnectWalletScreen";
 const Profile = () => {
   const { user } = useAppSelector((state) => state.wallet);
 
-  if (!user.id) {
+  if (!user?.id) {
     return <ConnectWalletScreen />;
   }
 
   return (
     <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true, isUserPage: true }}>
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         <Sidebar isProfile={true} />
         <div className="flex flex-col flex-1">
           <Tab />

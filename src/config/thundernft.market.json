@@ -1,0 +1,20 @@
+{
+  "type": "wagmi",
+  "walletList": [
+    "wagmi_metamask",
+    "wagmi_coinbase",
+    "wagmi_walletconnect",
+    "lit_google_auth",
+    "lit_discord_auth"
+  ],
+  "baseURL": "https://thunder-evm.azurewebsites.net/",
+  "collectionPathType": 1,
+  "collectionSwapLimit": 20,
+  "hideAllCancelButtons": true,
+  "userProfileIncludes": [
+    0,
+    1,
+    2,
+    4
+  ]
+}

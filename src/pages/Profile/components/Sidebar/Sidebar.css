@@ -1,22 +1,26 @@
 .sidebar-container {
-  @apply sticky;
+  @apply lg:sticky;
+  @apply lg:min-h-[585px] lg:sidebar-container-height;
   top: var(--headerHeight);
-  height: calc(100vh - var(--headerHeight));
-  min-height: 585px;
 }
 
 .profile-cover-image {
-  @apply absolute top-0 left-0 pb-5 border-b border-gray bg-gray;
-  width: 500px;
-  min-height: 315px;
-  max-height: 315px;
+  @apply relative bg-gray transition-all w-full;
+  min-height: 430px;
+  max-height: 430px;
   overflow: hidden;
+  mask-image: linear-gradient(180deg, #141414 20%, rgba(25, 25, 25, 0) 100%);
+  background-origin: content-box;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.profile-cover-image:after {
-  @apply absolute bottom-0 left-0 w-full h-full;
-  content: "";
-  background: linear-gradient(180deg, rgb(20, 20, 20, 0.1) 0%, rgba(20, 20, 20, 0.5) 20%, rgba(20, 20, 20, 0.7) 30%, rgba(20, 20, 20, 0.8) 35%, rgba(20, 20, 20, 1) 65%);
+@media (max-height: 768px) {
+  .profile-cover-image {
+    min-height: 300px;
+    max-height: 300px;
+  }
 }
 
 .btn-edit {

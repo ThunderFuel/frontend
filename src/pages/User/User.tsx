@@ -21,7 +21,7 @@ const User = () => {
 
   return (
     <ProfileProvider userId={userId} options={{ isUserPage: true }}>
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         <Sidebar />
         <div className="flex flex-col flex-1">
           <Tab userId={userId} />

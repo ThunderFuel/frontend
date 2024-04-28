@@ -14,10 +14,10 @@ const ClearFilterButton = ({ onClick }: any) => {
 const SelectedFilterItem = ({ children, onClick }: any) => {
   return (
     <div>
-      <div className="inline-flex body-medium text-white p-2.5 gap-2 group rounded-md border border-gray hover:bg-bg-light">
+      <div className="inline-flex items-center body-medium text-white p-2.5 gap-2 group rounded-md border border-gray bg-bg hover:bg-gray">
         <span className="text-overflow">{children}</span>
-        <IconCircleRemove className="cursor-pointer text-gray group-hover:hidden" />
-        <IconCircleRemoveWhite className="hidden cursor-pointer text-gray group-hover:flex" onClick={onClick} />
+        <IconCircleRemove className="w-5 h-5 text-gray group-hover:hidden" />
+        <IconCircleRemoveWhite className="w-5 h-5 hidden cursor-pointer text-white group-hover:flex" onClick={onClick} />
       </div>
     </div>
   );

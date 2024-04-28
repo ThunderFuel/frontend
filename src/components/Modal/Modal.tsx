@@ -43,8 +43,8 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
         {(title || etc.modalTitle) && (
           <div className="mhead">
             {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
-            <button className="flex justify-center items-center w-6 h-6 bg-bg-light rounded-full" onClick={etc.onClose}>
-              <IconClose className="text-white" />
+            <button className="flex justify-center items-center w-8 h-8 bg-gray rounded-full" onClick={etc.onClose}>
+              <IconClose className="text-white w-3 h-3" />
             </button>
           </div>
         )}

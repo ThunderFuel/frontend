@@ -8,12 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import offerService from "api/offer/offer.service";
-import { executeOrder, setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { BaseAssetId, Provider } from "fuels";
-import { contracts, exchangeContractId, provider, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
-import { toGwei } from "utils";
-import userService from "api/user/user.service";
+import { useWallet } from "hooks/useWallet";
 
 const checkoutProcessTexts = {
   title1: "Confirm offer",
@@ -38,46 +33,16 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { checkoutPrice, currentItem, onCheckoutComplete } = useAppSelector((state) => state.checkout);
-  const { wallet } = useAppSelector((state) => state.wallet);
+  const { wallet, user } = useAppSelector((state) => state.wallet);
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
+  const [wagmiSteps, setWagmiSteps] = useState<any>([]);
+  const [stepData, setStepData] = useState<any>([]);
+  const { handleAcceptOffer } = useWallet();
 
   const onComplete = () => {
-    offerService.getOffersIndex([currentItem.id]).then(async (res) => {
-      const order = {
-        isBuySide: false,
-        taker: currentItem.takerAddress,
-        maker: currentItem.makerAddress,
-        nonce: res.data[currentItem.id],
-        price: toGwei(currentItem.price).toNumber(),
-        collection: currentItem.contractAddress,
-        token_id: currentItem.tokenOrder,
-        strategy: strategyFixedPriceContractId,
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
-      };
-
-      const _provider = await Provider.create(provider);
-
-      setContracts(contracts, _provider);
-
-      executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
-        .then((res) => {
-          if (res.transactionResult.isStatusSuccess) {
-            offerService.acceptOffer({ id: currentItem.id }).then(() => {
-              userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
-              onCheckoutComplete();
-              setApproved(true);
-            });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
-    });
+    handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   React.useEffect(() => {
@@ -92,7 +57,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     <div className="flex flex-col w-full items-center">
       {startTransaction ? (
         <>
-          <CheckoutProcess onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
+          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
           {isFailed && (
             <div className="flex flex-col w-full border-t border-gray">
               <Button className="btn-secondary m-5" onClick={onClose}>

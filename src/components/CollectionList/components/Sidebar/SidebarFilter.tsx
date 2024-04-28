@@ -1,16 +1,14 @@
 import React from "react";
-import { IconChevronDoubleLeft, IconFilter } from "icons";
 import Collapse from "components/Collapse";
-import clsx from "clsx";
 import CheckboxList from "./components/CheckboxList";
 import RadioList from "./components/RadioList";
 import RangeBar from "./components/RangeBar";
 import RangeInputOptions from "./components/RangeInputOptions";
 import RangeInput from "./components/RangeInput";
-import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
+import { useCollectionListContext } from "../../CollectionListContext";
 
-import "./SideBarFilter.css";
 import CollectionCheckboxList from "./components/CollectionCheckboxList";
+import SidebarFilterBase, { MobileSidebarFilter } from "components/SidebarFilter";
 
 enum FilterComponentType {
   Input = 0,
@@ -22,20 +20,7 @@ enum FilterComponentType {
 }
 
 const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
-  const { displayType, setDisplayType, filters, params, setParams, deleteParams, options } = useCollectionListContext();
-  const [show, setShow] = React.useState(options?.hiddeSidebarFilter);
-
-  const onToggle = () => {
-    const tmpShow = !show;
-    if (displayType !== DisplayType.LIST) {
-      if (tmpShow) {
-        setDisplayType((prevState: string) => String(parseInt(prevState) + 1));
-      } else {
-        setDisplayType((prevState: string) => String(parseInt(prevState) - 1));
-      }
-    }
-    setShow(tmpShow);
-  };
+  const { displayType, setDisplayType, filters, params, setParams, deleteParams, options, isMobile, mobileFilterIsOpen, hideMobileFilter } = useCollectionListContext();
 
   const onChange = (name: any, value: any, type: number) => {
     if (Array.isArray(value) && !value.length) {
@@ -86,70 +71,52 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
     return [tmpAttributeFilter, tmpFilter.sort((a, b) => a.order - b.order).reverse()];
   }, [filters, params]);
 
+  const SidebarComponent = isMobile ? MobileSidebarFilter : SidebarFilterBase;
+
   return (
-    <div className="flex justify-end">
-      <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : className)}>
-        <div className={`sticky h-fit ${show ? "overflow-hidden" : ""}`} style={{ top: "calc(var(--headerHeight) + 68px)" }}>
-          <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", !show ? "overflow-hidden overflow-y-auto" : "")}>
-            <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
-              <div className="icon-btn bg-white fill-gray">
-                <IconFilter />
-              </div>
-            </div>
-            <div className={clsx("flex-1 transition-all duration-300", show && "pl-16")}>
-              <div className="flex items-center justify-between border-b border-b-gray pb-5">
-                <h5 className="text-h5 text-white">Filters</h5>
-                <div className="icon-btn cursor-pointer" onClick={onToggle}>
-                  <IconChevronDoubleLeft className="text-gray-light" />
-                </div>
-              </div>
-              <div className="flex flex-col gap-2.5 py-5">
-                {getFilter.map((item: any, i: number) => {
-                  const DynamicComponent = item.dynamicComponent;
+    <SidebarComponent options={options} className={className} displayType={displayType} setDisplayType={setDisplayType} isOpen={mobileFilterIsOpen} onClose={hideMobileFilter} params={params}>
+      <React.Fragment>
+        {getFilter.map((item: any, i: number) => {
+          const DynamicComponent = item.dynamicComponent;
 
-                  return (
-                    <Collapse key={i} isOpen={item.isOpen}>
-                      <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
-                      <Collapse.Body>
-                        <DynamicComponent
-                          filterData={item.filterData}
-                          name={item.name}
-                          defaultChecked={item.value === params[item.name]}
-                          value={item.value}
-                          onChange={(name: any, value: any) => {
-                            onChange(name, value, item.type);
-                          }}
-                        />
-                      </Collapse.Body>
-                    </Collapse>
-                  );
-                })}
-                {getFilter.length && getAttributeFilter.length ? <div className="border-b border-gray" /> : <></>}
-                {getAttributeFilter.map((item: any, i: number) => {
-                  const DynamicComponent = item.dynamicComponent;
+          return (
+            <Collapse key={i} isOpen={item.isOpen}>
+              <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
+              <Collapse.Body>
+                <DynamicComponent
+                  filterData={item.filterData}
+                  name={item.name}
+                  defaultChecked={item.value === params[item.name]}
+                  value={item.value}
+                  onChange={(name: any, value: any) => {
+                    onChange(name, value, item.type);
+                  }}
+                />
+              </Collapse.Body>
+            </Collapse>
+          );
+        })}
+        {getAttributeFilter.map((item: any, i: number) => {
+          const DynamicComponent = item.dynamicComponent;
 
-                  return (
-                    <Collapse key={i}>
-                      <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
-                      <Collapse.Body>
-                        <DynamicComponent
-                          filterData={item.filterData}
-                          name={item.name}
-                          value={item.value}
-                          onChange={(name: any, value: any) => {
-                            onChange(name, value, item.type);
-                          }}
-                        />
-                      </Collapse.Body>
-                    </Collapse>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          return (
+            <Collapse key={i}>
+              <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
+              <Collapse.Body>
+                <DynamicComponent
+                  filterData={item.filterData}
+                  name={item.name}
+                  value={item.value}
+                  onChange={(name: any, value: any) => {
+                    onChange(name, value, item.type);
+                  }}
+                />
+              </Collapse.Body>
+            </Collapse>
+          );
+        })}
+      </React.Fragment>
+    </SidebarComponent>
   );
 };
 
