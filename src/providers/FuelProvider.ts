@@ -815,6 +815,7 @@ class FuelProvider extends BaseProvider {
       let _type = "";
 
       if (type === "fuelet") _type = "Fuelet Wallet";
+      else if (type === "fuel_walletconnect") _type = "Metamask";
       else _type = "Fuel Wallet";
 
       try {

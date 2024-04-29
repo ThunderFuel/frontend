@@ -2,7 +2,8 @@
   "type": "fuel",
   "walletList": [
     "fuel",
-    "fuelet"
+    "fuelet",
+    "fuel_walletconnect"
   ],
   "baseURL": "https://api-thundernft.azurewebsites.net/",
   "collectionSwapLimit": 5,

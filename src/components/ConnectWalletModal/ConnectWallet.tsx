@@ -32,6 +32,10 @@ const WalletList = {
     name: "Fuelet",
     icon: IconFuelet,
   },
+  [FUEL_TYPE.FUEL_WALLETCONNECT]: {
+    name: "WalletConnect",
+    icon: IconFuelet,
+  },
   [FUEL_TYPE.WAGMI_METAMASK]: {
     name: "Metamask",
     icon: IconMetamask,
@@ -87,6 +91,7 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector, unavailable }:
   const activeWallet = {
     [FUEL_TYPE.FUEL]: { error: fuelError, isLoading: fuelLoading },
     [FUEL_TYPE.FUELET]: { error: fueletError, isLoading: fueletLoading },
+    [FUEL_TYPE.FUEL_WALLETCONNECT]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_METAMASK]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_WALLETCONNECT]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_COINBASE]: { error: coinbaseError },
