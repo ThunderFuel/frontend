@@ -1,8 +1,11 @@
 import fuel from "./fuel.thundernft.market.json";
 import base from "./thundernft.market.json";
 
-const FUEL_URL = "fuel.thundernft.market";
-const WAGMI_URL = "thundernft.market";
+// const FUEL_URL = "fuel.thundernft.market";
+// const WAGMI_URL = "thundernft.market";
+
+const FUEL_URL = "thundernft.market";
+const WAGMI_URL = "";
 
 enum PATH_TYPE {
   ID,
