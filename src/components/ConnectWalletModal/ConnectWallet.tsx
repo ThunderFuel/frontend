@@ -33,8 +33,8 @@ const WalletList = {
     icon: IconFuelet,
   },
   [FUEL_TYPE.FUEL_WALLETCONNECT]: {
-    name: "WalletConnect",
-    icon: IconFuelet,
+    name: "Metamask",
+    icon: IconMetamask,
   },
   [FUEL_TYPE.WAGMI_METAMASK]: {
     name: "Metamask",
