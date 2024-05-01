@@ -22,8 +22,8 @@ const SidebarFilter = ({ options, className, children, displayType, setDisplayTy
   return (
     <div className="flex justify-end">
       <div className={clsx("border-r border-r-gray transition-all duration-300", show ? "w-16" : className)}>
-        <div className={`sticky h-fit ${show ? "overflow-hidden" : ""}`} style={{ top: `calc(var(--headerHeight) + ${!hiddenTabOffset ? "68px" : "0px"})` }}>
-          <div className={clsx("flex pr-5 py-5 relative sidebar-h-screen", !show ? "overflow-hidden overflow-y-auto" : "")}>
+        <div className={`sticky h-fit pb-10 ${show ? "overflow-hidden" : ""}`} style={{ top: `calc(var(--headerHeight) + ${!hiddenTabOffset ? "68px" : "0px"})` }}>
+          <div className={clsx("flex pr-5 pt-5 pb-20 relative sidebar-h-screen", !show ? "overflow-hidden overflow-y-auto" : "")}>
             <div className={clsx("absolute transition-all duration-300", show ? "left-0" : "-left-12")} onClick={onToggle}>
               <div className="icon-btn dark:bg-white dark:text-gray text-gray-light">
                 <IconFilter />

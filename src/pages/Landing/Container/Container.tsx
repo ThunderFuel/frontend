@@ -13,7 +13,7 @@ const Container = () => {
   return (
     <div className="flex flex-col items-center justify-center border-t border-gray">
       <IconLayoutArrowDown className="hidden lg:flex text-white mt-8" />
-      <div className="container flex flex-col items-center pt-[120px]">
+      <div className="container flex flex-col items-center pt-[120px] pb-[80px] lg:pb-[60px]">
         <div data-aos="fade-up" className="flex flex-col items-center">
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-20 lg:justify-center w-full mt-12">
             <div className="flex justify-between">

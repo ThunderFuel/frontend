@@ -12,6 +12,8 @@ import "./Footer.css";
 import clsx from "clsx";
 import { useAppSelector } from "store";
 import Avatar from "components/Avatar";
+import { useDispatch } from "react-redux";
+import { toggleCartModal } from "store/cartSlice";
 
 const IntervalValue = 600000;
 const FooterBottom = React.memo(() => {
@@ -76,6 +78,7 @@ const FooterMobileBottom = React.memo(() => {
   const [initLocation, setInitLocation] = React.useState<any>(location.pathname);
   const { isConnected, user } = useAppSelector((state) => state.wallet);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const menus = [
     {
@@ -117,7 +120,7 @@ const FooterMobileBottom = React.memo(() => {
     },
     {
       icon: IconCart,
-      onClick: () => navigate(PATHS.DROPS),
+      onClick: () => dispatch(toggleCartModal()),
     },
   ].filter((item) => !item.isHidden);
   React.useEffect(() => {
@@ -161,7 +164,7 @@ const Footer = () => {
   }, [ref.current]);
 
   return (
-    <div className="bg-bg border-t border-t-gray fixed bottom-0 left-0 w-full z-20" ref={ref}>
+    <div className={clsx("bg-bg border-t border-t-gray fixed bottom-0 left-0 w-full", useIsMobile() ? "!z-30" : "z-20")} ref={ref}>
       {useIsMobile() ? <FooterMobileBottom /> : <FooterBottom />}
     </div>
   );

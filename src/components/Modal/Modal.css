@@ -23,6 +23,10 @@
   @apply flex flex-col h-full w-[480px] bg-bg rounded-none;
 }
 
+.cart.mobile .modal {
+  @apply !w-full;
+}
+
 .cart .modal .mhead {
   @apply lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
 }
