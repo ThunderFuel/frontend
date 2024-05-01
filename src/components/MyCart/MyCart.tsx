@@ -12,6 +12,8 @@ import { getCartTotal, removeAll, toggleCartModal } from "store/cartSlice";
 import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
+import clsx from "clsx";
+import { useIsMobile } from "hooks/useIsMobile";
 
 const MyCart = () => {
   const { totalAmount, itemCount, items, show } = useAppSelector((state) => state.cart);
@@ -58,7 +60,7 @@ const MyCart = () => {
   );
 
   return (
-    <Modal className="cart" title="My Cart" onClose={() => dispatch(toggleCartModal())} show={show} footer={items.length !== 0 ? footer : undefined}>
+    <Modal className={clsx("cart", useIsMobile() ? "mobile" : "")} title="My Cart" onClose={() => dispatch(toggleCartModal())} show={show} footer={items.length !== 0 ? footer : undefined}>
       <div className="flex flex-col h-full px-5 pt-5">
         {items.length !== 0 ? (
           <>
