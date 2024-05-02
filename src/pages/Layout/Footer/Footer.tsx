@@ -74,6 +74,61 @@ const FooterBottom = React.memo(() => {
 });
 FooterBottom.displayName = "FooterBottom";
 
+const MobileInfoBar = React.memo(() => {
+  const [isDarkMode, setIsDarkModa] = React.useState<boolean>(true);
+  const [gasFee, setGasFee] = React.useState<any>(0);
+  const [ethPrice, setEthPrice] = React.useState<any>(0);
+
+  const getData = async () => {
+    const response = await etherscanService.getData();
+
+    setEthPrice(parseFloat(response.result.ethusd).toFixed(2));
+    setGasFee(response.result.safeGasPrice);
+  };
+
+  const onChangeMode = () => {
+    if (!isDarkMode) {
+      document.documentElement.classList.add("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      useLocalStorage().setItem(THUNDER_THEME_NAME, "light");
+    }
+    setIsDarkModa(!isDarkMode);
+  };
+
+  React.useEffect(() => {
+    getData();
+    const interval = setInterval(() => {
+      getData();
+    }, IntervalValue);
+
+    setIsDarkModa(useLocalStorage().getItem(THUNDER_THEME_NAME) === "dark");
+
+    return () => clearInterval(interval);
+  }, []);
+  const Icon = isDarkMode ? IconSun : IconMoon;
+
+  return (
+    <div className="flex items-center justify-between px-5 py-[15px] border-b border-gray">
+      <div className="cursor-pointer" onClick={onChangeMode}>
+        <Icon className="text-white" />
+      </div>
+      <div className="flex items-center gap-4 shrink-0 text-headline-02">
+        <span className="flex items-center">
+          <IconEthereum className="text-gray-light" />
+          <span className="text-white">${ethPrice}</span>
+        </span>
+        <span className="flex items-center">
+          <IconGas className="mr-[6px] text-gray-light" />
+          <span className="text-white">{gasFee} GWEI</span>
+        </span>
+      </div>
+    </div>
+  );
+});
+MobileInfoBar.displayName = "MobileInfoBar";
+
 const FooterMobileBottom = React.memo(() => {
   const [initLocation, setInitLocation] = React.useState<any>(location.pathname);
   const { isConnected, user } = useAppSelector((state) => state.wallet);
@@ -165,6 +220,7 @@ const Footer = () => {
 
   return (
     <div className={clsx("bg-bg border-t border-t-gray fixed bottom-0 left-0 w-full", useIsMobile() ? "!z-30" : "z-20")} ref={ref}>
+      {useIsMobile() && window.location.pathname === PATHS.LOGIN ? <MobileInfoBar /> : <></>}
       {useIsMobile() ? <FooterMobileBottom /> : <FooterBottom />}
     </div>
   );
