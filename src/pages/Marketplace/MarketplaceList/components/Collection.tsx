@@ -1,9 +1,15 @@
 import React from "react";
 import Img from "components/Img";
+import clsx from "clsx";
 
-const Collection = ({ image, title, children }: { image: any; title: string; children?: any }) => {
+const Collection = ({ image, title, onClick, children }: { image: any; title: string; onClick?: () => void; children?: any }) => {
   return (
-    <div className="lg:px-4 flex items-center gap-2.5 lg:gap-5">
+    <div
+      className={clsx("lg:px-4 flex items-center gap-2.5 lg:gap-5", onClick ? "cursor-pointer" : "")}
+      onClick={() => {
+        if (onClick) onClick();
+      }}
+    >
       {children}
       <div className="overflow-hidden rounded-lg lg:rounded-full">
         <Img src={image} className="w-8 h-8 lg:w-12 lg:h-12" />

@@ -7,6 +7,10 @@ import EthereumPrice from "components/EthereumPrice";
 import Collection from "./components/Collection";
 import Change from "./components/Change";
 import NftImages from "./components/NftImages";
+import { getAbsolutePath } from "hooks/useNavigate";
+import config from "config";
+import { PATHS } from "router/config/paths";
+import { useNavigate } from "react-router-dom";
 
 const Cell = ({ title, value, children }: { title: string; value?: any; children?: any }) => {
   return (
@@ -18,9 +22,14 @@ const Cell = ({ title, value, children }: { title: string; value?: any; children
 };
 
 const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
+  const navigate = useNavigate();
   const { dayTabValue, addWatchList } = useMarketplace();
   const onAddWatchList = async (item: any, value: any) => {
     await addWatchList({ collectionId: item.id, value });
+  };
+
+  const handleItemOnClick = (item: any) => {
+    navigate(getAbsolutePath(PATHS.COLLECTION, { collectionId: config.isCollectionPathSlug() ? item.slug ?? item.id : item.id }));
   };
 
   return (
@@ -30,7 +39,7 @@ const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
           return (
             <div className="border border-gray rounded-md" key={`row_${k.toString()}`}>
               <div className="flex items-center justify-between border-b border-b-gray p-5">
-                <Collection image={item.image} title={item.collection} />
+                <Collection image={item.image} title={item.collection} onClick={() => handleItemOnClick(item)} />
                 <Favorite item={item} onChange={(value: boolean) => onAddWatchList(item, value)} />
               </div>
               <div className="flex flex-col">
