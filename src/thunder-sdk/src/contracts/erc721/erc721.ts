@@ -1,6 +1,8 @@
-import { Provider, WalletUnlocked, WalletLocked, BigNumberish, Wallet, FunctionInvocationScope, ReceiptMintCoder, BaseAssetId } from "fuels";
+import { Provider, WalletUnlocked, WalletLocked, BigNumberish, Wallet, FunctionInvocationScope, ReceiptMintCoder, Script, Contract } from "fuels";
 import { NFTContractAbi__factory } from "../../types/erc721";
 import { NFTContractAbi, ContractIdInput, IdentityInput, AssetIdInput } from "../../types/erc721/NFTContractAbi";
+import bytecode from "../../scripts/bulk_mint/binFile";
+import abi from "../../scripts/bulk_mint/out/bulk_mint-abi.json";
 
 async function setup(
     contractId: string,
@@ -20,26 +22,6 @@ async function setup(
     return NFTContractAbi__factory.connect(contractId, _provider);
 }
 
-// export async function initialize(
-//     contractId: string,
-//     provider: string,
-//     wallet: string | WalletLocked,
-//     maxSupply: BigNumberish,
-//     transferManager: string,
-// ) {
-//     try {
-//         const contract = await setup(contractId, provider, wallet);
-//         const _transferManager: ContractIdInput = { value: transferManager };
-//         const { transactionResult, transactionResponse } = await contract.functions
-//             .initialize(maxSupply, _transferManager)
-//             .txParams({gasPrice: 1})
-//             .call();
-//         return { transactionResponse, transactionResult };
-//     } catch(err: any) {
-//         throw Error(`ERC721: Initialize failed. Reason: ${err}`);
-//     }
-// }
-
 export async function mint(
     contractId: string,
     provider: string,
@@ -54,11 +36,11 @@ export async function mint(
         const fill0 = subId.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
         const _to: IdentityInput = { Address: { value: to } };
-        const { transactionResult, transactionResponse, logs } = await contract.functions
+        const { transactionResult, logs } = await contract.functions
             .mint(_to, stringSubId, amount)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult, logs };
+        return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: mint failed. Reason: ${err}`);
     }
@@ -69,15 +51,16 @@ export async function bulkMint(
     provider: string,
     wallet: string | WalletLocked,
     to: string,
-    startIndex: number,
     amount: number,
 ) {
     let subIDs = [];
 
     const zeroX = "0x";
     const contract = await setup(contractId, provider, wallet);
+    const currentIndexBN = await totalSupply(contractId, provider, wallet);
+    const currentIndex = Number(currentIndexBN.value)
 
-    for (let i=startIndex; i<(startIndex + amount); i++) {
+    for (let i=currentIndex; i<(currentIndex + amount); i++) {
         const fill0 = i.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
         subIDs.push(stringSubId);
@@ -88,13 +71,38 @@ export async function bulkMint(
     try {
         const { minGasPrice } = contract.provider.getGasConfig();
         const _to: IdentityInput = { Address: { value: to } };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult, logs } = await contract.functions
             .bulk_mint(_to, subIDs)
-            .txParams({gasPrice: minGasPrice})
+            .txParams({gasPrice: minGasPrice, variableOutputs: amount})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: bulkMint failed. Reason: ${err}`);
+    }
+}
+
+export async function bulkMintScript(
+    contractId: string,
+    provider: string,
+    wallet: WalletLocked | WalletUnlocked,
+    to: string,
+    amount: number,
+) {
+    try {
+        const _provider = await Provider.create(provider)
+        const _contract = new Contract(contractId, NFTContractAbi__factory.abi, _provider);
+        const _collection: ContractIdInput = { value: contractId };
+        const _to: IdentityInput = { Address: { value: to } };
+
+        const script = new Script(bytecode, abi, wallet)
+        const { transactionResult, logs } = await script.functions
+            .main(_collection, _to, amount)
+            .txParams({gasPrice: 1})
+            .addContracts([_contract])
+            .call();
+        return { transactionResult, logs };
+    } catch(err: any) {
+        throw Error(`ERC721: bulkMintScript failed. Reason: ${err}`)
     }
 }
 
@@ -103,34 +111,35 @@ export async function bulkMintWithMulticall(
     provider: string,
     wallet: string | WalletLocked,
     to: string,
-    startIndex: number,
     amount: number,
 ) {
     let calls: FunctionInvocationScope<any[], any>[] = [];
 
     const zeroX = "0x";
     const contract = await setup(contractId, provider, wallet);
+    const currentIndexBN = await totalSupply(contractId, provider, wallet);
+    const currentIndex = Number(currentIndexBN.value)
 
-    for (let i=startIndex; i<(startIndex + amount); i++) {
+    for (let i=currentIndex; i<(currentIndex + amount); i++) {
         const fill0 = i.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
         const _to: IdentityInput = { Address: { value: to } };
         const mintCall = contract.functions
             .mint(_to, stringSubId, 1)
-            .txParams({gasPrice: 1})
+            .txParams({gasPrice: 1, variableOutputs: 1})
         calls.push(mintCall);
     }
 
     if (calls.length === 0) return null;
 
     try {
-        const { minGasPrice } = contract.provider.getGasConfig();
-        const { transactionResult, transactionResponse } = await contract.multiCall(calls)
-            .txParams({gasPrice: 1})
+        const { minGasPrice } = contract.provider.getGasConfig()
+        const { transactionResult, logs } = await contract.multiCall(calls)
+            .txParams({gasPrice: minGasPrice, variableOutputs: amount})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult, logs };
     } catch(err: any) {
-        throw Error(`ERC721: bulkMint failed. Reason: ${err}`);
+        throw Error(`ERC721: bulkMintWithMulticall failed. Reason: ${err}`);
     }
 }
 
@@ -167,16 +176,16 @@ export async function balanceOf(
 export async function totalSupply(
     contractId: string,
     provider: string,
-    asset: string,
+    wallet: string | WalletLocked,
 ) {
     try {
-        const contract = await setup(contractId, provider);
+        const contract = await setup(contractId, provider, wallet);
         const { value } = await contract.functions
             .total_assets()
             .simulate();
         return { value };
     } catch(err: any) {
-        throw Error('ERC721: totalSupply failed');
+        throw Error(`ERC721: totalSupply failed. Reason: ${err}`);
     }
 }
 

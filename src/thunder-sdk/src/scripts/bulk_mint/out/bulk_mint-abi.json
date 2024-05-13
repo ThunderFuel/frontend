@@ -2,8 +2,19 @@
   "types": [
     {
       "typeId": 0,
-      "type": "()",
-      "components": [],
+      "type": "(_, _)",
+      "components": [
+        {
+          "name": "__tuple_element",
+          "type": 5,
+          "typeArguments": null
+        },
+        {
+          "name": "__tuple_element",
+          "type": 1,
+          "typeArguments": null
+        }
+      ],
       "typeParameters": null
     },
     {
@@ -64,7 +75,7 @@
     {
       "inputs": [
         {
-          "name": "collection",
+          "name": "id",
           "type": 4,
           "typeArguments": null
         },

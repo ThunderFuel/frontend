@@ -207,11 +207,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .initialize()
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. initialize failed. Reason: ${err}`)
     }
@@ -224,21 +224,21 @@ export async function placeOrder(
     order: MakerOrder,
 ) {
     if (order.isBuySide) {
-        const { transactionResult, transactionResponse } = await _placeBuyOrder(
+        const { transactionResult } = await _placeBuyOrder(
             contractId,
             provider,
             wallet,
             order
         );
-        return { transactionResult, transactionResponse }
+        return { transactionResult }
     }
-    const { transactionResult, transactionResponse } = await _placeSellOrder(
+    const { transactionResult } = await _placeSellOrder(
         contractId,
         provider,
         wallet,
         order,
     );
-    return { transactionResult, transactionResponse }
+    return { transactionResult }
 }
 
 async function _placeSellOrder(
@@ -263,13 +263,22 @@ async function _placeSellOrder(
 
         const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { gasUsed } = await contract.functions
             .place_order(_order)
             .txParams({gasPrice: 200000})
             .callParams({forward: asset})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.functions
+            .place_order(_order)
+            .txParams({gasPrice: 200000, gasLimit})
+            .callParams({forward: asset})
+            .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _placeSellOrder failed. Reason: ${err}`)
     }
@@ -294,12 +303,20 @@ async function _placeBuyOrder(
 
         const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { gasUsed } = await contract.functions
             .place_order(_order)
             .txParams({gasPrice: 1})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.functions
+            .place_order(_order)
+            .txParams({gasPrice: 1, gasLimit})
+            .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _placeBuyOrder failed. Reason: ${err}`)
     }
@@ -324,12 +341,20 @@ export async function updateOrder(
 
         const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { gasUsed } = await contract.functions
             .update_order(_order)
             .txParams({gasPrice: 1})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.functions
+            .update_order(_order)
+            .txParams({gasPrice: 1, gasLimit})
+            .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. updateOrder failed. Reason: ${err}`)
     }
@@ -366,13 +391,22 @@ export async function depositAndOffer(
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
 
         const script = new Script(bytecode, abi, wallet);
-        const { transactionResult, transactionResponse } = await script.functions
+        const { gasUsed } = await script.functions
             .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
             .txParams({gasPrice: 1})
             .callParams({forward: coin})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await script.functions
+            .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
+            .txParams({gasPrice: 1, gasLimit})
+            .callParams({forward: coin})
+            .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. depositAndOffer failed. Reason: ${err}`)
     }
@@ -443,11 +477,18 @@ export async function bulkListing(
 
     if (calls.length === 0) return null;
 
-    const { transactionResponse, transactionResult } = await contract.multiCall(calls)
+    const { gasUsed } = await contract.multiCall(calls)
         .txParams({gasPrice: 1})
         .addContracts(_contracts)
+        .getTransactionCost();
+
+    const gasLimit = Number(gasUsed) * 1.5
+
+    const { transactionResult } = await contract.multiCall(calls)
+        .txParams({gasPrice: 1, gasLimit})
+        .addContracts(_contracts)
         .call();
-    return { transactionResponse, transactionResult };
+    return { transactionResult };
 }
 
 export async function cancelOrder(
@@ -474,20 +515,28 @@ export async function cancelOrder(
         //     strategy = strategyAuction;
 
         if (isBuySide) {
-            const { transactionResult, transactionResponse } = await contract.functions
+            const { transactionResult } = await contract.functions
                 .cancel_order(_strategy, nonce, side)
                 .addContracts([strategyContract, executionManager])
                 .txParams({gasPrice: 1})
                 .call();
-            return { transactionResponse, transactionResult };
+            return { transactionResult };
         }
 
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { gasUsed } = await contract.functions
             .cancel_order(_strategy, nonce, side)
             .addContracts([strategyContract, executionManager])
             .txParams({gasPrice: 1, variableOutputs: 1})
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.functions
+            .cancel_order(_strategy, nonce, side)
+            .addContracts([strategyContract, executionManager])
+            .txParams({gasPrice: 1, variableOutputs: 1, gasLimit})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. cancelOrder failed. Reason: ${err}`)
     }
@@ -534,11 +583,18 @@ export async function bulkCancelOrder(
 
     if (calls.length === 0) return null;
 
-    const { transactionResponse, transactionResult } = await contract.multiCall(calls)
+    const { gasUsed } = await contract.multiCall(calls)
         .txParams({gasPrice: 1})
         .addContracts([strategyFixedPrice, executionManager])
+        .getTransactionCost();
+
+    const gasLimit = Number(gasUsed) * 1.5
+
+    const { transactionResult } = await contract.multiCall(calls)
+        .txParams({gasPrice: 1, gasLimit})
+        .addContracts([strategyFixedPrice, executionManager])
         .call();
-    return { transactionResponse, transactionResult };
+    return { transactionResult };
 }
 
 export async function executeOrder(
@@ -551,23 +607,23 @@ export async function executeOrder(
     const takerOrder = _convertToTakerOrder(order);
 
     if (order.isBuySide) {
-        const { transactionResult, transactionResponse } = await _executeBuyOrder(
+        const { transactionResult } = await _executeBuyOrder(
             contractId,
             provider,
             wallet,
             takerOrder,
             assetId
         );
-        return { transactionResult, transactionResponse }
+        return { transactionResult }
     }
 
-    const { transactionResult, transactionResponse } = await _executeSellOrder(
+    const { transactionResult } = await _executeSellOrder(
         contractId,
         provider,
         wallet,
         takerOrder,
     );
-    return { transactionResult, transactionResponse }
+    return { transactionResult }
 }
 
 async function _executeBuyOrder(
@@ -589,13 +645,22 @@ async function _executeBuyOrder(
         //     strategy = strategyAuction;
 
         const _collection = new Contract(order.collection.value, NFTContractAbi__factory.abi, _provider);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { gasUsed } = await contract.functions
             .execute_order(order)
             .txParams({gasPrice: 1, variableOutputs: 4})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
             .call();
-        return { transactionResponse, transactionResult };
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.functions
+            .execute_order(order)
+            .txParams({gasPrice: 1, variableOutputs: 4, gasLimit})
+            .addContracts([_strategy, _collection, royaltyManager, executionManager])
+            .callParams({forward: coin})
+            .call();
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _executeBuyOrder failed. Reason: ${err}`)
     }
@@ -622,13 +687,22 @@ async function _executeSellOrder(
         //     strategy = strategyAuction;
 
         const _collection = new Contract(order.collection.value, NFTContractAbi__factory.abi, _provider);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { gasUsed } = await contract.functions
             .execute_order(order)
             .txParams({gasPrice: 150000, variableOutputs: 4})
             .callParams({forward: asset})
             .addContracts([_strategy, _collection, pool, assetManager, royaltyManager, executionManager])
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.functions
+            .execute_order(order)
+            .txParams({gasPrice: 150000, variableOutputs: 4, gasLimit})
+            .callParams({forward: asset})
+            .addContracts([_strategy, _collection, pool, assetManager, royaltyManager, executionManager])
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _executeSellOrder failed. Reason: ${err}`)
     }
@@ -668,11 +742,18 @@ export async function bulkPurchase(
 
         if (calls.length === 0) return null;
 
-        const { transactionResponse, transactionResult } = await contract.multiCall(calls)
+        const { gasUsed } = await contract.multiCall(calls)
             .txParams({gasPrice: 1})
             .addContracts(_contracts)
+            .getTransactionCost();
+
+        const gasLimit = Number(gasUsed) * 1.5
+
+        const { transactionResult } = await contract.multiCall(calls)
+            .txParams({gasPrice: 1, gasLimit})
+            .addContracts(_contracts)
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
     }
@@ -687,11 +768,11 @@ export async function setPool(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _pool: ContractIdInput = { value: pool };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .set_pool(_pool)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
     }
@@ -706,11 +787,11 @@ export async function setExecutionManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _executionManager: ContractIdInput = { value: executionManager };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .set_execution_manager(_executionManager)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setExecutionManager failed. Reason: ${err}`)
     }
@@ -725,11 +806,11 @@ export async function setRoyaltyManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _royaltyManager: ContractIdInput = { value: royaltyManager };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .set_royalty_manager(_royaltyManager)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setRoyaltyManager failed. Reason: ${err}`)
     }
@@ -744,11 +825,11 @@ export async function setAssetManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _assetManager: ContractIdInput = { value: assetManager };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .set_asset_manager(_assetManager)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setAssetManager failed. Reason: ${err}`)
     }
@@ -767,11 +848,11 @@ export async function setProtocolFeeRecipient(
             _protocolFeeRecipient = { Address: { value: protocolFeeRecipient } } :
             _protocolFeeRecipient = { ContractId: { value: protocolFeeRecipient } };
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .set_protocol_fee_recipient(_protocolFeeRecipient)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setProtocolFeeRecipient failed. Reason: ${err}`)
     }
@@ -882,11 +963,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { value: newOwner } };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResult, transactionResponse };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. transferOwnership failed. Reason: ${err}`)
     }
@@ -899,11 +980,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .renounce_ownership()
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResult, transactionResponse };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. renounceOwnership failed. Reason: ${err}`)
     }
