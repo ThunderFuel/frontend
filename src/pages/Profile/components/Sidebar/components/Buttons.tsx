@@ -54,7 +54,7 @@ const ButtonEdit = () => {
   const navigate = useNavigate();
 
   return (
-    <Button className="text-white" onClick={() => navigate(PATHS.SETTINGS_PROFILE)}>
+    <Button className="text-white !bg-bg" onClick={() => navigate(PATHS.SETTINGS_PROFILE)}>
       EDIT YOUR PROFILE <IconPencil />
     </Button>
   );

@@ -101,8 +101,8 @@ const MarketplaceProvider = ({ children, options = {} }: { children: ReactNode; 
         type: filterTabValue?.value,
         filterDate: Math.round(dayjs().subtract(dayTabValue?.value, UnitType).startOf(UnitType).valueOf() / 1000),
         userId: user?.id,
-        // sortingValue,
-        // sortingType,
+        sortingValue,
+        sortingType,
         page: 1,
         pageSize: 10,
       });
