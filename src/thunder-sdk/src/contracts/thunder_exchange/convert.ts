@@ -11,12 +11,12 @@ const owner = async() => {
     return b.address.toAddress()
 }
 
-// main("0xfb7fc3829b13b134c3ec0431fb5ce5536f79e4872d4f83ba184045f64b5a9de3")
-//     .then((res) => {
-//         console.log(res)
-//     })
+main("0xfd76a1daac884867f7e69d78d27f59f9a7f1a39bc4a55708f958e3a5f538733f")
+    .then((res) => {
+        console.log(res)
+    })
 
-owner()
-.then((res) => {
-    console.log(res)
-})
+// owner()
+// .then((res) => {
+//     console.log(res)
+// })

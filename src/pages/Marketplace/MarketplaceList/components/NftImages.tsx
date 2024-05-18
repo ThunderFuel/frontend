@@ -10,7 +10,7 @@ const NftImages = ({ collectionItems }: { collectionItems: any[] }) => {
   return (
     <ul className="px-4 flex gap-2">
       {items.map((item, i) => (
-        <li key={i} className="w-8 h-8 lg:w-14 lg:h-14 overflow-hidden">
+        <li key={i} className="w-full lg:w-14 lg:h-14 overflow-hidden">
           <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })}>
             {item.image ? <Img src={item.image} alt={i.toString()} className="rounded-md" /> : <div className="w-full h-full bg-gray rounded-md"></div>}
           </Link>

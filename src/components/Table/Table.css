@@ -52,7 +52,7 @@
   @apply !border-b;
 }
 .fuel-table .tbody .tr-group:hover .tr .td {
-  @apply !bg-bg;
+  /* @apply !bg-bg; */
 }
 
 .fuel-table .tbody .tr-group:has(.after) .tr:not(.after) {

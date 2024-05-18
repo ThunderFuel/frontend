@@ -53,11 +53,11 @@ export async function setProtocolFee(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .set_protocol_fee(fee)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
         return { err };
@@ -217,11 +217,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { value: newOwner } };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResult, transactionResponse };
+        return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
         return { err };
@@ -235,11 +235,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .renounce_ownership()
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResult, transactionResponse };
+        return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
         return { err };

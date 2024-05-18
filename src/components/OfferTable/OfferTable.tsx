@@ -103,7 +103,7 @@ const defaultHeaders: ITableHeader[] = [
     width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <OfferLabel>{addressFormat(item?.takerUserId)}</OfferLabel>,
+    render: (item) => <OfferLabel>1</OfferLabel>,
     // renderHeader: (header) => <span>asasas</span>,
   },
   {

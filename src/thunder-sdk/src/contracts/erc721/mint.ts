@@ -1,5 +1,5 @@
 import { BigNumberish, Script, WalletUnlocked, Provider, Contract, WalletLocked } from "fuels"
-import { mint, bulkMint } from "./erc721"
+import { mint, bulkMint, bulkMintScript, bulkMintWithMulticall } from "./erc721"
 import { NFTContractAbi__factory } from "../../types/erc721/factories/NFTContractAbi__factory";
 import bytecode from "../../scripts/bulk_mint/binFile";
 import abi from "../../scripts/bulk_mint/out/bulk_mint-abi.json";
@@ -27,6 +27,15 @@ type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+const singleMint = async (collection: string) => {
+    const testnet = await Provider.create("https://beta-5.fuel.network/graphql");
+    const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
+    const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
+
+    const res = await mint(collection, testnet.url, privateKey, 1, 272, to)
+    console.log(res.transactionResult.isStatusSuccess)
+}
+
 const mintNFTs = async (collection: string, amount: BigNumberish) => {
     const testnet = await Provider.create("https://beta-5.fuel.network/graphql");
 
@@ -44,7 +53,7 @@ const mintNFTs = async (collection: string, amount: BigNumberish) => {
         .txParams({gasPrice: 1})
         .addContracts([_contract])
         .call();
-    return res.transactionResult.isStatusSuccess
+    return res.value
 }
 
 const mintNFTs2 = async (collection: string, amount: number, n: number) => {
@@ -53,71 +62,30 @@ const mintNFTs2 = async (collection: string, amount: number, n: number) => {
     const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
     const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
 
-    let startIndex = 180 // next time 270
+    for (let i=0; i<n; i++) {
+        const res = await bulkMintWithMulticall(collection, testnet.url, privateKey, to, amount);
+        console.log(res?.transactionResult.isStatusSuccess)
+        await sleep(5000);
+    }
+}
+
+const mintNFTs3 = async (collection: string, amount: number, n: number) => {
+    const testnet = await Provider.create("https://beta-5.fuel.network/graphql");
+
+    const to = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
+    const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
+    const wallet = new WalletUnlocked(privateKey, testnet);
+    //let startIndex = 180 // next time 270
 
     for (let i=0; i<n; i++) {
-        const res = await bulkMint(collection, testnet.url, privateKey, to, startIndex, amount);
+        const res = await bulkMintScript(collection, testnet.url, wallet, to, amount);
         console.log(res?.transactionResult.isStatusSuccess)
-        startIndex += amount
         await sleep(2500);
     }
 }
 
-// const main = async () => {
-//     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-//     const failed: string[] = [];
-
-//     for (let i=0; i<14; i++) {
-//         const nftContractId = nfts[i]
-//         console.log("start")
-//         const res = await mintNFTs2(nftContractId, 10);
-//         console.log(res)
-//         if (!res) {
-//             failed.push(nftContractId);
-//             continue
-//         }
-//         await sleep(1500);
-//     }
-
-//     if (failed.length != 0) {
-//         for (let i=0; i<failed.length; i++) {
-//             const nftContractId = failed[i]
-//             const res = await mintNFTs2(nftContractId, 10);
-//             if (!res) {
-//                 const index = failed.indexOf(nftContractId);
-//                 failed.splice(index, 1);
-//             }
-//             await sleep(1500);
-//         }
-
-//         if (failed.length == 0) return "success"
-//     } else {
-//         return "success"
-//     }
-
-//     return failed
-// }
-
 mintNFTs2(
-    nfts[12],
-    9,
-    10
+    nfts[11],
+    100,
+    3
 )
-.then((res) => console.log(res))
-.catch((err) => console.log(err))
-
-// const mintBatch = async () => {
-//     for (let i=0; i<nfts.length; i++) {
-//         await mintNFTs2(
-//             nfts[i],
-//             9,
-//             10
-//         )
-//         console.log(`collection ${i}: done`)
-//     }
-// }
-
-// mintNFTs2()
-//     .then((res) => console.log(res))
-//     .catch((err) => console.log(err))

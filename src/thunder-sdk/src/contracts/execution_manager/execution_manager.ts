@@ -27,11 +27,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet)
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .initialize()
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`ExecutionManager. initialize failed. Reason: ${err}`)
     }
@@ -46,11 +46,11 @@ export async function addStrategy(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _strategy: ContractIdInput = { value: strategy };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .add_strategy(_strategy)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`ExecutionManager. addStrategy failed. Reason: ${err}`)
     }
@@ -64,11 +64,11 @@ export async function removeStrategy(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .remove_strategy(index)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResponse, transactionResult };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`ExecutionManager. removeStrategy failed. Reason: ${err}`)
     }
@@ -146,11 +146,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { value: newOwner } };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResult, transactionResponse };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`ExecutionManager. transferOwnership failed. Reason: ${err}`)
     }
@@ -163,11 +163,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { transactionResult } = await contract.functions
             .renounce_ownership()
             .txParams({gasPrice: 1})
             .call();
-        return { transactionResult, transactionResponse };
+        return { transactionResult };
     } catch(err: any) {
         throw Error(`ExecutionManager. renounceOwnership failed. Reason: ${err}`)
     }

@@ -31,12 +31,10 @@ const isValid = async () => {
 }
 
 const getMakerOrder = async () => {
-    const strategy = "0x903a69c7350170df05dfe4b7159a61bb5cf15923b98855162687b10a3c88223b"
+    const strategy = "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f"
     const OWNER = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
     const user = "0x833ad9964a5b32c6098dfd8a1490f1790fc6459e239b07b74371607f21a2d307"
-    const buyer = "0xb4efddf66465900398d520b7e1033c87db70e65e9f9ea9a9fa092b7d733183f4"
-    const user2 = "0xde17819da267e599b28c3ebcef402f5cc25385451773896cbe5e9d802188ab4d"
-    const { value } = await getMakerOrderOfUser(strategy, provider, OWNER, user, 1405, false);
+    const { value } = await getMakerOrderOfUser(strategy, provider, OWNER, user, 222, false);
     return [
         value?.token_id,
         value?.start_time,

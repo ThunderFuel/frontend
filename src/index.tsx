@@ -12,9 +12,12 @@ import { initReactI18next } from "react-i18next";
 import LOCALES from "./locales";
 
 import * as Sentry from "@sentry/react";
-import { Fuel } from "@fuel-wallet/sdk";
+import { Fuel, FueletWalletConnector, FuelWalletConnector } from "@fuel-wallet/sdk";
+import { EVMWalletConnector } from "@fuels/connectors";
 
-export const FuelInstance = new Fuel();
+export const FuelInstance = new Fuel({
+  connectors: [new EVMWalletConnector(), new FueletWalletConnector(), new FuelWalletConnector()],
+});
 
 export const getFuel = () => {
   return FuelInstance;
@@ -43,7 +46,7 @@ export const litNodeClient = new LitNodeClient({
   debug: false,
 });
 
-litNodeClient.connect();
+// litNodeClient.connect();
 
 export const connectors = [
   new MetaMaskConnector({ chains }),

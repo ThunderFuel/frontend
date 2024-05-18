@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { toggleManageFundsModal } from "store/walletSlice";
 import { IconInfo, IconMinus, IconPlus, IconSwap, IconWallet, IconWarning } from "icons";
 import { useWallet } from "hooks/useWallet";
+import config from "config";
 
 const ManageFunds = () => {
   const dispatch = useAppDispatch();
@@ -66,7 +67,7 @@ const ManageFunds = () => {
   const renderBalances = useMemo(() => <Balances refresh={isDisabled} />, [isDisabled]);
 
   return (
-    <Modal className="checkout" title="Manage Funds" footer={footer} onClose={() => dispatch(toggleManageFundsModal())} show={manageFundsShow}>
+    <Modal className="checkout" title="Manage Funds" footer={config.getConfig("type") === "wagmi" ? footer : <></>} onClose={() => dispatch(toggleManageFundsModal())} show={manageFundsShow}>
       <div className="flex flex-col p-5 gap-5">
         {renderBalances}
         <div className="flex flex-col gap-5">
