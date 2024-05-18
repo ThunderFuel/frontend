@@ -655,6 +655,7 @@ class FuelProvider extends BaseProvider {
             const _currentBidBalance = res.data;
             if (_currentBidBalance < checkoutPrice) {
               const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
+              console.log({ provider, wallet, order, requiredBidAmount });
               depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, false)
                 .then((res) => {
                   if (res.transactionResult.isStatusSuccess) {
