@@ -57,7 +57,7 @@ const RightMenu = ({
   return (
     <div
       id="rightMenu"
-      className={`fixed lg:static z-50 top-full lg:top-auto lg:left-auto left-0 bg-bg w-full flex flex-col lg:border-lg border-none border-gray transition-all duration-1000 ease-in-out ${className}`}
+      className={`fixed lg:static z-50 lg:z-auto top-full lg:top-auto lg:left-auto left-0 bg-bg w-full flex flex-col lg:border-lg border-none border-gray transition-all duration-1000 ease-in-out ${className}`}
       style={{ height: isMobile ? "100%" : "calc(100vh - var(--headerHeight))" }}
     >
       <div className="flex justify-between lg:justify-normal items-center border-b border-gray text-white p-5 text-h4 lg:text-h5 lg:gap-5">
