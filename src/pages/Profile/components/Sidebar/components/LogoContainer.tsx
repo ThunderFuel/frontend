@@ -65,7 +65,7 @@ const LogoContainer = ({ userInfo }: any) => {
       <Avatar image={userInfo?.image} userId={user?.id} className="w-[84px] h-[84px]" />
       <div className="flex flex-col gap-2.5 flex-1 text-gray-light">
         <div className="flex items-center gap-2">
-          <h3 className="text-h3 text-white">{userInfo?.userName ?? walletAddress}</h3>
+          <h3 className="text-h3 text-white">{userInfo?.userName !== "" ? userInfo?.userName : walletAddress}</h3>
           {isFollowers ? (
             <div className="flex items-center gap-2">
               <IconCirclePlus className="" />
