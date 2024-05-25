@@ -174,7 +174,7 @@ const Table = ({
           </div>
         </div>
       </div>
-      {props.footer && <div className={clsx("tfoot", "container-fluid")}>{props.footer}</div>}
+      {props.footer && <div className={clsx("tfoot", "container-fluid pt-2.5")}>{props.footer}</div>}
     </>
   );
 };
