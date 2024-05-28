@@ -31,7 +31,7 @@ export const checkoutSlice = createSlice({
     checkoutPrice: 0,
     checkoutIsAuction: false,
     checkoutAuctionStartingPrice: 0,
-    checkoutExpireTime: 0 as number,
+    checkoutExpireTime: 315569260,
     checkoutMintAmount: 0,
     checkoutMintImage: "",
     checkoutMintContractAddress: "",
@@ -53,7 +53,7 @@ export const checkoutSlice = createSlice({
         state.checkoutPrice = 0;
         state.checkoutIsAuction = false;
         state.checkoutAuctionStartingPrice = 0;
-        state.checkoutExpireTime = 0;
+        state.checkoutExpireTime = 315569260;
         state.currentItem = { id: 0, price: 0 };
       }
       state.show = !state.show;
@@ -68,7 +68,7 @@ export const checkoutSlice = createSlice({
       state.checkoutType = action.payload?.type;
       state.checkoutPrice = action.payload?.price;
       state.checkoutIsAuction = action.payload?.isAuction;
-      state.checkoutExpireTime = action.payload?.expireTime;
+      state.checkoutExpireTime = 315569260;
       state.checkoutAuctionStartingPrice = action.payload?.auctionStartingPrice;
       state.currentItem = action.payload?.item;
       state.bulkListItems = action.payload?.bulkListItems;

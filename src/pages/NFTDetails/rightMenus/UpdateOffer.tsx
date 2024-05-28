@@ -104,13 +104,13 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">
+      {/* <div className="flex flex-col gap-y-2 text-white font-spaceGrotesk">
         Set Expiration Date
         <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
           <IconInfo className="w-[17px] h-[17px]" /> <span>Expires on </span> {getDateFromExpirationTime(expirationTime.value)}
         </div>
         <Select options={selectExpirationDates} onChange={setexpirationTime} value={expirationTime} />
-      </div>
+      </div> */}
     </RightMenu>
   );
 };

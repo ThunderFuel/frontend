@@ -67,7 +67,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
             nonce: res.data[item.tokenId],
             strategy: strategyFixedPriceContractId,
             payment_asset: BaseAssetId,
-            expiration_range: formatTimeContract(item.expireTime),
+            expiration_range: 315569260,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           };
         });
@@ -88,7 +88,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
             nonce: res.data + 1 + index,
             strategy: strategyFixedPriceContractId,
             payment_asset: BaseAssetId,
-            expiration_range: formatTimeContract(item.expireTime),
+            expiration_range: 315569260,
             extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
           };
         });
