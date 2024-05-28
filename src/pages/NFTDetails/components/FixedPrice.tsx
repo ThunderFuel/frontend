@@ -120,10 +120,10 @@ const FixedPrice = ({ isMultipleEdition }: any) => {
 
   return (
     <div className="flex flex-col border border-gray rounded-md bg-gray">
-      <div className="flex pl-2 items-center body-medium text-white gap-x-2 py-[10px]">
+      {/* <div className="flex pl-2 items-center body-medium text-white gap-x-2 py-[10px]">
         <IconListed className="w-[19px]" />
         Sale ends in {days}d {hours}h {minutes}m
-      </div>
+      </div> */}
       <div className="flex w-full bg-bg-light mb-[1px] p-5 last:rounded-b last:mb-0">
         <div className="flex flex-col w-full gap-[5px]">
           <div className="flex justify-between w-full bg-bg-light mb-[1px] last:rounded-b last:mb-0">

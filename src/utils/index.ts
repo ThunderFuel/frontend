@@ -159,10 +159,14 @@ export const downloadFile = (file: File) => {
 };
 
 export const formatTimeContract = (time: any) => {
+  return 315569260;
+
   return time * 24 * 60 * 60;
 };
 
 export const formatTimeBackend = (time: any) => {
+  return 315569260;
+
   return Math.round(dayjs().add(time, "days").valueOf() / 1000);
 };
 
