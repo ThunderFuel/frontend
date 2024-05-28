@@ -9,7 +9,7 @@ const FuelGatewayType = "thunder_fuel_gateway_type";
 export enum FUEL_TYPE {
   FUEL = "fuel",
   FUELET = "fuelet",
-  FUEL_WALLETCONNECT = "fuel_walletconnect",
+  // FUEL_WALLETCONNECT = "fuel_walletconnect",
   WAGMI_METAMASK = "wagmi_metamask",
   WAGMI_COINBASE = "wagmi_coinbase",
   WAGMI_WALLETCONNECT = "wagmi_walletconnect",
@@ -38,7 +38,7 @@ export const useFuelExtension = () => {
       return {
         [FUEL_TYPE.FUEL]: fuel,
         [FUEL_TYPE.FUELET]: fuelet,
-        [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
+        // [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
         [FUEL_TYPE.WAGMI_METAMASK]: wagmi,
         [FUEL_TYPE.WAGMI_COINBASE]: wagmi,
         [FUEL_TYPE.WAGMI_WALLETCONNECT]: wagmi,
