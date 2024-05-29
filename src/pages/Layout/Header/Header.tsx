@@ -122,7 +122,7 @@ const HeaderWarning = () => {
     <div className="hidden lg:flex-center text-orange border-y border-orange py-1">
       <IconWarning />
       <div className="body-small flex gap-0.5">
-        <span>Thunder is transitioning to Fuel Beta-4 Testnet. All transactions are currently on hold. Patience ⚡</span>
+        <span>Thunder is transitioning from beta-5 testnet to the latest testnet of Fuel. All transactions are currently on hold. Patience ⚡</span>
         <a href="https://twitter.com/ThunderbyFuel/status/1717210636285882874?s=20" target="_blank" className="font-bold underline" rel="noreferrer">
           Learn more.
         </a>
@@ -170,7 +170,7 @@ const Header = () => {
             </div>
             {/* <HeaderWarning /> */}
           </div>
-          {/* <HeaderWarning /> */}
+          <HeaderWarning />
         </>
         <MobileSearch />
       </>
