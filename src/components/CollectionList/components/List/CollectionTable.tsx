@@ -153,7 +153,7 @@ const CollectionTable = () => {
         headers={headers}
         items={collectionItems}
         onClick={onSelect}
-        containerFluidClassName={"!lg:px-5"}
+        containerFluidClassName={"lg:px-5"}
         isSelectedRow={(item) => item.isSelected}
       />
     </div>

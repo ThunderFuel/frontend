@@ -169,7 +169,7 @@ const Table = ({
           </div>
           {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
           {actionButton && actionButton()}
-          <div data-testid="tableBody" className={clsx("tbody lg:container-fluid", containerFluidClassName)}>
+          <div data-testid="tableBody" className={clsx("tbody", containerFluidClassName)}>
             {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
           </div>
         </div>

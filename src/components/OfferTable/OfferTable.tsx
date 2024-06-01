@@ -172,7 +172,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
     <Table
       headers={getHeaders}
       items={items}
-      containerFluidClassName={"!lg:px-5"}
+      containerFluidClassName={"lg:px-5"}
       ButtonBelowHeader={ButtonBelowHeader}
       afterRow={(item: any) => {
         if (!item.isActiveOffer || !item.showAfterRow) {
