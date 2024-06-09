@@ -29,7 +29,7 @@ export async function initialize(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .initialize()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -49,15 +49,15 @@ export async function registerRoyaltyInfo(
     try {
         let _receiver: IdentityInput;
         isReceiverAddress ?
-            _receiver = { Address: { value: receiver } } :
-            _receiver = { ContractId: { value: receiver } };
+            _receiver = { Address: { bits: receiver } } :
+            _receiver = { ContractId: { bits: receiver } };
         const contract = await setup(contractId, provider, wallet);
-        const _collection: ContractIdInput = { value: collection };
+        const _collection: ContractIdInput = { bits: collection };
         const _provider = await Provider.create(provider)
         const _collectionContract = new Contract(collection, RoyaltyManagerAbi__factory.abi, _provider);
         const { transactionResult } = await contract.functions
             .register_royalty_info(_collection, _receiver, fee)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .addContracts([_collectionContract])
             .call();
         return { transactionResult };
@@ -73,7 +73,7 @@ export async function getRoyaltyInfo(
 ) {
     try {
         const contract = await setup(contractId, provider);
-        const _collection: ContractIdInput = { value: collection };
+        const _collection: ContractIdInput = { bits: collection };
         const { value } = await contract.functions
             .get_royalty_info(_collection)
             .simulate();
@@ -94,7 +94,7 @@ export async function setRoyaltyFeeLimit(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .set_royalty_fee_limit(feeLimit)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -142,10 +142,10 @@ export async function transferOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _newOwner: IdentityInput = { Address: { value: newOwner } };
+        const _newOwner: IdentityInput = { Address: { bits: newOwner } };
         const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -162,7 +162,7 @@ export async function renounceOwnership(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .renounce_ownership()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {

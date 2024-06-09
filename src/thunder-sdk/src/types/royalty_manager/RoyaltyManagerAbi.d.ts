@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import type {
@@ -29,9 +29,9 @@ export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: Contract
 export enum RoyaltyManagerErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', CallerMustBeOwnerOrAdmin = 'CallerMustBeOwnerOrAdmin', FeeHigherThanLimit = 'FeeHigherThanLimit', FeeLimitTooHigh = 'FeeLimitTooHigh' };
 export enum RoyaltyManagerErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', CallerMustBeOwnerOrAdmin = 'CallerMustBeOwnerOrAdmin', FeeHigherThanLimit = 'FeeHigherThanLimit', FeeLimitTooHigh = 'FeeLimitTooHigh' };
 
-export type AddressInput = { value: string };
+export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
-export type ContractIdInput = { value: string };
+export type ContractIdInput = { bits: string };
 export type ContractIdOutput = ContractIdInput;
 export type OwnershipRenouncedInput = { previous_owner: IdentityInput };
 export type OwnershipRenouncedOutput = { previous_owner: IdentityOutput };

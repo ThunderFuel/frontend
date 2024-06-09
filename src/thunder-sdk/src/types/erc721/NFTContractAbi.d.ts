@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import type {
@@ -22,27 +22,39 @@ import type {
   StdString,
 } from 'fuels';
 
-import type { Option, Enum, Vec } from "./common";
+import type { Option, Enum } from "./common";
 
+export enum AccessErrorInput { NotOwner = 'NotOwner' };
+export enum AccessErrorOutput { NotOwner = 'NotOwner' };
 export enum BurnErrorInput { NotEnoughCoins = 'NotEnoughCoins' };
 export enum BurnErrorOutput { NotEnoughCoins = 'NotEnoughCoins' };
 export type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
 export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: ContractIdOutput }>;
+export enum InitializationErrorInput { CannotReinitialized = 'CannotReinitialized' };
+export enum InitializationErrorOutput { CannotReinitialized = 'CannotReinitialized' };
 export type MetadataInput = Enum<{ B256: string, Bytes: Bytes, Int: BigNumberish, String: StdString }>;
 export type MetadataOutput = Enum<{ B256: string, Bytes: Bytes, Int: BN, String: StdString }>;
 export enum MintErrorInput { CannotMintMoreThanOneNFTWithSubId = 'CannotMintMoreThanOneNFTWithSubId', MaxNFTsMinted = 'MaxNFTsMinted', NFTAlreadyMinted = 'NFTAlreadyMinted' };
 export enum MintErrorOutput { CannotMintMoreThanOneNFTWithSubId = 'CannotMintMoreThanOneNFTWithSubId', MaxNFTsMinted = 'MaxNFTsMinted', NFTAlreadyMinted = 'NFTAlreadyMinted' };
+export enum PauseErrorInput { Paused = 'Paused', NotPaused = 'NotPaused' };
+export enum PauseErrorOutput { Paused = 'Paused', NotPaused = 'NotPaused' };
 export enum SetErrorInput { ValueAlreadySet = 'ValueAlreadySet' };
 export enum SetErrorOutput { ValueAlreadySet = 'ValueAlreadySet' };
+export type StateInput = Enum<{ Uninitialized: [], Initialized: IdentityInput, Revoked: [] }>;
+export type StateOutput = Enum<{ Uninitialized: [], Initialized: IdentityOutput, Revoked: [] }>;
 
-export type AddressInput = { value: string };
+export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
-export type ContractIdInput = { value: string };
+export type ContractIdInput = { bits: string };
 export type ContractIdOutput = ContractIdInput;
-export type RawBytesInput = { ptr: BigNumberish, cap: BigNumberish };
-export type RawBytesOutput = { ptr: BN, cap: BN };
+export type OwnershipSetInput = { new_owner: IdentityInput };
+export type OwnershipSetOutput = { new_owner: IdentityOutput };
+
+export type NFTContractAbiConfigurables = {
+  MAX_SUPPLY: BigNumberish;
+};
 
 interface NFTContractAbiInterface extends Interface {
   functions: {
@@ -54,11 +66,15 @@ interface NFTContractAbiInterface extends Interface {
     burn: FunctionFragment;
     mint: FunctionFragment;
     metadata: FunctionFragment;
+    owner: FunctionFragment;
     set_decimals: FunctionFragment;
     set_name: FunctionFragment;
     set_symbol: FunctionFragment;
     set_metadata: FunctionFragment;
-    bulk_mint: FunctionFragment;
+    is_paused: FunctionFragment;
+    pause: FunctionFragment;
+    unpause: FunctionFragment;
+    constructor: FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: 'decimals', values: [AssetIdInput]): Uint8Array;
@@ -69,11 +85,15 @@ interface NFTContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'burn', values: [string, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'mint', values: [IdentityInput, string, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'metadata', values: [AssetIdInput, StdString]): Uint8Array;
+  encodeFunctionData(functionFragment: 'owner', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'set_decimals', values: [AssetIdInput, BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_name', values: [AssetIdInput, StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_symbol', values: [AssetIdInput, StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'set_metadata', values: [AssetIdInput, StdString, MetadataInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'bulk_mint', values: [IdentityInput, Vec<string>]): Uint8Array;
+  encodeFunctionData(functionFragment: 'is_paused', values: []): Uint8Array;
+  encodeFunctionData(functionFragment: 'pause', values: []): Uint8Array;
+  encodeFunctionData(functionFragment: 'unpause', values: []): Uint8Array;
+  encodeFunctionData(functionFragment: 'constructor', values: [IdentityInput]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'decimals', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'name', data: BytesLike): DecodedValue;
@@ -83,17 +103,21 @@ interface NFTContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'burn', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'mint', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'metadata', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'owner', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_decimals', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_name', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_symbol', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'set_metadata', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'bulk_mint', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'is_paused', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'pause', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'unpause', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'constructor', data: BytesLike): DecodedValue;
 }
 
 export class NFTContractAbi extends Contract {
   interface: NFTContractAbiInterface;
   functions: {
-    decimals: InvokeFunction<[asset: AssetIdInput], Option<number>>;
+    decimals: InvokeFunction<[_asset: AssetIdInput], Option<number>>;
     name: InvokeFunction<[asset: AssetIdInput], Option<StdString>>;
     symbol: InvokeFunction<[asset: AssetIdInput], Option<StdString>>;
     total_assets: InvokeFunction<[], BN>;
@@ -101,10 +125,14 @@ export class NFTContractAbi extends Contract {
     burn: InvokeFunction<[sub_id: string, amount: BigNumberish], void>;
     mint: InvokeFunction<[recipient: IdentityInput, sub_id: string, amount: BigNumberish], void>;
     metadata: InvokeFunction<[asset: AssetIdInput, key: StdString], Option<MetadataOutput>>;
-    set_decimals: InvokeFunction<[asset: AssetIdInput, decimals: BigNumberish], void>;
+    owner: InvokeFunction<[], StateOutput>;
+    set_decimals: InvokeFunction<[_asset: AssetIdInput, _decimals: BigNumberish], void>;
     set_name: InvokeFunction<[asset: AssetIdInput, name: StdString], void>;
     set_symbol: InvokeFunction<[asset: AssetIdInput, symbol: StdString], void>;
     set_metadata: InvokeFunction<[asset: AssetIdInput, key: StdString, metadata: MetadataInput], void>;
-    bulk_mint: InvokeFunction<[recipient: IdentityInput, sub_ids: Vec<string>], void>;
+    is_paused: InvokeFunction<[], boolean>;
+    pause: InvokeFunction<[], void>;
+    unpause: InvokeFunction<[], void>;
+    constructor: InvokeFunction<[owner: IdentityInput], void>;
   };
 }

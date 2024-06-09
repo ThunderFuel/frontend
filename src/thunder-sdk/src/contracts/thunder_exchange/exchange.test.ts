@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId, sleep } from 'fuels';
+import { Contract, ContractFactory, Provider, WalletUnlocked, sleep } from 'fuels';
 import path from 'path';
 
 // import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";

@@ -9,10 +9,10 @@ import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeContract, toGwei } from "utils";
-import { BaseAssetId } from "fuels";
 import { CheckoutCartItems } from "./Checkout";
 import { useWallet } from "hooks/useWallet";
-import { ZERO_B256, strategyFixedPriceContractId } from "global-constants";
+import { strategyFixedPriceContractId } from "global-constants";
+import FuelProvider from "providers/FuelProvider";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -54,6 +54,10 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
     const tokenIds = bulkUpdateItems.map((item: any) => item.tokenId); // for bulkupdate
     let updatePromise;
     let listPromise;
+
+    const fuel = new FuelProvider();
+    const _baseAssetId = await fuel.getBaseAssetId();
+
     if (bulkUpdateItems.length > 0) {
       updatePromise = nftdetailsService.getTokensIndex(tokenIds).then((res) => {
         bulkUpdateMakerOders = bulkUpdateItems.map((item: any) => {
@@ -66,9 +70,9 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
             amount: 1,
             nonce: res.data[item.tokenId],
             strategy: strategyFixedPriceContractId,
-            payment_asset: BaseAssetId,
+            payment_asset: _baseAssetId,
             expiration_range: 315569260,
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+            extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
           };
         });
       });
@@ -87,9 +91,9 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
             amount: 1,
             nonce: res.data + 1 + index,
             strategy: strategyFixedPriceContractId,
-            payment_asset: BaseAssetId,
+            payment_asset: _baseAssetId,
             expiration_range: 315569260,
-            extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+            extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
           };
         });
       });

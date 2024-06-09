@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
-import { Provider, ZeroBytes32, toB256, BaseAssetId } from "fuels";
+import { Provider, toB256 } from "fuels";
 import userService from "../api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeBackend, formatTimeContract, isObjectEmpty, toGwei } from "utils";
 import { bulkPurchase, executeOrder, setContracts, depositAndOffer, placeOrder, cancelOrder, bulkCancelOrder, bulkListing } from "thunder-sdk/src/contracts/thunder_exchange";
-import { assetManagerContractId, contracts, exchangeContractId, poolContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId, ZERO_B256 } from "global-constants";
+import { assetManagerContractId, contracts, exchangeContractId, poolContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId } from "global-constants";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import collectionsService from "api/collections/collections.service";
@@ -27,9 +27,17 @@ class FuelProvider extends BaseProvider {
     return "fuel";
   }
 
+  async getBaseAssetId() {
+    const _provider = await Provider.create(provider);
+
+    return _provider.getBaseAssetId();
+  }
+
   async handleWithdraw({ wallet, amount, user, setIsDisabled }: any) {
+    const _baseAssetId = await this.getBaseAssetId();
+
     try {
-      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId)
+      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId)
         .then(() => {
           userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
         })
@@ -44,8 +52,10 @@ class FuelProvider extends BaseProvider {
   }
 
   async handleDeposit({ wallet, amount, user, setIsDisabled }: any) {
+    const _baseAssetId = await this.getBaseAssetId();
+
     try {
-      await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), ZERO_B256, assetManagerContractId);
+      await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
       userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
     } catch (e) {
       console.log(e);
@@ -71,7 +81,21 @@ class FuelProvider extends BaseProvider {
       });
   }
 
-  handleUpdateOffer({ setBidBalanceUpdated, setCurrentBidBalance, currentItem, checkoutPrice, checkoutExpireTime, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
+  async handleUpdateOffer({
+    setBidBalanceUpdated,
+    setCurrentBidBalance,
+    currentItem,
+    checkoutPrice,
+    checkoutExpireTime,
+    selectedNFT,
+    wallet,
+    user,
+    setApproved,
+    setStartTransaction,
+    setIsFailed,
+  }: any) {
+    const _baseAssetId = await this.getBaseAssetId();
+
     offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then(async (res) => {
       const order = {
         isBuySide: true,
@@ -82,9 +106,9 @@ class FuelProvider extends BaseProvider {
         amount: 1, //fixed
         nonce: res.data[selectedNFT?.bestOffer?.id],
         strategy: strategyFixedPriceContractId,
-        payment_asset: BaseAssetId,
+        payment_asset: _baseAssetId,
         expiration_range: formatTimeContract(checkoutExpireTime),
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+        extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
       };
 
       const _provider = await this.getProvider();
@@ -95,7 +119,7 @@ class FuelProvider extends BaseProvider {
         setCurrentBidBalance(currentBidBalance);
         if (currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
-          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, true)
+          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, true)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenUpdateOffer({
@@ -183,7 +207,9 @@ class FuelProvider extends BaseProvider {
         handleTransactionError({ error: e, setStartTransaction, setIsFailed });
       });
   }
-  handleAcceptOffer({ wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete }: any) {
+  async handleAcceptOffer({ wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete }: any) {
+    const _baseAssetId = await this.getBaseAssetId();
+
     offerService.getOffersIndex([currentItem.id]).then(async (res) => {
       const order = {
         isBuySide: false,
@@ -194,14 +220,14 @@ class FuelProvider extends BaseProvider {
         collection: currentItem.contractAddress,
         token_id: currentItem.tokenOrder,
         strategy: strategyFixedPriceContractId,
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
+        extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // lazim degilse null
       };
 
       const _provider = await this.getProvider();
 
       setContracts(contracts, _provider);
 
-      executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
+      executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             offerService.acceptOffer({ id: currentItem.id }).then(() => {
@@ -418,6 +444,7 @@ class FuelProvider extends BaseProvider {
     updateListing,
   }: any) {
     const _provider = await this.getProvider();
+    const _baseAssetId = await this.getBaseAssetId();
 
     setContracts(contracts, _provider);
 
@@ -433,11 +460,11 @@ class FuelProvider extends BaseProvider {
           amount: 1,
           nonce: res.data + 1,
           strategy: strategyAuctionContractId,
-          payment_asset: BaseAssetId,
+          payment_asset: _baseAssetId,
           expiration_range: formatTimeContract(checkoutExpireTime),
           extra_params: {
-            extra_address_param: ZERO_B256,
-            extra_contract_param: ZERO_B256,
+            extra_address_param: _baseAssetId,
+            extra_contract_param: _baseAssetId,
             extra_u64_param: checkoutAuctionStartingPrice ? checkoutAuctionStartingPrice : 0,
           },
         },
@@ -465,9 +492,9 @@ class FuelProvider extends BaseProvider {
           amount: 1,
           nonce: res.data[selectedNFT?.id],
           strategy: strategyFixedPriceContractId,
-          payment_asset: BaseAssetId,
+          payment_asset: _baseAssetId,
           expiration_range: formatTimeContract(checkoutExpireTime),
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
         },
       ];
 
@@ -499,9 +526,9 @@ class FuelProvider extends BaseProvider {
           amount: 1,
           nonce: res.data + 1,
           strategy: strategyFixedPriceContractId,
-          payment_asset: BaseAssetId,
+          payment_asset: _baseAssetId,
           expiration_range: formatTimeContract(checkoutExpireTime),
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 },
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
         },
       ];
 
@@ -526,6 +553,7 @@ class FuelProvider extends BaseProvider {
 
   async handleCheckout({ setApproved, buyNowItem, tokenIds, user, items, setSuccessCheckout, wallet, setIsFailed, setStartTransaction }: any) {
     const _provider = await this.getProvider();
+    const _baseAssetId = await this.getBaseAssetId();
 
     setContracts(contracts, _provider);
 
@@ -540,10 +568,10 @@ class FuelProvider extends BaseProvider {
           token_id: buyNowItem.tokenOrder,
           collection: buyNowItem.contractAddress ?? buyNowItem.collection.contractAddress,
           strategy: strategyFixedPriceContractId,
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
         };
 
-        executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
+        executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
           .then((res) => {
             if (res.transactionResult.isStatusSuccess)
               nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
@@ -570,10 +598,10 @@ class FuelProvider extends BaseProvider {
           token_id: items[0].tokenOrder,
           collection: items[0].contractAddress,
           strategy: strategyFixedPriceContractId,
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
         };
 
-        executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
+        executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
           .then((res) => {
             if (res.transactionResult.isStatusSuccess)
               nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
@@ -602,11 +630,11 @@ class FuelProvider extends BaseProvider {
               token_id: item.tokenOrder,
               collection: item.contractAddress,
               strategy: strategyFixedPriceContractId,
-              extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+              extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
             };
           });
 
-          bulkPurchase(exchangeContractId, provider, wallet, takerOrders, BaseAssetId)
+          bulkPurchase(exchangeContractId, provider, wallet, takerOrders, _baseAssetId)
             .then((res) => {
               if (res?.transactionResult.isStatusSuccess)
                 nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
@@ -629,6 +657,8 @@ class FuelProvider extends BaseProvider {
   }
   async handleMakeOffer({ setApproved, selectedNFT, setBidBalanceUpdated, setCurrentBidBalance, checkoutPrice, checkoutExpireTime, user, wallet, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();
+    const _baseAssetId = await this.getBaseAssetId();
+
     setContracts(contracts, _provider);
 
     nftdetailsService
@@ -643,9 +673,9 @@ class FuelProvider extends BaseProvider {
           amount: 1, //fixed
           nonce: res.data + 1,
           strategy: strategyFixedPriceContractId,
-          payment_asset: BaseAssetId,
+          payment_asset: _baseAssetId,
           expiration_range: formatTimeContract(checkoutExpireTime),
-          extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
         };
 
         userService
@@ -655,7 +685,7 @@ class FuelProvider extends BaseProvider {
             const _currentBidBalance = res.data;
             if (_currentBidBalance < checkoutPrice) {
               const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-              depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, false)
+              depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
                 .then((res) => {
                   if (res.transactionResult.isStatusSuccess) {
                     nftdetailsService
@@ -721,6 +751,7 @@ class FuelProvider extends BaseProvider {
   }
   async handlePlaceBid({ selectedNFT, checkoutPrice, user, wallet, setStartTransaction, setIsFailed, setCurrentBidBalance, setApproved, setBidBalanceUpdated }: any) {
     const _provider = await this.getProvider();
+    const _baseAssetId = await this.getBaseAssetId();
 
     setContracts(contracts, _provider);
 
@@ -734,9 +765,9 @@ class FuelProvider extends BaseProvider {
         amount: 1,
         nonce: res.data[selectedNFT.id], //Auction bid de sabit tutabilirmisiz
         strategy: strategyAuctionContractId,
-        payment_asset: BaseAssetId,
+        payment_asset: _baseAssetId,
         expiration_range: 1, // Bid de fixed verebiliriz - onemli degil
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // laim degilse null
+        extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
       };
 
       userService.getBidBalance(user.id).then((res) => {
@@ -744,7 +775,7 @@ class FuelProvider extends BaseProvider {
         const _currentBidBalance = res.data;
         if (_currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), BaseAssetId, false)
+          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
@@ -793,7 +824,8 @@ class FuelProvider extends BaseProvider {
     }
     const _provider = await this.getProvider();
     const address = userWalletAddress ? userWalletAddress : walletAddress;
-    const balance = await _provider?.getBalance(address, ZeroBytes32);
+    const _baseAssetId = await this.getBaseAssetId();
+    const balance = await _provider?.getBalance(address, _baseAssetId);
 
     return balance?.toNumber() / 1000000000;
   }

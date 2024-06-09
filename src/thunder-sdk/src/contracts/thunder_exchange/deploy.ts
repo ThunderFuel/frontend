@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { Contract, ContractFactory, Provider, WalletUnlocked, BaseAssetId } from 'fuels';
+import { Contract, ContractFactory, Provider, WalletUnlocked } from 'fuels';
 import path from 'path';
 
 import { PoolAbi__factory } from "../../types/pool/factories/PoolAbi__factory";
@@ -26,12 +26,19 @@ let strategyAuction: Contract;
 let exchange: Contract;
 let contracts: Exchange.Contracts;
 
-const testnet = "https://beta-5.fuel.network/graphql";
+const testnet = "https://testnet.fuel.network/v1/graphql";
+const privateKey = "0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c"
 
 const main = async (_provider: string) => {
     const provider = await Provider.create(_provider)
-    const OWNER = new WalletUnlocked("0xde97d8624a438121b86a1956544bd72ed68cd69f2c99555b08b1e8c51ffd511c", provider);
-    const RECIPIENT = new WalletUnlocked("0x976e5c3fa620092c718d852ca703b6da9e3075b9f2ecb8ed42d9f746bf26aafb", provider);
+    const BaseAssetId = provider.getBaseAssetId()
+
+    if (!privateKey) {
+        console.error("Private key is required")
+        return
+    }
+    const OWNER = new WalletUnlocked(privateKey, provider);
+    const RECIPIENT = new WalletUnlocked(privateKey, provider);
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -41,53 +48,54 @@ const main = async (_provider: string) => {
          //                          CONTRACTS DEPLOYMENT                       //
         /////////////////////////////////////////////////////////////////////////
 
+        console.log("Contracts deployment started")
+
         // Deploy Exchange
         const exchangeBytecode = readFileSync(path.join(__dirname, '../../bin-files/thunder_exchange.bin'));
         const exchangeFactory = new ContractFactory(exchangeBytecode, ThunderExchangeAbi__factory.abi, OWNER);
-        const { minGasPrice: gasPrice } = provider.getGasConfig();
-        exchange = await exchangeFactory.deployContract({gasPrice});
+        exchange = await exchangeFactory.deployContract({});
         console.log(`Exchange contract id: ${exchange.id.toB256()}`)
         await sleep(1500);
 
         // Deploy AssetManager
         const assetManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/asset_manager.bin'));
         const assetManagerFactory = new ContractFactory(assetManagerBytecode, AssetManagerAbi__factory.abi, OWNER);
-        assetManager = await assetManagerFactory.deployContract({gasPrice: 1});
+        assetManager = await assetManagerFactory.deployContract({});
         console.log(`AssetManager contract id: ${assetManager.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Pool
         const poolBytecode = readFileSync(path.join(__dirname, '../../bin-files/pool.bin'));
         const poolFactory = new ContractFactory(poolBytecode, PoolAbi__factory.abi, OWNER);
-        pool = await poolFactory.deployContract({gasPrice: 1});
+        pool = await poolFactory.deployContract({});
         console.log(`Pool contract id: ${pool.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Strategy Fixed Price Sale
         const strategyBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_fixed_price_sale.bin'));
         const strategyFactory = new ContractFactory(strategyBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        strategyFixedPrice = await strategyFactory.deployContract({gasPrice: 1});
+        strategyFixedPrice = await strategyFactory.deployContract({});
         console.log(`StrategyFixedPrice contract id: ${strategyFixedPrice.id.toB256()}`)
         await sleep(1500);
 
         // // Deploy Strategy Auction
         const strategyAuctionBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_auction.bin'));
         const strategyAuctionFactory = new ContractFactory(strategyAuctionBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        strategyAuction = await strategyAuctionFactory.deployContract({gasPrice: 1});
+        strategyAuction = await strategyAuctionFactory.deployContract({});
         console.log(`StrategyAuction contract id: ${strategyAuction.id.toB256()}`)
         // await sleep(1500);
 
         // Deploy Execution Manager
         const executionManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/execution_manager.bin'));
         const executionManagerFactory = new ContractFactory(executionManagerBytecode, ExecutionManagerAbi__factory.abi, OWNER);
-        executionManager = await executionManagerFactory.deployContract({gasPrice: 1});
+        executionManager = await executionManagerFactory.deployContract({});
         console.log(`ExecutionManager contract id: ${executionManager.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Royalty Manager
         const royaltyManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/royalty_manager.bin'));
         const royaltyManagerFactory = new ContractFactory(royaltyManagerBytecode, RoyaltyManagerAbi__factory.abi, OWNER);
-        royaltyManager = await royaltyManagerFactory.deployContract({gasPrice: 1});
+        royaltyManager = await royaltyManagerFactory.deployContract({});
         console.log(`RoyaltyManager contract id: ${royaltyManager.id.toB256()}`)
         await sleep(1500);
 
@@ -148,6 +156,15 @@ const main = async (_provider: string) => {
             pool.id.toB256()
         );
         console.log(`set pool: ${setPool.isStatusSuccess}`)
+        await sleep(2000);
+
+        const { transactionResult: setMaxExpiration } = await Exchange.setMaxExpiration(
+            exchange.id.toString(),
+            provider.url,
+            OWNER.privateKey,
+            315569270
+        );
+        console.log(`set max expiration: ${setMaxExpiration.isStatusSuccess}`)
         await sleep(2000);
 
         // Initialize AssetManager

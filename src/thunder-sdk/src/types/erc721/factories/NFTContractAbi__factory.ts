@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
@@ -14,6 +14,7 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { NFTContractAbi, NFTContractAbiInterface } from "../NFTContractAbi";
 
 const _abi = {
+  "encoding": "1",
   "types": [
     {
       "typeId": 0,
@@ -29,6 +30,24 @@ const _abi = {
     },
     {
       "typeId": 2,
+      "type": "bool",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 3,
+      "type": "enum AccessError",
+      "components": [
+        {
+          "name": "NotOwner",
+          "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 4,
       "type": "enum BurnError",
       "components": [
         {
@@ -40,24 +59,36 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 3,
+      "typeId": 5,
       "type": "enum Identity",
       "components": [
         {
           "name": "Address",
-          "type": 10,
+          "type": 15,
           "typeArguments": null
         },
         {
           "name": "ContractId",
-          "type": 13,
+          "type": 18,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 4,
+      "typeId": 6,
+      "type": "enum InitializationError",
+      "components": [
+        {
+          "name": "CannotReinitialized",
+          "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 7,
       "type": "enum Metadata",
       "components": [
         {
@@ -67,24 +98,24 @@ const _abi = {
         },
         {
           "name": "Bytes",
-          "type": 12,
+          "type": 17,
           "typeArguments": null
         },
         {
           "name": "Int",
-          "type": 18,
+          "type": 22,
           "typeArguments": null
         },
         {
           "name": "String",
-          "type": 16,
+          "type": 21,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 5,
+      "typeId": 8,
       "type": "enum MintError",
       "components": [
         {
@@ -106,7 +137,7 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 6,
+      "typeId": 9,
       "type": "enum Option",
       "components": [
         {
@@ -116,16 +147,33 @@ const _abi = {
         },
         {
           "name": "Some",
-          "type": 8,
+          "type": 13,
           "typeArguments": null
         }
       ],
       "typeParameters": [
-        8
+        13
       ]
     },
     {
-      "typeId": 7,
+      "typeId": 10,
+      "type": "enum PauseError",
+      "components": [
+        {
+          "name": "Paused",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "NotPaused",
+          "type": 0,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 11,
       "type": "enum SetError",
       "components": [
         {
@@ -137,53 +185,22 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 8,
-      "type": "generic T",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 9,
-      "type": "raw untyped ptr",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 10,
-      "type": "struct Address",
-      "components": [
-        {
-          "name": "value",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 11,
-      "type": "struct AssetId",
-      "components": [
-        {
-          "name": "value",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
       "typeId": 12,
-      "type": "struct Bytes",
+      "type": "enum State",
       "components": [
         {
-          "name": "buf",
-          "type": 14,
+          "name": "Uninitialized",
+          "type": 0,
           "typeArguments": null
         },
         {
-          "name": "len",
-          "type": 18,
+          "name": "Initialized",
+          "type": 5,
+          "typeArguments": null
+        },
+        {
+          "name": "Revoked",
+          "type": 0,
           "typeArguments": null
         }
       ],
@@ -191,10 +208,22 @@ const _abi = {
     },
     {
       "typeId": 13,
-      "type": "struct ContractId",
+      "type": "generic T",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 14,
+      "type": "raw untyped ptr",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 15,
+      "type": "struct Address",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -202,48 +231,12 @@ const _abi = {
       "typeParameters": null
     },
     {
-      "typeId": 14,
-      "type": "struct RawBytes",
-      "components": [
-        {
-          "name": "ptr",
-          "type": 9,
-          "typeArguments": null
-        },
-        {
-          "name": "cap",
-          "type": 18,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 15,
-      "type": "struct RawVec",
-      "components": [
-        {
-          "name": "ptr",
-          "type": 9,
-          "typeArguments": null
-        },
-        {
-          "name": "cap",
-          "type": 18,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": [
-        8
-      ]
-    },
-    {
       "typeId": 16,
-      "type": "struct String",
+      "type": "struct AssetId",
       "components": [
         {
-          "name": "bytes",
-          "type": 12,
+          "name": "bits",
+          "type": 1,
           "typeArguments": null
         }
       ],
@@ -251,37 +244,82 @@ const _abi = {
     },
     {
       "typeId": 17,
-      "type": "struct Vec",
+      "type": "struct Bytes",
       "components": [
         {
           "name": "buf",
-          "type": 15,
-          "typeArguments": [
-            {
-              "name": "",
-              "type": 8,
-              "typeArguments": null
-            }
-          ]
+          "type": 20,
+          "typeArguments": null
         },
         {
           "name": "len",
-          "type": 18,
+          "type": 22,
           "typeArguments": null
         }
       ],
-      "typeParameters": [
-        8
-      ]
+      "typeParameters": null
     },
     {
       "typeId": 18,
+      "type": "struct ContractId",
+      "components": [
+        {
+          "name": "bits",
+          "type": 1,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 19,
+      "type": "struct OwnershipSet",
+      "components": [
+        {
+          "name": "new_owner",
+          "type": 5,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 20,
+      "type": "struct RawBytes",
+      "components": [
+        {
+          "name": "ptr",
+          "type": 14,
+          "typeArguments": null
+        },
+        {
+          "name": "cap",
+          "type": 22,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 21,
+      "type": "struct String",
+      "components": [
+        {
+          "name": "bytes",
+          "type": 17,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 22,
       "type": "u64",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 19,
+      "typeId": 23,
       "type": "u8",
       "components": null,
       "typeParameters": null
@@ -291,30 +329,24 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "asset",
-          "type": 11,
+          "name": "_asset",
+          "type": 16,
           "typeArguments": null
         }
       ],
       "name": "decimals",
       "output": {
         "name": "",
-        "type": 6,
+        "type": 9,
         "typeArguments": [
           {
             "name": "",
-            "type": 19,
+            "type": 23,
             "typeArguments": null
           }
         ]
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -464,6 +496,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
         }
       ]
     },
@@ -471,18 +509,18 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
+          "type": 16,
           "typeArguments": null
         }
       ],
       "name": "name",
       "output": {
         "name": "",
-        "type": 6,
+        "type": 9,
         "typeArguments": [
           {
             "name": "",
-            "type": 16,
+            "type": 21,
             "typeArguments": null
           }
         ]
@@ -656,18 +694,18 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
+          "type": 16,
           "typeArguments": null
         }
       ],
       "name": "symbol",
       "output": {
         "name": "",
-        "type": 6,
+        "type": 9,
         "typeArguments": [
           {
             "name": "",
-            "type": 16,
+            "type": 21,
             "typeArguments": null
           }
         ]
@@ -842,16 +880,10 @@ const _abi = {
       "name": "total_assets",
       "output": {
         "name": "",
-        "type": 18,
+        "type": 22,
         "typeArguments": null
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -977,6 +1009,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
         }
       ]
     },
@@ -984,18 +1022,18 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
+          "type": 16,
           "typeArguments": null
         }
       ],
       "name": "total_supply",
       "output": {
         "name": "",
-        "type": 6,
+        "type": 9,
         "typeArguments": [
           {
             "name": "",
-            "type": 18,
+            "type": 22,
             "typeArguments": null
           }
         ]
@@ -1004,7 +1042,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " Returns the total supply of tokens for an asset."
+            " Returns the total supply of coins for an asset."
           ]
         },
         {
@@ -1076,7 +1114,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " * [Option<u64>] - The total supply of tokens for `asset`."
+            " * [Option<u64>] - The total supply of coins for `asset`."
           ]
         },
         {
@@ -1192,7 +1230,7 @@ const _abi = {
         },
         {
           "name": "amount",
-          "type": 18,
+          "type": 22,
           "typeArguments": null
         }
       ],
@@ -1206,7 +1244,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " Burns tokens sent with the given `sub_id`."
+            " Burns assets sent with the given `sub_id`."
           ]
         },
         {
@@ -1260,13 +1298,37 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " * `sub_id`: [SubId] - The sub-identifier of the token to burn."
+            " * `sub_id`: [SubId] - The sub-identifier of the asset to burn."
           ]
         },
         {
           "name": "doc-comment",
           "arguments": [
-            " * `amount`: [u64] - The quantity of tokens to burn."
+            " * `amount`: [u64] - The quantity of coins to burn."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Reverts"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * When the contract is paused."
           ]
         },
         {
@@ -1390,6 +1452,10 @@ const _abi = {
           ]
         },
         {
+          "name": "payable",
+          "arguments": []
+        },
+        {
           "name": "storage",
           "arguments": [
             "read",
@@ -1402,7 +1468,7 @@ const _abi = {
       "inputs": [
         {
           "name": "recipient",
-          "type": 3,
+          "type": 5,
           "typeArguments": null
         },
         {
@@ -1412,7 +1478,7 @@ const _abi = {
         },
         {
           "name": "amount",
-          "type": 18,
+          "type": 22,
           "typeArguments": null
         }
       ],
@@ -1426,7 +1492,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " Mints new tokens using the `sub_id` sub-identifier."
+            " Mints new assets using the `sub_id` sub-identifier."
           ]
         },
         {
@@ -1450,13 +1516,13 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " This conforms to the SRC-20 NFT portion of the standard for a maximium"
+            " This conforms to the SRC-20 NFT portion of the standard for a maximum"
           ]
         },
         {
           "name": "doc-comment",
           "arguments": [
-            " mint amount of 1 token per asset."
+            " mint amount of 1 coin per asset."
           ]
         },
         {
@@ -1480,19 +1546,19 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " * `recipient`: [Identity] - The user to which the newly minted tokens are transferred to."
+            " * `recipient`: [Identity] - The user to which the newly minted assets are transferred to."
           ]
         },
         {
           "name": "doc-comment",
           "arguments": [
-            " * `sub_id`: [SubId] - The sub-identifier of the newly minted token."
+            " * `sub_id`: [SubId] - The sub-identifier of the newly minted asset."
           ]
         },
         {
           "name": "doc-comment",
           "arguments": [
-            " * `amount`: [u64] - The quantity of tokens to mint."
+            " * `amount`: [u64] - The quantity of coins to mint."
           ]
         },
         {
@@ -1516,6 +1582,12 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
+            " * When the contract is paused."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
             " * When amount is greater than one."
           ]
         },
@@ -1528,7 +1600,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " * When more than 100,000 NFTs have been minted."
+            " * When more than the MAX_SUPPLY NFTs have been minted."
           ]
         },
         {
@@ -1640,34 +1712,28 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
+          "type": 16,
           "typeArguments": null
         },
         {
           "name": "key",
-          "type": 16,
+          "type": 21,
           "typeArguments": null
         }
       ],
       "name": "metadata",
       "output": {
         "name": "",
-        "type": 6,
+        "type": 9,
         "typeArguments": [
           {
             "name": "",
-            "type": 4,
+            "type": 7,
             "typeArguments": null
           }
         ]
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -1835,19 +1901,192 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "output": {
+        "name": "",
+        "type": 12,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Returns the owner."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Return Values"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * [State] - Represents the state of ownership for this contract."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Number of Storage Accesses"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * Reads: `1`"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Examples"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```sway"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " use standards::src5::SRC5;"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " fn foo(contract_id: ContractId) {"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     let ownership_abi = abi(contract_id, SRC_5);"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     match ownership_abi.owner() {"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "         State::Uninitalized => log(\"The ownership is uninitalized\"),"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "         State::Initialized(owner) => log(\"The ownership is initalized\"),"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "         State::Revoked => log(\"The ownership is revoked\"),"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     }"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " }"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
+          ]
         }
       ]
     },
     {
       "inputs": [
         {
-          "name": "asset",
-          "type": 11,
+          "name": "_asset",
+          "type": 16,
           "typeArguments": null
         },
         {
-          "name": "decimals",
-          "type": 19,
+          "name": "_decimals",
+          "type": 23,
           "typeArguments": null
         }
       ],
@@ -1936,12 +2175,12 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
+          "type": 16,
           "typeArguments": null
         },
         {
           "name": "name",
-          "type": 16,
+          "type": 21,
           "typeArguments": null
         }
       ],
@@ -1952,12 +2191,6 @@ const _abi = {
         "typeArguments": null
       },
       "attributes": [
-        {
-          "name": "storage",
-          "arguments": [
-            "write"
-          ]
-        },
         {
           "name": "doc-comment",
           "arguments": [
@@ -2010,6 +2243,12 @@ const _abi = {
           "name": "doc-comment",
           "arguments": [
             ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * When the caller is not the owner of the contract."
           ]
         },
         {
@@ -2075,7 +2314,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " use token::SetAssetAttributes;"
+            " use asset::SetAssetAttributes;"
           ]
         },
         {
@@ -2143,6 +2382,12 @@ const _abi = {
           "arguments": [
             " ```"
           ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
         }
       ]
     },
@@ -2150,12 +2395,12 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
+          "type": 16,
           "typeArguments": null
         },
         {
           "name": "symbol",
-          "type": 16,
+          "type": 21,
           "typeArguments": null
         }
       ],
@@ -2223,6 +2468,12 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
+            " * When the caller is not the owner of the contract."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
             " * When the symbol has already been set for an asset."
           ]
         },
@@ -2283,7 +2534,7 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " use token::SetAssetAttributes;"
+            " use asset::SetAssetAttributes;"
           ]
         },
         {
@@ -2364,17 +2615,17 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 11,
-          "typeArguments": null
-        },
-        {
-          "name": "key",
           "type": 16,
           "typeArguments": null
         },
         {
+          "name": "key",
+          "type": 21,
+          "typeArguments": null
+        },
+        {
           "name": "metadata",
-          "type": 4,
+          "type": 7,
           "typeArguments": null
         }
       ],
@@ -2508,13 +2759,13 @@ const _abi = {
         {
           "name": "doc-comment",
           "arguments": [
-            " use src_7::{SRC7, Metadata};"
+            " use asset::metdata::SetAssetMetadata;"
           ]
         },
         {
           "name": "doc-comment",
           "arguments": [
-            " use token::metdata::SetAssetMetadata;"
+            " use src_7::{SRC7, Metadata};"
           ]
         },
         {
@@ -2575,31 +2826,623 @@ const _abi = {
       ]
     },
     {
-      "inputs": [
+      "inputs": [],
+      "name": "is_paused",
+      "output": {
+        "name": "",
+        "type": 2,
+        "typeArguments": null
+      },
+      "attributes": [
         {
-          "name": "recipient",
-          "type": 3,
-          "typeArguments": null
+          "name": "doc-comment",
+          "arguments": [
+            " Returns whether the contract is paused."
+          ]
         },
         {
-          "name": "sub_ids",
-          "type": 17,
-          "typeArguments": [
-            {
-              "name": "",
-              "type": 1,
-              "typeArguments": null
-            }
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Returns"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * [bool] - The pause state for the contract."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Number of Storage Accesses"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * Reads: `1`"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Examples"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```sway"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " use sway_libs::pausable::Pausable;"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " fn foo(contract_id: ContractId) {"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     let pausable_abi = abi(Pausable, contract_id);"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     assert(!pausable_abi.is_paused());"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " }"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
           ]
         }
-      ],
-      "name": "bulk_mint",
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "pause",
       "output": {
         "name": "",
         "type": 0,
         "typeArguments": null
       },
       "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Pauses the contract."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Reverts"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * When the caller is not the contract owner."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Number of Storage Accesses"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * Writes: `1`"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Examples"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```sway"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " use sway_libs::pausable::Pausable;"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " fn foo(contract_id: ContractId) {"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     let pausable_abi = abi(Pausable, contract_id);"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     pausable_abi.pause();"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     assert(pausable_abi.is_paused());"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " }"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Unpauses the contract."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Reverts"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * When the caller is not the contract owner."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Number of Storage Accesses"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * Writes: `1`"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Examples"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```sway"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " use sway_libs::pausable::Pausable;"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " fn foo(contract_id: ContractId) {"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     let pausable_abi = abi(Pausable, contract_id);"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     pausable_abi.unpause();"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     assert(!pausable_abi.is_paused());"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " }"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "write"
+          ]
+        }
+      ]
+    },
+    {
+      "inputs": [
+        {
+          "name": "owner",
+          "type": 5,
+          "typeArguments": null
+        }
+      ],
+      "name": "constructor",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      },
+      "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Sets the defaults for the contract."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Arguments"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * `owner`: [Identity] - The `Identity` that will be the first owner."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Reverts"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * When ownership has been set before."
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Number of Storage Acesses"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * Reads: `1`"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " * Write: `1`"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " # Examples"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```sway"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " use standards::src5::SRC5;"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " use nft::Constructor;"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " fn foo(contract: ContractId, owner: Identity) {"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     let src_5_abi = abi(SRC5, contract.bits());"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     assert(src_5_abi.owner() == State::Uninitialized);"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            ""
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     let constructor_abi = abi(Constructor, contract.bits());"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     constructor_abi.constructor(owner);"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            "     assert(src_5_abi.owner() == State::Initialized(owner));"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " }"
+          ]
+        },
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " ```"
+          ]
+        },
         {
           "name": "storage",
           "arguments": [
@@ -2612,88 +3455,74 @@ const _abi = {
   ],
   "loggedTypes": [
     {
-      "logId": 0,
+      "logId": "10032608944051208538",
       "loggedType": {
         "name": "",
-        "type": 2,
+        "type": 10,
         "typeArguments": []
       }
     },
     {
-      "logId": 1,
+      "logId": "4237256875605624201",
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 4,
         "typeArguments": []
       }
     },
     {
-      "logId": 2,
+      "logId": "17188485204969729195",
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 8,
         "typeArguments": []
       }
     },
     {
-      "logId": 3,
+      "logId": "13791596350235125220",
       "loggedType": {
         "name": "",
-        "type": 5,
+        "type": 11,
         "typeArguments": []
       }
     },
     {
-      "logId": 4,
+      "logId": "4571204900286667806",
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 3,
         "typeArguments": []
       }
     },
     {
-      "logId": 5,
+      "logId": "2161305517876418151",
       "loggedType": {
         "name": "",
-        "type": 7,
+        "type": 6,
         "typeArguments": []
       }
     },
     {
-      "logId": 6,
+      "logId": "16280289466020123285",
       "loggedType": {
         "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 7,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 8,
-      "loggedType": {
-        "name": "",
-        "type": 5,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 9,
-      "loggedType": {
-        "name": "",
-        "type": 5,
+        "type": 19,
         "typeArguments": []
       }
     }
   ],
   "messagesTypes": [],
-  "configurables": []
+  "configurables": [
+    {
+      "name": "MAX_SUPPLY",
+      "configurableType": {
+        "name": "",
+        "type": 22,
+        "typeArguments": null
+      },
+      "offset": 121536
+    }
+  ]
 };
 
 const _storageSlots: StorageSlot[] = [
@@ -2703,33 +3532,31 @@ const _storageSlots: StorageSlot[] = [
   }
 ];
 
-export class NFTContractAbi__factory {
-  static readonly abi = _abi;
+export const NFTContractAbi__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): NFTContractAbiInterface {
+  createInterface(): NFTContractAbiInterface {
     return new Interface(_abi) as unknown as NFTContractAbiInterface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): NFTContractAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as NFTContractAbi
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<NFTContractAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = NFTContractAbi__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 

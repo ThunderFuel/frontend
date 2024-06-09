@@ -29,7 +29,7 @@ export async function initialize(
         const contract = await setup(contractId, provider, wallet)
         const { transactionResult } = await contract.functions
             .initialize()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -45,10 +45,10 @@ export async function addStrategy(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _strategy: ContractIdInput = { value: strategy };
+        const _strategy: ContractIdInput = { bits: strategy };
         const { transactionResult } = await contract.functions
             .add_strategy(_strategy)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -66,7 +66,7 @@ export async function removeStrategy(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .remove_strategy(index)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -81,7 +81,7 @@ export async function isStrategyWhitelisted(
 ) {
     try {
         const contract = await setup(contractId, provider);
-        const _strategy: ContractIdInput = { value: strategy };
+        const _strategy: ContractIdInput = { bits: strategy };
         const { value } = await contract.functions
             .is_strategy_whitelisted(_strategy)
             .simulate();
@@ -145,10 +145,10 @@ export async function transferOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _newOwner: IdentityInput = { Address: { value: newOwner } };
+        const _newOwner: IdentityInput = { Address: { bits: newOwner } };
         const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -165,7 +165,7 @@ export async function renounceOwnership(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .renounce_ownership()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {

@@ -1,10 +1,12 @@
 import { Provider, WalletUnlocked, WalletLocked, BigNumberish } from "fuels";
 import { StrategyFixedPriceSaleAbi__factory, StrategyFixedPriceSaleAbi } from "../../types/execution_strategies/strategy_fixed_price_sale";
-//import { StrategyFixedPriceSaleAbi, ContractIdInput, AddressInput, IdentityInput, SideInput } from "../../types/execution_strategies/strategy_fixed_price_sale/StrategyFixedPriceSaleAbi";
-type AddressInput = { value: string };
-type ContractIdInput = { value: string };
+//import { ContractIdInput, AddressInput, IdentityInput, SideInput } from "../../types/execution_strategies/strategy_fixed_price_sale/StrategyFixedPriceSaleAbi";
+type AddressInput = { bits: string };
+type ContractIdInput = { bits: string };
 type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
-type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+type Enum<T> = {
+    [K in keyof T]: Pick<T, K> & { [P in Exclude<keyof T, K>]?: never };
+  }[keyof T];
 enum SideInput { Buy = 'Buy', Sell = 'Sell' };
 
 async function setup(
@@ -33,10 +35,10 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _exchange: ContractIdInput = { value: exchange };
+        const _exchange: ContractIdInput = { bits: exchange };
         const { transactionResult, transactionResponse } = await contract.functions
             .initialize(_exchange)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResponse, transactionResult };
     } catch(err: any) {
@@ -55,7 +57,7 @@ export async function setProtocolFee(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .set_protocol_fee(fee)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -109,7 +111,7 @@ export async function getMakerOrderOfUser(
         isBuyOrder?
             side = SideInput.Buy :
             side = SideInput.Sell;
-        const _user: AddressInput = { value: user };
+        const _user: AddressInput = { bits: user };
         const contract = await setup(contractId, provider, privateKey);
         const { value } = await contract.functions
             .get_maker_order_of_user(_user, nonce, side)
@@ -133,7 +135,7 @@ export async function isValidOrder(
         isBuyOrder?
             side = SideInput.Buy :
             side = SideInput.Sell;
-        const _user: AddressInput = { value: user };
+        const _user: AddressInput = { bits: user };
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .is_valid_order(_user, nonce, side)
@@ -157,7 +159,7 @@ export async function getOrderNonceOfUser(
         isBuyOrder?
             side = SideInput.Buy :
             side = SideInput.Sell;
-        const _user: AddressInput = { value: user };
+        const _user: AddressInput = { bits: user };
         const contract = await setup(contractId, provider, private_key);
         const { value } = await contract.functions
             .get_order_nonce_of_user(_user, side)
@@ -180,7 +182,7 @@ export async function getMinOrderNonceOfUser(
         isBuyOrder?
             side = SideInput.Buy :
             side = SideInput.Sell;
-        const _user: AddressInput = { value: user };
+        const _user: AddressInput = { bits: user };
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .get_min_order_nonce_of_user(_user, side)
@@ -216,10 +218,10 @@ export async function transferOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _newOwner: IdentityInput = { Address: { value: newOwner } };
+        const _newOwner: IdentityInput = { Address: { bits: newOwner } };
         const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -237,7 +239,7 @@ export async function renounceOwnership(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .renounce_ownership()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {

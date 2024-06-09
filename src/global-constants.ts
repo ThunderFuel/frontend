@@ -1,31 +1,29 @@
 export const THUNDER_THEME_NAME = "thunder_theme";
 
-export const provider = "https://beta-5.fuel.network/graphql";
-export const FUEL_FAUCET_URL = "https://faucet-beta-5.fuel.network";
-export const FUEL_EXPLORER_URL = "https://app.fuel.network/";
+export const provider = "https://testnet.fuel.network/v1/graphql";
+export const FUEL_FAUCET_URL = "https://faucet-testnet.fuel.network/";
+export const FUEL_EXPLORER_URL = "https://next-app.fuel.network/";
 
-export const ZERO_B256 = "0x0000000000000000000000000000000000000000000000000000000000000000";
-
-export const poolContractId = "0x8dad4bc41accf5c8a4d326ba513c7bccba075c4906ef1826f2cbf7409514a112";
-export const executionManagerContractId = "0x0bc0b9787481eea6bde1396600d1bc00a7e26018c9433d5a6c79fbe9e2d51aa1";
-export const royaltyManagerContractId = "0xf855df441b733d49ee9d738138ec38567fde35dbbb1ef08dac3c8e4f3e4a7908";
-export const assetManagerContractId = "0xe2591588f3dfaeb28053d6d509f16053272b9c58481bdd504dd7cb537a3504f0";
-export const strategyFixedPriceContractId = "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f";
-export const strategyAuctionContractId = "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f";
-export const exchangeContractId = "0xc5fbe89423bc290215a184f4e607e39340ef475b27f5b761fb9fa873bc937700";
+export const poolContractId = "0x6e7b503001d4f3ad0cb957d0201263c674e4cc744cece5cca587beec8422662e";
+export const executionManagerContractId = "0x4cc76daec9f3a8fe36b55d2b5f841f15e14d719094e73f25f26476e5a95e406d";
+export const royaltyManagerContractId = "0x125df60f18c9c86b025cb4015b2c1375cda45cf405762cccae1955ce274ca3ba";
+export const assetManagerContractId = "0xa6bb9d650a74f3c8ac0f6fdb0d97eefce5579fdd94891b9584559e23916c03ea";
+export const strategyFixedPriceContractId = "0xcb7ffc0631242f4804df59aded3cd6374aee8c0f7cec6f1d584110c06cbb5569";
+export const strategyAuctionContractId = "0x9ffe3ca6b3e042b57527e078dbabfefcfb84708251d9ce2cf20220b564bda4a4";
+export const exchangeContractId = "0x5f1c2c8f0c3f2e34a36f55ae4b80e594b81b33c8a41cfdf450d35bf51211ccc5";
 export const ERC721ContractId = "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74";
 
 // StrategyAuction contract id: 0x9b68a29813a329fa9c4d270a7c19081e369d332075ebb357a9fcb40824d88654
 
 export const contracts = {
-  pool: "0x8dad4bc41accf5c8a4d326ba513c7bccba075c4906ef1826f2cbf7409514a112",
-  executionManager: "0x0bc0b9787481eea6bde1396600d1bc00a7e26018c9433d5a6c79fbe9e2d51aa1",
-  royaltyManager: "0xf855df441b733d49ee9d738138ec38567fde35dbbb1ef08dac3c8e4f3e4a7908",
-  assetManager: "0xe2591588f3dfaeb28053d6d509f16053272b9c58481bdd504dd7cb537a3504f0",
-  strategyFixedPrice: "0x097dd0116aa8a47c8f243dfc9e523376ae015935441042d48d6ae6976738835f",
-  strategyAuction: "0x9b68a29813a329fa9c4d270a7c19081e369d332075ebb357a9fcb40824d88654",
-  // exchange: "0xc5fbe89423bc290215a184f4e607e39340ef475b27f5b761fb9fa873bc937700",
-  // erc721: "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
+  pool: "0x6e7b503001d4f3ad0cb957d0201263c674e4cc744cece5cca587beec8422662e",
+  executionManager: "0x4cc76daec9f3a8fe36b55d2b5f841f15e14d719094e73f25f26476e5a95e406d",
+  royaltyManager: "0x125df60f18c9c86b025cb4015b2c1375cda45cf405762cccae1955ce274ca3ba",
+  assetManager: "0xa6bb9d650a74f3c8ac0f6fdb0d97eefce5579fdd94891b9584559e23916c03ea",
+  strategyFixedPrice: "0xcb7ffc0631242f4804df59aded3cd6374aee8c0f7cec6f1d584110c06cbb5569",
+  strategyAuction: "0x9ffe3ca6b3e042b57527e078dbabfefcfb84708251d9ce2cf20220b564bda4a4",
+  exchange: "0x5f1c2c8f0c3f2e34a36f55ae4b80e594b81b33c8a41cfdf450d35bf51211ccc5",
+  erc721: "0x439c7e118889e1e9c56802ff4e5e14f9f4161ab85a233e8aa6758ad0c742dc74",
 };
 
 export const DISCORD_URL = "https://discord.com/invite/thundermarket";

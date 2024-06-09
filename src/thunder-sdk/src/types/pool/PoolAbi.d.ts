@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import type {
@@ -29,11 +29,11 @@ export type IdentityOutput = Enum<{ Address: AddressOutput, ContractId: Contract
 export enum PoolErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', AssetNotSupported = 'AssetNotSupported', AmountHigherThanBalance = 'AmountHigherThanBalance', CallerMustBeTheExchange = 'CallerMustBeTheExchange', IdentityMustBeNonZero = 'IdentityMustBeNonZero' };
 export enum PoolErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', AssetNotSupported = 'AssetNotSupported', AmountHigherThanBalance = 'AmountHigherThanBalance', CallerMustBeTheExchange = 'CallerMustBeTheExchange', IdentityMustBeNonZero = 'IdentityMustBeNonZero' };
 
-export type AddressInput = { value: string };
+export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
-export type ContractIdInput = { value: string };
+export type ContractIdInput = { bits: string };
 export type ContractIdOutput = ContractIdInput;
 export type DepositInput = { address: IdentityInput, asset: AssetIdInput, amount: BigNumberish };
 export type DepositOutput = { address: IdentityOutput, asset: AssetIdOutput, amount: BN };
