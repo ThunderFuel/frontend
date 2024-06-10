@@ -168,6 +168,8 @@ class FuelProvider extends BaseProvider {
       return { ...item, expireTime: formatTimeBackend(item.expireTime) };
     });
 
+    console.log(promises);
+
     const { bulkListMakerOders, bulkUpdateMakerOders } = await handleOrders({
       bulkListItems,
       bulkUpdateItems,

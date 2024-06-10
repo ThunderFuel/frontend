@@ -41,13 +41,13 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
+  const fuel = new FuelProvider();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = async () => {
-    const fuel = new FuelProvider();
     const _baseAssetId = await fuel.getBaseAssetId();
 
     nftdetailsService.getAuctionIndex([selectedNFT?.id]).then(async (res) => {

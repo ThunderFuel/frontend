@@ -8,7 +8,7 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
-import { formatTimeContract, toGwei } from "utils";
+import { toGwei } from "utils";
 import { CheckoutCartItems } from "./Checkout";
 import { useWallet } from "hooks/useWallet";
 import { strategyFixedPriceContractId } from "global-constants";
@@ -39,6 +39,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
+  const fuel = new FuelProvider();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
@@ -55,47 +56,44 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
     let updatePromise;
     let listPromise;
 
-    const fuel = new FuelProvider();
     const _baseAssetId = await fuel.getBaseAssetId();
 
     if (bulkUpdateItems.length > 0) {
-      updatePromise = nftdetailsService.getTokensIndex(tokenIds).then((res) => {
-        bulkUpdateMakerOders = bulkUpdateItems.map((item: any) => {
-          return {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: item.collection,
-            token_id: item.tokenOrder,
-            price: toGwei(item.price).toNumber(),
-            amount: 1,
-            nonce: res.data[item.tokenId],
-            strategy: strategyFixedPriceContractId,
-            payment_asset: _baseAssetId,
-            expiration_range: 315569260,
-            extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
-          };
-        });
+      const res = await nftdetailsService.getTokensIndex(tokenIds);
+      bulkUpdateMakerOders = bulkUpdateItems.map((item: any) => {
+        return {
+          isBuySide: false,
+          maker: user.walletAddress,
+          collection: item.collection,
+          token_id: item.tokenOrder,
+          price: toGwei(item.price).toNumber(),
+          amount: 1,
+          nonce: res.data[item.tokenId],
+          strategy: strategyFixedPriceContractId,
+          payment_asset: _baseAssetId,
+          expiration_range: 315569260,
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
+        };
       });
       promises.push(updatePromise);
     }
 
     if (bulkListItems.length > 0) {
-      listPromise = nftdetailsService.getLastIndex(0, user.id).then((res) => {
-        bulkListMakerOders = bulkListItems.map((item: any, index: any) => {
-          return {
-            isBuySide: false,
-            maker: user.walletAddress,
-            collection: item.collection,
-            token_id: item.tokenOrder,
-            price: toGwei(item.price).toNumber(),
-            amount: 1,
-            nonce: res.data + 1 + index,
-            strategy: strategyFixedPriceContractId,
-            payment_asset: _baseAssetId,
-            expiration_range: 315569260,
-            extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
-          };
-        });
+      const res = await nftdetailsService.getLastIndex(0, user.id);
+      bulkListMakerOders = bulkListItems.map((item: any, index: any) => {
+        return {
+          isBuySide: false,
+          maker: user.walletAddress,
+          collection: item.collection,
+          token_id: item.tokenOrder,
+          price: toGwei(item.price).toNumber(),
+          amount: 1,
+          nonce: res.data + 1 + index,
+          strategy: strategyFixedPriceContractId,
+          payment_asset: _baseAssetId,
+          expiration_range: 315569260,
+          extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 },
+        };
       });
       promises.push(listPromise);
     }
