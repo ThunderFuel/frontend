@@ -892,11 +892,8 @@ class FuelProvider extends BaseProvider {
   async hasEnoughFunds(buyNowItemPrice?: any, walletAddress?: any, userWalletAddress?: any, totalAmount?: any): Promise<any> {
     try {
       const balance = await this.getBalance(walletAddress, userWalletAddress);
-      if (!balance.toNumber()) {
-        return false;
-      }
 
-      return balance.toNumber() / 1000000000 >= (buyNowItemPrice ? buyNowItemPrice : totalAmount);
+      return balance >= (buyNowItemPrice ? buyNowItemPrice : totalAmount);
     } catch {
       return false;
     }
