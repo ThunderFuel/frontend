@@ -77,10 +77,11 @@ export async function removeAsset(
 export async function isAssetSupported(
     contractId: string,
     provider: string,
+    wallet: string | WalletLocked,
     asset: string,
 ) {
     try {
-        const contract = await setup(contractId, provider);
+        const contract = await setup(contractId, provider, wallet);
         const _asset: AssetIdInput = { bits: asset };
         const { value } = await contract.functions
             .is_asset_supported(_asset)
