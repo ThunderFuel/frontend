@@ -2,6 +2,7 @@
 node_modules
 src/contracts/thunder_exchange/deployCollection.ts
 src/contracts/erc721/mint.ts
+src/contracts/erc721/balance.ts
 
 # testing
 coverage
