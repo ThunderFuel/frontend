@@ -93,27 +93,27 @@ const defaultHeaders: ITableHeader[] = [
   {
     key: "topBid",
     text: "top bid",
-    width: "20%",
+    width: "30%",
     align: "flex-end",
     render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" />,
   },
   {
     key: "quantity",
     text: `Quantity`,
-    width: "20%",
+    width: "30%",
     align: "flex-end",
     sortValue: 1,
     render: (item) => <OfferLabel>1</OfferLabel>,
     // renderHeader: (header) => <span>asasas</span>,
   },
-  {
-    key: "date",
-    text: "expires",
-    width: "20%",
-    align: "flex-end",
-    sortValue: 3,
-    render: (item) => <OfferExpiredTime item={item} />,
-  },
+  // {
+  //   key: "date",
+  //   text: "expires",
+  //   width: "20%",
+  //   align: "flex-end",
+  //   sortValue: 3,
+  //   render: (item) => <OfferExpiredTime item={item} />,
+  // },
 ];
 
 const usersBidBalance = {} as any;
