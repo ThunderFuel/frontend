@@ -584,8 +584,21 @@ class FuelProvider extends BaseProvider {
                 }
               });
           })
-          .catch((e) => {
-            console.log(e);
+          .catch(async (e) => {
+            const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
+
+            if (response?.data === user?.walletAddress) {
+              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                if (res.data) {
+                  setSuccessCheckout(res.data);
+                  setApproved(true);
+                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                }
+              });
+
+              return;
+            }
+
             if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
               setStartTransaction(false);
             else setIsFailed(true);
@@ -614,8 +627,21 @@ class FuelProvider extends BaseProvider {
                 }
               });
           })
-          .catch((e) => {
-            console.log(e);
+          .catch(async (e) => {
+            const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
+
+            if (response?.data === user?.walletAddress) {
+              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                if (res.data) {
+                  setSuccessCheckout(res.data);
+                  setApproved(true);
+                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                }
+              });
+
+              return;
+            }
+
             if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
               setStartTransaction(false);
             else setIsFailed(true);
@@ -647,8 +673,21 @@ class FuelProvider extends BaseProvider {
                   }
                 });
             })
-            .catch((e) => {
-              console.log(e);
+            .catch(async (e) => {
+              const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
+
+              if (response?.data === user?.walletAddress) {
+                nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                  if (res.data) {
+                    setSuccessCheckout(res.data);
+                    setApproved(true);
+                    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                  }
+                });
+
+                return;
+              }
+
               if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
                 setStartTransaction(false);
               else setIsFailed(true);

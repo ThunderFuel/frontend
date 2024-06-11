@@ -66,4 +66,7 @@ export default {
   async getListingOrderId(params: any): Promise<ApiResponse<any>> {
     return ThunderURL.get("v1/offer/getListingByTokenId", { params });
   },
+  async getTokenOwner(params: { tokenId: string }): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/token/gettokenowner", { params });
+  },
 };
