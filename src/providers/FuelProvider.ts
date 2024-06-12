@@ -628,7 +628,7 @@ class FuelProvider extends BaseProvider {
               });
           })
           .catch(async (e) => {
-            const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
+            const response = await nftdetailsService.getTokenOwners([{ tokenOrder: items[0].tokenOrder, contractAddress: items[0].contractAddress }]);
 
             if (response?.data === user?.walletAddress) {
               nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
@@ -674,9 +674,12 @@ class FuelProvider extends BaseProvider {
                 });
             })
             .catch(async (e) => {
-              const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
+              const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
+              const response = await nftdetailsService.getTokenOwners(requestData);
 
-              if (response?.data === user?.walletAddress) {
+              const approvedPurchases = response?.data?.find((item: any) => item.owner === user?.walletAddress);
+
+              if (approvedPurchases !== undefined) {
                 nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
                   if (res.data) {
                     setSuccessCheckout(res.data);
