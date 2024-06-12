@@ -652,13 +652,13 @@ async function _executeBuyOrder(
             .txParams({variableOutputs: 4})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
-            .call();
+            .getTransactionCost();
 
         const gasLimit = Number(gasUsed) * 1.5
 
         const { transactionResult } = await contract.functions
             .execute_order(order)
-            .txParams({variableOutputs: 4})
+            .txParams({variableOutputs: 4, gasLimit})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
             .call();
