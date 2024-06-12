@@ -79,7 +79,7 @@ const BulkListing = () => {
           <h6 className="lg:hidden text-h6 text-gray-light">{getItems.length} Items</h6>
         </div>
       </div>
-      <div className="pb-14 lg:px-32">
+      <div className="lg:px-32">
         <div className="lg:border-x border-gray h-full">
           <div className="px-5 py-3 lg:py-2.5 flex items-center justify-between">
             <h6 className="hidden lg:flex text-h6 text-gray-light">{getItems.length} Items</h6>

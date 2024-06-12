@@ -62,7 +62,7 @@ const Footer = ({ items, prices }: any) => {
   }, [bulkItems]);
 
   return (
-    <footer className="sticky bottom-0 border-t border-gray flex flex-col bg-bg">
+    <footer className="sticky bottom-14 lg:bottom-0 border-t border-gray flex flex-col bg-bg">
       <div className="lg:p-5 flex flex-col lg:flex-row lg:gap-32 w-full justify-end text-gray-light">
         {/* <div className="py-2.5 px-3 lg:p-0 flex gap-2 lg:gap-16 flex-shrink-0 justify-between">
           <div className="flex flex-col gap-2">
