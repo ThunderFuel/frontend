@@ -29,7 +29,7 @@ const OfferList = ({ headers }: any) => {
           </Config>
         ) : null}
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 border-t border-gray">
         <OfferTable
           isOffersMade={isOffersMade}
           headers={headers}

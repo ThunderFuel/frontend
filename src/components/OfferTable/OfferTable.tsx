@@ -4,12 +4,13 @@ import EthereumPrice from "../EthereumPrice";
 import { addressFormat, dateFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
-import { IconCircleRemoveWhite, IconClock, IconHand, IconOffer } from "../../icons";
+import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconOffer, IconWarning } from "../../icons";
 import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 import { expiresInFormat } from "utils/timeago";
 import clsx from "clsx";
 import Tooltip from "components/Tooltip";
+import { OfferStatus } from "api/offer/offer.type";
 
 interface IOfferTable {
   isOffersMade?: boolean;
@@ -58,8 +59,8 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
 const OfferCollectionItem = ({ item }: any) => {
   return (
     <a href={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
-      <LazyImg className="w-10 h-10 rounded-md" src={item?.tokenImage} />
-      <h6 className="text-h6 text-white">{item?.tokenName ?? "-"}</h6>
+      <LazyImg className={clsx(!item.isActiveOffer ? "opacity-50" : "", "w-10 h-10 rounded-md")} src={item?.tokenImage} />
+      <h6 className={clsx(!item.isActiveOffer ? "text-gray-light" : "text-white", "text-h6")}>{item?.tokenName ?? "-"}</h6>
     </a>
   );
 };
@@ -74,8 +75,45 @@ const OfferExpiredTime = ({ item }: any) => {
     </Tooltip>
   );
 };
-const OfferLabel = ({ children }: any) => {
-  return <span className="body-medium">{children}</span>;
+const OfferLabel = ({ children, className }: any) => {
+  return <span className={clsx("body-medium", className)}>{children}</span>;
+};
+
+const OfferStatusProvider = ({ status }: { status: OfferStatus }) => {
+  switch (status) {
+    case OfferStatus.Cancelled:
+      return (
+        <div className="flex items-center gap-[5px] text-red">
+          <span className="text-bodyMd text-overflow">Cancelled</span>
+          <IconWarning className="w-[15px] h-[15px]" />
+        </div>
+      );
+    case OfferStatus.ActiveOffer:
+      return (
+        <div className="flex items-center gap-[5px] text-white">
+          <span className="text-bodyMd text-overflow">Active</span>
+          <IconClock className="w-[15px] h-[15px]" />
+        </div>
+      );
+    case OfferStatus.AcceptedOffer:
+      return (
+        <div className="flex items-center gap-[5px] text-green">
+          <span className="text-bodyMd text-overflow">Accepted</span>
+          <IconWarning className="w-[15px] h-[15px]" />
+        </div>
+      );
+
+    case OfferStatus.ExpiredOffer:
+      return (
+        <div className="flex items-center gap-[5px] text-orange">
+          <span className="text-bodyMd text-overflow">Expired</span>
+          <IconClock className="w-[15px] h-[15px]" />
+        </div>
+      );
+
+    default:
+      return <></>;
+  }
 };
 
 const defaultHeaders: ITableHeader[] = [
@@ -93,17 +131,30 @@ const defaultHeaders: ITableHeader[] = [
   {
     key: "topBid",
     text: "top bid",
-    width: "30%",
+    width: "20%",
     align: "flex-end",
-    render: (item) => <EthereumPrice price={item?.price} priceClassName="text-h6" />,
+    render: (item) => <EthereumPrice price={item?.price} className={!item.isActiveOffer ? "text-gray-light" : ""} priceClassName="text-h6" />,
   },
   {
     key: "quantity",
     text: `Quantity`,
-    width: "30%",
+    width: "20%",
     align: "flex-end",
     sortValue: 1,
-    render: (item) => <OfferLabel>1</OfferLabel>,
+    render: (item) => <OfferLabel className={!item.isActiveOffer ? "text-gray-light" : ""}>1</OfferLabel>,
+    // renderHeader: (header) => <span>asasas</span>,
+  },
+  {
+    key: "status",
+    text: `Status`,
+    width: "20%",
+    align: "flex-end",
+    sortValue: 1,
+    render: (item) => (
+      <OfferLabel>
+        <OfferStatusProvider status={item.status} />
+      </OfferLabel>
+    ),
     // renderHeader: (header) => <span>asasas</span>,
   },
   // {

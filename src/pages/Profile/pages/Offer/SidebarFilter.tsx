@@ -85,10 +85,10 @@ const SidebarFilter = () => {
           value: 2,
           text: "Accepted Offers",
         },
-        {
-          value: 3,
-          text: "Expired Offers",
-        },
+        // {
+        //   value: 3,
+        //   text: "Expired Offers",
+        // },
         {
           value: 0,
           text: "Canceled Offers",
