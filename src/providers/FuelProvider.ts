@@ -39,7 +39,8 @@ class FuelProvider extends BaseProvider {
     try {
       withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId)
         .then(() => {
-          userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
+          // userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
+          setIsDisabled(false);
         })
         .catch((e) => {
           console.log(e);
@@ -56,7 +57,8 @@ class FuelProvider extends BaseProvider {
 
     try {
       await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
-      userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
+      // userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
+      setIsDisabled(false);
     } catch (e) {
       console.log(e);
       setIsDisabled(false);
@@ -127,7 +129,8 @@ class FuelProvider extends BaseProvider {
                   price: checkoutPrice,
                   expireTime: formatTimeBackend(checkoutExpireTime),
                 });
-                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
+                // userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
+                setBidBalanceUpdated(true);
                 setApproved(true);
               }
             })
@@ -233,7 +236,7 @@ class FuelProvider extends BaseProvider {
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             offerService.acceptOffer({ id: currentItem.id }).then(() => {
-              userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
+              // userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
               onCheckoutComplete();
               setApproved(true);
             });
@@ -741,13 +744,15 @@ class FuelProvider extends BaseProvider {
                         expireTime: formatTimeBackend(checkoutExpireTime),
                       })
                       .then(() => {
-                        userService
-                          .updateBidBalance(user.id, Number(requiredBidAmount))
-                          .then(() => {
-                            setBidBalanceUpdated(true);
-                            setApproved(true);
-                          })
-                          .catch(() => setIsFailed(true));
+                        setBidBalanceUpdated(true);
+                        setApproved(true);
+                        // userService
+                        //   .updateBidBalance(user.id, Number(requiredBidAmount))
+                        //   .then(() => {
+                        //     setBidBalanceUpdated(true);
+                        //     setApproved(true);
+                        //   })
+                        //   .catch(() => setIsFailed(true));
                       })
                       .catch(() => setIsFailed(true));
                   }
@@ -823,7 +828,8 @@ class FuelProvider extends BaseProvider {
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
-                userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
+                // userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
+                setBidBalanceUpdated(true);
                 setApproved(true);
               }
             })

@@ -67,7 +67,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             offerService.acceptOffer({ id: currentItem?.id });
-            userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
+            // userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
             setApproved(true);
           }
         })
