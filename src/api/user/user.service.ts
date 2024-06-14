@@ -51,4 +51,7 @@ export default {
   getUserCollections(data: any) {
     return ThunderURL.post("v1/user/tokens", data);
   },
+  getUserOfferByNonce(params: { walletAddress: string; nonce: number; tokenOrder: number; contractAddress: string }): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/user/userofferbynonce", { params });
+  },
 };

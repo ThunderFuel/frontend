@@ -735,63 +735,61 @@ class FuelProvider extends BaseProvider {
               depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
                 .then((res) => {
                   if (res.transactionResult.isStatusSuccess) {
-                    nftdetailsService
-                      .makeOffer({
-                        makerUserId: user.id,
-                        tokenId: selectedNFT.id,
-                        price: checkoutPrice,
-                        priceType: 0,
-                        expireTime: formatTimeBackend(checkoutExpireTime),
-                      })
-                      .then(() => {
-                        setBidBalanceUpdated(true);
-                        setApproved(true);
-                        // userService
-                        //   .updateBidBalance(user.id, Number(requiredBidAmount))
-                        //   .then(() => {
-                        //     setBidBalanceUpdated(true);
-                        //     setApproved(true);
-                        //   })
-                        //   .catch(() => setIsFailed(true));
-                      })
-                      .catch(() => setIsFailed(true));
+                    setBidBalanceUpdated(true);
+                    setApproved(true);
                   }
                 })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
+                .catch(async (e) => {
+                  const response = await userService.getUserOfferByNonce({
+                    walletAddress: user.walletAddress,
+                    nonce: order.nonce,
+                    tokenOrder: selectedNFT.tokenOrder,
+                    contractAddress: selectedNFT.contractAddress,
+                  });
+
+                  if (response.data === true) {
+                    setBidBalanceUpdated(true);
+                    setApproved(true);
+                  } else {
+                    console.log(e);
+
+                    if (
+                      e.message.includes("Request cancelled without user response!") ||
+                      e.message.includes("Error: User rejected the transaction!") ||
+                      e.message.includes("An unexpected error occurred")
+                    )
+                      setStartTransaction(false);
+                    else setIsFailed(true);
+                  }
                 });
             } else
               placeOrder(exchangeContractId, provider, wallet, order)
                 .then((res) => {
                   if (res.transactionResult.isStatusSuccess) {
-                    nftdetailsService
-                      .makeOffer({
-                        makerUserId: user.id,
-                        tokenId: selectedNFT.id,
-                        price: checkoutPrice,
-                        priceType: 0,
-                        expireTime: formatTimeBackend(checkoutExpireTime),
-                      })
-                      .then(() => setApproved(true))
-                      .catch(() => setIsFailed(true));
+                    setApproved(true);
                   }
                 })
-                .catch((e) => {
-                  console.log(e);
-                  if (
-                    e.message.includes("Request cancelled without user response!") ||
-                    e.message.includes("Error: User rejected the transaction!") ||
-                    e.message.includes("An unexpected error occurred")
-                  )
-                    setStartTransaction(false);
-                  else setIsFailed(true);
+                .catch(async (e) => {
+                  const response = await userService.getUserOfferByNonce({
+                    walletAddress: user.walletAddress,
+                    nonce: order.nonce,
+                    tokenOrder: selectedNFT.tokenOrder,
+                    contractAddress: selectedNFT.contractAddress,
+                  });
+
+                  if (response.data === true) {
+                    setApproved(true);
+                  } else {
+                    console.log(e);
+
+                    if (
+                      e.message.includes("Request cancelled without user response!") ||
+                      e.message.includes("Error: User rejected the transaction!") ||
+                      e.message.includes("An unexpected error occurred")
+                    )
+                      setStartTransaction(false);
+                    else setIsFailed(true);
+                  }
                 });
           })
           .catch(() => setIsFailed(true));
