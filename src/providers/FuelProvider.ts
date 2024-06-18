@@ -72,7 +72,7 @@ class FuelProvider extends BaseProvider {
     const toAddress = tempAddress === "" ? address : tempAddress;
     transfer(selectedNFT.collection.contractAddress, _provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
       .then(() => {
-        nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
+        // nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
         setApproved(true);
       })
       .catch((e) => {
@@ -314,7 +314,7 @@ class FuelProvider extends BaseProvider {
       cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
-            nftdetailsService.tokenCancelList(selectedNFT.id);
+            // nftdetailsService.tokenCancelList(selectedNFT.id);
             setApproved(true);
           }
         })
@@ -363,10 +363,11 @@ class FuelProvider extends BaseProvider {
     bulkCancelOrder(exchangeContractId, provider, wallet, allOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
-          offerService
-            .cancelAllOfferAndListings(params)
-            .then(() => setApproved(true))
-            .catch(() => setIsFailed(true));
+          setApproved(true);
+          // offerService
+          //   .cancelAllOfferAndListings(params)
+          //   .then(() => setApproved(true))
+          //   .catch(() => setIsFailed(true));
         }
       })
       .catch((e) => {
@@ -421,10 +422,11 @@ class FuelProvider extends BaseProvider {
     bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
-          collectionsService
-            .cancelAllListings(params)
-            .then(() => setApproved(true))
-            .catch(() => setIsFailed(true));
+          // collectionsService
+          //   .cancelAllListings(params)
+          //   .then(() => setApproved(true))
+          //   .catch(() => setIsFailed(true));
+          setApproved(true);
         }
       })
       .catch((e) => {
@@ -507,13 +509,13 @@ class FuelProvider extends BaseProvider {
         const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, [], order);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
-          await nftdetailsService.tokenUpdateListing([
-            {
-              tokenId: selectedNFT.id,
-              price: checkoutPrice,
-              expireTime: formatTimeBackend(checkoutExpireTime),
-            },
-          ]);
+          // await nftdetailsService.tokenUpdateListing([
+          //   {
+          //     tokenId: selectedNFT.id,
+          //     price: checkoutPrice,
+          //     expireTime: formatTimeBackend(checkoutExpireTime),
+          //   },
+          // ]);
           setApproved(true);
         }
       } catch (e) {
@@ -541,13 +543,13 @@ class FuelProvider extends BaseProvider {
         const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
-          await nftdetailsService.tokenList([
-            {
-              tokenId: selectedNFT.id,
-              price: checkoutPrice,
-              expireTime: formatTimeBackend(checkoutExpireTime),
-            },
-          ]);
+          // await nftdetailsService.tokenList([
+          //   {
+          //     tokenId: selectedNFT.id,
+          //     price: checkoutPrice,
+          //     expireTime: formatTimeBackend(checkoutExpireTime),
+          //   },
+          // ]);
           setApproved(true);
         }
       } catch (e) {
@@ -578,26 +580,34 @@ class FuelProvider extends BaseProvider {
 
         executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
           .then((res) => {
-            if (res.transactionResult.isStatusSuccess)
-              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                if (res.data) {
-                  setSuccessCheckout(res.data);
-                  setApproved(true);
-                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                }
-              });
+            if (res.transactionResult.isStatusSuccess) {
+              // setSuccessCheckout(res.data); // TODO: buradaki data ne ona bakmak lazim
+              setApproved(true);
+              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+            }
+            // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+            //   if (res.data) {
+            //     setSuccessCheckout(res.data);
+            //     setApproved(true);
+            //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+            //   }
+            // });
           })
           .catch(async (e) => {
             const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
 
             if (response?.data === user?.walletAddress) {
-              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                if (res.data) {
-                  setSuccessCheckout(res.data);
-                  setApproved(true);
-                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                }
-              });
+              // setSuccessCheckout(res.data); // TODO: buradaki data ne ona bakmak lazim
+
+              setApproved(true);
+              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+              //   if (res.data) {
+              //     setSuccessCheckout(res.data);
+              //     setApproved(true);
+              //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              //   }
+              // });
 
               return;
             }
@@ -621,26 +631,34 @@ class FuelProvider extends BaseProvider {
 
         executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
           .then((res) => {
-            if (res.transactionResult.isStatusSuccess)
-              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                if (res.data) {
-                  setSuccessCheckout(res.data);
-                  setApproved(true);
-                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                }
-              });
+            if (res.transactionResult.isStatusSuccess) {
+              // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
+              setApproved(true);
+              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+            }
+            // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+            //   if (res.data) {
+            //     setSuccessCheckout(res.data);
+            //     setApproved(true);
+            //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+            //   }
+            // });
           })
           .catch(async (e) => {
             const response = await nftdetailsService.getTokenOwners([{ tokenOrder: items[0].tokenOrder, contractAddress: items[0].contractAddress }]);
 
             if (response?.data === user?.walletAddress) {
-              nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                if (res.data) {
-                  setSuccessCheckout(res.data);
-                  setApproved(true);
-                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                }
-              });
+              // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
+              setApproved(true);
+              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+
+              // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+              //   if (res.data) {
+              //     setSuccessCheckout(res.data);
+              //     setApproved(true);
+              //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              //   }
+              // });
 
               return;
             }
@@ -667,14 +685,19 @@ class FuelProvider extends BaseProvider {
 
           bulkPurchase(exchangeContractId, provider, wallet, takerOrders, _baseAssetId)
             .then((res) => {
-              if (res?.transactionResult.isStatusSuccess)
-                nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                  if (res.data) {
-                    setSuccessCheckout(res.data);
-                    setApproved(true);
-                    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                  }
-                });
+              if (res?.transactionResult.isStatusSuccess) {
+                // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
+                setApproved(true);
+                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              }
+
+              // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+              //   if (res.data) {
+              //     setSuccessCheckout(res.data);
+              //     setApproved(true);
+              //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              //   }
+              // });
             })
             .catch(async (e) => {
               const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
@@ -683,13 +706,17 @@ class FuelProvider extends BaseProvider {
               const approvedPurchases = response?.data?.find((item: any) => item.owner === user?.walletAddress);
 
               if (approvedPurchases !== undefined) {
-                nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                  if (res.data) {
-                    setSuccessCheckout(res.data);
-                    setApproved(true);
-                    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                  }
-                });
+                // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
+                setApproved(true);
+                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+
+                // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+                //   if (res.data) {
+                //     setSuccessCheckout(res.data);
+                //     setApproved(true);
+                //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                //   }
+                // });
 
                 return;
               }
