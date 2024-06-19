@@ -85,14 +85,14 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       render: (item) => <EthereumPrice price={item.volume} className="justify-end" />,
       renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
-    {
-      key: "change",
-      text: "CHANGE",
-      width: "10%",
-      align: "flex-end",
-      className: "text-right",
-      render: (item) => <Change change={item.change} />,
-    },
+    // {
+    //   key: "change",
+    //   text: "CHANGE",
+    //   width: "10%",
+    //   align: "flex-end",
+    //   className: "text-right",
+    //   render: (item) => <Change change={item.change} />,
+    // },
     {
       key: "floor",
       text: "FLOOR",
