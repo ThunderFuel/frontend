@@ -509,7 +509,7 @@ const LeftMenu = (props: any) => {
           </div>
         </div> */}
       </div>
-      <footer className={clsx("sticky bottom-[56px] z-50 lg:bottom-0 w-full  border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
+      <footer className={clsx("sticky bottom-[56px] z-10 lg:bottom-0 w-full  border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
         {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
       </footer>
     </div>
