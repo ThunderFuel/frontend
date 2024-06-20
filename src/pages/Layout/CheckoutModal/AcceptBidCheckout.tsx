@@ -66,7 +66,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
       executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
-            offerService.acceptOffer({ id: currentItem?.id });
+            // offerService.acceptOffer({ id: currentItem?.id });
             // userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
             setApproved(true);
           }

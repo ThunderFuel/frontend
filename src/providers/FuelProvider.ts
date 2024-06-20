@@ -124,11 +124,11 @@ class FuelProvider extends BaseProvider {
           depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, true)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
-                nftdetailsService.tokenUpdateOffer({
-                  id: currentItem?.id,
-                  price: checkoutPrice,
-                  expireTime: formatTimeBackend(checkoutExpireTime),
-                });
+                // nftdetailsService.tokenUpdateOffer({
+                //   id: currentItem?.id,
+                //   price: checkoutPrice,
+                //   expireTime: formatTimeBackend(checkoutExpireTime),
+                // });
                 // userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
                 setBidBalanceUpdated(true);
                 setApproved(true);
@@ -144,11 +144,11 @@ class FuelProvider extends BaseProvider {
           placeOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
-                nftdetailsService.tokenUpdateOffer({
-                  id: currentItem?.id,
-                  price: checkoutPrice,
-                  expireTime: formatTimeBackend(checkoutExpireTime),
-                });
+                // nftdetailsService.tokenUpdateOffer({
+                //   id: currentItem?.id,
+                //   price: checkoutPrice,
+                //   expireTime: formatTimeBackend(checkoutExpireTime),
+                // });
                 setApproved(true);
               }
             })
@@ -235,11 +235,13 @@ class FuelProvider extends BaseProvider {
       executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
-            offerService.acceptOffer({ id: currentItem.id }).then(() => {
-              // userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
-              onCheckoutComplete();
-              setApproved(true);
-            });
+            onCheckoutComplete();
+            setApproved(true);
+            // offerService.acceptOffer({ id: currentItem.id }).then(() => {
+            //   // userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
+            //   onCheckoutComplete();
+            //   setApproved(true);
+            // });
           }
         })
         .catch((e) => {
@@ -292,7 +294,7 @@ class FuelProvider extends BaseProvider {
         cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
           .then((res) => {
             if (res.transactionResult.isStatusSuccess) {
-              nftdetailsService.cancelOffer(currentItem.id);
+              // nftdetailsService.cancelOffer(currentItem.id);
               setApproved(true);
             }
           })
@@ -393,10 +395,11 @@ class FuelProvider extends BaseProvider {
     bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
-          offerService
-            .cancelAllOffer(params)
-            .then(() => setApproved(true))
-            .catch(() => setIsFailed(true));
+          setApproved(true);
+          // offerService
+          //   .cancelAllOffer(params)
+          //   .then(() => setApproved(true))
+          //   .catch(() => setIsFailed(true));
         }
       })
       .catch((e) => {
