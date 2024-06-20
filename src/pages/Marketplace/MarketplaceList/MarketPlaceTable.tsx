@@ -49,13 +49,20 @@ const SortHeaderIcon = ({ sortingType }: any) => {
   );
 };
 
-const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType }: any) => {
+const SortHeader = ({ header, sortingValue, onChangeSortValue, sortingType, sortingDisabled }: any) => {
   const onClick = () => onChangeSortValue(header.sortValue);
 
   return (
-    <div className={clsx("flex items-center lg:justify-center justify-end gap-1 cursor-pointer hover:text-white", sortingValue === header.sortValue && "text-white")} onClick={onClick}>
+    <div
+      className={clsx(
+        "flex items-center lg:justify-center justify-end gap-1 cursor-pointer hover:text-white",
+        sortingValue === header.sortValue && "text-white",
+        sortingDisabled ? "pointer-events-none" : ""
+      )}
+      onClick={onClick}
+    >
       {header.text}
-      <SortHeaderIcon sortingType={sortingValue === header.sortValue ? sortingType : null} />
+      {!sortingDisabled && <SortHeaderIcon sortingType={sortingValue === header.sortValue ? sortingType : null} />}
     </div>
   );
 };
@@ -102,7 +109,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       sortValue: 2,
       className: "text-right",
       render: (item) => <EthereumPrice price={item.floor} className="justify-end lg:justify-start" />,
-      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} sortingDisabled={true} />,
     },
     {
       key: "sales",
