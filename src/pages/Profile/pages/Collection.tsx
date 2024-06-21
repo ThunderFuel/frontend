@@ -137,7 +137,6 @@ const Collection = () => {
         pageCount: Math.round(tmpCollectionItems.length / PAGE_SIZE),
         itemsCount: tmpCollectionItems.length,
       });
-      console.log(tmpCollectionItems);
       setCollectionItems([...tmpCollectionItems].splice(0, PAGE_SIZE));
     } catch (e) {
       console.log(e);

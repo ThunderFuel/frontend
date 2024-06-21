@@ -171,8 +171,6 @@ class FuelProvider extends BaseProvider {
       return { ...item, expireTime: formatTimeBackend(item.expireTime) };
     });
 
-    console.log(promises);
-
     const { bulkListMakerOders, bulkUpdateMakerOders } = await handleOrders({
       bulkListItems,
       bulkUpdateItems,
@@ -188,21 +186,21 @@ class FuelProvider extends BaseProvider {
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           if (bulkUpdateItems.length > 0) {
-            try {
-              await collectionsService.updateBulkListing(_bulkUpdateItems);
-            } catch (e) {
-              console.log("Error from updateBulkListing:", e);
-              setIsFailed(true);
-            }
+            // try {
+            //   await collectionsService.updateBulkListing(_bulkUpdateItems);
+            // } catch (e) {
+            //   console.log("Error from updateBulkListing:", e);
+            //   setIsFailed(true);
+            // }
           }
 
           if (bulkListItems.length > 0) {
-            try {
-              await collectionsService.bulkListing(_bulkListItems);
-            } catch (e) {
-              console.log("Error from bulkListing:", e);
-              setIsFailed(true);
-            }
+            // try {
+            //   await collectionsService.bulkListing(_bulkListItems);
+            // } catch (e) {
+            //   console.log("Error from bulkListing:", e);
+            //   setIsFailed(true);
+            // }
           }
 
           setApproved(true);
@@ -582,11 +580,16 @@ class FuelProvider extends BaseProvider {
         };
 
         executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
-          .then((res) => {
+          .then(async (res) => {
             if (res.transactionResult.isStatusSuccess) {
-              // setSuccessCheckout(res.data); // TODO: buradaki data ne ona bakmak lazim
-              setApproved(true);
-              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              const response = await nftdetailsService.getTokenOwners([{ tokenOrder: items[0].tokenOrder, contractAddress: items[0].contractAddress }]);
+
+              if (response?.data === user?.walletAddress) {
+                setApproved(true);
+                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              } else {
+                setIsFailed(true);
+              }
             }
             // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
             //   if (res.data) {
@@ -633,11 +636,16 @@ class FuelProvider extends BaseProvider {
         };
 
         executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
-          .then((res) => {
+          .then(async (res) => {
             if (res.transactionResult.isStatusSuccess) {
-              // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
-              setApproved(true);
-              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              const response = await nftdetailsService.getTokenOwners([{ tokenOrder: items[0].tokenOrder, contractAddress: items[0].contractAddress }]);
+
+              if (response?.data === user?.walletAddress) {
+                setApproved(true);
+                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              } else {
+                setIsFailed(true);
+              }
             }
             // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
             //   if (res.data) {
@@ -687,20 +695,20 @@ class FuelProvider extends BaseProvider {
           });
 
           bulkPurchase(exchangeContractId, provider, wallet, takerOrders, _baseAssetId)
-            .then((res) => {
+            .then(async (res) => {
               if (res?.transactionResult.isStatusSuccess) {
-                // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
-                setApproved(true);
-                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-              }
+                const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
+                const response = await nftdetailsService.getTokenOwners(requestData);
 
-              // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-              //   if (res.data) {
-              //     setSuccessCheckout(res.data);
-              //     setApproved(true);
-              //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-              //   }
-              // });
+                const approvedPurchases = response?.data?.find((item: any) => item.owner === user?.walletAddress);
+
+                if (approvedPurchases !== undefined) {
+                  setApproved(true);
+                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                } else {
+                  setIsFailed(true);
+                }
+              }
             })
             .catch(async (e) => {
               const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
