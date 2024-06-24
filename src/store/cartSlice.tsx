@@ -50,7 +50,7 @@ export const cartSlice = createSlice({
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
-      state.items = state.items.filter((item: CollectionItemResponse) => item.tokenOrder !== action.payload);
+      state.items = state.items.filter((item: CollectionItemResponse) => item.uid !== action.payload);
       setItemsFromLocalStorage(state.items as any);
     },
     removeAll: (state) => {
@@ -58,7 +58,7 @@ export const cartSlice = createSlice({
       setItemsFromLocalStorage(state.items as any);
     },
     add: (state, action) => {
-      const isItemExists = Array.from(state.items).some((item) => item.tokenOrder === action.payload.tokenOrder);
+      const isItemExists = Array.from(state.items).some((item) => item.uid === action.payload.uid);
       if (!isItemExists && state.items.length < PurchaseLimit) {
         state.items.push(action.payload);
 
@@ -90,7 +90,7 @@ export const cartSlice = createSlice({
 
 export const getCartSelectedTokenOrderList = createSelector(
   (state: any) => {
-    return state.cart.items.map((item: ISelectedCartItem) => item.tokenOrder);
+    return state.cart.items.map((item: ISelectedCartItem) => item.uid);
   },
   (tokenOrderList: any[]) => tokenOrderList
 );

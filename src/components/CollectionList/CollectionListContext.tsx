@@ -79,7 +79,7 @@ const CollectionListProvider = ({ value, children }: { value: ICollectionListCon
   const collectionItems = React.useMemo(() => {
     return value.collectionItems.map((item: any) => ({
       ...item,
-      isSelected: cartSelectedTokenOrderList.includes(item.tokenOrder) || bulkListingSelectedTokenOrderList.includes(item.tokenOrder),
+      isSelected: cartSelectedTokenOrderList.includes(item.uid) || bulkListingSelectedTokenOrderList.includes(item.uid),
     }));
   }, [value.collectionItems, cartSelectedTokenOrderList, bulkListingSelectedTokenOrderList]);
 

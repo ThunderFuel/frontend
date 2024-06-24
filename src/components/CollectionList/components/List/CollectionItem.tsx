@@ -125,14 +125,14 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
     if (!collection.isSelected) {
       dispatch(cartAdd(collection));
     } else {
-      dispatch(cartRemove(collection.tokenOrder));
+      dispatch(cartRemove(collection.uid));
     }
   };
   const onToggleBulkListing = () => {
     if (!collection.isSelected) {
       dispatch(bulkListingAdd(collection));
     } else {
-      dispatch(bulkListingRemove(collection.tokenOrder));
+      dispatch(bulkListingRemove(collection.uid));
     }
   };
   const onSelect = (e: any) => {
