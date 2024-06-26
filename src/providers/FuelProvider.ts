@@ -83,19 +83,7 @@ class FuelProvider extends BaseProvider {
       });
   }
 
-  async handleUpdateOffer({
-    setBidBalanceUpdated,
-    setCurrentBidBalance,
-    currentItem,
-    checkoutPrice,
-    checkoutExpireTime,
-    selectedNFT,
-    wallet,
-    user,
-    setApproved,
-    setStartTransaction,
-    setIsFailed,
-  }: any) {
+  async handleUpdateOffer({ setBidBalanceUpdated, currentItem, checkoutPrice, checkoutExpireTime, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
     const _baseAssetId = await this.getBaseAssetId();
 
     offerService.getOffersIndex([selectedNFT?.bestOffer?.id]).then(async (res) => {
@@ -118,7 +106,6 @@ class FuelProvider extends BaseProvider {
 
       userService.getBidBalance(user.id).then((res) => {
         const currentBidBalance = res.data;
-        setCurrentBidBalance(currentBidBalance);
         if (currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
           depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, true)
