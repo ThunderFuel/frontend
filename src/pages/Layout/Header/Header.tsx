@@ -170,7 +170,7 @@ const Header = () => {
             </div>
             {/* <HeaderWarning /> */}
           </div>
-          {/* <HeaderWarning /> */}
+          <HeaderWarning />
         </>
         <MobileSearch />
       </>
