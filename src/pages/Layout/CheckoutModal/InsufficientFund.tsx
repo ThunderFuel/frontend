@@ -26,7 +26,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
     fetchBalance();
   }, [show]);
 
-  const neededAmount = parseFloat(((!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount) - balance / 1000000000).toFixed(9));
+  const neededAmount = parseFloat(((!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount) - balance).toFixed(9));
   const footer = (
     <div className="flex flex-col w-full h-full items-center">
       <div className="flex w-full py-2 px-5 justify-between border-b border-gray">

@@ -30,11 +30,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _exchange: ContractIdInput = { value: exchange };
-        const _Pool: ContractIdInput = { value: assetManager };
+        const _exchange: ContractIdInput = { bits: exchange };
+        const _Pool: ContractIdInput = { bits: assetManager };
         const { transactionResult } = await contract.functions
             .initialize(_exchange, _Pool)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -48,7 +48,7 @@ export async function totalSupply(
     asset: string,
 ) {
     try {
-        const _asset: ContractIdInput = { value: asset };
+        const _asset: ContractIdInput = { bits: asset };
         const contract = await setup(contractId, provider);
         const { value } = await contract.functions
             .total_supply(_asset)
@@ -68,8 +68,8 @@ export async function balanceOf(
     asset: string,
 ) {
     try {
-        const _account: IdentityInput = { Address: { value: account } };
-        const _asset: ContractIdInput = { value: asset };
+        const _account: IdentityInput = { Address: { bits: account } };
+        const _asset: ContractIdInput = { bits: asset };
         const contract = await setup(contractId, provider, wallet);
         const { value } = await contract.functions
             .balance_of(_account, _asset)
@@ -96,7 +96,7 @@ export async function deposit(
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .deposit()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .addContracts([assetManager])
             .callParams({forward: coin})
             .getTransactionCost()
@@ -105,7 +105,7 @@ export async function deposit(
 
         const { transactionResult } = await contract.functions
             .deposit()
-            .txParams({gasPrice: 1, gasLimit})
+            .txParams({gasLimit})
             .addContracts([assetManager])
             .callParams({forward: coin})
             .call();
@@ -125,12 +125,12 @@ export async function withdraw(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _asset: ContractIdInput = { value: assetId };
+        const _asset: ContractIdInput = { bits: assetId };
         const _provider = await Provider.create(provider)
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .withdraw(_asset, amount)
-            .txParams({gasPrice: 1, variableOutputs: 1})
+            .txParams({variableOutputs: 1})
             .addContracts([assetManager])
             .getTransactionCost()
 
@@ -138,7 +138,7 @@ export async function withdraw(
 
         const { transactionResult } = await contract.functions
             .withdraw(_asset, amount)
-            .txParams({gasPrice: 1, variableOutputs: 1, gasLimit})
+            .txParams({variableOutputs: 1, gasLimit})
             .addContracts([assetManager])
             .call();
         return { transactionResult };
@@ -159,7 +159,7 @@ export async function withdrawAll(
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
         const { transactionResult } = await contract.functions
             .withdraw_all()
-            .txParams({gasPrice: 1, variableOutputs: 1})
+            .txParams({variableOutputs: 1})
             .addContracts([assetManager])
             .call();
         return { transactionResult };
@@ -179,12 +179,12 @@ export async function transferFrom(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _from: IdentityInput = { Address: { value: from } };
-        const _to: IdentityInput = { Address: { value: to } };
-        const _asset: ContractIdInput = { value: asset };
+        const _from: IdentityInput = { Address: { bits: from } };
+        const _to: IdentityInput = { Address: { bits: to } };
+        const _asset: ContractIdInput = { bits: asset };
         const { transactionResult } = await contract.functions
             .transfer_from(_from, _to, _asset, amount)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -200,10 +200,10 @@ export async function setAssetManager(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _Pool: ContractIdInput = { value: assetManager };
+        const _Pool: ContractIdInput = { bits: assetManager };
         const { transactionResult } = await contract.functions
             .set_asset_manager(_Pool)
-            .txParams({gasPrice: 1, variableOutputs: 1})
+            .txParams({variableOutputs: 1})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -265,10 +265,10 @@ export async function transferOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _newOwner: IdentityInput = { Address: { value: newOwner } };
+        const _newOwner: IdentityInput = { Address: { bits: newOwner } };
         const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -285,7 +285,7 @@ export async function renounceOwnership(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .renounce_ownership()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {

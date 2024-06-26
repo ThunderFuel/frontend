@@ -3,7 +3,7 @@ import { CollectionItemResponse } from "api/collections/collections.type";
 
 type IBulkListingItem = CollectionItemResponse;
 
-const BulkLimit = 50;
+const BulkLimit = 30;
 
 export const bulkListingSlice = createSlice({
   name: "bulkListing",

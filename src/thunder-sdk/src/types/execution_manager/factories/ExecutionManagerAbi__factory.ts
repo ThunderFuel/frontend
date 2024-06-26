@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
@@ -14,6 +14,7 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { ExecutionManagerAbi, ExecutionManagerAbiInterface } from "../ExecutionManagerAbi";
 
 const _abi = {
+  "encoding": "1",
   "types": [
     {
       "typeId": 0,
@@ -134,7 +135,7 @@ const _abi = {
       "type": "struct Address",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -146,7 +147,7 @@ const _abi = {
       "type": "struct ContractId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -405,7 +406,7 @@ const _abi = {
   ],
   "loggedTypes": [
     {
-      "logId": 0,
+      "logId": "12764806370357731851",
       "loggedType": {
         "name": "",
         "type": 3,
@@ -413,7 +414,7 @@ const _abi = {
       }
     },
     {
-      "logId": 1,
+      "logId": "10980104167348192313",
       "loggedType": {
         "name": "",
         "type": 4,
@@ -421,39 +422,7 @@ const _abi = {
       }
     },
     {
-      "logId": 2,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 3,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 4,
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 5,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 6,
+      "logId": "9517900813706399297",
       "loggedType": {
         "name": "",
         "type": 11,
@@ -461,31 +430,7 @@ const _abi = {
       }
     },
     {
-      "logId": 7,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 8,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 9,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 10,
+      "logId": "7912903559520169914",
       "loggedType": {
         "name": "",
         "type": 10,
@@ -493,23 +438,7 @@ const _abi = {
       }
     },
     {
-      "logId": 11,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 12,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 13,
+      "logId": "10699517786846983752",
       "loggedType": {
         "name": "",
         "type": 12,
@@ -536,33 +465,31 @@ const _storageSlots: StorageSlot[] = [
   }
 ];
 
-export class ExecutionManagerAbi__factory {
-  static readonly abi = _abi;
+export const ExecutionManagerAbi__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): ExecutionManagerAbiInterface {
+  createInterface(): ExecutionManagerAbiInterface {
     return new Interface(_abi) as unknown as ExecutionManagerAbiInterface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): ExecutionManagerAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as ExecutionManagerAbi
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<ExecutionManagerAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = ExecutionManagerAbi__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 

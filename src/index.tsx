@@ -15,8 +15,11 @@ import * as Sentry from "@sentry/react";
 import { Fuel, FueletWalletConnector, FuelWalletConnector } from "@fuel-wallet/sdk";
 import { EVMWalletConnector } from "@fuels/connectors";
 
+// import { Fuel } from "fuels";
+// import { FuelWalletConnector, FueletWalletConnector } from "@fuels/connectors";
+
 export const FuelInstance = new Fuel({
-  connectors: [new EVMWalletConnector(), new FueletWalletConnector(), new FuelWalletConnector()],
+  connectors: [new FueletWalletConnector(), new FuelWalletConnector()],
 });
 
 export const getFuel = () => {

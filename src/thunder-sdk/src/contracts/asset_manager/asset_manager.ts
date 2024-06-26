@@ -29,7 +29,7 @@ export async function initialize(
         const contract = await setup(contractId, provider, wallet)
         const { transactionResult } = await contract.functions
             .initialize()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -45,10 +45,10 @@ export async function addAsset(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet)
-        const _asset: AssetIdInput = { value: asset };
+        const _asset: AssetIdInput = { bits: asset };
         const { transactionResult } = await contract.functions
             .add_asset(_asset)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -66,7 +66,7 @@ export async function removeAsset(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .remove_asset(index)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -77,11 +77,12 @@ export async function removeAsset(
 export async function isAssetSupported(
     contractId: string,
     provider: string,
+    wallet: string | WalletLocked,
     asset: string,
 ) {
     try {
-        const contract = await setup(contractId, provider);
-        const _asset: AssetIdInput = { value: asset };
+        const contract = await setup(contractId, provider, wallet);
+        const _asset: AssetIdInput = { bits: asset };
         const { value } = await contract.functions
             .is_asset_supported(_asset)
             .simulate();
@@ -149,10 +150,10 @@ export async function transferOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _newOwner: IdentityInput = { Address: { value: newOwner } };
+        const _newOwner: IdentityInput = { Address: { bits: newOwner } };
         const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -169,7 +170,7 @@ export async function renounceOwnership(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .renounce_ownership()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {

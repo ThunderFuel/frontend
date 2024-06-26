@@ -22,13 +22,13 @@ const Index = () => {
           <div className={clsx("text-headline-02 text-gray-light", !options?.hiddenSidebar && "lg:pl-5")}>
             {pagination?.itemsCount ?? collectionItems.length} {options?.itemLabel ?? "ITEMS"}
           </div>
-          {options?.isProfile ? (
+          {/* {options?.isProfile ? (
             <Config show={!config.isHideAllCancelButtons()}>
               <Button className="btn-secondary btn-sm" onClick={onCancelAllListings}>
                 cancel all listings <IconCircleRemoveWhite />
               </Button>
             </Config>
-          ) : null}
+          ) : null} */}
         </div>
         <SelectedFilter />
 

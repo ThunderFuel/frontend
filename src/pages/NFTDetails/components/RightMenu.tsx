@@ -4,6 +4,8 @@ import InfoBox from "./InfoBox";
 import clsx from "clsx";
 import { useIsMobile } from "hooks/useIsMobile";
 
+const body = document.querySelector("body");
+
 const tableMenus = ["Offers", "Activity", "Listings", "Bids"];
 
 const RightMenu = ({
@@ -48,6 +50,8 @@ const RightMenu = ({
     }
 
     return () => {
+      if (body) body.style.overflow = "auto";
+
       if (x && y) {
         x.style.position = "static";
       }

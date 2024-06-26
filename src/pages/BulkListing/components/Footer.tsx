@@ -62,9 +62,9 @@ const Footer = ({ items, prices }: any) => {
   }, [bulkItems]);
 
   return (
-    <footer className="sticky bottom-0 border-y border-gray flex flex-col bg-bg">
-      <div className="lg:p-5 flex flex-col lg:flex-row lg:gap-32 w-full text-gray-light">
-        <div className="py-2.5 px-3 lg:p-0 flex gap-2 lg:gap-16 flex-shrink-0 justify-between">
+    <footer className="sticky bottom-14 lg:bottom-0 border-t border-gray flex flex-col bg-bg">
+      <div className="lg:p-5 flex flex-col lg:flex-row lg:gap-32 w-full justify-end text-gray-light">
+        {/* <div className="py-2.5 px-3 lg:p-0 flex gap-2 lg:gap-16 flex-shrink-0 justify-between">
           <div className="flex flex-col gap-2">
             <div className="text-h6 text-white">Set Duration</div>
             <div className="flex items-center body-small text-gray-light">
@@ -79,8 +79,8 @@ const Footer = ({ items, prices }: any) => {
               setExpiredDateValue(value);
             }}
           />
-        </div>
-        <div className="py-2.5 px-3 lg:p-0 flex flex-col gap-2 w-full border-t border-t-gray">
+        </div> */}
+        <div className="py-2.5 px-3 lg:p-0 flex flex-col gap-2 w-full lg:w-1/2">
           <div className="flex items-center justify-between">
             <h6 className="text-h6">Service Fee</h6>
             <h6 className="text-h6 text-white mr-2.5">2.5%</h6>

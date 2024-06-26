@@ -81,7 +81,7 @@ const ActivityToUser = ({ item }: any) => {
   );
 };
 
-const ActivityTime = ({ item }: any) => {
+export const ActivityTime = ({ item }: any) => {
   return (
     <div className="pr-2.5 text-right">
       <Tooltip position="top" hiddenArrow={true} content={dateFormat(item.createdTimeStamp, "MMM DD, HH:mm A Z")}>

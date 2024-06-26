@@ -43,12 +43,12 @@ const MarketPlaceMobileTable = ({ items = [] }: { items: any[] }) => {
                 <Favorite item={item} onChange={(value: boolean) => onAddWatchList(item, value)} />
               </div>
               <div className="flex flex-col">
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-2">
                   <Cell title={`VOLUME (${dayTabValue?.text})`} value={item.volume} />
                   <Cell title={`floor  (${dayTabValue?.text})`} value={item.floor} />
-                  <Cell title={`change (${dayTabValue?.text})`}>
+                  {/* <Cell title={`change (${dayTabValue?.text})`}>
                     <Change change={item.change} />
-                  </Cell>
+                  </Cell> */}
                 </div>
                 <div className="py-5">
                   <NftImages collectionItems={item.collectionItems} />

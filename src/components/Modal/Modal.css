@@ -36,7 +36,7 @@
 }
 
 .checkout {
-  @apply fixed flex w-screen h-screen items-end lg:items-center justify-center z-30 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
+  @apply fixed flex w-screen h-screen items-end lg:items-center justify-center z-50 top-0 left-0 overflow-hidden bg-[rgba(37,37,37,0.8)];
 }
 
 .checkout .modal {

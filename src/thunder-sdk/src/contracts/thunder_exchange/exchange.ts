@@ -8,23 +8,25 @@ import { ExecutionManagerAbi__factory } from "../../types/execution_manager/fact
 import { RoyaltyManagerAbi__factory } from "../../types/royalty_manager/factories/RoyaltyManagerAbi__factory";
 import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
 import { NFTContractAbi__factory } from "../../types/erc721/factories/NFTContractAbi__factory";
-//import { ThunderExchangeAbi, IdentityInput, ContractIdInput, MakerOrderInputInput, SideInput, TakerOrderInput, ExtraParamsInput } from "../../types/thunder_exchange/ThunderExchangeAbi";
+//import { ThunderExchangeAbi, IdentityInput, ContractIdInput, MakerOrderInputInput, SideInput, TakerOrderInput, ExtraParamsInput, AssetIdInput } from "../../types/thunder_exchange/ThunderExchangeAbi";
 import { Option } from "../../types/thunder_exchange/common";
 
 import bytecode from "../../scripts/deposit_and_offer/binFile";
 import abi from "../../scripts/deposit_and_offer/out/deposit_and_offer-abi.json";
 import { NFTContractAbi } from "../../types/erc721";
 
-type AssetIdInput = { value: string };
-type AddressInput = { value: string };
-type ContractIdInput = { value: string };
+type AssetIdInput = { bits: string };
+type AddressInput = { bits: string };
+type ContractIdInput = { bits: string };
 type ExtraParamsInput = { extra_address_param: AddressInput, extra_contract_param: ContractIdInput, extra_u64_param: BigNumberish };
 //type MakerOrderInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, start_time: BigNumberish, end_time: BigNumberish, extra_params: ExtraParamsInput };
 type MakerOrderInputInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, expiration_range: BigNumberish, extra_params: ExtraParamsInput };
 type TakerOrderInput = { side: SideInput, taker: AddressInput, maker: AddressInput, nonce: BigNumberish, price: BigNumberish, token_id: string, collection: ContractIdInput, strategy: ContractIdInput, extra_params: ExtraParamsInput };
 enum SideInput { Buy = 'Buy', Sell = 'Sell' };
 type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
-type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+type Enum<T> = {
+    [K in keyof T]: Pick<T, K> & { [P in Exclude<keyof T, K>]?: never };
+  }[keyof T];
 
 export type MakerOrder = {
     isBuySide: boolean;
@@ -98,21 +100,21 @@ function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
     const subId = fill0.padStart(66, zeroX)
 
     const extraParams: ExtraParamsInput = {
-        extra_address_param: { value: makerOrder.extra_params.extra_address_param },
-        extra_contract_param: { value: makerOrder.extra_params.extra_contract_param },
+        extra_address_param: { bits: makerOrder.extra_params.extra_address_param },
+        extra_contract_param: { bits: makerOrder.extra_params.extra_contract_param },
         extra_u64_param: makerOrder.extra_params.extra_u64_param,
     };
 
     const output: MakerOrderInputInput = {
         side: makerOrder.isBuySide ? SideInput.Buy : SideInput.Sell,
-        maker: { value: makerOrder.maker },
-        collection: { value: makerOrder.collection },
+        maker: { bits: makerOrder.maker },
+        collection: { bits: makerOrder.collection },
         token_id: subId,
         price: makerOrder.price,
         amount: makerOrder.amount,
         nonce: makerOrder.nonce,
-        strategy: { value: makerOrder.strategy },
-        payment_asset: { value: makerOrder.payment_asset },
+        strategy: { bits: makerOrder.strategy },
+        payment_asset: { bits: makerOrder.payment_asset },
         expiration_range: makerOrder.expiration_range,
         extra_params: extraParams,
     }
@@ -126,20 +128,20 @@ function _convertToTakerOrder(takerOrder: TakerOrder): TakerOrderInput {
     const subId = fill0.padStart(66, zeroX)
 
     const extraParams: ExtraParamsInput = {
-        extra_address_param: { value: takerOrder.extra_params.extra_address_param },
-        extra_contract_param: { value: takerOrder.extra_params.extra_contract_param },
+        extra_address_param: { bits: takerOrder.extra_params.extra_address_param },
+        extra_contract_param: { bits: takerOrder.extra_params.extra_contract_param },
         extra_u64_param: takerOrder.extra_params.extra_u64_param,
     };
 
     const output: TakerOrderInput = {
         side: takerOrder.isBuySide ? SideInput.Buy : SideInput.Sell,
-        taker: { value: takerOrder.taker },
-        maker: { value: takerOrder.maker },
-        collection: { value: takerOrder.collection },
+        taker: { bits: takerOrder.taker },
+        maker: { bits: takerOrder.maker },
+        collection: { bits: takerOrder.collection },
         token_id: subId,
         price: takerOrder.price,
         nonce: takerOrder.nonce,
-        strategy: { value: takerOrder.strategy },
+        strategy: { bits: takerOrder.strategy },
         extra_params: extraParams,
     }
 
@@ -209,7 +211,7 @@ export async function initialize(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .initialize()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -265,7 +267,7 @@ async function _placeSellOrder(
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .place_order(_order)
-            .txParams({gasPrice: 200000})
+            .txParams({})
             .callParams({forward: asset})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .getTransactionCost();
@@ -274,7 +276,7 @@ async function _placeSellOrder(
 
         const { transactionResult } = await contract.functions
             .place_order(_order)
-            .txParams({gasPrice: 200000, gasLimit})
+            .txParams({gasLimit})
             .callParams({forward: asset})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
@@ -305,7 +307,7 @@ async function _placeBuyOrder(
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .place_order(_order)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .getTransactionCost();
 
@@ -313,7 +315,7 @@ async function _placeBuyOrder(
 
         const { transactionResult } = await contract.functions
             .place_order(_order)
-            .txParams({gasPrice: 1, gasLimit})
+            .txParams({gasLimit})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
         return { transactionResult };
@@ -343,7 +345,7 @@ export async function updateOrder(
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .update_order(_order)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .getTransactionCost();
 
@@ -351,7 +353,7 @@ export async function updateOrder(
 
         const { transactionResult } = await contract.functions
             .update_order(_order)
-            .txParams({gasPrice: 1, gasLimit})
+            .txParams({gasLimit})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
         return { transactionResult };
@@ -383,9 +385,9 @@ export async function depositAndOffer(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _exchange: ContractIdInput = { value: contractId };
-        const _pool: ContractIdInput = { value: pool.id.toB256() };
-        const _asset: AssetIdInput = { value: assetId };
+        const _exchange: ContractIdInput = { bits: contractId };
+        const _pool: ContractIdInput = { bits: pool.id.toB256() };
+        const _asset: AssetIdInput = { bits: assetId };
 
         const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
         const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
@@ -393,7 +395,7 @@ export async function depositAndOffer(
         const script = new Script(bytecode, abi, wallet);
         const { gasUsed } = await script.functions
             .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .callParams({forward: coin})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .getTransactionCost();
@@ -402,7 +404,7 @@ export async function depositAndOffer(
 
         const { transactionResult } = await script.functions
             .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
-            .txParams({gasPrice: 1, gasLimit})
+            .txParams({gasLimit})
             .callParams({forward: coin})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
@@ -440,12 +442,12 @@ export async function bulkListing(
             //     strategy = strategyFixedPrice:
             //     strategy = strategyAuction;
 
-            const _collection = new Contract(makerOrder.collection.value, NFTContractAbi__factory.abi, _provider);
+            const _collection = new Contract(makerOrder.collection.bits, NFTContractAbi__factory.abi, _provider);
             if (!_contracts.includes(strategy)) _contracts.push(strategy)
             if (!_contracts.includes(_collection)) _contracts.push(_collection)
             const call = contract.functions
                 .place_order(makerOrder)
-                .txParams({gasPrice: 1})
+                .txParams({})
                 .callParams({forward: asset})
                 .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             calls.push(call);
@@ -464,12 +466,12 @@ export async function bulkListing(
             //     strategy = strategyFixedPrice:
             //     strategy = strategyAuction;
 
-            const _collection = new Contract(makerOrder.collection.value, NFTContractAbi__factory.abi, _provider);
+            const _collection = new Contract(makerOrder.collection.bits, NFTContractAbi__factory.abi, _provider);
             if (!_contracts.includes(strategy)) _contracts.push(strategy)
             if (!_contracts.includes(_collection)) _contracts.push(_collection)
             const call = contract.functions
                 .update_order(makerOrder)
-                .txParams({gasPrice: 1})
+                .txParams({})
                 .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             calls.push(call);
         }
@@ -478,14 +480,14 @@ export async function bulkListing(
     if (calls.length === 0) return null;
 
     const { gasUsed } = await contract.multiCall(calls)
-        .txParams({gasPrice: 1})
+        .txParams({})
         .addContracts(_contracts)
         .getTransactionCost();
 
     const gasLimit = Number(gasUsed) * 1.5
 
     const { transactionResult } = await contract.multiCall(calls)
-        .txParams({gasPrice: 1, gasLimit})
+        .txParams({gasLimit})
         .addContracts(_contracts)
         .call();
     return { transactionResult };
@@ -506,7 +508,7 @@ export async function cancelOrder(
             side = SideInput.Sell;
         const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
-        const _strategy: ContractIdInput = { value: strategy };
+        const _strategy: ContractIdInput = { bits: strategy };
 
         let strategyContract: Contract;
         strategyContract = strategyFixedPrice
@@ -518,7 +520,7 @@ export async function cancelOrder(
             const { transactionResult } = await contract.functions
                 .cancel_order(_strategy, nonce, side)
                 .addContracts([strategyContract, executionManager])
-                .txParams({gasPrice: 1})
+                .txParams({})
                 .call();
             return { transactionResult };
         }
@@ -526,7 +528,7 @@ export async function cancelOrder(
         const { gasUsed } = await contract.functions
             .cancel_order(_strategy, nonce, side)
             .addContracts([strategyContract, executionManager])
-            .txParams({gasPrice: 1, variableOutputs: 1})
+            .txParams({variableOutputs: 1})
             .getTransactionCost();
 
         const gasLimit = Number(gasUsed) * 1.5
@@ -534,7 +536,7 @@ export async function cancelOrder(
         const { transactionResult } = await contract.functions
             .cancel_order(_strategy, nonce, side)
             .addContracts([strategyContract, executionManager])
-            .txParams({gasPrice: 1, variableOutputs: 1, gasLimit})
+            .txParams({variableOutputs: 1, gasLimit})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -558,7 +560,7 @@ export async function bulkCancelOrder(
             side = SideInput.Buy :
             side = SideInput.Sell;
 
-        const _strategy: ContractIdInput = { value: order.strategy };
+        const _strategy: ContractIdInput = { bits: order.strategy };
 
         let strategyContract: Contract;
         strategyContract = strategyFixedPrice
@@ -570,13 +572,13 @@ export async function bulkCancelOrder(
             const call = contract.functions
                 .cancel_order(_strategy, order.nonce, side)
                 .addContracts([strategyContract, executionManager])
-                .txParams({gasPrice: 1})
+                .txParams({})
             calls.push(call)
         } else {
             const call = contract.functions
                 .cancel_order(_strategy, order.nonce, side)
                 .addContracts([strategyContract, executionManager])
-                .txParams({gasPrice: 1, variableOutputs: 1})
+                .txParams({variableOutputs: 1})
             calls.push(call)
         }
     }
@@ -584,14 +586,14 @@ export async function bulkCancelOrder(
     if (calls.length === 0) return null;
 
     const { gasUsed } = await contract.multiCall(calls)
-        .txParams({gasPrice: 1})
+        .txParams({})
         .addContracts([strategyFixedPrice, executionManager])
         .getTransactionCost();
 
     const gasLimit = Number(gasUsed) * 1.5
 
     const { transactionResult } = await contract.multiCall(calls)
-        .txParams({gasPrice: 1, gasLimit})
+        .txParams({gasLimit})
         .addContracts([strategyFixedPrice, executionManager])
         .call();
     return { transactionResult };
@@ -644,19 +646,19 @@ async function _executeBuyOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection.value, NFTContractAbi__factory.abi, _provider);
+        const _collection = new Contract(order.collection.bits, NFTContractAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .execute_order(order)
-            .txParams({gasPrice: 1, variableOutputs: 4})
+            .txParams({variableOutputs: 4})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
-            .call();
+            .getTransactionCost();
 
         const gasLimit = Number(gasUsed) * 1.5
 
         const { transactionResult } = await contract.functions
             .execute_order(order)
-            .txParams({gasPrice: 1, variableOutputs: 4, gasLimit})
+            .txParams({variableOutputs: 4, gasLimit})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
             .call();
@@ -676,7 +678,7 @@ async function _executeSellOrder(
         const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
 
-        const assetId = ReceiptMintCoder.getAssetId(order.collection.value, order.token_id);
+        const assetId = ReceiptMintCoder.getAssetId(order.collection.bits, order.token_id);
         console.log(assetId)
         const asset: CoinQuantityLike = { amount: 1, assetId: assetId };
 
@@ -686,10 +688,10 @@ async function _executeSellOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection.value, NFTContractAbi__factory.abi, _provider);
+        const _collection = new Contract(order.collection.bits, NFTContractAbi__factory.abi, _provider);
         const { gasUsed } = await contract.functions
             .execute_order(order)
-            .txParams({gasPrice: 150000, variableOutputs: 4})
+            .txParams({variableOutputs: 4})
             .callParams({forward: asset})
             .addContracts([_strategy, _collection, pool, assetManager, royaltyManager, executionManager])
             .getTransactionCost();
@@ -698,8 +700,8 @@ async function _executeSellOrder(
 
         const { transactionResult } = await contract.functions
             .execute_order(order)
-            .txParams({gasPrice: 150000, variableOutputs: 4, gasLimit})
-            .callParams({forward: asset})
+            .txParams({variableOutputs: 4})
+            .callParams({forward: asset, gasLimit})
             .addContracts([_strategy, _collection, pool, assetManager, royaltyManager, executionManager])
             .call();
         return { transactionResult };
@@ -727,13 +729,13 @@ export async function bulkPurchase(
             if (order.isBuySide) {
                 const takerOrder = _convertToTakerOrder(order);
                 const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
-                const _collection = new Contract(takerOrder.collection.value, NFTContractAbi__factory.abi, _provider);
+                const _collection = new Contract(takerOrder.collection.bits, NFTContractAbi__factory.abi, _provider);
 
                 //if (order.strategy == strategyAuction.id.toB256()) continue;
                 if (!_contracts.includes(_collection)) _contracts.push(_collection)
                 const call = contract.functions
                     .execute_order(takerOrder)
-                    .txParams({gasPrice: 1, variableOutputs: 4})
+                    .txParams({variableOutputs: 4})
                     .addContracts([strategyFixedPrice, _collection, royaltyManager, executionManager])
                     .callParams({forward: coin})
                 calls.push(call);
@@ -743,14 +745,14 @@ export async function bulkPurchase(
         if (calls.length === 0) return null;
 
         const { gasUsed } = await contract.multiCall(calls)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .addContracts(_contracts)
             .getTransactionCost();
 
         const gasLimit = Number(gasUsed) * 1.5
 
         const { transactionResult } = await contract.multiCall(calls)
-            .txParams({gasPrice: 1, gasLimit})
+            .txParams({gasLimit})
             .addContracts(_contracts)
             .call();
         return { transactionResult };
@@ -767,10 +769,10 @@ export async function setPool(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _pool: ContractIdInput = { value: pool };
+        const _pool: ContractIdInput = { bits: pool };
         const { transactionResult } = await contract.functions
             .set_pool(_pool)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -786,10 +788,10 @@ export async function setExecutionManager(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _executionManager: ContractIdInput = { value: executionManager };
+        const _executionManager: ContractIdInput = { bits: executionManager };
         const { transactionResult } = await contract.functions
             .set_execution_manager(_executionManager)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -805,10 +807,10 @@ export async function setRoyaltyManager(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _royaltyManager: ContractIdInput = { value: royaltyManager };
+        const _royaltyManager: ContractIdInput = { bits: royaltyManager };
         const { transactionResult } = await contract.functions
             .set_royalty_manager(_royaltyManager)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -824,10 +826,10 @@ export async function setAssetManager(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _assetManager: ContractIdInput = { value: assetManager };
+        const _assetManager: ContractIdInput = { bits: assetManager };
         const { transactionResult } = await contract.functions
             .set_asset_manager(_assetManager)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -845,16 +847,34 @@ export async function setProtocolFeeRecipient(
     try {
         let _protocolFeeRecipient: IdentityInput;
         isRecipientAddress ?
-            _protocolFeeRecipient = { Address: { value: protocolFeeRecipient } } :
-            _protocolFeeRecipient = { ContractId: { value: protocolFeeRecipient } };
+            _protocolFeeRecipient = { Address: { bits: protocolFeeRecipient } } :
+            _protocolFeeRecipient = { ContractId: { bits: protocolFeeRecipient } };
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .set_protocol_fee_recipient(_protocolFeeRecipient)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setProtocolFeeRecipient failed. Reason: ${err}`)
+    }
+}
+
+export async function setMaxExpiration(
+    contractId: string,
+    provider: string,
+    wallet: string | WalletLocked,
+    maxExpiration: number,
+) {
+    try {
+        const contract = await setup(contractId, provider, wallet);
+        const { transactionResult } = await contract.functions
+            .set_max_expiration(maxExpiration)
+            .txParams({})
+            .call();
+        return { transactionResult };
+    } catch(err: any) {
+        throw Error(`Exchange. setMaxExpiration failed. Reason: ${err}`)
     }
 }
 
@@ -962,10 +982,10 @@ export async function transferOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const _newOwner: IdentityInput = { Address: { value: newOwner } };
+        const _newOwner: IdentityInput = { Address: { bits: newOwner } };
         const { transactionResult } = await contract.functions
             .transfer_ownership(_newOwner)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {
@@ -982,7 +1002,7 @@ export async function renounceOwnership(
         const contract = await setup(contractId, provider, wallet);
         const { transactionResult } = await contract.functions
             .renounce_ownership()
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult };
     } catch(err: any) {

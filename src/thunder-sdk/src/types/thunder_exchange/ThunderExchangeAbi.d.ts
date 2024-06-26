@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import type {
@@ -31,11 +31,11 @@ export enum SideOutput { Buy = 'Buy', Sell = 'Sell' };
 export enum ThunderExchangeErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', AmountHigherThanPoolBalance = 'AmountHigherThanPoolBalance', AssetIdNotMatched = 'AssetIdNotMatched', AmountNotMatched = 'AmountNotMatched', StrategyMustBeNonZeroContract = 'StrategyMustBeNonZeroContract', StrategyNotWhitelisted = 'StrategyNotWhitelisted', MakerMustBeNonZeroAddress = 'MakerMustBeNonZeroAddress', TakerMustBeNonZeroAddress = 'TakerMustBeNonZeroAddress', CallerMustBeMaker = 'CallerMustBeMaker', ExpirationRangeOutOfBound = 'ExpirationRangeOutOfBound', NonceMustBeNonZero = 'NonceMustBeNonZero', PriceMustBeNonZero = 'PriceMustBeNonZero', AmountMustBeNonZero = 'AmountMustBeNonZero', AssetNotSupported = 'AssetNotSupported', ExecutionInvalid = 'ExecutionInvalid', PaymentAssetMismatched = 'PaymentAssetMismatched', PriceMismatched = 'PriceMismatched', AmountMismatched = 'AmountMismatched', PoolTransferFromFailed = 'PoolTransferFromFailed', PoolMismatchedAssetBalance = 'PoolMismatchedAssetBalance' };
 export enum ThunderExchangeErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', AmountHigherThanPoolBalance = 'AmountHigherThanPoolBalance', AssetIdNotMatched = 'AssetIdNotMatched', AmountNotMatched = 'AmountNotMatched', StrategyMustBeNonZeroContract = 'StrategyMustBeNonZeroContract', StrategyNotWhitelisted = 'StrategyNotWhitelisted', MakerMustBeNonZeroAddress = 'MakerMustBeNonZeroAddress', TakerMustBeNonZeroAddress = 'TakerMustBeNonZeroAddress', CallerMustBeMaker = 'CallerMustBeMaker', ExpirationRangeOutOfBound = 'ExpirationRangeOutOfBound', NonceMustBeNonZero = 'NonceMustBeNonZero', PriceMustBeNonZero = 'PriceMustBeNonZero', AmountMustBeNonZero = 'AmountMustBeNonZero', AssetNotSupported = 'AssetNotSupported', ExecutionInvalid = 'ExecutionInvalid', PaymentAssetMismatched = 'PaymentAssetMismatched', PriceMismatched = 'PriceMismatched', AmountMismatched = 'AmountMismatched', PoolTransferFromFailed = 'PoolTransferFromFailed', PoolMismatchedAssetBalance = 'PoolMismatchedAssetBalance' };
 
-export type AddressInput = { value: string };
+export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
-export type ContractIdInput = { value: string };
+export type ContractIdInput = { bits: string };
 export type ContractIdOutput = ContractIdInput;
 export type ExtraParamsInput = { extra_address_param: AddressInput, extra_contract_param: ContractIdInput, extra_u64_param: BigNumberish };
 export type ExtraParamsOutput = { extra_address_param: AddressOutput, extra_contract_param: ContractIdOutput, extra_u64_param: BN };

@@ -169,12 +169,12 @@ const Table = ({
           </div>
           {ButtonBelowHeader ? <ButtonBelowHeader /> : <></>}
           {actionButton && actionButton()}
-          <div data-testid="tableBody" className={clsx("tbody lg:container-fluid", containerFluidClassName)}>
+          <div data-testid="tableBody" className={clsx("tbody", containerFluidClassName)}>
             {loading ? <TableLoading template={loadingTemplate} colSpan={headers.length} /> : items.length ? _getItems : <TableNotFound />}
           </div>
         </div>
       </div>
-      {props.footer && <div className={clsx("tfoot", "container-fluid")}>{props.footer}</div>}
+      {props.footer && <div className={clsx("tfoot", "container-fluid pt-2.5")}>{props.footer}</div>}
     </>
   );
 };

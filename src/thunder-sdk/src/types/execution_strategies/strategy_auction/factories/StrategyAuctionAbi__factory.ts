@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
@@ -14,6 +14,7 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { StrategyAuctionAbi, StrategyAuctionAbiInterface } from "../StrategyAuctionAbi";
 
 const _abi = {
+  "encoding": "1",
   "types": [
     {
       "typeId": 0,
@@ -181,7 +182,7 @@ const _abi = {
       "type": "struct Address",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -193,7 +194,7 @@ const _abi = {
       "type": "struct AssetId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -205,7 +206,7 @@ const _abi = {
       "type": "struct ContractId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -848,7 +849,7 @@ const _abi = {
   ],
   "loggedTypes": [
     {
-      "logId": 0,
+      "logId": "15703323638010531520",
       "loggedType": {
         "name": "",
         "type": 7,
@@ -856,31 +857,7 @@ const _abi = {
       }
     },
     {
-      "logId": 1,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 2,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 3,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 4,
+      "logId": "12764806370357731851",
       "loggedType": {
         "name": "",
         "type": 3,
@@ -888,7 +865,7 @@ const _abi = {
       }
     },
     {
-      "logId": 5,
+      "logId": "9517900813706399297",
       "loggedType": {
         "name": "",
         "type": 16,
@@ -896,79 +873,7 @@ const _abi = {
       }
     },
     {
-      "logId": 6,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 7,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 8,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 9,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 10,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 11,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 12,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 13,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 14,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 15,
+      "logId": "7912903559520169914",
       "loggedType": {
         "name": "",
         "type": 15,
@@ -976,106 +881,10 @@ const _abi = {
       }
     },
     {
-      "logId": 16,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 17,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 18,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 19,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 20,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 21,
+      "logId": "10699517786846983752",
       "loggedType": {
         "name": "",
         "type": 17,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 22,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 23,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 24,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 25,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 26,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 27,
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 28,
-      "loggedType": {
-        "name": "",
-        "type": 7,
         "typeArguments": []
       }
     }
@@ -1111,33 +920,31 @@ const _storageSlots: StorageSlot[] = [
   }
 ];
 
-export class StrategyAuctionAbi__factory {
-  static readonly abi = _abi;
+export const StrategyAuctionAbi__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): StrategyAuctionAbiInterface {
+  createInterface(): StrategyAuctionAbiInterface {
     return new Interface(_abi) as unknown as StrategyAuctionAbiInterface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): StrategyAuctionAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as StrategyAuctionAbi
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<StrategyAuctionAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = StrategyAuctionAbi__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 

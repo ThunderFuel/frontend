@@ -34,9 +34,9 @@ const Activity = () => {
         name: item.token.name,
         description: "",
         image: item.token.image,
-        type: filter.name,
-        subText: filter.subText,
-        typeIcon: filter.icon,
+        type: filter?.name,
+        subText: filter?.subText,
+        typeIcon: filter?.icon,
       };
     });
 

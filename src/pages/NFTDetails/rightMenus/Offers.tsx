@@ -22,6 +22,7 @@ import { OfferStatus } from "api/offer/offer.type";
 import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { useIsMobile } from "hooks/useIsMobile";
+import { ActivityTime } from "components/ActivityList/components/ActivityItems";
 
 const Box = ({
   item,
@@ -154,13 +155,13 @@ const headers: ITableHeader[] = [
     render: (item) => <span>-</span>,
   },
   {
-    key: "expireTime",
-    text: "EXPIRES",
+    key: "date",
+    text: "date",
     width: "25%",
     align: "flex-end",
     sortValue: 3,
     render: (item) => {
-      return <OfferTable.OfferExpiredTime item={item} />;
+      return <ActivityTime item={{ ...item, createdTimeStamp: item.createdAt }} />;
     },
   },
 ];

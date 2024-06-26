@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
@@ -14,6 +14,7 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { PoolAbi, PoolAbiInterface } from "../PoolAbi";
 
 const _abi = {
+  "encoding": "1",
   "types": [
     {
       "typeId": 0,
@@ -134,7 +135,7 @@ const _abi = {
       "type": "struct Address",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -146,7 +147,7 @@ const _abi = {
       "type": "struct AssetId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -158,7 +159,7 @@ const _abi = {
       "type": "struct ContractId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -323,15 +324,15 @@ const _abi = {
       },
       "attributes": [
         {
-          "name": "payable",
-          "arguments": []
-        },
-        {
           "name": "storage",
           "arguments": [
             "read",
             "write"
           ]
+        },
+        {
+          "name": "payable",
+          "arguments": []
         }
       ]
     },
@@ -345,15 +346,15 @@ const _abi = {
       },
       "attributes": [
         {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
-        {
           "name": "doc-comment",
           "arguments": [
             " Getters"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
           ]
         }
       ]
@@ -491,16 +492,16 @@ const _abi = {
       },
       "attributes": [
         {
+          "name": "doc-comment",
+          "arguments": [
+            " Setters"
+          ]
+        },
+        {
           "name": "storage",
           "arguments": [
             "read",
             "write"
-          ]
-        },
-        {
-          "name": "doc-comment",
-          "arguments": [
-            " Setters"
           ]
         }
       ]
@@ -634,7 +635,7 @@ const _abi = {
   ],
   "loggedTypes": [
     {
-      "logId": 0,
+      "logId": "15586886228264746057",
       "loggedType": {
         "name": "",
         "type": 6,
@@ -642,7 +643,7 @@ const _abi = {
       }
     },
     {
-      "logId": 1,
+      "logId": "12195664052085097644",
       "loggedType": {
         "name": "",
         "type": 11,
@@ -650,15 +651,7 @@ const _abi = {
       }
     },
     {
-      "logId": 2,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 3,
+      "logId": "12764806370357731851",
       "loggedType": {
         "name": "",
         "type": 3,
@@ -666,7 +659,7 @@ const _abi = {
       }
     },
     {
-      "logId": 4,
+      "logId": "9517900813706399297",
       "loggedType": {
         "name": "",
         "type": 13,
@@ -674,23 +667,7 @@ const _abi = {
       }
     },
     {
-      "logId": 5,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 6,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 7,
+      "logId": "7912903559520169914",
       "loggedType": {
         "name": "",
         "type": 12,
@@ -698,47 +675,7 @@ const _abi = {
       }
     },
     {
-      "logId": 8,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 9,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 10,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 11,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 12,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 13,
+      "logId": "14880471643791846054",
       "loggedType": {
         "name": "",
         "type": 15,
@@ -746,23 +683,7 @@ const _abi = {
       }
     },
     {
-      "logId": 14,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 15,
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 16,
+      "logId": "10699517786846983752",
       "loggedType": {
         "name": "",
         "type": 14,
@@ -770,23 +691,7 @@ const _abi = {
       }
     },
     {
-      "logId": 17,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 18,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 19,
+      "logId": "13279905576758129435",
       "loggedType": {
         "name": "",
         "type": 16,
@@ -829,33 +734,31 @@ const _storageSlots: StorageSlot[] = [
   }
 ];
 
-export class PoolAbi__factory {
-  static readonly abi = _abi;
+export const PoolAbi__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): PoolAbiInterface {
+  createInterface(): PoolAbiInterface {
     return new Interface(_abi) as unknown as PoolAbiInterface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): PoolAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as PoolAbi
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<PoolAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = PoolAbi__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 

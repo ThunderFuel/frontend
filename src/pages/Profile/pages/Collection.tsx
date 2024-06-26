@@ -26,6 +26,8 @@ const getInitParams = () => {
     return initParams;
   }
 };
+const PAGE_SIZE = 20;
+let tmpCollectionItems: any = [];
 const Collection = () => {
   const { userInfo, options: profileOptions } = useProfile();
   const [filter, setFilter] = React.useState([] as any);
@@ -85,7 +87,7 @@ const Collection = () => {
     try {
       setCollectionItems([]);
 
-      let tmpCollectionItems: any = userInfo.tokens;
+      tmpCollectionItems = userInfo.tokens;
       Object.entries(params).forEach(([key, item]: any) => {
         if (key === "search") {
           tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => String(collectionItem.name).toLowerCase().search(item) > -1);
@@ -128,7 +130,14 @@ const Collection = () => {
 
         return a.lowestSalePrice - b.lowestSalePrice;
       });
-      setCollectionItems(tmpCollectionItems);
+
+      setPagination({
+        pageNumber: 0,
+        page: 0,
+        pageCount: Math.round(tmpCollectionItems.length / PAGE_SIZE),
+        itemsCount: tmpCollectionItems.length,
+      });
+      setCollectionItems([...tmpCollectionItems].splice(0, PAGE_SIZE));
     } catch (e) {
       console.log(e);
     } finally {
@@ -171,7 +180,21 @@ const Collection = () => {
       return userInfo?.tokens ?? [];
     }
   };
-  const onChangePagination = async (params: any) => {
+
+  const onChangePagination = (params: any) => {
+    if (isLoading) {
+      return false;
+    }
+    setIsLoading(true);
+    const nextCollectionItems = [...tmpCollectionItems].splice(params.page * PAGE_SIZE, PAGE_SIZE);
+
+    setCollectionItems((prevState: any) => [...prevState, ...nextCollectionItems]);
+    setPagination((prevState: any) => ({ ...prevState, pageNumber: params.page }));
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  };
+  const onChangePaginationFetch = async (params: any) => {
     if (!!params.continuation || params.page > 1) {
       setIsLoading(true);
       try {
@@ -211,7 +234,7 @@ const Collection = () => {
   }, [userInfo]);
 
   return (
-    <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={onChangePagination}>
+    <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={isValidFilter ? onChangePagination : onChangePaginationFetch}>
       <CollectionList
         isLoading={isLoading}
         collectionItems={collectionItems}
@@ -219,6 +242,7 @@ const Collection = () => {
         filterItems={filter}
         options={{ ...options, ...profileOptions }}
         onChangeFilter={isValidFilter ? onChangeFilter : onChangeFilterFetchCollection}
+        pagination={pagination}
       />
     </InfiniteScroll>
   );

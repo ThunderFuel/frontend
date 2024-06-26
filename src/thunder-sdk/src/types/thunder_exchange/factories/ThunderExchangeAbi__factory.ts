@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
@@ -14,6 +14,7 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { ThunderExchangeAbi, ThunderExchangeAbiInterface } from "../ThunderExchangeAbi";
 
 const _abi = {
+  "encoding": "1",
   "types": [
     {
       "typeId": 0,
@@ -220,7 +221,7 @@ const _abi = {
       "type": "struct Address",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -232,7 +233,7 @@ const _abi = {
       "type": "struct AssetId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -244,7 +245,7 @@ const _abi = {
       "type": "struct ContractId",
       "components": [
         {
-          "name": "value",
+          "name": "bits",
           "type": 1,
           "typeArguments": null
         }
@@ -802,15 +803,15 @@ const _abi = {
       },
       "attributes": [
         {
-          "name": "storage",
-          "arguments": [
-            "read"
-          ]
-        },
-        {
           "name": "doc-comment",
           "arguments": [
             " Ownable ///"
+          ]
+        },
+        {
+          "name": "storage",
+          "arguments": [
+            "read"
           ]
         }
       ]
@@ -831,14 +832,14 @@ const _abi = {
       },
       "attributes": [
         {
-          "name": "payable",
-          "arguments": []
-        },
-        {
           "name": "storage",
           "arguments": [
             "read"
           ]
+        },
+        {
+          "name": "payable",
+          "arguments": []
         }
       ]
     },
@@ -972,16 +973,16 @@ const _abi = {
       },
       "attributes": [
         {
+          "name": "doc-comment",
+          "arguments": [
+            " Setters ///"
+          ]
+        },
+        {
           "name": "storage",
           "arguments": [
             "read",
             "write"
-          ]
-        },
-        {
-          "name": "doc-comment",
-          "arguments": [
-            " Setters ///"
           ]
         }
       ]
@@ -1112,7 +1113,7 @@ const _abi = {
   ],
   "loggedTypes": [
     {
-      "logId": 0,
+      "logId": "5160872022870533508",
       "loggedType": {
         "name": "",
         "type": 6,
@@ -1120,15 +1121,7 @@ const _abi = {
       }
     },
     {
-      "logId": 1,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 2,
+      "logId": "13612721533416287670",
       "loggedType": {
         "name": "",
         "type": 14,
@@ -1136,119 +1129,7 @@ const _abi = {
       }
     },
     {
-      "logId": 3,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 4,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 5,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 6,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 7,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 8,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 9,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 10,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 11,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 12,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 13,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 14,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 15,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 16,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 17,
+      "logId": "16905867214671608396",
       "loggedType": {
         "name": "",
         "type": 15,
@@ -1256,15 +1137,7 @@ const _abi = {
       }
     },
     {
-      "logId": 18,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 19,
+      "logId": "12764806370357731851",
       "loggedType": {
         "name": "",
         "type": 2,
@@ -1272,7 +1145,7 @@ const _abi = {
       }
     },
     {
-      "logId": 20,
+      "logId": "9517900813706399297",
       "loggedType": {
         "name": "",
         "type": 19,
@@ -1280,95 +1153,7 @@ const _abi = {
       }
     },
     {
-      "logId": 21,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 22,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 23,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 24,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 25,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 26,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 27,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 28,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 29,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 30,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 31,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 32,
+      "logId": "13895587280595317858",
       "loggedType": {
         "name": "",
         "type": 16,
@@ -1376,23 +1161,7 @@ const _abi = {
       }
     },
     {
-      "logId": 33,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 34,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 35,
+      "logId": "7912903559520169914",
       "loggedType": {
         "name": "",
         "type": 18,
@@ -1400,87 +1169,7 @@ const _abi = {
       }
     },
     {
-      "logId": 36,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 37,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 38,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 39,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 40,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 41,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 42,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 43,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 44,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 45,
-      "loggedType": {
-        "name": "",
-        "type": 2,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 46,
+      "logId": "10699517786846983752",
       "loggedType": {
         "name": "",
         "type": 20,
@@ -1488,79 +1177,7 @@ const _abi = {
       }
     },
     {
-      "logId": 47,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 48,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 49,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 50,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 51,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 52,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 53,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 54,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 55,
-      "loggedType": {
-        "name": "",
-        "type": 6,
-        "typeArguments": []
-      }
-    },
-    {
-      "logId": 56,
+      "logId": "5118125025934262562",
       "loggedType": {
         "name": "",
         "type": 17,
@@ -1643,33 +1260,31 @@ const _storageSlots: StorageSlot[] = [
   }
 ];
 
-export class ThunderExchangeAbi__factory {
-  static readonly abi = _abi;
+export const ThunderExchangeAbi__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): ThunderExchangeAbiInterface {
+  createInterface(): ThunderExchangeAbiInterface {
     return new Interface(_abi) as unknown as ThunderExchangeAbiInterface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): ThunderExchangeAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as ThunderExchangeAbi
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<ThunderExchangeAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = ThunderExchangeAbi__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 

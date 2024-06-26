@@ -9,9 +9,6 @@ export default {
   async cancelAllOffer(params: any): Promise<ApiResponse<any>> {
     return ThunderURL.put("v1/offer/cancelalloffer", {}, { params });
   },
-  async cancelOffer(params: any): Promise<ApiResponse<any>> {
-    return ThunderURL.put("v1/offer/canceloffer", {}, { params });
-  },
   async acceptOffer(params: any): Promise<ApiResponse<any>> {
     return ThunderURL.put("v1/offer/acceptoffer", {}, { params });
   },

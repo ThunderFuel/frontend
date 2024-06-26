@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.75.0
-  Forc version: 0.50.0
-  Fuel-Core version: 0.22.1
+  Fuels version: 0.89.1
+  Forc version: 0.60.0
+  Fuel-Core version: 0.27.0
 */
 
 import type {
@@ -31,11 +31,11 @@ export enum SideOutput { Buy = 'Buy', Sell = 'Sell' };
 export enum StrategyAuctionErrorsInput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', ExchangeAlreadyInitialized = 'ExchangeAlreadyInitialized', OrderCancelledOrExpired = 'OrderCancelledOrExpired', FeeTooHigh = 'FeeTooHigh', CallerMustBeTheExchange = 'CallerMustBeTheExchange', ItemIsNotOnAuction = 'ItemIsNotOnAuction', OwnerCanNotPlaceBid = 'OwnerCanNotPlaceBid', BidMustBeHigherThanPreviousOne = 'BidMustBeHigherThanPreviousOne', BidMustBeNonZero = 'BidMustBeNonZero', BidMustBeHigherThanStartingPrice = 'BidMustBeHigherThanStartingPrice', ItemIsAlreadyOnAuction = 'ItemIsAlreadyOnAuction' };
 export enum StrategyAuctionErrorsOutput { OnlyOwner = 'OnlyOwner', Initialized = 'Initialized', ExchangeAlreadyInitialized = 'ExchangeAlreadyInitialized', OrderCancelledOrExpired = 'OrderCancelledOrExpired', FeeTooHigh = 'FeeTooHigh', CallerMustBeTheExchange = 'CallerMustBeTheExchange', ItemIsNotOnAuction = 'ItemIsNotOnAuction', OwnerCanNotPlaceBid = 'OwnerCanNotPlaceBid', BidMustBeHigherThanPreviousOne = 'BidMustBeHigherThanPreviousOne', BidMustBeNonZero = 'BidMustBeNonZero', BidMustBeHigherThanStartingPrice = 'BidMustBeHigherThanStartingPrice', ItemIsAlreadyOnAuction = 'ItemIsAlreadyOnAuction' };
 
-export type AddressInput = { value: string };
+export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
-export type ContractIdInput = { value: string };
+export type ContractIdInput = { bits: string };
 export type ContractIdOutput = ContractIdInput;
 export type ExecutionResultInput = { is_executable: boolean, collection: ContractIdInput, token_id: string, amount: BigNumberish, payment_asset: AssetIdInput };
 export type ExecutionResultOutput = { is_executable: boolean, collection: ContractIdOutput, token_id: string, amount: BN, payment_asset: AssetIdOutput };

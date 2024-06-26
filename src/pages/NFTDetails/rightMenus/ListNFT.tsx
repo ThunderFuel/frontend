@@ -183,14 +183,14 @@ const ListNFT = ({ onBack }: { onBack: any }) => {
           </Tab>
         )}
         {isTimedAuction && infoBox}
-        <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
+        {/* <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
           {isTimedAuction ? "Set Duration" : "Listing Duration"}
           <div className="flex items-center gap-x-[5px] text-bodySm text-gray-light">
             <IconInfo className="w-[17px] h-[17px]" />
             <span>Expires on </span> {getDateFromExpirationTime(duration.value)}
           </div>
           <Select options={selectExpirationDates} onChange={setDuration} value={duration} />
-        </div>
+        </div> */}
         {isMultipleEdition && (
           <div className="flex justify-between">
             <div className="flex flex-col gap-2">

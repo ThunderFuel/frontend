@@ -79,6 +79,8 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
         {getFilter.map((item: any, i: number) => {
           const DynamicComponent = item.dynamicComponent;
 
+          if (item?.filterData.length === 0) return <></>;
+
           return (
             <Collapse key={i} isOpen={item.isOpen}>
               <Collapse.Header>{item.name ?? "-"}</Collapse.Header>

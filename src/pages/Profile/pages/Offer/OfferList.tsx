@@ -21,15 +21,15 @@ const OfferList = ({ headers }: any) => {
 
       <div className="flex items-center justify-between px-5">
         <div className="text-headline-02 text-gray-light uppercase">{label}</div>
-        {isOffersMade && hasActiveOffer && options?.isProfile ? (
+        {/* {isOffersMade && hasActiveOffer && options?.isProfile ? (
           <Config show={!config.isHideAllCancelButtons()}>
             <Button className="btn-secondary btn-sm" onClick={onCancelAllOffer}>
               cancel all offers <IconCircleRemoveWhite />
             </Button>
           </Config>
-        ) : null}
+        ) : null} */}
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 border-t border-gray">
         <OfferTable
           isOffersMade={isOffersMade}
           headers={headers}

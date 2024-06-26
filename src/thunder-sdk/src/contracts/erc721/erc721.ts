@@ -35,10 +35,10 @@ export async function mint(
         const zeroX = "0x";
         const fill0 = subId.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
-        const _to: IdentityInput = { Address: { value: to } };
+        const _to: IdentityInput = { Address: { bits: to } };
         const { transactionResult, logs } = await contract.functions
             .mint(_to, stringSubId, amount)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .call();
         return { transactionResult, logs };
     } catch(err: any) {
@@ -46,40 +46,39 @@ export async function mint(
     }
 }
 
-export async function bulkMint(
-    contractId: string,
-    provider: string,
-    wallet: string | WalletLocked,
-    to: string,
-    amount: number,
-) {
-    let subIDs = [];
+// export async function bulkMint(
+//     contractId: string,
+//     provider: string,
+//     wallet: string | WalletLocked,
+//     to: string,
+//     amount: number,
+// ) {
+//     let subIDs = [];
 
-    const zeroX = "0x";
-    const contract = await setup(contractId, provider, wallet);
-    const currentIndexBN = await totalSupply(contractId, provider, wallet);
-    const currentIndex = Number(currentIndexBN.value)
+//     const zeroX = "0x";
+//     const contract = await setup(contractId, provider, wallet);
+//     const currentIndexBN = await totalSupply(contractId, provider, wallet);
+//     const currentIndex = Number(currentIndexBN.value)
 
-    for (let i=currentIndex; i<(currentIndex + amount); i++) {
-        const fill0 = i.toString().padStart(64, "0")
-        const stringSubId = fill0.padStart(66, zeroX)
-        subIDs.push(stringSubId);
-    }
+//     for (let i=currentIndex; i<(currentIndex + amount); i++) {
+//         const fill0 = i.toString().padStart(64, "0")
+//         const stringSubId = fill0.padStart(66, zeroX)
+//         subIDs.push(stringSubId);
+//     }
 
-    if (subIDs.length === 0) return null;
+//     if (subIDs.length === 0) return null;
 
-    try {
-        const { minGasPrice } = contract.provider.getGasConfig();
-        const _to: IdentityInput = { Address: { value: to } };
-        const { transactionResult, logs } = await contract.functions
-            .bulk_mint(_to, subIDs)
-            .txParams({gasPrice: minGasPrice, variableOutputs: amount})
-            .call();
-        return { transactionResult, logs };
-    } catch(err: any) {
-        throw Error(`ERC721: bulkMint failed. Reason: ${err}`);
-    }
-}
+//     try {
+//         const _to: IdentityInput = { Address: { bits: to } };
+//         const { transactionResult, logs } = await contract.functions
+//             .bulk_mint(_to, subIDs)
+//             .txParams({variableOutputs: amount})
+//             .call();
+//         return { transactionResult, logs };
+//     } catch(err: any) {
+//         throw Error(`ERC721: bulkMint failed. Reason: ${err}`);
+//     }
+// }
 
 export async function bulkMintScript(
     contractId: string,
@@ -91,13 +90,13 @@ export async function bulkMintScript(
     try {
         const _provider = await Provider.create(provider)
         const _contract = new Contract(contractId, NFTContractAbi__factory.abi, _provider);
-        const _collection: ContractIdInput = { value: contractId };
-        const _to: IdentityInput = { Address: { value: to } };
+        const _collection: ContractIdInput = { bits: contractId };
+        const _to: IdentityInput = { Address: { bits: to } };
 
         const script = new Script(bytecode, abi, wallet)
         const { transactionResult, logs } = await script.functions
             .main(_collection, _to, amount)
-            .txParams({gasPrice: 1})
+            .txParams({})
             .addContracts([_contract])
             .call();
         return { transactionResult, logs };
@@ -123,19 +122,18 @@ export async function bulkMintWithMulticall(
     for (let i=currentIndex; i<(currentIndex + amount); i++) {
         const fill0 = i.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
-        const _to: IdentityInput = { Address: { value: to } };
+        const _to: IdentityInput = { Address: { bits: to } };
         const mintCall = contract.functions
             .mint(_to, stringSubId, 1)
-            .txParams({gasPrice: 1, variableOutputs: 1})
+            .txParams({variableOutputs: 1})
         calls.push(mintCall);
     }
 
     if (calls.length === 0) return null;
 
     try {
-        const { minGasPrice } = contract.provider.getGasConfig()
         const { transactionResult, logs } = await contract.multiCall(calls)
-            .txParams({gasPrice: minGasPrice, variableOutputs: amount})
+            .txParams({ variableOutputs: amount})
             .call();
         return { transactionResult, logs };
     } catch(err: any) {
@@ -204,7 +202,7 @@ export async function transfer(
         const subId = fill0.padStart(66, zeroX);
         const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
 
-        const res = await wallet.transfer(_to.address, amount, assetId, { gasPrice: 1 });
+        const res = await wallet.transfer(_to.address, amount, assetId, {  });
         const txResult = await res.wait();
         return txResult;
     } catch(err: any) {

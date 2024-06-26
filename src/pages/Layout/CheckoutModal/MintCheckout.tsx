@@ -10,7 +10,7 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { contracts, provider } from "global-constants";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
-import { mint, bulkMint } from "thunder-sdk/src/contracts/erc721";
+import { mint, bulkMintWithMulticall } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";
 import UseNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";

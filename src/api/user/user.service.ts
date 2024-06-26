@@ -45,10 +45,10 @@ export default {
   getBidBalance(userId: number): Promise<ApiResponse<any>> {
     return ThunderURL.get("v1/user/getbidbalance", { params: { userId } });
   },
-  updateBidBalance(userId: number, amount: number): Promise<ApiResponse<any>> {
-    return ThunderURL.post("v1/user/updatebidbalance", {}, { params: { userId, amount } });
-  },
   getUserCollections(data: any) {
     return ThunderURL.post("v1/user/tokens", data);
+  },
+  getUserOfferByNonce(params: { walletAddress: string; nonce: number; tokenOrder: number; contractAddress: string }): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/user/userofferbynonce", { params });
   },
 };

@@ -15,9 +15,6 @@ export default {
   async makeOffer(data: MakeOfferRequest): Promise<ApiResponse<any>> {
     return await ThunderURL.post("v1/offer/makeoffer", data);
   },
-  async acceptOffer(id: number): Promise<ApiResponse<any>> {
-    return await ThunderURL.put("v1/offer/acceptoffer", {}, { params: { id } });
-  },
   async cancelOffer(id: number): Promise<ApiResponse<any>> {
     return await ThunderURL.put("v1/offer/canceloffer", {}, { params: { id } });
   },
@@ -65,5 +62,11 @@ export default {
   },
   async getListingOrderId(params: any): Promise<ApiResponse<any>> {
     return ThunderURL.get("v1/offer/getListingByTokenId", { params });
+  },
+  async getTokenOwner(params: { tokenId: string }): Promise<ApiResponse<any>> {
+    return ThunderURL.get("v1/token/gettokenowner", { params });
+  },
+  async getTokenOwners(data: Array<{ tokenOrder: number; contractAddress: string }>): Promise<ApiResponse<any>> {
+    return ThunderURL.post("v1/token/gettokenowners", data, {});
   },
 };

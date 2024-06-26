@@ -10,11 +10,11 @@ import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import { executeOrder } from "thunder-sdk/src/contracts/thunder_exchange";
-import { exchangeContractId, provider, ZERO_B256 } from "global-constants";
-import { BaseAssetId } from "fuels";
+import { exchangeContractId, provider } from "global-constants";
 import { toGwei } from "utils";
 import userService from "api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import FuelProvider from "providers/FuelProvider";
 
 const checkoutProcessTexts = {
   title1: "Confirm bid",
@@ -41,12 +41,15 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
+  const fuel = new FuelProvider();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const onComplete = () => {
+  const onComplete = async () => {
+    const _baseAssetId = await fuel.getBaseAssetId();
+
     nftdetailsService.getAuctionIndex([selectedNFT?.id]).then(async (res) => {
       const order = {
         isBuySide: false,
@@ -57,14 +60,14 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         collection: selectedNFT.collection.contractAddress,
         token_id: selectedNFT.tokenOrder,
         strategy: "", //TODO strategyid vardi ama kaldirildi auction
-        extra_params: { extra_address_param: ZERO_B256, extra_contract_param: ZERO_B256, extra_u64_param: 0 }, // lazim degilse null
+        extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      executeOrder(exchangeContractId, provider, wallet, order, BaseAssetId)
+      executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
-            offerService.acceptOffer({ id: currentItem?.id });
-            userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
+            // offerService.acceptOffer({ id: currentItem?.id });
+            // userService.updateBidBalance(selectedNFT?.bestOffer?.makerUserId, -checkoutPrice);
             setApproved(true);
           }
         })
