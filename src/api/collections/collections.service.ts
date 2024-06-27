@@ -10,7 +10,7 @@ import {
   UpdateBulkListingRequestItem,
   WatchListRequest,
 } from "./collections.type";
-import { IconHand, IconListingCancel, IconMarketBasket, IconOfferCancel, IconQuarry, IconTag, IconTelegram } from "icons";
+import { IconAccept, IconBid, IconHand, IconListingCancel, IconMarketBasket, IconOfferCancel, IconQuarry, IconTag, IconTelegram } from "icons";
 
 export enum ActivityFilters {
   Offers = 0,
@@ -18,8 +18,10 @@ export enum ActivityFilters {
   Sales = 2,
   Transfers = 3,
   Listings = 4,
-  OfferCancel = 5,
-  ListingCancel = 6,
+  Bids = 5,
+  AcceptOffer = 6,
+  ListingCancel = 7,
+  OfferCancel = 8,
 }
 
 export enum ChecklistStatus {
@@ -53,8 +55,10 @@ export default {
       [ActivityFilters.Sales]: { icon: IconMarketBasket, name: "Sale" },
       [ActivityFilters.Transfers]: { icon: IconTelegram, name: "Transfer" },
       [ActivityFilters.Listings]: { icon: IconTag, name: "Listing" },
-      [ActivityFilters.OfferCancel]: { icon: IconOfferCancel, name: "Offer Cancelled", subText: "Cancelled" },
+      [ActivityFilters.Bids]: { icon: IconBid, name: "Bid" },
+      [ActivityFilters.AcceptOffer]: { icon: IconAccept, name: "Accept Offer" },
       [ActivityFilters.ListingCancel]: { icon: IconListingCancel, name: "Listing Cancelled", subText: "Cancelled" },
+      [ActivityFilters.OfferCancel]: { icon: IconOfferCancel, name: "Offer Cancelled", subText: "Cancelled" },
     };
   },
   addWatchList(data: WatchListRequest) {
