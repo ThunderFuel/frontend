@@ -18,6 +18,11 @@ import useToast from "hooks/useToast";
 import { useClickOutside } from "hooks/useClickOutside";
 import clsx from "clsx";
 
+function clipboardCopyWrapper(walletAddress: any) {
+  clipboardCopy(walletAddress);
+  useToast().success("Copied to clipboard.");
+}
+
 const WalletDropdown = ({ walletAddress, onLogout }: any) => {
   const [show, setShow] = useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -26,8 +31,7 @@ const WalletDropdown = ({ walletAddress, onLogout }: any) => {
       text: "Copy Address",
       icon: IconCopy,
       onClick: () => {
-        clipboardCopy(walletAddress);
-        useToast().success("Copied to clipboard.");
+        clipboardCopyWrapper(walletAddress);
         setShow(false);
       },
     },
@@ -252,7 +256,13 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex flex-col p-5 gap-5">
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col gap-2.5">
-            <h4 className="text-h4 text-green">{user?.userName ?? addressFormat(user?.walletAddress ?? "")}</h4>
+            <div className="flex items-center gap-2.5 group">
+              <h4 className="text-h4 text-green">{user?.userName ?? formatAddress(user?.walletAddress ?? "")}</h4>
+              <div className="flex cursor-pointer gap-1.5 group" onClick={() => clipboardCopyWrapper(user?.walletAddress ?? "")}>
+                <IconCopy className="w-5 h-5 text-gray group-hover:text-white" />
+                <span className="hidden group-hover:flex text-gray-light body-small">copy address</span>
+              </div>
+            </div>
             <h6 className="flex items-center gap text-h6 text-gray-light">
               {balance.toFixed(5)} <IconEthereum />
             </h6>
