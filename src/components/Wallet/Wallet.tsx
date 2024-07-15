@@ -5,7 +5,7 @@ import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSli
 import { IconActivity, IconArrowRight, IconChevronRight, IconCopy, IconDots, IconEthereum, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
-import { addressFormat, clipboardCopy, openInNewTab } from "utils";
+import { clipboardCopy, openInNewTab } from "utils";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
@@ -189,7 +189,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     if (!address || typeof address !== "string") return "-";
 
     const firstPart = address.substring(0, 6);
-    const secondPart = address.substring(address.length - 3);
+    const secondPart = address.substring(address.length - 4);
 
     return firstPart + "..." + secondPart;
   }
@@ -258,9 +258,9 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center gap-2.5 group">
               <h4 className="text-h4 text-green">{user?.userName ?? formatAddress(user?.walletAddress ?? "")}</h4>
-              <div className="flex cursor-pointer gap-1.5 group" onClick={() => clipboardCopyWrapper(user?.walletAddress ?? "")}>
+              <div className="flex items-center cursor-pointer gap-1.5 group" onClick={() => clipboardCopyWrapper(user?.walletAddress ?? "")}>
                 <IconCopy className="w-5 h-5 text-gray group-hover:text-white" />
-                <span className="hidden group-hover:flex text-gray-light body-small">copy address</span>
+                <span className="hidden group-hover:flex text-gray-light text-headline-01 uppercase">copy</span>
               </div>
             </div>
             <h6 className="flex items-center gap text-h6 text-gray-light">
