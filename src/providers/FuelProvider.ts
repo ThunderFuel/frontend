@@ -4,7 +4,7 @@ import { Provider, toB256 } from "fuels";
 import userService from "../api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeBackend, formatTimeContract, isObjectEmpty, toGwei } from "utils";
-import { bulkPurchase, executeOrder, setContracts, depositAndOffer, placeOrder, cancelOrder, bulkCancelOrder, bulkListing } from "thunder-sdk/src/contracts/thunder_exchange";
+import { bulkPurchase, executeOrder, setContracts, depositAndOffer, placeOrder, cancelOrder, bulkCancelOrder, bulkListing, updateOrder } from "thunder-sdk/src/contracts/thunder_exchange";
 import { assetManagerContractId, contracts, exchangeContractId, poolContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId } from "global-constants";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
@@ -128,7 +128,7 @@ class FuelProvider extends BaseProvider {
               else setIsFailed(true);
             });
         } else
-          placeOrder(exchangeContractId, provider, wallet, order)
+          updateOrder(exchangeContractId, provider, wallet, order)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 // nftdetailsService.tokenUpdateOffer({
