@@ -97,7 +97,7 @@ const BulkListing = () => {
               </div>
             </div>
           </div>
-          <div className="lg:border-t border-gray lg:pb-32">
+          <div className="lg:border-t border-gray lg:pb-44">
             <BulkListTable items={getItems} onUpdatePrice={onUpdatePrice} prices={prices} />
           </div>
           <Footer items={getItems} prices={prices} />
