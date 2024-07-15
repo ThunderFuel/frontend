@@ -266,7 +266,10 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
             <h6 className="flex items-center gap text-h6 text-gray-light">
               {balance.toFixed(5)} <IconEthereum />
             </h6>
-            <div className="flex items-center gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light" onClick={handleLogout}>
+            <div
+              className="flex items-center w-fit gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
+              onClick={handleLogout}
+            >
               <IconLogout className="w-[15px] h-[15px]" />
               Logout
             </div>
