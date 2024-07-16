@@ -5,7 +5,7 @@ import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSli
 import { IconActivity, IconArrowRight, IconChevronRight, IconCopy, IconDots, IconEthereum, IconFaucet, IconLike, IconLink, IconLogout, IconOffer, IconSettings, IconWallet } from "icons";
 import Button from "components/Button";
 import { useWallet } from "hooks/useWallet";
-import { clipboardCopy, openInNewTab } from "utils";
+import { addressFormat, clipboardCopy, openInNewTab } from "utils";
 import { PATHS } from "router/config/paths";
 import UseNavigate from "hooks/useNavigate";
 import Avatar from "components/Avatar";
@@ -185,15 +185,6 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   //   </div>
   // );
 
-  function formatAddress(address: string) {
-    if (!address || typeof address !== "string") return "-";
-
-    const firstPart = address.substring(0, 6);
-    const secondPart = address.substring(address.length - 4);
-
-    return firstPart + "..." + secondPart;
-  }
-
   function handleLogout() {
     walletDisconnect();
     dispatch(setIsConnected(false));
@@ -209,7 +200,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
       <div className="flex items-center justify-between text-gray-light">
         <span className="text-headline-01 uppercase">wallet</span>
         <div className="flex items-center gap-2.5">
-          <span className="body-medium">{formatAddress(user?.walletAddress)}</span>
+          <span className="body-medium">{addressFormat(user?.walletAddress)}</span>
           <WalletDropdown walletAddress={user?.walletAddress} onLogout={handleLogout} />
         </div>
       </div>
@@ -257,7 +248,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col gap-2.5">
             <div className="flex items-center gap-2.5 group">
-              <h4 className="text-h4 text-green">{user?.userName ?? formatAddress(user?.walletAddress ?? "")}</h4>
+              <h4 className="text-h4 text-green">{user?.userName ?? addressFormat(user?.walletAddress ?? "")}</h4>
               <div className="flex items-center cursor-pointer gap-1.5 group" onClick={() => clipboardCopyWrapper(user?.walletAddress ?? "")}>
                 <IconCopy className="w-5 h-5 text-gray group-hover:text-white" />
                 <span className="hidden group-hover:flex text-gray-light text-headline-01 uppercase">copy</span>
