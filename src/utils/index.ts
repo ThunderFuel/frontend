@@ -7,11 +7,12 @@ import config from "config";
 export { timeagoFormat } from "./timeago";
 
 export const addressFormat = (address: any) => {
-  if (!address) {
-    return "-";
-  }
+  if (!address || typeof address !== "string") return "-";
 
-  return String(address).substring(0, 6);
+  const firstPart = address.substring(0, 6);
+  const secondPart = address.substring(address.length - 4);
+
+  return firstPart + "..." + secondPart;
 };
 
 export const openInNewTab = (url: string): void => {
