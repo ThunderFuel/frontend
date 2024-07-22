@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { SVGProps, useEffect, useState } from "react";
-import { IconBid, IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
+import { IconAccept, IconBid, IconCart, IconListed, IconListingCancel, IconOffer, IconOfferCancel, IconToken, IconTransfer } from "icons";
 import Filter from "../components/Filter";
 import RightMenu from "../components/RightMenu";
 import EthereumPrice from "components/EthereumPrice";
@@ -38,37 +38,65 @@ function formatActivityData(data: any): { icon: any; title: string; description:
     />
   );
 
+  // MakeOffer = 0,
+  //       Mints = 1,
+  //       Sales = 2,
+  //       Transfer = 3,
+  //       Listings = 4,
+  //       Bids = 5,
+  //       AcceptOffer = 6,
+  //       CancelListing = 7,
+  //       CancelOffer = 8
+
   switch (data.activityType) {
-    case 0:
+    case ActivityFilters.Offers:
       return { icon: IconOffer, title: "Offer", description: description };
-    case 1:
+    case ActivityFilters.Mints:
       return {
         icon: IconToken,
         title: "Mint",
         description: description,
       };
-    case 2:
+    case ActivityFilters.Sales:
       return {
         icon: IconCart,
         title: "Sale",
         description: description,
       };
-    case 3:
+    case ActivityFilters.Transfers:
       return {
         icon: IconTransfer,
         title: "Transfer",
         description: description,
       };
-    case 4:
+    case ActivityFilters.Listings:
       return {
         icon: IconListed,
         title: "List",
         description: description,
       };
-    case 5:
+    case ActivityFilters.Bids:
       return {
         icon: IconBid,
         title: "Bid",
+        description: description,
+      };
+    case ActivityFilters.AcceptOffer:
+      return {
+        icon: IconAccept,
+        title: "Accept Offer",
+        description: description,
+      };
+    case ActivityFilters.ListingCancel:
+      return {
+        icon: IconListingCancel,
+        title: "Cancel Listing",
+        description: description,
+      };
+    case ActivityFilters.OfferCancel:
+      return {
+        icon: IconOfferCancel,
+        title: "Cancel Offer",
         description: description,
       };
     default:
