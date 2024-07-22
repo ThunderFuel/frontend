@@ -33,7 +33,7 @@ const ButtonFollow = () => {
   if (isFollow) {
     return (
       <Button
-        className="text-white border-white hover:border-red hover:text-red hover:bg-red/20"
+        className="text-white border-white !bg-bg hover:border-red hover:text-red hover:bg-red/20"
         onClick={onSetFollow}
         onMouseEnter={() => setHoverText("UNFOLLOW")}
         onMouseLeave={() => setHoverText("FOLLOWING")}
