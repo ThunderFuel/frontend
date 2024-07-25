@@ -7,6 +7,7 @@ import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll";
 import { CollectionItemsRequest } from "api/collections/collections.type";
 import { useAppDispatch } from "store";
 import { removeAll } from "store/bulkListingSlice";
+import { removeAll as removeALLWallet } from "store/cartSlice";
 
 const getInitParams = () => {
   const initParams = {
@@ -25,6 +26,7 @@ const getInitParams = () => {
     return initParams;
   }
 };
+let currentFilterValues: any = null;
 const Items = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -47,6 +49,9 @@ const Items = () => {
     };
 
     const { data: collectionData, ...paginationData } = await collectionService.getCollectionItems(data);
+
+    currentFilterValues = data;
+
     setPagination(paginationData);
 
     return collectionData;
@@ -146,21 +151,25 @@ const Items = () => {
     }
   };
 
+  const onCompleteCheckout = () => {
+    if (currentFilterValues) {
+      fetchCollections(currentFilterValues);
+    }
+
+    dispatch(removeAll());
+    dispatch(removeALLWallet());
+  };
+
   React.useEffect(() => {
     dispatch(removeAll());
+    dispatch(removeALLWallet());
 
     fetchFilters();
 
-    window.addEventListener("CompleteCheckout", () => {
-      fetchFilters();
-      fetchCollections();
-    });
+    window.addEventListener("CompleteCheckout", onCompleteCheckout);
 
     return () => {
-      window.addEventListener("CompleteCheckout", () => {
-        fetchFilters();
-        fetchCollections();
-      });
+      window.addEventListener("CompleteCheckout", onCompleteCheckout);
     };
   }, [collectionId]);
 
