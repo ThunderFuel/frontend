@@ -44,9 +44,9 @@ const Footer = ({ items, prices }: any) => {
         bulkListItems: bulkListingRequest,
         bulkUpdateItems: updateBulkListingRequest,
         onCheckoutComplete: () => {
-          navigate(PATHS.PROFILE);
           dispatch(removeBulkItems());
           dispatch(removeAll());
+          navigate(PATHS.PROFILE);
         },
       })
     );
