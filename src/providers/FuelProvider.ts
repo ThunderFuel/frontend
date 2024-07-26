@@ -587,7 +587,7 @@ class FuelProvider extends BaseProvider {
             // });
           })
           .catch(async (e) => {
-            const response = await nftdetailsService.getTokenOwner({ tokenId: buyNowItem.id });
+            const response = await nftdetailsService.getTokenOwners([{ tokenOrder: items[0].tokenOrder, contractAddress: items[0].contractAddress }]);
 
             if (response?.data === user?.walletAddress) {
               // setSuccessCheckout(res.data); // TODO: buradaki data ne ona bakmak lazim
