@@ -17,6 +17,7 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 import { useDispatch } from "react-redux";
 import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
+import { useConnectUI } from "@fuels/react";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -76,6 +77,7 @@ HeaderCardBadge.displayName = "HeaderCardBadge";
 const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
   const navigate = UseNavigate();
+  const { connect } = useConnectUI();
 
   const selectedCarts = useAppSelector((state) => state.cart.items);
   const { isConnected, user } = useAppSelector((state) => state.wallet);
@@ -90,7 +92,13 @@ const HeaderIconButtonGroup = React.memo(() => {
           <Avatar image={user?.image} userId={user?.id} className="w-9 h-9" />
         </HeaderIconButton>
       )}
-      <HeaderIconButton className="hidden lg:flex" onClick={() => dispatch(toggleWalletModal())}>
+      <HeaderIconButton
+        className="hidden lg:flex"
+        onClick={() => {
+          if (isConnected) dispatch(toggleWalletModal());
+          else connect();
+        }}
+      >
         <IconWallet className={clsx("h-[30px] w-[30px]", isConnected ? "text-white" : "text-gray-light")} />
       </HeaderIconButton>
       <HeaderIconButton className="relative" onClick={() => dispatch(toggleCartModal())}>

@@ -64,7 +64,7 @@ const TabMoreDropdowns = () => {
         );
         dispatch(toggleCheckoutModal());
       }
-    } else if (CancelType.CancelAllListingsAndOffers) {
+    } else if (CancelType.CancelAllListingsAndOffers === type) {
       {
         dispatch(
           setCheckout({

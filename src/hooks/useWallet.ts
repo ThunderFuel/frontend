@@ -2,13 +2,47 @@ import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
 import { useSelector } from "react-redux";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
+import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect } from "@fuels/react";
+import { useEffect } from "react";
+import userService from "api/user/user.service";
+import { toB256 } from "fuels";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
-  const { user, isConnected } = useAppSelector((state) => state.wallet);
+  const { user } = useAppSelector((state) => state.wallet);
   const { setGatewayType, selectedGateway, clearGatewayType } = useFuelExtension();
+  const { isConnected, refetch: refetchConnected } = useIsConnected();
+  const { account } = useAccount();
+  const { wallet } = useFuelWallet(account);
+  const { disconnect } = useDisconnect();
+
+  useEffect(() => {
+    refetchConnected();
+  }, [refetchConnected]);
+
+  async function _connect() {
+    const user = await userService.userCreate({ walletAddress: account });
+
+    dispatch(setUser(user.data));
+  }
+
+  useEffect(() => {
+    if (isConnected && wallet && account) {
+      dispatch(setIsConnected(true));
+      dispatch(setAddress(toB256(account as any) ?? ""));
+
+      _connect();
+
+      setGatewayType(FUEL_TYPE.FUEL);
+
+      dispatch(setWallet(wallet));
+    } else if (!isConnected) {
+      dispatch(setIsConnected(false));
+      dispatch(setUser({}));
+    }
+  }, [isConnected, account, wallet]);
 
   const hasEnoughFunds = async (buyNowItemPrice?: any) => {
     return selectedGateway().hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
@@ -60,6 +94,7 @@ export const useWallet = () => {
   };
 
   const walletDisconnect = async () => {
+    disconnect();
     try {
       await selectedGateway().walletDisconnect(() => {
         dispatch(setIsConnected(false));

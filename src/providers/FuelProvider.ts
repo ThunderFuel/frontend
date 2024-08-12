@@ -891,10 +891,6 @@ class FuelProvider extends BaseProvider {
   }
 
   async getBalance(walletAddress: any, userWalletAddress: any): Promise<any> {
-    const isConnected = await this.isConnected();
-    if (!isConnected) {
-      return null;
-    }
     const _provider = await this.getProvider();
     const address = userWalletAddress ? userWalletAddress : walletAddress;
     const _baseAssetId = await this.getBaseAssetId();

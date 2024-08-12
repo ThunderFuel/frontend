@@ -11,9 +11,13 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import LOCALES from "./locales";
 
+import { coinbaseWallet, walletConnect } from "@wagmi/connectors";
+import { http, createConfig, injected } from "@wagmi/core";
+import { mainnet, sepolia } from "@wagmi/core/chains";
+
 import * as Sentry from "@sentry/react";
 import { Fuel, FueletWalletConnector, FuelWalletConnector } from "@fuel-wallet/sdk";
-import { EVMWalletConnector } from "@fuels/connectors";
+import { FuelProvider } from "@fuels/react";
 
 // import { Fuel } from "fuels";
 // import { FuelWalletConnector, FueletWalletConnector } from "@fuels/connectors";
@@ -30,18 +34,15 @@ export const getFuelet = () => {
 };
 import { BrowserTracing } from "@sentry/browser";
 
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
 // import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
-import { goerli, linea, mainnet } from "wagmi/chains";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
+import { WALLET_CONNECT_PROJECT_ID } from "global-constants";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { defaultConnectors } from "@fuels/connectors";
 
-const { chains, publicClient, webSocketPublicClient } = configureChains([linea, goerli, mainnet], [publicProvider()]);
 const isDevelopment = "development" === process.env.NODE_ENV;
 
 export const litNodeClient = new LitNodeClient({
@@ -50,29 +51,6 @@ export const litNodeClient = new LitNodeClient({
 });
 
 // litNodeClient.connect();
-
-export const connectors = [
-  new MetaMaskConnector({ chains }),
-  // new CoinbaseWalletConnector({
-  //   chains,
-  //   options: {
-  //     appName: "wagmi",
-  //   },
-  // }),
-  new WalletConnectConnector({
-    chains,
-    options: {
-      projectId: "fbbe076e89456ef4f6f54493682058b9",
-    },
-  }),
-];
-
-const config = createConfig({
-  autoConnect: true,
-  connectors: connectors,
-  publicClient,
-  webSocketPublicClient,
-});
 
 createClient({
   chains: [
@@ -109,14 +87,57 @@ if (!isDevelopment) {
 
 const stytch = new StytchUIClient("public-token-test-af22c4d3-1e8a-4fa5-a0fa-4c032e2a840a");
 
+const WC_PROJECT_ID = WALLET_CONNECT_PROJECT_ID;
+const METADATA = {
+  name: "Wallet Demo",
+  description: "Fuel Wallets Demo",
+  url: location.href,
+  icons: ["https://connectors.fuel.network/logo_white.png"],
+};
+const wagmiConfig = createConfig({
+  chains: [mainnet, sepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+  },
+  connectors: [
+    injected({ shimDisconnect: false }),
+    walletConnect({
+      projectId: WC_PROJECT_ID,
+      metadata: METADATA,
+      showQrModal: false,
+    }),
+    coinbaseWallet({
+      appName: METADATA.name,
+      appLogoUrl: METADATA.icons[0],
+      darkMode: true,
+      reloadOnDisconnect: true,
+    }),
+  ],
+});
+const queryClient = new QueryClient();
+
 // eslint-disable-next-line react/no-deprecated
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <StytchProvider stytch={stytch}>
-        <WagmiConfig config={config}>
-          <Router />
-        </WagmiConfig>
+        {/* <WagmiProvider config={WagmiConfig}> */}
+        <QueryClientProvider client={queryClient}>
+          <FuelProvider
+            theme="dark"
+            fuelConfig={{
+              connectors: defaultConnectors({
+                devMode: true,
+                wcProjectId: WALLET_CONNECT_PROJECT_ID,
+                ethWagmiConfig: wagmiConfig,
+              }),
+            }}
+          >
+            <Router />
+          </FuelProvider>
+        </QueryClientProvider>
+        {/* </WagmiProvider> */}
       </StytchProvider>
     </Provider>
     <ToastContainer />

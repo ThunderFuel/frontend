@@ -1,4 +1,5 @@
 export const THUNDER_THEME_NAME = "thunder_theme";
+export const WALLET_CONNECT_PROJECT_ID = "fbbe076e89456ef4f6f54493682058b9";
 
 export const provider = "https://testnet.fuel.network/v1/graphql";
 export const FUEL_FAUCET_URL = "https://faucet-testnet.fuel.network/";
