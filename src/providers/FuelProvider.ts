@@ -70,7 +70,7 @@ class FuelProvider extends BaseProvider {
     let tempAddress = "";
     if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
     const toAddress = tempAddress === "" ? address : tempAddress;
-    transfer(selectedNFT.collection.contractAddress, _provider, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
+    transfer(selectedNFT.collection.contractAddress, _provider as unknown as any, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
       .then(() => {
         // nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
         setApproved(true);
@@ -102,7 +102,7 @@ class FuelProvider extends BaseProvider {
       };
 
       const _provider = await this.getProvider();
-      setContracts(contracts, _provider);
+      setContracts(contracts, _provider as any);
 
       userService.getBidBalance(user.id).then((res) => {
         const currentBidBalance = res.data;
@@ -167,7 +167,7 @@ class FuelProvider extends BaseProvider {
       .then(async () => {
         const _provider = await Provider.create(provider);
 
-        setContracts(contracts, _provider);
+        setContracts(contracts, _provider as any);
 
         const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, bulkListMakerOders, bulkUpdateMakerOders);
 
@@ -215,7 +215,7 @@ class FuelProvider extends BaseProvider {
 
       const _provider = await this.getProvider();
 
-      setContracts(contracts, _provider);
+      setContracts(contracts, _provider as any);
 
       executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
         .then((res) => {
@@ -257,7 +257,7 @@ class FuelProvider extends BaseProvider {
   async handleCancelOffer({ cancelOfferItems, wallet, user, setApproved, setStartTransaction, setIsFailed, currentItem }: any) {
     const _provider = await this.getProvider();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
 
     if (cancelOfferItems?.length > 0) {
       // TODO
@@ -295,7 +295,7 @@ class FuelProvider extends BaseProvider {
   async handleCancelListing({ selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
 
     nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
       cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
@@ -315,7 +315,7 @@ class FuelProvider extends BaseProvider {
   }
   async handleCancelAuction({ selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
       cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
         .then(() => {
@@ -333,7 +333,7 @@ class FuelProvider extends BaseProvider {
   async handleCancelAllOffersListings({ user, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
     const params = { userId: user.id };
 
     const response = await offerService.getAllOfferandListingIndexes({
@@ -367,7 +367,7 @@ class FuelProvider extends BaseProvider {
   async handleCancelAllOffers({ user, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
     const params = { userId: user.id };
 
     const response = await offerService.getAllOfferandListingIndexes({
@@ -396,7 +396,7 @@ class FuelProvider extends BaseProvider {
   }
   async handleCancelAllListings({ wallet, user, setApproved, setIsFailed, setStartTransaction }: any) {
     const _provider = await this.getProvider();
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
     const params = { userId: user.id };
 
     const response = await offerService.getAllOfferandListingIndexes({
@@ -441,7 +441,7 @@ class FuelProvider extends BaseProvider {
     const _provider = await this.getProvider();
     const _baseAssetId = await this.getBaseAssetId();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
 
     if (checkoutIsAuction) {
       const res = await nftdetailsService.getLastIndex(2, user.id);
@@ -550,7 +550,7 @@ class FuelProvider extends BaseProvider {
     const _provider = await this.getProvider();
     const _baseAssetId = await this.getBaseAssetId();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
 
     nftdetailsService.getTokensIndex(tokenIds).then((res) => {
       if (!isObjectEmpty(buyNowItem)) {
@@ -731,7 +731,7 @@ class FuelProvider extends BaseProvider {
     const _provider = await this.getProvider();
     const _baseAssetId = await this.getBaseAssetId();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
 
     nftdetailsService
       .getLastIndex(1, user.id)
@@ -825,7 +825,7 @@ class FuelProvider extends BaseProvider {
     const _provider = await this.getProvider();
     const _baseAssetId = await this.getBaseAssetId();
 
-    setContracts(contracts, _provider);
+    setContracts(contracts, _provider as any);
 
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
       const order = {
@@ -908,7 +908,7 @@ class FuelProvider extends BaseProvider {
   async getProvider(): Promise<Provider> {
     const _provider = await Provider.create(provider);
 
-    return _provider;
+    return _provider as Provider as any;
   }
 
   async walletConnect(activeConnector: any, type: FUEL_TYPE): Promise<any> {
