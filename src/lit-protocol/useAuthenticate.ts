@@ -2,19 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { isSignInRedirect, getProviderFromUrl } from "@lit-protocol/lit-auth-client";
 import { AuthMethod } from "@lit-protocol/types";
 import { authenticateWithGoogle, authenticateWithDiscord, authenticateWithEthWallet, authenticateWithWebAuthn } from "./lit";
-import { useConnect } from "wagmi";
 
 export default function useAuthenticate(redirectUri?: string) {
   const [authMethod, setAuthMethod] = useState<AuthMethod>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
-
-  // wagmi hook
-  const { connectAsync } = useConnect({
-    onError: (err: unknown) => {
-      setError(err as Error);
-    },
-  });
 
   /**
    * Handle redirect from Google OAuth

@@ -2,17 +2,19 @@
 import BaseProvider from "./BaseProvider";
 import userService from "../api/user/user.service";
 import * as wagmi from "@wagmi/core";
-import { connectors } from "index";
-import { createWalletClient, custom, formatEther, http, parseEther, parseGwei } from "viem";
+import { createWalletClient, custom, erc721Abi, formatEther, http, parseEther, parseGwei } from "viem";
 import { Execute, getClient } from "@reservoir0x/reservoir-sdk";
 import { linea, goerli } from "wagmi/chains";
 import { formatTimeBackend } from "utils";
-import { prepareWriteContract, writeContract, waitForTransaction, erc721ABI, readContract } from "@wagmi/core";
+import { readContract, writeContract, waitForTransactionReceipt } from "@wagmi/core";
+import { useContractWrite, useWriteContract } from "wagmi";
+
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import { erc1155ABI, goerliWethAddress, lineaWethAddress, wethABI } from "global-constants";
 import { useDispatch } from "react-redux";
 import { setNetworkId } from "store/walletSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
+import { WagmiConfig } from "wagmiconfig";
 class WagmiProvider extends BaseProvider {
   provider = wagmi;
   dispatch: any;
@@ -97,17 +99,14 @@ class WagmiProvider extends BaseProvider {
 
   async handleWithdraw({ amount, setIsDisabled }: any) {
     try {
-      const config = await prepareWriteContract({
+      const hash = await writeContract(WagmiConfig, {
         address: lineaWethAddress,
         abi: wethABI,
         functionName: "withdraw",
         args: [parseEther(amount.toString())],
       });
 
-      const { hash } = await writeContract(config);
-      const data = await waitForTransaction({
-        hash,
-      });
+      const data = await waitForTransactionReceipt(WagmiConfig, { hash });
 
       return data;
     } catch (error) {
@@ -119,17 +118,14 @@ class WagmiProvider extends BaseProvider {
 
   async handleDeposit({ amount, setIsDisabled }: any) {
     try {
-      const config = await prepareWriteContract({
+      const hash = await writeContract(WagmiConfig, {
         address: lineaWethAddress,
         abi: wethABI,
         functionName: "deposit",
         value: parseEther(amount.toString()),
       });
 
-      const { hash } = await writeContract(config);
-      const data = await waitForTransaction({
-        hash,
-      });
+      const data = await waitForTransactionReceipt(WagmiConfig, { hash });
 
       return data;
     } catch (error) {
@@ -172,32 +168,25 @@ class WagmiProvider extends BaseProvider {
     // }
 
     if (isMultiEdition) {
-      const config = await prepareWriteContract({
+      const hash = await writeContract(WagmiConfig, {
         address: selectedNFT.contractAddress,
         abi: erc1155ABI,
         functionName: "safeTransferFrom",
         // args: [from, to, id, amount, 0],
       });
 
-      const { hash } = await writeContract(config);
-      const data = await waitForTransaction({
-        hash,
-      });
+      const data = await waitForTransactionReceipt(WagmiConfig, { hash });
     } else {
       try {
-        const config = await prepareWriteContract({
+        const hash = await writeContract(WagmiConfig, {
           address: selectedNFT.contractAddress,
-          abi: erc721ABI,
+          abi: erc721Abi,
           functionName: "safeTransferFrom",
           args: [user.walletAddress, address, BigInt(selectedNFT.tokenOrder)],
         });
 
-        const { hash } = await writeContract(config);
-        console.log({ hash });
-        const data = await waitForTransaction({
-          hash,
-        });
-        console.log({ data });
+        const data = await waitForTransactionReceipt(WagmiConfig, { hash });
+
         setApproved(true);
       } catch (error) {
         handleTransactionError({ error, setStartTransaction, setIsFailed });
@@ -503,7 +492,7 @@ class WagmiProvider extends BaseProvider {
 
   async getAccounts(): Promise<any> {
     try {
-      const account = this.provider?.getAccount();
+      const account = this.provider?.getAccount(WagmiConfig);
 
       return account;
     } catch (e: any) {
@@ -512,10 +501,10 @@ class WagmiProvider extends BaseProvider {
   }
 
   async getBalance(): Promise<any> {
-    const account = this.provider?.getAccount();
+    const account = this.provider?.getAccount(WagmiConfig);
     if (account.address === undefined) return false;
 
-    const balance = await this.provider?.fetchBalance({
+    const balance = await this.provider?.getBalance(WagmiConfig, {
       address: account.address,
     });
 
@@ -523,7 +512,7 @@ class WagmiProvider extends BaseProvider {
   }
 
   async getBidBalance({ contractAddress }: any): Promise<any> {
-    const data = await readContract({
+    const data = await readContract(WagmiConfig, {
       address: lineaWethAddress,
       abi: wethABI,
       functionName: "balanceOf",
@@ -538,24 +527,35 @@ class WagmiProvider extends BaseProvider {
 
   async walletConnect(activeConnector?: any): Promise<any> {
     try {
-      const account = this.provider?.getAccount();
+      const account = this.provider?.getAccount(WagmiConfig);
 
       let walletAddress;
       if (account.isConnected) walletAddress = account.address;
       else {
-        const result = await this.provider?.connect({
-          connector: connectors[activeConnector],
+        const result = await this.provider?.connect(WagmiConfig, {
+          connector: WagmiConfig.connectors[activeConnector],
         });
-
-        walletAddress = result?.account;
       }
-      const network = this.provider.getNetwork();
 
-      this.dispatch(setNetworkId(network.chain?.id));
+      const { chainId, address } = this.provider.getAccount(WagmiConfig);
+
+      walletAddress = address;
+
+      const chains = WagmiConfig.chains;
+
+      const chain = chains.find((chain) => chain.id === chainId);
+
+      if (chain) this.dispatch(setNetworkId(chain.id));
+
       const user = await userService.userCreate({ walletAddress: walletAddress });
 
-      this.provider.watchNetwork((network) => {
-        this.dispatch(setNetworkId(network.chain?.id));
+      this.provider.watchAccount(WagmiConfig, {
+        onChange: (data) => {
+          const chains = WagmiConfig.chains;
+          const chain = chains.find((chain) => chain.id === data.chainId);
+
+          if (chain) this.dispatch(setNetworkId(chain.id));
+        },
       });
 
       return { user: user.data, address: walletAddress, connect: account?.isConnected, fuelAddress: null };
@@ -581,7 +581,7 @@ class WagmiProvider extends BaseProvider {
 
   async walletDisconnect(callbackFn: any): Promise<any> {
     try {
-      await this.provider?.disconnect();
+      await this.provider?.disconnect(WagmiConfig);
       callbackFn();
     } catch (e) {
       console.log(e);
@@ -589,7 +589,7 @@ class WagmiProvider extends BaseProvider {
   }
 
   isConnected(): any | undefined {
-    const account = this.provider?.getAccount();
+    const account = this.provider?.getAccount(WagmiConfig);
     if (account.isReconnecting) return "isReconnecting";
     else if (account?.connector === undefined) return false;
     else return account?.isConnected;

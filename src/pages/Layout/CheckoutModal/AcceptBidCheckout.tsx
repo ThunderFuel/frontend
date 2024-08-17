@@ -63,7 +63,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
+      executeOrder(exchangeContractId, provider, wallet as unknown as string, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             // offerService.acceptOffer({ id: currentItem?.id });
