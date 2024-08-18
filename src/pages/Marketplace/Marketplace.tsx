@@ -16,6 +16,8 @@ import { ethRequestHandler, PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 import { ethers } from "ethers";
 import { LitAbility, LitPKPResource } from "@lit-protocol/auth-helpers";
 import useSession from "lit-protocol/useSession";
+import Partners from "./Partners";
+import Creator from "./Creator";
 
 const config = {
   TEST_ENV: {
@@ -187,6 +189,8 @@ const Marketplace = () => {
         <Filter />
         <MarketplaceList itemCount={10} />
       </MarketplaceProvider>
+      <Creator />
+      <Partners />
     </div>
   );
 };

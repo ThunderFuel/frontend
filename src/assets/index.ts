@@ -37,3 +37,10 @@ export { default as AssetDropEditClipSingleImage } from "./drop/edit/clip-single
 export { default as AssetDropEditClipSingleVideo } from "./drop/edit/clip-single-video.png";
 
 export { default as AssetNotFound } from "./not-found/index.png";
+export { default as AssetPartnersFuel } from "./partners/fuel.png";
+export { default as AssetPartnersP2Ventures } from "./partners/p2_ventures.png";
+export { default as AssetPartnersCuriosityCapital } from "./partners/curiosity_capital.png";
+export { default as AssetCreatorCreator1 } from "./creator/creator_1.png";
+export { default as AssetCreatorCreator2 } from "./creator/creator_2.png";
+export { default as AssetCreatorCreator3 } from "./creator/creator_3.png";
+export { default as AssetCreatorCreator4 } from "./creator/creator_4.png";
