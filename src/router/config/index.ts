@@ -50,6 +50,12 @@ export const ROUTES: RouteConfig[] = [
     isResponsive: true,
   },
   {
+    path: PATHS.MARKETPLACE,
+    component: Marketplace,
+    layout: Layout,
+    isResponsive: true,
+  },
+  {
     path: PATHS.COLLECTION,
     component: Collection,
     layout: Layout,
