@@ -160,6 +160,13 @@
   @apply transition-all duration-500;
   @apply bg-gray;
   background-clip: padding-box;
+  position: relative;
+}
+.carousel-indicators [data-bs-target]:after{
+  @apply absolute top-0 left-0;
+  @apply bg-white w-0;
+  content: '';
+  height: 5px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -167,9 +174,16 @@
     transition: none;
   }
 }
-
 .carousel-indicators .active {
-  @apply bg-white;
+  @apply lg:w-12;
+}
+.carousel-indicators .active:after{
+  -webkit-transition: width 5s ease-in-out;
+  -moz-transition: width 5s ease-in-out;
+  -o-transition: width 5s ease-in-out;
+  transition: width 5s ease-in-out;
+
+  @apply w-full;
 }
 
 .carousel-caption {

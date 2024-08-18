@@ -17,23 +17,20 @@ const HotDrops = () => {
         page: 1,
         size: 4,
       });
-      const items = response.data
-        .map((responseItem) => {
-          const banners = responseItem.solds
-            .map((item) => item.token.image)
-            .filter((image) => !!image)
-            .slice(0, 3);
+      const items = response.data.slice(0, 5).map((responseItem) => {
+        const banners = responseItem.solds
+          .map((item) => item.token.image)
+          .filter((image) => !!image)
+          .slice(0, 3);
 
-          return {
-            description: responseItem.description,
-            banner: responseItem.banner,
-            banners: banners,
-            name: responseItem.name,
-            id: responseItem.id,
-          } as any;
-        })
-        .slice(0, 5);
-      console.log(items);
+        return {
+          description: responseItem.description,
+          banner: responseItem.banner,
+          banners: banners,
+          name: responseItem.name,
+          id: responseItem.id,
+        } as any;
+      });
 
       setItems(items);
     } catch (e) {
@@ -47,7 +44,7 @@ const HotDrops = () => {
 
   return (
     <div className="min-h-[440px]">
-      <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
+      <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="" interval={5000}>
         {items.map((item, k) => {
           return (
             <Carousel.Item key={k}>
