@@ -25,7 +25,7 @@ const Search = () => {
       onChange={onChange}
       onFocus={onFocus}
       show={isShow}
-      className={"flex flex-1 w-full lg:w-[440px] header-search p-2.5"}
+      className={"flex flex-1 w-full lg:max-w-[440px] header-search p-2.5"}
       inputClassName={"lg:h-[42px]"}
     >
       {Object.keys(results).map((resultKey) => {

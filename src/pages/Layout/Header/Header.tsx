@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
 import { useConnectUI } from "@fuels/react";
+import Button from "../../../components/Button";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -83,33 +84,29 @@ const HeaderIconButtonGroup = React.memo(() => {
   const { isConnected, user } = useAppSelector((state) => state.wallet);
 
   return (
-    <div className="hidden lg:flex divide-x divide-gray border-l border-l-gray lg:border-l-0 lg:border-r lg:border-gray">
-      <HeaderIconButton className="lg:hidden" onClick={() => dispatch(onToggle())}>
-        <IconSearch />
-      </HeaderIconButton>
+    <div className="hidden lg:flex gap-2 items-center">
       {isConnected && (
-        <HeaderIconButton className="hidden lg:flex p-[18px]" onClick={() => navigate(PATHS.PROFILE, {})}>
+        <div className="flex" onClick={() => navigate(PATHS.PROFILE, {})}>
           <Avatar image={user?.image} userId={user?.id} className="w-9 h-9" />
-        </HeaderIconButton>
+        </div>
       )}
-      <HeaderIconButton
-        className="hidden lg:flex"
-        onClick={() => {
-          if (isConnected) dispatch(toggleWalletModal());
-          else connect();
-        }}
-      >
-        <IconWallet className={clsx("h-[30px] w-[30px]", isConnected ? "text-white" : "text-gray-light")} />
-      </HeaderIconButton>
-      <HeaderIconButton className="relative" onClick={() => dispatch(toggleCartModal())}>
+      {!isConnected ? (
+        <Button className="btn-header-connect" onClick={connect}>
+          COnnect
+          <IconWallet className="h-[18px] w-[18px]" />
+        </Button>
+      ) : (
+        <Button className="btn-icon text-white" onClick={() => dispatch(toggleWalletModal())}>
+          <IconWallet className="h-[18px] w-[18px]" />
+        </Button>
+      )}
+
+      <Button className="btn-icon text-white" onClick={() => dispatch(toggleCartModal())}>
         <div className="relative">
-          <IconCart height="30px" width="30px" />
+          <IconCart className="h-[18px] w-[18px]" />
           {selectedCarts.length > 0 && <HeaderCardBadge count={selectedCarts.length} />}
         </div>
-      </HeaderIconButton>
-      <HeaderIconButton className="lg:hidden">
-        <IconHamburger />
-      </HeaderIconButton>
+      </Button>
     </div>
   );
 });
@@ -165,7 +162,7 @@ const Header = () => {
       <>
         <>
           <div className="border-y border-gray">
-            <div className="header-container-fluid">
+            <div className="header-container-fluid h-[71px]">
               <div className="flex items-center gap-5 lg:gap-6 flex-1 lg:pr-6">
                 <Link className="flex items-center text-white gap-1" to={PATHS.MARKETPLACE}>
                   <IconThunder2 className="w-14" />
