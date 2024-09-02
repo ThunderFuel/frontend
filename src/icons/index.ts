@@ -126,3 +126,4 @@ export { ReactComponent as IconOrder } from "./icon-order.svg";
 export { ReactComponent as IconCopy } from "./icon-copy.svg";
 export { ReactComponent as IconX } from "./icon-x.svg";
 export { ReactComponent as IconGithub } from "./icon-github.svg";
+export { ReactComponent as IconHotDropLoading } from "./icon-hot-drop-loading.svg";
