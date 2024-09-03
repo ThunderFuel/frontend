@@ -3,7 +3,7 @@
 }
 
 .modalbase .modal {
-  @apply flex flex-col w-[335px] bg-bg rounded-t-2xl lg:rounded-lg;
+  @apply flex flex-col w-[335px] bg-bg rounded-t-2xl lg:rounded-lg overflow-hidden;
 }
 
 .modalbase .modal .mhead {

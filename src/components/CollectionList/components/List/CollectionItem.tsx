@@ -12,9 +12,9 @@ import { useCollectionListContext } from "../../CollectionListContext";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
 import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
-import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
-import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 import { formatPrice } from "utils";
@@ -173,8 +173,15 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
       dispatch(toggleCartModal());
       dispatch(toggleWalletModal());
     } else {
-      dispatch(setRightMenu(RightMenuType.MakeOffer));
-      navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+      console.log(collection);
+      dispatch(
+        setCheckout({
+          type: CheckoutType.MakeOffer,
+          currentItemId: collection.id,
+        })
+      );
+      dispatch(toggleCheckoutModal());
+      // navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
     }
     e.stopPropagation();
     e.preventDefault();

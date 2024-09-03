@@ -66,7 +66,15 @@ const BestOffer = ({ fetchCollection }: { fetchCollection: any }) => {
             className="btn-secondary no-bg "
             onClick={() => {
               if (!isConnected) dispatch(toggleWalletModal());
-              else dispatch(setRightMenu(RightMenuType.MakeOffer));
+              else {
+                dispatch(
+                  setCheckout({
+                    type: CheckoutType.MakeOffer,
+                    currentItemId: selectedNFT.id,
+                  })
+                );
+                dispatch(toggleCheckoutModal());
+              }
             }}
           >
             MAKE OFFER <IconOffer />

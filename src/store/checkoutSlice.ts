@@ -41,6 +41,7 @@ export const checkoutSlice = createSlice({
     bulkUpdateItems: [],
     cancelOfferItems: [],
     cancelOrderIds: [],
+    currentItemId: undefined,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCheckoutComplete: () => {},
   },
@@ -65,6 +66,7 @@ export const checkoutSlice = createSlice({
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       const noOp = () => {};
 
+      state.currentItemId = action.payload?.currentItemId;
       state.checkoutType = action.payload?.type;
       state.checkoutPrice = action.payload?.price;
       state.checkoutIsAuction = action.payload?.isAuction;

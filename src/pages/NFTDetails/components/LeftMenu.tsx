@@ -62,7 +62,7 @@ const HoverButton = ({ Icon, text, btnClassName, onClick, disabled }: { Icon: Re
   );
 };
 
-const Footer = () => {
+const Footer = ({ selectedNFT }: any) => {
   const dispatch = useAppDispatch();
 
   return (
@@ -70,7 +70,13 @@ const Footer = () => {
       <Button
         className="w-full lg:w-fit"
         onClick={() => {
-          dispatch(setRightMenu(RightMenuType.ListNFT));
+          dispatch(
+            setCheckout({
+              type: CheckoutType.ConfirmListing,
+              currentItemId: selectedNFT.id,
+            })
+          );
+          dispatch(toggleCheckoutModal());
         }}
       >
         LIST YOUR NFT <IconListed />
@@ -510,7 +516,7 @@ const LeftMenu = (props: any) => {
         </div> */}
       </div>
       <footer className={clsx("sticky bottom-[56px] z-10 lg:bottom-0 w-full  border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
-        {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer />}
+        {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer selectedNFT={selectedNFT} />}
       </footer>
     </div>
   );
