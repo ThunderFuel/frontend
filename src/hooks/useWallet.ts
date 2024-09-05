@@ -39,8 +39,8 @@ export const useWallet = () => {
 
       dispatch(setWallet(wallet));
     } else if (!isConnected) {
-      dispatch(setIsConnected(false));
-      dispatch(setUser({}));
+      // dispatch(setIsConnected(false));
+      // dispatch(setUser({}));
     }
   }, [isConnected, account, wallet, user]);
 
