@@ -84,7 +84,7 @@ const Footer = ({ selectedNFT }: any) => {
     </div>
   );
 };
-const FooterListed = () => {
+const FooterListed = ({ selectedNFT }: any) => {
   const dispatch = useAppDispatch();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const { show } = useAppSelector((state) => state.checkout);
@@ -114,7 +114,13 @@ const FooterListed = () => {
       <Button
         className="w-full lg:w-fit"
         onClick={() => {
-          dispatch(setRightMenu(RightMenuType.UpdateListing));
+          dispatch(
+            setCheckout({
+              type: CheckoutType.UpdateListing,
+              currentItemId: selectedNFT.id,
+            })
+          );
+          dispatch(toggleCheckoutModal());
         }}
       >
         UPDATE LISTING <IconUpdateListing />
@@ -307,6 +313,7 @@ const LeftMenu = (props: any) => {
                       takerAddress: selectedNFT.user.walletAddress,
                       tokenOrder: selectedNFT.tokenOrder,
                       orderId: selectedNFT.tokenId,
+                      tokenImage: selectedNFT.image ?? "",
                     },
                     price: selectedNFT.bestOffer?.price,
                     onCheckoutComplete: fetchCollection,
@@ -516,7 +523,7 @@ const LeftMenu = (props: any) => {
         </div> */}
       </div>
       <footer className={clsx("sticky bottom-[56px] z-10 lg:bottom-0 w-full  border-t border-gray bg-bg", isOwner() ? "block" : "hidden")}>
-        {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed /> : <Footer selectedNFT={selectedNFT} />}
+        {nft.onAuction ? <FooterAuction /> : nft.salable ? <FooterListed selectedNFT={selectedNFT} /> : <Footer selectedNFT={selectedNFT} />}
       </footer>
     </div>
   );

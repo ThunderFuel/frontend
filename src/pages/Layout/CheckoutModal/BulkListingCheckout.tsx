@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Button from "components/Button";
 import Modal from "components/Modal";
 
-import { IconWarning } from "icons";
+import { IconSpinner, IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
@@ -13,6 +13,8 @@ import { CheckoutCartItems } from "./Checkout";
 import { useWallet } from "hooks/useWallet";
 import { strategyFixedPriceContractId } from "global-constants";
 import FuelProvider from "providers/FuelProvider";
+import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
+import { set } from "react-hook-form";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -41,8 +43,10 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
   const { handleBulkListing } = useWallet();
   const fuel = new FuelProvider();
 
+  const [totalAmount, setTotalAmount] = useState("");
+
   const [approved, setApproved] = useState(false);
-  const [startTransaction, setStartTransaction] = useState(false);
+  const [startTransaction, setStartTransaction] = useState(true);
   const [isFailed, setIsFailed] = useState(false);
   const bulkItems = bulkListItems.concat(bulkUpdateItems);
   let bulkListMakerOders = [] as any;
@@ -50,6 +54,15 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
   const promises = [] as any;
   const [wagmiSteps, setWagmiSteps] = useState<any>([]);
   const [stepData, setStepData] = useState<any>([]);
+
+  function calculateTotalAmount() {
+    let total = 0;
+    bulkItems.forEach((item: any) => {
+      total += item.price;
+    });
+
+    return total;
+  }
 
   const handleOrders = async ({ bulkListItems, bulkUpdateItems }: { bulkListItems: any; bulkUpdateItems: any }) => {
     const tokenIds = bulkUpdateItems.map((item: any) => item.tokenId); // for bulkupdate
@@ -105,62 +118,57 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
     try {
       handleBulkListing({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
     } catch (e) {
-      console.log("BulkListingCheckout", e);
       handleTransactionError({ error: e, setStartTransaction, setIsFailed });
     }
   };
 
   React.useEffect(() => {
-    setApproved(false);
-    setStartTransaction(false);
     if (show) {
-      setStartTransaction(true);
+      setTotalAmount(calculateTotalAmount().toString());
+      onComplete();
     }
   }, [show]);
 
-  const checkoutProcess = (
-    <div className="flex flex-col w-full items-center">
-      {startTransaction ? (
-        <>
-          <CheckoutProcess
-            bulkListItems={bulkListItems}
-            bulkUpdateItems={bulkUpdateItems}
-            stepData={stepData}
-            wagmiSteps={wagmiSteps}
-            onComplete={onComplete}
-            data={checkoutProcessTexts}
-            approved={approved}
-            failed={isFailed}
-          />
-          {isFailed && (
-            <div className="flex flex-col w-full border-t border-gray">
-              <Button className="btn-secondary m-5" onClick={onClose}>
-                CLOSE
-              </Button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="flex flex-col w-full border-t border-gray">
-          <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="text-red" />
-            <span className="text-h5 text-white">You rejected the request in your wallet!</span>
+  return (
+    <Modal
+      bodyClassName="!w-full !max-w-[600px]"
+      backdropDisabled={true}
+      className="checkout"
+      title="Bulk Listing"
+      show={show}
+      onClose={onClose}
+      footer={!startTransaction || isFailed ? <FooterCloseButton onClose={onClose} /> : <Footer approved={approved} onDone={onDone} />}
+    >
+      {!startTransaction ? (
+        <TransactionRejected />
+      ) : isFailed ? (
+        <TransactionFailed />
+      ) : approved ? (
+        <div className="flex flex-col w-full gap-5 p-5">
+          <Approved title="Bulk Listing Completed Successfully!" description="All selected items have been listed. You can review and manage your listings in your profile." />
+          <div className="flex flex-col w-full">
+            <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={totalAmount} approved={approved} />
           </div>
-          <Button className="btn-secondary m-5" onClick={onClose}>
-            CLOSE
-          </Button>
+        </div>
+      ) : (
+        <div className="flex-center flex-col w-full gap-8 px-[25px] pt-5 pb-[50px]">
+          <div className="flex flex-col w-full">
+            <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={totalAmount} approved={approved} />
+          </div>
+          <IconSpinner className="animate-spin text-white w-10 h-10" />
+          <div className="flex flex-col gap-2">
+            <h5 className="text-h5 text-white text-center">Confirm in Wallet</h5>
+            <span className="text-gray-light body-medium text-center">Waiting for you to confirm the transaction in your wallet.</span>
+          </div>
         </div>
       )}
-    </div>
-  );
-
-  return (
-    <Modal backdropDisabled={true} className="checkout" title="Bulk Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onDone={onDone} />}>
-      <div className="flex flex-col p-5">
-        <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={""} approved={approved} />
-      </div>
-      <div className="flex border-t border-gray">{checkoutProcess}</div>
     </Modal>
+    // <Modal backdropDisabled={true} className="checkout" title="Bulk Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onDone={onDone} />}>
+    //   <div className="flex flex-col p-5">
+    //     <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={""} approved={approved} />
+    //   </div>
+    //   <div className="flex border-t border-gray">{checkoutProcess}</div>
+    // </Modal>
   );
 };
 

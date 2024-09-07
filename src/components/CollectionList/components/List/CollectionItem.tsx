@@ -24,13 +24,22 @@ import config from "../../../../config";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
-    <button className={clsx("button-buy-now", className)} onClick={onClick}>
+    <button className={clsx("button-buy-now w-full", className)} onClick={onClick}>
       <span className="uppercase">buy now</span>
       <IconThunderSmall className="w-7 h-7" />
     </button>
   );
 });
 ButtonBuyNow.displayName = "ButtonBuyNow";
+
+const ButtonIconMakeOffer = React.memo(({ className, onClick }: any) => {
+  return (
+    <button className={clsx("button-make-offer-icon", className)} onClick={onClick}>
+      <IconHand className="fill-white" />
+    </button>
+  );
+});
+ButtonIconMakeOffer.displayName = "ButtonIconMakeOffer";
 
 const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
   return (
@@ -173,7 +182,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
       dispatch(toggleCartModal());
       dispatch(toggleWalletModal());
     } else {
-      console.log(collection);
+      dispatch(setSelectedNFT(collection));
       dispatch(
         setCheckout({
           type: CheckoutType.MakeOffer,
@@ -253,7 +262,10 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
             {!isOwnCollectionItem ? (
               collection.salable ? (
-                <ButtonBuyNow onClick={onBuyNow} />
+                <div className="flex border-t border-gray">
+                  <ButtonBuyNow onClick={onBuyNow} />
+                  <ButtonIconMakeOffer onClick={onMakeOffer} />
+                </div>
               ) : collection.onAuction ? (
                 <ButtonPlaceBid onClick={onPlaceBid} />
               ) : (

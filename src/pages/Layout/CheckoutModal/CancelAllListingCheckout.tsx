@@ -4,19 +4,10 @@ import clsx from "clsx";
 import Button from "components/Button";
 import Modal from "components/Modal";
 
-import { IconWarning } from "icons";
+import { IconSpinner } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess } from "./components/CheckoutProcess";
 import { useWallet } from "hooks/useWallet";
-
-const checkoutProcessTexts = {
-  title1: "Confirm your canceling listing",
-  description1: "Proceed in your wallet and confirm canceling listing.",
-  title2: "Wait for approval",
-  description2: "Waiting for transaction to be approved",
-  title3: "Your listings are canceled!",
-  description3: "Your listings are succesfully canceled.",
-};
+import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
@@ -36,59 +27,55 @@ const CancelAllListingCheckout = ({ show, onClose }: { show: boolean; onClose: a
   const { handleCancelAllListings } = useWallet();
 
   const [approved, setApproved] = useState(false);
-  const [startTransaction, setStartTransaction] = useState(false);
+  const [startTransaction, setStartTransaction] = useState(true);
   const [isFailed, setIsFailed] = useState(false);
   const [wagmiSteps, setWagmiSteps] = useState<any>([]);
   const [stepData, setStepData] = useState<any>([]);
 
   const onComplete = () => {
     try {
-      handleCancelAllListings({ cancelOrderIds, wallet, user, wagmiSteps, setWagmiSteps, setStepData });
+      handleCancelAllListings({ cancelOrderIds, wallet, user, wagmiSteps, setWagmiSteps, setStepData, setIsFailed, setApproved, setStartTransaction });
     } catch (e) {
       setIsFailed(true);
     }
   };
 
   React.useEffect(() => {
-    setApproved(false);
-    setStartTransaction(false);
     if (show) {
-      setStartTransaction(true);
+      onComplete();
     }
   }, [show]);
-
-  const checkoutProcess = (
-    <div className="flex flex-col w-full items-center">
-      {startTransaction ? (
-        <>
-          <CheckoutProcess stepData={stepData} wagmiSteps={wagmiSteps} onComplete={onComplete} data={checkoutProcessTexts} approved={approved} failed={isFailed} />
-          {isFailed && (
-            <div className="flex flex-col w-full border-t border-gray">
-              <Button className="btn-secondary m-5" onClick={onClose}>
-                CLOSE
-              </Button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="flex flex-col w-full border-t border-gray">
-          <div className="flex w-full items-center gap-x-5 p-5 border-b border-gray">
-            <IconWarning className="text-red" />
-            <span className="text-h5 text-white">You rejected the request in your wallet!</span>
-          </div>
-          <Button className="btn-secondary m-5" onClick={onClose}>
-            CLOSE
-          </Button>
-        </div>
-      )}
-    </div>
-  );
 
   // const viewOnBlockchain = approved && <button className="body-small text-gray-light underline">View on Blockchain</button>;
 
   return (
-    <Modal backdropDisabled={true} className="checkout" title="Cancel All Listing" show={show} onClose={onClose} footer={<Footer approved={approved} onClose={onClose} />}>
-      <div className="flex border-t border-gray">{checkoutProcess}</div>
+    <Modal
+      bodyClassName="!w-full !max-w-[600px]"
+      title="Cancel All Listings"
+      backdropDisabled={true}
+      className="checkout"
+      show={show}
+      onClose={onClose}
+      footer={!startTransaction || isFailed ? <FooterCloseButton onClose={onClose} /> : <Footer approved={approved} onClose={onClose} />}
+    >
+      {!startTransaction ? (
+        <TransactionRejected />
+      ) : isFailed ? (
+        <TransactionFailed />
+      ) : approved ? (
+        <div className="flex flex-col w-full gap-5 p-5">
+          <Approved title="All Listings Cancelled Successfully!" description="All of your listings have been cancelled." />
+        </div>
+      ) : (
+        <div className="flex-center flex-col w-full gap-8 px-[25px] pt-5 pb-[50px]">
+          <IconSpinner className="animate-spin text-white w-10 h-10" />
+
+          <div className="flex flex-col gap-2">
+            <h5 className="text-h5 text-white text-center">Confirm in Wallet</h5>
+            <span className="text-gray-light body-medium text-center">Waiting for you to confirm the transaction in your wallet.</span>
+          </div>
+        </div>
+      )}
     </Modal>
   );
 };

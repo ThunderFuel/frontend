@@ -11,20 +11,30 @@ import { useAppSelector } from "store";
 import { useWallet } from "hooks/useWallet";
 import InputEthereum from "components/InputEthereum";
 import collectionsService from "api/collections/collections.service";
-import { formatPrice } from "utils";
+import { formatPrice, isObjectEmpty } from "utils";
 import EthereumPrice from "components/EthereumPrice";
 import floorService from "api/floor/floor.service";
+import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
 
-const checkoutProcessTexts = {
-  title1: "Confirm your listing",
-  description1: "Proceed in your wallet and confirm the listing.",
-  title2: "Wait for approval",
-  description2: "Waiting for transaction to be approved",
-  title3: "Your NFT listed!",
-  description3: "Congrats, your NFT succesfully listed.",
-};
-
-const Footer = ({ approved, onClose, onSubmit, isOnConfirmStep, price }: { approved: boolean; onClose: any; onSubmit: () => void; isOnConfirmStep: boolean; price: any }) => {
+const Footer = ({
+  approved,
+  onClose,
+  onSubmit,
+  isOnConfirmStep,
+  price,
+  updateListing,
+  startTransaction,
+  isFailed,
+}: {
+  approved: boolean;
+  onClose: any;
+  onSubmit: () => void;
+  isOnConfirmStep: boolean;
+  price: any;
+  updateListing?: boolean | undefined;
+  startTransaction: boolean;
+  isFailed: boolean;
+}) => {
   if (isOnConfirmStep)
     return approved ? (
       <div className={"flex w-full gap-2.5 items-center justify-center p-5"}>
@@ -32,6 +42,8 @@ const Footer = ({ approved, onClose, onSubmit, isOnConfirmStep, price }: { appro
           CLOSE
         </Button>
       </div>
+    ) : !startTransaction || isFailed ? (
+      <FooterCloseButton onClose={onClose} />
     ) : (
       <></>
     );
@@ -50,7 +62,7 @@ const Footer = ({ approved, onClose, onSubmit, isOnConfirmStep, price }: { appro
             CANCEL
           </Button>
           <Button className="w-full tracking-widest" disabled={!price || price === "" || price <= 0} onClick={onSubmit}>
-            CONFIRM LISTING
+            {updateListing ? "UPDATE LISTING" : "CONFIRM LISTING"}
             <IconListed />
           </Button>
         </div>
@@ -59,32 +71,13 @@ const Footer = ({ approved, onClose, onSubmit, isOnConfirmStep, price }: { appro
   );
 };
 
-const Submitted = () => {
-  return (
-    <div className="flex-center flex-col gap-8 py-[50px] px-[25px]">
-      <IconAccept className="text-white w-10 h-10" />
-
-      <div className="flex flex-col gap-2">
-        <h5 className="text-h5 text-white text-center">NFT Listed Successfully!</h5>
-        <span className="text-gray-light body-medium text-center">You'll be notified when someone buys it. You can manage your listings in the "Listings" tab of your profile.</span>
-      </div>
-    </div>
-  );
-};
-
-const ApprovedCartItemBottomPart = ({ floorPrice, price }: { price: number; floorPrice?: number }) => {
+const ApprovedCartItemBottomPart = ({ price }: { price: number }) => {
   return (
     <div className="flex flex-col gap-[15px]">
       <div className="flex flex-col gap-[5px]">
-        {floorPrice && (
-          <div className="flex justify-between w-full text-h6">
-            <span className="text-gray-light">Floor Price</span>
-            <EthereumPrice price={floorPrice} priceClassName="body-medium !font-medium" />
-          </div>
-        )}
         <div className="flex justify-between w-full text-h6">
-          <span className="text-green">Your Listing</span>
-          <EthereumPrice price={price} priceClassName="body-medium !font-medium text-green" iconClassName="text-green" />
+          <span className="text-gray-light">Your Listing</span>
+          <EthereumPrice price={price} priceClassName="body-medium !font-medium" />
         </div>
       </div>
 
@@ -96,30 +89,30 @@ const ApprovedCartItemBottomPart = ({ floorPrice, price }: { price: number; floo
   );
 };
 
-const InitialCartItemBottomPart = ({ floorPrice, bestOffer }: { floorPrice?: number; bestOffer?: number }) => {
-  return (
-    <div className="flex flex-col gap-[15px]">
-      <div className="flex flex-col gap-[5px]">
-        {floorPrice && (
-          <div className="flex justify-between w-full text-h6">
-            <span className="text-gray-light">Floor Price</span>
-            <EthereumPrice price={floorPrice} priceClassName="body-medium !font-medium" />
-          </div>
-        )}
-        {bestOffer && (
-          <div className="flex justify-between w-full text-h6">
-            <span className="text-orange">Best Offer</span>
-            <EthereumPrice price={bestOffer} priceClassName="body-medium !font-medium text-orange" iconClassName="text-orange" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+// const InitialCartItemBottomPart = ({ floorPrice, bestOffer }: { floorPrice?: number; bestOffer?: number }) => {
+//   return (
+//     <div className="flex flex-col gap-[15px]">
+//       <div className="flex flex-col gap-[5px]">
+//         {floorPrice && (
+//           <div className="flex justify-between w-full text-h6">
+//             <span className="text-gray-light">Floor Price</span>
+//             <EthereumPrice price={floorPrice} priceClassName="body-medium !font-medium" />
+//           </div>
+//         )}
+//         {bestOffer && (
+//           <div className="flex justify-between w-full text-h6">
+//             <span className="text-orange">Best Offer</span>
+//             <EthereumPrice price={bestOffer} priceClassName="body-medium !font-medium text-orange" iconClassName="text-orange" />
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
 
 const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolean; onClose: any; updateListing?: boolean }) => {
-  // const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const [selectedNFT, setSelectedNFT] = useState<any>(null);
+  const nftdetails = useAppSelector((state) => state.nftdetails);
+  const [selectedNFT, setSelectedNFT] = useState<any>(nftdetails.selectedNFT);
   const serviceFee = 2.5;
   const [topTrait, setTopTrait] = useState(0);
 
@@ -143,19 +136,12 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   };
 
   React.useEffect(() => {
-    console.log(show, currentItemId);
-    if (show && currentItemId)
+    if (show && currentItemId && isObjectEmpty(selectedNFT))
       collectionsService.getCollection({ id: currentItemId }).then((res: any) => {
         console.log(res);
         setSelectedNFT(res.data);
       });
-
-    // setApproved(false);
-    // setStartTransaction(false);
-    // if (show) {
-    //   setStartTransaction(true);
-    // }
-  }, [show, currentItemId]);
+  }, [show, currentItemId, selectedNFT]);
 
   const fetchTopTrait = async () => {
     try {
@@ -222,16 +208,28 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
 
   return (
     <Modal
+      bodyClassName="!w-full !max-w-[600px]"
       backdropDisabled={true}
       className="checkout"
       // title={updateListing ? "Update Listing" : "Complete Listing"}
       show={show}
       onClose={onClose}
-      footer={<Footer price={price} isOnConfirmStep={isOnConfirmStep} approved={approved} onClose={onClose} onSubmit={onSubmit} />}
+      footer={
+        <Footer
+          price={price}
+          isOnConfirmStep={isOnConfirmStep}
+          approved={approved}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          updateListing={updateListing}
+          startTransaction={startTransaction}
+          isFailed={isFailed}
+        />
+      }
     >
       <div className="flex w-full justify-between border-b border-gray text-h6">
         <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
-          {!isOnConfirmStep ? <IconListed /> : <IconDone className="text-green" />} Listing
+          {!isOnConfirmStep ? <IconListed /> : <IconDone className="text-green" />} {updateListing ? "Update Listing" : "Listing"}
         </span>
 
         <div className="flex-shrink-0 w-[1px] bg-gray" />
@@ -241,14 +239,21 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         </span>
       </div>
 
-      {approved ? (
+      {isOnConfirmStep && !startTransaction ? (
+        <TransactionRejected />
+      ) : isOnConfirmStep && isFailed ? (
+        <TransactionFailed />
+      ) : approved ? (
         <div className="flex flex-col w-full gap-5 p-5">
-          <Submitted />
+          <Approved
+            title={updateListing ? "Item Listing Updated Successfully!" : "Item Listed Successfully!"}
+            description="Your item is listed on the marketplace. You can review and manage your listings in your profile."
+          />
 
           <div className="flex w-full">
             <CartItem
               text="Your Offer"
-              BottomPart={<ApprovedCartItemBottomPart floorPrice={selectedNFT?.collection?.floor} price={price} />}
+              BottomPart={<ApprovedCartItemBottomPart price={price} />}
               price={price}
               className="w-full"
               name={selectedNFT?.name ?? selectedNFT?.tokenOrder}
@@ -260,56 +265,58 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
       ) : !isOnConfirmStep ? (
         <div className="flex flex-col gap-5 p-5">
           <div className="flex">
-            <CartItem
-              BottomPart={<InitialCartItemBottomPart floorPrice={selectedNFT?.collection?.floor} bestOffer={selectedNFT?.bestOffer?.price} />}
-              className="w-full"
-              name={selectedNFT?.name ?? selectedNFT?.tokenOrder}
-              image={selectedNFT?.image ?? ""}
-              id={0}
-            />
+            <CartItem className="w-full" name={selectedNFT?.name ?? selectedNFT?.tokenOrder} image={selectedNFT?.image ?? ""} id={0} />
           </div>
 
-          <div className="">
-            <div className="flex flex-col text-head6 font-spaceGrotesk text-white gap-y-2">
-              {/* {isMultipleEdition ? "Enter Price per Item*" : "Enter Price*"} */}
-              <InputEthereum maxLength="8" onChange={setprice} value={price} type="text" />
+          <div className="flex flex-col text-h6 font-spaceGrotesk text-white gap-2.5">
+            {"Enter Price*"}
+            <InputEthereum maxLength="8" onChange={setprice} value={price} type="text" />
 
-              {price !== "" && price < selectedNFT?.floorPrice && warning}
-              <div className="flex text-bodyMd gap-x-2">
-                {selectedNFT?.collection?.floor && (
-                  <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
-                    {selectedNFT?.collection ? formatPrice(selectedNFT?.collection?.floor) : "-"} ETH - Floor Price
-                  </div>
-                )}
-                {topTrait ? (
-                  <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
-                    {formatPrice(topTrait)} ETH - Top Trait Price
-                  </div>
-                ) : (
-                  <></>
-                )}
+            {price !== "" && price < selectedNFT?.floorPrice && warning}
+            <div className="flex text-bodyMd gap-x-2">
+              {selectedNFT?.collection?.floor && (
+                <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(selectedNFT.collection?.floor)}>
+                  {selectedNFT?.collection ? formatPrice(selectedNFT?.collection?.floor) : "-"} ETH - Floor Price
+                </div>
+              )}
+              {topTrait ? (
+                <div className="flex p-[10px] rounded-[5px] border border-gray cursor-pointer hover:bg-gray" onClick={() => setprice(topTrait)}>
+                  {formatPrice(topTrait)} ETH - Top Trait Price
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="flex flex-col gap-[5px]">
+              <div className="flex w-full justify-between">
+                <div className="text-gray-light">Service Fee</div>
+                <div className="">2.5%</div>
               </div>
-              <div className="flex flex-col gap-y-2 p-[15px] rounded-[5px] border border-gray">
-                <div className="flex w-full justify-between">
-                  <div className="text-gray-light">Service Fee</div>
-                  <div className="">2.5%</div>
-                </div>
-                <div className="flex w-full justify-between">
-                  <div className="text-gray-light">Creator Earnings</div>
-                  <div className={`${selectedNFT?.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT?.collection?.royaltyFee ? `${selectedNFT?.collection?.royaltyFee} %` : "-"}</div>
-                </div>
-                <div className="flex w-full justify-between">
-                  <div className="text-gray-light">You’ll Receive</div>
-                  <div className={`flex items-center ${isValidNumber(price) ? "text-green" : "text-gray-light"}`}>
-                    {isValidNumber(price) ? formatPrice(calculateReceivingAmount(price)) : "-"} <IconEthereum />
-                  </div>
+              <div className="flex w-full justify-between">
+                <div className="text-gray-light">Creator Earnings</div>
+                <div className={`${selectedNFT?.collection?.royaltyFee ? "" : "text-gray-light"}`}>{selectedNFT?.collection?.royaltyFee ? `${selectedNFT?.collection?.royaltyFee} %` : "-"}</div>
+              </div>
+              <div className="flex w-full justify-between">
+                <div className="text-gray-light">You’ll Receive</div>
+                <div className={`flex items-center ${isValidNumber(price) ? "text-green" : "text-gray-light"}`}>
+                  {isValidNumber(price) ? formatPrice(calculateReceivingAmount(price)) : "-"} <IconEthereum />
                 </div>
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="flex-center flex-col gap-8 border-t border-gray py-[50px] px-[25px]">
+        <div className="flex-center flex-col gap-8 px-[25px] pt-5 pb-[50px]">
+          <CartItem
+            text="Your Offer"
+            BottomPart={<ApprovedCartItemBottomPart price={price} />}
+            price={price}
+            className="w-full"
+            name={selectedNFT?.name ?? selectedNFT?.tokenOrder}
+            image={selectedNFT?.image}
+            id={0}
+          />
+
           <IconSpinner className="animate-spin text-white w-10 h-10" />
 
           <div className="flex flex-col gap-2">

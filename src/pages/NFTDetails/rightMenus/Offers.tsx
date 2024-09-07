@@ -327,6 +327,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
                 takerAddress: selectedNFT.user.walletAddress,
                 tokenOrder: selectedNFT.tokenOrder,
                 orderId: selectedNFT.tokenId,
+                tokenImage: selectedNFT.image,
               },
               price: selectedNFT.bestOffer?.price,
             })
@@ -336,11 +337,16 @@ const Offers = ({ onBack }: { onBack: any }) => {
         onUpdateOffer={(item: any) => {
           dispatch(
             setCheckout({
+              type: CheckoutType.UpdateOffer,
+              currentItemId: selectedNFT.id,
               cancelOrderIds: [item.id],
+              onCheckoutComplete: () => {
+                dispatch(setCheckout({ item: {}, cancelOrderIds: [] }));
+                onBack();
+              },
             })
           );
-          dispatch(setYourCurrentOffer(item.price));
-          dispatch(setRightMenu(RightMenuType.UpdateOffer));
+          dispatch(toggleCheckoutModal());
         }}
         // isProfile={}
         // getBidBalance={}

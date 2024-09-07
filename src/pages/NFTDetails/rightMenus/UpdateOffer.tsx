@@ -61,9 +61,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
             dispatch(
               setCheckout({
                 type: CheckoutType.UpdateOffer,
-                price: offer,
-                item: selectedNFT,
-                expireTime: expirationTime?.value,
+                currentItemId: selectedNFT.id,
                 cancelOrderIds: cancelOrderIds,
                 onCheckoutComplete: () => {
                   dispatch(setCheckout({ item: {}, cancelOrderIds: [] }));
