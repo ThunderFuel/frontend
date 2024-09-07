@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Carousel from "components/Carousel";
 import UseNavigate from "hooks/useNavigate";
-import { IconArrowRight, IconChevronLeft, IconChevronRight, IconHotDropLoading, IconLoadingGrid } from "icons";
+import { IconArrowRight, IconChevronLeft, IconChevronRight, IconHotDropLoading } from "icons";
 import marketplaceService from "api/marketplace/marketplace.service";
 import Button from "components/Button";
 
@@ -48,8 +48,9 @@ const HotDrops = () => {
   return (
     <div className="min-h-[440px]">
       {isLoading ? (
-        <div className="bg-gray grid-skeleton text-left">
+        <div className="flex gap-10 w-full h-full bg-bg grid-skeleton text-left">
           <IconHotDropLoading className="text-gray" />
+          <div className="w-full min-h-[440px] bg-bg-light" />
         </div>
       ) : (
         <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="" defaultActiveIndex={0}>
