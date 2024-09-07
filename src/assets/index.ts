@@ -44,3 +44,4 @@ export { default as AssetCreatorCreator1 } from "./creator/creator_1.png";
 export { default as AssetCreatorCreator2 } from "./creator/creator_2.png";
 export { default as AssetCreatorCreator3 } from "./creator/creator_3.png";
 export { default as AssetCreatorCreator4 } from "./creator/creator_4.png";
+export { default as AssetGridBackedByFuel } from "./grids/backed-by-fuel.svg";
