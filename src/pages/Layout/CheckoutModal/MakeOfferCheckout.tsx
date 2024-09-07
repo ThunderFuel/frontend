@@ -121,7 +121,7 @@ export const InitialCartItemBottomPart = ({ floorPrice, bestOffer, currentOffer 
       )}
       {currentOffer && (
         <div className="flex justify-between w-full">
-          <span className="text-gray-light text-bodyMd font-medium">Best Offer</span>
+          <span className="text-gray-light text-bodyMd font-medium">Your Current Offer</span>
           <EthereumPrice price={currentOffer} priceClassName="text-bodyMd font-medium !text-white" />
         </div>
       )}

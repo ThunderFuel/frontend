@@ -17,8 +17,8 @@ import Balances from "pages/NFTDetails/components/Balances";
 
 const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const nftdetails = useAppSelector((state) => state.nftdetails);
-  const [selectedNFT, setSelectedNFT] = useState<any>(nftdetails.selectedNFT);
-  const { checkoutPrice, currentItem, checkoutExpireTime, cancelOrderIds, currentItemId } = useAppSelector((state) => state.checkout);
+  const { currentItem, checkoutExpireTime, cancelOrderIds, currentItemId } = useAppSelector((state) => state.checkout);
+  const [selectedNFT, setSelectedNFT] = useState<any>(!isObjectEmpty(nftdetails.selectedNFT) ? nftdetails.selectedNFT : currentItem);
   const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const [approved, setApproved] = useState(false);
@@ -141,7 +141,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
               price={offer}
               className="w-full"
               name={selectedNFT?.name ?? selectedNFT?.tokenOrder}
-              image={selectedNFT?.image}
+              image={selectedNFT?.image ?? selectedNFT.tokenImage}
               id={0}
             />
           </div>
@@ -161,7 +161,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       ) : !isOnConfirmStep ? (
         <>
           <div className="flex p-5">
-            <CartItem className="w-full" name={selectedNFT?.name ?? selectedNFT?.tokenOrder} image={selectedNFT?.image ?? ""} id={0} />
+            <CartItem className="w-full" name={selectedNFT?.name ?? selectedNFT?.tokenOrder} image={selectedNFT?.image ?? selectedNFT.tokenImage} id={0} />
           </div>
 
           <div className="flex flex-col gap-2 p-5">
@@ -189,13 +189,19 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
             )}
             <div className="flex flex-col gap-[5px]">
               <Balances balance={balance} onFetchBalance={fetchBalance} />
-              <InitialCartItemBottomPart floorPrice={selectedNFT?.collection?.floor} bestOffer={selectedNFT?.bestOffer?.price} />
+              <InitialCartItemBottomPart floorPrice={selectedNFT?.collection?.floor} bestOffer={selectedNFT?.bestOffer?.price} currentOffer={selectedNFT?.currentOfferItemOffer} />
             </div>
           </div>
         </>
       ) : (
         <div className="flex-center flex-col gap-8 px-[25px] pt-5 pb-[50px]">
-          <CartItem BottomPart={<CartItemLoadingBottomPart offer={offer} />} className="w-full" name={selectedNFT?.name ?? selectedNFT?.tokenOrder} image={selectedNFT?.image ?? ""} id={0} />
+          <CartItem
+            BottomPart={<CartItemLoadingBottomPart offer={offer} />}
+            className="w-full"
+            name={selectedNFT?.name ?? selectedNFT?.tokenOrder}
+            image={selectedNFT?.image ?? selectedNFT?.tokenImage}
+            id={0}
+          />
 
           <IconSpinner className="animate-spin text-white w-10 h-10" />
 
