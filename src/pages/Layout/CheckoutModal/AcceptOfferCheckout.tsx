@@ -59,7 +59,7 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   return (
     <Modal
       bodyClassName="!w-full !max-w-[600px]"
-      title="Accept Offer"
+      title={approved || !startTransaction || isFailed ? "" : "Accept Offer"}
       backdropDisabled={true}
       className="checkout"
       show={show}

@@ -127,7 +127,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   return (
     <Modal
       bodyClassName="!w-full !max-w-[600px]"
-      title="Confirm Purchase"
+      title={approved || !startTransaction || isFailed ? "" : "Confirm Purchase"}
       backdropDisabled={true}
       className="checkout"
       show={show}

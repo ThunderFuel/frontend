@@ -108,18 +108,22 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
         <Footer isOnConfirmStep={isOnConfirmStep} approved={approved} onClose={onClose} onSubmit={onSubmit} startTransaction={startTransaction} isFailed={isFailed} primaryActionText="Update Offer" />
       }
     >
-      {!approved && (
-        <div className="sticky top-0 flex w-full justify-between border-b border-gray text-h6">
-          <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
-            {!isOnConfirmStep ? <IconOffer /> : <IconDone className="text-green" />} Update Your Offer
-          </span>
+      {isOnConfirmStep && (!startTransaction || isFailed) ? (
+        <></>
+      ) : (
+        !approved && (
+          <div className="sticky top-0 flex w-full justify-between border-b border-gray text-h6">
+            <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
+              {!isOnConfirmStep ? <IconOffer /> : <IconDone className="text-green" />} Update Your Offer
+            </span>
 
-          <div className="flex-shrink-0 w-[1px] bg-gray" />
+            <div className="flex-shrink-0 w-[1px] bg-gray" />
 
-          <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "bg-bg-light border-b border-white" : "")}>
-            {approved ? <IconDone className="text-green" /> : <IconAccept />} Confirm
-          </span>
-        </div>
+            <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "bg-bg-light border-b border-white" : "")}>
+              {approved ? <IconDone className="text-green" /> : <IconAccept />} Confirm
+            </span>
+          </div>
+        )
       )}
 
       {isOnConfirmStep && !startTransaction ? (

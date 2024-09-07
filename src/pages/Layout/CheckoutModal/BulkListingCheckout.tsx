@@ -134,7 +134,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
       bodyClassName="!w-full !max-w-[600px]"
       backdropDisabled={true}
       className="checkout"
-      title="Bulk Listing"
+      title={approved || !startTransaction || isFailed ? "" : "Bulk Listing"}
       show={show}
       onClose={onClose}
       footer={!startTransaction || isFailed ? <FooterCloseButton onClose={onClose} /> : <Footer approved={approved} onDone={onDone} />}

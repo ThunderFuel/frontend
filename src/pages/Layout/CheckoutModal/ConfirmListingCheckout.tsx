@@ -211,7 +211,6 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
       bodyClassName="!w-full !max-w-[600px]"
       backdropDisabled={true}
       className="checkout"
-      // title={updateListing ? "Update Listing" : "Complete Listing"}
       show={show}
       onClose={onClose}
       footer={
@@ -227,17 +226,23 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
         />
       }
     >
-      <div className="flex w-full justify-between border-b border-gray text-h6">
-        <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
-          {!isOnConfirmStep ? <IconListed /> : <IconDone className="text-green" />} {updateListing ? "Update Listing" : "Listing"}
-        </span>
+      {isOnConfirmStep && (!startTransaction || isFailed) ? (
+        <></>
+      ) : (
+        !approved && (
+          <div className="flex w-full justify-between border-b border-gray text-h6">
+            <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
+              {!isOnConfirmStep ? <IconListed /> : <IconDone className="text-green" />} {updateListing ? "Update Listing" : "Listing"}
+            </span>
 
-        <div className="flex-shrink-0 w-[1px] bg-gray" />
+            <div className="flex-shrink-0 w-[1px] bg-gray" />
 
-        <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "bg-bg-light border-b border-white" : "")}>
-          {approved ? <IconDone className="text-green" /> : <IconAccept />} Confirm
-        </span>
-      </div>
+            <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "bg-bg-light border-b border-white" : "")}>
+              {approved ? <IconDone className="text-green" /> : <IconAccept />} Confirm
+            </span>
+          </div>
+        )
+      )}
 
       {isOnConfirmStep && !startTransaction ? (
         <TransactionRejected />

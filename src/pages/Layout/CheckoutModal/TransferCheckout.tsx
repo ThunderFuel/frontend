@@ -127,18 +127,22 @@ const TransferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =>
       onClose={onClose}
       footer={<Footer address={address} isOnConfirmStep={isOnConfirmStep} approved={approved} onClose={onClose} onSubmit={onSubmit} startTransaction={startTransaction} isFailed={isFailed} />}
     >
-      {!approved && (
-        <div className="sticky top-0 flex w-full justify-between border-b border-gray text-h6">
-          <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
-            {!isOnConfirmStep ? <IconTransfer /> : <IconDone className="text-green" />} Enter Address
-          </span>
+      {isOnConfirmStep && (!startTransaction || isFailed) ? (
+        <></>
+      ) : (
+        !approved && (
+          <div className="sticky top-0 flex w-full justify-between border-b border-gray text-h6">
+            <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "" : "bg-bg-light border-b border-white")}>
+              {!isOnConfirmStep ? <IconTransfer /> : <IconDone className="text-green" />} Enter Address
+            </span>
 
-          <div className="flex-shrink-0 w-[1px] bg-gray" />
+            <div className="flex-shrink-0 w-[1px] bg-gray" />
 
-          <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "bg-bg-light border-b border-white" : "")}>
-            {approved ? <IconDone className="text-green" /> : <IconAccept />} Confirm
-          </span>
-        </div>
+            <span className={clsx("flex items-center gap-2.5 w-full p-5 text-white", isOnConfirmStep ? "bg-bg-light border-b border-white" : "")}>
+              {approved ? <IconDone className="text-green" /> : <IconAccept />} Confirm
+            </span>
+          </div>
+        )
       )}
 
       {isOnConfirmStep && !startTransaction ? (

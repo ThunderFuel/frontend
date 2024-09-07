@@ -61,7 +61,7 @@ const CancelOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   return (
     <Modal
       bodyClassName="!w-full !max-w-[600px]"
-      title={cancelOfferItems?.length > 0 ? "Cancel All Offers" : "Cancel Your Offer"}
+      title={approved || !startTransaction || isFailed ? "" : cancelOfferItems?.length > 0 ? "Cancel All Offers" : "Cancel Your Offer"}
       backdropDisabled={true}
       className="checkout"
       show={show}
