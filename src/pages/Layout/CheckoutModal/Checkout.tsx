@@ -46,12 +46,12 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
       <div className="flex flex-col gap-2">
         <CartItem
           text="Total"
+          BottomPart={titleSlot}
           name={`${itemCount === 1 ? items[0].name ?? items[0].tokenOrder : itemCount + " Items"}`}
           price={totalAmount}
           image={getImages}
           id={1}
           className={clsx(showDetails && "rounded-b-none")}
-          titleSlot={titleSlot}
         />
       </div>
       <div className="overflow-hidden transition-all" style={{ height: showDetails ? `${ref.current?.scrollHeight}px` : 0 }} ref={ref}>
