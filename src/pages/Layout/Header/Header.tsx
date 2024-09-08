@@ -1,14 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import { IconArrowRight, IconCart, IconEthereum, IconFaucet, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
+import {
+  IconActivity,
+  IconArrowRight,
+  IconCart,
+  IconChevronRight,
+  IconEthereum,
+  IconGas,
+  IconHand,
+  IconInfo,
+  IconLike,
+  IconLogout,
+  IconSettings,
+  IconThunder2,
+  IconThunderLogoText,
+  IconWallet,
+  IconWarning,
+} from "icons";
 import Search from "./components/Search/Search";
 import "./Header.css";
 import { useAppDispatch, useAppSelector } from "store";
-import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
-import { toggleManageFundsModal, toggleWalletModal } from "store/walletSlice";
+import { setIsConnected, setUser, toggleManageFundsModal, toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
@@ -22,8 +37,10 @@ import Button from "../../../components/Button";
 import { addressFormat } from "../../../utils";
 import { useWallet } from "../../../hooks/useWallet";
 import { useClickOutside } from "../../../hooks/useClickOutside";
-import { FUEL_FAUCET_URL } from "../../../global-constants";
 import GetTestEth from "../../../components/GetTestEth/GetTestEth";
+import { removeAll } from "../../../store/bulkListingSlice";
+import { removeBulkItems } from "../../../store/checkoutSlice";
+import { useLocalStorage } from "../../../hooks/useLocalStorage";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -92,11 +109,14 @@ const BaseDropdown = ({ children, container }: any) => {
   };
 
   return (
-    <div className="relative cursor-pointer" onClick={onClick}>
-      <div className={clsx("flex items-center p-2 gap-2", show ? "bg-gray" : "")}>{children}</div>
+    <div className="relative" ref={containerRef} onClick={onClick}>
+      <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", show ? "bg-gray" : "")}>{children}</div>
       {show ? <div className="absolute top-full right-0 pt-2">{container}</div> : null}
     </div>
   );
+};
+const BaseDropdownContainer = ({ className, children }: any) => {
+  return <div className={clsx("flex flex-col bg-bg border border-gray rounded-2xl gap-2.5 p-4 ", className)}>{children}</div>;
 };
 
 const HeaderUserBalance = ({ user, address }: any) => {
@@ -121,7 +141,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   }, []);
 
   const container = (
-    <div className="flex flex-col bg-bg border border-gray rounded-2xl gap-2.5 p-4 w-full lg:w-[432px]">
+    <BaseDropdownContainer className="w-full lg:w-[432px]">
       <div className="flex items-center justify-between text-gray-light">
         <div className="text-headline-01 uppercase">Wallet</div>
         <div className="body-medium">{formattedAddress}</div>
@@ -154,7 +174,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
           </Button>
         </div>
       </div>
-    </div>
+    </BaseDropdownContainer>
   );
 
   return (
@@ -166,23 +186,95 @@ const HeaderUserBalance = ({ user, address }: any) => {
   );
 };
 
-const HeaderUserProfile = ({ user, address }: any) => {
+const HeaderUserProfileInfo = ({ user }: any) => {
+  const dispatch = useAppDispatch();
+  const { walletDisconnect } = useWallet();
+  const navigate = UseNavigate();
   const formattedAddress = addressFormat(user.walletAddress);
+  const items = [
+    {
+      icon: IconWallet,
+      name: "My Profile",
+      path: PATHS.PROFILE,
+    },
+    {
+      icon: IconHand,
+      name: "Offers",
+      path: PATHS.PROFILE_OFFER,
+    },
+    {
+      icon: IconLike,
+      name: "Liked",
+      path: PATHS.PROFILE_LIKED,
+    },
+    {
+      icon: IconActivity,
+      name: "Activity",
+      path: PATHS.PROFILE_ACTIVITY,
+    },
+    {
+      icon: IconSettings,
+      name: "Settings",
+      path: PATHS.SETTINGS_PROFILE,
+    },
+    {
+      icon: IconLogout,
+      name: "Logout",
+      isLogout: true,
+    },
+  ];
+  const onClick = (item: any) => {
+    if (item.isLogout) {
+      walletDisconnect();
+      dispatch(setIsConnected(false));
+      dispatch(setUser({}));
+      dispatch(removeAll());
+      dispatch(removeBulkItems());
+      useLocalStorage().removeItem("connected_account");
+    } else {
+      navigate(item.path, {});
+    }
+  };
 
+  const container = (
+    <BaseDropdownContainer className="lg:w-[280px] w-full !p-0">
+      <div>
+        {items.map((item) => {
+          const Icon = item.icon;
+
+          return (
+            <div key={item.name} onClick={() => onClick(item)} className="flex flex-row py-3 px-4 items-center justify-between border-b border-gray cursor-pointer">
+              <div className="flex flex-row items-center gap-5">
+                <Icon className="w-6 h-6" />
+                <span className="body-small !font-bold">{item.name}</span>
+              </div>
+              <IconChevronRight className="text-gray-light" />
+            </div>
+          );
+        })}
+      </div>
+    </BaseDropdownContainer>
+  );
+
+  return (
+    <BaseDropdown container={container}>
+      <span className="body-medium">{formattedAddress}</span>
+      <Avatar image={user?.image} userId={user?.id} className="w-6 h-6" />
+    </BaseDropdown>
+  );
+};
+
+const HeaderUserProfile = ({ user, address }: any) => {
   return (
     <div className="flex border border-gray rounded-md text-white">
       <HeaderUserBalance user={user} address={address} />
-      <div className="flex items-center p-2 gap-2">
-        <span className="body-medium">{formattedAddress}</span>
-        <Avatar image={user?.image} userId={user?.id} className="w-6 h-6" />
-      </div>
+      <HeaderUserProfileInfo user={user} />
     </div>
   );
 };
 
 const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
-  const navigate = UseNavigate();
   const { connect } = useConnectUI();
 
   const selectedCarts = useAppSelector((state) => state.cart.items);
@@ -190,25 +282,14 @@ const HeaderIconButtonGroup = React.memo(() => {
 
   return (
     <div className="hidden lg:flex gap-2 items-center">
-      {isConnected && (
-        <>
-          <HeaderUserProfile user={user} address={address} />
-          <div className="flex" onClick={() => navigate(PATHS.PROFILE, {})}>
-            <Avatar image={user?.image} userId={user?.id} className="w-9 h-9" />
-          </div>
-        </>
-      )}
-      {!isConnected ? (
+      {isConnected ? (
+        <HeaderUserProfile user={user} address={address} />
+      ) : (
         <Button className="btn-header-connect" onClick={connect}>
           COnnect
           <IconWallet className="h-[18px] w-[18px]" />
         </Button>
-      ) : (
-        <Button className="btn-icon text-white" onClick={() => dispatch(toggleWalletModal())}>
-          <IconWallet className="h-[18px] w-[18px]" />
-        </Button>
       )}
-
       <Button className="btn-icon text-white" onClick={() => dispatch(toggleCartModal())}>
         <div className="relative">
           <IconCart className="h-[18px] w-[18px]" />
@@ -229,20 +310,6 @@ const HeaderIconButton = React.memo((props: any) => {
   );
 });
 HeaderIconButton.displayName = "HeaderIconButton";
-
-const HeaderWarning = () => {
-  return (
-    <div className="hidden lg:flex-center text-orange border-y border-orange py-1">
-      <IconWarning />
-      <div className="body-small flex gap-0.5">
-        <span>Thunder is transitioning from beta-5 testnet to the latest testnet of Fuel. All transactions are currently on hold. Patience ⚡</span>
-        <a href="https://twitter.com/ThunderbyFuel/status/1717210636285882874?s=20" target="_blank" className="font-bold underline" rel="noreferrer">
-          Learn more.
-        </a>
-      </div>
-    </div>
-  );
-};
 
 const Header = () => {
   const ref = useRef<any>(null);
@@ -281,9 +348,7 @@ const Header = () => {
               </div>
               <HeaderIconButtonGroup />
             </div>
-            {/* <HeaderWarning /> */}
           </div>
-          {/* <HeaderWarning /> */}
         </>
         <MobileSearch />
       </>
