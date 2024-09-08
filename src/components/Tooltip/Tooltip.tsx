@@ -15,6 +15,8 @@ interface ITooltip {
 const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenArrow = false, appendToBody = false }: ITooltip) => {
   const ref = useRef<HTMLDivElement>(null);
   const refContent = useRef<HTMLDivElement>(null);
+  let refContentTimeout: any;
+  let refContentOpacityTimeout: any;
 
   const currentPosition = () => {
     if (ref.current && refContent.current) {
@@ -32,9 +34,9 @@ const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenA
   };
   const onMouseEnter = () => {
     if (ref.current && refContent.current) {
-      setTimeout(() => {
+      refContentTimeout = setTimeout(() => {
         currentPosition();
-        setTimeout(() => {
+        refContentOpacityTimeout = setTimeout(() => {
           if (refContent?.current) {
             refContent.current.style.visibility = "visible";
             refContent.current.style.opacity = "1";
@@ -45,6 +47,8 @@ const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenA
   };
   const onMouseLeave = () => {
     if (refContent.current) {
+      clearTimeout(refContentTimeout);
+      clearTimeout(refContentOpacityTimeout);
       refContent.current.style.opacity = "0";
     }
   };
