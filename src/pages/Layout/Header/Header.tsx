@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import { IconCart, IconEthereum, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
+import { IconArrowRight, IconCart, IconEthereum, IconFaucet, IconGas, IconHamburger, IconInfo, IconSearch, IconThunder2, IconThunderLogoText, IconWallet, IconWarning } from "icons";
 import Search from "./components/Search/Search";
 import "./Header.css";
 import { useAppDispatch, useAppSelector } from "store";
 import { onToggle } from "store/mobileSearchSlice";
 import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
-import { toggleWalletModal } from "store/walletSlice";
+import { toggleManageFundsModal, toggleWalletModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
@@ -19,6 +19,11 @@ import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
 import { useConnectUI } from "@fuels/react";
 import Button from "../../../components/Button";
+import { addressFormat } from "../../../utils";
+import { useWallet } from "../../../hooks/useWallet";
+import { useClickOutside } from "../../../hooks/useClickOutside";
+import { FUEL_FAUCET_URL } from "../../../global-constants";
+import GetTestEth from "../../../components/GetTestEth/GetTestEth";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -75,20 +80,123 @@ const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
 
 HeaderCardBadge.displayName = "HeaderCardBadge";
 
+const BaseDropdown = ({ children, container }: any) => {
+  const [show, setShow] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  useClickOutside(containerRef, () => {
+    setShow(false);
+  });
+  const onClick = () => {
+    setShow(!show);
+  };
+
+  return (
+    <div className="relative cursor-pointer" onClick={onClick}>
+      <div className={clsx("flex items-center p-2 gap-2", show ? "bg-gray" : "")}>{children}</div>
+      {show ? <div className="absolute top-full right-0 pt-2">{container}</div> : null}
+    </div>
+  );
+};
+
+const HeaderUserBalance = ({ user, address }: any) => {
+  const dispatch = useAppDispatch();
+  const formattedAddress = addressFormat(user.walletAddress);
+  const { getBalance, getBidBalance } = useWallet();
+  const [balance, setbalance] = useState<number>(0);
+  const [bidBalance, setBidBalance] = useState<number>(0);
+  const fetchBalance = () => {
+    getBalance().then((res) => setbalance(res ? res : 0));
+  };
+  const fetchBidBalance = () => {
+    if (user.walletAddress === undefined) return;
+    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+      setBidBalance(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchBalance();
+    fetchBidBalance();
+  }, []);
+
+  const container = (
+    <div className="flex flex-col bg-bg border border-gray rounded-2xl gap-2.5 p-4 w-full lg:w-[432px]">
+      <div className="flex items-center justify-between text-gray-light">
+        <div className="text-headline-01 uppercase">Wallet</div>
+        <div className="body-medium">{formattedAddress}</div>
+      </div>
+      <div className="flex flex-col border border-gray rounded-lg">
+        <div className="flex flex-col p-2.5 gap-2.5">
+          <div className="flex justify-between">
+            <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
+            <span className="flex text-white">
+              {balance.toFixed(2)} <IconEthereum className="text-gray-light" />
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
+            <span className="flex text-white">
+              {bidBalance.toFixed(2)} <IconEthereum className="text-gray-light" />
+            </span>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2.5 p-4 border-t border-gray">
+          <GetTestEth className="btn-sm" user={user} address={address} />
+          <Button
+            className="btn-secondary w-full"
+            onClick={() => {
+              dispatch(toggleManageFundsModal());
+            }}
+          >
+            <span className="text-nowrap">MANAGE FUNDS</span>
+            <IconArrowRight />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <BaseDropdown container={container}>
+      <div className="flex px-2">
+        {balance.toFixed(2)} <IconEthereum className="text-gray-light" />
+      </div>
+    </BaseDropdown>
+  );
+};
+
+const HeaderUserProfile = ({ user, address }: any) => {
+  const formattedAddress = addressFormat(user.walletAddress);
+
+  return (
+    <div className="flex border border-gray rounded-md text-white">
+      <HeaderUserBalance user={user} address={address} />
+      <div className="flex items-center p-2 gap-2">
+        <span className="body-medium">{formattedAddress}</span>
+        <Avatar image={user?.image} userId={user?.id} className="w-6 h-6" />
+      </div>
+    </div>
+  );
+};
+
 const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
   const navigate = UseNavigate();
   const { connect } = useConnectUI();
 
   const selectedCarts = useAppSelector((state) => state.cart.items);
-  const { isConnected, user } = useAppSelector((state) => state.wallet);
+  const { isConnected, user, address } = useAppSelector((state) => state.wallet);
 
   return (
     <div className="hidden lg:flex gap-2 items-center">
       {isConnected && (
-        <div className="flex" onClick={() => navigate(PATHS.PROFILE, {})}>
-          <Avatar image={user?.image} userId={user?.id} className="w-9 h-9" />
-        </div>
+        <>
+          <HeaderUserProfile user={user} address={address} />
+          <div className="flex" onClick={() => navigate(PATHS.PROFILE, {})}>
+            <Avatar image={user?.image} userId={user?.id} className="w-9 h-9" />
+          </div>
+        </>
       )}
       {!isConnected ? (
         <Button className="btn-header-connect" onClick={connect}>
