@@ -2,6 +2,7 @@
   @apply relative cursor-pointer;
 }
 
+.tooltip-content,
 .tooltip .content {
   visibility: hidden;
   z-index: 9999;
@@ -14,7 +15,12 @@
   @apply whitespace-nowrap;
   @apply p-2.5;
 }
+.tooltip-content {
+  @apply mt-0;
+  transform: translate(-50%, -150%);
+}
 
+.tooltip-content .arrow,
 .tooltip .content .arrow {
   content: "";
   height: 11px;
@@ -24,6 +30,7 @@
   z-index: 0;
 }
 
+.tooltip-content .arrow:after,
 .tooltip .content .arrow:after {
   content: "";
   display: inline-block;

@@ -21,6 +21,7 @@ import { formatPrice } from "utils";
 import LazyImg from "../../../LazyImg";
 import NoContent from "../../../NoContent";
 import config from "../../../../config";
+import Tooltip from "../../../Tooltip";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
@@ -34,9 +35,11 @@ ButtonBuyNow.displayName = "ButtonBuyNow";
 
 const ButtonIconMakeOffer = React.memo(({ className, onClick }: any) => {
   return (
-    <button className={clsx("button-make-offer-icon", className)} onClick={onClick}>
-      <IconHand className="fill-white" />
-    </button>
+    <Tooltip position="top" content="Make Offer" appendToBody={true} hiddenArrow={true}>
+      <button className={clsx("button-make-offer-icon", className)} onClick={onClick}>
+        <IconHand className="fill-white" />
+      </button>
+    </Tooltip>
   );
 });
 ButtonIconMakeOffer.displayName = "ButtonIconMakeOffer";
