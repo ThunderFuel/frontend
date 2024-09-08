@@ -92,7 +92,7 @@ const HeaderTop = React.memo(() => {
 HeaderTop.displayName = "HeaderTop";
 
 const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
-  return <span className="font-spaceGrotesk font-bold bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">{count}</span>;
+  return <span className="body-small bg-white flex-center text-black absolute rounded-full w-[22px] h-[22px] -top-1 -right-1 border-[2px] border-bg tracking-normal">{count}</span>;
 });
 
 HeaderCardBadge.displayName = "HeaderCardBadge";
@@ -290,12 +290,12 @@ const HeaderIconButtonGroup = React.memo(() => {
           <IconWallet className="h-[18px] w-[18px]" />
         </Button>
       )}
-      <Button className="btn-icon text-white" onClick={() => dispatch(toggleCartModal())}>
-        <div className="relative">
+      <div className="relative">
+        <Button className="btn-icon text-white" onClick={() => dispatch(toggleCartModal())}>
           <IconCart className="h-[18px] w-[18px]" />
-          {selectedCarts.length > 0 && <HeaderCardBadge count={selectedCarts.length} />}
-        </div>
-      </Button>
+        </Button>
+        {selectedCarts.length > 0 && <HeaderCardBadge count={selectedCarts.length} />}
+      </div>
     </div>
   );
 });
