@@ -23,6 +23,7 @@ import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { useIsMobile } from "hooks/useIsMobile";
 import { ActivityTime } from "components/ActivityList/components/ActivityItems";
+import { get } from "http";
 
 const Box = ({
   item,
@@ -125,7 +126,7 @@ const Box = ({
   );
 };
 
-const headers: ITableHeader[] = [
+const headers = (currentWalletAddress: any): ITableHeader[] => [
   {
     key: "from",
     text: `From`,
@@ -133,9 +134,12 @@ const headers: ITableHeader[] = [
     align: "flex-start",
     sortValue: 1,
     render: (item) => {
+      const isOwner = compareAddresses(item.makerAddress, currentWalletAddress);
+
       return (
         <a href={getAbsolutePath(PATHS.USER, { userId: item.makerUserId })} className="flex text-h6 items-center gap-2.5">
-          <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerAddress)}
+          <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} />
+          <span className={isOwner ? "text-green" : "text-white"}>{isOwner ? "you" : addressFormat(item?.makerAddress)}</span>
         </a>
       );
     },
@@ -252,6 +256,12 @@ const Offers = ({ onBack }: { onBack: any }) => {
     fetchOffers();
   }, [nftId]);
 
+  function getHeaders() {
+    const _headers = headers(user.walletAddress);
+
+    return _headers;
+  }
+
   return isMobile ? (
     <OfferTable
       items={offers}
@@ -302,7 +312,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
     <RightMenu title="Offers" onBack={onBack}>
       <OfferTable
         items={offers}
-        headers={headers}
+        headers={getHeaders()}
         ButtonBelowHeader={compareAddresses(selectedNFT.user.id, user.id) ? undefined : MakeOfferButton}
         onCancelOffer={(item: any) => {
           dispatch(
