@@ -189,7 +189,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
       dispatch(
         setCheckout({
           type: CheckoutType.MakeOffer,
-          currentItemId: collection.id,
+          // currentItemId: collection.id,
         })
       );
       dispatch(toggleCheckoutModal());

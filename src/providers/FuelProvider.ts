@@ -769,7 +769,7 @@ class FuelProvider extends BaseProvider {
         const order = {
           isBuySide: true,
           maker: user.walletAddress,
-          collection: selectedNFT.collection.contractAddress,
+          collection: selectedNFT.contractAddress ?? selectedNFT.collection.contractAddress,
           token_id: selectedNFT.tokenOrder,
           price: toGwei(checkoutPrice).toNumber(),
           amount: 1, //fixed
@@ -830,7 +830,7 @@ class FuelProvider extends BaseProvider {
                     walletAddress: user.walletAddress,
                     nonce: order.nonce,
                     tokenOrder: selectedNFT.tokenOrder,
-                    contractAddress: selectedNFT.contractAddress,
+                    contractAddress: selectedNFT.contractAddress ?? selectedNFT.collection.contractAddress,
                   });
 
                   if (response.data === true) {

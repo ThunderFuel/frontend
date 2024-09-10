@@ -42,8 +42,6 @@ const AcceptOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
   const [stepData, setStepData] = useState<any>([]);
   const { handleAcceptOffer } = useWallet();
 
-  console.log(currentItem);
-
   const onComplete = () => {
     handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData });
   };
