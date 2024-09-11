@@ -136,8 +136,6 @@ const HeaderUserBalance = ({ user, address }: any) => {
     });
   };
 
-  console.log({ balance, bidBalance });
-
   useEffect(() => {
     fetchBalance();
     fetchBidBalance();

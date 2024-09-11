@@ -69,6 +69,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
   const { handleCheckout } = useWallet();
   const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
+  const [_items, set_Items] = useState(items);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const [isFailed, setIsFailed] = useState(false);
 
@@ -91,7 +92,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
         tokenIds,
         setSuccessCheckout,
         user,
-        items,
+        items: _items,
         wallet,
         setStartTransaction,
         setIsFailed,
@@ -103,6 +104,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   };
 
   React.useEffect(() => {
+    if (items.length > 0) set_Items(items);
     if (show) dispatch(getCartTotal());
   }, [items, show]);
 
@@ -123,6 +125,15 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       setIsFailed(false);
     }
   }, [show]);
+
+  function calculateTotalAmount() {
+    let total = 0;
+    _items.forEach((item: any) => {
+      total += item.price;
+    });
+
+    return total;
+  }
 
   return (
     <Modal
@@ -145,8 +156,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
           <div className="flex flex-col w-full">
             {!isObjectEmpty(buyNowItem) ? (
               <CheckoutCartItems items={[buyNowItem]} itemCount={1} totalAmount={buyNowItem.price} approved={approved} />
-            ) : items.length > 0 ? (
-              <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />
+            ) : _items.length > 0 ? (
+              <CheckoutCartItems items={_items} itemCount={_items.length} totalAmount={calculateTotalAmount()} approved={approved} />
             ) : (
               <NotFound>Your cart is empty. Start adding NFTs to your cart to collect.</NotFound>
             )}
@@ -157,8 +168,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
           <div className="flex flex-col w-full">
             {!isObjectEmpty(buyNowItem) ? (
               <CheckoutCartItems items={[buyNowItem]} itemCount={1} totalAmount={buyNowItem.price} approved={approved} />
-            ) : items.length > 0 ? (
-              <CheckoutCartItems items={items} itemCount={itemCount} totalAmount={totalAmount} approved={approved} />
+            ) : _items.length > 0 ? (
+              <CheckoutCartItems items={_items} itemCount={_items.length} totalAmount={calculateTotalAmount()} approved={approved} />
             ) : (
               <NotFound>Your cart is empty. Start adding NFTs to your cart to collect.</NotFound>
             )}
