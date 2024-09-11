@@ -5,22 +5,20 @@ import MarketplaceProvider from "./MarketplaceContext";
 import HotDropsV2 from "./HotDropsV2";
 import { GoogleProvider } from "@lit-protocol/lit-auth-client";
 import { ProviderType } from "@lit-protocol/constants";
-import { authenticateWithDiscord, getPKPs, litAuthClient, mintPKP } from "lit-protocol/lit";
+import { authenticateWithDiscord, getPKPs, litAuthClient } from "lit-protocol/lit";
 import userService from "api/user/user.service";
 import { useDispatch } from "react-redux";
-import { setAddress, setIsConnected, setUser, setWallet } from "store/walletSlice";
+import { setAddress, setIsConnected, setUser } from "store/walletSlice";
 import { useWallet } from "hooks/useWallet";
 import { FUEL_TYPE } from "hooks/useFuelExtension";
-import { litNodeClient } from "index";
-import { PKPEthersWallet, ethRequestHandler } from "@lit-protocol/pkp-ethers";
+import { ethRequestHandler, PKPEthersWallet } from "@lit-protocol/pkp-ethers";
 
 import { ethers } from "ethers";
-import { checkAndSignAuthMessage } from "@lit-protocol/lit-node-client";
-import { AuthMethod } from "@lit-protocol/types";
-import { LitAbility, LitAccessControlConditionResource, LitActionResource, LitPKPResource } from "@lit-protocol/auth-helpers";
+import { LitAbility, LitPKPResource } from "@lit-protocol/auth-helpers";
 import useSession from "lit-protocol/useSession";
-import useAccounts from "lit-protocol/useAccounts";
-import { AuthMethodType } from "@lit-protocol/types/src/lib/enums";
+import Creator from "./Creator";
+import Grids from "./Grids";
+import Footer from "./Footer";
 
 const config = {
   TEST_ENV: {
@@ -192,6 +190,10 @@ const Marketplace = () => {
         <Filter />
         <MarketplaceList itemCount={10} />
       </MarketplaceProvider>
+      <Creator />
+      {/*<Partners />*/}
+      <Grids />
+      <Footer />
     </div>
   );
 };

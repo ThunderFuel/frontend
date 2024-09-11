@@ -109,7 +109,7 @@ const MarketPlaceTable = ({ items = [] }: { items: any[] }) => {
       sortValue: 2,
       className: "text-right",
       render: (item) => <EthereumPrice price={item.floor} className="justify-end lg:justify-start" />,
-      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} sortingDisabled={true} />,
+      renderHeader: (header) => <SortHeader header={header} sortingValue={sortingValue} onChangeSortValue={onChangeSortValue} sortingType={sortingType} />,
     },
     {
       key: "sales",

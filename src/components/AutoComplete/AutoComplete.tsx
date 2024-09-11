@@ -1,7 +1,6 @@
 import React from "react";
 import InputSearch from "../InputSearch";
 import clsx from "clsx";
-import { useIsMobile } from "../../hooks/useIsMobile";
 
 const Group = ({ children, title }: { title: any; children: React.ReactNode }) => {
   return (

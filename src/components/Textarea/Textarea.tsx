@@ -6,13 +6,14 @@ interface ITextarea {
   icon?: React.ReactNode;
   className?: string;
   containerClassName?: string;
-  children: string;
-  error: string;
+  children?: string;
+  error?: string;
 
   [key: string]: any;
 }
 
-const Textarea = ({ className, containerClassName, icon, error, ...etc }: ITextarea, ref: any) => {
+// ForwardRefRenderFunction type is defined to handle the props and ref correctly
+const Textarea = React.forwardRef<HTMLTextAreaElement, ITextarea>(({ className, containerClassName, icon, error, ...etc }, ref) => {
   return (
     <>
       <div className={clsx("input-container flex flex-row items-center gap-2 p-4", "w-full lg:border lg:rounded lg:border-gray", containerClassName)}>
@@ -22,6 +23,7 @@ const Textarea = ({ className, containerClassName, icon, error, ...etc }: ITexta
       {error && <InputError error={error} />}
     </>
   );
-};
+});
+Textarea.displayName = "Textarea";
 
-export default React.forwardRef(Textarea);
+export default Textarea;

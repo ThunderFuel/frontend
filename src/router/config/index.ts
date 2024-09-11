@@ -45,8 +45,8 @@ export interface RouteConfig {
 export const ROUTES: RouteConfig[] = [
   {
     path: PATHS.HOME,
-    component: Landing,
-    notLoggedIn: true,
+    component: Marketplace,
+    layout: Layout,
     isResponsive: true,
   },
   {

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { removeAll } from "store/bulkListingSlice";
-import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const CollectionFooter = () => {
   const dispatch = useAppDispatch();
@@ -22,11 +22,18 @@ const CollectionFooter = () => {
   };
   const onUpdateBulkListing = () => {
     if (selectedBulkListingItemCount <= 1) {
-      const { id, salable } = bulkListingItems[0];
-      const rightMenuType = salable ? RightMenuType.UpdateListing : RightMenuType.ListNFT;
+      const { id, price } = bulkListingItems[0];
 
-      dispatch(setRightMenu(rightMenuType));
-      navigate(PATHS.NFT_DETAILS, { nftId: id });
+      dispatch(
+        setCheckout({
+          type: price ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
+          currentItemId: id,
+        })
+      );
+      dispatch(toggleCheckoutModal());
+
+      // dispatch(setRightMenu(rightMenuType));
+      // navigate(PATHS.NFT_DETAILS, { nftId: id });
     } else {
       navigate(PATHS.BULK_LISTING);
     }

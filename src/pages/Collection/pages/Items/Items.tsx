@@ -162,7 +162,6 @@ const Items = () => {
 
   React.useEffect(() => {
     dispatch(removeAll());
-    dispatch(removeALLWallet());
 
     fetchFilters();
 

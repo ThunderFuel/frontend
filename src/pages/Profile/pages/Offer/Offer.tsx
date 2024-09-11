@@ -103,9 +103,19 @@ const Offer = () => {
     }
   };
   const onUpdateOffer = (item: any) => {
-    dispatch(setRightMenu(RightMenuType.UpdateOffer));
-    dispatch(setCheckout({ item: item }));
-    navigate(PATHS.NFT_DETAILS, { nftId: item.tokenId });
+    const _item = { ...item, currentOfferItemOffer: item.price };
+    delete item.price;
+
+    dispatch(
+      setCheckout({
+        item: _item,
+        type: CheckoutType.UpdateOffer,
+        onCheckoutComplete: () => {
+          dispatch(setCheckout({ item: {}, cancelOrderIds: [] }));
+        },
+      })
+    );
+    dispatch(toggleCheckoutModal());
   };
 
   const getBidBalance = async (id = userInfo.id) => userService.getBidBalance(id);

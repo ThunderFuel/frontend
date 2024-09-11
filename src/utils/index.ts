@@ -195,7 +195,6 @@ export async function activateInjectedProvider(providerName: any) {
 
       // ethereum.selectExtension("MetaMask");
       ethereum.setProvider(provider.providers[0]);
-      console.log("YAVAS LOOOO");
 
       break;
     default:

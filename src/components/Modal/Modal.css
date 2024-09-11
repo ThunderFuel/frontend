@@ -3,7 +3,7 @@
 }
 
 .modalbase .modal {
-  @apply flex flex-col w-[335px] bg-bg rounded-t-2xl lg:rounded-lg;
+  @apply flex flex-col w-[335px] bg-bg rounded-t-2xl lg:rounded-lg overflow-hidden;
 }
 
 .modalbase .modal .mhead {
@@ -44,7 +44,7 @@
 }
 
 .checkout .modal .mhead {
-  @apply px-[15px] lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray;
+  @apply px-[15px] lg:p-5 text-head5 flex justify-between items-center py-5 border-b border-gray bg-bg-light;
 }
 
 .checkout .modal .mhead .mtitle {

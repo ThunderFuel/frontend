@@ -21,11 +21,15 @@
 }
 
 .button-make-offer {
-  @apply button-animation w-full bg-bg border-t border-t-gray text-headline-02 text-white flex-center py-3 gap-2;
+  @apply button-animation w-full bg-bg border-t border-t-gray text-headline-02 text-white flex py-3 px-4 gap-2;
 }
 
 .button-buy-now {
-  @apply button-animation w-full bg-white text-headline-02 flex-center py-1.5 gap-2 text-black;
+  @apply button-animation w-full bg-white text-headline-02 flex items-center px-4 py-1.5 gap-2 text-black;
+}
+
+.button-make-offer-icon {
+  @apply flex-center w-10 h-10 flex-shrink-0 text-white border-l border-gray;
 }
 
 .collection-item-create-page {

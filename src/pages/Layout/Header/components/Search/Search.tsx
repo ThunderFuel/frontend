@@ -19,7 +19,15 @@ const Search = () => {
   const isShow = show && hasValue > 0;
 
   return (
-    <AutoComplete placeholder="Search items, collections and creators." ref={ref} onChange={onChange} onFocus={onFocus} show={isShow} className={"flex flex-1 w-full lg:w-[440px] header-search p-2.5"}>
+    <AutoComplete
+      placeholder="Search items, collections and creators."
+      ref={ref}
+      onChange={onChange}
+      onFocus={onFocus}
+      show={isShow}
+      className={"flex flex-1 w-full lg:max-w-[440px] header-search p-2.5"}
+      inputClassName={"lg:h-[42px]"}
+    >
       {Object.keys(results).map((resultKey) => {
         return (
           <AutoComplete.Group key={resultKey} title={resultKey}>

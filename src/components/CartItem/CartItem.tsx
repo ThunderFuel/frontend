@@ -7,7 +7,7 @@ import EthereumPrice from "../EthereumPrice";
 
 export interface CartItemProps {
   className?: string;
-  text: string;
+  text?: string;
   name: string;
   image: string;
   price?: number | string;
@@ -16,6 +16,7 @@ export interface CartItemProps {
   uid?: any;
   isRemovable?: boolean;
   onClick?: any;
+  BottomPart?: any;
 }
 
 const CartItemStatus = ({ text }: { text: string }) => {
@@ -41,6 +42,8 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
     <div className="relative ">
       <div className={clsx(images.length > 1 && "w-20")}>
         {images.map((img: any, index) => {
+          if (!img) return <div key={"null_image_" + index} className="w-16 h-16 top-0 bg-bg-light overflow-hidden rounded-md" />;
+
           return (
             <div className={clsx("h-16 w-16 top-0 overflow-hidden rounded-md", imagePosition[index] ?? "")} key={index}>
               <img alt={`image_${index}`} src={img} className={clsx("w-full")} />
@@ -57,7 +60,7 @@ const CartItemImage = ({ image, onRemove, isUnavailable, isRemovable }: { image:
     </div>
   );
 };
-const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemovable, onClick }: CartItemProps) => {
+const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemovable, onClick, BottomPart }: CartItemProps) => {
   const dispatch = useAppDispatch();
   const onRemove = () => {
     dispatch(remove(uid));
@@ -80,10 +83,14 @@ const CartItem = ({ text, name, image, price, uid, className, titleSlot, isRemov
               </span>
               {titleSlot}
             </div>
-            <div className="flex w-full items-center justify-between text-h6 mt-2">
-              <span className="text-gray-light">{text}</span>
-              {text === "Address" ? <>{price}</> : price !== "" && <EthereumPrice priceClassName="text-h6" price={price} />}
-            </div>
+            {BottomPart ? (
+              <div className="pt-2">{BottomPart}</div>
+            ) : (
+              <div className="flex w-full items-center justify-between text-h6 mt-2">
+                <span className="text-gray-light">{text}</span>
+                {text === "Address" ? <>{price}</> : price !== "" && text && <EthereumPrice priceClassName="text-h6" price={price} />}
+              </div>
+            )}
             {hasError && (
               <div className="mt-2">
                 {isPriceChange && <CartItemStatus text={"Price Change"} />}

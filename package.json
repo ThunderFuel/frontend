@@ -128,10 +128,5 @@
       "npm run lint:fix",
       "npm run lint:check"
     ]
-  },
-  "overrides": {
-    "awesome-typescript-loader": {
-      "typescript": "latest"
-    }
   }
 }

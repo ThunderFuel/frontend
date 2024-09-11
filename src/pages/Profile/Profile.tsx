@@ -14,7 +14,7 @@ const Profile = () => {
   }
 
   return (
-    <ProfileProvider userId={user.id ?? 16} options={{ isProfile: true, isUserPage: true }}>
+    <ProfileProvider userId={user?.id ?? 16} options={{ isProfile: true, isUserPage: true }}>
       <div className="flex flex-col lg:flex-row">
         <Sidebar isProfile={true} />
         <div className="flex flex-col flex-1">

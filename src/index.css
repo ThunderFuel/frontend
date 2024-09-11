@@ -134,7 +134,6 @@ body {
   .btn.btn-secondary {
     @apply text-white bg-bg border-gray;
     @apply disabled:bg-gray disabled:cursor-default disabled:text-gray-light disabled:pointer-events-none disabled:border-none;
-
   }
 
   .btn.btn-secondary.no-bg {
@@ -178,6 +177,13 @@ body {
     @apply bg-bg border-bg-light text-white lg:bg-white lg:text-bg-light;
   }
 
+  .btn-header-connect {
+    @apply btn-sm;
+    @apply ease-in-out transform duration-300 group-hover:opacity-100;
+    @apply bg-gray text-white border-gray;
+    @apply !py-2.5
+  }
+
   .input {
     background: transparent;
     @apply body-medium w-full outline-none text-white placeholder-gray-light;
@@ -192,13 +198,13 @@ body {
     @apply bg-gray;
   }
 
-  .header-btn {
+  .header-btn1 {
     @apply p-[21px];
     @apply items-center justify-center;
     @apply text-headlineMd font-bigShoulderDisplay text-white;
   }
 
-  .header-btn:hover {
+  .header-btn1:hover {
     @apply bg-bg-light;
   }
 

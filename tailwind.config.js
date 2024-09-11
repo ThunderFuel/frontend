@@ -33,6 +33,8 @@ module.exports = {
         "mode-hotdrop": "linear-gradient(270deg, rgba(255, 255, 255, 0.00) 0%, #FFFFFF 100%)",
         "table-row-skeleton": "linear-gradient(90deg, rgba(37, 37, 37, 0) 0, rgba(37, 37, 37, 0.2) 20%, rgba(37, 37, 37, 0.5) 60%, rgba(37, 37, 37, 0))",
         "mode-table-row-skeleton": "linear-gradient(90deg, rgba(230, 230, 230, 0) 0, rgba(230, 230, 230, 0.2) 20%, rgba(230, 230, 230, 0.5) 60%, rgba(230, 230, 230, 0))",
+        "marketplace-fuel-network-bg": "url('/src/assets/grids/fuel-network-bg.png')",
+        "audited-by-immunefi-bg": "url('/src/assets/grids/audited-by-immunefi-bg.png')",
       },
       screens: {
         xs: "475px",
@@ -48,10 +50,10 @@ module.exports = {
         },
       ],
       head2: [
-        "44px",
+        "36px",
         {
-          lineHeight: "60px",
-          fontWeight: "600",
+          lineHeight: "50px",
+          fontWeight: "700",
         },
       ],
       head3: [

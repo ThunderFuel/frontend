@@ -19,26 +19,27 @@ const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance
 
   useEffect(() => {
     fetchBidBalance();
+    onFetchBalance();
   }, []);
 
   return (
-    <div className="flex flex-col gap-y-2 px-5 py-2 border-b border-gray">
+    <div className="flex flex-col gap-[5px]">
       <div className="flex justify-between">
         <div className="flex items-center gap-x-1">
-          <span className="text-gray-light">Wallet Balance</span>
+          <span className="text-gray-light text-bodyMd font-medium">Wallet Balance</span>
           <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => onFetchBalance()} />
         </div>
         <div className="flex items-center">
-          <EthereumPrice price={balance} priceClassName="text-h6" />
+          <EthereumPrice price={balance} priceClassName="text-bodyMd font-medium text-white" />
         </div>
       </div>
       <div className="flex justify-between">
         <div className="flex items-center gap-x-1">
-          <span className="text-gray-light">Bid Balance</span>
+          <span className="text-gray-light text-bodyMd font-medium">Bid Balance</span>
           <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => fetchBidBalance()} />
         </div>
         <div className="flex items-center">
-          <EthereumPrice price={bidBalance} priceClassName="text-h6" />
+          <EthereumPrice price={bidBalance} priceClassName="text-bodyMd font-medium text-white" />
         </div>
       </div>
     </div>

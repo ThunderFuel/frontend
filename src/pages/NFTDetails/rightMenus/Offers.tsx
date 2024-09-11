@@ -23,109 +23,9 @@ import { getAbsolutePath } from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { useIsMobile } from "hooks/useIsMobile";
 import { ActivityTime } from "components/ActivityList/components/ActivityItems";
+import { get } from "http";
 
-const Box = ({
-  item,
-  isExpired,
-  ownOffer,
-  isOwner,
-  onBack,
-  isAccepted,
-}: {
-  item: any;
-  isExpired?: boolean;
-  ownOffer?: boolean;
-  isOwner: () => boolean;
-  fetchOffers: any;
-  onBack: any;
-  isAccepted: boolean;
-}) => {
-  const dispatch = useAppDispatch();
-  const formattedDate = dateFormat(item.expireTime, "DD MMM YYYY, HH:ss A Z");
-
-  const Icon = item.isExpired || item.isCanceled ? IconWarning : IconClock;
-  const description = item.isCanceled ? "Canceled" : item.isExpired ? "Expired" : `Expires on ${formattedDate}`;
-
-  const isDisabled = item.isExpired || item.isCanceled;
-
-  return (
-    <div className={clsx("flex flex-col border border-gray rounded-lg text-h6", isDisabled ? "text-gray-light" : "text-white")}>
-      <div className={`flex w-full p-[15px] gap-x-[15px]  ${isExpired ? "opacity-50" : ""}`}>
-        <Avatar image={item?.userImage} userId={item?.makerUserId} className={"w-8 h-8 flex-shrink-0"} />
-        <div className="flex flex-col gap-y-[10px]">
-          <span>
-            {ownOffer ? <span className="text-green">you</span> : item.makerUserName ?? addressFormat(item.makerAddress)} on {dateFormat(item.createdAt, "MMM DD, YYYY")}
-          </span>
-          <div className="flex items-center p-[6px] gap-x-1 border text-bodyMd border-gray rounded-[5px]">
-            <Icon className="w-[15px] h-[15px] flex-shrink-0" />
-            {description}
-          </div>
-        </div>
-        <div className="flex h-fit grow justify-end">
-          <EthereumPrice price={item.price} priceClassName="text-h6" />
-        </div>
-      </div>
-      {isOwner() && !isExpired && !isAccepted && (
-        <div className="flex border-t border-gray">
-          <Button
-            className="btn w-full btn-sm no-bg border-none text-white"
-            onClick={() => {
-              userService.getBidBalance(item.makerUserId).then((res) => {
-                if (res.data < item.price) useToast().error("Offer amount exceeds bidder`s available balance. Cannot be accepted until the balance is enough.");
-                else {
-                  dispatch(
-                    setCheckout({
-                      type: CheckoutType.AcceptOffer,
-                      item: item,
-                      price: item.price,
-                      onCheckoutComplete: onBack,
-                    })
-                  );
-                  dispatch(toggleCheckoutModal());
-                }
-              });
-            }}
-          >
-            ACCEPT OFFER
-            <IconOffer width="18px" />
-          </Button>
-        </div>
-      )}
-      {ownOffer && !isExpired && (
-        <div className="flex border-t border-gray">
-          <Button
-            className="btn w-full btn-sm no-bg border-none text-white"
-            onClick={() => {
-              dispatch(
-                setCheckout({
-                  type: CheckoutType.CancelOffer,
-                  item: item,
-                  onCheckoutComplete: onBack,
-                })
-              );
-              dispatch(toggleCheckoutModal());
-            }}
-          >
-            CANCEL OFFER
-            <IconCancel width="18px" />
-          </Button>
-          <div className="flex border-r border-gray"></div>
-          <Button
-            className="btn w-full btn-sm no-bg border-none text-white"
-            onClick={() => {
-              dispatch(setRightMenu(RightMenuType.UpdateOffer));
-            }}
-          >
-            UPDATE OFFER
-            <IconOffer width="18px" />
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const headers: ITableHeader[] = [
+const headers = (currentWalletAddress: any): ITableHeader[] => [
   {
     key: "from",
     text: `From`,
@@ -133,9 +33,12 @@ const headers: ITableHeader[] = [
     align: "flex-start",
     sortValue: 1,
     render: (item) => {
+      const isOwner = compareAddresses(item.makerAddress, currentWalletAddress);
+
       return (
         <a href={getAbsolutePath(PATHS.USER, { userId: item.makerUserId })} className="flex text-h6 items-center gap-2.5">
-          <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} /> {addressFormat(item?.makerAddress)}
+          <Avatar className="w-8 h-8 rounded-full" image={null} userId={item.makerUserId} />
+          <span className={isOwner ? "text-green" : "text-white"}>{isOwner ? "you" : addressFormat(item?.makerAddress)}</span>
         </a>
       );
     },
@@ -233,7 +136,15 @@ const Offers = ({ onBack }: { onBack: any }) => {
       className="btn-sm btn-secondary mx-5"
       onClick={() => {
         if (!isConnected) dispatch(toggleWalletModal());
-        else dispatch(setRightMenu(RightMenuType.MakeOffer));
+        else {
+          dispatch(
+            setCheckout({
+              type: CheckoutType.MakeOffer,
+              currentItemId: selectedNFT.id,
+            })
+          );
+          dispatch(toggleCheckoutModal());
+        }
       }}
     >
       MAKE OFFER <IconOffer className="w-[18px] h-[18px]" />
@@ -243,6 +154,12 @@ const Offers = ({ onBack }: { onBack: any }) => {
   useEffect(() => {
     fetchOffers();
   }, [nftId]);
+
+  function getHeaders() {
+    const _headers = headers(user.walletAddress);
+
+    return _headers;
+  }
 
   return isMobile ? (
     <OfferTable
@@ -294,7 +211,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
     <RightMenu title="Offers" onBack={onBack}>
       <OfferTable
         items={offers}
-        headers={headers}
+        headers={getHeaders()}
         ButtonBelowHeader={compareAddresses(selectedNFT.user.id, user.id) ? undefined : MakeOfferButton}
         onCancelOffer={(item: any) => {
           dispatch(
@@ -319,6 +236,7 @@ const Offers = ({ onBack }: { onBack: any }) => {
                 takerAddress: selectedNFT.user.walletAddress,
                 tokenOrder: selectedNFT.tokenOrder,
                 orderId: selectedNFT.tokenId,
+                tokenImage: selectedNFT.image,
               },
               price: selectedNFT.bestOffer?.price,
             })
@@ -328,11 +246,16 @@ const Offers = ({ onBack }: { onBack: any }) => {
         onUpdateOffer={(item: any) => {
           dispatch(
             setCheckout({
+              type: CheckoutType.UpdateOffer,
+              currentItemId: selectedNFT.id,
               cancelOrderIds: [item.id],
+              onCheckoutComplete: () => {
+                dispatch(setCheckout({ item: {}, cancelOrderIds: [] }));
+                onBack();
+              },
             })
           );
-          dispatch(setYourCurrentOffer(item.price));
-          dispatch(setRightMenu(RightMenuType.UpdateOffer));
+          dispatch(toggleCheckoutModal());
         }}
         // isProfile={}
         // getBidBalance={}

@@ -29,7 +29,7 @@ export const useWallet = () => {
   }
 
   useEffect(() => {
-    if (isConnected && wallet && account) {
+    if (isConnected && wallet && account && user.walletAddress === undefined) {
       dispatch(setIsConnected(true));
       dispatch(setAddress(toB256(account as any) ?? ""));
 
@@ -39,10 +39,10 @@ export const useWallet = () => {
 
       dispatch(setWallet(wallet));
     } else if (!isConnected) {
-      dispatch(setIsConnected(false));
-      dispatch(setUser({}));
+      // dispatch(setIsConnected(false));
+      // dispatch(setUser({}));
     }
-  }, [isConnected, account, wallet]);
+  }, [isConnected, account, wallet, user]);
 
   const hasEnoughFunds = async (buyNowItemPrice?: any) => {
     return selectedGateway().hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);

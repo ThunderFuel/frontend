@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./Tooltip.css";
 import clsx from "clsx";
+import ReactDOM from "react-dom";
 
 interface ITooltip {
   children: React.ReactNode;
@@ -8,11 +9,14 @@ interface ITooltip {
   content?: any;
   hiddenArrow?: any;
   contentClass?: any;
+  appendToBody?: any;
 }
 
-const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenArrow = false }: ITooltip) => {
+const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenArrow = false, appendToBody = false }: ITooltip) => {
   const ref = useRef<HTMLDivElement>(null);
   const refContent = useRef<HTMLDivElement>(null);
+  let refContentTimeout: any;
+  let refContentOpacityTimeout: any;
 
   const currentPosition = () => {
     if (ref.current && refContent.current) {
@@ -30,13 +34,21 @@ const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenA
   };
   const onMouseEnter = () => {
     if (ref.current && refContent.current) {
-      currentPosition();
-      refContent.current.style.visibility = "visible";
-      refContent.current.style.opacity = "1";
+      refContentTimeout = setTimeout(() => {
+        currentPosition();
+        refContentOpacityTimeout = setTimeout(() => {
+          if (refContent?.current) {
+            refContent.current.style.visibility = "visible";
+            refContent.current.style.opacity = "1";
+          }
+        }, 100);
+      }, 100);
     }
   };
   const onMouseLeave = () => {
     if (refContent.current) {
+      clearTimeout(refContentTimeout);
+      clearTimeout(refContentOpacityTimeout);
       refContent.current.style.opacity = "0";
     }
   };
@@ -45,12 +57,24 @@ const Tooltip = ({ children, position = "bottom", content, contentClass, hiddenA
     currentPosition();
   }, []);
 
+  let container: any = (
+    <div ref={refContent} className={clsx("content", contentClass)}>
+      {content} {!hiddenArrow && <span className="arrow" />}
+    </div>
+  );
+  if (appendToBody) {
+    container = ReactDOM.createPortal(
+      <div ref={refContent} className={clsx("tooltip-content", contentClass)}>
+        {content} {!hiddenArrow && <span className="arrow" />}
+      </div>,
+      document.body
+    );
+  }
+
   return (
     <div className={clsx("tooltip", position)} ref={ref} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {children}
-      <div ref={refContent} className={clsx("content", contentClass)}>
-        {content} {!hiddenArrow && <span className="arrow" />}
-      </div>
+      {container}
     </div>
   );
 };

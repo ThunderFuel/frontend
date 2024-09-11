@@ -43,9 +43,11 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
         {(title || etc.modalTitle) && (
           <div className="mhead">
             {etc.modalTitle ? etc.modalTitle : <h5 className="mtitle">{title}</h5>}
-            <button className="flex justify-center items-center w-8 h-8 bg-gray rounded-full" onClick={etc.onClose}>
-              <IconClose className="text-white w-3 h-3" />
-            </button>
+            {!etc.backdropDisabled && (
+              <button className="flex justify-center items-center w-8 h-8 bg-gray rounded-full" onClick={etc.onClose}>
+                <IconClose className="text-white w-3 h-3" />
+              </button>
+            )}
           </div>
         )}
         <div className="flex flex-col h-full overflow-y-scroll no-scrollbar">{children}</div>

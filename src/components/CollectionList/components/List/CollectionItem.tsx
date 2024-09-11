@@ -12,25 +12,37 @@ import { useCollectionListContext } from "../../CollectionListContext";
 import { Link } from "react-router-dom";
 import EthereumPrice from "components/EthereumPrice";
 import useNavigate, { getAbsolutePath } from "hooks/useNavigate";
-import { RightMenuType, setRightMenu } from "store/NFTDetailsSlice";
+import { RightMenuType, setRightMenu, setSelectedNFT } from "store/NFTDetailsSlice";
 import { toggleWalletModal } from "store/walletSlice";
-import { setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
+import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { remainingTime } from "pages/NFTDetails/components/AuctionCountdown";
 import { formatPrice } from "utils";
 import LazyImg from "../../../LazyImg";
 import NoContent from "../../../NoContent";
 import config from "../../../../config";
+import Tooltip from "../../../Tooltip";
 
 const ButtonBuyNow = React.memo(({ className, onClick }: any) => {
   return (
-    <button className={clsx("button-buy-now", className)} onClick={onClick}>
+    <button className={clsx("button-buy-now w-full", className)} onClick={onClick}>
       <span className="uppercase">buy now</span>
       <IconThunderSmall className="w-7 h-7" />
     </button>
   );
 });
 ButtonBuyNow.displayName = "ButtonBuyNow";
+
+const ButtonIconMakeOffer = React.memo(({ className, onClick }: any) => {
+  return (
+    <Tooltip position="top" content="Make Offer" appendToBody={true} hiddenArrow={true}>
+      <button className={clsx("button-make-offer-icon", className)} onClick={onClick}>
+        <IconHand className="fill-white" />
+      </button>
+    </Tooltip>
+  );
+});
+ButtonIconMakeOffer.displayName = "ButtonIconMakeOffer";
 
 const ButtonMakeOffer = React.memo(({ className, onClick }: any) => {
   return (
@@ -173,8 +185,15 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
       dispatch(toggleCartModal());
       dispatch(toggleWalletModal());
     } else {
-      dispatch(setRightMenu(RightMenuType.MakeOffer));
-      navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
+      dispatch(setSelectedNFT(collection));
+      dispatch(
+        setCheckout({
+          type: CheckoutType.MakeOffer,
+          // currentItemId: collection.id,
+        })
+      );
+      dispatch(toggleCheckoutModal());
+      // navigate(PATHS.NFT_DETAILS, { nftId: collection.id });
     }
     e.stopPropagation();
     e.preventDefault();
@@ -246,7 +265,10 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
           <div className="absolute w-full transition-all translate-y-full group-hover:-translate-y-full">
             {!isOwnCollectionItem ? (
               collection.salable ? (
-                <ButtonBuyNow onClick={onBuyNow} />
+                <div className="flex border-t border-gray">
+                  <ButtonBuyNow onClick={onBuyNow} />
+                  <ButtonIconMakeOffer onClick={onMakeOffer} />
+                </div>
               ) : collection.onAuction ? (
                 <ButtonPlaceBid onClick={onPlaceBid} />
               ) : (

@@ -347,6 +347,12 @@ class FuelProvider extends BaseProvider {
 
     const allOrders = cancelOfferOrders.concat(cancelListingOrders);
 
+    if (allOrders.length === 0) {
+      setIsFailed(true);
+
+      return;
+    }
+
     bulkCancelOrder(exchangeContractId, provider, wallet, allOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
@@ -375,7 +381,14 @@ class FuelProvider extends BaseProvider {
       getListings: true,
       getOffers: true,
     });
+
     const cancelOrders = response.data.orderIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: true }));
+
+    if (cancelOrders.length === 0) {
+      setIsFailed(true);
+
+      return;
+    }
 
     bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
       .then((res) => {
@@ -407,13 +420,15 @@ class FuelProvider extends BaseProvider {
 
     const cancelOrders = response.data.listingIndexes.map((index: any) => ({ strategy: strategyFixedPriceContractId, nonce: index, isBuySide: false }));
 
+    if (cancelOrders.length === 0) {
+      setIsFailed(true);
+
+      return;
+    }
+
     bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
-          // collectionsService
-          //   .cancelAllListings(params)
-          //   .then(() => setApproved(true))
-          //   .catch(() => setIsFailed(true));
           setApproved(true);
         }
       })
@@ -676,69 +691,69 @@ class FuelProvider extends BaseProvider {
             else setIsFailed(true);
           });
       } else {
-        nftdetailsService.getTokensIndex(tokenIds).then((res) => {
-          const takerOrders = items.map((item: any) => {
-            return {
-              isBuySide: true,
-              taker: user.walletAddress,
-              maker: item.userWalletAddress,
-              nonce: res.data[item.id],
-              price: toGwei(item.price).toNumber(),
-              token_id: item.tokenOrder,
-              collection: item.contractAddress,
-              strategy: strategyFixedPriceContractId,
-              extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
-            };
-          });
+        // nftdetailsService.getTokensIndex(tokenIds).then((res) => {
+        const takerOrders = items.map((item: any) => {
+          return {
+            isBuySide: true,
+            taker: user.walletAddress,
+            maker: item.userWalletAddress,
+            nonce: res.data[item.id],
+            price: toGwei(item.price).toNumber(),
+            token_id: item.tokenOrder,
+            collection: item.contractAddress,
+            strategy: strategyFixedPriceContractId,
+            extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // laim degilse null
+          };
+        });
 
-          bulkPurchase(exchangeContractId, provider, wallet, takerOrders, _baseAssetId)
-            .then(async (res) => {
-              if (res?.transactionResult.isStatusSuccess) {
-                const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
-                const response = await nftdetailsService.getTokenOwners(requestData);
-
-                const approvedPurchases = response?.data?.find((item: any) => item.owner === user?.walletAddress);
-
-                if (approvedPurchases !== undefined) {
-                  setApproved(true);
-                  window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                } else {
-                  setIsFailed(true);
-                }
-              }
-            })
-            .catch(async (e) => {
+        bulkPurchase(exchangeContractId, provider, wallet, takerOrders, _baseAssetId)
+          .then(async (res) => {
+            if (res?.transactionResult.isStatusSuccess) {
               const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
               const response = await nftdetailsService.getTokenOwners(requestData);
 
               const approvedPurchases = response?.data?.find((item: any) => item.owner === user?.walletAddress);
 
               if (approvedPurchases !== undefined) {
-                // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
                 setApproved(true);
                 window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-
-                // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
-                //   if (res.data) {
-                //     setSuccessCheckout(res.data);
-                //     setApproved(true);
-                //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
-                //   }
-                // });
-
-                return;
+              } else {
+                setIsFailed(true);
               }
+            }
+          })
+          .catch(async (e) => {
+            const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
+            const response = await nftdetailsService.getTokenOwners(requestData);
 
-              if (
-                e.message.includes("Request cancelled without user response!") ||
-                e.message.includes("Error: User rejected the transaction!") ||
-                e.message.includes("An unexpected error occurred") ||
-                e.message.includes("User canceled sending transaction")
-              )
-                setStartTransaction(false);
-              else setIsFailed(true);
-            });
-        });
+            const approvedPurchases = response?.data?.find((item: any) => item.owner === user?.walletAddress);
+
+            if (approvedPurchases !== undefined) {
+              // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
+              setApproved(true);
+              window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+
+              // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
+              //   if (res.data) {
+              //     setSuccessCheckout(res.data);
+              //     setApproved(true);
+              //     window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              //   }
+              // });
+
+              return;
+            }
+
+            if (
+              e.message.includes("Request cancelled without user response!") ||
+              e.message.includes("Error: User rejected the transaction!") ||
+              e.message.includes("An unexpected error occurred") ||
+              e.message.includes("User canceled sending transaction")
+            )
+              setStartTransaction(false);
+            else setIsFailed(true);
+          });
+        // });
       }
     });
   }
@@ -754,7 +769,7 @@ class FuelProvider extends BaseProvider {
         const order = {
           isBuySide: true,
           maker: user.walletAddress,
-          collection: selectedNFT.collection.contractAddress,
+          collection: selectedNFT.contractAddress ?? selectedNFT.collection.contractAddress,
           token_id: selectedNFT.tokenOrder,
           price: toGwei(checkoutPrice).toNumber(),
           amount: 1, //fixed
@@ -815,7 +830,7 @@ class FuelProvider extends BaseProvider {
                     walletAddress: user.walletAddress,
                     nonce: order.nonce,
                     tokenOrder: selectedNFT.tokenOrder,
-                    contractAddress: selectedNFT.contractAddress,
+                    contractAddress: selectedNFT.contractAddress ?? selectedNFT.collection.contractAddress,
                   });
 
                   if (response.data === true) {

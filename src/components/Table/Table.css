@@ -38,7 +38,7 @@
 }
 
 .fuel-table .tbody {
-  /* @apply py-5; */
+  @apply px-5;
   @apply flex flex-col lg:gap-2;
 }
 
