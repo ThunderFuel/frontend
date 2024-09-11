@@ -136,6 +136,8 @@ const HeaderUserBalance = ({ user, address }: any) => {
     });
   };
 
+  console.log({ balance, bidBalance });
+
   useEffect(() => {
     fetchBalance();
     fetchBidBalance();
@@ -155,13 +157,13 @@ const HeaderUserBalance = ({ user, address }: any) => {
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {balance.toFixed(2)} <IconEthereum className="text-gray-light font" />
+              {balance.toFixed(4)} <IconEthereum className="text-gray-light font" />
             </span>
           </div>
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {bidBalance.toFixed(2)} <IconEthereum className="text-gray-light" />
+              {bidBalance.toFixed(4)} <IconEthereum className="text-gray-light" />
             </span>
           </div>
         </div>
@@ -184,7 +186,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   return (
     <BaseDropdown container={container}>
       <div className="flex px-2">
-        {balance.toFixed(2)} <IconEthereum className="text-gray-light" />
+        {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
       </div>
     </BaseDropdown>
   );
