@@ -12,6 +12,7 @@ import { getCartTotal, removeAll, removeBuyNowItem } from "store/cartSlice";
 import { isObjectEmpty } from "utils";
 import { useWallet } from "hooks/useWallet";
 import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
+import EthereumPrice from "components/EthereumPrice";
 
 const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
   return (
@@ -30,16 +31,22 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
   const [showDetails, setShowDetails] = useState(false);
 
   const getImages = items.slice(0, itemCount > 3 ? 3 : itemCount).map((i: any) => (i.image ? i.image : i.tokenImage));
-  const titleSlot = approved && (
-    <div className="flex gap-x-2.5">
-      {/* <button className="body-small text-gray-light underline">View on Blockchain</button> */}
-      {itemCount !== 1 && (
-        <button className="body-small text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
-          {showDetails ? "Hide Details" : "Show Details"}
-        </button>
-      )}
-    </div>
-  );
+  const titleSlot =
+    approved && itemCount !== 1 ? (
+      <div className="flex gap-x-2.5">
+        {/* <button className="body-small text-gray-light underline">View on Blockchain</button> */}
+        {itemCount !== 1 && (
+          <button className="body-small text-gray-light underline" onClick={() => setShowDetails(!showDetails)}>
+            {showDetails ? "Hide Details" : "Show Details"}
+          </button>
+        )}
+      </div>
+    ) : (
+      <div className="flex w-full items-center justify-between text-h6 mt-2">
+        <span className="text-gray-light">Total</span>
+        <EthereumPrice priceClassName="text-h6" price={totalAmount} />
+      </div>
+    );
 
   return (
     <>
@@ -69,6 +76,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const dispatch = useAppDispatch();
   const { handleCheckout } = useWallet();
   const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
+  const [_buyNowItem, set_BuyNowItem] = useState(buyNowItem);
   const [_items, set_Items] = useState(items);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const [isFailed, setIsFailed] = useState(false);
@@ -104,6 +112,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   };
 
   React.useEffect(() => {
+    if (buyNowItem && !isObjectEmpty(buyNowItem)) set_BuyNowItem(buyNowItem);
     if (items.length > 0) set_Items(items);
     if (show) dispatch(getCartTotal());
   }, [items, show]);
@@ -154,8 +163,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
           <Approved title="Purchase Completed!" description="Your purchase was successful! You can view purchased items in your profile." />
 
           <div className="flex flex-col w-full">
-            {!isObjectEmpty(buyNowItem) ? (
-              <CheckoutCartItems items={[buyNowItem]} itemCount={1} totalAmount={buyNowItem.price} approved={approved} />
+            {!isObjectEmpty(_buyNowItem) ? (
+              <CheckoutCartItems items={[_buyNowItem]} itemCount={1} totalAmount={_buyNowItem.price} approved={approved} />
             ) : _items.length > 0 ? (
               <CheckoutCartItems items={_items} itemCount={_items.length} totalAmount={calculateTotalAmount()} approved={approved} />
             ) : (
@@ -166,8 +175,8 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       ) : (
         <div className="flex-center flex-col w-full gap-8 px-[25px] pt-5 pb-[50px]">
           <div className="flex flex-col w-full">
-            {!isObjectEmpty(buyNowItem) ? (
-              <CheckoutCartItems items={[buyNowItem]} itemCount={1} totalAmount={buyNowItem.price} approved={approved} />
+            {!isObjectEmpty(_buyNowItem) ? (
+              <CheckoutCartItems items={[_buyNowItem]} itemCount={1} totalAmount={_buyNowItem.price} approved={approved} />
             ) : _items.length > 0 ? (
               <CheckoutCartItems items={_items} itemCount={_items.length} totalAmount={calculateTotalAmount()} approved={approved} />
             ) : (
