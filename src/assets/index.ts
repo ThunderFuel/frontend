@@ -45,3 +45,5 @@ export { default as AssetCreatorCreator2 } from "./creator/creator_2.png";
 export { default as AssetCreatorCreator3 } from "./creator/creator_3.png";
 export { default as AssetCreatorCreator4 } from "./creator/creator_4.png";
 export { default as AssetGridBackedByFuel } from "./grids/backed-by-fuel.svg";
+
+export { default as AssetConnectAWalletScreen1 } from "./connectawalletcreen1.png";
