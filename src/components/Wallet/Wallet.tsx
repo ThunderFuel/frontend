@@ -23,7 +23,7 @@ function clipboardCopyWrapper(walletAddress: any) {
   useToast().success("Copied to clipboard.");
 }
 
-const WalletDropdown = ({ walletAddress, onLogout }: any) => {
+export const WalletDropdown = ({ walletAddress, onLogout }: any) => {
   const [show, setShow] = useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const items = [
@@ -40,14 +40,6 @@ const WalletDropdown = ({ walletAddress, onLogout }: any) => {
       icon: IconLink,
       onClick: () => {
         openInNewTab(`${config.getConfig("type") === "wagmi" ? lineaExplorerLink : fueldExplorerLink}${walletAddress}`);
-        setShow(false);
-      },
-    },
-    {
-      text: "Logout",
-      icon: IconLogout,
-      onClick: () => {
-        onLogout();
         setShow(false);
       },
     },

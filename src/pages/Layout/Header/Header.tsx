@@ -41,6 +41,7 @@ import GetTestEth from "../../../components/GetTestEth/GetTestEth";
 import { removeAll } from "../../../store/bulkListingSlice";
 import { removeBulkItems } from "../../../store/checkoutSlice";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
+import { WalletDropdown } from "components/Wallet/Wallet";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -105,7 +106,7 @@ const BaseDropdown = ({ children, container }: any) => {
     setShow(false);
   });
   const onClick = () => {
-    setShow(!show);
+    // setShow(!show);
   };
 
   return (
@@ -144,19 +145,22 @@ const HeaderUserBalance = ({ user, address }: any) => {
     <BaseDropdownContainer className="w-full lg:w-[432px]">
       <div className="flex items-center justify-between text-gray-light">
         <div className="text-headline-01 uppercase">Wallet</div>
-        <div className="body-medium">{formattedAddress}</div>
+        <div className="flex items-center gap-2.5">
+          <div className="body-medium">{formattedAddress}</div>
+          <WalletDropdown walletAddress={user.walletAddress} />
+        </div>
       </div>
       <div className="flex flex-col border border-gray rounded-lg">
         <div className="flex flex-col p-2.5 gap-2.5">
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
-            <span className="flex text-white">
-              {balance.toFixed(2)} <IconEthereum className="text-gray-light" />
+            <span className="flex font-spaceGrotesk text-white">
+              {balance.toFixed(2)} <IconEthereum className="text-gray-light font" />
             </span>
           </div>
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
-            <span className="flex text-white">
+            <span className="flex font-spaceGrotesk text-white">
               {bidBalance.toFixed(2)} <IconEthereum className="text-gray-light" />
             </span>
           </div>
