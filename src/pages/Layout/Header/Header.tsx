@@ -106,7 +106,7 @@ const BaseDropdown = ({ children, container }: any) => {
     setShow(false);
   });
   const onClick = () => {
-    // setShow(!show);
+    setShow(true);
   };
 
   return (
