@@ -100,7 +100,7 @@ HeaderCardBadge.displayName = "HeaderCardBadge";
 
 const BaseDropdown = ({ children, container }: any) => {
   const [show, setShow] = React.useState(false);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   useClickOutside(containerRef, () => {
     setShow(false);
