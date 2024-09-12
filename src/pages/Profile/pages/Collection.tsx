@@ -29,65 +29,22 @@ const getInitParams = () => {
 const PAGE_SIZE = 20;
 let tmpCollectionItems: any = [];
 const Collection = () => {
-  const { userInfo, options: profileOptions } = useProfile();
+  const { userInfo, options: profileOptions, tokens } = useProfile();
   const [filter, setFilter] = React.useState([] as any);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [collectionItems, setCollectionItems] = useState<any>([]);
   const [pagination, setPagination] = useState<any>({});
   const initParams = getInitParams();
-  const isValidFilter = true;
-
-  const onChangeFilterFetchCollection = async (params: any) => {
-    const { sortingType, search, ...etcParams } = params;
-
-    try {
-      const selectedFilter = Object.keys(etcParams).map((paramKey) => {
-        const name = paramKey;
-        const type = params[paramKey].type;
-        let value = params[paramKey].value;
-        const selecteds = Array.isArray(params[paramKey].value) ? params[paramKey].value : [];
-        if (params[paramKey]?.value?.min || params[paramKey]?.value?.max) {
-          value = `${params[paramKey].value.min ?? ""}-${params[paramKey].value.max ?? ""}`;
-        } else if (selecteds.length) {
-          value = "";
-        }
-
-        return {
-          name,
-          type,
-          selecteds,
-          value,
-        };
-      });
-      if (search?.length) {
-        selectedFilter.push({
-          name: "",
-          type: 0,
-          value: search,
-          selecteds: [],
-        });
-      }
-
-      await fetchCollections({
-        sortingType,
-        page: 1,
-        items: selectedFilter,
-      });
-
-      window.requestParams = {
-        selectedFilter,
-        sortingType,
-      };
-    } catch (e) {
-      console.log(e);
-    }
-  };
   const onChangeFilter = (params: any) => {
+    if (!tokens.length) {
+      return false;
+    }
+
     setIsLoading(true);
     try {
       setCollectionItems([]);
 
-      tmpCollectionItems = userInfo.tokens;
+      tmpCollectionItems = tokens ?? userInfo.tokens;
       Object.entries(params).forEach(([key, item]: any) => {
         if (key === "search") {
           tmpCollectionItems = tmpCollectionItems.filter((collectionItem: any) => String(collectionItem.name).toLowerCase().search(item) > -1);
@@ -154,33 +111,8 @@ const Collection = () => {
       setFilter(response.data.filters ?? []);
     } catch (e) {
       console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-
-    await onChangeFilter(initParams);
-  };
-
-  const getCollectionItems = async (filterParam: any = {}) => {
-    if (!userInfo.id) {
-      return [];
-    }
-    const data: CollectionItemsRequest = {
-      userId: userInfo.id,
-      page: pagination.pageNumber,
-      pageSize: 20,
-      ...filterParam,
-    };
-    try {
-      const { data: collectionData, ...paginationData } = await userService.getUserCollections(data);
-      setPagination(paginationData);
-
-      return collectionData;
-    } catch (e) {
-      return userInfo?.tokens ?? [];
     }
   };
-
   const onChangePagination = (params: any) => {
     if (isLoading) {
       return false;
@@ -194,54 +126,25 @@ const Collection = () => {
       setIsLoading(false);
     }, 1000);
   };
-  const onChangePaginationFetch = async (params: any) => {
-    if (!!params.continuation || params.page > 1) {
-      setIsLoading(true);
-      try {
-        const { selectedFilter, sortingType } = window.requestParams;
-        const collectionData = await getCollectionItems({
-          items: selectedFilter,
-          page: params.page,
-          continuation: params.continuation,
-          sortingType,
-        });
-
-        setCollectionItems((prevState: any) => [...prevState, ...(collectionData as any)]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-  const fetchCollections = async (filter: any = {}) => {
-    if (isLoading) {
-      return false;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const collectionData = await getCollectionItems(filter);
-      setCollectionItems(collectionData);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   React.useEffect(() => {
     if (userInfo.id) {
       fetchFilters();
     }
   }, [userInfo]);
+  React.useEffect(() => {
+    onChangeFilter(initParams);
+  }, [tokens]);
 
   return (
-    <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={isValidFilter ? onChangePagination : onChangePaginationFetch}>
+    <InfiniteScroll isLoading={isLoading} pagination={pagination} onChangePagination={onChangePagination}>
       <CollectionList
         isLoading={isLoading}
         collectionItems={collectionItems}
         initParams={initParams}
         filterItems={filter}
         options={{ ...options, ...profileOptions }}
-        onChangeFilter={isValidFilter ? onChangeFilter : onChangeFilterFetchCollection}
+        onChangeFilter={onChangeFilter}
         pagination={pagination}
       />
     </InfiniteScroll>

@@ -14,12 +14,14 @@ interface IProfileContext {
   onSetSocialActiveTab: any;
   onFollow: ({ isFollow, followUser }: { isFollow: boolean; followUser: IUserResponse }) => void;
   options?: any;
+  tokens?: any;
 }
 
 export const ProfileContext = createContext<IProfileContext>({} as any);
 
 const ProfileProvider = ({ userId, options, children }: { userId: any; options: any; children: ReactNode }) => {
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
+  const [tokens, setTokens] = React.useState<any>([]);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
 
   const fetchUserProfile = async () => {
@@ -30,7 +32,25 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
         includes: config.getConfig("userProfileIncludes"),
       });
 
-      setUserInfo(response.data as any);
+      setUserInfo({
+        ...response.data,
+        tokens: [],
+      });
+    } catch (e) {
+      console.log(e);
+    }
+
+    fetchUserProfileTokens();
+  };
+  const fetchUserProfileTokens = async () => {
+    try {
+      const response = await userService.getUser({
+        id: userId,
+        includes: config.getConfig("userProfileTokens"),
+      });
+
+      console.log(response);
+      setTokens(response.data.tokens ?? []);
     } catch (e) {
       console.log(e);
     }
@@ -38,10 +58,14 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
 
   React.useEffect(() => {
     fetchUserProfile();
-    window.addEventListener("CompleteCheckout", fetchUserProfile);
+    window.addEventListener("CompleteCheckout", () => {
+      fetchUserProfile();
+    });
 
     return () => {
-      window.addEventListener("CompleteCheckout", fetchUserProfile);
+      window.removeEventListener("CompleteCheckout", () => {
+        fetchUserProfile();
+      });
     };
   }, [userId]);
 
@@ -70,6 +94,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
     onSetSocialActiveTab,
     onFollow,
     options,
+    tokens,
   };
 
   return !!userInfo && <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

@@ -82,7 +82,7 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
           if (item?.filterData.length === 0) return <></>;
 
           return (
-            <Collapse key={i} isOpen={item.isOpen}>
+            <Collapse key={`${item.name}_${i}`} isOpen={item.isOpen}>
               <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
               <Collapse.Body>
                 <DynamicComponent
@@ -102,7 +102,7 @@ const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
           const DynamicComponent = item.dynamicComponent;
 
           return (
-            <Collapse key={i}>
+            <Collapse key={`${item.name}_${i}`}>
               <Collapse.Header>{item.name ?? "-"}</Collapse.Header>
               <Collapse.Body>
                 <DynamicComponent
