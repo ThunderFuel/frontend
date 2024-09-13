@@ -98,7 +98,7 @@ const HeaderCardBadge = React.memo(({ count }: { count: number }) => {
 
 HeaderCardBadge.displayName = "HeaderCardBadge";
 
-const BaseDropdown = ({ children, container }: any) => {
+const BaseDropdown = ({ children, container, className }: any) => {
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -111,7 +111,7 @@ const BaseDropdown = ({ children, container }: any) => {
 
   return (
     <div className="relative" ref={containerRef} onClick={onClick}>
-      <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", show ? "bg-gray" : "")}>{children}</div>
+      <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", className, show ? "bg-gray" : "")}>{children}</div>
       {show ? <div className="absolute top-full right-0 pt-2">{container}</div> : null}
     </div>
   );
@@ -261,8 +261,8 @@ const HeaderUserProfileInfo = ({ user }: any) => {
   );
 
   return (
-    <BaseDropdown container={container}>
-      <span className="body-medium">{formattedAddress}</span>
+    <BaseDropdown container={container} className={"border-l border-l-gray"}>
+      <span className="body-medium pl-2">{formattedAddress}</span>
       <Avatar image={user?.image} userId={user?.id} className="w-6 h-6" />
     </BaseDropdown>
   );
