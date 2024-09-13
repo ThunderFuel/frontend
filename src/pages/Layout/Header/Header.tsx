@@ -168,7 +168,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
         <div className="grid grid-cols-2 gap-2.5 p-4 border-t border-gray">
           <GetTestEth className="btn-sm" user={user} address={address} />
           <Button
-            className="btn-secondary w-full"
+            className="btn-sm btn-secondary w-full"
             onClick={() => {
               dispatch(toggleManageFundsModal());
             }}
