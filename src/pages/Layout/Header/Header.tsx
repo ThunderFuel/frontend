@@ -122,7 +122,7 @@ const BaseDropdownContainer = ({ className, children }: any) => {
 
 const HeaderUserBalance = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
-  const formattedAddress = addressFormat(user.walletAddress);
+  const formattedAddress = addressFormat(user.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
@@ -194,7 +194,7 @@ const HeaderUserProfileInfo = ({ user }: any) => {
   const dispatch = useAppDispatch();
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
-  const formattedAddress = addressFormat(user.walletAddress);
+  const formattedAddress = addressFormat(user.walletAddress ?? "");
   const items = [
     {
       icon: IconWallet,
