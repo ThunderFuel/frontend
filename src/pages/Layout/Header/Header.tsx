@@ -16,14 +16,13 @@ import {
   IconThunder2,
   IconThunderLogoText,
   IconWallet,
-  IconWarning,
 } from "icons";
 import Search from "./components/Search/Search";
 import "./Header.css";
 import { useAppDispatch, useAppSelector } from "store";
 import MobileSearch from "./components/Search/MobileSearch";
 import { toggleCartModal } from "store/cartSlice";
-import { setIsConnected, setUser, toggleManageFundsModal, toggleWalletModal } from "store/walletSlice";
+import { setIsConnected, setUser, toggleManageFundsModal } from "store/walletSlice";
 import { PATHS } from "router/config/paths";
 import Tab from "./components/Tab";
 import Avatar from "components/Avatar/Avatar";
@@ -120,12 +119,28 @@ const BaseDropdownContainer = ({ className, children }: any) => {
   return <div className={clsx("flex flex-col bg-bg border border-gray rounded-2xl gap-2.5 p-4 ", className)}>{children}</div>;
 };
 
+export const EventDispatchFetchBalances = "ThunderFuelFetchBalances";
+
 const HeaderUserBalance = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const formattedAddress = addressFormat(user.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
+
+  React.useEffect(() => {
+    const fetchBalances = () => {
+      fetchBalance();
+      fetchBidBalance();
+    };
+
+    window.addEventListener(EventDispatchFetchBalances, fetchBalances);
+
+    return () => {
+      window.removeEventListener(EventDispatchFetchBalances, fetchBalances);
+    };
+  }, []);
+
   const fetchBalance = () => {
     getBalance().then((res) => setbalance(res ? res : 0));
   };
@@ -155,13 +170,13 @@ const HeaderUserBalance = ({ user, address }: any) => {
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {balance.toFixed(4)} <IconEthereum className="text-gray-light font" />
+              {bidBalance.toFixed(4)} <IconEthereum className="text-gray-light font" />
             </span>
           </div>
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {bidBalance.toFixed(4)} <IconEthereum className="text-gray-light" />
+              {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
             </span>
           </div>
         </div>

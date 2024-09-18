@@ -15,6 +15,7 @@ import { getFuel } from "index";
 import { useFuel } from "hooks/useFuel";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { FUEL_TYPE } from "hooks/useFuelExtension";
+import { EventDispatchFetchBalances } from "pages/Layout/Header/Header";
 
 class FuelProvider extends BaseProvider {
   provider = useFuel()[0];
@@ -59,6 +60,7 @@ class FuelProvider extends BaseProvider {
       await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
       // userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
       setIsDisabled(false);
+      window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
     } catch (e) {
       console.log(e);
       setIsDisabled(false);
@@ -119,6 +121,7 @@ class FuelProvider extends BaseProvider {
                 // userService.updateBidBalance(user.id, Number(requiredBidAmount)).then(() => setBidBalanceUpdated(true));
                 setBidBalanceUpdated(true);
                 setApproved(true);
+                window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
               }
             })
             .catch((e) => {
@@ -137,6 +140,7 @@ class FuelProvider extends BaseProvider {
                 //   expireTime: formatTimeBackend(checkoutExpireTime),
                 // });
                 setApproved(true);
+                window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
               }
             })
             .catch((e) => {
@@ -222,6 +226,7 @@ class FuelProvider extends BaseProvider {
           if (res.transactionResult.isStatusSuccess) {
             onCheckoutComplete();
             setApproved(true);
+            window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
             // offerService.acceptOffer({ id: currentItem.id }).then(() => {
             //   // userService.updateBidBalance(currentItem.makerUserId, -currentItem.price);
             //   onCheckoutComplete();
@@ -589,6 +594,7 @@ class FuelProvider extends BaseProvider {
               if (response?.data[0].owner === user?.walletAddress) {
                 setApproved(true);
                 window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
               } else {
                 setIsFailed(true);
               }
@@ -609,6 +615,7 @@ class FuelProvider extends BaseProvider {
 
               setApproved(true);
               window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
               // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
               //   if (res.data) {
               //     setSuccessCheckout(res.data);
@@ -650,6 +657,7 @@ class FuelProvider extends BaseProvider {
               if (response?.data[0].owner === user?.walletAddress) {
                 setApproved(true);
                 window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
               } else {
                 setIsFailed(true);
               }
@@ -669,6 +677,7 @@ class FuelProvider extends BaseProvider {
               // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
               setApproved(true);
               window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
 
               // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
               //   if (res.data) {
@@ -717,6 +726,7 @@ class FuelProvider extends BaseProvider {
               if (approvedPurchases !== undefined) {
                 setApproved(true);
                 window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+                window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
               } else {
                 setIsFailed(true);
               }
@@ -732,6 +742,7 @@ class FuelProvider extends BaseProvider {
               // setSuccessCheckout(res.data); /// TODO: buradaki data ne ona bakmak lazim
               setApproved(true);
               window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+              window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
 
               // nftdetailsService.tokenBuyNow(tokenIds, user.id).then((res) => {
               //   if (res.data) {
@@ -792,6 +803,7 @@ class FuelProvider extends BaseProvider {
                   if (res.transactionResult.isStatusSuccess) {
                     setBidBalanceUpdated(true);
                     setApproved(true);
+                    window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
                   }
                 })
                 .catch(async (e) => {
