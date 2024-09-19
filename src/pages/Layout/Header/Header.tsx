@@ -7,6 +7,7 @@ import {
   IconCart,
   IconChevronRight,
   IconEthereum,
+  IconFaucet,
   IconGas,
   IconHand,
   IconInfo,
@@ -41,6 +42,7 @@ import { removeAll } from "../../../store/bulkListingSlice";
 import { removeBulkItems } from "../../../store/checkoutSlice";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import { WalletDropdown } from "components/Wallet/Wallet";
+import { FUEL_FAUCET_URL } from "global-constants";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -116,7 +118,7 @@ const BaseDropdown = ({ children, container, className }: any) => {
   );
 };
 const BaseDropdownContainer = ({ className, children }: any) => {
-  return <div className={clsx("flex flex-col bg-bg border border-gray rounded-2xl gap-2.5 p-4 ", className)}>{children}</div>;
+  return <div className={clsx("flex flex-col bg-bg border border-gray rounded-[8px] gap-2.5 p-4 ", className)}>{children}</div>;
 };
 
 export const EventDispatchFetchBalances = "ThunderFuelFetchBalances";
@@ -205,7 +207,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   );
 };
 
-const HeaderUserProfileInfo = ({ user }: any) => {
+const HeaderUserProfileInfo = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
@@ -237,12 +239,23 @@ const HeaderUserProfileInfo = ({ user }: any) => {
       path: PATHS.SETTINGS_PROFILE,
     },
     {
+      icon: IconFaucet,
+      name: "Get Test ETH",
+      isFaucet: true,
+    },
+    {
       icon: IconLogout,
       name: "Logout",
       isLogout: true,
     },
   ];
   const onClick = (item: any) => {
+    if (item.isFaucet) {
+      window.open(`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`, "_blank")?.focus();
+
+      return;
+    }
+
     if (item.isLogout) {
       walletDisconnect();
       dispatch(setIsConnected(false));
@@ -256,18 +269,22 @@ const HeaderUserProfileInfo = ({ user }: any) => {
   };
 
   const container = (
-    <BaseDropdownContainer className="lg:w-[280px] w-full !p-0">
+    <BaseDropdownContainer className="lg:w-[280px] w-full !p-0 overflow-hidden">
       <div>
         {items.map((item) => {
           const Icon = item.icon;
 
           return (
-            <div key={item.name} onClick={() => onClick(item)} className="flex flex-row py-3 px-4 items-center justify-between border-b border-gray cursor-pointer">
+            <div
+              key={item.name}
+              onClick={() => onClick(item)}
+              className="flex flex-row py-3 px-4 items-center justify-between border-b last:border-b-0 border-gray cursor-pointer hover:bg-bg-light group"
+            >
               <div className="flex flex-row items-center gap-5">
                 <Icon className="w-6 h-6" />
                 <span className="body-small !font-bold">{item.name}</span>
               </div>
-              <IconChevronRight className="text-gray-light" />
+              <IconChevronRight className="text-gray-light group-hover:text-white" />
             </div>
           );
         })}
@@ -287,7 +304,7 @@ const HeaderUserProfile = ({ user, address }: any) => {
   return (
     <div className="flex border border-gray rounded-md text-white">
       <HeaderUserBalance user={user} address={address} />
-      <HeaderUserProfileInfo user={user} />
+      <HeaderUserProfileInfo user={user} address={address} />
     </div>
   );
 };
