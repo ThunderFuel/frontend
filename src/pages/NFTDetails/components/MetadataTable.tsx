@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "store";
 import { RightMenuType, setPresetPrice, setRightMenu } from "store/NFTDetailsSlice";
 import "./MetadataTable.css";
+import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
 const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: any }) => {
   const dispatch = useDispatch();
@@ -52,8 +53,16 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                 <Button
                   className="btn-secondary no-bg text-headline-02 border-none rounded-none py-3"
                   onClick={() => {
-                    dispatch(setPresetPrice(getTraitFloor(item) === "-" ? "" : getTraitFloor(item)));
-                    dispatch(setRightMenu(selectedNFT.salable ? RightMenuType.UpdateListing : RightMenuType.ListNFT));
+                    dispatch(
+                      setCheckout({
+                        type: selectedNFT.salable ? CheckoutType.UpdateListing : CheckoutType.ConfirmListing,
+                        currentItemId: selectedNFT.id,
+                        price: getTraitFloor(item),
+                      })
+                    );
+                    dispatch(toggleCheckoutModal());
+                    // dispatch(setPresetPrice(getTraitFloor(item) === "-" ? "" : getTraitFloor(item)));
+                    // dispatch(setRightMenu(selectedNFT.salable ? RightMenuType.UpdateListing : RightMenuType.ListNFT));
                   }}
                 >
                   LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />
