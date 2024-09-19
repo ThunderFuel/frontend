@@ -123,7 +123,7 @@ export const EventDispatchFetchBalances = "ThunderFuelFetchBalances";
 
 const HeaderUserBalance = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
-  const formattedAddress = addressFormat(user.walletAddress ?? "");
+  const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
@@ -145,8 +145,8 @@ const HeaderUserBalance = ({ user, address }: any) => {
     getBalance().then((res) => setbalance(res ? res : 0));
   };
   const fetchBidBalance = () => {
-    if (user.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+    if (user?.walletAddress === undefined) return;
+    getBidBalance({ contractAddress: user?.walletAddress, user: user }).then((res) => {
       setBidBalance(res);
     });
   };
@@ -162,7 +162,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
         <div className="text-headline-01 uppercase">Wallet</div>
         <div className="flex items-center gap-2.5">
           <div className="body-medium">{formattedAddress}</div>
-          <WalletDropdown walletAddress={user.walletAddress} />
+          <WalletDropdown walletAddress={user?.walletAddress} />
         </div>
       </div>
       <div className="flex flex-col border border-gray rounded-lg">
@@ -209,7 +209,7 @@ const HeaderUserProfileInfo = ({ user }: any) => {
   const dispatch = useAppDispatch();
   const { walletDisconnect } = useWallet();
   const navigate = UseNavigate();
-  const formattedAddress = addressFormat(user.walletAddress ?? "");
+  const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const items = [
     {
       icon: IconWallet,
