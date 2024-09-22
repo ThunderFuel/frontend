@@ -5,7 +5,6 @@ import { useOfferContext } from "../OfferContext";
 const MobileSidebarFilter = () => {
   const { onChangeFilterValue, filterValue } = useOfferContext();
   const onChange = (value: any) => {
-    console.log(value);
     onChangeFilterValue(value);
   };
 

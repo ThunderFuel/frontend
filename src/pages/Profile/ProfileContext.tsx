@@ -49,7 +49,6 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
         includes: config.getConfig("userProfileTokens"),
       });
 
-      console.log(response);
       setTokens(response.data.tokens ?? []);
     } catch (e) {
       console.log(e);
