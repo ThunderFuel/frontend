@@ -32,7 +32,7 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 import { useDispatch } from "react-redux";
 import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
-import { useConnectUI } from "@fuels/react";
+import { useConnectUI, useIsConnected } from "@fuels/react";
 import Button from "../../../components/Button";
 import { addressFormat } from "../../../utils";
 import { useWallet } from "../../../hooks/useWallet";
@@ -249,7 +249,7 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
       isLogout: true,
     },
   ];
-  const onClick = (item: any) => {
+  const onClick = async (item: any) => {
     if (item.isFaucet) {
       window.open(`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`, "_blank")?.focus();
 
@@ -257,7 +257,8 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
     }
 
     if (item.isLogout) {
-      walletDisconnect();
+      await walletDisconnect();
+
       dispatch(setIsConnected(false));
       dispatch(setUser({}));
       dispatch(removeAll());
@@ -312,13 +313,14 @@ const HeaderUserProfile = ({ user, address }: any) => {
 const HeaderIconButtonGroup = React.memo(() => {
   const dispatch = useAppDispatch();
   const { connect } = useConnectUI();
+  const fuelIsConnected = useIsConnected().isConnected;
 
   const selectedCarts = useAppSelector((state) => state.cart.items);
-  const { isConnected, user, address } = useAppSelector((state) => state.wallet);
+  const { isConnected, user, address, isConnecting } = useAppSelector((state) => state.wallet);
 
   return (
     <div className="hidden lg:flex gap-2 items-center">
-      {isConnected ? (
+      {isConnected && fuelIsConnected && !isConnecting ? (
         <HeaderUserProfile user={user} address={address} />
       ) : (
         <Button className="btn-header-connect" onClick={connect}>
