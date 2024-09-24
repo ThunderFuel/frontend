@@ -14,6 +14,7 @@ export const walletSlice = createSlice({
     wallet: {} as WalletLocked,
     walletType: "",
     networkId: null as unknown as number,
+    isConnecting: false,
   },
 
   reducers: {
@@ -40,7 +41,6 @@ export const walletSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-
     setWallet: (state, action) => {
       state.wallet = action.payload;
     },
@@ -49,6 +49,9 @@ export const walletSlice = createSlice({
     },
     setNetworkId: (state, action) => {
       state.networkId = action.payload;
+    },
+    setIsConnecting: (state, action) => {
+      state.isConnecting = action.payload;
     },
   },
 });
@@ -64,6 +67,6 @@ export const getSerializeAddress = createSelector(
   (address: any) => address
 );
 
-export const { setWallet, setAddress, setIsConnected, toggleWalletModal, toggleManageFundsModal, setUser, setWalletType, setNetworkId } = walletSlice.actions;
+export const { setWallet, setAddress, setIsConnected, toggleWalletModal, toggleManageFundsModal, setUser, setWalletType, setNetworkId, setIsConnecting } = walletSlice.actions;
 
 export default walletSlice.reducer;
