@@ -40,7 +40,7 @@ const CollectionFooter = () => {
   };
 
   return (
-    <div className="sticky p-3 grid grid-cols-2 lg:flex gap-3 items-center justify-end border-t border-t-gray bg-bg z-[100]" style={{ bottom: "calc(var(--footerHeight))" }}>
+    <div className="sticky p-3 grid grid-cols-2 lg:flex gap-3 items-center justify-end border-t border-t-gray bg-bg z-[49]" style={{ bottom: "calc(var(--footerHeight))" }}>
       <Button className="btn-secondary uppercase" onClick={onClear}>
         Clear {selectedBulkListingItemCount} {selectedBulkListingItemCount > 1 ? "items" : "item"}
         <IconTrash />

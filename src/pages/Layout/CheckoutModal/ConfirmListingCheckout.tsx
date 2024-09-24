@@ -116,7 +116,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const serviceFee = 2.5;
   const [topTrait, setTopTrait] = useState(0);
 
-  const { checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime, currentItemId } = useAppSelector((state) => state.checkout);
+  const { checkoutIsAuction, checkoutAuctionStartingPrice, checkoutExpireTime, currentItemId, checkoutPrice } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
 
   const { handleConfirmListing } = useWallet();
@@ -129,7 +129,7 @@ const ConfirmListingCheckout = ({ show, onClose, updateListing }: { show: boolea
   const [stepData, setStepData] = useState<any>([]);
 
   const [isOnConfirmStep, setIsOnConfirmStep] = useState(false);
-  const [price, setprice] = useState<any>("");
+  const [price, setprice] = useState<any>(checkoutPrice ?? "");
 
   const calculateReceivingAmount = (price: any) => {
     return price - (price * serviceFee) / 100 - (price * selectedNFT.collection?.royaltyFee) / 100;

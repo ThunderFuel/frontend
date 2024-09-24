@@ -3,8 +3,9 @@ import clsx from "clsx";
 import CollectionItem from "./CollectionItem";
 import { DisplayType, useCollectionListContext } from "../../CollectionListContext";
 import NotFound from "../../../NotFound";
+import CollectionGridLoading from "./CollectionGridLoading";
 
-const CollectionGrid = ({ children }: any) => {
+const CollectionGrid = ({ children, isLoading }: any) => {
   const { displayType, collectionItems, options } = useCollectionListContext();
 
   const displayClass = useMemo(() => {
@@ -16,6 +17,10 @@ const CollectionGrid = ({ children }: any) => {
 
     return "lg:grid-cols-5";
   }, [displayType]);
+
+  if (isLoading && !collectionItems.length) {
+    return <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:pl-5")}>{children}</div>;
+  }
 
   return (
     <>

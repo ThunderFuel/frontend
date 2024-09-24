@@ -34,7 +34,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
         <EthereumPrice className="text-white" price={balance} />
       </div>
       <div className="flex flex-col w-full gap-y-2.5 p-5">
-        <BSButton target="_blank" rel="noreferrer" as="a" href={`${FUEL_FAUCET_URL}/?address=${user?.contractAddress ?? address}`}>
+        <BSButton target="_blank" rel="noreferrer" as="a" href={`${FUEL_FAUCET_URL}/?address=${user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`}>
           ADD FUNDS
         </BSButton>
         <Button className="btn-secondary" onClick={onClose}>

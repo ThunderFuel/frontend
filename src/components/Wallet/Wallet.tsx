@@ -214,7 +214,12 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
           </div>
         </div>
         <div className="grid p-[15px] grid-cols-2 gap-2.5 border-t border-gray">
-          <a target="_blank" rel="noreferrer" href={`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}`} className="btn btn-primary w-full">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`}
+            className="btn btn-primary w-full"
+          >
             GET TEST ETH <IconFaucet />
           </a>
           <Button

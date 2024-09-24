@@ -25,7 +25,7 @@ const CheckboxList = ({ filterData, name, onChange, value }: any) => {
     const isChecked = Object.values(value ?? {}).includes(item.value);
 
     return (
-      <div key={i} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", isChecked ? "bg-gray" : "")}>
+      <div key={`${item.text}_${i}`} className={clsx("hover:bg-bg-light border border-gray rounded-md p-2.5 text-white", isChecked ? "bg-gray" : "")}>
         <Checkbox checked={isChecked} value={item.value} name={name} onClick={() => onSelect(item.value)}>
           <span className="body-medium">{item.text}</span>
         </Checkbox>

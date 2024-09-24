@@ -3,8 +3,11 @@ import { IconArrowRight } from "icons";
 import Button from "components/Button";
 import { AssetConnectAWalletScreen1 } from "assets";
 import "./connectwalletscreen.css";
+import { useConnectUI } from "@fuels/react";
 
 const ConnectWalletScreen = () => {
+  const { connect } = useConnectUI();
+
   return (
     <div className="flex-center flex-1">
       <div className="flex flex-col lg:flex-row w-full justify-between pt-[60px] px-4 lg:border-x lg:border-gray lg:pl-10 pb-10 lg:mx-40">
@@ -13,7 +16,7 @@ const ConnectWalletScreen = () => {
             <h2 className="text-h2 text-white">Connect a wallet</h2>
             <p className="body-medium text-gray-light break-words">Looks like you`re not connected to a wallet. In order to use Thunder marketplace you should sign in with your wallet.</p>
           </div>
-          <Button className="btn btn-primary w-1/2 lg:w-full">
+          <Button className="btn btn-primary w-1/2 lg:w-full" onClick={connect}>
             Connect <IconArrowRight />
           </Button>
         </div>

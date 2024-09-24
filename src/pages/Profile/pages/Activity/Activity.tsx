@@ -69,7 +69,6 @@ const Activity = () => {
     }
   };
   const onChangeFilterValue = (params: any) => {
-    console.log("sjadjasjdajs", params);
     setCurrentFilter(params);
     fetchActivity(params);
   };

@@ -53,7 +53,7 @@ const HotDrops = () => {
           <div className="w-full min-h-[440px] bg-bg-light" />
         </div>
       ) : (
-        <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="" defaultActiveIndex={0}>
+        <Carousel pause={"hover"} prevIcon={<IconChevronLeft />} prevLabel="" nextIcon={<IconChevronRight />} nextLabel="">
           {items.map((item, k) => {
             return (
               <Carousel.Item key={k}>

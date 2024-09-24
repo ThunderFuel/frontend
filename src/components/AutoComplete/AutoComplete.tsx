@@ -1,6 +1,7 @@
 import React from "react";
 import InputSearch from "../InputSearch";
 import clsx from "clsx";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 const Group = ({ children, title }: { title: any; children: React.ReactNode }) => {
   return (
@@ -29,10 +30,11 @@ const Item = ({ item, className, ...etc }: { className?: string; item: any; [key
 };
 
 const AutoCompleteRoot = (props: any, ref: any) => {
+  const isMobile = useIsMobile();
   const { children, className, show, ...etc } = props;
   const [customStyle, setCustomStyle] = React.useState({});
   React.useEffect(() => {
-    if (ref.current) {
+    if (ref.current && isMobile) {
       const { offsetLeft } = ref.current;
       setCustomStyle({
         width: `${window.innerWidth}px`,

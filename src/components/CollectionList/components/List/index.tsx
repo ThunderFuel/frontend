@@ -7,10 +7,6 @@ import { useCollectionListContext } from "../../CollectionListContext";
 import SelectedFilter from "../SelectedFilter";
 import CollectionGridLoading from "./CollectionGridLoading";
 import CollectionProfileFooter from "./CollectionProfileFooter";
-import Button from "components/Button";
-import { IconCircleRemoveWhite } from "icons";
-import config from "../../../../config";
-import Config from "../../../Config";
 
 const Index = () => {
   const { isDisplayTypeList, pagination, isLoading, collectionItems, options, onCancelAllListings } = useCollectionListContext();
@@ -33,7 +29,7 @@ const Index = () => {
         <SelectedFilter />
 
         <div className={clsx("lg:flex-1", isDisplayTypeList ? (options?.isUserPage ? "-mr-5" : "lg:-mr-10") : "")}>
-          {isDisplayTypeList ? <CollectionTable /> : <CollectionGrid>{isLoading ? <CollectionGridLoading /> : null}</CollectionGrid>}
+          {isDisplayTypeList ? <CollectionTable /> : <CollectionGrid isLoading={isLoading}>{isLoading ? <CollectionGridLoading /> : null}</CollectionGrid>}
         </div>
       </div>
       {options?.hideFooter ? null : options?.isProfile ? <CollectionProfileFooter /> : <CollectionFooter />}

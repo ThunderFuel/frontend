@@ -1,24 +1,28 @@
 import React from "react";
-import { IconThunder2, IconThunderSmall } from "../../icons";
+import { IconThunder2 } from "../../icons";
+import { DISCORD_URL, MEDIUM_URL, TWITTER_URL } from "../../global-constants";
+import { getAbsolutePath } from "../../hooks/useNavigate";
+import { PATHS } from "../../router/config/paths";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const links = [
     {
       name: "marketplace",
       children: [
-        { name: "Explore", link: "#" },
-        { name: "Collections", link: "#" },
-        { name: "Drops", link: "#" },
+        { name: "Explore", link: getAbsolutePath(PATHS.MARKETPLACE) },
+        { name: "Collections", link: getAbsolutePath(PATHS.RANKINGS) },
+        { name: "Drops", link: getAbsolutePath(PATHS.DROPS) },
       ],
     },
     {
       name: "account",
       children: [
-        { name: "My Profile", link: "#" },
-        { name: "Offers", link: "#" },
-        { name: "Like", link: "#" },
-        { name: "Activity", link: "#" },
-        { name: "Settings", link: "#" },
+        { name: "My Profile", link: getAbsolutePath(PATHS.PROFILE) },
+        { name: "Offers", link: getAbsolutePath(PATHS.PROFILE_OFFER) },
+        { name: "Like", link: getAbsolutePath(PATHS.PROFILE_LIKED) },
+        { name: "Activity", link: getAbsolutePath(PATHS.PROFILE_ACTIVITY) },
+        { name: "Settings", link: getAbsolutePath(PATHS.SETTINGS_PROFILE) },
       ],
     },
     {
@@ -32,9 +36,9 @@ const Footer = () => {
     {
       name: "socials",
       children: [
-        { name: "Discord", link: "#" },
-        { name: "X(Twitter)", link: "#" },
-        { name: "Medium", link: "#" },
+        { name: "Discord", link: DISCORD_URL },
+        { name: "X(Twitter)", link: TWITTER_URL },
+        { name: "Medium", link: MEDIUM_URL },
       ],
     },
   ];
@@ -53,9 +57,9 @@ const Footer = () => {
               <div className="flex flex-col gap-3 mt-7">
                 {item.children.map((child) => {
                   return (
-                    <a href={child.link} key={`${item.name}_${child.name}`} className="body-medium">
+                    <Link to={child.link} key={`${item.name}_${child.name}`} className="body-medium">
                       {child.name}
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
