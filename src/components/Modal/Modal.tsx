@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
-import { IconClose } from "icons";
+import { IconAccept, IconClose, IconDone, IconTransfer } from "icons";
 import "./Modal.css";
 import { useClickOutside } from "hooks/useClickOutside";
 
@@ -58,4 +58,46 @@ const Modal = ({ className, footer, children, title, show, ...etc }: ModalProps)
   );
 };
 
-export default Modal;
+const TabItem = ({ children }: any) => {
+  return children;
+};
+
+const Tabs = ({ activeItem, children }: any) => {
+  const [activeTab, setActiveTab] = useState(activeItem ?? 0);
+  const content = React.useMemo(() => {
+    return children.find((child: any, index: any) => index === activeTab);
+  }, [activeTab]);
+  const headers = React.useMemo(() => {
+    return children.map((child: any, index: any) => ({
+      index,
+      icon: child.props.headerIcon,
+      text: child.props.headerText,
+    }));
+  }, [children]);
+
+  return (
+    <div>
+      <div className="sticky top-0 flex w-full justify-between border-b border-gray text-h6 text-gray-light">
+        {headers.map((header: any, index: number) => {
+          const Icon = header.icon;
+
+          return (
+            <>
+              <span key={index} className={clsx("flex items-center gap-2.5 w-full p-5 border-b border-gray", activeTab === header.index ? "text-white bg-bg-light border-white" : "")}>
+                <Icon />
+                {header.text}
+              </span>
+              <div className="flex-shrink-0 w-[1px] bg-gray" />
+            </>
+          );
+        })}
+      </div>
+      {content.props.children}
+    </div>
+  );
+};
+
+export default Object.assign(Modal, {
+  Tabs,
+  TabItem,
+});
