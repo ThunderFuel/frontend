@@ -8,7 +8,7 @@ const FORM_URL = "https://forms.gle/d9sYqvXaF2PoHNvc7";
 const CREATOR_IMAGE = [AssetCreatorCreator1, AssetCreatorCreator2, AssetCreatorCreator3, AssetCreatorCreator4];
 const Creator = () => {
   return (
-    <div className="container-fluid flex flex-col gap-10 mt-10 lg:mt-28">
+    <div className="container-fluid flex flex-col gap-10 mt-2.5 lg:mt-10">
       <div className="flex flex-col lg:flex-row justify-between items-center gap-5">
         <div className="flex flex-col gap-5 text-white">
           <h2 className="text-h2">Are you a creator?</h2>

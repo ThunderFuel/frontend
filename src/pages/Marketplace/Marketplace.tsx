@@ -183,7 +183,7 @@ const Marketplace = () => {
   }, [id]);
 
   return (
-    <div className="flex flex-col gap-20 pb-20 lg:pb-16">
+    <div className="flex flex-col gap-20 pb-16">
       {/*<HotDrops />*/}
       <HotDropsV2 />
       <MarketplaceProvider>
