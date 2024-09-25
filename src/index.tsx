@@ -128,7 +128,7 @@ ReactDOM.render(
             theme="dark"
             fuelConfig={{
               connectors: defaultConnectors({
-                devMode: true,
+                // devMode: true,
                 wcProjectId: WALLET_CONNECT_PROJECT_ID,
                 ethWagmiConfig: wagmiConfig,
               }),

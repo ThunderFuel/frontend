@@ -6,6 +6,7 @@ import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect }
 import { useEffect } from "react";
 import userService from "api/user/user.service";
 import { toB256 } from "fuels";
+import { isObjectEmpty } from "utils";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
@@ -43,9 +44,9 @@ export const useWallet = () => {
       setGatewayType(FUEL_TYPE.FUEL);
 
       dispatch(setWallet(wallet));
-    } else if (!isConnected) {
-      // dispatch(setIsConnected(false));
-      // dispatch(setUser({}));
+    } else if (!isConnected && !isObjectEmpty(user)) {
+      dispatch(setIsConnected(false));
+      dispatch(setUser({}));
     }
   }, [isConnected, account, wallet, user]);
 
