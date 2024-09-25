@@ -1,19 +1,20 @@
 import { useAppDispatch, useAppSelector } from "store";
-import { getSerializeAddress, setAddress, setIsConnected, setUser, setWallet } from "../store/walletSlice";
+import { getSerializeAddress, setAddress, setIsConnected, setIsConnecting, setUser, setWallet } from "../store/walletSlice";
 import { useSelector } from "react-redux";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect } from "@fuels/react";
 import { useEffect } from "react";
 import userService from "api/user/user.service";
 import { toB256 } from "fuels";
+import { isObjectEmpty } from "utils";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
-  const { user } = useAppSelector((state) => state.wallet);
+  const { user, isConnecting } = useAppSelector((state) => state.wallet);
   const { setGatewayType, selectedGateway, clearGatewayType } = useFuelExtension();
-  const { isConnected, refetch: refetchConnected } = useIsConnected();
+  const { isConnected, refetch: refetchConnected, isFetching } = useIsConnected();
   const { account } = useAccount();
   const { wallet } = useFuelWallet(account);
   const { disconnect } = useDisconnect();
@@ -26,11 +27,16 @@ export const useWallet = () => {
     const user = await userService.userCreate({ walletAddress: account });
 
     dispatch(setUser(user.data));
+    dispatch(setIsConnecting(false));
   }
 
   useEffect(() => {
-    if (isConnected && wallet && account && user.walletAddress === undefined) {
+    if (isConnecting || isFetching) return;
+
+    if (isConnected && wallet && account && user?.walletAddress === undefined) {
+      dispatch(setIsConnecting(true));
       dispatch(setIsConnected(true));
+
       dispatch(setAddress(toB256(account as any) ?? ""));
 
       _connect();
@@ -38,9 +44,9 @@ export const useWallet = () => {
       setGatewayType(FUEL_TYPE.FUEL);
 
       dispatch(setWallet(wallet));
-    } else if (!isConnected) {
-      // dispatch(setIsConnected(false));
-      // dispatch(setUser({}));
+    } else if (!isConnected && !isObjectEmpty(user)) {
+      dispatch(setIsConnected(false));
+      dispatch(setUser({}));
     }
   }, [isConnected, account, wallet, user]);
 
