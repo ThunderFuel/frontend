@@ -30,6 +30,7 @@ export const contracts = {
 export const DISCORD_URL = "https://discord.com/invite/thundermarket";
 export const TWITTER_URL = "https://twitter.com/ThunderbyFuel";
 export const MEDIUM_URL = "https://medium.com/@ThunderbyFuel/";
+export const GUTHUB_URL = "https://thunder-nft-marketplace.gitbook.io/thunder-nft-marketplace";
 
 export const lineaChainId = 59144;
 export const goerliWethAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";

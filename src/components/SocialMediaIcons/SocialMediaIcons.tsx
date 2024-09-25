@@ -1,6 +1,6 @@
 import React from "react";
 import { IconDiscord, IconSocial3Dots, IconX, IconGithub } from "icons";
-import { DISCORD_URL, MEDIUM_URL, TWITTER_URL } from "global-constants";
+import { DISCORD_URL, GUTHUB_URL, MEDIUM_URL, TWITTER_URL } from "global-constants";
 
 const SocialMediaIcons = () => {
   return (
@@ -11,7 +11,7 @@ const SocialMediaIcons = () => {
       <a href={TWITTER_URL} target="_blank" rel="noreferrer" className="hover:text-white">
         <IconX />
       </a>
-      <a href="#" target="_blank" rel="noreferrer" className="hover:text-white">
+      <a href={GUTHUB_URL} target="_blank" rel="noreferrer" className="hover:text-white">
         <IconGithub />
       </a>
       <a href={DISCORD_URL} target="_blank" rel="noreferrer" className="hover:text-white">
