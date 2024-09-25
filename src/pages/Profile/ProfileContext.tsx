@@ -15,6 +15,8 @@ interface IProfileContext {
   onFollow: ({ isFollow, followUser }: { isFollow: boolean; followUser: IUserResponse }) => void;
   options?: any;
   tokens?: any;
+  showBulkListing: boolean;
+  setShowBulkListing: any;
 }
 
 export const ProfileContext = createContext<IProfileContext>({} as any);
@@ -23,6 +25,7 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
   const [userInfo, setUserInfo] = React.useState<IUserResponse>({ tokens: [], likedTokens: [] } as any);
   const [tokens, setTokens] = React.useState<any>([]);
   const [socialActiveTab, setSocialActiveTab] = React.useState<any>(null);
+  const [showBulkListing, setShowBulkListing] = React.useState<any>(null);
 
   const fetchUserProfile = async () => {
     setUserInfo({ tokens: [], likedTokens: [] } as any);
@@ -94,6 +97,8 @@ const ProfileProvider = ({ userId, options, children }: { userId: any; options: 
     onFollow,
     options,
     tokens,
+    showBulkListing,
+    setShowBulkListing,
   };
 
   return !!userInfo && <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
