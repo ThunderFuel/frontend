@@ -10,6 +10,7 @@ import ModalBulkListing from "./Modal/ModalBulkListing";
 
 const Profile = () => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
+
   if (!isConnected) {
     return <ConnectWalletScreen />;
   }
