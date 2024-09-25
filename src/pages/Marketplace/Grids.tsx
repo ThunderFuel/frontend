@@ -9,7 +9,7 @@ const GridItem = ({ children, className }: any) => {
 };
 const Grids = () => {
   return (
-    <div className="container-fluid flex flex-col gap-5">
+    <div className="container-fluid flex flex-col gap-5 mt-2.5 lg:mt-10">
       <div className="flex flex-col lg:flex-row gap-5">
         <GridItem className="flex-1 lg:max-w-[400px] h-[400px] pb-0">
           <div className="flex flex-col text-white gap-7">

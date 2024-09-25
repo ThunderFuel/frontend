@@ -44,7 +44,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className="container-fluid flex flex-col lg:flex-row justify-between gap-10">
+    <div className="container-fluid flex flex-col lg:flex-row justify-between gap-10 mt-2.5 lg:mt-10">
       <div className="flex flex-col gap-5">
         <IconThunder2 className="w-[75px] text-white" />
         <span className="body-medium text-gray-light">Thunder is an NFT marketplace on Fuel.</span>
