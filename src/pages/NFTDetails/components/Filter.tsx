@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IconBid, IconCart, IconListed, IconOffer, IconToken, IconTransfer } from "icons";
+import { IconAccept, IconBid, IconCart, IconListed, IconListingCancel, IconOffer, IconOfferCancel, IconToken, IconTransfer } from "icons";
 import Tooltip from "components/Tooltip";
 
 const filterItemsData = [
@@ -9,6 +9,9 @@ const filterItemsData = [
   { icon: IconTransfer, text: "Transfers", type: 3 },
   { icon: IconListed, text: "Listings", type: 4 },
   { icon: IconBid, text: "Bids", type: 5 },
+  { icon: IconAccept, text: "Accept Offer", type: 6 },
+  { icon: IconListingCancel, text: "Cancel Listing", type: 7 },
+  { icon: IconOfferCancel, text: "Cancel Offer", type: 8 },
 ];
 
 interface OtherProps {
