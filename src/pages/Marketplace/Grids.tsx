@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import { IconArrowRight, IconDiscord, IconGithub, IconSocial3Dots, IconX } from "../../icons";
 import clsx from "clsx";
 import { openInNewTab } from "../../utils";
+import { HELP_CENTER_URL } from "../../global-constants";
 
 const GridItem = ({ children, className }: any) => {
   return <div className={clsx("flex flex-col bg-bg-light border border-bg rounded-md p-5", className)}>{children}</div>;
@@ -74,7 +75,7 @@ const Grids = () => {
               <Button
                 className="btn-secondary"
                 onClick={() => {
-                  openInNewTab("https://thunder-nft-marketplace.gitbook.io/thunder-nft-marketplace");
+                  openInNewTab(HELP_CENTER_URL);
                 }}
               >
                 HELP CENTER <IconArrowRight />
@@ -82,7 +83,7 @@ const Grids = () => {
               <Button
                 className="btn-secondary mt-2"
                 onClick={() => {
-                  openInNewTab("https://discord.com/invite/thundermarket");
+                  openInNewTab(CHAT_SUPPORT_URL);
                 }}
               >
                 CHAT SUPPORT <IconArrowRight />
