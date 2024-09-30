@@ -60,28 +60,24 @@ const MobileCollection = ({ item, onSelect, prices, onUpdatePrice }: any) => {
 const MobileTableRow = ({ item }: any) => {
   return (
     <>
-      <div className="grid grid-cols-5 px-5 py-2.5 border-b border-gray text-gray-light">
-        <div className="text-headline-01 uppercase">floor</div>
-        <div className="text-headline-01 uppercase">top trait</div>
-        <div className="text-headline-01 uppercase">listed at</div>
-        <div className="text-headline-01 uppercase">loyalty</div>
-        <div className="text-headline-01 uppercase">proceed</div>
+      <div className="grid grid-cols-4 px-5 py-2.5 border-b border-gray text-gray-light">
+        <div className="text-headline-01 uppercase">floor prıce</div>
+        <div className="text-headline-01 uppercase text-right">top trait</div>
+        <div className="text-headline-01 uppercase text-right">loyalty</div>
+        <div className="text-headline-01 uppercase text-right">proceed</div>
       </div>
-      <div className="grid grid-cols-5 px-5 py-2.5 text-white">
+      <div className="grid grid-cols-4 px-5 py-2.5 text-white">
         <div className="text-headline-01 uppercase">
           <EthereumPrice price={item.floor} />
         </div>
         <div className="text-headline-01 uppercase">
-          <EthereumPrice price={item.topTrait} />
+          <EthereumPrice className="justify-end" price={item.topTrait} />
         </div>
         <div className="text-headline-01 uppercase">
-          <EthereumPrice price={item.price} />
+          <h5 className="text-h6 text-right">{item?.royalty}%</h5>
         </div>
-        <div className="text-headline-01 uppercase">
-          <h5 className="text-h6"> {item?.royalty}%</h5>
-        </div>
-        <div className="text-headline-01 uppercase">
-          <EthereumPrice className={clsx(item?.proceedPrice && "text-green")} price={item?.proceedPrice} />
+        <div className="text-headline-01 uppercase text-right">
+          <EthereumPrice className={clsx("justify-end", item?.proceedPrice && "text-green")} price={item?.proceedPrice} />
         </div>
       </div>
     </>
@@ -92,7 +88,7 @@ const MobileTable = ({ items, onSelect, onUpdatePrices, prices }: any) => {
     <div className="flex flex-col gap-4">
       {items.map((item: any, index: number) => {
         return (
-          <div key={index} className="flex flex-col border-y border-gray">
+          <div key={index} className="flex flex-col border border-gray rounded-2xl">
             <div className="border-b border-gray">
               <MobileCollection item={item} onSelect={onSelect} prices={prices} onUpdatePrices={onUpdatePrices} />
             </div>
