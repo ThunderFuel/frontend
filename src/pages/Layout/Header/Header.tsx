@@ -111,8 +111,10 @@ const BaseDropdown = ({ children, container, className }: any) => {
   };
 
   return (
-    <div className="relative" ref={containerRef} onClick={onClick}>
-      <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", className, show ? "bg-gray" : "")}>{children}</div>
+    <div className="relative" ref={containerRef}>
+      <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", className, show ? "bg-gray" : "")} onClick={onClick}>
+        {children}
+      </div>
       {show ? <div className="absolute top-full right-0 pt-2">{container}</div> : null}
     </div>
   );
@@ -124,6 +126,7 @@ const BaseDropdownContainer = ({ className, children }: any) => {
 export const EventDispatchFetchBalances = "ThunderFuelFetchBalances";
 
 const HeaderUserBalance = ({ user, address }: any) => {
+  const { walletDisconnect } = useWallet();
   const dispatch = useAppDispatch();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
@@ -158,13 +161,23 @@ const HeaderUserBalance = ({ user, address }: any) => {
     fetchBidBalance();
   }, []);
 
+  const onLogout = async () => {
+    await walletDisconnect();
+
+    dispatch(setIsConnected(false));
+    dispatch(setUser({}));
+    dispatch(removeAll());
+    dispatch(removeBulkItems());
+    useLocalStorage().removeItem("connected_account");
+  };
+
   const container = (
     <BaseDropdownContainer className="w-full lg:w-[432px]">
       <div className="flex items-center justify-between text-gray-light">
         <div className="text-headline-01 uppercase">Wallet</div>
         <div className="flex items-center gap-2.5">
           <div className="body-medium">{formattedAddress}</div>
-          <WalletDropdown walletAddress={user?.walletAddress} />
+          <WalletDropdown walletAddress={user?.walletAddress} isLogout={true} onLogout={onLogout} />
         </div>
       </div>
       <div className="flex flex-col border border-gray rounded-lg">

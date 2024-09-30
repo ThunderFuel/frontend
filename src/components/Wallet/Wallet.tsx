@@ -23,7 +23,7 @@ function clipboardCopyWrapper(walletAddress: any) {
   useToast().success("Copied to clipboard.");
 }
 
-export const WalletDropdown = ({ walletAddress, onLogout }: any) => {
+export const WalletDropdown = ({ walletAddress, isLogout, onLogout }: any) => {
   const [show, setShow] = useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const items = [
@@ -44,6 +44,13 @@ export const WalletDropdown = ({ walletAddress, onLogout }: any) => {
       },
     },
   ];
+  if (isLogout) {
+    items.push({
+      icon: IconLogout,
+      text: "Logout",
+      onClick: onLogout,
+    });
+  }
   useClickOutside(containerRef, () => {
     setShow(false);
   });

@@ -3,6 +3,8 @@ import { AssetGridBackedByFuel } from "assets";
 import Button from "../../components/Button";
 import { IconArrowRight, IconDiscord, IconGithub, IconSocial3Dots, IconX } from "../../icons";
 import clsx from "clsx";
+import { openInNewTab } from "../../utils";
+import { CHAT_SUPPORT_URL, HELP_CENTER_URL } from "../../global-constants";
 
 const GridItem = ({ children, className }: any) => {
   return <div className={clsx("flex flex-col bg-bg-light border border-bg rounded-md p-5", className)}>{children}</div>;
@@ -65,6 +67,30 @@ const Grids = () => {
             </Button>
           </GridItem>
         </div>
+        <GridItem className="flex-1 flex-1 lg:max-w-[400px] min-h-[400px] lg:min-h-0 bg-get-help-bg bg-right-bottom bg-cover bg-no-repeat">
+          <div className="flex flex-col text-white gap-7">
+            <h2 className="text-h2">Get help</h2>
+            <div className="body-large">Got questions or just wanna chat? We&apos;re always here to help you out!</div>
+            <div className="">
+              <Button
+                className="btn-secondary"
+                onClick={() => {
+                  openInNewTab(HELP_CENTER_URL);
+                }}
+              >
+                HELP CENTER <IconArrowRight />
+              </Button>
+              <Button
+                className="btn-secondary mt-2"
+                onClick={() => {
+                  openInNewTab(CHAT_SUPPORT_URL);
+                }}
+              >
+                CHAT SUPPORT <IconArrowRight />
+              </Button>
+            </div>
+          </div>
+        </GridItem>
       </div>
     </div>
   );

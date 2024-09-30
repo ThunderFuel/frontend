@@ -6,8 +6,10 @@ import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
 import { removeAll } from "store/bulkListingSlice";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
+import { useProfile } from "../../../../pages/Profile/ProfileContext";
 
 const CollectionFooter = () => {
+  const { setShowBulkListing } = useProfile();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const bulkListingItems = useAppSelector((state) => state.bulkListing.items);
@@ -35,7 +37,8 @@ const CollectionFooter = () => {
       // dispatch(setRightMenu(rightMenuType));
       // navigate(PATHS.NFT_DETAILS, { nftId: id });
     } else {
-      navigate(PATHS.BULK_LISTING);
+      setShowBulkListing(true);
+      // navigate(PATHS.BULK_LISTING);
     }
   };
 

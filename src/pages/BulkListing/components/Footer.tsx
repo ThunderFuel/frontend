@@ -1,16 +1,15 @@
 import React from "react";
 import EthereumPrice from "components/EthereumPrice";
 import Button from "components/Button";
-import { IconCircleRemoveWhite, IconInfo, IconTag } from "icons";
+import { IconCircleRemoveWhite, IconTag } from "icons";
 import dayjs from "dayjs";
 import useNavigate from "hooks/useNavigate";
 import { PATHS } from "router/config/paths";
-import SelectExpiredDate from "./SelectExpiredDate";
 import { useAppDispatch } from "store";
 import { CheckoutType, removeBulkItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { removeAll } from "store/bulkListingSlice";
 
-const Footer = ({ items, prices }: any) => {
+const Footer = ({ items, prices, onClose, onTriggerCheckout }: any) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
@@ -50,7 +49,11 @@ const Footer = ({ items, prices }: any) => {
         },
       })
     );
+    /*
     dispatch(toggleCheckoutModal());
+    */
+    console.log("onTriggerCheckout");
+    onTriggerCheckout(1);
   };
 
   const getExpiredDate = React.useMemo(() => {
@@ -62,37 +65,27 @@ const Footer = ({ items, prices }: any) => {
   }, [bulkItems]);
 
   return (
-    <footer className="sticky bottom-14 lg:bottom-0 border-t border-gray flex flex-col bg-bg">
-      <div className="p-4 lg:p-5">
-        <div className="flex justify-between text-gray-light items-center">
-          <div className="flex flex-col gap-2  w-full lg:w-1/2">
-            <div className="flex items-center justify-between">
-              <h6 className="text-h6">Service Fee</h6>
-              <h6 className="text-h6 text-white mr-2.5">2.5%</h6>
-            </div>
-            <div className="flex items-center justify-between">
-              <h6 className="text-h6">You’ll Receive</h6>
-              <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 lg:flex gap-3 lg:gap-4 justify-end">
-            <Button
-              className="btn-secondary"
-              onClick={() => {
-                navigate(PATHS.PROFILE);
-              }}
-            >
-              CANCEL
-              <IconCircleRemoveWhite />
-            </Button>
-            <Button onClick={onUpdateBulkListing} disabled={!bulkItems.length}>
-              {`List${hasUpdate ? "/Update" : ""}`} {bulkItems.length} {bulkItems.length > 1 ? "ITEMS" : "ITEM"}
-              <IconTag />
-            </Button>
-          </div>
+    <div className="flex flex-col">
+      <div className="flex justify-between text-gray-light px-5 pb-5">
+        <div className="flex flex-col">
+          <h6 className="body-medium">Service Fee</h6>
+          <h6 className="body-medium">You’ll Receive</h6>
+        </div>
+        <div className="flex flex-col items-end">
+          <h6 className="body-medium text-white">2.5%</h6>
+          <EthereumPrice price={getProceedPrice} className="text-green" priceClassName="text-h6" />
         </div>
       </div>
-    </footer>
+      <div className="grid grid-cols-2 p-5 gap-2.5 border-t border-gray">
+        <Button className="btn-secondary w-full" onClick={onClose}>
+          CANCEL
+        </Button>
+        <Button className="w-full" onClick={onUpdateBulkListing} disabled={!bulkItems.length}>
+          CONFIRM LISTING
+          <IconTag />
+        </Button>
+      </div>
+    </div>
   );
 };
 

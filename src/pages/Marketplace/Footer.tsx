@@ -1,6 +1,6 @@
 import React from "react";
 import { IconThunder2 } from "../../icons";
-import { DISCORD_URL, MEDIUM_URL, TWITTER_URL } from "../../global-constants";
+import { CHAT_SUPPORT_URL, DISCORD_URL, HELP_CENTER_URL, MEDIUM_URL, TWITTER_URL } from "../../global-constants";
 import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 import { Link } from "react-router-dom";
@@ -28,8 +28,8 @@ const Footer = () => {
     {
       name: "resources",
       children: [
-        { name: "About", link: "#" },
-        { name: "Docs", link: "#" },
+        { name: "Help Center", link: HELP_CENTER_URL },
+        { name: "Chat Support", link: CHAT_SUPPORT_URL },
         { name: "Github", link: "#" },
       ],
     },
