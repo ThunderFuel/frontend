@@ -6,6 +6,7 @@ import Tab from "./components/Tab";
 import ProfileProvider from "./ProfileContext";
 import { useAppSelector } from "store";
 import ConnectWalletScreen from "components/ConnectWalletScreen";
+import ModalBulkListing from "./Modal/ModalBulkListing";
 
 const Profile = () => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
@@ -23,6 +24,7 @@ const Profile = () => {
           <Outlet />
         </div>
         <ModalSocial />
+        <ModalBulkListing />
       </div>
     </ProfileProvider>
   );

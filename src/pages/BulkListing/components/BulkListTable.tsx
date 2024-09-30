@@ -11,7 +11,7 @@ import { useIsMobile } from "../../../hooks/useIsMobile";
 
 const Collection = ({ item }: any) => {
   return (
-    <div className="p-4 flex items-center gap-5">
+    <div className="flex items-center gap-5">
       <div className="w-14 h-14 overflow-hidden rounded-md">
         <Img src={item?.image} className="w-full" />
       </div>
@@ -103,7 +103,16 @@ const MobileTable = ({ items, onSelect, onUpdatePrices, prices }: any) => {
     </div>
   );
 };
-const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
+
+const ColumnTitle = ({ title, children }: any) => {
+  return (
+    <div className={"flex flex-col items-end gap-1"}>
+      <div className="text-headline-01 text-gray-light uppercase">{title}</div>
+      {children}
+    </div>
+  );
+};
+const BulkListTable = ({ items, prices, onUpdatePrice, theadClassName }: any) => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const onSelect = (selectedItem: any) => {
@@ -141,41 +150,45 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     {
       key: "floor",
       text: "floor prıce",
-      width: "10%",
+      width: "13%",
       align: "flex-end",
-      render: (item) => <EthereumPrice isNull={true} price={item.floor} />,
+      render: (item) => (
+        <ColumnTitle title={"floor prıce"}>
+          <EthereumPrice price={item.floor} />
+        </ColumnTitle>
+      ),
     },
     {
       key: "topTrait",
       text: "top traıt",
-      width: "10%",
+      width: "13%",
       align: "flex-end",
-      render: (item) => <EthereumPrice isNull={true} price={item.topTrait} />,
-    },
-    {
-      key: "listedAt",
-      text: "lısted at",
-      width: "10%",
-      align: "flex-end",
-      render: (item) => <EthereumPrice isNull={true} price={item.price} />,
+      render: (item) => (
+        <ColumnTitle title={"top trait"}>
+          <EthereumPrice price={item.topTrait} />
+        </ColumnTitle>
+      ),
     },
     {
       key: "royalty",
       text: "royalty",
-      width: "10%",
+      width: "14%",
       align: "flex-end",
       render: (item) => (
-        <div className="flex flex-col items-end">
-          <h5 className="text-h5 font-spaceGrotesk text-white"> {item?.royalty}%</h5>
-          <EthereumPrice priceClassName="text-bodySm font-spaceGrotesk text-gray-light" iconClassName="w-4 h-4" price={item?.royaltyPrice} />
-        </div>
+        <ColumnTitle title="LOYALTY">
+          <h5 className="text-h5 text-white"> {item?.royalty}%</h5>
+        </ColumnTitle>
       ),
     },
     {
       key: "proceed",
       text: "proceed",
       align: "flex-end",
-      render: (item) => <EthereumPrice className={clsx(item?.proceedPrice && "text-green")} price={item?.proceedPrice} />,
+      render: (item) => (
+        <ColumnTitle title="pROCEED">
+          <EthereumPrice className={clsx(item?.proceedPrice && "text-green")} price={item?.proceedPrice} />
+        </ColumnTitle>
+      ),
     },
     {
       key: "price",
@@ -198,7 +211,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice }: any) => {
     },
   ];
 
-  return <Table containerFluidClassName={"-mx-5 !w-auto"} headers={headers} items={items} />;
+  return <Table containerFluidClassName={"-mx-5 !w-auto"} headers={headers} items={items} theadClassName={theadClassName} />;
 };
 
 export default BulkListTable;
