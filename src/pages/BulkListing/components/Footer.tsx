@@ -9,7 +9,7 @@ import { useAppDispatch } from "store";
 import { CheckoutType, removeBulkItems, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 import { removeAll } from "store/bulkListingSlice";
 
-const Footer = ({ items, prices, onClose }: any) => {
+const Footer = ({ items, prices, onClose, onTriggerCheckout }: any) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [expiredDateValue, setExpiredDateValue] = React.useState<any>(null);
@@ -49,7 +49,11 @@ const Footer = ({ items, prices, onClose }: any) => {
         },
       })
     );
+    /*
     dispatch(toggleCheckoutModal());
+    */
+    console.log("onTriggerCheckout");
+    onTriggerCheckout(1);
   };
 
   const getExpiredDate = React.useMemo(() => {

@@ -63,10 +63,10 @@ const TabItem = ({ children }: any) => {
 };
 
 const Tabs = ({ activeItem, children }: any) => {
-  const [activeTab, setActiveTab] = useState(activeItem ?? 0);
+  // const [activeTab, setActiveTab] = useState(activeItem ?? 0);
   const content = React.useMemo(() => {
-    return children.find((child: any, index: any) => index === activeTab);
-  }, [activeTab]);
+    return children.find((child: any, index: any) => index === activeItem);
+  }, [activeItem]);
   const headers = React.useMemo(() => {
     return children.map((child: any, index: any) => ({
       index,
@@ -78,13 +78,13 @@ const Tabs = ({ activeItem, children }: any) => {
   return (
     <div>
       <div className="sticky top-0 flex w-full justify-between border-b border-gray text-h6 text-gray-light">
-        {headers.map((header: any, index: number) => {
+        {headers.map((header: any) => {
           const Icon = header.icon;
 
           return (
             <>
-              <span key={index} className={clsx("flex items-center gap-2.5 w-full p-5 border-b border-gray", activeTab === header.index ? "text-white bg-bg-light border-white" : "")}>
-                <Icon />
+              <span key={header.index} className={clsx("flex items-center gap-2.5 w-full p-5 border-b border-gray", activeItem === header.index ? "text-white bg-bg-light border-white" : "")}>
+                {activeItem > header.index ? <IconDone className="text-green" /> : <Icon />}
                 {header.text}
               </span>
               <div className="flex-shrink-0 w-[1px] bg-gray" />
