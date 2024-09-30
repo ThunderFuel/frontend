@@ -86,10 +86,10 @@ const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   return (
     <>
       <div className="p-5 flex flex-col gap-3">
-        <div className="flex flex-col gap-2 items-start lg:grid lg:grid-cols-2 lg:items-center">
+        <div className="flex flex-col gap-2 items-start lg:grid lg:grid-cols-3 lg:items-center">
           <div className="text-h6 text-white">Set Price for All</div>
-          <div className="grid grid-cols-3 lg:flex items-center gap-2.5 lg:gap-5">
-            <div className="col-span-2 lg:flex gap-2.5 lg:gap-3">
+          <div className="col-span-2 grid grid-cols-3 lg:flex items-center gap-2.5 lg:gap-5">
+            <div className="col-span-2 flex gap-2.5 lg:gap-3">
               <Button className="btn-secondary btn-sm uppercase lg:w-[240px]" onClick={onSetTopFloorPrice}>
                 {isMobile ? "Floor Price" : "Set Floor Price"}
               </Button>
