@@ -26,32 +26,34 @@ const Collection = ({ item }: any) => {
 const MobileCollection = ({ item, onSelect, prices, onUpdatePrice }: any) => {
   return (
     <div className="flex items-center justify-between gap-2.5 px-4 py-2.5">
-      <div className="flex items-center gap-2.5 flex-1">
-        <Checkbox
-          checked={item.isChecked}
-          onClick={() => {
-            onSelect(item);
-          }}
-        />
-        <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 overflow-hidden rounded-md">
+      <div className="flex gap-4 flex-1">
+        <div className="pt-5">
+          <Checkbox
+            checked={item.isChecked}
+            onClick={() => {
+              onSelect(item);
+            }}
+          />
+        </div>
+        <div className="flex flex-1 gap-2.5">
+          <div className="w-[64px] h-[64px] overflow-hidden rounded-md">
             <Img src={item?.image} className="w-full" />
           </div>
-          <div className="flex-1 w-full">
-            <div className="body-medium text-gray-light">{item?.collectionName}</div>
-            <h6 className="text-h6 text-white">{item?.name}</h6>
+          <div className="flex flex-col gap-3 flex-1">
+            <div className="flex-1 w-full">
+              <div className="body-medium text-gray-light">{item?.collectionName}</div>
+              <h6 className="text-h6 text-white">{item?.name}</h6>
+            </div>
+            <InputEthereum
+              className="lg:w-auto h-10"
+              placeholder="0"
+              value={prices?.[item.uid]}
+              onChange={(value: any) => {
+                onUpdatePrice(item.uid, value);
+              }}
+            />
           </div>
         </div>
-      </div>
-      <div>
-        <InputEthereum
-          className="w-[92px] lg:w-auto h-10"
-          placeholder="0"
-          value={prices?.[item.uid]}
-          onChange={(value: any) => {
-            onUpdatePrice(item.uid, value);
-          }}
-        />
       </div>
     </div>
   );
