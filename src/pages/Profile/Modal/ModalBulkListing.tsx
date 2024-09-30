@@ -19,6 +19,7 @@ import { handleTransactionError } from "../../Layout/CheckoutModal/components/Ch
 import nftdetailsService from "../../../api/nftdetails/nftdetails.service";
 import { toGwei } from "../../../utils";
 import { strategyFixedPriceContractId } from "../../../global-constants";
+import clsx from "clsx";
 
 const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   const isMobile = useIsMobile();
@@ -110,7 +111,7 @@ const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   );
 };
 
-const BulkListingCheckout = () => {
+const BulkListingCheckout = ({ onClose }: any) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
@@ -193,8 +194,7 @@ const BulkListingCheckout = () => {
     try {
       handleBulkListing({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
     } catch (e) {
-      // handleTransactionError({ error: e, setStartTransaction, setIsFailed });
-      setStartTransaction(false);
+      handleTransactionError({ error: e, setStartTransaction, setIsFailed });
     }
   };
 
@@ -203,32 +203,50 @@ const BulkListingCheckout = () => {
     onComplete();
   }, []);
 
-  return (
-    <>
-      {!startTransaction ? (
-        <TransactionRejected />
-      ) : isFailed ? (
-        <TransactionFailed />
-      ) : approved ? (
+  if (!startTransaction) {
+    return <TransactionRejected />;
+  } else if (isFailed) {
+    return (
+      <>
+        <div className="px-5">
+          <TransactionFailed />
+        </div>
+        <div className="p-5 gap-2.5 border-t border-gray">
+          <Button className="btn-secondary w-full" onClick={onClose}>
+            CLOSE
+          </Button>
+        </div>
+      </>
+    );
+  } else if (approved) {
+    return (
+      <>
         <div className="flex flex-col w-full gap-5 p-5">
           <Approved title="Bulk Listing Completed Successfully!" description="All selected items have been listed. You can review and manage your listings in your profile." />
           <div className="flex flex-col w-full">
             <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={totalAmount} approved={approved} />
           </div>
         </div>
-      ) : (
-        <div className="flex-center flex-col w-full gap-8 px-[25px] pt-5 pb-[50px]">
-          <div className="flex flex-col w-full">
-            <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={totalAmount} approved={approved} />
-          </div>
-          <IconSpinner className="animate-spin text-white w-10 h-10" />
-          <div className="flex flex-col gap-2">
-            <h5 className="text-h5 text-white text-center">Confirm in Wallet</h5>
-            <span className="text-gray-light body-medium text-center">Waiting for you to confirm the transaction in your wallet.</span>
-          </div>
+        <div className="p-5 gap-2.5 border-t border-gray">
+          <Button className="w-full" onClick={onClose}>
+            VIEW PURCHASE
+          </Button>
         </div>
-      )}
-    </>
+      </>
+    );
+  }
+
+  return (
+    <div className="flex-center flex-col w-full gap-8 px-[25px] pt-5 pb-[50px]">
+      <div className="flex flex-col w-full">
+        <CheckoutCartItems items={bulkItems} itemCount={bulkItems.length} totalAmount={totalAmount} approved={approved} />
+      </div>
+      <IconSpinner className="animate-spin text-white w-10 h-10" />
+      <div className="flex flex-col gap-2">
+        <h5 className="text-h5 text-white text-center">Confirm in Wallet</h5>
+        <span className="text-gray-light body-medium text-center">Waiting for you to confirm the transaction in your wallet.</span>
+      </div>
+    </div>
   );
 };
 
@@ -236,6 +254,7 @@ const ModalBulkListing = () => {
   const { showBulkListing, setShowBulkListing } = useProfile();
   const [activeItem, setActiveItem] = React.useState(0);
   const onClose = () => {
+    setActiveItem(0);
     setShowBulkListing(false);
   };
   const onTriggerCheckout = (stepNumber: any) => {
@@ -243,13 +262,13 @@ const ModalBulkListing = () => {
   };
 
   return (
-    <Modal bodyClassName="!w-full lg:!max-w-[80%]" backdropDisabled={true} className="checkout" show={showBulkListing} onClose={onClose}>
+    <Modal bodyClassName={clsx("!w-full", activeItem === 0 ? "lg:!max-w-[80%]" : " lg:!max-w-[650px]")} backdropDisabled={true} className="checkout" show={showBulkListing} onClose={onClose}>
       <Modal.Tabs activeItem={activeItem}>
         <Modal.TabItem headerIcon={IconTag} headerText="Bulk Listing">
           <BulkListingContainer onClose={onClose} onTriggerCheckout={onTriggerCheckout} />
         </Modal.TabItem>
         <Modal.TabItem headerIcon={IconLikeHand} headerText="Confirm Bulk Listing">
-          <BulkListingCheckout />
+          <BulkListingCheckout onClose={onClose} />
         </Modal.TabItem>
       </Modal.Tabs>
     </Modal>
