@@ -4,7 +4,7 @@ import Button from "../../components/Button";
 import { IconArrowRight, IconDiscord, IconGithub, IconSocial3Dots, IconX } from "../../icons";
 import clsx from "clsx";
 import { openInNewTab } from "../../utils";
-import { HELP_CENTER_URL } from "../../global-constants";
+import { CHAT_SUPPORT_URL, HELP_CENTER_URL } from "../../global-constants";
 
 const GridItem = ({ children, className }: any) => {
   return <div className={clsx("flex flex-col bg-bg-light border border-bg rounded-md p-5", className)}>{children}</div>;
