@@ -104,10 +104,11 @@ const BaseDropdown = ({ children, container, className }: any) => {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   useClickOutside(containerRef, () => {
+    console.log("BaseDropdown");
     setShow(false);
   });
   const onClick = () => {
-    setShow(!show);
+    setShow(true);
   };
 
   return (

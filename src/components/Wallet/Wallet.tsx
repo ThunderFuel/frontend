@@ -45,12 +45,13 @@ export const WalletDropdown = ({ walletAddress, onLogout }: any) => {
     },
   ];
   useClickOutside(containerRef, () => {
+    console.log("WalletDropdown");
     setShow(false);
   });
 
   return (
     <div className="relative" ref={containerRef}>
-      <IconDots className={clsx("cursor-pointer hover:text-white", show ? "text-white" : "text-gray-light")} onClick={() => setShow(!show)} />
+      <IconDots className={clsx("cursor-pointer hover:text-white", show ? "text-white" : "text-gray-light")} onClick={() => setShow(true)} />
       {show ? (
         <ul className="absolute top-full right-0 mt-1 flex flex-col bg-bg border border-gray rounded divide-y divide-gray overflow-hidden">
           {items.map((item, k) => {
