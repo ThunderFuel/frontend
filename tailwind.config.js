@@ -35,6 +35,7 @@ module.exports = {
         "mode-table-row-skeleton": "linear-gradient(90deg, rgba(230, 230, 230, 0) 0, rgba(230, 230, 230, 0.2) 20%, rgba(230, 230, 230, 0.5) 60%, rgba(230, 230, 230, 0))",
         "marketplace-fuel-network-bg": "url('/src/assets/grids/fuel-network-bg.png')",
         "audited-by-immunefi-bg": "url('/src/assets/grids/audited-by-immunefi-bg.png')",
+        "get-help-bg": "url('/src/assets/grids/get-help-bg.png')",
       },
       screens: {
         xs: "475px",

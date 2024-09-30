@@ -46,6 +46,9 @@ const ActivityItemDescription = React.memo(({ price, activityType, fromUserContr
         </div>
       )}offer canceled by`;
     }
+    if (ActivityFilters.AcceptOffer === activityType) {
+      activeTypeLabel = `Offer accepted by`;
+    }
     if (ActivityFilters.Sales === activityType) {
       activeTypeLabel = `${renderToString(
         <div className="inline-block">

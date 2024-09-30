@@ -204,6 +204,21 @@ class FuelProvider extends BaseProvider {
   async handleAcceptOffer({ wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete }: any) {
     const _baseAssetId = await this.getBaseAssetId();
 
+    try {
+      const { data } = await collectionsService.getCollection({ id: currentItem.tokenId });
+      if (data.salable) {
+        const result = await this.handleCancelListing({ selectedNFT: { id: currentItem.tokenId }, wallet, setApproved, setStartTransaction, setIsFailed, isAcceptOffer: true });
+
+        if (result === false) {
+          setIsFailed(true);
+
+          return;
+        }
+      }
+    } catch (error) {
+      setIsFailed(true);
+    }
+
     offerService.getOffersIndex([currentItem.id]).then(async (res) => {
       const order = {
         isBuySide: false,
@@ -297,26 +312,29 @@ class FuelProvider extends BaseProvider {
       });
     }
   }
-  async handleCancelListing({ selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
+  async handleCancelListing({ selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, isAcceptOffer }: any) {
     const _provider = await this.getProvider();
 
     setContracts(contracts, _provider as any);
 
-    nftdetailsService.getTokensIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false)
-        .then((res) => {
-          if (res.transactionResult.isStatusSuccess) {
-            // nftdetailsService.tokenCancelList(selectedNFT.id);
-            setApproved(true);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
-            setStartTransaction(false);
-          else setIsFailed(true);
-        });
-    });
+    try {
+      const res = await nftdetailsService.getTokensIndex([selectedNFT.id]);
+      const cancelRes = await cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false);
+      if (cancelRes.transactionResult.isStatusSuccess) {
+        if (isAcceptOffer) return true;
+
+        // nftdetailsService.tokenCancelList(selectedNFT.id);
+        setApproved(true);
+      }
+    } catch (e: any) {
+      if (isAcceptOffer) return false;
+
+      if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred")) {
+        setStartTransaction(false);
+      } else {
+        setIsFailed(true);
+      }
+    }
   }
   async handleCancelAuction({ selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();

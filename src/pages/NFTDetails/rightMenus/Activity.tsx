@@ -114,6 +114,7 @@ const headers: ITableHeader[] = [
     // className: "!bg-bg-light",
     sortValue: 1,
     render: (item) => {
+      console.log(item);
       const { icon, title, description } = formatActivityData(item);
 
       return <ActivityType title={title} description={description} Icon={icon} price={item.price} />;
@@ -226,7 +227,7 @@ const Activity = ({ onBack }: { onBack: any }) => {
   }, [params]);
 
   function renderItems() {
-    const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType) && item.activityType !== ActivityFilters.ListingCancel);
+    const _activities = activities.filter((item: any) => !notActiveFilters.includes(item.activityType));
     // const { icon, title, description } = formatActivityData(activity);
     const filters = collectionsService.getActivityFilters();
 
