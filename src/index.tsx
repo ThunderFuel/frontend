@@ -42,6 +42,7 @@ import { StytchUIClient } from "@stytch/vanilla-js";
 import { WALLET_CONNECT_PROJECT_ID } from "global-constants";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { defaultConnectors } from "@fuels/connectors";
+import ModalLogin from "./modal-login";
 
 const isDevelopment = "development" === process.env.NODE_ENV;
 
@@ -141,6 +142,7 @@ ReactDOM.render(
       </StytchProvider>
     </Provider>
     <ToastContainer />
+    <ModalLogin />
   </React.StrictMode>,
   document.getElementById("root")
 );

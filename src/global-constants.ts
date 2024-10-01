@@ -174,3 +174,5 @@ export const wethABI = [
     type: "event",
   },
 ];
+
+export const FINALLY_MAINNET = "finally_mainnet";
