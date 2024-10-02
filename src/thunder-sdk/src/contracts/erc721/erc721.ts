@@ -1,6 +1,6 @@
 import { Provider, WalletUnlocked, WalletLocked, BigNumberish, Wallet, FunctionInvocationScope, ReceiptMintCoder, Script, Contract } from "fuels";
-import { NFTContractAbi__factory } from "../../types/erc721";
-import { NFTContractAbi, ContractIdInput, IdentityInput, AssetIdInput } from "../../types/erc721/NFTContractAbi";
+import { NFTContract } from "../../types/erc721";
+import { ContractIdInput, IdentityInput, AssetIdInput } from "../../types/erc721/NFTContract";
 import bytecode from "../../scripts/bulk_mint/binFile";
 import abi from "../../scripts/bulk_mint/out/bulk_mint-abi.json";
 
@@ -8,18 +8,18 @@ async function setup(
     contractId: string,
     provider: string,
     wallet?: string | WalletLocked,
-): Promise<NFTContractAbi> {
+): Promise<NFTContract> {
     const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
         const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
-        return NFTContractAbi__factory.connect(contractId, walletUnlocked);
+        return new NFTContract(contractId, walletUnlocked)
     } else if (wallet && typeof wallet !== "string") {
-        return NFTContractAbi__factory.connect(contractId, wallet);
+        return new NFTContract(contractId, wallet)
     }
 
-    return NFTContractAbi__factory.connect(contractId, _provider);
+    return new NFTContract(contractId, _provider)
 }
 
 export async function mint(
@@ -36,10 +36,11 @@ export async function mint(
         const fill0 = subId.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
         const _to: IdentityInput = { Address: { bits: to } };
-        const { transactionResult, logs } = await contract.functions
+        const call = await contract.functions
             .mint(_to, stringSubId, amount)
             .txParams({})
             .call();
+        const { transactionResult, logs } = await call.waitForResult()
         return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: mint failed. Reason: ${err}`);
@@ -80,31 +81,6 @@ export async function mint(
 //     }
 // }
 
-export async function bulkMintScript(
-    contractId: string,
-    provider: string,
-    wallet: WalletLocked | WalletUnlocked,
-    to: string,
-    amount: number,
-) {
-    try {
-        const _provider = await Provider.create(provider)
-        const _contract = new Contract(contractId, NFTContractAbi__factory.abi, _provider);
-        const _collection: ContractIdInput = { bits: contractId };
-        const _to: IdentityInput = { Address: { bits: to } };
-
-        const script = new Script(bytecode, abi, wallet)
-        const { transactionResult, logs } = await script.functions
-            .main(_collection, _to, amount)
-            .txParams({})
-            .addContracts([_contract])
-            .call();
-        return { transactionResult, logs };
-    } catch(err: any) {
-        throw Error(`ERC721: bulkMintScript failed. Reason: ${err}`)
-    }
-}
-
 export async function bulkMintWithMulticall(
     contractId: string,
     provider: string,
@@ -132,9 +108,10 @@ export async function bulkMintWithMulticall(
     if (calls.length === 0) return null;
 
     try {
-        const { transactionResult, logs } = await contract.multiCall(calls)
+        const call = await contract.multiCall(calls)
             .txParams({ variableOutputs: amount})
             .call();
+        const { transactionResult, logs } = await call.waitForResult()
         return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: bulkMintWithMulticall failed. Reason: ${err}`);
