@@ -12,8 +12,10 @@ const ModalLogin = () => {
   const [password, setPassword] = React.useState("");
 
   const onSubmit = (e: any) => {
+    console.log(FINALLY_MAINNET === password.trim());
     if (FINALLY_MAINNET === password.trim()) {
       useAuthToken.setAuthTokenFromLocalStorage(true);
+      setShow(false);
     } else {
       useToast().error("Password is wrong");
     }
