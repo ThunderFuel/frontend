@@ -31,7 +31,7 @@ export const DISCORD_URL = "https://discord.com/invite/thundermarket";
 export const TWITTER_URL = "https://twitter.com/ThunderbyFuel";
 export const MEDIUM_URL = "https://medium.com/@ThunderbyFuel/";
 export const GITHUB_DOCUMENT_URL = "https://thunder-nft-marketplace.gitbook.io/thunder-nft-marketplace";
-export const GITHUB_URL = "#";
+export const GITHUB_URL = "https://github.com/ThunderFuel";
 
 export const HELP_CENTER_URL = "https://thunder-nft-marketplace.gitbook.io/thunder-nft-marketplace";
 export const CHAT_SUPPORT_URL = "https://discord.com/invite/thundermarket";
@@ -174,3 +174,5 @@ export const wethABI = [
     type: "event",
   },
 ];
+
+export const FINALLY_MAINNET = "finally_mainnet";
