@@ -12,4 +12,5 @@ coverage.json
 # production
 lib
 dist
+build
 .fueldb

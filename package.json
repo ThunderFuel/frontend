@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@azure/storage-blob": "^12.14.0",
-    "@fuel-wallet/sdk": "^0.15.2",
-    "@fuels/connectors": "^0.9.1",
-    "@fuels/react": "^0.20.0",
+    "@fuel-wallet/sdk": "^0.16.1",
+    "@fuels/connectors": "^0.29.2",
+    "@fuels/react": "^0.29.2",
     "@hookform/resolvers": "^3.0.0",
     "@lit-protocol/auth-helpers": "^3.0.27",
     "@lit-protocol/contracts-sdk": "^3.0.27",
@@ -31,7 +31,7 @@
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
     "ethers": "^5.7.2",
-    "fuels": "^0.89.1",
+    "fuels": "^0.94.8",
     "i18next": "^21.6.15",
     "ics": "^3.1.0",
     "react": "^18.3.1",
@@ -88,6 +88,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.23.4",
     "@simplewebauthn/browser": "^9.0.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.4",
@@ -104,6 +105,7 @@
     "autoprefixer": "^10.4.4",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
+    "customize-cra": "^1.0.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -127,6 +129,19 @@
     "src/**/*.{ts,tsx,js,jsx}": [
       "npm run lint:fix",
       "npm run lint:check"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-typescript",
+        {
+          "allowDeclareFields": true
+        }
+      ]
     ]
   }
 }
