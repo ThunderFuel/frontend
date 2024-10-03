@@ -58,7 +58,7 @@ const AllowListPhase = () => {
       collectionsService
         .checkMintable({
           contractAddress: dropDetail.contractAddress,
-          walletAddress: wallet.address.toB256(),
+          walletAddress: wallet.address,
         })
         .then(({ data }) => {
           setIsMintable(data.status === ChecklistStatus.Eligible);

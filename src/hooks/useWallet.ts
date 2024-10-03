@@ -5,7 +5,6 @@ import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
 import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect } from "@fuels/react";
 import { useEffect } from "react";
 import userService from "api/user/user.service";
-import { toB256 } from "fuels";
 import { isObjectEmpty } from "utils";
 
 export const useWallet = () => {
