@@ -37,7 +37,7 @@ export const useWallet = () => {
       dispatch(setIsConnecting(true));
       dispatch(setIsConnected(true));
 
-      dispatch(setAddress(toB256(account as any) ?? ""));
+      dispatch(setAddress(account));
 
       _connect();
 

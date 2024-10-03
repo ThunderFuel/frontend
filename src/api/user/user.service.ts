@@ -27,7 +27,7 @@ export default {
   userCreate({ walletAddress }: any) {
     const data = {
       params: {
-        address: toB256(walletAddress),
+        address: walletAddress,
         fuelAddress: walletAddress,
       },
     };

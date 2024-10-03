@@ -131,7 +131,7 @@ ReactDOM.render(
               connectors: defaultConnectors({
                 // devMode: true,
                 wcProjectId: WALLET_CONNECT_PROJECT_ID,
-                ethWagmiConfig: wagmiConfig,
+                //ethWagmiConfig: wagmiConfig,
               }),
             }}
           >
