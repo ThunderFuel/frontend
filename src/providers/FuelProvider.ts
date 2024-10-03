@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
-import { Provider, toB256 } from "fuels";
+import { Provider } from "fuels";
 import userService from "../api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeBackend, formatTimeContract, isObjectEmpty, toGwei } from "utils";
@@ -69,9 +69,7 @@ class FuelProvider extends BaseProvider {
 
   async handleTransfer({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed }: any) {
     const _provider = await this.getProvider();
-    let tempAddress = "";
-    if (address.slice(0, 4) === "fuel") tempAddress = toB256(address as any);
-    const toAddress = tempAddress === "" ? address : tempAddress;
+    const toAddress = address;
     transfer(selectedNFT.collection.contractAddress, _provider as unknown as any, wallet, user.walletAddress, toAddress, selectedNFT.tokenOrder)
       .then(() => {
         // nftdetailsService.tokenTransfer(selectedNFT.id, tempAddress === "" ? address : tempAddress);
