@@ -32,7 +32,7 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 import { useDispatch } from "react-redux";
 import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
-import { useConnectUI, useIsConnected } from "@fuels/react";
+import { useBalance, useConnectUI, useIsConnected } from "@fuels/react";
 import Button from "../../../components/Button";
 import { addressFormat } from "../../../utils";
 import { useWallet } from "../../../hooks/useWallet";
@@ -132,6 +132,11 @@ const HeaderUserBalance = ({ user, address }: any) => {
   const { getBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
+  const account = user?.walletAddress ?? user?.contractAddress;
+  const balanceRes = useBalance({
+    address: account,
+    assetId: "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07",
+  });
 
   React.useEffect(() => {
     const fetchBalances = () => {
@@ -159,7 +164,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   useEffect(() => {
     fetchBalance();
     fetchBidBalance();
-  }, []);
+  }, [balanceRes.balance]);
 
   const onLogout = async () => {
     await walletDisconnect();
