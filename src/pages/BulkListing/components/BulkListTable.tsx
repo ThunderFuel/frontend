@@ -173,9 +173,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice, theadClassName }: any) =>
       width: "14%",
       align: "flex-end",
       render: (item) => (
-        <ColumnTitle title="LOYALTY">
-          <h5 className="text-h5 text-white"> {item?.royalty}%</h5>
-        </ColumnTitle>
+        <ColumnTitle title="ROYALTY">{item?.royalty ? <h5 className="text-h5 text-white"> {item?.royalty}%</h5> : <h5 className="text-h5 text-white text-opacity-0"> 0</h5>}</ColumnTitle>
       ),
     },
     {

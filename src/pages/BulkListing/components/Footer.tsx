@@ -52,7 +52,7 @@ const Footer = ({ items, prices, onClose, onTriggerCheckout }: any) => {
     /*
     dispatch(toggleCheckoutModal());
     */
-    console.log("onTriggerCheckout");
+
     onTriggerCheckout(1);
   };
 
@@ -61,7 +61,7 @@ const Footer = ({ items, prices, onClose, onTriggerCheckout }: any) => {
   }, [expiredDateValue]);
 
   const getProceedPrice = React.useMemo(() => {
-    return bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * (1 - (item.royalty + 2.5) / 100), 0);
+    return bulkItems.reduce((total: any, item: any) => total + prices[item.uid] * (1 - (item.royalty ?? 0 + 2.5) / 100), 0);
   }, [bulkItems]);
 
   return (

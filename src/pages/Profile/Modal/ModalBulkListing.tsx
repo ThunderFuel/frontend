@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { IconLikeHand, IconSpinner, IconTag } from "../../../icons";
 import Modal from "../../../components/Modal";
-import { useSelector } from "react-redux";
-import { getBulkListingTableItems } from "../../../store/bulkListingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getBulkListingTableItems, removeAll } from "../../../store/bulkListingSlice";
 import BulkListTable from "../../BulkListing/components/BulkListTable";
 import floorService from "../../../api/floor/floor.service";
 import { useProfile } from "../ProfileContext";
@@ -70,13 +70,15 @@ const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
     });
   };
 
+  console.log("items", items);
+
   const getItems = React.useMemo(() => {
     return items.map((item: any) => ({
       ...item,
       floor: collectionFloor?.[item.collectionId],
       topTrait: topTraitByToken?.[item.id],
-      proceedPrice: prices[item.uid] * (1 - (item.royalty + 2.5) / 100),
-      royaltyPrice: (prices[item.uid] * item.royalty) / 100,
+      proceedPrice: prices[item.uid] * (1 - (item.royalty ?? 0 + 2.5) / 100),
+      royaltyPrice: (prices[item.uid] * (item.royalty ?? 1)) / 100,
     }));
   }, [items, collectionFloor, topTraitByToken, prices]);
   React.useEffect(() => {
@@ -111,7 +113,7 @@ const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   );
 };
 
-const BulkListingCheckout = ({ onClose }: any) => {
+const BulkListingCheckout = ({ onClose, setHideHeaders, onFinalComplete }: any) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
@@ -192,7 +194,20 @@ const BulkListingCheckout = ({ onClose }: any) => {
 
   const onComplete = async () => {
     try {
-      handleBulkListing({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData });
+      await handleBulkListing({
+        promises,
+        user,
+        handleOrders,
+        bulkListItems,
+        bulkUpdateItems,
+        wallet,
+        setApproved,
+        setStartTransaction,
+        setIsFailed,
+        wagmiSteps,
+        setWagmiSteps,
+        setStepData,
+      });
     } catch (e) {
       handleTransactionError({ error: e, setStartTransaction, setIsFailed });
     }
@@ -204,21 +219,38 @@ const BulkListingCheckout = ({ onClose }: any) => {
   }, []);
 
   if (!startTransaction) {
-    return <TransactionRejected />;
+    setHideHeaders(true);
+
+    return (
+      <>
+        <div className="px-5">
+          <TransactionRejected />
+        </div>
+        <div className="p-5 gap-2.5 border-t border-gray">
+          <Button className="btn-primary w-full" onClick={onClose}>
+            CLOSE
+          </Button>
+        </div>
+      </>
+    );
   } else if (isFailed) {
+    setHideHeaders(true);
+
     return (
       <>
         <div className="px-5">
           <TransactionFailed />
         </div>
         <div className="p-5 gap-2.5 border-t border-gray">
-          <Button className="btn-secondary w-full" onClick={onClose}>
+          <Button className="btn-primary w-full" onClick={onClose}>
             CLOSE
           </Button>
         </div>
       </>
     );
   } else if (approved) {
+    setHideHeaders(true);
+
     return (
       <>
         <div className="flex flex-col w-full gap-5 p-5">
@@ -251,11 +283,20 @@ const BulkListingCheckout = ({ onClose }: any) => {
 };
 
 const ModalBulkListing = () => {
+  const dispatch = useDispatch();
   const { showBulkListing, setShowBulkListing } = useProfile();
   const [activeItem, setActiveItem] = React.useState(0);
+  const [hideHeaders, setHideHeaders] = React.useState(false);
+
+  function onFinalComplete() {
+    dispatch(removeAll());
+    window.dispatchEvent(new CustomEvent("CompleteCheckout"));
+  }
+
   const onClose = () => {
     setActiveItem(0);
     setShowBulkListing(false);
+    onFinalComplete();
   };
   const onTriggerCheckout = (stepNumber: any) => {
     setActiveItem(stepNumber);
@@ -263,12 +304,12 @@ const ModalBulkListing = () => {
 
   return (
     <Modal bodyClassName={clsx("!w-full", activeItem === 0 ? "lg:!max-w-[80%]" : " lg:!max-w-[650px]")} backdropDisabled={true} className="checkout" show={showBulkListing} onClose={onClose}>
-      <Modal.Tabs activeItem={activeItem}>
+      <Modal.Tabs activeItem={activeItem} headersHidden={hideHeaders}>
         <Modal.TabItem headerIcon={IconTag} headerText="Bulk Listing">
           <BulkListingContainer onClose={onClose} onTriggerCheckout={onTriggerCheckout} />
         </Modal.TabItem>
         <Modal.TabItem headerIcon={IconLikeHand} headerText="Confirm Bulk Listing">
-          <BulkListingCheckout onClose={onClose} />
+          <BulkListingCheckout onClose={onClose} setHideHeaders={setHideHeaders} onFinalComplete={onFinalComplete} />
         </Modal.TabItem>
       </Modal.Tabs>
     </Modal>
