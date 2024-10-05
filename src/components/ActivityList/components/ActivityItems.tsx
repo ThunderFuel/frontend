@@ -19,8 +19,8 @@ const ActivityType = ({ item }: any) => {
   const Icon = item.typeIcon ?? IconHand;
 
   return (
-    <div className="flex items-center gap-2.5 px-2.5 flex-1">
-      <div className="flex-center h-8 basis-8 rounded-full bg-gray">
+    <div className="flex items-center gap-2.5 px-2.5 flex-1 w-full">
+      <div className="flex-center min-h-8 min-w-8 basis-8 rounded-full bg-gray">
         <Icon />
       </div>
       <div className="min-w-0 flex flex-col">
@@ -31,7 +31,6 @@ const ActivityType = ({ item }: any) => {
   );
 };
 const ActivityCollectionItem = ({ item }: any) => {
-  const isMobile = useIsMobile();
   const Icon = item.typeIcon ?? IconHand;
 
   return (
