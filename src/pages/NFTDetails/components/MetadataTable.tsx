@@ -38,7 +38,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
               <div className="text-white">{item.value}</div>
               <div>
                 {traitfloors.find((trait: any) => trait.traitType === item.traitType) ? (
-                  <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price} />
+                  <EthereumPrice isNull={true} priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price} />
                 ) : (
                   <span className="text-headline-01">NO LISTINGS</span>
                 )}
