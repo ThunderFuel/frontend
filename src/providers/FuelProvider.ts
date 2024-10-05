@@ -90,7 +90,7 @@ class FuelProvider extends BaseProvider {
       const order = {
         isBuySide: true,
         maker: user.walletAddress,
-        collection: selectedNFT.collection.contractAddress,
+        collection: selectedNFT.contractAddress,
         token_id: selectedNFT.tokenOrder,
         price: toGwei(checkoutPrice).toNumber(),
         amount: 1, //fixed
