@@ -9,8 +9,7 @@ import { ButtonEdit, ButtonFollow } from "./components/Buttons";
 import { FollowType, useProfile } from "../../ProfileContext";
 
 const Sidebar = ({ isProfile = false }: any) => {
-  const { userInfo, onSetSocialActiveTab } = useProfile();
-  const ownedTokens = userInfo?.tokens ?? [];
+  const { userInfo, tokens, onSetSocialActiveTab } = useProfile();
 
   return (
     <div className="flex flex-col lg:border-r lg:border-gray lg:min-w-[410px] lg:max-w-[410px] relative">
@@ -37,7 +36,7 @@ const Sidebar = ({ isProfile = false }: any) => {
               >
                 {numberFormat(userInfo?.follows?.length)}
               </BoxGroupItem>
-              <BoxGroupItem header="Collected">{numberFormat(ownedTokens.length)}</BoxGroupItem>
+              <BoxGroupItem header="Collected">{numberFormat(tokens.length)}</BoxGroupItem>
             </BoxGroup>
             {userInfo?.bio ? <div className="body-medium mt-5 lg:min-h-[21px] text-overflow-3">{userInfo?.bio}</div> : null}
 
