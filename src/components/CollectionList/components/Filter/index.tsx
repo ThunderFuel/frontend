@@ -8,7 +8,7 @@ import clsx from "clsx";
 import SelectOrderBy from "./SelectOrderBy";
 import { useCollectionListContext } from "../../CollectionListContext";
 import { ISelectOption } from "components/Select";
-import { useAppDispatch } from "store";
+import { useAppDispatch, useAppSelector } from "store";
 import { sweepAdd } from "store/cartSlice";
 import config from "../../../../config";
 import Button from "../../../Button";
@@ -73,14 +73,14 @@ const MobileRange = (props: any) => {
 const KEY_ENTER = "Enter";
 
 const Index = ({ className }: { className?: string }) => {
+  const { user } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
   const { options, setParams, collectionItems, sweep, setSweep, params, showMobileFilter, isMobile } = useCollectionListContext();
   const [search, setSearch] = React.useState(params?.search ?? "");
   const swapLimit = config.getConfig("collectionSwapLimit");
-
   const onRangeChange = (value: any) => {
     setSweep(value);
-    const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable)].splice(0, value);
+    const sweepCollectionItems = [...collectionItems.filter((collectionItem: any) => collectionItem.salable && collectionItem.userId !== user.id)].splice(0, value);
     const collectionId = collectionItems?.[0].collectionId;
     dispatch(
       sweepAdd({
