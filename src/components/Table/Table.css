@@ -38,12 +38,11 @@
 }
 
 .fuel-table .tbody {
-  @apply px-5;
   @apply flex flex-col lg:gap-2;
 }
 
 .fuel-table .tbody .tr {
-  @apply p-2.5;
+  @apply lg:p-2.5;
   @apply lg:flex flex-row items-center border-b lg:border border-gray lg:rounded-lg;
 }
 

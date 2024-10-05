@@ -105,7 +105,7 @@ const ActivityItems = (props: any) => {
     {
       key: "item",
       text: `ITEM`,
-      width: "27%",
+      width: "20%",
       align: "flex-start",
       minWidth: "240px",
       sortValue: 1,
@@ -114,7 +114,7 @@ const ActivityItems = (props: any) => {
     {
       key: "price",
       text: "PRICE",
-      width: "10%",
+      width: "17%",
       align: "flex-end",
       className: "text-right",
       render: (item) => {
@@ -155,7 +155,7 @@ const ActivityItems = (props: any) => {
       {useIsMobile() ? <MobileSidebar /> : null}
       <div className={clsx("flex flex-col flex-1 lg:pt-4 lg:pb-16 lg:py-5", props.containerClassName)}>
         {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
-        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!lg:px-5"} rowClassName={"!h-[60px]"} />
+        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"lg:px-5"} rowClassName={"!h-[60px]"} />
       </div>
     </>
   );
