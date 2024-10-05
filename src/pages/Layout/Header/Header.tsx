@@ -8,6 +8,7 @@ import {
   IconChevronRight,
   IconEthereum,
   IconFaucet,
+  IconFuel,
   IconGas,
   IconHand,
   IconInfo,
@@ -34,7 +35,7 @@ import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
 import { useBalance, useConnectUI, useIsConnected } from "@fuels/react";
 import Button from "../../../components/Button";
-import { addressFormat } from "../../../utils";
+import { addressFormat, openInNewTab } from "../../../utils";
 import { useWallet } from "../../../hooks/useWallet";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import GetTestEth from "../../../components/GetTestEth/GetTestEth";
@@ -341,10 +342,21 @@ const HeaderIconButtonGroup = React.memo(() => {
       {isConnected && fuelIsConnected && !isConnecting ? (
         <HeaderUserProfile user={user} address={address} />
       ) : (
-        <Button className="btn-header-connect" onClick={connect}>
-          COnnect
-          <IconWallet className="h-[18px] w-[18px]" />
-        </Button>
+        <>
+          <Button
+            className="btn-sm no-bg border-green-fuel !py-2.5 border-opacity-20 text-white !transition-none hover:gap-2"
+            onClick={() => {
+              openInNewTab("https://app.fuel.network/earn-points");
+            }}
+          >
+            <IconFuel className="h-[18px] w-[18px]" />
+            poınts
+          </Button>
+          <Button className="btn-header-connect" onClick={connect}>
+            COnnect
+            <IconWallet className="h-[18px] w-[18px]" />
+          </Button>
+        </>
       )}
       <div className="relative">
         <Button className="btn-icon text-white" onClick={() => dispatch(toggleCartModal())}>

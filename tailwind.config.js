@@ -22,6 +22,7 @@ module.exports = {
       green: {
         light: "rgb(var(--th-green-light) / <alpha-value>)",
         DEFAULT: "rgb(var(--th-green) / <alpha-value>)",
+        fuel: "rgb(var(--th-green-fuel) / <alpha-value>)",
       },
       red: "rgb(var(--th-red) / <alpha-value>)",
       orange: "rgb(var(--th-orange) / <alpha-value>)",

@@ -128,3 +128,4 @@ export { ReactComponent as IconX } from "./icon-x.svg";
 export { ReactComponent as IconGithub } from "./icon-github.svg";
 export { ReactComponent as IconHotDropLoading } from "./icon-hot-drop-loading.svg";
 export { ReactComponent as IconGithubDocument } from "./icon-github-document.svg";
+export { ReactComponent as IconFuel } from "./icon-fuel.svg";
