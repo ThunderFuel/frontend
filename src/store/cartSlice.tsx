@@ -46,7 +46,7 @@ export const cartSlice = createSlice({
           itemCount: 0,
         }
       );
-      state.totalAmount = totalAmount.toFixed(4);
+      state.totalAmount = totalAmount;
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
@@ -94,7 +94,6 @@ export const getCartSelectedTokenOrderList = createSelector(
   },
   (tokenOrderList: any[]) => tokenOrderList
 );
-
 export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd, addBuyNowItem, removeBuyNowItem } = cartSlice.actions;
 
 export default cartSlice.reducer;

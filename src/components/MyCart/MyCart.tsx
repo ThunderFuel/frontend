@@ -43,7 +43,7 @@ const MyCart = () => {
       <div className="flex w-full px-5 py-2 justify-between border-b border-gray">
         <span className="text-h6 text-gray-light">Total</span>
         <span className="flex items-center text-white">
-          <EthereumPrice price={totalAmount} priceClassName="text-head6 font-spaceGrotesk" />
+          <EthereumPrice price={totalAmount} priceClassName="text-h6" />
         </span>
       </div>
       <div className="flex w-full p-5">
