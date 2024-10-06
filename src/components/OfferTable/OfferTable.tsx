@@ -22,6 +22,7 @@ interface IOfferTable {
   isProfile?: any;
   getBidBalance?: any;
   ButtonBelowHeader?: any;
+  rowKey?: any;
 }
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
@@ -197,7 +198,7 @@ const AfterRow = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, getBidBal
   return <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />;
 };
 
-const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade, ButtonBelowHeader }: IOfferTable) => {
+const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade, ButtonBelowHeader, rowKey }: IOfferTable) => {
   const afterRowParams = {
     onAcceptOffer,
     onCancelOffer,
@@ -225,6 +226,7 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       items={items}
       containerFluidClassName={"lg:px-5"}
       ButtonBelowHeader={ButtonBelowHeader}
+      rowKey={rowKey}
       afterRow={(item: any) => {
         if (!item.isActiveOffer || !item.showAfterRow) {
           return null;

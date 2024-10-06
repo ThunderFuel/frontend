@@ -1,10 +1,6 @@
 import React from "react";
-import { IconCircleRemoveWhite } from "icons";
-import Button from "components/Button";
 import { useOfferContext } from "./OfferContext";
 import OfferTable from "components/OfferTable";
-import config from "../../../../config";
-import Config from "../../../../components/Config";
 import { useIsMobile } from "../../../../hooks/useIsMobile";
 import MobileSidebarFilter from "./MobileSidebarFilter/MobileSidebarFilter";
 
@@ -39,6 +35,7 @@ const OfferList = ({ headers }: any) => {
           onUpdateOffer={onUpdateOffer}
           getBidBalance={getBidBalance}
           isProfile={options?.isProfile}
+          rowKey="id"
         />
       </div>
     </div>

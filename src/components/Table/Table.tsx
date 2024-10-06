@@ -36,6 +36,7 @@ export interface ITable {
   afterRow?: any;
   actionButton?: any;
   ButtonBelowHeader?: any;
+  rowKey?: any;
 }
 
 const TableNotFound = React.memo(() => {
@@ -87,6 +88,7 @@ const Table = ({
   afterRow,
   actionButton,
   ButtonBelowHeader,
+  rowKey,
   ...props
 }: ITable) => {
   const isMobile = useIsMobile();
@@ -119,6 +121,7 @@ const Table = ({
   });
   const _getItems = items.map((item, k) => {
     const RowElement = rowElement ?? TableRow;
+    const _rowKey = rowKey && item[rowKey] ? `row_${item[rowKey]}` : `row_${k.toString()}`;
 
     return (
       <div className="tr-group" key={`parentRow_${k.toString()}`}>
@@ -139,10 +142,10 @@ const Table = ({
             }
           }}
           className={clsx("tr", rowClassName, isSelectedRow && isSelectedRow(item) ? "active" : "")}
-          key={`row_${k.toString()}`}
+          key={_rowKey}
         >
           {filteredHeaders.map((header) => {
-            const key = `cell_${header.key}_${k.toString()}`;
+            const key = rowKey && item[rowKey] ? `cell_${header.key}_${item[rowKey]}` : `cell_${header.key}_${k.toString()}`;
             const width = isMobile ? header.minWidth || "100px" : header.width;
             const style = { maxWidth: width, minWidth: width, justifyContent: header.align };
 
