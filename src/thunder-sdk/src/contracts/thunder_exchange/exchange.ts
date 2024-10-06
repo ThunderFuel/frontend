@@ -1,4 +1,4 @@
-import { Provider, WalletUnlocked, WalletLocked, CoinQuantityLike, Contract, BigNumberish, FunctionInvocationScope, ReceiptMintCoder, Script } from "fuels";
+import { Provider, WalletUnlocked, WalletLocked, CoinQuantityLike, Contract, BigNumberish, FunctionInvocationScope, Script, getMintedAssetId } from "fuels";
 import { ThunderExchange } from "../../types/thunder_exchange";
 import { StrategyFixedPriceSale } from "../../types/execution_strategies/strategy_fixed_price_sale";
 import { Pool, } from "../../types/pool/";
@@ -250,7 +250,7 @@ async function _placeSellOrder(
         const _provider = await Provider.create(provider);
         const _order = _convertToInput(order);
 
-        const assetId = ReceiptMintCoder.getAssetId(order.collection, _order.token_id);
+        const assetId = getMintedAssetId(order.collection, _order.token_id);
         const asset: CoinQuantityLike = { amount: order.amount, assetId: assetId };
 
         let strategy: Contract;
@@ -433,7 +433,7 @@ export async function bulkListing(
             if (order.isBuySide) continue;
 
             const makerOrder = _convertToInput(order);
-            const assetId = ReceiptMintCoder.getAssetId(order.collection, makerOrder.token_id);
+            const assetId = getMintedAssetId(order.collection, makerOrder.token_id);
             const asset: CoinQuantityLike = { amount: order.amount, assetId: assetId };
 
             let strategy: Contract;
@@ -691,7 +691,7 @@ async function _executeSellOrder(
         const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
 
-        const assetId = ReceiptMintCoder.getAssetId(order.collection.bits, order.token_id);
+        const assetId = getMintedAssetId(order.collection.bits, order.token_id);
         console.log(assetId)
         const asset: CoinQuantityLike = { amount: 1, assetId: assetId };
 
