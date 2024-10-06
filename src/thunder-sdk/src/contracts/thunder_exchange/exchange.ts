@@ -1,4 +1,14 @@
-import { Provider, WalletUnlocked, WalletLocked, CoinQuantityLike, Contract, BigNumberish, FunctionInvocationScope, Script, getMintedAssetId } from "fuels";
+import {
+    Provider,
+    WalletUnlocked,
+    WalletLocked,
+    CoinQuantityLike,
+    Contract,
+    BigNumberish,
+    FunctionInvocationScope,
+    Script,
+    getMintedAssetId
+} from "fuels";
 import { ThunderExchange } from "../../types/thunder_exchange";
 import { StrategyFixedPriceSale } from "../../types/execution_strategies/strategy_fixed_price_sale";
 import { Pool, } from "../../types/pool/";
@@ -6,24 +16,17 @@ import { ExecutionManager } from "../../types/execution_manager";
 import { RoyaltyManager } from "../../types/royalty_manager";
 import { AssetManager } from "../../types/asset_manager";
 import { NFTContract } from "../../types/erc721";
-//import { ThunderExchangeAbi, IdentityInput, ContractIdInput, MakerOrderInputInput, SideInput, TakerOrderInput, ExtraParamsInput, AssetIdInput } from "../../types/thunder_exchange/ThunderExchangeAbi";
-import { Option } from "../../types/thunder_exchange/common";
+import { IdentityInput,
+    ContractIdInput,
+    MakerOrderInput,
+    SideInput,
+    TakerOrderInput,
+    ExtraParamsInput,
+    AssetIdInput
+} from "../../types/thunder_exchange/ThunderExchange";
 
 import bytecode from "../../scripts/deposit_and_offer/binFile";
 import abi from "../../scripts/deposit_and_offer/out/deposit_and_offer-abi.json";
-
-type AssetIdInput = { bits: string };
-type AddressInput = { bits: string };
-type ContractIdInput = { bits: string };
-type ExtraParamsInput = { extra_address_param: AddressInput, extra_contract_param: ContractIdInput, extra_u64_param: BigNumberish };
-//type MakerOrderInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, start_time: BigNumberish, end_time: BigNumberish, extra_params: ExtraParamsInput };
-type MakerOrderInputInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, expiration_range: BigNumberish, extra_params: ExtraParamsInput };
-type TakerOrderInput = { side: SideInput, taker: AddressInput, maker: AddressInput, nonce: BigNumberish, price: BigNumberish, token_id: string, collection: ContractIdInput, strategy: ContractIdInput, extra_params: ExtraParamsInput };
-enum SideInput { Buy = 'Buy', Sell = 'Sell' };
-type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
-type Enum<T> = {
-    [K in keyof T]: Pick<T, K> & { [P in Exclude<keyof T, K>]?: never };
-  }[keyof T];
 
 export type MakerOrder = {
     isBuySide: boolean;
@@ -89,7 +92,7 @@ export function setContracts(
     strategyFixedPrice = new StrategyFixedPriceSale(contracts.strategyFixedPrice, provider);
 }
 
-function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
+function _convertToInput(makerOrder: MakerOrder): MakerOrderInput {
     const zeroX = "0x";
     const fill0 = makerOrder.token_id.toString().padStart(64, "0")
     const subId = fill0.padStart(66, zeroX)
@@ -100,7 +103,7 @@ function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
         extra_u64_param: makerOrder.extra_params.extra_u64_param,
     };
 
-    const output: MakerOrderInputInput = {
+    const output: MakerOrderInput = {
         side: makerOrder.isBuySide ? SideInput.Buy : SideInput.Sell,
         maker: { bits: makerOrder.maker },
         collection: { bits: makerOrder.collection },
@@ -110,7 +113,6 @@ function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
         nonce: makerOrder.nonce,
         strategy: { bits: makerOrder.strategy },
         payment_asset: { bits: makerOrder.payment_asset },
-        expiration_range: makerOrder.expiration_range,
         extra_params: extraParams,
     }
 
