@@ -107,6 +107,11 @@ export const formatPrice = (price: any) => {
     .toFixed(5) //.toFixed(4)
     .replace(/\.?0+$/, "");
 };
+export const formatPriceRounded = (price: any) => {
+  const MAX_VALUE = 1000000;
+
+  return Math.round(price * MAX_VALUE) / MAX_VALUE;
+};
 
 export const isObjectEmpty = (object: any) => Object.keys(object).length === 0;
 
