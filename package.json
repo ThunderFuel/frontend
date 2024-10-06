@@ -5,8 +5,8 @@
   "dependencies": {
     "@azure/storage-blob": "^12.14.0",
     "@fuel-wallet/sdk": "^0.16.1",
-    "@fuels/connectors": "^0.29.2",
-    "@fuels/react": "^0.29.2",
+    "@fuels/connectors": "^0.29.5",
+    "@fuels/react": "^0.29.5",
     "@hookform/resolvers": "^3.0.0",
     "@lit-protocol/auth-helpers": "^3.0.27",
     "@lit-protocol/contracts-sdk": "^3.0.27",
