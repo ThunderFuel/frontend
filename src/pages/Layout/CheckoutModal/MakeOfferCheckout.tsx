@@ -149,7 +149,7 @@ export const TransactionFailed = () => {
 
       <div className="flex flex-col gap-2">
         <h5 className="text-h5 text-white text-center">Transaction Failed!</h5>
-        <span className="text-gray-light body-medium text-center">Transactions can fail due to network issues, gas fee increases, or because someone else bought the item before you.</span>
+        <span className="text-gray-light body-medium text-center">Transactions can fail due to network issues or gas fee increases. Please try again.</span>
       </div>
     </div>
   );
