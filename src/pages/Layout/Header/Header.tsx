@@ -38,7 +38,7 @@ import Button from "../../../components/Button";
 import { addressFormat, openInNewTab } from "../../../utils";
 import { useWallet } from "../../../hooks/useWallet";
 import { useClickOutside } from "../../../hooks/useClickOutside";
-import GetTestEth from "../../../components/GetTestEth/GetTestEth";
+import BridgeFunds from "../../../components/BridgeFunds/BridgeFunds";
 import { removeAll } from "../../../store/bulkListingSlice";
 import { removeBulkItems } from "../../../store/checkoutSlice";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
@@ -202,7 +202,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2.5 p-4 border-t border-gray">
-          <GetTestEth className="btn-sm" user={user} address={address} />
+          <BridgeFunds className="btn-sm" />
           <Button
             className="btn-sm btn-secondary w-full"
             onClick={() => {
