@@ -57,7 +57,9 @@
 .fuel-table .tbody .tr-group:has(.after) .tr:not(.after) {
   @apply border-b-0 rounded-b-none pb-0;
   /* transition: padding 0.2s ease-in-out; */
-  @apply hover:pb-2;
+}
+.fuel-table .tbody .tr-group:has(.after):hover .tr:not(.after) {
+  @apply pb-2;
 }
 
 .fuel-table .tbody .tr.active {
