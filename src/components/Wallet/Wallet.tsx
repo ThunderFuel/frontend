@@ -247,7 +247,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal className="cart" title="Wallet" onClose={onClose} show={show}>
+    <Modal className="cart" title="Wallet" onClose={onClose} show={false}>
       <div className="flex flex-col p-5 gap-5">
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col gap-2.5">
