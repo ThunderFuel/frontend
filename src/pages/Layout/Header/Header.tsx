@@ -7,7 +7,7 @@ import {
   IconCart,
   IconChevronRight,
   IconEthereum,
-  IconFaucet,
+  IconSwap,
   IconFuel,
   IconGas,
   IconHand,
@@ -43,7 +43,7 @@ import { removeAll } from "../../../store/bulkListingSlice";
 import { removeBulkItems } from "../../../store/checkoutSlice";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import { WalletDropdown } from "components/Wallet/Wallet";
-import { FUEL_FAUCET_URL } from "global-constants";
+import { FUEL_BRIDGE_URL, FUEL_FAUCET_URL } from "global-constants";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -258,9 +258,9 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
       path: PATHS.SETTINGS_PROFILE,
     },
     {
-      icon: IconFaucet,
-      name: "Get Test ETH",
-      isFaucet: true,
+      icon: IconSwap,
+      name: "Bridge Funds",
+      isBridge: true,
     },
     {
       icon: IconLogout,
@@ -269,8 +269,8 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
     },
   ];
   const onClick = async (item: any) => {
-    if (item.isFaucet) {
-      window.open(`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`, "_blank")?.focus();
+    if (item.isBridge) {
+      openInNewTab(FUEL_BRIDGE_URL);
 
       return;
     }
