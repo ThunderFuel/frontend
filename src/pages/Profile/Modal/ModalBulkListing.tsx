@@ -261,7 +261,7 @@ const BulkListingCheckout = ({ onClose, setHideHeaders, onFinalComplete }: any) 
         </div>
         <div className="p-5 gap-2.5 border-t border-gray">
           <Button className="w-full" onClick={onClose}>
-            VIEW PURCHASE
+            CONFIRM
           </Button>
         </div>
       </>
