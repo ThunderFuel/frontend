@@ -142,7 +142,6 @@ ReactDOM.render(
       </StytchProvider>
     </Provider>
     <ToastContainer />
-    <ModalLogin />
   </React.StrictMode>,
   document.getElementById("root")
 );
