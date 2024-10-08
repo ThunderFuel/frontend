@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import clsx from "clsx";
 import ImageBar from "./components/ImageBar";
 import LeftMenu from "./components/LeftMenu";
-import ListNFT from "./rightMenus/ListNFT";
 import PlaceBid from "./rightMenus/PlaceBid";
 import MakeOffer from "./rightMenus/MakeOffer";
 import UpdateOffer from "./rightMenus/UpdateOffer";
@@ -96,8 +95,6 @@ const NFTDetails = () => {
         return Activity;
       case RightMenuType.Bids:
         return Bids;
-      case RightMenuType.ListNFT:
-        return ListNFT;
       case RightMenuType.MakeOffer:
         return MakeOffer;
       case RightMenuType.Offers:
@@ -106,8 +103,6 @@ const NFTDetails = () => {
         return PlaceBid;
       case RightMenuType.UpdateOffer:
         return UpdateOffer;
-      case RightMenuType.UpdateListing:
-        return ListNFT;
       case RightMenuType.Listings:
         return Listings;
       default:

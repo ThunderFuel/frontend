@@ -77,8 +77,8 @@ const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
       ...item,
       floor: collectionFloor?.[item.collectionId],
       topTrait: topTraitByToken?.[item.id],
-      proceedPrice: prices[item.uid] * (1 - (item.royalty ?? 0 + 2.5) / 100),
-      royaltyPrice: (prices[item.uid] * (item.royalty ?? 1)) / 100,
+      proceedPrice: prices[item.uid] * (1 - (item.royaltyFee ?? 0 + 2.5) / 100),
+      royaltyPrice: (prices[item.uid] * (item.royaltyFee ?? 1)) / 100,
     }));
   }, [items, collectionFloor, topTraitByToken, prices]);
   React.useEffect(() => {
