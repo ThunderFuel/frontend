@@ -41,8 +41,6 @@ import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
 import { WALLET_CONNECT_PROJECT_ID } from "global-constants";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { defaultConnectors } from "@fuels/connectors";
-import ModalLogin from "./modal-login";
 
 const isDevelopment = "development" === process.env.NODE_ENV;
 
@@ -128,11 +126,7 @@ ReactDOM.render(
           <FuelProvider
             theme="dark"
             fuelConfig={{
-              connectors: defaultConnectors({
-                // devMode: true,
-                wcProjectId: WALLET_CONNECT_PROJECT_ID,
-                //ethWagmiConfig: wagmiConfig,
-              }),
+              connectors: [new FueletWalletConnector() as any],
             }}
           >
             <Router />
