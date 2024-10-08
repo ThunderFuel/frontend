@@ -34,36 +34,41 @@ class FuelProvider extends BaseProvider {
     return _provider.getBaseAssetId();
   }
 
-  async handleWithdraw({ wallet, amount, user, setIsDisabled }: any) {
+  async handleWithdraw({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) {
     const _baseAssetId = await this.getBaseAssetId();
 
     try {
-      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId)
-        .then(() => {
-          // userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
-          setIsDisabled(false);
-        })
-        .catch((e) => {
-          console.log(e);
-          setIsDisabled(false);
-        });
-    } catch (e) {
-      console.log(e);
+      await withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
+      // userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
       setIsDisabled(false);
+      setApproved(true);
+      window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
+    } catch (e: any) {
+      console.log({ e });
+      setIsDisabled(false);
+
+      if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+        setStartTransaction(false);
+      else setIsFailed(true);
     }
   }
 
-  async handleDeposit({ wallet, amount, user, setIsDisabled }: any) {
+  async handleDeposit({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) {
     const _baseAssetId = await this.getBaseAssetId();
 
     try {
       await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
       // userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
       setIsDisabled(false);
+      setApproved(true);
       window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      console.log({ e });
       setIsDisabled(false);
+
+      if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+        setStartTransaction(false);
+      else setIsFailed(true);
     }
   }
 

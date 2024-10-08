@@ -111,6 +111,10 @@ const BaseDropdown = ({ children, container, className }: any) => {
     setShow(!show);
   };
 
+  React.useEffect(() => {
+    if (show) dispatchEvent(new Event(EventDispatchFetchBalances));
+  }, [show]);
+
   return (
     <div className="relative" ref={containerRef}>
       <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", className, show ? "bg-gray" : "")} onClick={onClick}>

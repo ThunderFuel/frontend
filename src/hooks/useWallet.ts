@@ -115,12 +115,12 @@ export const useWallet = () => {
     return selectedGateway().getProviderType();
   };
 
-  const handleDeposit = ({ wallet, amount, user, setIsDisabled }: any) => {
-    return selectedGateway().handleDeposit({ wallet, amount, user, setIsDisabled });
+  const handleDeposit = ({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) => {
+    return selectedGateway().handleDeposit({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved });
   };
 
-  const handleWithdraw = ({ wallet, amount, user, setIsDisabled }: any) => {
-    return selectedGateway().handleWithdraw({ wallet, amount, user, setIsDisabled });
+  const handleWithdraw = ({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) => {
+    return selectedGateway().handleWithdraw({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved });
   };
 
   const handleCheckout = ({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
