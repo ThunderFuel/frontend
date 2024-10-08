@@ -7,12 +7,11 @@ import { useWallet } from "hooks/useWallet";
 import { isObjectEmpty, formatPrice } from "utils";
 import { useAppSelector } from "store";
 import { Button as BSButton } from "react-bootstrap";
-import { FUEL_FAUCET_URL } from "global-constants";
+import { FUEL_BRIDGE_URL } from "global-constants";
 
 const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { getBalance } = useWallet();
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
-  const { user, address } = useAppSelector((state) => state.wallet);
 
   const [balance, setbalance] = useState<number>(0);
 
@@ -34,8 +33,8 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
         <EthereumPrice className="text-white" price={balance} />
       </div>
       <div className="flex flex-col w-full gap-y-2.5 p-5">
-        <BSButton target="_blank" rel="noreferrer" as="a" href={`${FUEL_FAUCET_URL}/?address=${user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`}>
-          ADD FUNDS
+        <BSButton target="_blank" rel="noreferrer" as="a" href={FUEL_BRIDGE_URL}>
+          BRIDGE FUNDS
         </BSButton>
         <Button className="btn-secondary" onClick={onClose}>
           CLOSE
