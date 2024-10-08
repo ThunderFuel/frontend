@@ -484,7 +484,7 @@ const LeftMenu = (props: any) => {
                 </div>
                 <div className="flex flex-col gap-y-[5px]">
                   <div className="text-headline-01 text-gray-light">CREATOR FEE</div>
-                  {nft?.royalty}%
+                  {nft?.royalty ?? 0}%
                 </div>
               </Box>
             </div>
