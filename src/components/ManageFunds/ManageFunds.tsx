@@ -32,10 +32,10 @@ const ManageFunds = () => {
     });
   }
 
-  function handleSwap() {
+  async function handleSwap() {
     setIsDisabled(true);
-    if (isAddToPool) handleDeposit({ wallet, amount, user, setIsDisabled });
-    else handleWithdraw({ wallet, amount, user, setIsDisabled });
+    if (isAddToPool) await handleDeposit({ wallet, amount, user, setIsDisabled });
+    else await handleWithdraw({ wallet, amount, user, setIsDisabled });
   }
 
   const footer = (
