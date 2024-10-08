@@ -6,6 +6,7 @@ import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect }
 import { useEffect } from "react";
 import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
+import { toB256 } from "fuels";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
@@ -36,7 +37,7 @@ export const useWallet = () => {
       dispatch(setIsConnecting(true));
       dispatch(setIsConnected(true));
 
-      dispatch(setAddress(account));
+      dispatch(setAddress(toB256(account as any) ?? ""));
 
       _connect();
 

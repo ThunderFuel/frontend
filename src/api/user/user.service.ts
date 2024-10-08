@@ -1,6 +1,7 @@
 import { ThunderURL } from "../index";
 import { ICreateUser, IFollowParams, IUserResponse } from "./user.type";
 import { ApiResponse } from "../HttpClient";
+import { toB256 } from "fuels";
 
 export default {
   getUser(params: any): Promise<ApiResponse<IUserResponse>> {
@@ -26,7 +27,7 @@ export default {
   userCreate({ walletAddress }: any) {
     const data = {
       params: {
-        address: walletAddress,
+        address: toB256(walletAddress),
         fuelAddress: walletAddress,
       },
     };
