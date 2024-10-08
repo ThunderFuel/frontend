@@ -16,11 +16,11 @@ const Creator = () => {
             Empowering creators! Thunder prioritizes to help creators by providing assistance in technical support, networking and community building.
           </div>
         </div>
-        <div>
+        {/* <div>
           <Button className="text-nowrap" onClick={() => openInNewTab(FORM_URL)}>
             apply now <IconArrowRight className="w-[18px] h-[18px]" />
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {CREATOR_IMAGE.map((image, index) => (
