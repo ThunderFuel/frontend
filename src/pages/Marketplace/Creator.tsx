@@ -12,7 +12,9 @@ const Creator = () => {
       <div className="flex flex-col lg:flex-row justify-between items-center gap-5">
         <div className="flex flex-col gap-5 text-white">
           <h2 className="text-h2">Are you a creator?</h2>
-          <div className="text-bodyMd max-w-[560px]">Empowering creators! Thunder prioritizes to help creators by providing assistance in technical support, networking and community building.</div>
+          <div className="text-bodyMd font-spaceGrotesk max-w-[560px]">
+            Empowering creators! Thunder prioritizes to help creators by providing assistance in technical support, networking and community building.
+          </div>
         </div>
         <div>
           <Button className="text-nowrap" onClick={() => openInNewTab(FORM_URL)}>
