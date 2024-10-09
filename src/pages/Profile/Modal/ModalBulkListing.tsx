@@ -20,6 +20,8 @@ import nftdetailsService from "../../../api/nftdetails/nftdetails.service";
 import { toGwei } from "../../../utils";
 import { strategyFixedPriceContractId } from "../../../global-constants";
 import clsx from "clsx";
+import { useFuel } from '@fuels/react';
+
 
 const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   const isMobile = useIsMobile();
@@ -115,7 +117,11 @@ const BulkListingCheckout = ({ onClose }: any) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
-  const fuel = new FuelProvider();
+  // Must be immediately available, thtat's why the local useFuel is not used
+  const { fuel: fuelInstance } = useFuel();
+  // "() => {}" is a pattern to only resolve the useState once, otherwise it computes at each render, even if not stored
+  // useState is used to prevent the useFuel hook from being recreated again and again
+  const [fuel, _] = useState(() => new FuelProvider(fuelInstance));
 
   const [startTransaction, setStartTransaction] = useState(true);
   const [isFailed, setIsFailed] = useState(false);

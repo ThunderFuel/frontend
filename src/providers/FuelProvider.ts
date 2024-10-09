@@ -1,27 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
-import { Provider, toB256 } from "fuels";
+import { type Fuel, Provider, toB256 } from "fuels";
 import userService from "../api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeBackend, formatTimeContract, isObjectEmpty, toGwei } from "utils";
 import { bulkPurchase, executeOrder, setContracts, depositAndOffer, placeOrder, cancelOrder, bulkCancelOrder, bulkListing, updateOrder } from "thunder-sdk/src/contracts/thunder_exchange";
-import { assetManagerContractId, contracts, exchangeContractId, poolContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId } from "global-constants";
+import { assetManagerContractId, contracts, exchangeContractId, FUEL_PROVIDER, poolContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId } from "global-constants";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import collectionsService from "api/collections/collections.service";
 import { transfer } from "thunder-sdk/src/contracts/erc721";
 import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
-import { getFuel } from "index";
-import { useFuel } from "hooks/useFuel";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { FUEL_TYPE } from "hooks/useFuelExtension";
+import type { FUEL_TYPE } from "hooks/useFuelExtension";
 import { EventDispatchFetchBalances } from "pages/Layout/Header/Header";
 
 class FuelProvider extends BaseProvider {
-  provider = useFuel()[0];
 
-  constructor() {
+  provider: Fuel;
+
+  constructor(provider: Fuel | undefined) {
     super();
+    if (!provider) throw new Error("Provider is not defined");
+    this.provider = provider;
   }
 
   getProviderType() {
@@ -29,9 +30,8 @@ class FuelProvider extends BaseProvider {
   }
 
   async getBaseAssetId() {
-    const _provider = await Provider.create(provider);
 
-    return _provider.getBaseAssetId();
+    return (await FUEL_PROVIDER).getBaseAssetId();
   }
 
   async handleWithdraw({ wallet, amount, user, setIsDisabled }: any) {
@@ -975,18 +975,18 @@ class FuelProvider extends BaseProvider {
   async walletConnect(activeConnector: any, type: FUEL_TYPE): Promise<any> {
     try {
       let _type = "";
-
+      const provider = await this.provider;
       if (type === "fuelet") _type = "Fuelet Wallet";
       // else if (type === "fuel_walletconnect") _type = "Metamask";
       else _type = "Fuel Wallet";
 
       try {
-        await this.provider?.selectConnector(_type);
+        await provider?.selectConnector(_type);
       } catch (error) {
         return;
       }
 
-      const connect = await this.provider?.connect();
+      const connect = await provider?.connect();
       if (!connect) {
         throw new Error("Not Connected");
       }
@@ -996,7 +996,7 @@ class FuelProvider extends BaseProvider {
         throw new Error("Not Found Address");
       }
 
-      const wallet = await this.provider?.getWallet(fuelAddress);
+      const wallet = await provider?.getWallet(fuelAddress);
       if (!wallet) {
         throw new Error("Not Found Wallet");
       }
