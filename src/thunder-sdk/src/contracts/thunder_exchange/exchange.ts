@@ -406,12 +406,13 @@ export async function depositAndOffer(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await script.functions
+        const { waitForResult } = await script.functions
             .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
             .txParams({gasLimit})
             .callParams({forward: coin})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const{ transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. depositAndOffer failed. Reason: ${err}`)
@@ -490,10 +491,11 @@ export async function bulkListing(
 
     const gasLimit = Number(gasUsed) * 1.5
 
-    const { transactionResult } = await contract.multiCall(calls)
+    const { waitForResult } = await contract.multiCall(calls)
         .txParams({gasLimit})
         .addContracts(_contracts)
         .call();
+    const { transactionResult } = await waitForResult();
     return { transactionResult };
 }
 
@@ -598,10 +600,11 @@ export async function bulkCancelOrder(
 
     const gasLimit = Number(gasUsed) * 1.5
 
-    const { transactionResult } = await contract.multiCall(calls)
+    const { waitForResult } = await contract.multiCall(calls)
         .txParams({gasLimit})
         .addContracts([strategyFixedPrice, executionManager])
         .call();
+    const { transactionResult } = await waitForResult();
     return { transactionResult };
 }
 
@@ -760,10 +763,11 @@ export async function bulkPurchase(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.multiCall(calls)
+        const { waitForResult } = await contract.multiCall(calls)
             .txParams({gasLimit})
             .addContracts(_contracts)
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
