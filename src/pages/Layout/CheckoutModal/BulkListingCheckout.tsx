@@ -4,17 +4,16 @@ import clsx from "clsx";
 import Button from "components/Button";
 import Modal from "components/Modal";
 
-import { IconSpinner, IconWarning } from "icons";
+import { IconSpinner } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
+import { handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toGwei } from "utils";
 import { CheckoutCartItems } from "./Checkout";
 import { useWallet } from "hooks/useWallet";
 import { strategyFixedPriceContractId } from "global-constants";
-import FuelProvider from "providers/FuelProvider";
 import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
-import { set } from "react-hook-form";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -41,7 +40,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
-  const fuel = new FuelProvider();
+  const { fuelGateway: fuel } = useFuelExtension();
 
   const [totalAmount, setTotalAmount] = useState("");
 
@@ -69,7 +68,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
     let updatePromise;
     let listPromise;
 
-    const _baseAssetId = await fuel.getBaseAssetId();
+    const _baseAssetId = await fuel?.getBaseAssetId();
 
     if (bulkUpdateItems.length > 0) {
       const res = await nftdetailsService.getTokensIndex(tokenIds);

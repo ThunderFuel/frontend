@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
 import AuthorizationPageBase from "./AuthorizationPage";
@@ -51,10 +51,13 @@ const Router = () => {
     };
   }, []);
 
+  // Avoid re-rendering
+  const routes = useMemo(() => ROUTES.map((route) => getRoute(route)), []);
+
   return (
     <BrowserRouter>
       <Routes>
-        {ROUTES.map((route) => getRoute(route))}
+        {routes}
 
         <Route
           path="*"

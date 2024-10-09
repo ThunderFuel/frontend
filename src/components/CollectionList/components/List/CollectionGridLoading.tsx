@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { IconLoadingGrid } from "icons";
 
 const CollectionGridLoading = () => {
-  const collectionItems = new Array(10).fill(1);
+  const collectionItems = useMemo(() => new Array(10).fill(1), []);
 
   return (
     <>

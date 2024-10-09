@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { CollectionItemResponse } from "api/collections/collections.type";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import type { CollectionItemResponse } from "api/collections/collections.type";
+import { localStore } from "../hooks/useLocalStorage";
 
 type ISelectedCartItem = CollectionItemResponse;
 
@@ -10,7 +10,7 @@ const PurchaseLimit = 5;
 
 export const getItemsFromLocalStorage = () => {
   try {
-    const items = useLocalStorage().getItem(LocalStorageCartsKey);
+    const items = localStore.getItem(LocalStorageCartsKey);
 
     return items ?? [];
   } catch (e) {
@@ -18,7 +18,7 @@ export const getItemsFromLocalStorage = () => {
   }
 };
 export const setItemsFromLocalStorage = (items = []) => {
-  useLocalStorage().setItem(LocalStorageCartsKey, items);
+  localStore.setItem(LocalStorageCartsKey, items);
 };
 
 export const cartSlice = createSlice({

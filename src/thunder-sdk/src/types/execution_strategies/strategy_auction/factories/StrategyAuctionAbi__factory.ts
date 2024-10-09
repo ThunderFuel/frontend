@@ -14,424 +14,416 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { StrategyAuctionAbi, StrategyAuctionAbiInterface } from "../StrategyAuctionAbi";
 
 const _abi = {
-  "encoding": "1",
-  "types": [
+  "programType": "contract",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
     {
-      "typeId": 0,
       "type": "()",
-      "components": [],
-      "typeParameters": null
+      "concreteTypeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
     },
     {
-      "typeId": 1,
-      "type": "b256",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 2,
       "type": "bool",
-      "components": null,
-      "typeParameters": null
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
     },
     {
-      "typeId": 3,
-      "type": "enum AccessError",
-      "components": [
-        {
-          "name": "CannotReinitialized",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "NotOwner",
-          "type": 0,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
+      "type": "enum errors::StrategyAuctionErrors",
+      "concreteTypeId": "d9ed69a6249ccec0caa7154ae7da0992125b1fe5dfe08fecc05b51dc173424d4",
+      "metadataTypeId": 1
     },
     {
-      "typeId": 4,
-      "type": "enum Identity",
-      "components": [
-        {
-          "name": "Address",
-          "type": 9,
-          "typeArguments": null
-        },
-        {
-          "name": "ContractId",
-          "type": 11,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
+      "type": "enum libraries::order_types::Side",
+      "concreteTypeId": "b003c2b57c46049375f998db2f982f6f1598f54310c64f499aab5c7a8ea9a197",
+      "metadataTypeId": 2
     },
     {
-      "typeId": 5,
-      "type": "enum Option",
-      "components": [
-        {
-          "name": "None",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "Some",
-          "type": 8,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": [
-        8
+      "type": "enum libraries::ownable::AccessError",
+      "concreteTypeId": "b125b3c353d0e20ba2296785cc1653908f3c1fb7e67e055938c31fd0e1bb8086",
+      "metadataTypeId": 3
+    },
+    {
+      "type": "enum std::identity::Identity",
+      "concreteTypeId": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335",
+      "metadataTypeId": 4
+    },
+    {
+      "type": "enum std::option::Option<enum std::identity::Identity>",
+      "concreteTypeId": "253aea1197e8005518365bd24c8bc31f73a434fac0f7350e57696edfdd4850c2",
+      "metadataTypeId": 5,
+      "typeArguments": [
+        "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335"
       ]
     },
     {
-      "typeId": 6,
-      "type": "enum Side",
-      "components": [
-        {
-          "name": "Buy",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "Sell",
-          "type": 0,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
+      "type": "enum std::option::Option<struct libraries::order_types::MakerOrder>",
+      "concreteTypeId": "c1247fb45d12f60f490392a0ee7342da7621d729580ef4db4378f7fa40dce5de",
+      "metadataTypeId": 5,
+      "typeArguments": [
+        "3d46176b340e1859842235481ab83a21dd6493b73dcbfc8e8c0ba96dbd2d07bb"
+      ]
     },
     {
-      "typeId": 7,
-      "type": "enum StrategyAuctionErrors",
+      "type": "struct libraries::execution_result::ExecutionResult",
+      "concreteTypeId": "7777d8570157d7515a05d05a1ce6c2a32889f3f5bf5924f855909d5b47504c4e",
+      "metadataTypeId": 7
+    },
+    {
+      "type": "struct libraries::order_types::MakerOrder",
+      "concreteTypeId": "3d46176b340e1859842235481ab83a21dd6493b73dcbfc8e8c0ba96dbd2d07bb",
+      "metadataTypeId": 9
+    },
+    {
+      "type": "struct libraries::order_types::TakerOrder",
+      "concreteTypeId": "d3408708920d172bcfc4781923ab1553134bdc5d085dcac5537d09287a8847ed",
+      "metadataTypeId": 10
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipRenounced",
+      "concreteTypeId": "6dd047dcef1fafba87b54170a1ee4a99a8ae37746e594cbc548c5315368b20c3",
+      "metadataTypeId": 11
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipSet",
+      "concreteTypeId": "8416605cb05f0e41791636365d6644426eb8723c9bbdfc940b41652fc5bb7e61",
+      "metadataTypeId": 12
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipTransferred",
+      "concreteTypeId": "947c52bd18fcf648398d82d4d7b3cb539ef96fec3211f41a6e733a8a4f02f67e",
+      "metadataTypeId": 13
+    },
+    {
+      "type": "struct std::address::Address",
+      "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
+      "metadataTypeId": 14
+    },
+    {
+      "type": "struct std::contract_id::ContractId",
+      "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
+      "metadataTypeId": 16
+    },
+    {
+      "type": "u64",
+      "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+    }
+  ],
+  "metadataTypes": [
+    {
+      "type": "b256",
+      "metadataTypeId": 0
+    },
+    {
+      "type": "enum errors::StrategyAuctionErrors",
+      "metadataTypeId": 1,
       "components": [
         {
           "name": "OnlyOwner",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "Initialized",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "ExchangeAlreadyInitialized",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "OrderCancelledOrExpired",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "FeeTooHigh",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "CallerMustBeTheExchange",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "ItemIsNotOnAuction",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "OwnerCanNotPlaceBid",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "BidMustBeHigherThanPreviousOne",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "BidMustBeNonZero",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "BidMustBeHigherThanStartingPrice",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "ItemIsAlreadyOnAuction",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 8,
+      "type": "enum libraries::order_types::Side",
+      "metadataTypeId": 2,
+      "components": [
+        {
+          "name": "Buy",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "Sell",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        }
+      ]
+    },
+    {
+      "type": "enum libraries::ownable::AccessError",
+      "metadataTypeId": 3,
+      "components": [
+        {
+          "name": "CannotReinitialized",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "NotOwner",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        }
+      ]
+    },
+    {
+      "type": "enum std::identity::Identity",
+      "metadataTypeId": 4,
+      "components": [
+        {
+          "name": "Address",
+          "typeId": 14
+        },
+        {
+          "name": "ContractId",
+          "typeId": 16
+        }
+      ]
+    },
+    {
+      "type": "enum std::option::Option",
+      "metadataTypeId": 5,
+      "components": [
+        {
+          "name": "None",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "Some",
+          "typeId": 6
+        }
+      ],
+      "typeParameters": [
+        6
+      ]
+    },
+    {
       "type": "generic T",
-      "components": null,
-      "typeParameters": null
+      "metadataTypeId": 6
     },
     {
-      "typeId": 9,
-      "type": "struct Address",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 10,
-      "type": "struct AssetId",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 11,
-      "type": "struct ContractId",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 12,
-      "type": "struct ExecutionResult",
+      "type": "struct libraries::execution_result::ExecutionResult",
+      "metadataTypeId": 7,
       "components": [
         {
           "name": "is_executable",
-          "type": 2,
-          "typeArguments": null
+          "typeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
         },
         {
           "name": "collection",
-          "type": 11,
-          "typeArguments": null
+          "typeId": 16
         },
         {
           "name": "token_id",
-          "type": 1,
-          "typeArguments": null
+          "typeId": 0
         },
         {
           "name": "amount",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "payment_asset",
-          "type": 10,
-          "typeArguments": null
+          "typeId": 15
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 13,
-      "type": "struct ExtraParams",
+      "type": "struct libraries::order_types::ExtraParams",
+      "metadataTypeId": 8,
       "components": [
         {
           "name": "extra_address_param",
-          "type": 9,
-          "typeArguments": null
+          "typeId": 14
         },
         {
           "name": "extra_contract_param",
-          "type": 11,
-          "typeArguments": null
+          "typeId": 16
         },
         {
           "name": "extra_u64_param",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 14,
-      "type": "struct MakerOrder",
+      "type": "struct libraries::order_types::MakerOrder",
+      "metadataTypeId": 9,
       "components": [
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "typeId": 2
         },
         {
           "name": "maker",
-          "type": 9,
-          "typeArguments": null
+          "typeId": 14
         },
         {
           "name": "collection",
-          "type": 11,
-          "typeArguments": null
+          "typeId": 16
         },
         {
           "name": "token_id",
-          "type": 1,
-          "typeArguments": null
+          "typeId": 0
         },
         {
           "name": "price",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "amount",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "nonce",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "strategy",
-          "type": 11,
-          "typeArguments": null
+          "typeId": 16
         },
         {
           "name": "payment_asset",
-          "type": 10,
-          "typeArguments": null
-        },
-        {
-          "name": "start_time",
-          "type": 19,
-          "typeArguments": null
-        },
-        {
-          "name": "end_time",
-          "type": 19,
-          "typeArguments": null
+          "typeId": 15
         },
         {
           "name": "extra_params",
-          "type": 13,
-          "typeArguments": null
+          "typeId": 8
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 15,
-      "type": "struct OwnershipRenounced",
-      "components": [
-        {
-          "name": "previous_owner",
-          "type": 4,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 16,
-      "type": "struct OwnershipSet",
-      "components": [
-        {
-          "name": "new_owner",
-          "type": 4,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 17,
-      "type": "struct OwnershipTransferred",
-      "components": [
-        {
-          "name": "new_owner",
-          "type": 4,
-          "typeArguments": null
-        },
-        {
-          "name": "previous_owner",
-          "type": 4,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 18,
-      "type": "struct TakerOrder",
+      "type": "struct libraries::order_types::TakerOrder",
+      "metadataTypeId": 10,
       "components": [
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "typeId": 2
         },
         {
           "name": "taker",
-          "type": 9,
-          "typeArguments": null
+          "typeId": 14
         },
         {
           "name": "maker",
-          "type": 9,
-          "typeArguments": null
+          "typeId": 14
         },
         {
           "name": "nonce",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "price",
-          "type": 19,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "token_id",
-          "type": 1,
-          "typeArguments": null
+          "typeId": 0
         },
         {
           "name": "collection",
-          "type": 11,
-          "typeArguments": null
+          "typeId": 16
         },
         {
           "name": "strategy",
-          "type": 11,
-          "typeArguments": null
+          "typeId": 16
         },
         {
           "name": "extra_params",
-          "type": 13,
-          "typeArguments": null
+          "typeId": 8
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 19,
-      "type": "u64",
-      "components": null,
-      "typeParameters": null
+      "type": "struct libraries::ownable::OwnershipRenounced",
+      "metadataTypeId": 11,
+      "components": [
+        {
+          "name": "previous_owner",
+          "typeId": 4
+        }
+      ]
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipSet",
+      "metadataTypeId": 12,
+      "components": [
+        {
+          "name": "new_owner",
+          "typeId": 4
+        }
+      ]
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipTransferred",
+      "metadataTypeId": 13,
+      "components": [
+        {
+          "name": "new_owner",
+          "typeId": 4
+        },
+        {
+          "name": "previous_owner",
+          "typeId": 4
+        }
+      ]
+    },
+    {
+      "type": "struct std::address::Address",
+      "metadataTypeId": 14,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
+    },
+    {
+      "type": "struct std::asset_id::AssetId",
+      "metadataTypeId": 15,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
+    },
+    {
+      "type": "struct std::contract_id::ContractId",
+      "metadataTypeId": 16,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
     }
   ],
   "functions": [
@@ -439,26 +431,19 @@ const _abi = {
       "inputs": [
         {
           "name": "maker",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
         },
         {
           "name": "nonce",
-          "type": 19,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "b003c2b57c46049375f998db2f982f6f1598f54310c64f499aab5c7a8ea9a197"
         }
       ],
       "name": "cancel_order",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -473,16 +458,11 @@ const _abi = {
       "inputs": [
         {
           "name": "order",
-          "type": 18,
-          "typeArguments": null
+          "concreteTypeId": "d3408708920d172bcfc4781923ab1553134bdc5d085dcac5537d09287a8847ed"
         }
       ],
       "name": "execute_order",
-      "output": {
-        "name": "",
-        "type": 12,
-        "typeArguments": null
-      },
+      "output": "7777d8570157d7515a05d05a1ce6c2a32889f3f5bf5924f855909d5b47504c4e",
       "attributes": [
         {
           "name": "storage",
@@ -496,11 +476,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "get_exchange",
-      "output": {
-        "name": "",
-        "type": 11,
-        "typeArguments": null
-      },
+      "output": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
       "attributes": [
         {
           "name": "storage",
@@ -514,32 +490,19 @@ const _abi = {
       "inputs": [
         {
           "name": "user",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
         },
         {
           "name": "nonce",
-          "type": 19,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "b003c2b57c46049375f998db2f982f6f1598f54310c64f499aab5c7a8ea9a197"
         }
       ],
       "name": "get_maker_order_of_user",
-      "output": {
-        "name": "",
-        "type": 5,
-        "typeArguments": [
-          {
-            "name": "",
-            "type": 14,
-            "typeArguments": null
-          }
-        ]
-      },
+      "output": "c1247fb45d12f60f490392a0ee7342da7621d729580ef4db4378f7fa40dce5de",
       "attributes": [
         {
           "name": "storage",
@@ -553,21 +516,15 @@ const _abi = {
       "inputs": [
         {
           "name": "user",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
         },
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "b003c2b57c46049375f998db2f982f6f1598f54310c64f499aab5c7a8ea9a197"
         }
       ],
       "name": "get_min_order_nonce_of_user",
-      "output": {
-        "name": "",
-        "type": 19,
-        "typeArguments": null
-      },
+      "output": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
       "attributes": [
         {
           "name": "storage",
@@ -581,21 +538,15 @@ const _abi = {
       "inputs": [
         {
           "name": "user",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
         },
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "b003c2b57c46049375f998db2f982f6f1598f54310c64f499aab5c7a8ea9a197"
         }
       ],
       "name": "get_order_nonce_of_user",
-      "output": {
-        "name": "",
-        "type": 19,
-        "typeArguments": null
-      },
+      "output": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
       "attributes": [
         {
           "name": "storage",
@@ -608,11 +559,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "get_protocol_fee",
-      "output": {
-        "name": "",
-        "type": 19,
-        "typeArguments": null
-      },
+      "output": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
       "attributes": [
         {
           "name": "storage",
@@ -626,16 +573,15 @@ const _abi = {
       "inputs": [
         {
           "name": "exchange",
-          "type": 11,
-          "typeArguments": null
+          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
+        },
+        {
+          "name": "protocol_fee",
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
       ],
       "name": "initialize",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -650,26 +596,19 @@ const _abi = {
       "inputs": [
         {
           "name": "maker",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
         },
         {
           "name": "nonce",
-          "type": 19,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "side",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "b003c2b57c46049375f998db2f982f6f1598f54310c64f499aab5c7a8ea9a197"
         }
       ],
       "name": "is_valid_order",
-      "output": {
-        "name": "",
-        "type": 2,
-        "typeArguments": null
-      },
+      "output": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
       "attributes": [
         {
           "name": "storage",
@@ -682,17 +621,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "owner",
-      "output": {
-        "name": "",
-        "type": 5,
-        "typeArguments": [
-          {
-            "name": "",
-            "type": 4,
-            "typeArguments": null
-          }
-        ]
-      },
+      "output": "253aea1197e8005518365bd24c8bc31f73a434fac0f7350e57696edfdd4850c2",
       "attributes": [
         {
           "name": "doc-comment",
@@ -712,16 +641,11 @@ const _abi = {
       "inputs": [
         {
           "name": "order",
-          "type": 14,
-          "typeArguments": null
+          "concreteTypeId": "3d46176b340e1859842235481ab83a21dd6493b73dcbfc8e8c0ba96dbd2d07bb"
         }
       ],
       "name": "place_order",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -735,11 +659,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "renounce_ownership",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -754,16 +674,11 @@ const _abi = {
       "inputs": [
         {
           "name": "exchange_contract",
-          "type": 11,
-          "typeArguments": null
+          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
         }
       ],
       "name": "set_exchange",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -778,16 +693,11 @@ const _abi = {
       "inputs": [
         {
           "name": "fee",
-          "type": 19,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
       ],
       "name": "set_protocol_fee",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -802,16 +712,11 @@ const _abi = {
       "inputs": [
         {
           "name": "new_owner",
-          "type": 4,
-          "typeArguments": null
+          "concreteTypeId": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335"
         }
       ],
       "name": "transfer_ownership",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -826,16 +731,11 @@ const _abi = {
       "inputs": [
         {
           "name": "order",
-          "type": 14,
-          "typeArguments": null
+          "concreteTypeId": "3d46176b340e1859842235481ab83a21dd6493b73dcbfc8e8c0ba96dbd2d07bb"
         }
       ],
       "name": "update_order",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -850,43 +750,23 @@ const _abi = {
   "loggedTypes": [
     {
       "logId": "15703323638010531520",
-      "loggedType": {
-        "name": "",
-        "type": 7,
-        "typeArguments": []
-      }
+      "concreteTypeId": "d9ed69a6249ccec0caa7154ae7da0992125b1fe5dfe08fecc05b51dc173424d4"
     },
     {
       "logId": "12764806370357731851",
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
+      "concreteTypeId": "b125b3c353d0e20ba2296785cc1653908f3c1fb7e67e055938c31fd0e1bb8086"
     },
     {
       "logId": "9517900813706399297",
-      "loggedType": {
-        "name": "",
-        "type": 16,
-        "typeArguments": []
-      }
+      "concreteTypeId": "8416605cb05f0e41791636365d6644426eb8723c9bbdfc940b41652fc5bb7e61"
     },
     {
       "logId": "7912903559520169914",
-      "loggedType": {
-        "name": "",
-        "type": 15,
-        "typeArguments": []
-      }
+      "concreteTypeId": "6dd047dcef1fafba87b54170a1ee4a99a8ae37746e594cbc548c5315368b20c3"
     },
     {
       "logId": "10699517786846983752",
-      "loggedType": {
-        "name": "",
-        "type": 17,
-        "typeArguments": []
-      }
+      "concreteTypeId": "947c52bd18fcf648398d82d4d7b3cb539ef96fec3211f41a6e733a8a4f02f67e"
     }
   ],
   "messagesTypes": [],
@@ -895,27 +775,27 @@ const _abi = {
 
 const _storageSlots: StorageSlot[] = [
   {
-    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae",
+    "key": "1d63cc2495bbf5570c9a6d7f632018dc033107e7f4452405c44601bb771a4a5d",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbaf",
+    "key": "1d63cc2495bbf5570c9a6d7f632018dc033107e7f4452405c44601bb771a4a5e",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "b48b753af346966d0d169c0b2e3234611f65d5cfdb57c7b6e7cd6ca93707bee0",
+    "key": "38a1b038206f348ec947ba5770c6d713148c9d8bb0b312f47acc88777da1c09d",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c0",
+    "key": "5241fe67131bb3e82a0a52cc83936f02e45f5108564dba8af8faef76ba31fd0a",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c1",
+    "key": "5241fe67131bb3e82a0a52cc83936f02e45f5108564dba8af8faef76ba31fd0b",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "key": "7dbef6dc4e365382940f04cc782498fa1eb5d35829c52c2ddeaa18df059c4910",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   }
 ];
@@ -943,7 +823,7 @@ export const StrategyAuctionAbi__factory = {
   ): Promise<StrategyAuctionAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const contract = await factory.deployContract({
+    const contract = await factory.deploy({
       storageSlots: _storageSlots,
       ...options,
     });

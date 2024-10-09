@@ -27,10 +27,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet)
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .initialize()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`AssetManager. initialize failed. Reason: ${err}`)
@@ -46,10 +47,11 @@ export async function addAsset(
     try {
         const contract = await setup(contractId, provider, wallet)
         const _asset: AssetIdInput = { bits: asset };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .add_asset(_asset)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`AssetManager. addAsset failed. Reason: ${err}`)
@@ -64,10 +66,11 @@ export async function removeAsset(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .remove_asset(index)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`AssetManager. removeAsset failed. Reason: ${err}`)
@@ -151,10 +154,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`AssetManager. transferOwnership failed. Reason: ${err}`)
@@ -168,10 +172,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`AssetManager. renounceOwnership failed. Reason: ${err}`)

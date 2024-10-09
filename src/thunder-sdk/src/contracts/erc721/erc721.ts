@@ -36,10 +36,11 @@ export async function mint(
         const fill0 = subId.toString().padStart(64, "0")
         const stringSubId = fill0.padStart(66, zeroX)
         const _to: IdentityInput = { Address: { bits: to } };
-        const { transactionResult, logs } = await contract.functions
+        const { waitForResult } = await contract.functions
             .mint(_to, stringSubId, amount)
             .txParams({})
             .call();
+        const { transactionResult, logs } = await waitForResult();
         return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: mint failed. Reason: ${err}`);
@@ -70,10 +71,11 @@ export async function mint(
 
 //     try {
 //         const _to: IdentityInput = { Address: { bits: to } };
-//         const { transactionResult, logs } = await contract.functions
+//         const { waitForResult } = await contract.functions
 //             .bulk_mint(_to, subIDs)
 //             .txParams({variableOutputs: amount})
 //             .call();
+//         const { transactionResult, logs } = await waitForResult();
 //         return { transactionResult, logs };
 //     } catch(err: any) {
 //         throw Error(`ERC721: bulkMint failed. Reason: ${err}`);
@@ -94,11 +96,12 @@ export async function bulkMintScript(
         const _to: IdentityInput = { Address: { bits: to } };
 
         const script = new Script(bytecode, abi, wallet)
-        const { transactionResult, logs } = await script.functions
+        const { waitForResult } = await script.functions
             .main(_collection, _to, amount)
             .txParams({})
             .addContracts([_contract])
             .call();
+        const { transactionResult, logs } = await waitForResult();
         return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: bulkMintScript failed. Reason: ${err}`)
@@ -132,9 +135,10 @@ export async function bulkMintWithMulticall(
     if (calls.length === 0) return null;
 
     try {
-        const { transactionResult, logs } = await contract.multiCall(calls)
+        const { waitForResult } = await contract.multiCall(calls)
             .txParams({ variableOutputs: amount})
             .call();
+        const { transactionResult, logs } = await waitForResult();
         return { transactionResult, logs };
     } catch(err: any) {
         throw Error(`ERC721: bulkMintWithMulticall failed. Reason: ${err}`);

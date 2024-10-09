@@ -1,13 +1,13 @@
 /// <reference types="react-scripts" />
 
-import { FuelWeb3 } from "@fuel-wallet/sdk";
+import type { Fuel } from "fuels";
 
 export {};
 
 declare global {
   interface Window {
-    fuel: FuelWeb3;
-    fuelet: FuelWeb3;
+    fuel: Fuel;
+    fuelet: Fuel;
     ethereum: any;
     requestParams: any;
   }

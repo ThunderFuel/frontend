@@ -170,7 +170,7 @@ const CollectionItem = ({ collection, selectionDisabled }: { collection: Collect
     } else {
       dispatch(addBuyNowItem(collection));
       try {
-        hasEnoughFunds(collection.price).then((res) => {
+        hasEnoughFunds(collection.price.toString()).then((res) => {
           dispatch(setIsInsufficientBalance(!res));
           dispatch(toggleCheckoutModal());
         });

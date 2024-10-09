@@ -15,13 +15,17 @@ import { useDispatch } from "react-redux";
 import { setNetworkId } from "store/walletSlice";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { WagmiConfig } from "wagmiconfig";
-class WagmiProvider extends BaseProvider {
-  provider = wagmi;
-  dispatch: any;
+import type { Action, Dispatch } from "redux";
 
-  constructor() {
+class WagmiProvider<T extends Action<Y>, Y = any> extends BaseProvider {
+  provider = wagmi;
+  dispatch: Dispatch;
+
+  constructor(dispatch: Dispatch<T>) {
     super();
-    this.dispatch = useDispatch();
+    // Hooks should only be called in a React context (e.g. inside a component or another hook)
+    // Though the method that uses this doesn't seem to be used anywhere, this can cause nasty bugs and crashes
+    this.dispatch = dispatch;
   }
 
   private handleSteps({ updateListing, steps, setApproved, wagmiSteps, setWagmiSteps, setStepData }: any) {

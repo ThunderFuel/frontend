@@ -14,204 +14,221 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { AssetManagerAbi, AssetManagerAbiInterface } from "../AssetManagerAbi";
 
 const _abi = {
-  "encoding": "1",
-  "types": [
+  "programType": "contract",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
     {
-      "typeId": 0,
       "type": "()",
-      "components": [],
-      "typeParameters": null
+      "concreteTypeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
     },
     {
-      "typeId": 1,
-      "type": "b256",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 2,
       "type": "bool",
-      "components": null,
-      "typeParameters": null
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
     },
     {
-      "typeId": 3,
-      "type": "enum AccessError",
-      "components": [
-        {
-          "name": "CannotReinitialized",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "NotOwner",
-          "type": 0,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
+      "type": "enum errors::AssetManagerErrors",
+      "concreteTypeId": "763887443d2a6ae25bd40b563190248c23a7e47981142ca06968489e63950963",
+      "metadataTypeId": 1
     },
     {
-      "typeId": 4,
-      "type": "enum AssetManagerErrors",
-      "components": [
-        {
-          "name": "Initialized",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "OnlyOwner",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "AssetAlreadySupported",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "AssetNotSupported",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "ZeroLengthVec",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "IndexOutOfBound",
-          "type": 0,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
+      "type": "enum libraries::ownable::AccessError",
+      "concreteTypeId": "b125b3c353d0e20ba2296785cc1653908f3c1fb7e67e055938c31fd0e1bb8086",
+      "metadataTypeId": 2
     },
     {
-      "typeId": 5,
-      "type": "enum Identity",
-      "components": [
-        {
-          "name": "Address",
-          "type": 8,
-          "typeArguments": null
-        },
-        {
-          "name": "ContractId",
-          "type": 10,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
+      "type": "enum std::identity::Identity",
+      "concreteTypeId": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335",
+      "metadataTypeId": 3
     },
     {
-      "typeId": 6,
-      "type": "enum Option",
-      "components": [
-        {
-          "name": "None",
-          "type": 0,
-          "typeArguments": null
-        },
-        {
-          "name": "Some",
-          "type": 7,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": [
-        7
+      "type": "enum std::option::Option<enum std::identity::Identity>",
+      "concreteTypeId": "253aea1197e8005518365bd24c8bc31f73a434fac0f7350e57696edfdd4850c2",
+      "metadataTypeId": 4,
+      "typeArguments": [
+        "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335"
       ]
     },
     {
-      "typeId": 7,
+      "type": "enum std::option::Option<struct std::asset_id::AssetId>",
+      "concreteTypeId": "191bf2140761b3c5ab6c43992d162bb3dc9d7f2272b2ee5f5eeea411ddedcd32",
+      "metadataTypeId": 4,
+      "typeArguments": [
+        "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974"
+      ]
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipRenounced",
+      "concreteTypeId": "6dd047dcef1fafba87b54170a1ee4a99a8ae37746e594cbc548c5315368b20c3",
+      "metadataTypeId": 6
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipSet",
+      "concreteTypeId": "8416605cb05f0e41791636365d6644426eb8723c9bbdfc940b41652fc5bb7e61",
+      "metadataTypeId": 7
+    },
+    {
+      "type": "struct libraries::ownable::OwnershipTransferred",
+      "concreteTypeId": "947c52bd18fcf648398d82d4d7b3cb539ef96fec3211f41a6e733a8a4f02f67e",
+      "metadataTypeId": 8
+    },
+    {
+      "type": "struct std::asset_id::AssetId",
+      "concreteTypeId": "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974",
+      "metadataTypeId": 10
+    },
+    {
+      "type": "u64",
+      "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+    }
+  ],
+  "metadataTypes": [
+    {
+      "type": "b256",
+      "metadataTypeId": 0
+    },
+    {
+      "type": "enum errors::AssetManagerErrors",
+      "metadataTypeId": 1,
+      "components": [
+        {
+          "name": "Initialized",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "OnlyOwner",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "AssetAlreadySupported",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "AssetNotSupported",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "ZeroLengthVec",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "IndexOutOfBound",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        }
+      ]
+    },
+    {
+      "type": "enum libraries::ownable::AccessError",
+      "metadataTypeId": 2,
+      "components": [
+        {
+          "name": "CannotReinitialized",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "NotOwner",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        }
+      ]
+    },
+    {
+      "type": "enum std::identity::Identity",
+      "metadataTypeId": 3,
+      "components": [
+        {
+          "name": "Address",
+          "typeId": 9
+        },
+        {
+          "name": "ContractId",
+          "typeId": 11
+        }
+      ]
+    },
+    {
+      "type": "enum std::option::Option",
+      "metadataTypeId": 4,
+      "components": [
+        {
+          "name": "None",
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
+        },
+        {
+          "name": "Some",
+          "typeId": 5
+        }
+      ],
+      "typeParameters": [
+        5
+      ]
+    },
+    {
       "type": "generic T",
-      "components": null,
-      "typeParameters": null
+      "metadataTypeId": 5
     },
     {
-      "typeId": 8,
-      "type": "struct Address",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 9,
-      "type": "struct AssetId",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 10,
-      "type": "struct ContractId",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 11,
-      "type": "struct OwnershipRenounced",
+      "type": "struct libraries::ownable::OwnershipRenounced",
+      "metadataTypeId": 6,
       "components": [
         {
           "name": "previous_owner",
-          "type": 5,
-          "typeArguments": null
+          "typeId": 3
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 12,
-      "type": "struct OwnershipSet",
+      "type": "struct libraries::ownable::OwnershipSet",
+      "metadataTypeId": 7,
       "components": [
         {
           "name": "new_owner",
-          "type": 5,
-          "typeArguments": null
+          "typeId": 3
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 13,
-      "type": "struct OwnershipTransferred",
+      "type": "struct libraries::ownable::OwnershipTransferred",
+      "metadataTypeId": 8,
       "components": [
         {
           "name": "new_owner",
-          "type": 5,
-          "typeArguments": null
+          "typeId": 3
         },
         {
           "name": "previous_owner",
-          "type": 5,
-          "typeArguments": null
+          "typeId": 3
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 14,
-      "type": "u64",
-      "components": null,
-      "typeParameters": null
+      "type": "struct std::address::Address",
+      "metadataTypeId": 9,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
+    },
+    {
+      "type": "struct std::asset_id::AssetId",
+      "metadataTypeId": 10,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
+    },
+    {
+      "type": "struct std::contract_id::ContractId",
+      "metadataTypeId": 11,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
     }
   ],
   "functions": [
@@ -219,17 +236,18 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974"
         }
       ],
       "name": "add_asset",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Adds asset into supported assets vec"
+          ]
+        },
         {
           "name": "storage",
           "arguments": [
@@ -242,11 +260,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "get_count_supported_assets",
-      "output": {
-        "name": "",
-        "type": 14,
-        "typeArguments": null
-      },
+      "output": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
       "attributes": [
         {
           "name": "storage",
@@ -260,23 +274,18 @@ const _abi = {
       "inputs": [
         {
           "name": "index",
-          "type": 14,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
       ],
       "name": "get_supported_asset",
-      "output": {
-        "name": "",
-        "type": 6,
-        "typeArguments": [
-          {
-            "name": "",
-            "type": 9,
-            "typeArguments": null
-          }
-        ]
-      },
+      "output": "191bf2140761b3c5ab6c43992d162bb3dc9d7f2272b2ee5f5eeea411ddedcd32",
       "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Returns a supported asset at the index"
+          ]
+        },
         {
           "name": "storage",
           "arguments": [
@@ -288,12 +297,14 @@ const _abi = {
     {
       "inputs": [],
       "name": "initialize",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Initializes the contract and sets the owner"
+          ]
+        },
         {
           "name": "storage",
           "arguments": [
@@ -307,17 +318,18 @@ const _abi = {
       "inputs": [
         {
           "name": "asset",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974"
         }
       ],
       "name": "is_asset_supported",
-      "output": {
-        "name": "",
-        "type": 2,
-        "typeArguments": null
-      },
+      "output": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
       "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Returns true or false based on whether the asset is supported or not"
+          ]
+        },
         {
           "name": "storage",
           "arguments": [
@@ -329,17 +341,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "owner",
-      "output": {
-        "name": "",
-        "type": 6,
-        "typeArguments": [
-          {
-            "name": "",
-            "type": 5,
-            "typeArguments": null
-          }
-        ]
-      },
+      "output": "253aea1197e8005518365bd24c8bc31f73a434fac0f7350e57696edfdd4850c2",
       "attributes": [
         {
           "name": "storage",
@@ -353,17 +355,18 @@ const _abi = {
       "inputs": [
         {
           "name": "index",
-          "type": 14,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
       ],
       "name": "remove_asset",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
+        {
+          "name": "doc-comment",
+          "arguments": [
+            " Removes asset from supported assets vec"
+          ]
+        },
         {
           "name": "storage",
           "arguments": [
@@ -376,11 +379,7 @@ const _abi = {
     {
       "inputs": [],
       "name": "renounce_ownership",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -395,16 +394,11 @@ const _abi = {
       "inputs": [
         {
           "name": "new_owner",
-          "type": 5,
-          "typeArguments": null
+          "concreteTypeId": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335"
         }
       ],
       "name": "transfer_ownership",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "storage",
@@ -419,43 +413,23 @@ const _abi = {
   "loggedTypes": [
     {
       "logId": "12764806370357731851",
-      "loggedType": {
-        "name": "",
-        "type": 3,
-        "typeArguments": []
-      }
+      "concreteTypeId": "b125b3c353d0e20ba2296785cc1653908f3c1fb7e67e055938c31fd0e1bb8086"
     },
     {
       "logId": "8518707422325009122",
-      "loggedType": {
-        "name": "",
-        "type": 4,
-        "typeArguments": []
-      }
+      "concreteTypeId": "763887443d2a6ae25bd40b563190248c23a7e47981142ca06968489e63950963"
     },
     {
       "logId": "9517900813706399297",
-      "loggedType": {
-        "name": "",
-        "type": 12,
-        "typeArguments": []
-      }
+      "concreteTypeId": "8416605cb05f0e41791636365d6644426eb8723c9bbdfc940b41652fc5bb7e61"
     },
     {
       "logId": "7912903559520169914",
-      "loggedType": {
-        "name": "",
-        "type": 11,
-        "typeArguments": []
-      }
+      "concreteTypeId": "6dd047dcef1fafba87b54170a1ee4a99a8ae37746e594cbc548c5315368b20c3"
     },
     {
       "logId": "10699517786846983752",
-      "loggedType": {
-        "name": "",
-        "type": 13,
-        "typeArguments": []
-      }
+      "concreteTypeId": "947c52bd18fcf648398d82d4d7b3cb539ef96fec3211f41a6e733a8a4f02f67e"
     }
   ],
   "messagesTypes": [],
@@ -464,15 +438,15 @@ const _abi = {
 
 const _storageSlots: StorageSlot[] = [
   {
-    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c0",
+    "key": "1d63cc2495bbf5570c9a6d7f632018dc033107e7f4452405c44601bb771a4a5d",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "de9090cb50e71c2588c773487d1da7066d0c719849a7e58dc8b6397a25c567c1",
+    "key": "1d63cc2495bbf5570c9a6d7f632018dc033107e7f4452405c44601bb771a4a5e",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   },
   {
-    "key": "f383b0ce51358be57daa3b725fe44acdb2d880604e367199080b4379c41bb6ed",
+    "key": "38a1b038206f348ec947ba5770c6d713148c9d8bb0b312f47acc88777da1c09d",
     "value": "0000000000000000000000000000000000000000000000000000000000000000"
   }
 ];
@@ -500,7 +474,7 @@ export const AssetManagerAbi__factory = {
   ): Promise<AssetManagerAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const contract = await factory.deployContract({
+    const contract = await factory.deploy({
       storageSlots: _storageSlots,
       ...options,
     });

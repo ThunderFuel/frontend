@@ -47,7 +47,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const { getBalance, hasEnoughBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
 
   const [offer, setoffer] = useState<any>("");
@@ -56,24 +56,19 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
 
   const [isMultipleEdition, setIsMultipleEdition] = useState(false);
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
-
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+    getBidBalance?.({ contractAddress: user.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   }
 
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 
   const isValidNumber = (price: any) => {
-    return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
+    return !(Number.isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
   const bidBalanceControl = () => {
@@ -82,13 +77,13 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
 
   const footer = (
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
-      <Balances balance={balance} onFetchBalance={fetchBalance} />
+      <Balances />
       <div className="flex justify-end gap-x-3 px-5 py-5">
         <Button className="btn-secondary" onClick={() => dispatch(toggleManageFundsModal())}>
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(offer) || !hasEnoughBalance(balance, offer) ? true : isButtonDisabled}
+          disabled={!isValidNumber(offer) || !hasEnoughBalance(offer) ? true : isButtonDisabled}
           onClick={() => {
             setIsButtonDisabled(true);
             dispatch(
@@ -135,6 +130,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
       </div>
     );
   };
+  const hasEnough = hasEnoughBalance(offer);
 
   return (
     <RightMenu title="Make Offer" footer={footer} onBack={onBack}>
@@ -150,13 +146,13 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           )}
         </div>
         <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
-        {!hasEnoughBalance(balance, offer) && offer !== "" && (
+        {!hasEnoughBalance(offer) && offer !== "" && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
           </div>
         )}
-        {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
+        {!toGwei(offer).eq(0) && hasEnough && offer > bidBalance && (
           <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
             <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>

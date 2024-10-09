@@ -209,10 +209,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .initialize()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. initialize failed. Reason: ${err}`)
@@ -274,12 +275,13 @@ async function _placeSellOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .place_order(_order)
             .txParams({gasLimit})
             .callParams({forward: asset})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _placeSellOrder failed. Reason: ${err}`)
@@ -313,11 +315,12 @@ async function _placeBuyOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .place_order(_order)
             .txParams({gasLimit})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _placeBuyOrder failed. Reason: ${err}`)
@@ -351,11 +354,12 @@ export async function updateOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .update_order(_order)
             .txParams({gasLimit})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. updateOrder failed. Reason: ${err}`)
@@ -402,12 +406,13 @@ export async function depositAndOffer(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await script.functions
+        const { waitForResult } = await script.functions
             .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
             .txParams({gasLimit})
             .callParams({forward: coin})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const{ transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. depositAndOffer failed. Reason: ${err}`)
@@ -486,10 +491,11 @@ export async function bulkListing(
 
     const gasLimit = Number(gasUsed) * 1.5
 
-    const { transactionResult } = await contract.multiCall(calls)
+    const { waitForResult } = await contract.multiCall(calls)
         .txParams({gasLimit})
         .addContracts(_contracts)
         .call();
+    const { transactionResult } = await waitForResult();
     return { transactionResult };
 }
 
@@ -517,11 +523,12 @@ export async function cancelOrder(
         //     strategy = strategyAuction;
 
         if (isBuySide) {
-            const { transactionResult } = await contract.functions
+            const { waitForResult } = await contract.functions
                 .cancel_order(_strategy, nonce, side)
                 .addContracts([strategyContract, executionManager])
                 .txParams({})
                 .call();
+            const { transactionResult } = await waitForResult();
             return { transactionResult };
         }
 
@@ -533,11 +540,12 @@ export async function cancelOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .cancel_order(_strategy, nonce, side)
             .addContracts([strategyContract, executionManager])
             .txParams({variableOutputs: 1, gasLimit})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. cancelOrder failed. Reason: ${err}`)
@@ -592,10 +600,11 @@ export async function bulkCancelOrder(
 
     const gasLimit = Number(gasUsed) * 1.5
 
-    const { transactionResult } = await contract.multiCall(calls)
+    const { waitForResult } = await contract.multiCall(calls)
         .txParams({gasLimit})
         .addContracts([strategyFixedPrice, executionManager])
         .call();
+    const { transactionResult } = await waitForResult();
     return { transactionResult };
 }
 
@@ -609,6 +618,7 @@ export async function executeOrder(
     const takerOrder = _convertToTakerOrder(order);
 
     if (order.isBuySide) {
+        // This returns contratNotInInputs for Fuel network
         const { transactionResult } = await _executeBuyOrder(
             contractId,
             provider,
@@ -656,12 +666,13 @@ async function _executeBuyOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .execute_order(order)
             .txParams({variableOutputs: 4, gasLimit})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _executeBuyOrder failed. Reason: ${err}`)
@@ -698,12 +709,13 @@ async function _executeSellOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .execute_order(order)
             .txParams({variableOutputs: 4})
             .callParams({forward: asset, gasLimit})
             .addContracts([_strategy, _collection, pool, assetManager, royaltyManager, executionManager])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _executeSellOrder failed. Reason: ${err}`)
@@ -751,10 +763,11 @@ export async function bulkPurchase(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.multiCall(calls)
+        const { waitForResult } = await contract.multiCall(calls)
             .txParams({gasLimit})
             .addContracts(_contracts)
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
@@ -770,10 +783,11 @@ export async function setPool(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _pool: ContractIdInput = { bits: pool };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_pool(_pool)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
@@ -789,10 +803,11 @@ export async function setExecutionManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _executionManager: ContractIdInput = { bits: executionManager };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_execution_manager(_executionManager)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setExecutionManager failed. Reason: ${err}`)
@@ -808,10 +823,11 @@ export async function setRoyaltyManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _royaltyManager: ContractIdInput = { bits: royaltyManager };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_royalty_manager(_royaltyManager)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setRoyaltyManager failed. Reason: ${err}`)
@@ -827,10 +843,11 @@ export async function setAssetManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _assetManager: ContractIdInput = { bits: assetManager };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_asset_manager(_assetManager)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setAssetManager failed. Reason: ${err}`)
@@ -850,10 +867,11 @@ export async function setProtocolFeeRecipient(
             _protocolFeeRecipient = { Address: { bits: protocolFeeRecipient } } :
             _protocolFeeRecipient = { ContractId: { bits: protocolFeeRecipient } };
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_protocol_fee_recipient(_protocolFeeRecipient)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setProtocolFeeRecipient failed. Reason: ${err}`)
@@ -868,10 +886,11 @@ export async function setMaxExpiration(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_max_expiration(maxExpiration)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setMaxExpiration failed. Reason: ${err}`)
@@ -983,10 +1002,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. transferOwnership failed. Reason: ${err}`)
@@ -1000,10 +1020,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. renounceOwnership failed. Reason: ${err}`)

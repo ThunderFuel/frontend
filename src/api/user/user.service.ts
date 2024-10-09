@@ -1,7 +1,7 @@
 import { ThunderURL } from "../index";
 import { ICreateUser, IFollowParams, IUserResponse } from "./user.type";
 import { ApiResponse } from "../HttpClient";
-import { toB256 } from "fuels";
+import { Address } from "fuels";
 
 export default {
   getUser(params: any): Promise<ApiResponse<IUserResponse>> {
@@ -25,9 +25,11 @@ export default {
     return ThunderURL.post("v1/user", body);
   },
   userCreate({ walletAddress }: any) {
+    const address = walletAddress?.length > 44 ? Address.fromDynamicInput(walletAddress) : Address.fromEvmAddress(walletAddress);
+
     const data = {
       params: {
-        address: toB256(walletAddress),
+        address: address.toB256(),
         fuelAddress: walletAddress,
       },
     };

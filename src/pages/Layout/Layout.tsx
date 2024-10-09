@@ -20,14 +20,15 @@ interface Props {
 }
 
 const Layout = ({ children, ...etc }: Props) => {
+  const { getItem } = useLocalStorage();
   React.useEffect(() => {
-    const theme = useLocalStorage().getItem(THUNDER_THEME_NAME);
+    const theme = getItem(THUNDER_THEME_NAME);
     if (theme === "dark" || (!(THUNDER_THEME_NAME in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, []);
+  }, [getItem]);
 
   const isMobile = useIsMobile();
 
