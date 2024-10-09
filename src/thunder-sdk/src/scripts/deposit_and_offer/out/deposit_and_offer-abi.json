@@ -1,166 +1,148 @@
 {
-  "encoding": "1",
-  "types": [
+  "programType": "script",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
     {
-      "typeId": 0,
       "type": "()",
-      "components": [],
-      "typeParameters": null
+      "concreteTypeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
     },
     {
-      "typeId": 1,
-      "type": "b256",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 2,
       "type": "bool",
-      "components": null,
-      "typeParameters": null
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
     },
     {
-      "typeId": 3,
-      "type": "enum Side",
+      "type": "struct libraries::order_types::MakerOrder",
+      "concreteTypeId": "3d46176b340e1859842235481ab83a21dd6493b73dcbfc8e8c0ba96dbd2d07bb",
+      "metadataTypeId": 3
+    },
+    {
+      "type": "struct std::asset_id::AssetId",
+      "concreteTypeId": "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974",
+      "metadataTypeId": 5
+    },
+    {
+      "type": "struct std::contract_id::ContractId",
+      "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
+      "metadataTypeId": 6
+    },
+    {
+      "type": "u64",
+      "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
+    }
+  ],
+  "metadataTypes": [
+    {
+      "type": "b256",
+      "metadataTypeId": 0
+    },
+    {
+      "type": "enum libraries::order_types::Side",
+      "metadataTypeId": 1,
       "components": [
         {
           "name": "Buy",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         },
         {
           "name": "Sell",
-          "type": 0,
-          "typeArguments": null
+          "typeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 4,
-      "type": "struct Address",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 5,
-      "type": "struct AssetId",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 6,
-      "type": "struct ContractId",
-      "components": [
-        {
-          "name": "bits",
-          "type": 1,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 7,
-      "type": "struct ExtraParams",
+      "type": "struct libraries::order_types::ExtraParams",
+      "metadataTypeId": 2,
       "components": [
         {
           "name": "extra_address_param",
-          "type": 4,
-          "typeArguments": null
+          "typeId": 4
         },
         {
           "name": "extra_contract_param",
-          "type": 6,
-          "typeArguments": null
+          "typeId": 6
         },
         {
           "name": "extra_u64_param",
-          "type": 9,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 8,
-      "type": "struct MakerOrderInput",
+      "type": "struct libraries::order_types::MakerOrder",
+      "metadataTypeId": 3,
       "components": [
         {
           "name": "side",
-          "type": 3,
-          "typeArguments": null
+          "typeId": 1
         },
         {
           "name": "maker",
-          "type": 4,
-          "typeArguments": null
+          "typeId": 4
         },
         {
           "name": "collection",
-          "type": 6,
-          "typeArguments": null
+          "typeId": 6
         },
         {
           "name": "token_id",
-          "type": 1,
-          "typeArguments": null
+          "typeId": 0
         },
         {
           "name": "price",
-          "type": 9,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "amount",
-          "type": 9,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "nonce",
-          "type": 9,
-          "typeArguments": null
+          "typeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "strategy",
-          "type": 6,
-          "typeArguments": null
+          "typeId": 6
         },
         {
           "name": "payment_asset",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "expiration_range",
-          "type": 9,
-          "typeArguments": null
+          "typeId": 5
         },
         {
           "name": "extra_params",
-          "type": 7,
-          "typeArguments": null
+          "typeId": 2
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 9,
-      "type": "u64",
-      "components": null,
-      "typeParameters": null
+      "type": "struct std::address::Address",
+      "metadataTypeId": 4,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
+    },
+    {
+      "type": "struct std::asset_id::AssetId",
+      "metadataTypeId": 5,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
+    },
+    {
+      "type": "struct std::contract_id::ContractId",
+      "metadataTypeId": 6,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 0
+        }
+      ]
     }
   ],
   "functions": [
@@ -168,41 +150,31 @@
       "inputs": [
         {
           "name": "thunder_exchange",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
         },
         {
           "name": "pool",
-          "type": 6,
-          "typeArguments": null
+          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
         },
         {
           "name": "order",
-          "type": 8,
-          "typeArguments": null
+          "concreteTypeId": "3d46176b340e1859842235481ab83a21dd6493b73dcbfc8e8c0ba96dbd2d07bb"
         },
         {
           "name": "require_bid_amount",
-          "type": 9,
-          "typeArguments": null
+          "concreteTypeId": "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0"
         },
         {
           "name": "asset",
-          "type": 5,
-          "typeArguments": null
+          "concreteTypeId": "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974"
         },
         {
           "name": "is_update",
-          "type": 2,
-          "typeArguments": null
+          "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
         }
       ],
       "name": "main",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d",
       "attributes": [
         {
           "name": "payable",
