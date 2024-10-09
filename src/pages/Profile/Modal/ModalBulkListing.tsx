@@ -20,8 +20,7 @@ import nftdetailsService from "../../../api/nftdetails/nftdetails.service";
 import { toGwei } from "../../../utils";
 import { strategyFixedPriceContractId } from "../../../global-constants";
 import clsx from "clsx";
-import { useFuel } from '@fuels/react';
-
+import { useFuel } from "@fuels/react";
 
 const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   const isMobile = useIsMobile();

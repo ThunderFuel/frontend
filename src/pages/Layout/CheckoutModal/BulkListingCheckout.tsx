@@ -15,7 +15,7 @@ import { strategyFixedPriceContractId } from "global-constants";
 import FuelProvider from "providers/FuelProvider";
 import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
 import { set } from "react-hook-form";
-import { useFuel } from '@fuels/react';
+import { useFuel } from "@fuels/react";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",

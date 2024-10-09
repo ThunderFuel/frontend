@@ -1,8 +1,8 @@
-import { useGatewayStore } from '../store/gatewayStore';
-import { useFuel } from 'hooks/useFuel';
-import { useMemo, useState } from 'react';
-import WagmiProvider from 'providers/WagmiProvider';
-import { Fuel } from 'fuels';
+import { useGatewayStore } from "../store/gatewayStore";
+import { useFuel } from "hooks/useFuel";
+import { useMemo, useState } from "react";
+import WagmiProvider from "providers/WagmiProvider";
+import { Fuel } from "fuels";
 
 export enum FUEL_TYPE {
   FUEL = "fuel",
@@ -14,8 +14,6 @@ export enum FUEL_TYPE {
   LIT_GOOGLE_AUTH = "lit_google_auth",
   LIT_DISCORD_AUTH = "lit_discord_auth",
 }
-
-
 
 interface WagmiGateway {
   fuelGateway: undefined;
@@ -36,12 +34,11 @@ export const useFuelExtension = (): WagmiGateway | FuelGateway => {
   const { fuel } = useFuel();
   const [wagmi] = useState(() => new WagmiProvider());
 
-  
   return useMemo(() => {
     const baseObject = {
       setGatewayType,
       clearGatewayType,
-    }
+    };
 
     switch (gatewayType) {
       case FUEL_TYPE.WAGMI_METAMASK:
@@ -53,7 +50,7 @@ export const useFuelExtension = (): WagmiGateway | FuelGateway => {
           ...baseObject,
           wagmiGateway: wagmi,
           fuelGateway: undefined,
-        }
+        };
       case FUEL_TYPE.FUEL:
       case FUEL_TYPE.FUELET:
       default:

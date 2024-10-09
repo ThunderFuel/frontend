@@ -16,7 +16,7 @@ export const useWallet = () => {
   const { setGatewayType, wagmiGateway, clearGatewayType } = useFuelExtension();
   const { isConnected, refetch: refetchConnected, isFetching } = useIsConnected();
   const { account } = useAccount();
-  const { wallet } = useFuelWallet({account});
+  const { wallet } = useFuelWallet({ account });
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
@@ -50,13 +50,19 @@ export const useWallet = () => {
     }
   }, [isConnected, account, wallet, user, isConnecting, isFetching, _connect, setGatewayType, dispatch]);
 
-  const hasEnoughFunds = useCallback(async (buyNowItemPrice?: any) => {
-    return wagmiGateway?.hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
-  }, [wagmiGateway, getWalletAddress, totalAmount, user.walletAddress]);
+  const hasEnoughFunds = useCallback(
+    async (buyNowItemPrice?: any) => {
+      return wagmiGateway?.hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
+    },
+    [wagmiGateway, getWalletAddress, totalAmount, user.walletAddress]
+  );
 
-  const hasEnoughBalance = useCallback((balance: any, amount: any) => {
-    return wagmiGateway?.hasEnoughBalance(balance, amount);
-  }, [wagmiGateway]);
+  const hasEnoughBalance = useCallback(
+    (balance: any, amount: any) => {
+      return wagmiGateway?.hasEnoughBalance(balance, amount);
+    },
+    [wagmiGateway]
+  );
 
   const getConnectionStatus = useCallback(async () => {
     return wagmiGateway?.isConnected();
@@ -68,37 +74,46 @@ export const useWallet = () => {
     return null;
   }, [wagmiGateway, isConnected, user.walletAddress]);
 
-  const getBidBalance = useCallback(({ contractAddress, user }: any) => {
-    if (isConnected) {
-      return wagmiGateway?.getBidBalance({ contractAddress, user });
-    }
-
-    return null;
-  }, [wagmiGateway, isConnected]);
-
-  const walletConnectGateway = useCallback((type: FUEL_TYPE, activeConnector: number) => {
-    setGatewayType(type);
-
-    return walletConnect(activeConnector, type);
-  }, [setGatewayType]);
-
-  const walletConnect = useCallback(async (activeConnector?: number, type?: any) => {
-    if (!isConnected) {
-      try {
-        const { connect, user, wallet, fuelAddress, address } = await wagmiGateway?.walletConnect(activeConnector);
-        dispatch(setIsConnected(connect));
-        dispatch(setAddress(fuelAddress ?? address));
-        dispatch(setUser(user));
-        dispatch(setWallet(wallet));
-
-        return true;
-      } catch (e) {
-        // useErrorModal(e);
-
-        return false;
+  const getBidBalance = useCallback(
+    ({ contractAddress, user }: any) => {
+      if (isConnected) {
+        return wagmiGateway?.getBidBalance({ contractAddress, user });
       }
-    } else return true;
-  }, [wagmiGateway, dispatch, isConnected]);
+
+      return null;
+    },
+    [wagmiGateway, isConnected]
+  );
+
+  const walletConnectGateway = useCallback(
+    (type: FUEL_TYPE, activeConnector: number) => {
+      setGatewayType(type);
+
+      return walletConnect(activeConnector, type);
+    },
+    [setGatewayType]
+  );
+
+  const walletConnect = useCallback(
+    async (activeConnector?: number, type?: any) => {
+      if (!isConnected) {
+        try {
+          const { connect, user, wallet, fuelAddress, address } = (await wagmiGateway?.walletConnect(activeConnector)) ?? {};
+          dispatch(setIsConnected(connect));
+          dispatch(setAddress(fuelAddress ?? address));
+          dispatch(setUser(user));
+          dispatch(setWallet(wallet));
+
+          return true;
+        } catch (e) {
+          // useErrorModal(e);
+
+          return false;
+        }
+      } else return true;
+    },
+    [wagmiGateway, dispatch, isConnected]
+  );
 
   const walletDisconnect = useCallback(async () => {
     disconnect();
@@ -116,17 +131,26 @@ export const useWallet = () => {
     return wagmiGateway?.getProviderType();
   }, [wagmiGateway]);
 
-  const handleDeposit = useCallback(({ wallet, amount, user, setIsDisabled }: any) => {
-    return wagmiGateway?.handleDeposit({ wallet, amount, user, setIsDisabled });
-  }, [wagmiGateway]);
+  const handleDeposit = useCallback(
+    ({ wallet, amount, user, setIsDisabled }: any) => {
+      return wagmiGateway?.handleDeposit({ wallet, amount, user, setIsDisabled });
+    },
+    [wagmiGateway]
+  );
 
-  const handleWithdraw = useCallback(({ wallet, amount, user, setIsDisabled }: any) => {
-    return wagmiGateway?.handleWithdraw({ wallet, amount, user, setIsDisabled });
-  }, [wagmiGateway]);
+  const handleWithdraw = useCallback(
+    ({ wallet, amount, user, setIsDisabled }: any) => {
+      return wagmiGateway?.handleWithdraw({ wallet, amount, user, setIsDisabled });
+    },
+    [wagmiGateway]
+  );
 
-  const handleCheckout = useCallback(({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
-    return wagmiGateway?.handleCheckout({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
-  }, [wagmiGateway]);
+  const handleCheckout = useCallback(
+    ({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
+      return wagmiGateway?.handleCheckout({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
+    },
+    [wagmiGateway]
+  );
 
   const handleConfirmListing = ({
     cancelOrderIds,

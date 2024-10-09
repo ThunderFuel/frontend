@@ -16,7 +16,6 @@ import type { FUEL_TYPE } from "hooks/useFuelExtension";
 import { EventDispatchFetchBalances } from "pages/Layout/Header/Header";
 
 class FuelProvider extends BaseProvider {
-
   provider: Fuel;
 
   constructor(provider: Fuel | undefined) {
@@ -30,7 +29,6 @@ class FuelProvider extends BaseProvider {
   }
 
   async getBaseAssetId() {
-
     return (await FUEL_PROVIDER).getBaseAssetId();
   }
 
