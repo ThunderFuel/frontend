@@ -13,18 +13,10 @@ import LOCALES from "./locales";
 
 
 import * as Sentry from "@sentry/react";
-import { Fuel } from 'fuels';
 import { FuelProvider } from "@fuels/react";
 
-import { FuelWalletConnector, FueletWalletConnector } from "@fuels/connectors";
 import { BrowserTracing } from "@sentry/browser";
 
-export const FuelInstance = new Fuel({
-  connectors: [new FueletWalletConnector(), new FuelWalletConnector()],
-});
-
-
-// import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import { StytchProvider } from "@stytch/react";
