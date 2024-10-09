@@ -1,6 +1,7 @@
 import { useLocalStorage } from "./useLocalStorage";
 import WagmiProvider from "providers/WagmiProvider";
 import { useFuel } from 'hooks/useFuel';
+import { useState } from 'react';
 
 const storage = useLocalStorage();
 const FuelGatewayType = "thunder_fuel_gateway_type";
@@ -22,7 +23,9 @@ export const useFuelExtension = () => {
 
   const { fuel } = useFuel();
 
-  const wagmi = new WagmiProvider();
+  // Anything ouside useState, useCallback or useEffect will be called on each render
+  // Best practice is to use the hook inside the useState, useMemo or useEffect
+  const [wagmi, _] = useState(() => new WagmiProvider());
 
   const setGatewayType = (type: FUEL_TYPE) => {
     storage.setItem(FuelGatewayType, type);
