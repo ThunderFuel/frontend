@@ -18,10 +18,79 @@ import { mainnet, sepolia } from "@wagmi/core/chains";
 import * as Sentry from "@sentry/react";
 import { FuelProvider } from "@fuels/react";
 
-import { Fuel } from "fuels";
+import { CHAIN_IDS, Fuel, Provider as ProviderFuelsCore } from "fuels";
 
-export const FuelInstance = new Fuel({
-  connectors: [new FueletWalletConnector(), new FuelWalletConnector()],
+import { BrowserTracing } from "@sentry/browser";
+
+import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import { StytchProvider } from "@stytch/react";
+import { StytchUIClient } from "@stytch/vanilla-js";
+import { WALLET_CONNECT_PROJECT_ID, provider } from "global-constants";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { FueletWalletConnector, FuelWalletConnector, SolanaConnector, WalletConnectConnector } from "@fuels/connectors";
+
+const WC_PROJECT_ID = WALLET_CONNECT_PROJECT_ID;
+
+const METADATA = {
+  name: "Wallet Demo",
+  description: "Fuel Wallets Demo",
+  url: location.href,
+  icons: ["https://connectors.fuel.network/logo_white.png"],
+};
+const wagmiConfig = createConfig({
+  chains: [mainnet, sepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+  },
+  connectors: [
+    injected({ shimDisconnect: false }),
+    walletConnect({
+      projectId: WC_PROJECT_ID,
+      metadata: METADATA,
+      showQrModal: false,
+    }),
+    coinbaseWallet({
+      appName: METADATA.name,
+      appLogoUrl: METADATA.icons[0],
+      darkMode: true,
+      reloadOnDisconnect: true,
+    }),
+  ],
+});
+
+const CHAIN_ID = CHAIN_IDS.fuel["mainnet"];
+
+const NETWORKS = [
+  {
+    chainId: CHAIN_ID,
+    url: provider,
+  },
+];
+
+const mainnetProvider = ProviderFuelsCore.create(provider);
+
+const connectorConfig = {
+  chainId: CHAIN_IDS.fuel.mainnet,
+  fuelProvider: mainnetProvider,
+};
+
+const FuelInstance = new Fuel({
+  connectors: [
+    new FueletWalletConnector(),
+    new FuelWalletConnector(),
+    // new BakoSafeConnector(),
+    new WalletConnectConnector({
+      projectId: WC_PROJECT_ID,
+      wagmiConfig: wagmiConfig as any,
+      fuelProvider: mainnetProvider,
+    }),
+    new SolanaConnector({
+      projectId: WC_PROJECT_ID,
+      ...connectorConfig,
+    }),
+  ],
 });
 
 export const getFuel = () => {
@@ -30,16 +99,6 @@ export const getFuel = () => {
 export const getFuelet = () => {
   return FuelInstance;
 };
-import { BrowserTracing } from "@sentry/browser";
-
-// import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { createClient, reservoirChains } from "@reservoir0x/reservoir-sdk";
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
-import { StytchProvider } from "@stytch/react";
-import { StytchUIClient } from "@stytch/vanilla-js";
-import { WALLET_CONNECT_PROJECT_ID } from "global-constants";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FueletWalletConnector, FuelWalletConnector } from "@fuels/connectors";
 
 const isDevelopment = "development" === process.env.NODE_ENV;
 
@@ -85,34 +144,6 @@ if (!isDevelopment) {
 
 const stytch = new StytchUIClient("public-token-test-af22c4d3-1e8a-4fa5-a0fa-4c032e2a840a");
 
-const WC_PROJECT_ID = WALLET_CONNECT_PROJECT_ID;
-const METADATA = {
-  name: "Wallet Demo",
-  description: "Fuel Wallets Demo",
-  url: location.href,
-  icons: ["https://connectors.fuel.network/logo_white.png"],
-};
-const wagmiConfig = createConfig({
-  chains: [mainnet, sepolia],
-  transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-  },
-  connectors: [
-    injected({ shimDisconnect: false }),
-    walletConnect({
-      projectId: WC_PROJECT_ID,
-      metadata: METADATA,
-      showQrModal: false,
-    }),
-    coinbaseWallet({
-      appName: METADATA.name,
-      appLogoUrl: METADATA.icons[0],
-      darkMode: true,
-      reloadOnDisconnect: true,
-    }),
-  ],
-});
 const queryClient = new QueryClient();
 
 // eslint-disable-next-line react/no-deprecated
@@ -124,8 +155,28 @@ ReactDOM.render(
         <QueryClientProvider client={queryClient}>
           <FuelProvider
             theme="dark"
+            networks={NETWORKS}
             fuelConfig={{
-              connectors: [new FuelWalletConnector(), new FueletWalletConnector()],
+              // connectors: defaultConnectors({
+              //   wcProjectId: WC_PROJECT_ID,
+              //   ethWagmiConfig: wagmiConfig as any,
+              //   chainId: CHAIN_ID,
+              //   fuelProvider: ProviderFuelsCore.create(provider),
+              // }),
+              connectors: [
+                new FueletWalletConnector(),
+                new FuelWalletConnector(),
+                // new BakoSafeConnector(),
+                new WalletConnectConnector({
+                  projectId: WC_PROJECT_ID,
+                  wagmiConfig: wagmiConfig as any,
+                  fuelProvider: mainnetProvider,
+                }),
+                new SolanaConnector({
+                  projectId: WC_PROJECT_ID,
+                  ...connectorConfig,
+                }),
+              ],
             }}
           >
             <Router />

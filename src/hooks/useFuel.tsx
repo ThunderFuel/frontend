@@ -52,6 +52,7 @@ export function useFuel() {
       setError("");
       setIsLoading(false);
     } catch (error) {
+      console.log(error);
       setFuel(undefined);
       setError("Fuel wallet error");
       setIsLoading(false);

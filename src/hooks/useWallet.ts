@@ -33,6 +33,8 @@ export const useWallet = () => {
   useEffect(() => {
     if (isConnecting || isFetching) return;
 
+    console.log(account);
+
     if (isConnected && wallet && account && user?.walletAddress === undefined) {
       dispatch(setIsConnecting(true));
       dispatch(setIsConnected(true));
