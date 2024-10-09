@@ -81,6 +81,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { walletDisconnect, getBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
+  const { removeItem } = useLocalStorage();
 
   function fetchBalance() {
     getBalance().then((res) => setbalance(res ? res : 0));
@@ -190,7 +191,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     dispatch(setUser({}));
     dispatch(removeAll());
     dispatch(removeBulkItems());
-    useLocalStorage().removeItem("connected_account");
+    removeItem("connected_account");
     onClose();
   }
 
@@ -286,7 +287,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
                   dispatch(setUser({}));
                   dispatch(removeAll());
                   dispatch(removeBulkItems());
-                  useLocalStorage().removeItem("connected_account");
+                  removeItem("connected_account");
                   onClose();
                 }}
               >

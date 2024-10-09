@@ -132,6 +132,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   const { getBalance, getBidBalance } = useWallet();
   const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
+  const { removeItem } = useLocalStorage();
 
   React.useEffect(() => {
     const fetchBalances = () => {
@@ -168,7 +169,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
     dispatch(setUser({}));
     dispatch(removeAll());
     dispatch(removeBulkItems());
-    useLocalStorage().removeItem("connected_account");
+    removeItem("connected_account");
   };
 
   const container = (
@@ -223,6 +224,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
 const HeaderUserProfileInfo = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const { walletDisconnect } = useWallet();
+  const { removeItem } = useLocalStorage();
   const navigate = UseNavigate();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const items = [
@@ -276,7 +278,7 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
       dispatch(setUser({}));
       dispatch(removeAll());
       dispatch(removeBulkItems());
-      useLocalStorage().removeItem("connected_account");
+      removeItem("connected_account");
     } else {
       navigate(item.path, {});
     }
