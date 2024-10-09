@@ -8,13 +8,12 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import offerService from "api/offer/offer.service";
 import { executeOrder } from "thunder-sdk/src/contracts/thunder_exchange";
 import { exchangeContractId, provider } from "global-constants";
 import { toGwei } from "utils";
-import userService from "api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import FuelProvider from "providers/FuelProvider";
+import { useFuel } from '@fuels/react';
 
 const checkoutProcessTexts = {
   title1: "Confirm bid",
@@ -41,7 +40,11 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
-  const fuel = new FuelProvider();
+  // Must be immediately available, thtat's why the local useFuel is not used
+  const { fuel: fuelInstance } = useFuel();
+  // "() => {}" is a pattern to only resolve the useState once, otherwise it computes at each render, even if not stored
+  // useState is used to prevent the useFuel hook from being recreated again and again
+  const [fuel, _] = useState(() => new FuelProvider(fuelInstance));
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);

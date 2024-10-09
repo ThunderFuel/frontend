@@ -1,7 +1,6 @@
 import { useLocalStorage } from "./useLocalStorage";
-import FueletProvider from "../providers/FueletProvider";
-import FuelProvider from "../providers/FuelProvider";
 import WagmiProvider from "providers/WagmiProvider";
+import { useFuel } from 'hooks/useFuel';
 
 const storage = useLocalStorage();
 const FuelGatewayType = "thunder_fuel_gateway_type";
@@ -20,8 +19,9 @@ export enum FUEL_TYPE {
 let gatewayType: any = storage.getItem(FuelGatewayType);
 
 export const useFuelExtension = () => {
-  const fuelet = new FueletProvider();
-  const fuel = new FuelProvider();
+
+  const { fuel } = useFuel();
+
   const wagmi = new WagmiProvider();
 
   const setGatewayType = (type: FUEL_TYPE) => {
@@ -37,7 +37,7 @@ export const useFuelExtension = () => {
     selectedGateway: () => {
       return {
         [FUEL_TYPE.FUEL]: fuel,
-        [FUEL_TYPE.FUELET]: fuelet,
+        [FUEL_TYPE.FUELET]: fuel,
         // [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
         [FUEL_TYPE.WAGMI_METAMASK]: wagmi,
         [FUEL_TYPE.WAGMI_COINBASE]: wagmi,
