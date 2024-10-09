@@ -45,13 +45,13 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
 
   const footer = (
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
-      <Balances balance={balance} onFetchBalance={fetchBalance} />
+      <Balances />
       <div className="flex justify-end gap-x-3 px-5 py-5">
         <Button className="btn-secondary" onClick={() => dispatch(toggleManageFundsModal())}>
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(offer) || !hasEnoughBalance(balance, offer) ? true : isButtonDisabled}
+          disabled={!isValidNumber(offer) || !hasEnoughBalance(offer) ? true : isButtonDisabled}
           onClick={() => {
             setIsButtonDisabled(true);
             dispatch(
@@ -74,6 +74,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
       </div>
     </div>
   );
+  const hasEnough = hasEnoughBalance(offer);
 
   return (
     <RightMenu title="Update Offer" footer={footer} onBack={onBack}>
@@ -91,7 +92,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
           </div>
         )}
-        {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
+        {!toGwei(offer).eq(0) && hasEnough && offer > bidBalance && (
           <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
             <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>

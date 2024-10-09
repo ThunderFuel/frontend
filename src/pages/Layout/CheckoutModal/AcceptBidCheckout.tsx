@@ -48,9 +48,16 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = async () => {
-    const _baseAssetId = await fuel.getBaseAssetId();
+    const _baseAssetId = await fuel?.getBaseAssetId();
 
     nftdetailsService.getAuctionIndex([selectedNFT?.id]).then(async (res) => {
+      if (!_baseAssetId) {
+        console.error("Base asset ID is invalid");
+        setIsFailed(true);
+
+        return;
+      }
+
       const order = {
         isBuySide: false,
         taker: user.walletAddress,

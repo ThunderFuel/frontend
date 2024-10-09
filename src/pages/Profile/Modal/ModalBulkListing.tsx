@@ -143,7 +143,7 @@ const BulkListingCheckout = ({ onClose }: any) => {
     let updatePromise;
     let listPromise;
 
-    const _baseAssetId = await fuel.getBaseAssetId();
+    const _baseAssetId = await fuel?.getBaseAssetId();
 
     if (bulkUpdateItems.length > 0) {
       const res = await nftdetailsService.getTokensIndex(tokenIds);
