@@ -16,10 +16,11 @@ const Index = () => {
   const { show, isConnected } = useAppSelector(selectWallet);
   const { fuelGateway, wagmiGateway } = useFuelExtension();
   const selectedGateway = fuelGateway || wagmiGateway;
+  const { getItem, removeItem } = useLocalStorage();
 
   const handleConnection = useCallback(async () => {
     const status = await getConnectionStatus();
-    const userData = useLocalStorage().getItem("connected_account");
+    const userData = getItem("connected_account");
 
     if (status && userData) {
       dispatch(setUser(userData));
@@ -28,9 +29,9 @@ const Index = () => {
       if (connected) dispatch(setIsConnected(true));
       else dispatch(setIsConnected(false));
     } else {
-      useLocalStorage().removeItem("connected_account");
+      removeItem("connected_account");
     }
-  }, [getConnectionStatus, walletConnect, dispatch]);
+  }, [getConnectionStatus, walletConnect, dispatch, getItem, removeItem]);
 
   useEffect(() => {
     if (selectedGateway === undefined || isConnected) return;

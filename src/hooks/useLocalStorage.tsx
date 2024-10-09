@@ -1,6 +1,6 @@
 // Keep as many objects out of react state as possible
 // Otherwise objects will be re-rendered on every state change/new render
-const store = {
+export const localStore = {
   setItem: (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data));
   },
@@ -19,5 +19,5 @@ const store = {
 };
 
 export const useLocalStorage = () => {
-  return store;
+  return localStore;
 };

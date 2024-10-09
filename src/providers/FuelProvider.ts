@@ -11,7 +11,7 @@ import offerService from "api/offer/offer.service";
 import collectionsService from "api/collections/collections.service";
 import { transfer } from "thunder-sdk/src/contracts/erc721";
 import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
-import { useLocalStorage } from "hooks/useLocalStorage";
+import { localStore } from "hooks/useLocalStorage";
 import type { FUEL_TYPE } from "hooks/useFuelExtension";
 import { EventDispatchFetchBalances } from "pages/Layout/Header/Header";
 
@@ -1000,7 +1000,7 @@ class FuelProvider extends BaseProvider {
       }
 
       const user = await userService.userCreate({ walletAddress: wallet.address });
-      useLocalStorage().setItem("connected_account", user.data);
+      localStore.setItem("connected_account", user.data);
 
       return {
         connect,

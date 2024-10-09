@@ -1,16 +1,15 @@
 import { useSyncExternalStore } from "react";
-import { FUEL_TYPE } from "../hooks/useFuelExtension";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import type { FUEL_TYPE } from "../hooks/useFuelExtension";
+import { localStore } from "../hooks/useLocalStorage";
 
 type Listener = () => void;
 
 class GatewayStore {
   private gatewayType: FUEL_TYPE | null;
   private listeners: Set<Listener>;
-  private storage = useLocalStorage();
 
   constructor() {
-    this.gatewayType = (this.storage.getItem("thunder_fuel_gateway_type") as FUEL_TYPE) || null;
+    this.gatewayType = (localStore.getItem("thunder_fuel_gateway_type") as FUEL_TYPE) || null;
     this.listeners = new Set();
   }
 
@@ -24,13 +23,13 @@ class GatewayStore {
 
   setGatewayType = (type: FUEL_TYPE) => {
     this.gatewayType = type;
-    this.storage.setItem("thunder_fuel_gateway_type", type);
+    localStore.setItem("thunder_fuel_gateway_type", type);
     this.emitChange(); // Notify listeners
   };
 
   clearGatewayType = () => {
     this.gatewayType = null;
-    this.storage.removeItem("thunder_fuel_gateway_type");
+    localStore.removeItem("thunder_fuel_gateway_type");
     this.emitChange(); // Notify listeners
   };
 
