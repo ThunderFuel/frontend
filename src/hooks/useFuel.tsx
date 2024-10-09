@@ -11,7 +11,7 @@ export function useFuel() {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["fuelConnector", fuel],
+    queryKey: ["fuelConnector", fuel.name],
     queryFn: async () => {
       if (!fuel) {
         throw new Error("Fuel Wallet is not installed!");
