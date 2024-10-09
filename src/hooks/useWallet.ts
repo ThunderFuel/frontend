@@ -8,6 +8,7 @@ import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
 import { useAccount, useBalance } from "wagmi";
 import { bn, DECIMAL_FUEL, DECIMAL_WEI } from "fuels";
+import { getDecimalPlaces } from "utils/getDecimalPlaces";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
@@ -16,26 +17,27 @@ export const useWallet = () => {
   const { user } = useAppSelector((state) => state.wallet);
   const { setGatewayType, selectedGateway, clearGatewayType, gateway } = useFuelExtension();
   const { currentConnector } = useCurrentConnector();
+  const isExternal = currentConnector?.external; // External means connectors that do not support Fuel's Network (e.g. Solana, EVM (e.g. MetaMask))
 
   const { isConnected, refetch: refetchConnected, isFetching } = useIsConnected();
   const { disconnect } = useDisconnect();
   // Account
   const wagmiAccount = useAccount();
   const { account: fuelAccount } = useFuelAccount();
-  const account = gateway === "fuel" ? fuelAccount : wagmiAccount?.address;
+  const account = isExternal ? wagmiAccount?.address : fuelAccount;
   // Balance
   const { data: wagmiBalance } = useBalance({ address: wagmiAccount?.address });
   const { balance: fuelBalance } = useFuelBalance({ address: account });
   const balance = useMemo(() => {
-    if (gateway === "fuel") {
-      return fuelBalance || bn("0");
+    if (isExternal) {
+      return bn((wagmiBalance?.value || BigInt(0)).toString());
     }
 
-    return bn((wagmiBalance?.value || BigInt(0)).toString());
-  }, [fuelBalance, wagmiBalance, gateway]);
-  // const balance = gateway === "fuel" ? BigInt(fuelBalance?.toString() ?? '0') : wagmiBalance?.value || BigInt(0);
+    return fuelBalance || bn("0");
+  }, [fuelBalance, wagmiBalance, isExternal]);
 
   const { wallet: fuelWallet } = useFuelWallet({ account: fuelAccount });
+  const decimalUnits = isExternal ? DECIMAL_WEI : DECIMAL_FUEL;
 
   // Just to keep updated, but ideally this should be used directly via hooks
   useEffect(() => {
@@ -82,10 +84,16 @@ export const useWallet = () => {
   }, [currentConnector]);
 
   const hasEnoughFunds = useCallback(
-    async (buyNowItemPrice?: any) => {
-      return selectedGateway?.hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
+    async (buyNowItemPrice = "0.000") => {
+      const buyDecimalCases = getDecimalPlaces(buyNowItemPrice);
+      const balanceStringified = balance.format({
+        units: decimalUnits,
+        precision: buyDecimalCases,
+      });
+
+      return Number.parseFloat(balanceStringified) >= Number.parseFloat(buyNowItemPrice);
     },
-    [selectedGateway, getWalletAddress, totalAmount, user.walletAddress]
+    [balance, decimalUnits]
   );
 
   const hasEnoughBalance = useCallback(
@@ -103,11 +111,11 @@ export const useWallet = () => {
   const getBalance = useCallback(
     (precision = 4) => {
       return balance?.format({
-        units: gateway === "fuel" ? DECIMAL_FUEL : DECIMAL_WEI,
+        units: decimalUnits,
         precision: precision,
       });
     },
-    [balance, gateway]
+    [balance, decimalUnits]
   );
 
   const getBidBalance = useCallback(
