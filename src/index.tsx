@@ -16,11 +16,9 @@ import { http, createConfig, injected } from "@wagmi/core";
 import { mainnet, sepolia } from "@wagmi/core/chains";
 
 import * as Sentry from "@sentry/react";
-import { Fuel, FueletWalletConnector, FuelWalletConnector } from "@fuel-wallet/sdk";
 import { FuelProvider } from "@fuels/react";
 
-// import { Fuel } from "fuels";
-// import { FuelWalletConnector, FueletWalletConnector } from "@fuels/connectors";
+import { Fuel } from "fuels";
 
 export const FuelInstance = new Fuel({
   connectors: [new FueletWalletConnector(), new FuelWalletConnector()],
@@ -41,6 +39,7 @@ import { StytchProvider } from "@stytch/react";
 import { StytchUIClient } from "@stytch/vanilla-js";
 import { WALLET_CONNECT_PROJECT_ID } from "global-constants";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { FueletWalletConnector, FuelWalletConnector } from "@fuels/connectors";
 
 const isDevelopment = "development" === process.env.NODE_ENV;
 
@@ -126,7 +125,7 @@ ReactDOM.render(
           <FuelProvider
             theme="dark"
             fuelConfig={{
-              connectors: [new FueletWalletConnector() as any],
+              connectors: [new FuelWalletConnector(), new FueletWalletConnector()],
             }}
           >
             <Router />
