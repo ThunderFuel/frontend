@@ -16,7 +16,8 @@ const Index = () => {
   const dispatch = useAppDispatch();
   const { getConnectionStatus, walletConnect } = useWallet();
   const { show, isConnected } = useAppSelector(selectWallet);
-  const { selectedGateway } = useFuelExtension();
+  const { fuelGateway, wagmiGateway } = useFuelExtension();
+  const selectedGateway = fuelGateway || wagmiGateway;
 
   const handleConnection = useCallback(async () => {
     const status = await getConnectionStatus();

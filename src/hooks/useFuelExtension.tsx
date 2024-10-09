@@ -1,10 +1,8 @@
-import { useLocalStorage } from "./useLocalStorage";
-import WagmiProvider from "providers/WagmiProvider";
+import { useGatewayStore } from '../store/gatewayStore';
 import { useFuel } from 'hooks/useFuel';
-import { useCallback, useMemo, useState } from 'react';
-
-const storage = useLocalStorage();
-const FuelGatewayType = "thunder_fuel_gateway_type";
+import { useMemo, useState } from 'react';
+import WagmiProvider from 'providers/WagmiProvider';
+import { Fuel } from 'fuels';
 
 export enum FUEL_TYPE {
   FUEL = "fuel",
@@ -17,44 +15,53 @@ export enum FUEL_TYPE {
   LIT_DISCORD_AUTH = "lit_discord_auth",
 }
 
-let gatewayType: any = storage.getItem(FuelGatewayType);
 
-export const useFuelExtension = () => {
 
+interface WagmiGateway {
+  fuelGateway: undefined;
+  wagmiGateway: WagmiProvider | undefined;
+  setGatewayType: (type: FUEL_TYPE) => void;
+  clearGatewayType: () => void;
+}
+
+interface FuelGateway {
+  fuelGateway: Fuel | undefined;
+  wagmiGateway: undefined;
+  setGatewayType: (type: FUEL_TYPE) => void;
+  clearGatewayType: () => void;
+}
+
+export const useFuelExtension = (): WagmiGateway | FuelGateway => {
+  const { gatewayType, setGatewayType, clearGatewayType } = useGatewayStore();
   const { fuel } = useFuel();
+  const [wagmi] = useState(() => new WagmiProvider());
 
-  // Anything ouside useState, useCallback or useEffect will be called on each render
-  // Best practice is to use the hook inside the useState, useMemo or useEffect
-  const [wagmi, _] = useState(() => new WagmiProvider());
-
-  const setGatewayType = useCallback((type: FUEL_TYPE) => {
-    storage.setItem(FuelGatewayType, type);
-    gatewayType = type;
-  }, []);
   
-  const clearGatewayType = useCallback(() => {
-    storage.removeItem(FuelGatewayType);
-    gatewayType = null;
-  }, []);
+  return useMemo(() => {
+    const baseObject = {
+      setGatewayType,
+      clearGatewayType,
+    }
 
-  // Creating an object is O(n), so we should avoid doing it on each render
-  const gateways = useMemo(() => ({
-    [FUEL_TYPE.FUEL]: fuel,
-    [FUEL_TYPE.FUELET]: fuel,
-    // [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
-    [FUEL_TYPE.WAGMI_METAMASK]: wagmi,
-    [FUEL_TYPE.WAGMI_COINBASE]: wagmi,
-    [FUEL_TYPE.WAGMI_WALLETCONNECT]: wagmi,
-    [FUEL_TYPE.LIT_GOOGLE_AUTH]: wagmi,
-    [FUEL_TYPE.LIT_DISCORD_AUTH]: wagmi,
-  }), [fuel, wagmi]);
-
-  // Accessing a property in an object is O(1)
-  const selectedGateway = gateways[gatewayType as FUEL_TYPE]
-
-  return {
-    selectedGateway,
-    setGatewayType,
-    clearGatewayType,
-  };
+    switch (gatewayType) {
+      case FUEL_TYPE.WAGMI_METAMASK:
+      case FUEL_TYPE.WAGMI_COINBASE:
+      case FUEL_TYPE.WAGMI_WALLETCONNECT:
+      case FUEL_TYPE.LIT_GOOGLE_AUTH:
+      case FUEL_TYPE.LIT_DISCORD_AUTH:
+        return {
+          ...baseObject,
+          wagmiGateway: wagmi,
+          fuelGateway: undefined,
+        }
+      case FUEL_TYPE.FUEL:
+      case FUEL_TYPE.FUELET:
+      default:
+        return {
+          ...baseObject,
+          fuelGateway: fuel,
+          wagmiGateway: undefined,
+        };
+    }
+  }, [gatewayType, setGatewayType, clearGatewayType]);
 };

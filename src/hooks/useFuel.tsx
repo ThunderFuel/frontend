@@ -1,6 +1,5 @@
 import { useFuel as useFuelContext } from '@fuels/react';
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from "react";
 
 export const FuelConnectorName = "Fuel Wallet";
 
