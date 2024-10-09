@@ -609,6 +609,7 @@ export async function executeOrder(
     const takerOrder = _convertToTakerOrder(order);
 
     if (order.isBuySide) {
+        // This returns contratNotInInputs for Fuel network
         const { transactionResult } = await _executeBuyOrder(
             contractId,
             provider,
