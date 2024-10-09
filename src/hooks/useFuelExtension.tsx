@@ -53,6 +53,11 @@ export const useFuelExtension = (): WagmiGateway | FuelGateway => {
         };
       case FUEL_TYPE.FUEL:
       case FUEL_TYPE.FUELET:
+        return {
+          ...baseObject,
+          fuelGateway: fuel,
+          wagmiGateway: undefined,
+        };
       default:
         return {
           ...baseObject,
@@ -60,5 +65,5 @@ export const useFuelExtension = (): WagmiGateway | FuelGateway => {
           wagmiGateway: undefined,
         };
     }
-  }, [gatewayType, setGatewayType, clearGatewayType]);
+  }, [fuel, wagmi, gatewayType, setGatewayType, clearGatewayType]);
 };
