@@ -1,66 +1,37 @@
-import { getFuel } from "index";
+import { useFuel as useFuelContext } from '@fuels/react';
+import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from "react";
 
 export const FuelConnectorName = "Fuel Wallet";
 
 export function useFuel() {
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [fuel, setFuel] = useState<any>(getFuel());
+  const {fuel } = useFuelContext();
 
-  async function handleConnector() {
-    setIsLoading(true);
-    if (!fuel) {
-      setFuel(undefined);
-      setError("Fuel Wallet is not installed!");
-      setIsLoading(false);
-
-      return;
-    }
-
-    try {
+  const { data: fuelData, error, isLoading } = useQuery({
+    queryKey: ['fuelConnector', fuel],
+    queryFn: async () => {
+      if (!fuel) {
+        throw new Error("Fuel Wallet is not installed!");
+      }
       const hasConnector = await fuel.hasConnector();
-
-      // Extensions are disabled or not installed
       if (!hasConnector) {
-        setFuel(undefined);
-        setIsLoading(false);
-
-        return;
+        throw new Error("Fuel Wallet connector not available");
       }
-
       const connectors = await fuel.connectors();
-
       if (connectors.length === 0) {
-        setFuel(undefined);
-        setError("Fuel Wallet is not installed!");
-        setIsLoading(false);
-
-        return;
+        throw new Error("Fuel Wallet is not installed!");
       }
-
-      const fuelConnector = connectors.find((item: any) => item.name === FuelConnectorName);
-
+      const fuelConnector = connectors.find(
+        (item: any) => item.name === FuelConnectorName
+      );
       if (!fuelConnector?.installed) {
-        setFuel(undefined);
-        setError("Fuel Wallet is not installed!");
-        setIsLoading(false);
-
-        return;
+        throw new Error("Fuel Wallet is not installed!");
       }
+      return fuel;
+    },
+    retry: 3,
+    refetchOnMount: true,
+  });
 
-      setError("");
-      setIsLoading(false);
-    } catch (error) {
-      setFuel(undefined);
-      setError("Fuel wallet error");
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    handleConnector();
-  }, [fuel]);
-
-  return [fuel, error, isLoading] as const;
+  return {fuel: fuelData, error, isLoading} as const;
 }
