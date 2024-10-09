@@ -14,13 +14,12 @@ import { Approved, TransactionFailed, TransactionRejected } from "../../Layout/C
 import { CheckoutCartItems } from "../../Layout/CheckoutModal/Checkout";
 import { useAppSelector } from "../../../store";
 import { useWallet } from "../../../hooks/useWallet";
-import FuelProvider from "../../../providers/FuelProvider";
 import { handleTransactionError } from "../../Layout/CheckoutModal/components/CheckoutProcess";
 import nftdetailsService from "../../../api/nftdetails/nftdetails.service";
 import { toGwei } from "../../../utils";
 import { strategyFixedPriceContractId } from "../../../global-constants";
 import clsx from "clsx";
-import { useFuel } from "@fuels/react";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   const isMobile = useIsMobile();
@@ -116,11 +115,7 @@ const BulkListingCheckout = ({ onClose }: any) => {
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
-  // Must be immediately available, thtat's why the local useFuel is not used
-  const { fuel: fuelInstance } = useFuel();
-  // "() => {}" is a pattern to only resolve the useState once, otherwise it computes at each render, even if not stored
-  // useState is used to prevent the useFuel hook from being recreated again and again
-  const [fuel, _] = useState(() => new FuelProvider(fuelInstance));
+  const { fuelGateway: fuel } = useFuelExtension();
 
   const [startTransaction, setStartTransaction] = useState(true);
   const [isFailed, setIsFailed] = useState(false);

@@ -47,7 +47,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const { user, isConnected } = useAppSelector((state) => state.wallet);
 
   const { getBalance, hasEnoughBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
 
   const [offer, setoffer] = useState<any>("");
@@ -55,10 +55,6 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const [isMultipleEdition, setIsMultipleEdition] = useState(false);
-
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
 
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
@@ -150,7 +146,7 @@ const MakeOffer = ({ onBack }: { onBack: any }) => {
           )}
         </div>
         <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
-        {!hasEnoughBalance(balance, offer) && offer !== "" && (
+        {!hasEnoughBalance(offer) && offer !== "" && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>

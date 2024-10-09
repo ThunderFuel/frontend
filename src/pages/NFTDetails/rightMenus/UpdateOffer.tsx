@@ -21,21 +21,17 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
   const { user } = useAppSelector((state) => state.wallet);
 
   const { getBalance, hasEnoughBalance } = useWallet();
-  const [balance, setbalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const [offer, setoffer] = useState<any>("");
   const [expirationTime, setexpirationTime] = useState(selectExpirationDates[0]);
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
   function fetchBidBalance() {
     userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
   }
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 
@@ -89,7 +85,7 @@ const UpdateOffer = ({ onBack }: { onBack: any }) => {
           <span>If your offer is more than your bid balance, you will be prompted to convert your ETH into wETH in the following step. </span>
         </div>
         <InputPrice onChange={setoffer} value={offer} type="text" />
-        {!hasEnoughBalance(balance, offer) && offer !== "" && (
+        {!hasEnoughBalance(offer) && offer !== "" && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>

@@ -130,13 +130,12 @@ const HeaderUserBalance = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
   const { removeItem } = useLocalStorage();
 
   React.useEffect(() => {
     const fetchBalances = () => {
-      fetchBalance();
       fetchBidBalance();
     };
 
@@ -147,9 +146,6 @@ const HeaderUserBalance = ({ user, address }: any) => {
     };
   }, []);
 
-  const fetchBalance = () => {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  };
   const fetchBidBalance = () => {
     if (user?.walletAddress === undefined) return;
     getBidBalance({ contractAddress: user?.walletAddress, user: user })?.then((res) => {
@@ -158,7 +154,6 @@ const HeaderUserBalance = ({ user, address }: any) => {
   };
 
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 
@@ -186,13 +181,13 @@ const HeaderUserBalance = ({ user, address }: any) => {
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {bidBalance.toFixed(4)} <IconEthereum className="text-gray-light font" />
+              {bidBalance} <IconEthereum className="text-gray-light font" />
             </span>
           </div>
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
+              {balance} <IconEthereum className="text-gray-light" />
             </span>
           </div>
         </div>
@@ -215,7 +210,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   return (
     <BaseDropdown container={container}>
       <div className="flex px-2">
-        {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
+        {balance} <IconEthereum className="text-gray-light" />
       </div>
     </BaseDropdown>
   );

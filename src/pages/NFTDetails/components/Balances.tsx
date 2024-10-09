@@ -4,10 +4,10 @@ import { useAppSelector } from "store";
 import EthereumPrice from "../../../components/EthereumPrice";
 import { useWallet } from "hooks/useWallet";
 
-const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance: () => void }) => {
+const Balances = ({ onFetchBalance }: { balance: number; onFetchBalance: () => void }) => {
   const { user } = useAppSelector((state) => state.wallet);
-  const { getBidBalance } = useWallet();
-
+  const { getBidBalance, getBalance } = useWallet();
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState(0);
 
   function fetchBidBalance() {
@@ -18,7 +18,6 @@ const Balances = ({ balance, onFetchBalance }: { balance: number; onFetchBalance
   }
 
   useEffect(() => {
-    fetchBidBalance();
     onFetchBalance();
   }, []);
 

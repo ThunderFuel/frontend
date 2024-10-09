@@ -24,18 +24,14 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const [bid, setBid] = useState<any>("");
-  const [balance, setBalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
 
-  function fetchBalance() {
-    getBalance().then((res) => setBalance(res ? res : 0));
-  }
   function fetchBidBalance() {
     userService.getBidBalance(user.id).then((res) => setBidBalance(res.data ? res.data : 0));
   }
 
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 

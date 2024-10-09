@@ -2,21 +2,53 @@ import { useAppDispatch, useAppSelector } from "store";
 import { getSerializeAddress, setAddress, setIsConnected, setIsConnecting, setUser, setWallet } from "../store/walletSlice";
 import { useSelector } from "react-redux";
 import { FUEL_TYPE, useFuelExtension } from "./useFuelExtension";
-import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect } from "@fuels/react";
-import { useCallback, useEffect } from "react";
+import { useAccount as useFuelAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect, useBalance as useFuelBalance, useFuel, useCurrentConnector } from "@fuels/react";
+import { useCallback, useEffect, useMemo } from "react";
 import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
+import { useAccount, useBalance } from "wagmi";
+import { bn, DECIMAL_FUEL, DECIMAL_WEI } from "fuels";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
-  const { user, isConnecting } = useAppSelector((state) => state.wallet);
-  const { setGatewayType, wagmiGateway, clearGatewayType } = useFuelExtension();
+  const { user } = useAppSelector((state) => state.wallet);
+  const { setGatewayType, selectedGateway, clearGatewayType, gateway } = useFuelExtension();
+  const { currentConnector } = useCurrentConnector();
+
   const { isConnected, refetch: refetchConnected, isFetching } = useIsConnected();
-  const { account } = useAccount();
-  const { wallet } = useFuelWallet({ account });
   const { disconnect } = useDisconnect();
+  // Account
+  const wagmiAccount = useAccount();
+  const { account: fuelAccount } = useFuelAccount();
+  const account = gateway === "fuel" ? fuelAccount : wagmiAccount?.address;
+  // Balance
+  const { data: wagmiBalance } = useBalance({ address: wagmiAccount?.address });
+  const { balance: fuelBalance } = useFuelBalance({ address: account });
+  const balance = useMemo(() => {
+    if (gateway === "fuel") {
+      return fuelBalance || bn("0");
+    }
+
+    return bn((wagmiBalance?.value || BigInt(0)).toString());
+  }, [fuelBalance, wagmiBalance, gateway]);
+  // const balance = gateway === "fuel" ? BigInt(fuelBalance?.toString() ?? '0') : wagmiBalance?.value || BigInt(0);
+
+  const { wallet: fuelWallet } = useFuelWallet({ account: fuelAccount });
+
+  // Just to keep updated, but ideally this should be used directly via hooks
+  useEffect(() => {
+    dispatch(setWallet(fuelWallet));
+  }, [fuelWallet, dispatch]);
+
+  useEffect(() => {
+    dispatch(setIsConnected(isConnected));
+  }, [isConnected, dispatch]);
+
+  useEffect(() => {
+    dispatch(setAddress(account ?? ""));
+  }, [account, dispatch]);
 
   useEffect(() => {
     refetchConnected();
@@ -30,126 +62,109 @@ export const useWallet = () => {
   }, [account, dispatch]);
 
   useEffect(() => {
-    if (isConnecting || isFetching) return;
-
-    if (isConnected && wallet && account && user?.walletAddress === undefined) {
-      dispatch(setIsConnecting(true));
-      dispatch(setIsConnected(true));
-
-      // Addresses are now already delivered in hex format
-      dispatch(setAddress(account ?? ""));
-
-      _connect();
-
-      setGatewayType(FUEL_TYPE.FUEL);
-
-      dispatch(setWallet(wallet));
-    } else if (!isConnected && !isObjectEmpty(user)) {
-      dispatch(setIsConnected(false));
-      dispatch(setUser({}));
+    let abort = false;
+    if (isConnected && account && user?.walletAddress === undefined) {
+      _connect().then(() => {
+        !abort && setGatewayType(FUEL_TYPE.WAGMI_METAMASK);
+      });
     }
-  }, [isConnected, account, wallet, user, isConnecting, isFetching, _connect, setGatewayType, dispatch]);
+
+    return () => {
+      abort = true;
+    };
+  }, [isConnected, account, user, _connect, setGatewayType]);
+
+  const walletConnect = useCallback(async () => {
+    return currentConnector
+      ?.connect()
+      .then(() => true)
+      .catch(() => false);
+  }, [currentConnector]);
 
   const hasEnoughFunds = useCallback(
     async (buyNowItemPrice?: any) => {
-      return wagmiGateway?.hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
+      return selectedGateway?.hasEnoughFunds(buyNowItemPrice, getWalletAddress, user.walletAddress, totalAmount);
     },
-    [wagmiGateway, getWalletAddress, totalAmount, user.walletAddress]
+    [selectedGateway, getWalletAddress, totalAmount, user.walletAddress]
   );
 
   const hasEnoughBalance = useCallback(
-    (balance: any, amount: any) => {
-      return wagmiGateway?.hasEnoughBalance(balance, amount);
+    (amount: any) => {
+      return selectedGateway?.hasEnoughBalance(balance, amount);
     },
-    [wagmiGateway]
+    [selectedGateway, balance]
   );
 
   const getConnectionStatus = useCallback(async () => {
-    return wagmiGateway?.isConnected();
-  }, [wagmiGateway]);
+    return selectedGateway?.isConnected();
+  }, [selectedGateway]);
 
-  const getBalance = useCallback(async () => {
-    if (isConnected) return wagmiGateway?.getBalance();
-
-    return null;
-  }, [wagmiGateway, isConnected, user.walletAddress]);
+  // We should rather use hooks directly whenever possible
+  const getBalance = useCallback(
+    (precision = 4) => {
+      return balance?.format({
+        units: gateway === "fuel" ? DECIMAL_FUEL : DECIMAL_WEI,
+        precision: precision,
+      });
+    },
+    [balance, gateway]
+  );
 
   const getBidBalance = useCallback(
     ({ contractAddress, user }: any) => {
       if (isConnected) {
-        return wagmiGateway?.getBidBalance({ contractAddress, user });
+        return selectedGateway?.getBidBalance({ contractAddress, user });
       }
 
       return null;
     },
-    [wagmiGateway, isConnected]
+    [selectedGateway, isConnected]
   );
 
   const walletConnectGateway = useCallback(
-    (type: FUEL_TYPE, activeConnector: number) => {
+    (type: FUEL_TYPE) => {
       setGatewayType(type);
 
-      return walletConnect(activeConnector, type);
+      return walletConnect();
     },
-    [setGatewayType]
-  );
-
-  const walletConnect = useCallback(
-    async (activeConnector?: number, type?: any) => {
-      if (!isConnected) {
-        try {
-          const { connect, user, wallet, fuelAddress, address } = (await wagmiGateway?.walletConnect(activeConnector)) ?? {};
-          dispatch(setIsConnected(connect));
-          dispatch(setAddress(fuelAddress ?? address));
-          dispatch(setUser(user));
-          dispatch(setWallet(wallet));
-
-          return true;
-        } catch (e) {
-          // useErrorModal(e);
-
-          return false;
-        }
-      } else return true;
-    },
-    [wagmiGateway, dispatch, isConnected]
+    [setGatewayType, walletConnect]
   );
 
   const walletDisconnect = useCallback(async () => {
     disconnect();
     try {
-      await wagmiGateway?.walletDisconnect(() => {
+      await selectedGateway?.walletDisconnect(() => {
         dispatch(setIsConnected(false));
         clearGatewayType();
       });
     } catch (e) {
       console.log(e);
     }
-  }, [wagmiGateway, disconnect, dispatch, clearGatewayType]);
+  }, [selectedGateway, disconnect, dispatch, clearGatewayType]);
 
   const getProviderType = useCallback(() => {
-    return wagmiGateway?.getProviderType();
-  }, [wagmiGateway]);
+    return selectedGateway?.getProviderType();
+  }, [selectedGateway]);
 
   const handleDeposit = useCallback(
     ({ wallet, amount, user, setIsDisabled }: any) => {
-      return wagmiGateway?.handleDeposit({ wallet, amount, user, setIsDisabled });
+      return selectedGateway?.handleDeposit({ wallet, amount, user, setIsDisabled });
     },
-    [wagmiGateway]
+    [selectedGateway]
   );
 
   const handleWithdraw = useCallback(
     ({ wallet, amount, user, setIsDisabled }: any) => {
-      return wagmiGateway?.handleWithdraw({ wallet, amount, user, setIsDisabled });
+      return selectedGateway?.handleWithdraw({ wallet, amount, user, setIsDisabled });
     },
-    [wagmiGateway]
+    [selectedGateway]
   );
 
   const handleCheckout = useCallback(
     ({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any) => {
-      return wagmiGateway?.handleCheckout({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
+      return selectedGateway?.handleCheckout({ setWagmiSteps, setApproved, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed });
     },
-    [wagmiGateway]
+    [selectedGateway]
   );
 
   const handleConfirmListing = ({
@@ -171,7 +186,7 @@ export const useWallet = () => {
     setApproved,
     selectedNFT,
   }: any) => {
-    return wagmiGateway?.handleConfirmListing({
+    return selectedGateway?.handleConfirmListing({
       setWagmiSteps,
       wagmiSteps,
       setStepData,
@@ -211,7 +226,7 @@ export const useWallet = () => {
     checkoutPrice,
     checkoutExpireTime,
   }: any) => {
-    return wagmiGateway?.handleMakeOffer({
+    return selectedGateway?.handleMakeOffer({
       checkoutExpireTime,
       checkoutPrice,
       setWagmiSteps,
@@ -233,7 +248,7 @@ export const useWallet = () => {
   };
 
   const handleCancelOffer = ({ user, cancelOrderIds, cancelOfferItems, wallet, setApproved, setStartTransaction, setIsFailed, currentItem, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleCancelOffer({
+    return selectedGateway?.handleCancelOffer({
       user,
       cancelOrderIds,
       cancelOfferItems,
@@ -262,7 +277,7 @@ export const useWallet = () => {
     setWagmiSteps,
     setStepData,
   }: any) => {
-    return wagmiGateway?.handleCancelListing({
+    return selectedGateway?.handleCancelListing({
       user,
       selectedNFT,
       cancelOrderIds,
@@ -278,19 +293,19 @@ export const useWallet = () => {
     });
   };
   const handleCancelAuction = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleCancelAuction({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+    return selectedGateway?.handleCancelAuction({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   const handleCancelAllOffersListings = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleCancelAllOffersListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+    return selectedGateway?.handleCancelAllOffersListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   const handleCancelAllOffers = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleCancelAllOffers({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+    return selectedGateway?.handleCancelAllOffers({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   const handleCancelAllListings = ({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleCancelAllListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
+    return selectedGateway?.handleCancelAllListings({ cancelOrderIds, selectedNFT, wallet, setApproved, setStartTransaction, setIsFailed, user, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   const handlePlaceBid = ({
@@ -308,7 +323,7 @@ export const useWallet = () => {
     setStepData,
     checkoutExpireTime,
   }: any) => {
-    return wagmiGateway?.handlePlaceBid({
+    return selectedGateway?.handlePlaceBid({
       selectedNFT,
       checkoutPrice,
       user,
@@ -326,7 +341,7 @@ export const useWallet = () => {
   };
 
   const handleAcceptOffer = ({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData });
+    return selectedGateway?.handleAcceptOffer({ user, wallet, setStartTransaction, setIsFailed, setApproved, currentItem, onCheckoutComplete, wagmiSteps, setWagmiSteps, setStepData });
   };
 
   const handleAcceptBid = () => {
@@ -334,7 +349,7 @@ export const useWallet = () => {
   };
 
   const handleBulkListing = ({ promises, user, handleOrders, bulkListItems, bulkUpdateItems, wallet, setApproved, setStartTransaction, setIsFailed, wagmiSteps, setWagmiSteps, setStepData }: any) => {
-    return wagmiGateway?.handleBulkListing({
+    return selectedGateway?.handleBulkListing({
       promises,
       user,
       handleOrders,
@@ -351,7 +366,7 @@ export const useWallet = () => {
   };
 
   const handleTransfer = ({ address, selectedNFT, wallet, user, setApproved, setStartTransaction, setIsFailed, setWagmiSteps, setStepData, quantity, wagmiSteps }: any) => {
-    return wagmiGateway?.handleTransfer({
+    return selectedGateway?.handleTransfer({
       address,
       selectedNFT,
       wallet,
@@ -382,7 +397,7 @@ export const useWallet = () => {
     checkoutPrice,
     checkoutExpireTime,
   }: any) => {
-    wagmiGateway?.handleUpdateOffer({
+    selectedGateway?.handleUpdateOffer({
       selectedNFT,
       user,
       cancelOrderIds,

@@ -79,13 +79,11 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const navigate = UseNavigate();
   const { user, address } = useAppSelector((state) => state.wallet);
   const { walletDisconnect, getBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
   const { removeItem } = useLocalStorage();
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
+  const balance = getBalance(5);
+
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
     getBidBalance({ contractAddress: user.walletAddress, user: user })?.then((res) => {
@@ -95,7 +93,6 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
 
   useEffect(() => {
     if (!show) return;
-    fetchBalance();
     fetchBidBalance();
   }, [show]);
 
@@ -260,7 +257,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
               </div>
             </div>
             <h6 className="flex items-center gap text-h6 text-gray-light">
-              {balance.toFixed(5)} <IconEthereum />
+              {balance} <IconEthereum />
             </h6>
             <div
               className="flex items-center w-fit gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
