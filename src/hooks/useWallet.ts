@@ -15,7 +15,7 @@ export const useWallet = () => {
   const dispatch = useAppDispatch();
   const { totalAmount } = useAppSelector((state) => state.cart);
   const { user } = useAppSelector((state) => state.wallet);
-  const { setGatewayType, selectedGateway, clearGatewayType, gateway } = useFuelExtension();
+  const { setGatewayType, selectedGateway, clearGatewayType } = useFuelExtension();
   const { currentConnector } = useCurrentConnector();
   const isExternal = currentConnector?.external; // External means connectors that do not support Fuel's Network (e.g. Solana, EVM (e.g. MetaMask))
 

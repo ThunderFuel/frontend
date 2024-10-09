@@ -1,10 +1,11 @@
 import { useGatewayStore } from "../store/gatewayStore";
 import { useFuel } from "hooks/useFuel";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import WagmiProvider from "providers/WagmiProvider";
 import { useDispatch } from "react-redux";
 import FuelProvider from "providers/FuelProvider";
 import type { Action } from "redux";
+import { useCurrentConnector } from "@fuels/react";
 
 export enum FUEL_TYPE {
   FUEL = "fuel",
@@ -17,17 +18,8 @@ export enum FUEL_TYPE {
   LIT_DISCORD_AUTH = "lit_discord_auth",
 }
 
-interface WagmiGateway {
-  selectedGateway: WagmiProvider<Action> | undefined;
-  setGatewayType: (type: FUEL_TYPE) => void;
-  clearGatewayType: () => void;
-  gateway: "wagmi";
-  wagmiGateway: WagmiProvider<Action> | undefined;
-  fuelGateway: FuelProvider | undefined;
-}
-
-interface FuelGateway {
-  selectedGateway: FuelProvider | undefined;
+interface Gateway {
+  selectedGateway: FuelProvider | WagmiProvider<Action> | undefined;
   setGatewayType: (type: FUEL_TYPE) => void;
   clearGatewayType: () => void;
   gateway: "fuel" | "wagmi";
@@ -35,10 +27,17 @@ interface FuelGateway {
   fuelGateway: FuelProvider | undefined;
 }
 
-export const useFuelExtension = (): WagmiGateway | FuelGateway => {
+export const useFuelExtension = (): Gateway => {
   const { gatewayType, setGatewayType, clearGatewayType } = useGatewayStore();
   const { fuel } = useFuel();
   const dispatch = useDispatch();
+  const { currentConnector } = useCurrentConnector();
+  const isExternal = currentConnector?.external;
+
+  // Workaround, ideally everything should be fetched from connectors data
+  useEffect(() => {
+    setGatewayType(isExternal ? FUEL_TYPE.WAGMI_METAMASK : FUEL_TYPE.FUELET);
+  }, [isExternal, setGatewayType]);
 
   const gateway = useMemo(() => {
     switch (gatewayType) {
@@ -58,7 +57,7 @@ export const useFuelExtension = (): WagmiGateway | FuelGateway => {
   const wagmiProvider = useMemo(() => new WagmiProvider(dispatch), [dispatch]);
   const fuelProvider = useMemo(() => (fuel ? new FuelProvider(fuel) : undefined), [fuel]);
 
-  if (gateway === "wagmi") {
+  if (isExternal) {
     return {
       setGatewayType,
       clearGatewayType,
