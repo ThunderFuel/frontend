@@ -1,4 +1,3 @@
-
 // Keep as many objects out of react state as possible
 // Otherwise objects will be re-rendered on every state change/new render
 const store = {

@@ -7,8 +7,6 @@ import { useWallet } from "hooks/useWallet";
 import { useFuelExtension } from "hooks/useFuelExtension";
 import { useLocalStorage } from "hooks/useLocalStorage";
 
-
-
 // Static selectors are not re-evaluated on every render, so they are more efficient
 const selectWallet = (state: RootState) => state.wallet;
 

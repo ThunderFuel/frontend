@@ -80,7 +80,7 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector, unavailable }:
   const { walletConnectGateway } = useWallet();
   const dispatch = useDispatch();
 
-  const {error: fuelError, isLoading: fuelLoading} = useFuel();
+  const { error: fuelError, isLoading: fuelLoading } = useFuel();
   const [metamaskError] = useMetamask();
   const [coinbaseError] = useCoinbase();
   const Icon = icon ?? IconFuelet;

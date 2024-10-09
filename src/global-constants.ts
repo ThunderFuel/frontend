@@ -1,9 +1,9 @@
-import { defaultConnectors } from '@fuels/connectors';
-import { coinbaseWallet, injected, walletConnect } from '@wagmi/connectors';
-import { CHAIN_IDS, type FuelConfig, Provider } from 'fuels';
+import { defaultConnectors } from "@fuels/connectors";
+import { coinbaseWallet, injected, walletConnect } from "@wagmi/connectors";
+import { CHAIN_IDS, type FuelConfig, Provider } from "fuels";
 import { http, createConfig } from "@wagmi/core";
 import { mainnet, sepolia } from "@wagmi/core/chains";
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 export const THUNDER_THEME_NAME = "thunder_theme";
 export const WALLET_CONNECT_PROJECT_ID = "fbbe076e89456ef4f6f54493682058b9";
@@ -203,6 +203,7 @@ const METADATA = {
   url: location.href,
   icons: ["https://connectors.fuel.network/logo_white.png"],
 };
+
 export const WAGMI_CONFIG = createConfig({
   chains: [mainnet, sepolia],
   transports: {
@@ -226,17 +227,14 @@ export const WAGMI_CONFIG = createConfig({
 });
 export const FUEL_PROVIDER = Provider.create(FUEL_PROVIDER_URL);
 export const FUEL_CONFIG: FuelConfig = {
-
-    connectors: defaultConnectors({
-      // devMode: true,
-      wcProjectId: WALLET_CONNECT_PROJECT_ID,
-      ethWagmiConfig: WAGMI_CONFIG,
-      devMode: true,
-      chainId: CHAIN_IDS.fuel.testnet,
-      fuelProvider: FUEL_PROVIDER,
-    }),
-
-
-}
+  connectors: defaultConnectors({
+    // devMode: true,
+    wcProjectId: WALLET_CONNECT_PROJECT_ID,
+    ethWagmiConfig: WAGMI_CONFIG,
+    devMode: true,
+    chainId: CHAIN_IDS.fuel.testnet,
+    fuelProvider: FUEL_PROVIDER,
+  }),
+};
 
 export const QUERY_CLIENT = new QueryClient();

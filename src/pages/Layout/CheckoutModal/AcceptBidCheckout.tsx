@@ -13,7 +13,7 @@ import { exchangeContractId, provider } from "global-constants";
 import { toGwei } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import FuelProvider from "providers/FuelProvider";
-import { useFuel } from '@fuels/react';
+import { useFuel } from "@fuels/react";
 
 const checkoutProcessTexts = {
   title1: "Confirm bid",
