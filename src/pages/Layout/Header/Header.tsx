@@ -152,7 +152,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   };
   const fetchBidBalance = () => {
     if (user?.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user?.walletAddress, user: user }).then((res) => {
+    getBidBalance({ contractAddress: user?.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   };
