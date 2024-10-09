@@ -4,18 +4,16 @@ import clsx from "clsx";
 import Button from "components/Button";
 import Modal from "components/Modal";
 
-import { IconSpinner, IconWarning } from "icons";
+import { IconSpinner } from "icons";
 import { useAppSelector } from "store";
-import { CheckoutProcess, handleTransactionError } from "./components/CheckoutProcess";
+import { handleTransactionError } from "./components/CheckoutProcess";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { toGwei } from "utils";
 import { CheckoutCartItems } from "./Checkout";
 import { useWallet } from "hooks/useWallet";
 import { strategyFixedPriceContractId } from "global-constants";
-import FuelProvider from "providers/FuelProvider";
 import { Approved, FooterCloseButton, TransactionFailed, TransactionRejected } from "./MakeOfferCheckout";
-import { set } from "react-hook-form";
-import { useFuel } from "@fuels/react";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const checkoutProcessTexts = {
   title1: "Confirm your listing",
@@ -42,11 +40,7 @@ const BulkListingCheckout = ({ show, onClose, onDone }: { show: boolean; onClose
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
-  // Must be immediately available, thtat's why the local useFuel is not used
-  const { fuel: fuelInstance } = useFuel();
-  // "() => {}" is a pattern to only resolve the useState once, otherwise it computes at each render, even if not stored
-  // useState is used to prevent the useFuel hook from being recreated again and again
-  const [fuel, _] = useState(() => new FuelProvider(fuelInstance));
+  const { fuelGateway: fuel } = useFuelExtension();
 
   const [totalAmount, setTotalAmount] = useState("");
 

@@ -9,12 +9,8 @@ import { useAppSelector } from "store";
 const Balances = (refresh: any) => {
   const { getBalance, getBidBalance } = useWallet();
   const { user } = useAppSelector((state) => state.wallet);
-  const [balance, setbalance] = useState<number>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
-
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
 
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
@@ -24,7 +20,6 @@ const Balances = (refresh: any) => {
   }
 
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, [refresh]);
 
@@ -33,12 +28,7 @@ const Balances = (refresh: any) => {
       <div className="flex w-full p-4 flex-col">
         <div className="flex w-full justify-between items-center">
           <h1 className="flex text-headlineSm font-bigShoulderDisplay text-gray-light">WALLET BALANCE</h1>
-          <IconRefresh
-            className="w-4 h-4 text-gray-light cursor-pointer hover:text-white"
-            onClick={() => {
-              fetchBalance();
-            }}
-          />
+          <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" />
         </div>
         <EthereumPrice price={balance} priceClassName="text-head3 text-white" />
       </div>

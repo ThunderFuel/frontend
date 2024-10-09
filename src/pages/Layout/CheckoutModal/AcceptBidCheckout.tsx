@@ -14,6 +14,7 @@ import { toGwei } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import FuelProvider from "providers/FuelProvider";
 import { useFuel } from "@fuels/react";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const checkoutProcessTexts = {
   title1: "Confirm bid",
@@ -38,13 +39,9 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
+  const { checkoutPrice } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
-  // Must be immediately available, thtat's why the local useFuel is not used
-  const { fuel: fuelInstance } = useFuel();
-  // "() => {}" is a pattern to only resolve the useState once, otherwise it computes at each render, even if not stored
-  // useState is used to prevent the useFuel hook from being recreated again and again
-  const [fuel, _] = useState(() => new FuelProvider(fuelInstance));
+  const { fuelGateway: fuel } = useFuelExtension();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);

@@ -1,8 +1,10 @@
 import { useGatewayStore } from "../store/gatewayStore";
 import { useFuel } from "hooks/useFuel";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import WagmiProvider from "providers/WagmiProvider";
-import { Fuel } from "fuels";
+import { useDispatch } from "react-redux";
+import FuelProvider from "providers/FuelProvider";
+import type { Action } from "redux";
 
 export enum FUEL_TYPE {
   FUEL = "fuel",
@@ -16,54 +18,63 @@ export enum FUEL_TYPE {
 }
 
 interface WagmiGateway {
-  fuelGateway: undefined;
-  wagmiGateway: WagmiProvider | undefined;
+  selectedGateway: WagmiProvider<Action> | undefined;
   setGatewayType: (type: FUEL_TYPE) => void;
   clearGatewayType: () => void;
+  gateway: "wagmi";
+  wagmiGateway: WagmiProvider<Action> | undefined;
+  fuelGateway: FuelProvider | undefined;
 }
 
 interface FuelGateway {
-  fuelGateway: Fuel | undefined;
-  wagmiGateway: undefined;
+  selectedGateway: FuelProvider | undefined;
   setGatewayType: (type: FUEL_TYPE) => void;
   clearGatewayType: () => void;
+  gateway: "fuel" | "wagmi";
+  wagmiGateway: WagmiProvider<Action> | undefined;
+  fuelGateway: FuelProvider | undefined;
 }
 
 export const useFuelExtension = (): WagmiGateway | FuelGateway => {
   const { gatewayType, setGatewayType, clearGatewayType } = useGatewayStore();
   const { fuel } = useFuel();
-  const [wagmi] = useState(() => new WagmiProvider());
+  const dispatch = useDispatch();
 
-  return useMemo(() => {
-    const baseObject = {
-      setGatewayType,
-      clearGatewayType,
-    };
-
+  const gateway = useMemo(() => {
     switch (gatewayType) {
       case FUEL_TYPE.WAGMI_METAMASK:
       case FUEL_TYPE.WAGMI_COINBASE:
       case FUEL_TYPE.WAGMI_WALLETCONNECT:
       case FUEL_TYPE.LIT_GOOGLE_AUTH:
       case FUEL_TYPE.LIT_DISCORD_AUTH:
-        return {
-          ...baseObject,
-          wagmiGateway: wagmi,
-          fuelGateway: undefined,
-        };
+        return "wagmi";
       case FUEL_TYPE.FUEL:
       case FUEL_TYPE.FUELET:
-        return {
-          ...baseObject,
-          fuelGateway: fuel,
-          wagmiGateway: undefined,
-        };
+        return "fuel";
       default:
-        return {
-          ...baseObject,
-          fuelGateway: fuel,
-          wagmiGateway: undefined,
-        };
+        return "fuel";
     }
-  }, [fuel, wagmi, gatewayType, setGatewayType, clearGatewayType]);
+  }, [gatewayType]);
+  const wagmiProvider = useMemo(() => new WagmiProvider(dispatch), [dispatch]);
+  const fuelProvider = useMemo(() => (fuel ? new FuelProvider(fuel) : undefined), [fuel]);
+
+  if (gateway === "wagmi") {
+    return {
+      setGatewayType,
+      clearGatewayType,
+      gateway,
+      selectedGateway: wagmiProvider,
+      fuelGateway: fuelProvider,
+      wagmiGateway: wagmiProvider,
+    };
+  }
+
+  return {
+    setGatewayType,
+    clearGatewayType,
+    gateway,
+    selectedGateway: fuelProvider,
+    fuelGateway: fuelProvider,
+    wagmiGateway: wagmiProvider,
+  };
 };

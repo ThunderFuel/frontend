@@ -194,7 +194,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
 
   const [isOnConfirmStep, setIsOnConfirmStep] = useState(false);
   const [offer, setoffer] = useState<any>("");
-  const [balance, setbalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
 
   React.useEffect(() => {
@@ -204,9 +204,6 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
       });
   }, [show, currentItemId, selectedNFT]);
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
     getBidBalance({ contractAddress: user.walletAddress, user: user })?.then((res) => {
@@ -215,7 +212,6 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   }
 
   React.useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 
@@ -329,7 +325,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
               )}
             </div>
             <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
-            {!hasEnoughBalance(balance, offer) && offer !== "" && (
+            {!hasEnoughBalance(offer) && offer !== "" && (
               <div className="flex w-full items-center gap-x-[5px] text-red">
                 <IconWarning width="17px" />
                 <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>

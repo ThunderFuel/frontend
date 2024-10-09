@@ -102,7 +102,7 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector, unavailable }:
     } else if (name == "Discord") {
       signInWithDiscord("http://localhost:3000/marketplace");
     } else {
-      walletConnectGateway(type, activeConnector).then((res: any) => {
+      walletConnectGateway(type).then((res: any) => {
         if (res) {
           dispatch(toggleWalletModal());
         }
@@ -251,7 +251,7 @@ export const ConnectWallet = () => {
             dispatch(setIsConnected(true));
             dispatch(setAddress(walletAddress));
             dispatch(setUser(res.data));
-            walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK, 3);
+            walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK);
           });
         });
       } catch (err) {

@@ -14,17 +14,7 @@ const InsufficientFunds = ({ show, onClose }: { show: boolean; onClose: any }) =
   const { totalAmount, buyNowItem } = useAppSelector((state) => state.cart);
   const { user, address } = useAppSelector((state) => state.wallet);
 
-  const [balance, setbalance] = useState<number>(0);
-
-  function fetchBalance() {
-    getBalance().then((res) => {
-      setbalance(res ? res : 0);
-    });
-  }
-
-  useEffect(() => {
-    fetchBalance();
-  }, [show]);
+  const balance = getBalance();
 
   const neededAmount = parseFloat(((!isObjectEmpty(buyNowItem) ? buyNowItem.price : totalAmount) - balance).toFixed(9));
   const footer = (
