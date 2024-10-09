@@ -32,10 +32,11 @@ export async function initialize(
         const contract = await setup(contractId, provider, wallet);
         const _exchange: ContractIdInput = { bits: exchange };
         const _Pool: ContractIdInput = { bits: assetManager };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .initialize(_exchange, _Pool)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. initialize failed. Reason: ${err}`)
@@ -103,12 +104,13 @@ export async function deposit(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .deposit()
             .txParams({gasLimit})
             .addContracts([assetManager])
             .callParams({forward: coin})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. deposit failed. Reason: ${err}`)
@@ -136,11 +138,12 @@ export async function withdraw(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .withdraw(_asset, amount)
             .txParams({variableOutputs: 1, gasLimit})
             .addContracts([assetManager])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. withdraw failed. Reason: ${err}`)
@@ -157,11 +160,12 @@ export async function withdrawAll(
         const contract = await setup(contractId, provider, wallet);
         const _provider = await Provider.create(provider)
         const assetManager = new Contract(assetManagerAddr, AssetManagerAbi__factory.abi, _provider);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .withdraw_all()
             .txParams({variableOutputs: 1})
             .addContracts([assetManager])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. withdrawAll failed. Reason: ${err}`)
@@ -182,10 +186,11 @@ export async function transferFrom(
         const _from: IdentityInput = { Address: { bits: from } };
         const _to: IdentityInput = { Address: { bits: to } };
         const _asset: ContractIdInput = { bits: asset };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .transfer_from(_from, _to, _asset, amount)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. transferFrom failed. Reason: ${err}`)
@@ -201,10 +206,11 @@ export async function setAssetManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _Pool: ContractIdInput = { bits: assetManager };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_asset_manager(_Pool)
             .txParams({variableOutputs: 1})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. setAssetManager failed. Reason: ${err}`)
@@ -266,10 +272,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. transferOwnership failed. Reason: ${err}`)
@@ -283,10 +290,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Pool. renounceOwnership failed. Reason: ${err}`)

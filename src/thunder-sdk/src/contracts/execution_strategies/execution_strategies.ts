@@ -36,10 +36,11 @@ export async function initialize(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _exchange: ContractIdInput = { bits: exchange };
-        const { transactionResult, transactionResponse } = await contract.functions
+        const { waitForResult } = await contract.functions
             .initialize(_exchange)
             .txParams({})
             .call();
+        const { transactionResult, transactionResponse } = await waitForResult();
         return { transactionResponse, transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -55,10 +56,11 @@ export async function setProtocolFee(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_protocol_fee(fee)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -219,10 +221,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -237,10 +240,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);

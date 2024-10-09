@@ -27,10 +27,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .initialize()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`RoyaltyManager. initialize failed. Reason: ${err}`)
@@ -55,11 +56,12 @@ export async function registerRoyaltyInfo(
         const _collection: ContractIdInput = { bits: collection };
         const _provider = await Provider.create(provider)
         const _collectionContract = new Contract(collection, RoyaltyManagerAbi__factory.abi, _provider);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .register_royalty_info(_collection, _receiver, fee)
             .txParams({})
             .addContracts([_collectionContract])
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`RoyaltyManager. registerRoyaltyInfo failed. Reason: ${err}`)
@@ -92,10 +94,11 @@ export async function setRoyaltyFeeLimit(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .set_royalty_fee_limit(feeLimit)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`RoyaltyManager. setRoyaltyFeeLimit failed. Reason: ${err}`)
@@ -143,10 +146,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`RoyaltyManager. transferOwnership failed. Reason: ${err}`)
@@ -160,10 +164,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const { waitForResult } = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await waitForResult();
         return { transactionResult };
     } catch(err: any) {
         throw Error(`RoyaltyManager. renounceOwnership failed. Reason: ${err}`)
