@@ -5,6 +5,7 @@ import { http, createConfig } from "@wagmi/core";
 import { mainnet, sepolia } from "@wagmi/core/chains";
 import { QueryClient } from "@tanstack/react-query";
 import { structuralSharing } from "@wagmi/core/query";
+import { getDefaultConnectors } from "utils/getDefaultConnectors";
 
 export const THUNDER_THEME_NAME = "thunder_theme";
 export const WALLET_CONNECT_PROJECT_ID = "fbbe076e89456ef4f6f54493682058b9";
@@ -228,11 +229,9 @@ export const WAGMI_CONFIG = createConfig({
 });
 export const FUEL_PROVIDER = Provider.create(FUEL_PROVIDER_URL);
 export const FUEL_CONFIG: FuelConfig = {
-  connectors: defaultConnectors({
-    // devMode: true,
+  connectors: getDefaultConnectors({
     wcProjectId: WALLET_CONNECT_PROJECT_ID,
     ethWagmiConfig: WAGMI_CONFIG,
-    devMode: true,
     chainId: CHAIN_IDS.fuel.testnet,
     fuelProvider: FUEL_PROVIDER,
   }),
