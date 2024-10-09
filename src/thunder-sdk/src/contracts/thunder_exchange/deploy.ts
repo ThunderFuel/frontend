@@ -53,49 +53,49 @@ const main = async (_provider: string) => {
         // Deploy Exchange
         const exchangeBytecode = readFileSync(path.join(__dirname, '../../bin-files/thunder_exchange.bin'));
         const exchangeFactory = new ContractFactory(exchangeBytecode, ThunderExchangeAbi__factory.abi, OWNER);
-        exchange = await exchangeFactory.deployContract({});
+        exchange = await exchangeFactory.deploy({});
         console.log(`Exchange contract id: ${exchange.id.toB256()}`)
         await sleep(1500);
 
         // Deploy AssetManager
         const assetManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/asset_manager.bin'));
         const assetManagerFactory = new ContractFactory(assetManagerBytecode, AssetManagerAbi__factory.abi, OWNER);
-        assetManager = await assetManagerFactory.deployContract({});
+        assetManager = await assetManagerFactory.deploy({});
         console.log(`AssetManager contract id: ${assetManager.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Pool
         const poolBytecode = readFileSync(path.join(__dirname, '../../bin-files/pool.bin'));
         const poolFactory = new ContractFactory(poolBytecode, PoolAbi__factory.abi, OWNER);
-        pool = await poolFactory.deployContract({});
+        pool = await poolFactory.deploy({});
         console.log(`Pool contract id: ${pool.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Strategy Fixed Price Sale
         const strategyBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_fixed_price_sale.bin'));
         const strategyFactory = new ContractFactory(strategyBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        strategyFixedPrice = await strategyFactory.deployContract({});
+        strategyFixedPrice = await strategyFactory.deploy({});
         console.log(`StrategyFixedPrice contract id: ${strategyFixedPrice.id.toB256()}`)
         await sleep(1500);
 
         // // Deploy Strategy Auction
         const strategyAuctionBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_auction.bin'));
         const strategyAuctionFactory = new ContractFactory(strategyAuctionBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        strategyAuction = await strategyAuctionFactory.deployContract({});
+        strategyAuction = await strategyAuctionFactory.deploy({});
         console.log(`StrategyAuction contract id: ${strategyAuction.id.toB256()}`)
         // await sleep(1500);
 
         // Deploy Execution Manager
         const executionManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/execution_manager.bin'));
         const executionManagerFactory = new ContractFactory(executionManagerBytecode, ExecutionManagerAbi__factory.abi, OWNER);
-        executionManager = await executionManagerFactory.deployContract({});
+        executionManager = await executionManagerFactory.deploy({});
         console.log(`ExecutionManager contract id: ${executionManager.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Royalty Manager
         const royaltyManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/royalty_manager.bin'));
         const royaltyManagerFactory = new ContractFactory(royaltyManagerBytecode, RoyaltyManagerAbi__factory.abi, OWNER);
-        royaltyManager = await royaltyManagerFactory.deployContract({});
+        royaltyManager = await royaltyManagerFactory.deploy({});
         console.log(`RoyaltyManager contract id: ${royaltyManager.id.toB256()}`)
         await sleep(1500);
 
