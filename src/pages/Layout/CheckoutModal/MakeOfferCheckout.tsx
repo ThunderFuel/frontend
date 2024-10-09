@@ -209,7 +209,7 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
   }
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+    getBidBalance({ contractAddress: user.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   }
