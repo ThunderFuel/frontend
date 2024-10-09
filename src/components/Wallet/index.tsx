@@ -1,19 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import ConnectWallet from "components/ConnectWalletModal";
-import { useAppDispatch, useAppSelector } from "store";
+import { RootState, useAppDispatch, useAppSelector } from "store";
 import { setIsConnected, setUser, toggleWalletModal } from "store/walletSlice";
 import Wallet from "./Wallet";
 import { useWallet } from "hooks/useWallet";
 import { useFuelExtension } from "hooks/useFuelExtension";
 import { useLocalStorage } from "hooks/useLocalStorage";
 
+
+
+// Static selectors are not re-evaluated on every render, so they are more efficient
+const selectWallet = (state: RootState) => state.wallet;
+
 const Index = () => {
   const dispatch = useAppDispatch();
   const { getConnectionStatus, walletConnect } = useWallet();
-  const { show, isConnected } = useAppSelector((state) => state.wallet);
+  const { show, isConnected } = useAppSelector(selectWallet);
   const { selectedGateway } = useFuelExtension();
 
-  async function handleConnection() {
+  const handleConnection = useCallback(async () => {
     const status = await getConnectionStatus();
     const userData = useLocalStorage().getItem("connected_account");
 
@@ -26,13 +31,13 @@ const Index = () => {
     } else {
       useLocalStorage().removeItem("connected_account");
     }
-  }
+  }, [getConnectionStatus, walletConnect, dispatch]);
 
   useEffect(() => {
-    if (selectedGateway() === undefined || isConnected) return;
+    if (selectedGateway === undefined || isConnected) return;
 
     handleConnection();
-  }, [selectedGateway()?.provider]);
+  }, [selectedGateway, handleConnection, isConnected]);
 
   return isConnected ? <Wallet show={show} onClose={() => dispatch(toggleWalletModal())} /> : <ConnectWallet show={show} onClose={() => dispatch(toggleWalletModal())} />;
 };

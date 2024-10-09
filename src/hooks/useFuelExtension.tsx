@@ -1,7 +1,7 @@
 import { useLocalStorage } from "./useLocalStorage";
 import WagmiProvider from "providers/WagmiProvider";
 import { useFuel } from 'hooks/useFuel';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const storage = useLocalStorage();
 const FuelGatewayType = "thunder_fuel_gateway_type";
@@ -27,28 +27,33 @@ export const useFuelExtension = () => {
   // Best practice is to use the hook inside the useState, useMemo or useEffect
   const [wagmi, _] = useState(() => new WagmiProvider());
 
-  const setGatewayType = (type: FUEL_TYPE) => {
+  const setGatewayType = useCallback((type: FUEL_TYPE) => {
     storage.setItem(FuelGatewayType, type);
     gatewayType = type;
-  };
-  const clearGatewayType = () => {
+  }, []);
+  
+  const clearGatewayType = useCallback(() => {
     storage.removeItem(FuelGatewayType);
     gatewayType = null;
-  };
+  }, []);
+
+  // Creating an object is O(n), so we should avoid doing it on each render
+  const gateways = useMemo(() => ({
+    [FUEL_TYPE.FUEL]: fuel,
+    [FUEL_TYPE.FUELET]: fuel,
+    // [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
+    [FUEL_TYPE.WAGMI_METAMASK]: wagmi,
+    [FUEL_TYPE.WAGMI_COINBASE]: wagmi,
+    [FUEL_TYPE.WAGMI_WALLETCONNECT]: wagmi,
+    [FUEL_TYPE.LIT_GOOGLE_AUTH]: wagmi,
+    [FUEL_TYPE.LIT_DISCORD_AUTH]: wagmi,
+  }), [fuel, wagmi]);
+
+  // Accessing a property in an object is O(1)
+  const selectedGateway = gateways[gatewayType as FUEL_TYPE]
 
   return {
-    selectedGateway: () => {
-      return {
-        [FUEL_TYPE.FUEL]: fuel,
-        [FUEL_TYPE.FUELET]: fuel,
-        // [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
-        [FUEL_TYPE.WAGMI_METAMASK]: wagmi,
-        [FUEL_TYPE.WAGMI_COINBASE]: wagmi,
-        [FUEL_TYPE.WAGMI_WALLETCONNECT]: wagmi,
-        [FUEL_TYPE.LIT_GOOGLE_AUTH]: wagmi,
-        [FUEL_TYPE.LIT_DISCORD_AUTH]: wagmi,
-      }[gatewayType as FUEL_TYPE];
-    },
+    selectedGateway,
     setGatewayType,
     clearGatewayType,
   };
