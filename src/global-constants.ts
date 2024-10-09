@@ -4,6 +4,7 @@ import { CHAIN_IDS, type FuelConfig, Provider } from "fuels";
 import { http, createConfig } from "@wagmi/core";
 import { mainnet, sepolia } from "@wagmi/core/chains";
 import { QueryClient } from "@tanstack/react-query";
+import { structuralSharing } from "@wagmi/core/query";
 
 export const THUNDER_THEME_NAME = "thunder_theme";
 export const WALLET_CONNECT_PROJECT_ID = "fbbe076e89456ef4f6f54493682058b9";
@@ -237,4 +238,10 @@ export const FUEL_CONFIG: FuelConfig = {
   }),
 };
 
-export const QUERY_CLIENT = new QueryClient();
+export const QUERY_CLIENT = new QueryClient({
+  defaultOptions: {
+    queries: {
+      structuralSharing,
+    },
+  },
+});
