@@ -249,6 +249,8 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
     return <span className="font-bold whitespace-nowrap">{parseFloat((offer - bidBalance).toFixed(9))} ETH</span>;
   };
 
+  const hasEnough = hasEnoughBalance(offer);
+
   return (
     <Modal
       bodyClassName="!w-full !max-w-[600px]"
@@ -331,14 +333,14 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
                 <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
               </div>
             )}
-            {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
+            {!toGwei(offer).eq(0) && hasEnough && offer > bidBalance && (
               <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
                 <IconInfo width="17px" />
                 <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>
               </div>
             )}
             <div className="flex flex-col gap-[5px]">
-              <Balances balance={balance} onFetchBalance={fetchBalance} />
+              <Balances />
               <InitialCartItemBottomPart floorPrice={selectedNFT?.collection?.floor} bestOffer={selectedNFT?.bestOffer?.price} />
             </div>
           </div>

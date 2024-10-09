@@ -17,7 +17,7 @@ const bidDescription =
 
 const PlaceBid = ({ onBack }: { onBack: any }) => {
   const dispatch = useAppDispatch();
-  const { getBalance } = useWallet();
+  const { getBalance, hasEnoughBalance } = useWallet();
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
   const { user } = useAppSelector((state) => state.wallet);
 
@@ -39,8 +39,8 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
     return !(isNaN(Number(price)) || price === "" || Number(price) === 0);
   };
 
-  const hasEnoughBalance = () => {
-    return balance / 1000000000 >= bid;
+  const enoughBalance = () => {
+    return hasEnoughBalance(bid.toString());
   };
 
   const bidBalanceControl = () => {
@@ -49,13 +49,13 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
 
   const footer = (
     <div className="flex flex-col text-head6 font-spaceGrotesk text-white">
-      <Balances balance={balance} onFetchBalance={fetchBalance} />
+      <Balances />
       <div className="flex justify-end gap-x-3 px-5 py-5">
         <Button className="btn-secondary" onClick={() => dispatch(toggleManageFundsModal())}>
           ADD FUNDS <IconArrowRight />
         </Button>
         <Button
-          disabled={!isValidNumber(bid) || !hasEnoughBalance() ? true : isButtonDisabled}
+          disabled={!isValidNumber(bid) || !enoughBalance() ? true : isButtonDisabled}
           onClick={() => {
             setIsButtonDisabled(true);
 
@@ -75,13 +75,13 @@ const PlaceBid = ({ onBack }: { onBack: any }) => {
       <div className="flex flex-col gap-y-2 ">
         <h6 className="text-head6 font-spaceGrotesk text-white">Your Bid</h6>
         <InputPrice onChange={setBid} value={bid} type="text" />
-        {balance < toGwei(bid) && (
+        {!enoughBalance() && (
           <div className="flex w-full items-center gap-x-[5px] text-red">
             <IconWarning width="17px" />
             <span className="text-bodySm font-spaceGrotesk">You don’t have enough funds.</span>
           </div>
         )}
-        {!toGwei(bid).eq(0) && balance >= toGwei(bid) && bid > bidBalance && (
+        {!toGwei(bid).eq(0) && enoughBalance() && bid > bidBalance && (
           <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
             <IconInfo width="17px" />
             <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>

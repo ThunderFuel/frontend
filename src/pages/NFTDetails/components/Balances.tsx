@@ -4,7 +4,7 @@ import { useAppSelector } from "store";
 import EthereumPrice from "../../../components/EthereumPrice";
 import { useWallet } from "hooks/useWallet";
 
-const Balances = ({ onFetchBalance }: { balance: number; onFetchBalance: () => void }) => {
+const Balances = () => {
   const { user } = useAppSelector((state) => state.wallet);
   const { getBidBalance, getBalance } = useWallet();
   const balance = getBalance();
@@ -17,16 +17,12 @@ const Balances = ({ onFetchBalance }: { balance: number; onFetchBalance: () => v
     });
   }
 
-  useEffect(() => {
-    onFetchBalance();
-  }, []);
-
   return (
     <div className="flex flex-col gap-[5px]">
       <div className="flex justify-between">
         <div className="flex items-center gap-x-1">
           <span className="text-gray-light text-bodyMd font-medium">Wallet Balance</span>
-          <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" onClick={() => onFetchBalance()} />
+          <IconRefresh className="w-4 h-4 text-gray-light cursor-pointer hover:text-white" />
         </div>
         <div className="flex items-center">
           <EthereumPrice price={balance} priceClassName="text-bodyMd font-medium text-white" />
