@@ -6,7 +6,7 @@ import { useAccount, useIsConnected, useWallet as useFuelWallet, useDisconnect }
 import { useEffect } from "react";
 import userService from "api/user/user.service";
 import { isObjectEmpty } from "utils";
-import { toB256 } from "fuels";
+import { isB256, toB256 } from "fuels";
 
 export const useWallet = () => {
   const getWalletAddress = useSelector(getSerializeAddress);
@@ -23,8 +23,8 @@ export const useWallet = () => {
     refetchConnected();
   }, [refetchConnected]);
 
-  async function _connect() {
-    const user = await userService.userCreate({ walletAddress: account });
+  async function _connect(address: any) {
+    const user = await userService.userCreate({ walletAddress: address });
 
     dispatch(setUser(user.data));
     dispatch(setIsConnecting(false));
@@ -37,9 +37,12 @@ export const useWallet = () => {
       dispatch(setIsConnecting(true));
       dispatch(setIsConnected(true));
 
-      dispatch(setAddress(toB256(account as any) ?? ""));
+      let _address = account;
+      if (!isB256(_address)) _address = toB256(account as any);
 
-      _connect();
+      dispatch(setAddress(_address ?? ""));
+
+      _connect(_address);
 
       setGatewayType(FUEL_TYPE.FUEL);
 
@@ -59,7 +62,7 @@ export const useWallet = () => {
   };
 
   const getConnectionStatus = async () => {
-    return selectedGateway()?.isConnected();
+    return isConnected;
   };
 
   const getBalance = async () => {
