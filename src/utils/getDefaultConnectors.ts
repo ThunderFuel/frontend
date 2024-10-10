@@ -6,6 +6,7 @@ import {
   FuelWalletConnector,
   FueletWalletConnector,
   WalletConnectConnector,
+  SolanaConnector,
 } from "@fuels/connectors";
 import type { Config } from "@wagmi/core";
 import type { Provider } from "fuels";
@@ -21,7 +22,7 @@ interface IDefaultConnectors {
 export const getDefaultConnectors = ({ wcProjectId, ethWagmiConfig, chainId, fuelProvider, burnerWalletConfig }: IDefaultConnectors) => {
   const connectors = [
     new FuelWalletConnector(),
-    new BakoSafeConnector(),
+    // new BakoSafeConnector(),
     new FueletWalletConnector(),
     new WalletConnectConnector({
       projectId: wcProjectId,
@@ -31,6 +32,11 @@ export const getDefaultConnectors = ({ wcProjectId, ethWagmiConfig, chainId, fue
     }),
     new BurnerWalletConnector({
       ...burnerWalletConfig,
+      chainId,
+      fuelProvider,
+    }),
+    new SolanaConnector({
+      projectId: wcProjectId,
       chainId,
       fuelProvider,
     }),

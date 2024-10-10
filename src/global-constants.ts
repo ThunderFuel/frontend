@@ -190,15 +190,16 @@ export const FINALLY_MAINNET = "finally_mainnet";
 
 const FUEL_URLS = {
   [CHAIN_IDS.fuel.testnet]: "https://testnet.fuel.network/v1/graphql",
+  [CHAIN_IDS.fuel.mainnet]: provider,
 };
 
 // Should be consistent accross project
-export const FUEL_PROVIDER_URL = FUEL_URLS[CHAIN_IDS.fuel.testnet];
+export const FUEL_PROVIDER_URL = FUEL_URLS[CHAIN_IDS.fuel.mainnet];
 
 export const FUEL_NETWORKS = [
   {
-    chainId: CHAIN_IDS.fuel.testnet,
-    url: FUEL_PROVIDER_URL,
+    chainId: CHAIN_IDS.fuel.mainnet,
+    url: provider,
   },
 ];
 const METADATA = {
@@ -234,7 +235,7 @@ export const FUEL_CONFIG: FuelConfig = {
   connectors: getDefaultConnectors({
     wcProjectId: WALLET_CONNECT_PROJECT_ID,
     ethWagmiConfig: WAGMI_CONFIG,
-    chainId: CHAIN_IDS.fuel.testnet,
+    chainId: CHAIN_IDS.fuel.mainnet,
     fuelProvider: FUEL_PROVIDER,
   }),
 };
