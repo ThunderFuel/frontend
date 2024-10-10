@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import SocialMediaIcons from "components/SocialMediaIcons";
 import etherscanService from "api/etherscan/etherscan.service";
 import { IconCart, IconCollections, IconDrops, IconEthereum, IconGas, IconHome, IconMoon, IconSun, IconWallet, IconWalletConnect } from "icons";
@@ -20,21 +20,21 @@ const FooterBottom = React.memo(() => {
   const [isDarkMode, setIsDarkModa] = React.useState<boolean>(true);
   const [gasFee, setGasFee] = React.useState<any>(0);
   const [ethPrice, setEthPrice] = React.useState<any>(0);
-
-  const getData = async () => {
+  const { getItem, setItem } = useLocalStorage();
+  const getData = useCallback(async () => {
     const response = await etherscanService.getData();
 
-    setEthPrice(parseFloat(response.result.ethusd).toFixed(2));
+    setEthPrice(Number.parseFloat(response.result.ethusd).toFixed(2));
     setGasFee(response.result.safeGasPrice);
-  };
+  }, []);
 
   const onChangeMode = () => {
     if (!isDarkMode) {
       document.documentElement.classList.add("dark");
-      useLocalStorage().setItem(THUNDER_THEME_NAME, "dark");
+      setItem(THUNDER_THEME_NAME, "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      useLocalStorage().setItem(THUNDER_THEME_NAME, "light");
+      setItem(THUNDER_THEME_NAME, "light");
     }
     setIsDarkModa(!isDarkMode);
   };
@@ -45,10 +45,10 @@ const FooterBottom = React.memo(() => {
       getData();
     }, IntervalValue);
 
-    setIsDarkModa(useLocalStorage().getItem(THUNDER_THEME_NAME) === "dark");
+    setIsDarkModa(getItem(THUNDER_THEME_NAME) === "dark");
 
     return () => clearInterval(interval);
-  }, []);
+  }, [getData, getItem]);
   const Icon = isDarkMode ? IconSun : IconMoon;
 
   return (
@@ -78,21 +78,21 @@ const MobileInfoBar = React.memo(() => {
   const [isDarkMode, setIsDarkModa] = React.useState<boolean>(true);
   const [gasFee, setGasFee] = React.useState<any>(0);
   const [ethPrice, setEthPrice] = React.useState<any>(0);
-
-  const getData = async () => {
+  const { getItem, setItem } = useLocalStorage();
+  const getData = useCallback(async () => {
     const response = await etherscanService.getData();
 
-    setEthPrice(parseFloat(response.result.ethusd).toFixed(2));
+    setEthPrice(Number.parseFloat(response.result.ethusd).toFixed(2));
     setGasFee(response.result.safeGasPrice);
-  };
+  }, []);
 
   const onChangeMode = () => {
     if (!isDarkMode) {
       document.documentElement.classList.add("dark");
-      useLocalStorage().setItem(THUNDER_THEME_NAME, "dark");
+      setItem(THUNDER_THEME_NAME, "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      useLocalStorage().setItem(THUNDER_THEME_NAME, "light");
+      setItem(THUNDER_THEME_NAME, "light");
     }
     setIsDarkModa(!isDarkMode);
   };
@@ -103,7 +103,7 @@ const MobileInfoBar = React.memo(() => {
       getData();
     }, IntervalValue);
 
-    setIsDarkModa(useLocalStorage().getItem(THUNDER_THEME_NAME) === "dark");
+    setIsDarkModa(getItem(THUNDER_THEME_NAME) === "dark");
 
     return () => clearInterval(interval);
   }, []);

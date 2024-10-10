@@ -135,17 +135,12 @@ const HeaderUserBalance = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
-  const account = user?.walletAddress ?? user?.contractAddress;
-  const balanceRes = useBalance({
-    address: account,
-    assetId: "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07",
-  });
+  const { removeItem } = useLocalStorage();
 
   React.useEffect(() => {
     const fetchBalances = () => {
-      fetchBalance();
       fetchBidBalance();
     };
 
@@ -156,20 +151,16 @@ const HeaderUserBalance = ({ user, address }: any) => {
     };
   }, []);
 
-  const fetchBalance = () => {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  };
   const fetchBidBalance = () => {
     if (user?.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user?.walletAddress, user: user }).then((res) => {
-      setBidBalance(res ? res : 0);
+    getBidBalance({ contractAddress: user?.walletAddress, user: user })?.then((res) => {
+      setBidBalance(res);
     });
   };
 
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
-  }, [balanceRes.balance]);
+  }, []);
 
   const onLogout = async () => {
     await walletDisconnect();
@@ -178,7 +169,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
     dispatch(setUser({}));
     dispatch(removeAll());
     dispatch(removeBulkItems());
-    useLocalStorage().removeItem("connected_account");
+    removeItem("connected_account");
   };
 
   const container = (
@@ -195,13 +186,13 @@ const HeaderUserBalance = ({ user, address }: any) => {
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {bidBalance.toFixed(4)} <IconEthereum className="text-gray-light font" />
+              {bidBalance} <IconEthereum className="text-gray-light font" />
             </span>
           </div>
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
+              {balance} <IconEthereum className="text-gray-light" />
             </span>
           </div>
         </div>
@@ -224,7 +215,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   return (
     <BaseDropdown container={container}>
       <div className="flex px-2">
-        {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
+        {balance} <IconEthereum className="text-gray-light" />
       </div>
     </BaseDropdown>
   );
@@ -233,6 +224,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
 const HeaderUserProfileInfo = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const { walletDisconnect } = useWallet();
+  const { removeItem } = useLocalStorage();
   const navigate = UseNavigate();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const items = [
@@ -286,7 +278,7 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
       dispatch(setUser({}));
       dispatch(removeAll());
       dispatch(removeBulkItems());
-      useLocalStorage().removeItem("connected_account");
+      removeItem("connected_account");
     } else {
       navigate(item.path, {});
     }

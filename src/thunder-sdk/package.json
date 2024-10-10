@@ -18,6 +18,6 @@
   },
   "dependencies": {
     "ethers": "^6.9.0",
-    "fuels": "^0.94.8"
+    "fuels": "0.94.9"
   }
 }

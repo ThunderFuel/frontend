@@ -38,7 +38,7 @@ const ManageFunds = () => {
   const [isAddToPool, setisAddToPool] = useState(true);
   const [amount, setAmount] = useState<any>(0);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [balance, setbalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<any>(0);
 
   const [isOnConfirmStep, setIsOnConfirmStep] = useState(false);
@@ -46,11 +46,8 @@ const ManageFunds = () => {
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
   function fetchBidBalance() {
-    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+    getBidBalance({ contractAddress: user.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   }
@@ -79,7 +76,6 @@ const ManageFunds = () => {
   );
 
   React.useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
 
     return () => {
@@ -89,7 +85,6 @@ const ManageFunds = () => {
   }, [manageFundsShow]);
 
   React.useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 

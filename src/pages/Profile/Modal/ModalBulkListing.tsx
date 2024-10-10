@@ -14,12 +14,12 @@ import { Approved, TransactionFailed, TransactionRejected } from "../../Layout/C
 import { CheckoutCartItems } from "../../Layout/CheckoutModal/Checkout";
 import { useAppSelector } from "../../../store";
 import { useWallet } from "../../../hooks/useWallet";
-import FuelProvider from "../../../providers/FuelProvider";
 import { handleTransactionError } from "../../Layout/CheckoutModal/components/CheckoutProcess";
 import nftdetailsService from "../../../api/nftdetails/nftdetails.service";
 import { toGwei } from "../../../utils";
 import { strategyFixedPriceContractId } from "../../../global-constants";
 import clsx from "clsx";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const BulkListingContainer = ({ onClose, onTriggerCheckout }: any) => {
   const isMobile = useIsMobile();
@@ -117,7 +117,7 @@ const BulkListingCheckout = ({ onClose, setHideHeaders, onFinalComplete }: any) 
   const { bulkListItems, bulkUpdateItems } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
   const { handleBulkListing } = useWallet();
-  const fuel = new FuelProvider();
+  const { fuelGateway: fuel } = useFuelExtension();
 
   const [startTransaction, setStartTransaction] = useState(true);
   const [isFailed, setIsFailed] = useState(false);
@@ -145,7 +145,7 @@ const BulkListingCheckout = ({ onClose, setHideHeaders, onFinalComplete }: any) 
     let updatePromise;
     let listPromise;
 
-    const _baseAssetId = await fuel.getBaseAssetId();
+    const _baseAssetId = await fuel?.getBaseAssetId();
 
     if (bulkUpdateItems.length > 0) {
       const res = await nftdetailsService.getTokensIndex(tokenIds);
