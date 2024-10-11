@@ -194,7 +194,7 @@ const ManageFunds = () => {
                 </div>
               )}
               <Button
-                disabled={isDisabled ? true : amount === 0 || amount === "" || (isAddToPool && balance < amount) || (!isAddToPool && bidBalance < amount)}
+                disabled={isDisabled ? true : Number(amount) === 0 || amount === "" || (isAddToPool && balance < amount) || (!isAddToPool && bidBalance < amount)}
                 className="btn-secondary w-full mt-[2px]"
                 onClick={handleSwap}
               >

@@ -14,11 +14,14 @@ const InputEthereum = (props: any) => {
     }
     onChange(value);
   };
+
   const handleChange = (event: any) => {
     const newValue = event.target.value;
     const lastChar = newValue.substring(newValue.length - 1);
+
+    // Don't parse into a number to avoid scientific notation
     if (newValue.match(/^(0*[1-9]\d*|0*[1-9]\d*\.\d+|0*\.\d+|0+)$/)) {
-      onInput(lastChar === "0" ? newValue : +newValue);
+      onInput(newValue); // Keep value as string
     } else if (lastChar === "." && !newValue.substring(0, newValue.length - 1).includes(".")) {
       onInput(newValue);
     } else if (newValue === "") {

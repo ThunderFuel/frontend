@@ -123,6 +123,7 @@ class FuelProvider extends BaseProvider {
                 setBidBalanceUpdated(true);
                 setApproved(true);
                 window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
+                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
               }
             })
             .catch((e) => {
@@ -142,6 +143,7 @@ class FuelProvider extends BaseProvider {
                 // });
                 setApproved(true);
                 window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
+                window.dispatchEvent(new CustomEvent("CompleteCheckout"));
               }
             })
             .catch((e) => {
@@ -510,6 +512,7 @@ class FuelProvider extends BaseProvider {
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
           setApproved(true);
+          window.dispatchEvent(new CustomEvent("CompleteCheckout"));
         }
       } catch (e) {
         handleTransactionError({ error: e, setStartTransaction, setIsFailed });
@@ -544,6 +547,7 @@ class FuelProvider extends BaseProvider {
           //   },
           // ]);
           setApproved(true);
+          window.dispatchEvent(new CustomEvent("CompleteCheckout"));
         }
       } catch (e) {
         handleTransactionError({ error: e, setStartTransaction, setIsFailed });
@@ -578,6 +582,7 @@ class FuelProvider extends BaseProvider {
           //   },
           // ]);
           setApproved(true);
+          window.dispatchEvent(new CustomEvent("CompleteCheckout"));
         }
       } catch (e) {
         handleTransactionError({ error: e, setStartTransaction, setIsFailed });
