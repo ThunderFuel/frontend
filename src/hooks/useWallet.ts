@@ -22,22 +22,22 @@ export const useWallet = () => {
   const { isConnected, refetch: refetchConnected, isFetching } = useIsConnected();
   const { disconnect } = useDisconnect();
   // Account
-  const wagmiAccount = useAccount();
+  // const wagmiAccount = useAccount();
   const { account: fuelAccount } = useFuelAccount();
-  const account = isExternal ? wagmiAccount?.address : fuelAccount;
+  const account = fuelAccount;
   // Balance
-  const { data: wagmiBalance } = useBalance({ address: wagmiAccount?.address });
+  // const { data: wagmiBalance } = useBalance({ address: wagmiAccount?.address });
   const { balance: fuelBalance } = useFuelBalance({ address: account });
   const balance = useMemo(() => {
-    if (isExternal) {
-      return bn((wagmiBalance?.value || BigInt(0)).toString());
-    }
+    // if (isExternal) {
+    //   return bn((wagmiBalance?.value || BigInt(0)).toString());
+    // }
 
     return fuelBalance || bn("0");
-  }, [fuelBalance, wagmiBalance, isExternal]);
+  }, [fuelBalance]);
 
   const { wallet: fuelWallet } = useFuelWallet({ account: fuelAccount });
-  const decimalUnits = isExternal ? DECIMAL_WEI : DECIMAL_FUEL;
+  const decimalUnits = DECIMAL_FUEL;
 
   // Just to keep updated, but ideally this should be used directly via hooks
   useEffect(() => {
@@ -66,9 +66,11 @@ export const useWallet = () => {
   useEffect(() => {
     let abort = false;
     if (isConnected && account && user?.walletAddress === undefined) {
-      _connect().then(() => {
-        !abort && setGatewayType(FUEL_TYPE.WAGMI_METAMASK);
-      });
+      // _connect().then(() => {
+      //   !abort && setGatewayType(FUEL_TYPE.WAGMI_METAMASK);
+      // });
+
+      _connect();
     }
 
     return () => {

@@ -74,13 +74,13 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <StytchProvider stytch={stytch}>
-        <WagmiProvider config={WAGMI_CONFIG}>
-          <QueryClientProvider client={QUERY_CLIENT}>
-            <FuelProvider theme="dark" fuelConfig={FUEL_CONFIG} networks={FUEL_NETWORKS}>
-              <Router />
-            </FuelProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
+        {/* <WagmiProvider config={WAGMI_CONFIG}> */}
+        <QueryClientProvider client={QUERY_CLIENT}>
+          <FuelProvider theme="dark" fuelConfig={FUEL_CONFIG} networks={FUEL_NETWORKS}>
+            <Router />
+          </FuelProvider>
+        </QueryClientProvider>
+        {/* </WagmiProvider> */}
       </StytchProvider>
     </Provider>
     <ToastContainer />

@@ -9,7 +9,7 @@ import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
 import { executeOrder } from "thunder-sdk/src/contracts/thunder_exchange";
-import { exchangeContractId, provider } from "global-constants";
+import { exchangeContractId, FUEL_PROVIDER_URL } from "global-constants";
 import { toGwei } from "utils";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import FuelProvider from "providers/FuelProvider";
@@ -70,7 +70,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      executeOrder(exchangeContractId, provider, wallet as unknown as string, order, _baseAssetId)
+      executeOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet as unknown as string, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             // offerService.acceptOffer({ id: currentItem?.id });

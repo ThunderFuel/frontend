@@ -32,12 +32,12 @@ export const useFuelExtension = (): Gateway => {
   const { fuel } = useFuel();
   const dispatch = useDispatch();
   const { currentConnector } = useCurrentConnector();
-  const isExternal = currentConnector?.external;
+  // const isExternal = currentConnector?.external;
 
   // Workaround, ideally everything should be fetched from connectors data
-  useEffect(() => {
-    setGatewayType(isExternal ? FUEL_TYPE.WAGMI_METAMASK : FUEL_TYPE.FUELET);
-  }, [isExternal, setGatewayType]);
+  // useEffect(() => {
+  //   setGatewayType(isExternal ? FUEL_TYPE.WAGMI_METAMASK : FUEL_TYPE.FUELET);
+  // }, [isExternal, setGatewayType]);
 
   const gateway = useMemo(() => {
     switch (gatewayType) {
@@ -57,16 +57,16 @@ export const useFuelExtension = (): Gateway => {
   const wagmiProvider = useMemo(() => new WagmiProvider(dispatch), [dispatch]);
   const fuelProvider = useMemo(() => (fuel ? new FuelProvider(fuel) : undefined), [fuel]);
 
-  if (isExternal) {
-    return {
-      setGatewayType,
-      clearGatewayType,
-      gateway,
-      selectedGateway: wagmiProvider,
-      fuelGateway: fuelProvider,
-      wagmiGateway: wagmiProvider,
-    };
-  }
+  // if (isExternal) {
+  //   return {
+  //     setGatewayType,
+  //     clearGatewayType,
+  //     gateway,
+  //     selectedGateway: wagmiProvider,
+  //     fuelGateway: fuelProvider,
+  //     wagmiGateway: wagmiProvider,
+  //   };
+  // }
 
   return {
     setGatewayType,

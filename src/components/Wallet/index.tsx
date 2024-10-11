@@ -15,7 +15,7 @@ const Index = () => {
   const { getConnectionStatus, walletConnect } = useWallet();
   const { show, isConnected } = useAppSelector(selectWallet);
   const { fuelGateway, wagmiGateway } = useFuelExtension();
-  const selectedGateway = fuelGateway || wagmiGateway;
+  const selectedGateway = fuelGateway;
   const { getItem, removeItem } = useLocalStorage();
 
   const handleConnection = useCallback(async () => {
