@@ -22,7 +22,7 @@ interface IDefaultConnectors {
 export const getDefaultConnectors = ({ wcProjectId, ethWagmiConfig, chainId, fuelProvider, burnerWalletConfig }: IDefaultConnectors) => {
   const connectors = [
     new FuelWalletConnector(),
-    // new BakoSafeConnector(),
+    new BakoSafeConnector(),
     new FueletWalletConnector(),
     new WalletConnectConnector({
       projectId: wcProjectId,
