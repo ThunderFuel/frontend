@@ -103,7 +103,16 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       show={show}
       onClose={onClose}
       footer={
-        <Footer isOnConfirmStep={isOnConfirmStep} approved={approved} onClose={onClose} onSubmit={onSubmit} startTransaction={startTransaction} isFailed={isFailed} primaryActionText="Update Offer" />
+        <Footer
+          isOnConfirmStep={isOnConfirmStep}
+          approved={approved}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          startTransaction={startTransaction}
+          isFailed={isFailed}
+          primaryActionText="Update Offer"
+          primaryActionDisabled={Number(offer) === 0 || offer === ""}
+        />
       }
     >
       {isOnConfirmStep && (!startTransaction || isFailed) ? (

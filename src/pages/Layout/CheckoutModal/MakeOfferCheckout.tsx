@@ -22,6 +22,7 @@ export const Footer = ({
   startTransaction,
   isFailed,
   primaryActionText = "MAKE OFFER",
+  primaryActionDisabled = false,
 }: {
   approved: boolean;
   onClose: any;
@@ -30,6 +31,7 @@ export const Footer = ({
   startTransaction: boolean;
   isFailed: boolean;
   primaryActionText?: string;
+  primaryActionDisabled?: boolean;
 }) => {
   if (isOnConfirmStep)
     return approved ? (
@@ -57,7 +59,7 @@ export const Footer = ({
           <Button className="btn-secondary w-full tracking-widest" onClick={onClose}>
             CANCEL
           </Button>
-          <Button className="w-full tracking-widest uppercase" onClick={onSubmit}>
+          <Button className="w-full tracking-widest uppercase" onClick={onSubmit} disabled={primaryActionDisabled}>
             {primaryActionText}
             <IconOffer />
           </Button>
@@ -258,7 +260,17 @@ const MakeOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
       className="checkout"
       show={show}
       onClose={onClose}
-      footer={<Footer isOnConfirmStep={isOnConfirmStep} approved={approved} onClose={onClose} onSubmit={onSubmit} startTransaction={startTransaction} isFailed={isFailed} />}
+      footer={
+        <Footer
+          isOnConfirmStep={isOnConfirmStep}
+          approved={approved}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          startTransaction={startTransaction}
+          isFailed={isFailed}
+          primaryActionDisabled={Number(offer) === 0 || offer === ""}
+        />
+      }
     >
       {isOnConfirmStep && (!startTransaction || isFailed) ? (
         <></>
