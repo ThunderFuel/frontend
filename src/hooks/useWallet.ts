@@ -157,15 +157,15 @@ export const useWallet = () => {
   }, [selectedGateway]);
 
   const handleDeposit = useCallback(
-    ({ wallet, amount, user, setIsDisabled }: any) => {
-      return selectedGateway?.handleDeposit({ wallet, amount, user, setIsDisabled });
+    ({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) => {
+      return selectedGateway?.handleDeposit({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved });
     },
     [selectedGateway]
   );
 
   const handleWithdraw = useCallback(
-    ({ wallet, amount, user, setIsDisabled }: any) => {
-      return selectedGateway?.handleWithdraw({ wallet, amount, user, setIsDisabled });
+    ({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) => {
+      return selectedGateway?.handleWithdraw({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved });
     },
     [selectedGateway]
   );
