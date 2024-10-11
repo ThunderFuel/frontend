@@ -50,7 +50,7 @@ const Grids = () => {
             <Button
               className="btn-secondary"
               onClick={() => {
-                navigate(DISCORD_URL);
+                openInNewTab(DISCORD_URL);
               }}
             >
               Discord <IconArrowRight />
@@ -61,7 +61,7 @@ const Grids = () => {
             <Button
               className="btn-secondary"
               onClick={() => {
-                navigate(TWITTER_URL);
+                openInNewTab(TWITTER_URL);
               }}
             >
               X <IconArrowRight />
@@ -72,7 +72,7 @@ const Grids = () => {
             <Button
               className="btn-secondary"
               onClick={() => {
-                navigate(MEDIUM_URL);
+                openInNewTab(MEDIUM_URL);
               }}
             >
               medium <IconArrowRight />
@@ -83,7 +83,7 @@ const Grids = () => {
             <Button
               className="btn-secondary"
               onClick={() => {
-                navigate(GITHUB_URL);
+                openInNewTab(GITHUB_URL);
               }}
             >
               Github <IconArrowRight />
