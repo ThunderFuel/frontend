@@ -627,6 +627,17 @@ class FuelProvider extends BaseProvider {
             // });
           })
           .catch(async (e) => {
+            if (
+              e.message.includes("Request cancelled without user response!") ||
+              e.message.includes("Error: User rejected the transaction!") ||
+              e.message.includes("An unexpected error occurred") ||
+              e.message.includes("User canceled sending transaction")
+            ) {
+              setStartTransaction(false);
+
+              return;
+            }
+
             const response = await nftdetailsService.getTokenOwners([{ tokenOrder: buyNowItem.tokenOrder, contractAddress: buyNowItem.contractAddress }]);
 
             if (response?.data[0].owner === user?.walletAddress) {
@@ -644,16 +655,7 @@ class FuelProvider extends BaseProvider {
               // });
 
               return;
-            }
-
-            if (
-              e.message.includes("Request cancelled without user response!") ||
-              e.message.includes("Error: User rejected the transaction!") ||
-              e.message.includes("An unexpected error occurred") ||
-              e.message.includes("User canceled sending transaction")
-            )
-              setStartTransaction(false);
-            else setIsFailed(true);
+            } else setIsFailed(true);
           });
       } else if (tokenIds.length === 1) {
         const order = {
@@ -690,6 +692,17 @@ class FuelProvider extends BaseProvider {
             // });
           })
           .catch(async (e) => {
+            if (
+              e.message.includes("Request cancelled without user response!") ||
+              e.message.includes("Error: User rejected the transaction!") ||
+              e.message.includes("An unexpected error occurred") ||
+              e.message.includes("User canceled sending transaction")
+            ) {
+              setStartTransaction(false);
+
+              return;
+            }
+
             const response = await nftdetailsService.getTokenOwners([{ tokenOrder: items[0].tokenOrder, contractAddress: items[0].contractAddress }]);
 
             if (response?.data[0].owner === user?.walletAddress) {
@@ -707,16 +720,7 @@ class FuelProvider extends BaseProvider {
               // });
 
               return;
-            }
-
-            if (
-              e.message.includes("Request cancelled without user response!") ||
-              e.message.includes("Error: User rejected the transaction!") ||
-              e.message.includes("An unexpected error occurred") ||
-              e.message.includes("User canceled sending transaction")
-            )
-              setStartTransaction(false);
-            else setIsFailed(true);
+            } else setIsFailed(true);
           });
       } else {
         // nftdetailsService.getTokensIndex(tokenIds).then((res) => {
@@ -752,6 +756,16 @@ class FuelProvider extends BaseProvider {
             }
           })
           .catch(async (e) => {
+            if (
+              e.message.includes("Request cancelled without user response!") ||
+              e.message.includes("Error: User rejected the transaction!") ||
+              e.message.includes("An unexpected error occurred") ||
+              e.message.includes("User canceled sending transaction")
+            ) {
+              setStartTransaction(false);
+
+              return;
+            }
             const requestData = items.map((item: any) => ({ tokenOrder: item.tokenOrder, contractAddress: item.contractAddress }));
             const response = await nftdetailsService.getTokenOwners(requestData);
 
@@ -772,16 +786,7 @@ class FuelProvider extends BaseProvider {
               // });
 
               return;
-            }
-
-            if (
-              e.message.includes("Request cancelled without user response!") ||
-              e.message.includes("Error: User rejected the transaction!") ||
-              e.message.includes("An unexpected error occurred") ||
-              e.message.includes("User canceled sending transaction")
-            )
-              setStartTransaction(false);
-            else setIsFailed(true);
+            } else setIsFailed(true);
           });
         // });
       }
@@ -826,6 +831,17 @@ class FuelProvider extends BaseProvider {
                   }
                 })
                 .catch(async (e) => {
+                  if (
+                    e.message.includes("Request cancelled without user response!") ||
+                    e.message.includes("Error: User rejected the transaction!") ||
+                    e.message.includes("An unexpected error occurred") ||
+                    e.message.includes("User canceled sending transaction")
+                  ) {
+                    setStartTransaction(false);
+
+                    return;
+                  }
+
                   const response = await userService.getUserOfferByNonce({
                     walletAddress: user.walletAddress,
                     nonce: order.nonce,
@@ -838,15 +854,7 @@ class FuelProvider extends BaseProvider {
                     setApproved(true);
                   } else {
                     console.log(e);
-
-                    if (
-                      e.message.includes("Request cancelled without user response!") ||
-                      e.message.includes("Error: User rejected the transaction!") ||
-                      e.message.includes("An unexpected error occurred") ||
-                      e.message.includes("User canceled sending transaction")
-                    )
-                      setStartTransaction(false);
-                    else setIsFailed(true);
+                    setIsFailed(true);
                   }
                 });
             } else
@@ -857,6 +865,15 @@ class FuelProvider extends BaseProvider {
                   }
                 })
                 .catch(async (e) => {
+                  if (
+                    e.message.includes("Request cancelled without user response!") ||
+                    e.message.includes("Error: User rejected the transaction!") ||
+                    e.message.includes("An unexpected error occurred")
+                  ) {
+                    setStartTransaction(false);
+
+                    return;
+                  }
                   const response = await userService.getUserOfferByNonce({
                     walletAddress: user.walletAddress,
                     nonce: order.nonce,
@@ -868,14 +885,7 @@ class FuelProvider extends BaseProvider {
                     setApproved(true);
                   } else {
                     console.log(e);
-
-                    if (
-                      e.message.includes("Request cancelled without user response!") ||
-                      e.message.includes("Error: User rejected the transaction!") ||
-                      e.message.includes("An unexpected error occurred")
-                    )
-                      setStartTransaction(false);
-                    else setIsFailed(true);
+                    setIsFailed(true);
                   }
                 });
           })

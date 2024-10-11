@@ -112,6 +112,12 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   };
 
   React.useEffect(() => {
+    if (!show) {
+      set_BuyNowItem({} as any);
+    }
+  }, [show]);
+
+  React.useEffect(() => {
     if (buyNowItem && !isObjectEmpty(buyNowItem)) set_BuyNowItem(buyNowItem);
     if (items.length > 0) set_Items(items);
     if (show) dispatch(getCartTotal());
