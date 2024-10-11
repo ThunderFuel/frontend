@@ -53,49 +53,56 @@ const main = async (_provider: string) => {
         // Deploy Exchange
         const exchangeBytecode = readFileSync(path.join(__dirname, '../../bin-files/thunder_exchange.bin'));
         const exchangeFactory = new ContractFactory(exchangeBytecode, ThunderExchangeAbi__factory.abi, OWNER);
-        exchange = await exchangeFactory.deployContract({});
+        const exchangeFactoryDeploy =  await exchangeFactory.deploy({});
+        exchange = (await exchangeFactoryDeploy.waitForResult()).contract;
         console.log(`Exchange contract id: ${exchange.id.toB256()}`)
         await sleep(1500);
 
         // Deploy AssetManager
         const assetManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/asset_manager.bin'));
         const assetManagerFactory = new ContractFactory(assetManagerBytecode, AssetManagerAbi__factory.abi, OWNER);
-        assetManager = await assetManagerFactory.deployContract({});
+        const assetManagerDeploy =  await assetManagerFactory.deploy({});
+        assetManager = (await assetManagerDeploy.waitForResult()).contract;
         console.log(`AssetManager contract id: ${assetManager.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Pool
         const poolBytecode = readFileSync(path.join(__dirname, '../../bin-files/pool.bin'));
         const poolFactory = new ContractFactory(poolBytecode, PoolAbi__factory.abi, OWNER);
-        pool = await poolFactory.deployContract({});
+        const poolDeploy =  await poolFactory.deploy({});
+        pool = (await poolDeploy.waitForResult()).contract;
         console.log(`Pool contract id: ${pool.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Strategy Fixed Price Sale
         const strategyBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_fixed_price_sale.bin'));
         const strategyFactory = new ContractFactory(strategyBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        strategyFixedPrice = await strategyFactory.deployContract({});
+        const strategyDeploy =  await strategyFactory.deploy({});
+        strategyFixedPrice = (await strategyDeploy.waitForResult()).contract;
         console.log(`StrategyFixedPrice contract id: ${strategyFixedPrice.id.toB256()}`)
         await sleep(1500);
 
         // // Deploy Strategy Auction
         const strategyAuctionBytecode = readFileSync(path.join(__dirname, '../../bin-files/strategy_auction.bin'));
         const strategyAuctionFactory = new ContractFactory(strategyAuctionBytecode, StrategyFixedPriceSaleAbi__factory.abi, OWNER);
-        strategyAuction = await strategyAuctionFactory.deployContract({});
+        const strategyAuctionDeploy =  await strategyAuctionFactory.deploy({});
+        strategyAuction = (await strategyAuctionDeploy.waitForResult()).contract;
         console.log(`StrategyAuction contract id: ${strategyAuction.id.toB256()}`)
         // await sleep(1500);
 
         // Deploy Execution Manager
         const executionManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/execution_manager.bin'));
         const executionManagerFactory = new ContractFactory(executionManagerBytecode, ExecutionManagerAbi__factory.abi, OWNER);
-        executionManager = await executionManagerFactory.deployContract({});
+        const executionManagerDeploy =  await executionManagerFactory.deploy({});
+        executionManager = (await executionManagerDeploy.waitForResult()).contract;
         console.log(`ExecutionManager contract id: ${executionManager.id.toB256()}`)
         await sleep(1500);
 
         // Deploy Royalty Manager
         const royaltyManagerBytecode = readFileSync(path.join(__dirname, '../../bin-files/royalty_manager.bin'));
         const royaltyManagerFactory = new ContractFactory(royaltyManagerBytecode, RoyaltyManagerAbi__factory.abi, OWNER);
-        royaltyManager = await royaltyManagerFactory.deployContract({});
+        const royaltyManagerDeploy =  await royaltyManagerFactory.deploy({});
+        royaltyManager = (await royaltyManagerDeploy.waitForResult()).contract;
         console.log(`RoyaltyManager contract id: ${royaltyManager.id.toB256()}`)
         await sleep(1500);
 
