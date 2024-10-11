@@ -246,6 +246,10 @@ const LeftMenu = (props: any) => {
   const isOwner = () => {
     return isConnected ? compareAddresses(user?.id, nft?.user?.id) : false;
   };
+  const isOfferOwner = () => {
+    return isConnected ? (compareAddresses(nft.bestOffer?.user?.id, user.id) ? true : false) : false;
+  };
+
   const isBestOfferOwner = () => {
     return isConnected ? (compareAddresses(nft.bestOffer?.user?.walletAddress, user.walletAddress) ? true : false) : false;
   };
@@ -298,7 +302,7 @@ const LeftMenu = (props: any) => {
         </div>
         <div className="flex gap-x-2.5">
           <HoverButton Icon={IconArrowRight} text="SEE ALL" btnClassName="btn-secondary no-bg" onClick={() => dispatch(setRightMenu(RightMenuType.Offers))} />
-          {isOwner() && (
+          {isOwner() && !isOfferOwner() && (
             <HoverButton
               Icon={IconAccept}
               text="ACCEPT"

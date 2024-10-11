@@ -13,7 +13,8 @@ import Tooltip from "components/Tooltip";
 import { OfferStatus } from "api/offer/offer.type";
 import Img from "../Img/Img";
 import { Link } from "react-router-dom";
-
+import { useAccount } from "@fuels/react";
+import { useAppSelector } from "store";
 interface IOfferTable {
   isOffersMade?: boolean;
   headers?: any[];
@@ -214,6 +215,9 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
     getBidBalance,
   };
 
+  const { account } = useAccount();
+  const { user } = useAppSelector((state) => state.wallet);
+
   const getHeaders = React.useMemo(() => {
     if (headers) {
       return headers;
@@ -235,6 +239,9 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       ButtonBelowHeader={ButtonBelowHeader}
       rowKey={rowKey}
       afterRow={(item: any) => {
+        if (item.ownerId === user.id) {
+          return null;
+        }
         if (!item.isActiveOffer || !item.showAfterRow) {
           return null;
         }
