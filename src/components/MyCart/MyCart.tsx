@@ -33,9 +33,9 @@ const MyCart = () => {
       dispatch(toggleWalletModal());
     } else
       hasEnoughFunds().then((res) => {
-        dispatch(setIsInsufficientBalance(!res));
-        dispatch(toggleCartModal());
         dispatch(toggleCheckoutModal());
+        dispatch(toggleCartModal());
+        dispatch(setIsInsufficientBalance(!res));
       });
   };
   const footer = (
