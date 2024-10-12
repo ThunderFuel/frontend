@@ -69,4 +69,7 @@ export default {
   async getTokenOwners(data: Array<{ tokenOrder: number; contractAddress: string }>): Promise<ApiResponse<any>> {
     return ThunderURL.post("v1/token/gettokenowners", data, {});
   },
+  async setTokensOwner({ tokenIds, walletAddress }: { tokenIds: any[]; walletAddress: string }): Promise<ApiResponse<any>> {
+    return ThunderURL.post("v1/token/settokensowner", tokenIds, { params: { walletAddress } });
+  },
 };

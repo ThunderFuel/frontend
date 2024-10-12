@@ -253,6 +253,11 @@ class FuelProvider extends BaseProvider {
       executeOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
+            nftdetailsService.setTokensOwner({
+              tokenIds: [currentItem.tokenId],
+              walletAddress: currentItem.takerAddress,
+            });
+
             onCheckoutComplete();
             setApproved(true);
             window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
@@ -634,6 +639,12 @@ class FuelProvider extends BaseProvider {
       if (transactionResult.isStatusSuccess) {
         setIsFailed(false);
         setApproved(true);
+
+        nftdetailsService.setTokensOwner({
+          tokenIds: tokenIds,
+          walletAddress: user.walletAddress,
+        });
+
         window.dispatchEvent(new CustomEvent("CompleteCheckout"));
         window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
       } else {
