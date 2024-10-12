@@ -4,13 +4,15 @@ import EthereumPrice from "../EthereumPrice";
 import { addressFormat, dateFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
-import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconOffer, IconWarning } from "../../icons";
+import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconLink, IconOffer, IconWarning } from "../../icons";
 import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 import { expiresInFormat } from "utils/timeago";
 import clsx from "clsx";
 import Tooltip from "components/Tooltip";
 import { OfferStatus } from "api/offer/offer.type";
+import Img from "../Img/Img";
+import { Link } from "react-router-dom";
 
 interface IOfferTable {
   isOffersMade?: boolean;
@@ -59,10 +61,15 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
 };
 const OfferCollectionItem = ({ item }: any) => {
   return (
-    <a href={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
-      <LazyImg className={clsx(!item.isActiveOffer ? "opacity-50" : "", "w-10 h-10 rounded-md")} src={item?.tokenImage} />
+    <div className="flex group w-full items-center gap-2.5">
+      <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.id })} className={clsx("relative min-w-[40px] max-w-[40px] aspect-square rounded-md overflow-hidden flex-center bg-gray")}>
+        <LazyImg className={clsx(!item.isActiveOffer ? "opacity-50" : "", "w-10 h-10 rounded-md")} src={item?.tokenImage} />
+        <div className="absolute top-0 left-0 bottom-0 right-0 flex-center bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <IconLink className="cursor-pointer text-white" />
+        </div>
+      </Link>
       <h6 className={clsx(!item.isActiveOffer ? "text-gray-light" : "text-white", "text-h6")}>{item?.tokenName ?? "-"}</h6>
-    </a>
+    </div>
   );
 };
 

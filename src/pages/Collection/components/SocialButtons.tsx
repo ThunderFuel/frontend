@@ -64,7 +64,7 @@ const FavoriteButton = ({ collection }: { collection: any }) => {
 const SocialShareButton = ({ collection, user, className = "right-0" }: any) => {
   const [show, setShow] = React.useState(false);
   const containerRef = React.useRef<HTMLLIElement>(null);
-  const shareTwitter = useShareTwitter();
+  const shareTwitter = useShareTwitter({ userId: user?.id });
 
   const items = [
     {

@@ -22,8 +22,8 @@ abstract class BaseProvider {
   abstract getProviderType(): any;
   //interface yaz
 
-  abstract handleDeposit({ wallet, amount, user, setIsDisabled }: any): any;
-  abstract handleWithdraw({ wallet, amount, user, setIsDisabled }: any): any;
+  abstract handleDeposit({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any): any;
+  abstract handleWithdraw({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any): any;
 
   abstract handleCheckout({ setApproved, setWagmiSteps, wagmiSteps, setStepData, buyNowItem, tokenIds, setSuccessCheckout, user, items, wallet, setStartTransaction, setIsFailed }: any): any;
 

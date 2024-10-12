@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BaseProvider from "./BaseProvider";
-import { Address, Provider } from "fuels";
+import { type Fuel, Provider } from "fuels";
 import userService from "../api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import { formatTimeBackend, formatTimeContract, isObjectEmpty, toGwei } from "utils";
@@ -16,22 +16,23 @@ import {
   updateOrder,
   type TakerOrder,
 } from "thunder-sdk/src/contracts/thunder_exchange";
-import { assetManagerContractId, contracts, exchangeContractId, poolContractId, provider, strategyAuctionContractId, strategyFixedPriceContractId } from "global-constants";
+import { assetManagerContractId, contracts, exchangeContractId, FUEL_PROVIDER, FUEL_PROVIDER_URL, poolContractId, strategyAuctionContractId, strategyFixedPriceContractId } from "global-constants";
 import { handleTransactionError } from "pages/Layout/CheckoutModal/components/CheckoutProcess";
 import offerService from "api/offer/offer.service";
 import collectionsService from "api/collections/collections.service";
 import { transfer } from "thunder-sdk/src/contracts/erc721";
 import { deposit, withdraw } from "thunder-sdk/src/contracts/pool";
-import { useFuel } from "hooks/useFuel";
-import { useLocalStorage } from "hooks/useLocalStorage";
 import type { FUEL_TYPE } from "hooks/useFuelExtension";
 import { EventDispatchFetchBalances } from "pages/Layout/Header/Header";
+import { localStore } from "hooks/useLocalStorage";
 
 class FuelProvider extends BaseProvider {
-  provider = useFuel()[0];
+  provider: Fuel;
 
-  constructor() {
+  constructor(provider: Fuel | undefined) {
     super();
+    if (!provider) throw new Error("Provider is not defined");
+    this.provider = provider;
   }
 
   getProviderType() {
@@ -39,41 +40,44 @@ class FuelProvider extends BaseProvider {
   }
 
   async getBaseAssetId() {
-    const _provider = await Provider.create(provider);
-
-    return _provider.getBaseAssetId();
+    return (await FUEL_PROVIDER).getBaseAssetId();
   }
 
-  async handleWithdraw({ wallet, amount, user, setIsDisabled }: any) {
+  async handleWithdraw({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) {
     const _baseAssetId = await this.getBaseAssetId();
 
     try {
-      withdraw(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId)
-        .then(() => {
-          // userService.updateBidBalance(user.id, -amount).then(() => setIsDisabled(false));
-          setIsDisabled(false);
-        })
-        .catch((e) => {
-          console.log(e);
-          setIsDisabled(false);
-        });
-    } catch (e) {
-      console.log(e);
+      await withdraw(poolContractId, FUEL_PROVIDER_URL, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
+      // userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
       setIsDisabled(false);
+      setApproved(true);
+      window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
+    } catch (e: any) {
+      console.log({ e });
+      setIsDisabled(false);
+
+      if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+        setStartTransaction(false);
+      else setIsFailed(true);
     }
   }
 
-  async handleDeposit({ wallet, amount, user, setIsDisabled }: any) {
+  async handleDeposit({ wallet, amount, user, setIsDisabled, setStartTransaction, setIsFailed, setApproved }: any) {
     const _baseAssetId = await this.getBaseAssetId();
 
     try {
-      await deposit(poolContractId, provider, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
+      await deposit(poolContractId, FUEL_PROVIDER_URL, wallet, toGwei(amount).toNumber(), _baseAssetId, assetManagerContractId);
       // userService.updateBidBalance(user.id, amount).then(() => setIsDisabled(false));
       setIsDisabled(false);
+      setApproved(true);
       window.dispatchEvent(new CustomEvent(EventDispatchFetchBalances));
-    } catch (e) {
-      console.log(e);
+    } catch (e: any) {
+      console.log({ e });
       setIsDisabled(false);
+
+      if (e.message.includes("Request cancelled without user response!") || e.message.includes("Error: User rejected the transaction!") || e.message.includes("An unexpected error occurred"))
+        setStartTransaction(false);
+      else setIsFailed(true);
     }
   }
 
@@ -118,7 +122,7 @@ class FuelProvider extends BaseProvider {
         const currentBidBalance = res.data;
         if (currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - currentBidBalance).toFixed(9);
-          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, true)
+          depositAndOffer(exchangeContractId, FUEL_PROVIDER_URL, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, true)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 // nftdetailsService.tokenUpdateOffer({
@@ -139,7 +143,7 @@ class FuelProvider extends BaseProvider {
               else setIsFailed(true);
             });
         } else
-          updateOrder(exchangeContractId, provider, wallet, order)
+          updateOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, order)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 // nftdetailsService.tokenUpdateOffer({
@@ -177,11 +181,11 @@ class FuelProvider extends BaseProvider {
 
     Promise.all(promises)
       .then(async () => {
-        const _provider = await Provider.create(provider);
+        const _provider = await Provider.create(FUEL_PROVIDER_URL);
 
         setContracts(contracts, _provider as any);
 
-        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, bulkListMakerOders, bulkUpdateMakerOders);
+        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, FUEL_PROVIDER_URL, wallet, bulkListMakerOders, bulkUpdateMakerOders);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           if (bulkUpdateItems.length > 0) {
@@ -244,7 +248,7 @@ class FuelProvider extends BaseProvider {
 
       setContracts(contracts, _provider as any);
 
-      executeOrder(exchangeContractId, provider, wallet, order, _baseAssetId)
+      executeOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             onCheckoutComplete();
@@ -304,7 +308,7 @@ class FuelProvider extends BaseProvider {
       //   });
     } else {
       offerService.getOffersIndex([currentItem.id]).then((res) => {
-        cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
+        cancelOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, strategyFixedPriceContractId, res.data[currentItem.id], true)
           .then((res) => {
             if (res.transactionResult.isStatusSuccess) {
               // nftdetailsService.cancelOffer(currentItem.id);
@@ -327,7 +331,7 @@ class FuelProvider extends BaseProvider {
 
     try {
       const res = await nftdetailsService.getTokensIndex([selectedNFT.id]);
-      const cancelRes = await cancelOrder(exchangeContractId, provider, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false);
+      const cancelRes = await cancelOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, strategyFixedPriceContractId, res.data[selectedNFT.id], false);
       if (cancelRes.transactionResult.isStatusSuccess) {
         if (isAcceptOffer) return true;
 
@@ -348,7 +352,7 @@ class FuelProvider extends BaseProvider {
     const _provider = await this.getProvider();
     setContracts(contracts, _provider as any);
     nftdetailsService.getAuctionIndex([selectedNFT.id]).then((res) => {
-      cancelOrder(exchangeContractId, provider, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
+      cancelOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, strategyAuctionContractId, res.data[selectedNFT.id], false)
         .then(() => {
           nftdetailsService.tokenCancelAuction(selectedNFT.id);
           setApproved(true);
@@ -384,7 +388,7 @@ class FuelProvider extends BaseProvider {
       return;
     }
 
-    bulkCancelOrder(exchangeContractId, provider, wallet, allOrders)
+    bulkCancelOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, allOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
           setApproved(true);
@@ -421,7 +425,7 @@ class FuelProvider extends BaseProvider {
       return;
     }
 
-    bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
+    bulkCancelOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, cancelOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
           setApproved(true);
@@ -457,7 +461,7 @@ class FuelProvider extends BaseProvider {
       return;
     }
 
-    bulkCancelOrder(exchangeContractId, provider, wallet, cancelOrders)
+    bulkCancelOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, cancelOrders)
       .then((res) => {
         if (res?.transactionResult.isStatusSuccess) {
           setApproved(true);
@@ -512,7 +516,7 @@ class FuelProvider extends BaseProvider {
       ];
 
       try {
-        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
+        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, FUEL_PROVIDER_URL, wallet, order);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           await nftdetailsService.tokenOnAuction(selectedNFT.id, formatTimeBackend(checkoutExpireTime), checkoutAuctionStartingPrice !== 0 ? checkoutAuctionStartingPrice : undefined);
@@ -540,7 +544,7 @@ class FuelProvider extends BaseProvider {
       ];
 
       try {
-        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, [], order);
+        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, FUEL_PROVIDER_URL, wallet, [], order);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           // await nftdetailsService.tokenUpdateListing([
@@ -574,7 +578,7 @@ class FuelProvider extends BaseProvider {
       ];
 
       try {
-        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, provider, wallet, order);
+        const bulkPlaceOrderRes = await bulkListing(exchangeContractId, FUEL_PROVIDER_URL, wallet, order);
 
         if (bulkPlaceOrderRes?.transactionResult.isStatusSuccess) {
           // await nftdetailsService.tokenList([
@@ -618,7 +622,7 @@ class FuelProvider extends BaseProvider {
       }));
 
       // Call bulkPurchase instead of individual purchases
-      const { transactionResult } = await bulkPurchase(exchangeContractId, provider, wallet, takerOrders, _baseAssetId);
+      const { transactionResult } = await bulkPurchase(exchangeContractId, FUEL_PROVIDER_URL, wallet, takerOrders, _baseAssetId);
 
       if (transactionResult.isStatusSuccess) {
         setIsFailed(false);
@@ -665,7 +669,7 @@ class FuelProvider extends BaseProvider {
             const _currentBidBalance = res.data;
             if (_currentBidBalance < checkoutPrice) {
               const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-              depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
+              depositAndOffer(exchangeContractId, FUEL_PROVIDER_URL, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
                 .then((res) => {
                   if (res.transactionResult.isStatusSuccess) {
                     setBidBalanceUpdated(true);
@@ -698,7 +702,7 @@ class FuelProvider extends BaseProvider {
                   }
                 });
             } else
-              placeOrder(exchangeContractId, provider, wallet, order)
+              placeOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, order)
                 .then((res) => {
                   if (res.transactionResult.isStatusSuccess) {
                     setApproved(true);
@@ -757,7 +761,7 @@ class FuelProvider extends BaseProvider {
         const _currentBidBalance = res.data;
         if (_currentBidBalance < checkoutPrice) {
           const requiredBidAmount = (checkoutPrice - _currentBidBalance).toFixed(9);
-          depositAndOffer(exchangeContractId, provider, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
+          depositAndOffer(exchangeContractId, FUEL_PROVIDER_URL, wallet, order, toGwei(requiredBidAmount).toNumber(), _baseAssetId, false)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
@@ -773,7 +777,7 @@ class FuelProvider extends BaseProvider {
               else setIsFailed(true);
             });
         } else
-          placeOrder(exchangeContractId, provider, wallet, order)
+          placeOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet, order)
             .then((res) => {
               if (res.transactionResult.isStatusSuccess) {
                 nftdetailsService.tokenPlaceBid({ tokenId: selectedNFT.id, userId: user.id, price: checkoutPrice });
@@ -816,7 +820,7 @@ class FuelProvider extends BaseProvider {
   }
 
   async getProvider(): Promise<Provider> {
-    const _provider = await Provider.create(provider);
+    const _provider = await Provider.create(FUEL_PROVIDER_URL);
 
     return _provider as Provider as any;
   }
@@ -824,18 +828,18 @@ class FuelProvider extends BaseProvider {
   async walletConnect(activeConnector: any, type: FUEL_TYPE): Promise<any> {
     try {
       let _type = "";
-
+      const provider = await this.provider;
       if (type === "fuelet") _type = "Fuelet Wallet";
       // else if (type === "fuel_walletconnect") _type = "Metamask";
       else _type = "Fuel Wallet";
 
       try {
-        await this.provider?.selectConnector(_type);
+        await provider?.selectConnector(_type);
       } catch (error) {
         return;
       }
 
-      const connect = await this.provider?.connect();
+      const connect = await provider?.connect();
       if (!connect) {
         throw new Error("Not Connected");
       }
@@ -845,13 +849,13 @@ class FuelProvider extends BaseProvider {
         throw new Error("Not Found Address");
       }
 
-      const wallet = await this.provider?.getWallet(fuelAddress);
+      const wallet = await provider?.getWallet(fuelAddress);
       if (!wallet) {
         throw new Error("Not Found Wallet");
       }
 
       const user = await userService.userCreate({ walletAddress: wallet.address });
-      useLocalStorage().setItem("connected_account", user.data);
+      localStore.setItem("connected_account", user.data);
 
       return {
         connect,

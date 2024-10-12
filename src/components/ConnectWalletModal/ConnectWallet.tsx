@@ -80,17 +80,14 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector, unavailable }:
   const { walletConnectGateway } = useWallet();
   const dispatch = useDispatch();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuel, fuelError, fuelLoading] = useFuel();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fuelet, fueletError, fueletLoading] = useFuelet();
+  const { error: fuelError, isLoading: fuelLoading } = useFuel();
   const [metamaskError] = useMetamask();
   const [coinbaseError] = useCoinbase();
   const Icon = icon ?? IconFuelet;
 
   const activeWallet = {
     [FUEL_TYPE.FUEL]: { error: fuelError, isLoading: fuelLoading },
-    [FUEL_TYPE.FUELET]: { error: fueletError, isLoading: fueletLoading },
+    [FUEL_TYPE.FUELET]: { error: fuelError, isLoading: fuelLoading },
     // [FUEL_TYPE.FUEL_WALLETCONNECT]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_METAMASK]: { error: metamaskError },
     [FUEL_TYPE.WAGMI_WALLETCONNECT]: { error: metamaskError },
@@ -105,7 +102,7 @@ const ConnectWalletButton = ({ name, icon, type, activeConnector, unavailable }:
     } else if (name == "Discord") {
       signInWithDiscord("http://localhost:3000/marketplace");
     } else {
-      walletConnectGateway(type, activeConnector).then((res: any) => {
+      walletConnectGateway(type).then((res: any) => {
         if (res) {
           dispatch(toggleWalletModal());
         }
@@ -254,7 +251,7 @@ export const ConnectWallet = () => {
             dispatch(setIsConnected(true));
             dispatch(setAddress(walletAddress));
             dispatch(setUser(res.data));
-            walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK, 3);
+            walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK);
           });
         });
       } catch (err) {

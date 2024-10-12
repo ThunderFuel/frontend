@@ -8,7 +8,7 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import { contracts, provider } from "global-constants";
+import { contracts } from "global-constants";
 import { setContracts } from "thunder-sdk/src/contracts/thunder_exchange";
 import { mint, bulkMintWithMulticall } from "thunder-sdk/src/contracts/erc721";
 import collectionsService from "api/collections/collections.service";

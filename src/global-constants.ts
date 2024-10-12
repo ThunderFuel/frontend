@@ -1,8 +1,16 @@
+import { coinbaseWallet, injected, walletConnect } from "@wagmi/connectors";
+import { CHAIN_IDS, type FuelConfig, Provider } from "fuels";
+import { http, createConfig } from "@wagmi/core";
+import { mainnet, sepolia } from "@wagmi/core/chains";
+import { QueryClient } from "@tanstack/react-query";
+import { structuralSharing } from "@wagmi/core/query";
+import { getDefaultConnectors } from "utils/getDefaultConnectors";
+
 export const THUNDER_THEME_NAME = "thunder_theme";
 export const WALLET_CONNECT_PROJECT_ID = "fbbe076e89456ef4f6f54493682058b9";
 
 export const providerTestnet = "https://testnet.fuel.network/v1/graphql";
-export const provider = "https://thunder:BQ-2H1ZFHZvq0_xa62g0zA@mainnet.fuel.network/v1/graphql";
+export const FUEL_PROVIDER_URL = "https://thunder:BQ-2H1ZFHZvq0_xa62g0zA@mainnet.fuel.network/v1/graphql";
 export const FUEL_FAUCET_URL = "https://faucet-testnet.fuel.network/";
 export const FUEL_TESTNET_EXPLORER_URL = "https://next-app.fuel.network/";
 export const FUEL_EXPLORER_URL = "https://app-mainnet.fuel.network/";
@@ -42,7 +50,7 @@ export const lineaChainId = 59144;
 export const goerliWethAddress = "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6";
 export const lineaWethAddress = "0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f";
 export const lineaExplorerLink = "https://lineascan.build/address/";
-export const fueldExplorerLink = "https://fuellabs.github.io/block-explorer-v2/address/";
+export const fueldExplorerLink = "https://app.fuel.network/account/";
 
 export const erc1155ABI = [
   {
@@ -178,3 +186,62 @@ export const wethABI = [
 ];
 
 export const FINALLY_MAINNET = "finally_mainnet";
+
+// Should be consistent accross project
+// export const FUEL_PROVIDER_URL = FUEL_URLS[CHAIN_IDS.fuel.mainnet];
+
+export const FUEL_NETWORKS = [
+  {
+    chainId: CHAIN_IDS.fuel.mainnet,
+    url: FUEL_PROVIDER_URL,
+  },
+  {
+    chainId: CHAIN_IDS.eth.mainnet,
+    url: "https://eth-mainnet.g.alchemy.com/v2/ALrOqgm050KBPMryg1gQ8tp7SILcoepK",
+  },
+];
+const METADATA = {
+  name: "Wallet Demo",
+  description: "Fuel Wallets Demo",
+  url: location.href,
+  icons: ["https://connectors.fuel.network/logo_white.png"],
+};
+
+export const WAGMI_CONFIG = createConfig({
+  chains: [mainnet, sepolia],
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+  },
+  connectors: [
+    injected({ shimDisconnect: false }),
+    walletConnect({
+      projectId: WALLET_CONNECT_PROJECT_ID,
+      metadata: METADATA,
+      showQrModal: false,
+    }),
+    coinbaseWallet({
+      appName: METADATA.name,
+      appLogoUrl: METADATA.icons[0],
+      darkMode: true,
+      reloadOnDisconnect: true,
+    }),
+  ],
+});
+export const FUEL_PROVIDER = Provider.create(FUEL_PROVIDER_URL);
+export const FUEL_CONFIG: FuelConfig = {
+  connectors: getDefaultConnectors({
+    wcProjectId: WALLET_CONNECT_PROJECT_ID,
+    ethWagmiConfig: WAGMI_CONFIG,
+    chainId: CHAIN_IDS.fuel.mainnet,
+    fuelProvider: FUEL_PROVIDER,
+  }),
+};
+
+export const QUERY_CLIENT = new QueryClient({
+  defaultOptions: {
+    queries: {
+      structuralSharing,
+    },
+  },
+});

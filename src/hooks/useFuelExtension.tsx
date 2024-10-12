@@ -1,10 +1,11 @@
-import { useLocalStorage } from "./useLocalStorage";
-import FueletProvider from "../providers/FueletProvider";
-import FuelProvider from "../providers/FuelProvider";
+import { useGatewayStore } from "../store/gatewayStore";
+import { useFuel } from "hooks/useFuel";
+import { useEffect, useMemo } from "react";
 import WagmiProvider from "providers/WagmiProvider";
-
-const storage = useLocalStorage();
-const FuelGatewayType = "thunder_fuel_gateway_type";
+import { useDispatch } from "react-redux";
+import FuelProvider from "providers/FuelProvider";
+import type { Action } from "redux";
+import { useCurrentConnector } from "@fuels/react";
 
 export enum FUEL_TYPE {
   FUEL = "fuel",
@@ -17,36 +18,62 @@ export enum FUEL_TYPE {
   LIT_DISCORD_AUTH = "lit_discord_auth",
 }
 
-let gatewayType: any = storage.getItem(FuelGatewayType);
+interface Gateway {
+  selectedGateway: FuelProvider | WagmiProvider<Action> | undefined;
+  setGatewayType: (type: FUEL_TYPE) => void;
+  clearGatewayType: () => void;
+  gateway: "fuel" | "wagmi";
+  wagmiGateway: WagmiProvider<Action> | undefined;
+  fuelGateway: FuelProvider | undefined;
+}
 
-export const useFuelExtension = () => {
-  const fuelet = new FueletProvider();
-  const fuel = new FuelProvider();
-  const wagmi = new WagmiProvider();
+export const useFuelExtension = (): Gateway => {
+  const { gatewayType, setGatewayType, clearGatewayType } = useGatewayStore();
+  const { fuel } = useFuel();
+  const dispatch = useDispatch();
+  const { currentConnector } = useCurrentConnector();
+  // const isExternal = currentConnector?.external;
 
-  const setGatewayType = (type: FUEL_TYPE) => {
-    storage.setItem(FuelGatewayType, type);
-    gatewayType = type;
-  };
-  const clearGatewayType = () => {
-    storage.removeItem(FuelGatewayType);
-    gatewayType = null;
-  };
+  // Workaround, ideally everything should be fetched from connectors data
+  // useEffect(() => {
+  //   setGatewayType(isExternal ? FUEL_TYPE.WAGMI_METAMASK : FUEL_TYPE.FUELET);
+  // }, [isExternal, setGatewayType]);
+
+  const gateway = useMemo(() => {
+    switch (gatewayType) {
+      case FUEL_TYPE.WAGMI_METAMASK:
+      case FUEL_TYPE.WAGMI_COINBASE:
+      case FUEL_TYPE.WAGMI_WALLETCONNECT:
+      case FUEL_TYPE.LIT_GOOGLE_AUTH:
+      case FUEL_TYPE.LIT_DISCORD_AUTH:
+        return "wagmi";
+      case FUEL_TYPE.FUEL:
+      case FUEL_TYPE.FUELET:
+        return "fuel";
+      default:
+        return "fuel";
+    }
+  }, [gatewayType]);
+  const wagmiProvider = useMemo(() => new WagmiProvider(dispatch), [dispatch]);
+  const fuelProvider = useMemo(() => (fuel ? new FuelProvider(fuel) : undefined), [fuel]);
+
+  // if (isExternal) {
+  //   return {
+  //     setGatewayType,
+  //     clearGatewayType,
+  //     gateway,
+  //     selectedGateway: wagmiProvider,
+  //     fuelGateway: fuelProvider,
+  //     wagmiGateway: wagmiProvider,
+  //   };
+  // }
 
   return {
-    selectedGateway: () => {
-      return {
-        [FUEL_TYPE.FUEL]: fuel,
-        [FUEL_TYPE.FUELET]: fuelet,
-        // [FUEL_TYPE.FUEL_WALLETCONNECT]: fuel,
-        [FUEL_TYPE.WAGMI_METAMASK]: wagmi,
-        [FUEL_TYPE.WAGMI_COINBASE]: wagmi,
-        [FUEL_TYPE.WAGMI_WALLETCONNECT]: wagmi,
-        [FUEL_TYPE.LIT_GOOGLE_AUTH]: wagmi,
-        [FUEL_TYPE.LIT_DISCORD_AUTH]: wagmi,
-      }[gatewayType as FUEL_TYPE];
-    },
     setGatewayType,
     clearGatewayType,
+    gateway,
+    selectedGateway: fuelProvider,
+    fuelGateway: fuelProvider,
+    wagmiGateway: wagmiProvider,
   };
 };

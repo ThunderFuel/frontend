@@ -12,7 +12,9 @@ import Dropdown from "components/Dropdown";
 
 const ImageBar = ({ nft, toggleFullscreen }: any) => {
   const dispatch = useAppDispatch();
-  const shareTwitter = useShareTwitter();
+  const shareTwitter = useShareTwitter({
+    userId: "",
+  });
   const [isLiked, setIsliked] = useState(false);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const isMobile = useIsMobile();
