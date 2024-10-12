@@ -4,14 +4,17 @@ import EthereumPrice from "../EthereumPrice";
 import { addressFormat, dateFormat } from "utils";
 import LazyImg from "../LazyImg";
 import Button from "../Button";
-import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconOffer, IconWarning } from "../../icons";
+import { IconCircleCheck, IconCircleRemoveWhite, IconClock, IconHand, IconLink, IconOffer, IconWarning } from "../../icons";
 import { getAbsolutePath } from "../../hooks/useNavigate";
 import { PATHS } from "../../router/config/paths";
 import { expiresInFormat } from "utils/timeago";
 import clsx from "clsx";
 import Tooltip from "components/Tooltip";
 import { OfferStatus } from "api/offer/offer.type";
-
+import Img from "../Img/Img";
+import { Link } from "react-router-dom";
+import { useAccount } from "@fuels/react";
+import { useAppSelector } from "store";
 interface IOfferTable {
   isOffersMade?: boolean;
   headers?: any[];
@@ -22,6 +25,7 @@ interface IOfferTable {
   isProfile?: any;
   getBidBalance?: any;
   ButtonBelowHeader?: any;
+  rowKey?: any;
 }
 
 const OfferItemAcceptButton = ({ item, onAcceptOffer }: any) => {
@@ -58,10 +62,15 @@ const OfferItemUpdateButtons = ({ item, onCancelOffer, onUpdateOffer }: any) => 
 };
 const OfferCollectionItem = ({ item }: any) => {
   return (
-    <a href={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.tokenId })} className="flex w-full items-center gap-2.5">
-      <LazyImg className={clsx(!item.isActiveOffer ? "opacity-50" : "", "w-10 h-10 rounded-md")} src={item?.tokenImage} />
+    <div className="flex group w-full items-center gap-2.5">
+      <Link to={getAbsolutePath(PATHS.NFT_DETAILS, { nftId: item.id })} className={clsx("relative min-w-[40px] max-w-[40px] aspect-square rounded-md overflow-hidden flex-center bg-gray")}>
+        <LazyImg className={clsx(!item.isActiveOffer ? "opacity-50" : "", "w-10 h-10 rounded-md")} src={item?.tokenImage} />
+        <div className="absolute top-0 left-0 bottom-0 right-0 flex-center bg-gray/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <IconLink className="cursor-pointer text-white" />
+        </div>
+      </Link>
       <h6 className={clsx(!item.isActiveOffer ? "text-gray-light" : "text-white", "text-h6")}>{item?.tokenName ?? "-"}</h6>
-    </a>
+    </div>
   );
 };
 
@@ -197,7 +206,7 @@ const AfterRow = ({ item, onAcceptOffer, onCancelOffer, onUpdateOffer, getBidBal
   return <OfferItemUpdateButtons onCancelOffer={onCancelOffer} onUpdateOffer={onUpdateOffer} item={item} />;
 };
 
-const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade, ButtonBelowHeader }: IOfferTable) => {
+const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffer, isProfile, getBidBalance, isOffersMade, ButtonBelowHeader, rowKey }: IOfferTable) => {
   const afterRowParams = {
     onAcceptOffer,
     onCancelOffer,
@@ -205,6 +214,9 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
     isProfile,
     getBidBalance,
   };
+
+  const { account } = useAccount();
+  const { user } = useAppSelector((state) => state.wallet);
 
   const getHeaders = React.useMemo(() => {
     if (headers) {
@@ -225,7 +237,11 @@ const OfferTable = ({ headers, items, onAcceptOffer, onCancelOffer, onUpdateOffe
       items={items}
       containerFluidClassName={"lg:px-5"}
       ButtonBelowHeader={ButtonBelowHeader}
+      rowKey={rowKey}
       afterRow={(item: any) => {
+        if (item.ownerId === user.id) {
+          return null;
+        }
         if (!item.isActiveOffer || !item.showAfterRow) {
           return null;
         }

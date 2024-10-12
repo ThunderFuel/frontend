@@ -37,6 +37,8 @@ const Collection = () => {
   const initParams = getInitParams();
   const onChangeFilter = (params: any) => {
     if (!tokens.length) {
+      setIsLoading(false);
+
       return false;
     }
 

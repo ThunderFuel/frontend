@@ -8,13 +8,13 @@ import Modal from "components/Modal";
 import { IconWarning } from "icons";
 import { useAppSelector } from "store";
 import { CheckoutProcess } from "./components/CheckoutProcess";
-import offerService from "api/offer/offer.service";
 import { executeOrder } from "thunder-sdk/src/contracts/thunder_exchange";
-import { exchangeContractId, provider } from "global-constants";
+import { exchangeContractId, FUEL_PROVIDER_URL } from "global-constants";
 import { toGwei } from "utils";
-import userService from "api/user/user.service";
 import nftdetailsService from "api/nftdetails/nftdetails.service";
 import FuelProvider from "providers/FuelProvider";
+import { useFuel } from "@fuels/react";
+import { useFuelExtension } from "hooks/useFuelExtension";
 
 const checkoutProcessTexts = {
   title1: "Confirm bid",
@@ -39,18 +39,25 @@ const Footer = ({ approved, onClose }: { approved: boolean; onClose: any }) => {
 
 const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const { selectedNFT } = useAppSelector((state) => state.nftdetails);
-  const { checkoutPrice, currentItem } = useAppSelector((state) => state.checkout);
+  const { checkoutPrice } = useAppSelector((state) => state.checkout);
   const { user, wallet } = useAppSelector((state) => state.wallet);
-  const fuel = new FuelProvider();
+  const { fuelGateway: fuel } = useFuelExtension();
 
   const [approved, setApproved] = useState(false);
   const [startTransaction, setStartTransaction] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const onComplete = async () => {
-    const _baseAssetId = await fuel.getBaseAssetId();
+    const _baseAssetId = await fuel?.getBaseAssetId();
 
     nftdetailsService.getAuctionIndex([selectedNFT?.id]).then(async (res) => {
+      if (!_baseAssetId) {
+        console.error("Base asset ID is invalid");
+        setIsFailed(true);
+
+        return;
+      }
+
       const order = {
         isBuySide: false,
         taker: user.walletAddress,
@@ -63,7 +70,7 @@ const AcceptBidCheckout = ({ show, onClose }: { show: boolean; onClose: any }) =
         extra_params: { extra_address_param: _baseAssetId, extra_contract_param: _baseAssetId, extra_u64_param: 0 }, // lazim degilse null
       };
 
-      executeOrder(exchangeContractId, provider, wallet as unknown as string, order, _baseAssetId)
+      executeOrder(exchangeContractId, FUEL_PROVIDER_URL, wallet as unknown as string, order, _baseAssetId)
         .then((res) => {
           if (res.transactionResult.isStatusSuccess) {
             // offerService.acceptOffer({ id: currentItem?.id });

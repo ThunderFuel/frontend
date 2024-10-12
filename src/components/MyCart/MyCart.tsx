@@ -25,7 +25,7 @@ const MyCart = () => {
 
   useEffect(() => {
     dispatch(getCartTotal());
-  }, [items]);
+  }, [items, dispatch]);
 
   const onToggleCheckoutModal = () => {
     if (!isConnected) {
@@ -43,7 +43,7 @@ const MyCart = () => {
       <div className="flex w-full px-5 py-2 justify-between border-b border-gray">
         <span className="text-h6 text-gray-light">Total</span>
         <span className="flex items-center text-white">
-          <EthereumPrice price={totalAmount} priceClassName="text-head6 font-spaceGrotesk" />
+          <EthereumPrice price={totalAmount} priceClassName="text-h6" />
         </span>
       </div>
       <div className="flex w-full p-5">
@@ -66,14 +66,15 @@ const MyCart = () => {
           <>
             <div className="flex justify-between items-center pb-5">
               <span className="text-headlineMd font-bigShoulderDisplay text-white">{itemCount} ITEMS</span>
-              <button className="text-headlineSm font-bigShoulderDisplay text-gray-light" onClick={() => dispatch(removeAll())}>
+              <button type="button" className="text-headlineSm font-bigShoulderDisplay text-gray-light" onClick={() => dispatch(removeAll())}>
                 CLEAR ALL
               </button>
             </div>
             <div className="flex flex-col h-[calc(100vh-265px)] gap-2 overflow-y-scroll no-scrollbar ">
               {items.map((i, index) => (
                 <CartItem
-                  key={index}
+                  // Index shouldn't be used as keys, causes bugs when order of elements change
+                  key={i.id}
                   text="Price"
                   name={i.name ?? i.tokenOrder}
                   price={i.price}
@@ -85,13 +86,13 @@ const MyCart = () => {
                     navigate(PATHS.NFT_DETAILS, { nftId: i.id });
                     dispatch(toggleCartModal());
                   }}
-                ></CartItem>
+                />
               ))}
             </div>
           </>
         ) : (
           <div className="flex flex-col w-full h-full justify-center items-center">
-            <img src={AssetEmptyCart}></img>
+            <img src={AssetEmptyCart} alt="Empty cart" />
             <span className="text-bodyLg font-spaceGrotesk text-gray-light w-[320px] text-center">Your cart is empty. Start adding NFTs to your cart to collect.</span>
           </div>
         )}

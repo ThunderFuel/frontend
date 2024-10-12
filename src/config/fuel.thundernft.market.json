@@ -5,7 +5,7 @@
     "fuelet"
   ],
   "baseURL": "https://api-thundernft.azurewebsites.net/",
-  "collectionSwapLimit": 5,
+  "collectionSwapLimit": 10,
   "userProfileIncludes": [
     0,
     1,

@@ -126,9 +126,9 @@ const Tab = () => {
               {route.name}
             </TabBase.Item>
           ))}
-          <Config show={!config.isHideAllCancelButtons()}>
+          {/* <Config show={!config.isHideAllCancelButtons()}>
             <TabMoreDropdowns />
-          </Config>
+          </Config> */}
         </TabBase>
       </div>
     </div>

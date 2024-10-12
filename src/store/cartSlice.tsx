@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { CollectionItemResponse } from "api/collections/collections.type";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import type { CollectionItemResponse } from "api/collections/collections.type";
+import { localStore } from "../hooks/useLocalStorage";
 
 type ISelectedCartItem = CollectionItemResponse;
 
@@ -10,7 +10,7 @@ const PurchaseLimit = 5;
 
 export const getItemsFromLocalStorage = () => {
   try {
-    const items = useLocalStorage().getItem(LocalStorageCartsKey);
+    const items = localStore.getItem(LocalStorageCartsKey);
 
     return items ?? [];
   } catch (e) {
@@ -18,7 +18,7 @@ export const getItemsFromLocalStorage = () => {
   }
 };
 export const setItemsFromLocalStorage = (items = []) => {
-  useLocalStorage().setItem(LocalStorageCartsKey, items);
+  localStore.setItem(LocalStorageCartsKey, items);
 };
 
 export const cartSlice = createSlice({
@@ -46,7 +46,7 @@ export const cartSlice = createSlice({
           itemCount: 0,
         }
       );
-      state.totalAmount = totalAmount.toFixed(4);
+      state.totalAmount = totalAmount;
       state.itemCount = itemCount;
     },
     remove: (state, action) => {
@@ -94,7 +94,6 @@ export const getCartSelectedTokenOrderList = createSelector(
   },
   (tokenOrderList: any[]) => tokenOrderList
 );
-
 export const { getCartTotal, remove, getCartItems, add, removeAll, toggleCartModal, sweepAdd, addBuyNowItem, removeBuyNowItem } = cartSlice.actions;
 
 export default cartSlice.reducer;

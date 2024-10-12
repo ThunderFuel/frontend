@@ -4,12 +4,15 @@ import Button from "../../components/Button";
 import { IconArrowRight, IconDiscord, IconGithub, IconSocial3Dots, IconX } from "../../icons";
 import clsx from "clsx";
 import { openInNewTab } from "../../utils";
-import { CHAT_SUPPORT_URL, HELP_CENTER_URL } from "../../global-constants";
+import { CHAT_SUPPORT_URL, DISCORD_URL, GITHUB_URL, HELP_CENTER_URL, MEDIUM_URL, TWITTER_URL } from "../../global-constants";
+import { useNavigate } from "react-router-dom";
 
 const GridItem = ({ children, className }: any) => {
   return <div className={clsx("flex flex-col bg-bg-light border border-bg rounded-md p-5", className)}>{children}</div>;
 };
 const Grids = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="container-fluid flex flex-col gap-5 mt-2.5 lg:mt-10">
       <div className="flex flex-col lg:flex-row gap-5">
@@ -34,35 +37,55 @@ const Grids = () => {
           <div className="flex flex-col text-white gap-7 max-w-[500px]">
             <h2 className="text-h2">Audited by Immunefi</h2>
             <div className="body-large">Thunder has been thoroughly audited by Immunefi, the leading bug bounty and security platform for Web3.</div>
-            <div>
+            {/* <div>
               <Button className="btn-secondary">
                 READ <IconArrowRight />
               </Button>
-            </div>
+            </div> */}
           </div>
         </GridItem>
         <div className="flex-1 lg:max-w-[400px] min-h-[400px] grid grid-cols-2 gap-5 text-white">
           <GridItem className="justify-between">
             <IconDiscord className="h-12 w-12" />
-            <Button className="btn-secondary">
+            <Button
+              className="btn-secondary"
+              onClick={() => {
+                openInNewTab(DISCORD_URL);
+              }}
+            >
               Discord <IconArrowRight />
             </Button>
           </GridItem>
           <GridItem className="justify-between">
             <IconX className="h-12 w-12" />
-            <Button className="btn-secondary">
+            <Button
+              className="btn-secondary"
+              onClick={() => {
+                openInNewTab(TWITTER_URL);
+              }}
+            >
               X <IconArrowRight />
             </Button>
           </GridItem>
           <GridItem className="justify-between">
             <IconSocial3Dots className="h-12 w-12" />
-            <Button className="btn-secondary">
+            <Button
+              className="btn-secondary"
+              onClick={() => {
+                openInNewTab(MEDIUM_URL);
+              }}
+            >
               medium <IconArrowRight />
             </Button>
           </GridItem>
           <GridItem className="justify-between">
             <IconGithub className="h-12 w-12" />
-            <Button className="btn-secondary">
+            <Button
+              className="btn-secondary"
+              onClick={() => {
+                openInNewTab(GITHUB_URL);
+              }}
+            >
               Github <IconArrowRight />
             </Button>
           </GridItem>

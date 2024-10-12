@@ -34,7 +34,7 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
 
   const [isOnConfirmStep, setIsOnConfirmStep] = useState(false);
   const [offer, setoffer] = useState<any>("");
-  const [balance, setbalance] = useState<any>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
 
   React.useEffect(() => {
@@ -44,18 +44,14 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       });
   }, [show, currentItemId, selectedNFT]);
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+    getBidBalance({ contractAddress: user.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   }
 
   React.useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 
@@ -97,6 +93,8 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
     return <span className="font-bold whitespace-nowrap">{parseFloat((offer - bidBalance).toFixed(9))} ETH</span>;
   };
 
+  const hasEnough = hasEnoughBalance(offer);
+
   return (
     <Modal
       bodyClassName="!w-full !max-w-[600px]"
@@ -105,7 +103,16 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
       show={show}
       onClose={onClose}
       footer={
-        <Footer isOnConfirmStep={isOnConfirmStep} approved={approved} onClose={onClose} onSubmit={onSubmit} startTransaction={startTransaction} isFailed={isFailed} primaryActionText="Update Offer" />
+        <Footer
+          isOnConfirmStep={isOnConfirmStep}
+          approved={approved}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          startTransaction={startTransaction}
+          isFailed={isFailed}
+          primaryActionText="Update Offer"
+          primaryActionDisabled={Number(offer) === 0 || offer === ""}
+        />
       }
     >
       {isOnConfirmStep && (!startTransaction || isFailed) ? (
@@ -175,20 +182,20 @@ const UpdateOfferCheckout = ({ show, onClose }: { show: boolean; onClose: any })
               )}
             </div>
             <InputEthereum maxLength="8" onChange={setoffer} value={offer} type="text" />
-            {!hasEnoughBalance(balance, offer) && offer !== "" && (
+            {!hasEnoughBalance(offer) && offer !== "" && (
               <div className="flex w-full items-center gap-x-[5px] text-red">
                 <IconWarning width="17px" />
                 <span className="text-bodySm font-spaceGrotesk">You don`t have enough funds to make this offer.</span>
               </div>
             )}
-            {!toGwei(offer).eq(0) && balance >= toGwei(offer) && offer > bidBalance && (
+            {!toGwei(offer).eq(0) && hasEnough && offer > bidBalance && (
               <div className="flex items-center gap-x-[5px] text-bodySm text-orange font-spaceGrotesk">
                 <IconInfo width="17px" />
                 <span>{bidBalanceControl()} will be automatically added your bid balance to place this bid.</span>
               </div>
             )}
             <div className="flex flex-col gap-[5px]">
-              <Balances balance={balance} onFetchBalance={fetchBalance} />
+              <Balances />
               <InitialCartItemBottomPart floorPrice={selectedNFT?.collection?.floor} bestOffer={selectedNFT?.bestOffer?.price} currentOffer={selectedNFT?.currentOfferItemOffer} />
             </div>
           </div>

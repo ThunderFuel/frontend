@@ -36,6 +36,7 @@ const Index = () => {
       CheckoutType.ConfirmListing,
       CheckoutType.UpdateListing,
       CheckoutType.CancelOffer,
+      CheckoutType.AcceptOffer,
     ];
     if (isValidOnCheckoutComplete.includes(checkoutType)) {
       onCheckoutComplete();

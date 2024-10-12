@@ -1,5 +1,5 @@
 import { Provider, WalletUnlocked, WalletLocked, BigNumberish } from "fuels";
-import { StrategyFixedPriceSaleAbi__factory, StrategyFixedPriceSaleAbi } from "../../types/execution_strategies/strategy_fixed_price_sale";
+import { StrategyFixedPriceSale } from "../../types/execution_strategies/strategy_fixed_price_sale/";
 //import { ContractIdInput, AddressInput, IdentityInput, SideInput } from "../../types/execution_strategies/strategy_fixed_price_sale/StrategyFixedPriceSaleAbi";
 type AddressInput = { bits: string };
 type ContractIdInput = { bits: string };
@@ -13,18 +13,18 @@ async function setup(
     contractId: string,
     provider: string,
     wallet?: string | WalletLocked,
-): Promise<StrategyFixedPriceSaleAbi> {
+): Promise<StrategyFixedPriceSale> {
     const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
         const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
-        return StrategyFixedPriceSaleAbi__factory.connect(contractId, walletUnlocked);
+        return new StrategyFixedPriceSale(contractId, walletUnlocked)
     } else if (wallet && typeof wallet !== "string") {
-        return StrategyFixedPriceSaleAbi__factory.connect(contractId, wallet);
+        return new StrategyFixedPriceSale(contractId, wallet)
     }
 
-    return StrategyFixedPriceSaleAbi__factory.connect(contractId, _provider);
+    return new StrategyFixedPriceSale(contractId, _provider)
 }
 
 export async function initialize(
@@ -32,15 +32,17 @@ export async function initialize(
     provider: string,
     wallet: string | WalletLocked,
     exchange: string,
+    fee: number
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
         const _exchange: ContractIdInput = { bits: exchange };
-        const { transactionResult, transactionResponse } = await contract.functions
-            .initialize(_exchange)
+        const call = await contract.functions
+            .initialize(_exchange, fee)
             .txParams({})
             .call();
-        return { transactionResponse, transactionResult };
+        const { transactionResponse, transactionResult } = await call.waitForResult()
+        return { transactionResponse, transactionResult }
     } catch(err: any) {
         console.error("Strategy: " + err);
         return { err };
@@ -55,10 +57,11 @@ export async function setProtocolFee(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .set_protocol_fee(fee)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -126,6 +129,7 @@ export async function getMakerOrderOfUser(
 export async function isValidOrder(
     contractId: string,
     provider: string,
+    privateKey: string,
     user: string,
     nonce: BigNumberish,
     isBuyOrder: boolean,
@@ -136,7 +140,7 @@ export async function isValidOrder(
             side = SideInput.Buy :
             side = SideInput.Sell;
         const _user: AddressInput = { bits: user };
-        const contract = await setup(contractId, provider);
+        const contract = await setup(contractId, provider, privateKey);
         const { value } = await contract.functions
             .is_valid_order(_user, nonce, side)
             .simulate();
@@ -219,10 +223,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);
@@ -237,10 +242,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         console.error("Strategy: " + err);

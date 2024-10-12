@@ -7,7 +7,8 @@ import {
   IconCart,
   IconChevronRight,
   IconEthereum,
-  IconFaucet,
+  IconSwap,
+  IconFuel,
   IconGas,
   IconHand,
   IconInfo,
@@ -32,17 +33,17 @@ import SocialMediaIcons from "components/SocialMediaIcons";
 import { useDispatch } from "react-redux";
 import etherscanService from "api/etherscan/etherscan.service";
 import { toggleClosedBetaModal } from "store/commonSlice";
-import { useConnectUI, useIsConnected } from "@fuels/react";
+import { useBalance, useConnectUI, useIsConnected } from "@fuels/react";
 import Button from "../../../components/Button";
-import { addressFormat } from "../../../utils";
+import { addressFormat, openInNewTab } from "../../../utils";
 import { useWallet } from "../../../hooks/useWallet";
 import { useClickOutside } from "../../../hooks/useClickOutside";
-import GetTestEth from "../../../components/GetTestEth/GetTestEth";
+import BridgeFunds from "../../../components/BridgeFunds/BridgeFunds";
 import { removeAll } from "../../../store/bulkListingSlice";
 import { removeBulkItems } from "../../../store/checkoutSlice";
 import { useLocalStorage } from "../../../hooks/useLocalStorage";
 import { WalletDropdown } from "components/Wallet/Wallet";
-import { FUEL_FAUCET_URL } from "global-constants";
+import { FUEL_BRIDGE_URL, FUEL_FAUCET_URL } from "global-constants";
 
 const IntervalValue = 600000;
 const HeaderTop = React.memo(() => {
@@ -110,6 +111,10 @@ const BaseDropdown = ({ children, container, className }: any) => {
     setShow(!show);
   };
 
+  React.useEffect(() => {
+    if (show) dispatchEvent(new Event(EventDispatchFetchBalances));
+  }, [show]);
+
   return (
     <div className="relative" ref={containerRef}>
       <div className={clsx("flex items-center p-2 gap-2 cursor-pointer", className, show ? "bg-gray" : "")} onClick={onClick}>
@@ -130,12 +135,12 @@ const HeaderUserBalance = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const { getBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
+  const balance = getBalance();
   const [bidBalance, setBidBalance] = useState<number>(0);
+  const { removeItem } = useLocalStorage();
 
   React.useEffect(() => {
     const fetchBalances = () => {
-      fetchBalance();
       fetchBidBalance();
     };
 
@@ -146,18 +151,14 @@ const HeaderUserBalance = ({ user, address }: any) => {
     };
   }, []);
 
-  const fetchBalance = () => {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  };
   const fetchBidBalance = () => {
     if (user?.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user?.walletAddress, user: user }).then((res) => {
+    getBidBalance({ contractAddress: user?.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   };
 
   useEffect(() => {
-    fetchBalance();
     fetchBidBalance();
   }, []);
 
@@ -168,7 +169,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
     dispatch(setUser({}));
     dispatch(removeAll());
     dispatch(removeBulkItems());
-    useLocalStorage().removeItem("connected_account");
+    removeItem("connected_account");
   };
 
   const container = (
@@ -185,18 +186,18 @@ const HeaderUserBalance = ({ user, address }: any) => {
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Bid Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {bidBalance.toFixed(4)} <IconEthereum className="text-gray-light font" />
+              {bidBalance} <IconEthereum className="text-gray-light font" />
             </span>
           </div>
           <div className="flex justify-between">
             <span className="body-medium !font-medium text-gray-light">Wallet Balance</span>
             <span className="flex font-spaceGrotesk text-white">
-              {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
+              {balance} <IconEthereum className="text-gray-light" />
             </span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2.5 p-4 border-t border-gray">
-          <GetTestEth className="btn-sm" user={user} address={address} />
+          <BridgeFunds className="btn-sm" />
           <Button
             className="btn-sm btn-secondary w-full"
             onClick={() => {
@@ -214,7 +215,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
   return (
     <BaseDropdown container={container}>
       <div className="flex px-2">
-        {balance.toFixed(4)} <IconEthereum className="text-gray-light" />
+        {balance} <IconEthereum className="text-gray-light" />
       </div>
     </BaseDropdown>
   );
@@ -223,6 +224,7 @@ const HeaderUserBalance = ({ user, address }: any) => {
 const HeaderUserProfileInfo = ({ user, address }: any) => {
   const dispatch = useAppDispatch();
   const { walletDisconnect } = useWallet();
+  const { removeItem } = useLocalStorage();
   const navigate = UseNavigate();
   const formattedAddress = addressFormat(user?.walletAddress ?? "");
   const items = [
@@ -252,9 +254,9 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
       path: PATHS.SETTINGS_PROFILE,
     },
     {
-      icon: IconFaucet,
-      name: "Get Test ETH",
-      isFaucet: true,
+      icon: IconSwap,
+      name: "Bridge Funds",
+      isBridge: true,
     },
     {
       icon: IconLogout,
@@ -263,8 +265,8 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
     },
   ];
   const onClick = async (item: any) => {
-    if (item.isFaucet) {
-      window.open(`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`, "_blank")?.focus();
+    if (item.isBridge) {
+      openInNewTab(FUEL_BRIDGE_URL);
 
       return;
     }
@@ -276,7 +278,7 @@ const HeaderUserProfileInfo = ({ user, address }: any) => {
       dispatch(setUser({}));
       dispatch(removeAll());
       dispatch(removeBulkItems());
-      useLocalStorage().removeItem("connected_account");
+      removeItem("connected_account");
     } else {
       navigate(item.path, {});
     }
@@ -336,10 +338,21 @@ const HeaderIconButtonGroup = React.memo(() => {
       {isConnected && fuelIsConnected && !isConnecting ? (
         <HeaderUserProfile user={user} address={address} />
       ) : (
-        <Button className="btn-header-connect" onClick={connect}>
-          COnnect
-          <IconWallet className="h-[18px] w-[18px]" />
-        </Button>
+        <>
+          <Button
+            className="btn-sm no-bg border-green-fuel !py-2.5 border-opacity-20 text-white !transition-none hover:gap-2"
+            onClick={() => {
+              openInNewTab("https://app.fuel.network/earn-points");
+            }}
+          >
+            <IconFuel className="h-[18px] w-[18px]" />
+            poınts
+          </Button>
+          <Button className="btn-header-connect" onClick={connect}>
+            COnnect
+            <IconWallet className="h-[18px] w-[18px]" />
+          </Button>
+        </>
       )}
       <div className="relative">
         <Button className="btn-icon text-white" onClick={() => dispatch(toggleCartModal())}>

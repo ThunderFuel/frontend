@@ -1,32 +1,32 @@
-import { Provider, WalletUnlocked, WalletLocked, CoinQuantityLike, Contract, BigNumberish, FunctionInvocationScope, ReceiptMintCoder, Script } from "fuels";
-import { ThunderExchangeAbi__factory, ThunderExchangeAbi } from "../../types/thunder_exchange";
-import { StrategyFixedPriceSaleAbi__factory } from "../../types/execution_strategies/strategy_fixed_price_sale/factories/StrategyFixedPriceSaleAbi__factory";
-import { StrategyAuctionAbi__factory } from "../../types/execution_strategies/strategy_auction/factories/StrategyAuctionAbi__factory";
-import { PoolAbi__factory, } from "../../types/pool/factories/PoolAbi__factory";
-import { PoolAbi } from "../../types/pool/PoolAbi"
-import { ExecutionManagerAbi__factory } from "../../types/execution_manager/factories/ExecutionManagerAbi__factory";
-import { RoyaltyManagerAbi__factory } from "../../types/royalty_manager/factories/RoyaltyManagerAbi__factory";
-import { AssetManagerAbi__factory } from "../../types/asset_manager/factories/AssetManagerAbi__factory";
-import { NFTContractAbi__factory } from "../../types/erc721/factories/NFTContractAbi__factory";
-//import { ThunderExchangeAbi, IdentityInput, ContractIdInput, MakerOrderInputInput, SideInput, TakerOrderInput, ExtraParamsInput, AssetIdInput } from "../../types/thunder_exchange/ThunderExchangeAbi";
-import { Option } from "../../types/thunder_exchange/common";
+import {
+    Provider,
+    WalletUnlocked,
+    WalletLocked,
+    CoinQuantityLike,
+    Contract,
+    BigNumberish,
+    FunctionInvocationScope,
+    Script,
+    getMintedAssetId
+} from "fuels";
+import { ThunderExchange } from "../../types/thunder_exchange";
+import { StrategyFixedPriceSale } from "../../types/execution_strategies/strategy_fixed_price_sale";
+import { Pool, } from "../../types/pool/";
+import { ExecutionManager } from "../../types/execution_manager";
+import { RoyaltyManager } from "../../types/royalty_manager";
+import { AssetManager } from "../../types/asset_manager";
+import { NFTContract } from "../../types/erc721";
+import { IdentityInput,
+    ContractIdInput,
+    MakerOrderInput,
+    SideInput,
+    TakerOrderInput,
+    ExtraParamsInput,
+    AssetIdInput
+} from "../../types/thunder_exchange/ThunderExchange";
 
 import bytecode from "../../scripts/deposit_and_offer/binFile";
 import abi from "../../scripts/deposit_and_offer/out/deposit_and_offer-abi.json";
-import { NFTContractAbi } from "../../types/erc721";
-
-type AssetIdInput = { bits: string };
-type AddressInput = { bits: string };
-type ContractIdInput = { bits: string };
-type ExtraParamsInput = { extra_address_param: AddressInput, extra_contract_param: ContractIdInput, extra_u64_param: BigNumberish };
-//type MakerOrderInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, start_time: BigNumberish, end_time: BigNumberish, extra_params: ExtraParamsInput };
-type MakerOrderInputInput = { side: SideInput, maker: AddressInput, collection: ContractIdInput, token_id: string, price: BigNumberish, amount: BigNumberish, nonce: BigNumberish, strategy: ContractIdInput, payment_asset: AssetIdInput, expiration_range: BigNumberish, extra_params: ExtraParamsInput };
-type TakerOrderInput = { side: SideInput, taker: AddressInput, maker: AddressInput, nonce: BigNumberish, price: BigNumberish, token_id: string, collection: ContractIdInput, strategy: ContractIdInput, extra_params: ExtraParamsInput };
-enum SideInput { Buy = 'Buy', Sell = 'Sell' };
-type IdentityInput = Enum<{ Address: AddressInput, ContractId: ContractIdInput }>;
-type Enum<T> = {
-    [K in keyof T]: Pick<T, K> & { [P in Exclude<keyof T, K>]?: never };
-  }[keyof T];
 
 export type MakerOrder = {
     isBuySide: boolean;
@@ -72,7 +72,6 @@ export type Contracts = {
     royaltyManager: string,
     assetManager: string,
     strategyFixedPrice: string,
-    strategyAuction: string,
 }
 
 let pool: Contract;
@@ -86,15 +85,14 @@ export function setContracts(
     contracts: Contracts,
     provider: Provider
 ) {
-    pool = new Contract(contracts.pool, PoolAbi__factory.abi, provider);
-    executionManager = new Contract(contracts.executionManager, ExecutionManagerAbi__factory.abi, provider);
-    royaltyManager = new Contract(contracts.royaltyManager, RoyaltyManagerAbi__factory.abi, provider);
-    assetManager = new Contract(contracts.assetManager, AssetManagerAbi__factory.abi, provider);
-    strategyFixedPrice = new Contract(contracts.strategyFixedPrice, StrategyFixedPriceSaleAbi__factory.abi, provider);
-    strategyAuction = new Contract(contracts.strategyAuction, StrategyAuctionAbi__factory.abi, provider);
+    pool = new Pool(contracts.pool, provider);
+    executionManager = new ExecutionManager(contracts.executionManager, provider);
+    royaltyManager = new RoyaltyManager(contracts.royaltyManager, provider);
+    assetManager = new AssetManager(contracts.assetManager, provider);
+    strategyFixedPrice = new StrategyFixedPriceSale(contracts.strategyFixedPrice, provider);
 }
 
-function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
+function _convertToInput(makerOrder: MakerOrder): MakerOrderInput {
     const zeroX = "0x";
     const fill0 = makerOrder.token_id.toString().padStart(64, "0")
     const subId = fill0.padStart(66, zeroX)
@@ -105,7 +103,7 @@ function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
         extra_u64_param: makerOrder.extra_params.extra_u64_param,
     };
 
-    const output: MakerOrderInputInput = {
+    const output: MakerOrderInput = {
         side: makerOrder.isBuySide ? SideInput.Buy : SideInput.Sell,
         maker: { bits: makerOrder.maker },
         collection: { bits: makerOrder.collection },
@@ -115,7 +113,6 @@ function _convertToInput(makerOrder: MakerOrder): MakerOrderInputInput {
         nonce: makerOrder.nonce,
         strategy: { bits: makerOrder.strategy },
         payment_asset: { bits: makerOrder.payment_asset },
-        expiration_range: makerOrder.expiration_range,
         extra_params: extraParams,
     }
 
@@ -152,54 +149,54 @@ async function setup(
     contractId: string,
     provider: string,
     wallet?: string | WalletLocked,
-): Promise<ThunderExchangeAbi> {
+): Promise<ThunderExchange> {
     const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
         const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
-        return ThunderExchangeAbi__factory.connect(contractId, walletUnlocked);
+        return new ThunderExchange(contractId, walletUnlocked)
     } else if (wallet && typeof wallet !== "string") {
-        return ThunderExchangeAbi__factory.connect(contractId, wallet);
+        return new ThunderExchange(contractId, wallet)
     }
 
-    return ThunderExchangeAbi__factory.connect(contractId, _provider);
+    return new ThunderExchange(contractId, _provider)
 }
 
 async function poolSetup(
     contractId: string,
     provider: string,
     wallet?: string | WalletLocked,
-): Promise<PoolAbi> {
+): Promise<Pool> {
     const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
         const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
-        return PoolAbi__factory.connect(contractId, walletUnlocked);
+        return new Pool(contractId, walletUnlocked)
     } else if (wallet && typeof wallet !== "string") {
-        return PoolAbi__factory.connect(contractId, wallet);
+        return new Pool(contractId, wallet)
     }
 
-    return PoolAbi__factory.connect(contractId, _provider);
+    return new Pool(contractId, _provider)
 }
 
 async function erc721Setup(
     contractId: string,
     provider: string,
     wallet?: string | WalletLocked,
-): Promise<NFTContractAbi> {
+): Promise<NFTContract> {
     const _provider = await Provider.create(provider);
 
     if (wallet && typeof wallet === "string") {
         const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
-        return NFTContractAbi__factory.connect(contractId, walletUnlocked);
+        return new NFTContract(contractId, walletUnlocked)
     } else if (wallet && typeof wallet !== "string") {
-        return NFTContractAbi__factory.connect(contractId, wallet);
+        return new NFTContract(contractId, wallet)
     }
 
-    return NFTContractAbi__factory.connect(contractId, _provider);
+    return new NFTContract(contractId, _provider)
 }
 
 export async function initialize(
@@ -209,10 +206,11 @@ export async function initialize(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .initialize()
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. initialize failed. Reason: ${err}`)
@@ -254,7 +252,7 @@ async function _placeSellOrder(
         const _provider = await Provider.create(provider);
         const _order = _convertToInput(order);
 
-        const assetId = ReceiptMintCoder.getAssetId(order.collection, _order.token_id);
+        const assetId = getMintedAssetId(order.collection, _order.token_id);
         const asset: CoinQuantityLike = { amount: order.amount, assetId: assetId };
 
         let strategy: Contract;
@@ -263,8 +261,8 @@ async function _placeSellOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
-        const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+        const _collection = new NFTContract(order.collection, _provider);
+        const _contract = new ThunderExchange(contract.id, _provider);
         const { gasUsed } = await contract.functions
             .place_order(_order)
             .txParams({})
@@ -274,12 +272,13 @@ async function _placeSellOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .place_order(_order)
             .txParams({gasLimit})
             .callParams({forward: asset})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _placeSellOrder failed. Reason: ${err}`)
@@ -303,8 +302,8 @@ async function _placeBuyOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
-        const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+        const _collection = new NFTContract(order.collection, _provider);
+        const _contract = new ThunderExchange(contract.id, _provider);
         const { gasUsed } = await contract.functions
             .place_order(_order)
             .txParams({})
@@ -313,11 +312,12 @@ async function _placeBuyOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .place_order(_order)
             .txParams({gasLimit})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _placeBuyOrder failed. Reason: ${err}`)
@@ -341,8 +341,8 @@ export async function updateOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
-        const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+        const _collection = new NFTContract(order.collection, _provider);
+        const _contract = new ThunderExchange(contract.id, _provider);
         const { gasUsed } = await contract.functions
             .update_order(_order)
             .txParams({})
@@ -351,11 +351,12 @@ export async function updateOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .update_order(_order)
             .txParams({gasLimit})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. updateOrder failed. Reason: ${err}`)
@@ -389,8 +390,8 @@ export async function depositAndOffer(
         const _pool: ContractIdInput = { bits: pool.id.toB256() };
         const _asset: AssetIdInput = { bits: assetId };
 
-        const _collection = new Contract(order.collection, NFTContractAbi__factory.abi, _provider);
-        const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+        const _collection = new NFTContract(order.collection, _provider);
+        const _contract = new ThunderExchange(contract.id, _provider);
 
         const script = new Script(bytecode, abi, wallet);
         const { gasUsed } = await script.functions
@@ -402,12 +403,13 @@ export async function depositAndOffer(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await script.functions
+        const call = await script.functions
             .main(_exchange, _pool, _order, requiredBidAmount, _asset, isUpdate)
             .txParams({gasLimit})
             .callParams({forward: coin})
             .addContracts([strategy, pool, executionManager, assetManager, _collection, _contract])
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. depositAndOffer failed. Reason: ${err}`)
@@ -425,7 +427,7 @@ export async function bulkListing(
 
     const contract = await setup(contractId, provider, wallet);
     const _provider = await Provider.create(provider);
-    const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+    const _contract = new ThunderExchange(contract.id, _provider);
     const _contracts = [pool, executionManager, assetManager, _contract]
 
     if (orders.length !== 0) {
@@ -433,7 +435,7 @@ export async function bulkListing(
             if (order.isBuySide) continue;
 
             const makerOrder = _convertToInput(order);
-            const assetId = ReceiptMintCoder.getAssetId(order.collection, makerOrder.token_id);
+            const assetId = getMintedAssetId(order.collection, makerOrder.token_id);
             const asset: CoinQuantityLike = { amount: order.amount, assetId: assetId };
 
             let strategy: Contract;
@@ -442,7 +444,7 @@ export async function bulkListing(
             //     strategy = strategyFixedPrice:
             //     strategy = strategyAuction;
 
-            const _collection = new Contract(makerOrder.collection.bits, NFTContractAbi__factory.abi, _provider);
+            const _collection = new NFTContract(makerOrder.collection.bits, _provider);
             if (!_contracts.includes(strategy)) _contracts.push(strategy)
             if (!_contracts.includes(_collection)) _contracts.push(_collection)
             const call = contract.functions
@@ -466,7 +468,7 @@ export async function bulkListing(
             //     strategy = strategyFixedPrice:
             //     strategy = strategyAuction;
 
-            const _collection = new Contract(makerOrder.collection.bits, NFTContractAbi__factory.abi, _provider);
+            const _collection = new NFTContract(makerOrder.collection.bits, _provider);
             if (!_contracts.includes(strategy)) _contracts.push(strategy)
             if (!_contracts.includes(_collection)) _contracts.push(_collection)
             const call = contract.functions
@@ -486,10 +488,11 @@ export async function bulkListing(
 
     const gasLimit = Number(gasUsed) * 1.5
 
-    const { transactionResult } = await contract.multiCall(calls)
+    const call = await contract.multiCall(calls)
         .txParams({gasLimit})
         .addContracts(_contracts)
         .call();
+    const { transactionResult } = await call.waitForResult()
     return { transactionResult };
 }
 
@@ -517,11 +520,20 @@ export async function cancelOrder(
         //     strategy = strategyAuction;
 
         if (isBuySide) {
-            const { transactionResult } = await contract.functions
+            const { gasUsed } = await contract.functions
                 .cancel_order(_strategy, nonce, side)
                 .addContracts([strategyContract, executionManager])
                 .txParams({})
+                .getTransactionCost();
+
+            const gasLimit = Number(gasUsed) * 1.5
+
+            const call = await contract.functions
+                .cancel_order(_strategy, nonce, side)
+                .addContracts([strategyContract, executionManager])
+                .txParams({gasLimit})
                 .call();
+            const { transactionResult } = await call.waitForResult()
             return { transactionResult };
         }
 
@@ -533,11 +545,12 @@ export async function cancelOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .cancel_order(_strategy, nonce, side)
             .addContracts([strategyContract, executionManager])
             .txParams({variableOutputs: 1, gasLimit})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. cancelOrder failed. Reason: ${err}`)
@@ -592,10 +605,11 @@ export async function bulkCancelOrder(
 
     const gasLimit = Number(gasUsed) * 1.5
 
-    const { transactionResult } = await contract.multiCall(calls)
+    const call = await contract.multiCall(calls)
         .txParams({gasLimit})
         .addContracts([strategyFixedPrice, executionManager])
         .call();
+    const { transactionResult } = await call.waitForResult()
     return { transactionResult };
 }
 
@@ -646,7 +660,7 @@ async function _executeBuyOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection.bits, NFTContractAbi__factory.abi, _provider);
+        const _collection = new NFTContract(order.collection.bits, _provider);
         const { gasUsed } = await contract.functions
             .execute_order(order)
             .txParams({variableOutputs: 4})
@@ -656,12 +670,13 @@ async function _executeBuyOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .execute_order(order)
             .txParams({variableOutputs: 4, gasLimit})
             .addContracts([_strategy, _collection, royaltyManager, executionManager])
             .callParams({forward: coin})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _executeBuyOrder failed. Reason: ${err}`)
@@ -678,7 +693,7 @@ async function _executeSellOrder(
         const _provider = await Provider.create(provider);
         const contract = await setup(contractId, provider, wallet);
 
-        const assetId = ReceiptMintCoder.getAssetId(order.collection.bits, order.token_id);
+        const assetId = getMintedAssetId(order.collection.bits, order.token_id);
         console.log(assetId)
         const asset: CoinQuantityLike = { amount: 1, assetId: assetId };
 
@@ -688,7 +703,7 @@ async function _executeSellOrder(
         //     strategy = strategyFixedPrice:
         //     strategy = strategyAuction;
 
-        const _collection = new Contract(order.collection.bits, NFTContractAbi__factory.abi, _provider);
+        const _collection = new NFTContract(order.collection.bits, _provider);
         const { gasUsed } = await contract.functions
             .execute_order(order)
             .txParams({variableOutputs: 4})
@@ -698,12 +713,13 @@ async function _executeSellOrder(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .execute_order(order)
             .txParams({variableOutputs: 4})
             .callParams({forward: asset, gasLimit})
             .addContracts([_strategy, _collection, pool, assetManager, royaltyManager, executionManager])
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. _executeSellOrder failed. Reason: ${err}`)
@@ -722,14 +738,14 @@ export async function bulkPurchase(
 
         const contract = await setup(contractId, provider, wallet);
         const _provider = await Provider.create(provider);
-        const _contract = new Contract(contract.id, ThunderExchangeAbi__factory.abi, _provider);
+        const _contract = new ThunderExchange(contract.id, _provider);
         const _contracts = [pool, executionManager, assetManager, _contract, strategyFixedPrice, royaltyManager]
 
         for (const order of orders) {
             if (order.isBuySide) {
                 const takerOrder = _convertToTakerOrder(order);
                 const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
-                const _collection = new Contract(takerOrder.collection.bits, NFTContractAbi__factory.abi, _provider);
+                const _collection = new NFTContract(takerOrder.collection.bits, _provider);
 
                 //if (order.strategy == strategyAuction.id.toB256()) continue;
                 if (!_contracts.includes(_collection)) _contracts.push(_collection)
@@ -751,10 +767,11 @@ export async function bulkPurchase(
 
         const gasLimit = Number(gasUsed) * 1.5
 
-        const { transactionResult } = await contract.multiCall(calls)
+        const call = await contract.multiCall(calls)
             .txParams({gasLimit})
             .addContracts(_contracts)
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
@@ -770,10 +787,11 @@ export async function setPool(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _pool: ContractIdInput = { bits: pool };
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .set_pool(_pool)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setPool failed. Reason: ${err}`)
@@ -789,10 +807,11 @@ export async function setExecutionManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _executionManager: ContractIdInput = { bits: executionManager };
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .set_execution_manager(_executionManager)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setExecutionManager failed. Reason: ${err}`)
@@ -808,10 +827,11 @@ export async function setRoyaltyManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _royaltyManager: ContractIdInput = { bits: royaltyManager };
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .set_royalty_manager(_royaltyManager)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setRoyaltyManager failed. Reason: ${err}`)
@@ -827,10 +847,11 @@ export async function setAssetManager(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _assetManager: ContractIdInput = { bits: assetManager };
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .set_asset_manager(_assetManager)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setAssetManager failed. Reason: ${err}`)
@@ -850,31 +871,14 @@ export async function setProtocolFeeRecipient(
             _protocolFeeRecipient = { Address: { bits: protocolFeeRecipient } } :
             _protocolFeeRecipient = { ContractId: { bits: protocolFeeRecipient } };
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .set_protocol_fee_recipient(_protocolFeeRecipient)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. setProtocolFeeRecipient failed. Reason: ${err}`)
-    }
-}
-
-export async function setMaxExpiration(
-    contractId: string,
-    provider: string,
-    wallet: string | WalletLocked,
-    maxExpiration: number,
-) {
-    try {
-        const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
-            .set_max_expiration(maxExpiration)
-            .txParams({})
-            .call();
-        return { transactionResult };
-    } catch(err: any) {
-        throw Error(`Exchange. setMaxExpiration failed. Reason: ${err}`)
     }
 }
 
@@ -983,10 +987,11 @@ export async function transferOwnership(
     try {
         const contract = await setup(contractId, provider, wallet);
         const _newOwner: IdentityInput = { Address: { bits: newOwner } };
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .transfer_ownership(_newOwner)
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. transferOwnership failed. Reason: ${err}`)
@@ -1000,10 +1005,11 @@ export async function renounceOwnership(
 ) {
     try {
         const contract = await setup(contractId, provider, wallet);
-        const { transactionResult } = await contract.functions
+        const call = await contract.functions
             .renounce_ownership()
             .txParams({})
             .call();
+        const { transactionResult } = await call.waitForResult()
         return { transactionResult };
     } catch(err: any) {
         throw Error(`Exchange. renounceOwnership failed. Reason: ${err}`)

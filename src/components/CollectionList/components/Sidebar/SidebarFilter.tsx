@@ -19,7 +19,7 @@ enum FilterComponentType {
   CollectionCheckboxList = 6,
 }
 
-const SidebarFilter = ({ className = "w-72" }: { className?: string }) => {
+const SidebarFilter = ({ className = "w-72" }: { className?: string } = {}) => {
   const { displayType, setDisplayType, filters, params, setParams, deleteParams, options, isMobile, mobileFilterIsOpen, hideMobileFilter } = useCollectionListContext();
 
   const onChange = (name: any, value: any, type: number) => {

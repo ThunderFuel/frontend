@@ -19,8 +19,8 @@ const ActivityType = ({ item }: any) => {
   const Icon = item.typeIcon ?? IconHand;
 
   return (
-    <div className="flex items-center gap-2.5 px-2.5 flex-1">
-      <div className="flex-center h-8 basis-8 rounded-full bg-gray">
+    <div className="flex items-center gap-2.5 px-2.5 flex-1 w-full">
+      <div className="flex-center min-h-8 min-w-8 basis-8 rounded-full bg-gray">
         <Icon />
       </div>
       <div className="min-w-0 flex flex-col">
@@ -31,7 +31,6 @@ const ActivityType = ({ item }: any) => {
   );
 };
 const ActivityCollectionItem = ({ item }: any) => {
-  const isMobile = useIsMobile();
   const Icon = item.typeIcon ?? IconHand;
 
   return (
@@ -106,7 +105,7 @@ const ActivityItems = (props: any) => {
     {
       key: "item",
       text: `ITEM`,
-      width: "27%",
+      width: "20%",
       align: "flex-start",
       minWidth: "240px",
       sortValue: 1,
@@ -115,7 +114,7 @@ const ActivityItems = (props: any) => {
     {
       key: "price",
       text: "PRICE",
-      width: "10%",
+      width: "17%",
       align: "flex-end",
       className: "text-right",
       render: (item) => {
@@ -155,8 +154,8 @@ const ActivityItems = (props: any) => {
     <>
       {useIsMobile() ? <MobileSidebar /> : null}
       <div className={clsx("flex flex-col flex-1 lg:pt-4 lg:pb-16 lg:py-5", props.containerClassName)}>
-        {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{pagination.itemsCount} ACTIVITIES</div>}
-        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"!lg:px-5"} rowClassName={"!h-[60px]"} />
+        {!props.hideTitle && <div className="text-headline-02 text-gray-light px-5 pb-3 lg:pb-5 lg:border-b lg:border-b-gray">{getActivities.length} ACTIVITIES</div>}
+        <Table headers={props.headers ?? defaultHeader} items={getActivities} containerFluidClassName={"lg:px-5"} rowClassName={"!h-[60px]"} />
       </div>
     </>
   );

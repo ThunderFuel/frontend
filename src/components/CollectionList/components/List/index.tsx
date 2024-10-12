@@ -13,7 +13,7 @@ const Index = () => {
 
   return (
     <div className={"lg:flex lg:flex-col lg:flex-1 pt-5 gap-5"}>
-      <div className="flex flex-col gap-5 px-5 lg:px-0">
+      <div className="flex flex-col gap-5 px-5 lg:px-0 h-full">
         <div className="flex items-center justify-between">
           <div className={clsx("text-headline-02 text-gray-light", !options?.hiddenSidebar && "lg:pl-5")}>
             {pagination?.itemsCount ?? collectionItems.length} {options?.itemLabel ?? "ITEMS"}

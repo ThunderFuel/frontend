@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { IUserResponse } from "api/user/user.type";
-import { Address, WalletLocked } from "fuels";
+import type { IUserResponse } from "api/user/user.type";
+import { Address, type WalletLocked } from "fuels";
 
 export const walletSlice = createSlice({
   name: "wallet",
@@ -58,8 +58,9 @@ export const walletSlice = createSlice({
 
 export const getSerializeAddress = createSelector(
   (state: any) => {
-    if (state.wallet?.address?.trim() !== "") {
-      return Address.fromString(state.wallet.address);
+    const trimmedAddress = state.wallet?.address?.trim();
+    if (trimmedAddress !== "") {
+      return trimmedAddress.length > 44 ? Address.fromDynamicInput(state.wallet.address) : Address.fromEvmAddress(state.wallet.address);
     }
 
     return null;

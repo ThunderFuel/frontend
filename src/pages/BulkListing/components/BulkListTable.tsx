@@ -76,7 +76,7 @@ const MobileTableRow = ({ item }: any) => {
           <EthereumPrice className="justify-end" price={item.topTrait} />
         </div>
         <div className="text-headline-01 uppercase">
-          <h5 className="text-h6 text-right">{item?.royalty}%</h5>
+          <h5 className="text-h6 text-right">{item?.royaltyFee}%</h5>
         </div>
         <div className="text-headline-01 uppercase text-right">
           <EthereumPrice className={clsx("justify-end", item?.proceedPrice && "text-green")} price={item?.proceedPrice} />
@@ -173,9 +173,7 @@ const BulkListTable = ({ items, prices, onUpdatePrice, theadClassName }: any) =>
       width: "14%",
       align: "flex-end",
       render: (item) => (
-        <ColumnTitle title="LOYALTY">
-          <h5 className="text-h5 text-white"> {item?.royalty}%</h5>
-        </ColumnTitle>
+        <ColumnTitle title="ROYALTY">{item?.royalty ? <h5 className="text-h5 text-white"> {item?.royaltyFee}%</h5> : <h5 className="text-h5 text-white text-opacity-0"> 0</h5>}</ColumnTitle>
       ),
     },
     {

@@ -4,7 +4,6 @@ export enum RightMenuType {
   None,
   Activities,
   Bids,
-  ListNFT,
   MakeOffer,
   Offers,
   PlaceBid,

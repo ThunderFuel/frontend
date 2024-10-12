@@ -75,7 +75,7 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
   const { handleCheckout } = useWallet();
-  const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
+  const { items, buyNowItem } = useAppSelector((state) => state.cart);
   const [_buyNowItem, set_BuyNowItem] = useState(buyNowItem);
   const [_items, set_Items] = useState(items);
   const { user, wallet } = useAppSelector((state) => state.wallet);
@@ -110,6 +110,12 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
       setIsFailed(true);
     }
   };
+
+  React.useEffect(() => {
+    if (!show) {
+      set_BuyNowItem({} as any);
+    }
+  }, [show]);
 
   React.useEffect(() => {
     if (buyNowItem && !isObjectEmpty(buyNowItem)) set_BuyNowItem(buyNowItem);

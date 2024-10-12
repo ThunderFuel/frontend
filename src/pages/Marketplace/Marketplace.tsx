@@ -116,7 +116,7 @@ const Marketplace = () => {
           dispatch(setIsConnected(true));
           dispatch(setAddress(walletAddress));
           dispatch(setUser(res.data));
-          walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK, 3);
+          walletConnectGateway(FUEL_TYPE.WAGMI_METAMASK);
           // if (authMethod && pkps.length > 0) {
           //   initSession(authMethod, pkps[1]);
           // }

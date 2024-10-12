@@ -9,10 +9,13 @@ import { useShareTwitter } from "hooks/useShareTwitter";
 import { compareAddresses } from "utils";
 import { useIsMobile } from "hooks/useIsMobile";
 import Dropdown from "components/Dropdown";
+import useToast from "hooks/useToast";
 
 const ImageBar = ({ nft, toggleFullscreen }: any) => {
   const dispatch = useAppDispatch();
-  const shareTwitter = useShareTwitter();
+  const shareTwitter = useShareTwitter({
+    userId: "",
+  });
   const [isLiked, setIsliked] = useState(false);
   const { user, isConnected } = useAppSelector((state) => state.wallet);
   const isMobile = useIsMobile();
@@ -57,7 +60,12 @@ const ImageBar = ({ nft, toggleFullscreen }: any) => {
     },
     { icon: IconFullscreen, onClick: () => toggleFullscreen() },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    { icon: IconRefresh, onClick: () => {} },
+    {
+      icon: IconRefresh,
+      onClick: () => {
+        useToast().info("We're refreshing metadata for this item! Check back in a minute...");
+      },
+    },
     {
       icon: IconShare,
       onClick: onShare,

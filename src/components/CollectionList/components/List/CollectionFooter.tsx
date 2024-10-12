@@ -6,6 +6,7 @@ import { removeAll } from "store/cartSlice";
 import { CheckoutType, setCheckout, setIsInsufficientBalance, toggleCheckoutModal } from "store/checkoutSlice";
 import { useWallet } from "hooks/useWallet";
 import { toggleWalletModal } from "store/walletSlice";
+import { formatPriceRounded } from "utils";
 
 const CollectionFooter = () => {
   const { hasEnoughFunds } = useWallet();
@@ -54,7 +55,7 @@ const CollectionFooter = () => {
             <IconTrash />
           </Button>
           <Button className="uppercase" onClick={onToggleCheckoutModal}>
-            buy {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"} - {selectedCartTotalAmount} eth
+            buy {selectedCartItemCount} {selectedCartItemCount <= 1 ? "ıtem" : "ıtems"} - {formatPriceRounded(selectedCartTotalAmount)} eth
             <IconArrowRight />
           </Button>
         </div>

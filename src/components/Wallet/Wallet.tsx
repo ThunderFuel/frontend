@@ -17,6 +17,7 @@ import config from "config";
 import useToast from "hooks/useToast";
 import { useClickOutside } from "hooks/useClickOutside";
 import clsx from "clsx";
+import GetTestEth from "components/GetTestEth/GetTestEth";
 
 function clipboardCopyWrapper(walletAddress: any) {
   clipboardCopy(walletAddress);
@@ -79,22 +80,20 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   const navigate = UseNavigate();
   const { user, address } = useAppSelector((state) => state.wallet);
   const { walletDisconnect, getBalance, getBidBalance } = useWallet();
-  const [balance, setbalance] = useState<number>(0);
   const [bidBalance, setBidBalance] = useState<number>(0);
+  const { removeItem } = useLocalStorage();
 
-  function fetchBalance() {
-    getBalance().then((res) => setbalance(res ? res : 0));
-  }
+  const balance = getBalance(5);
+
   function fetchBidBalance() {
     if (user.walletAddress === undefined) return;
-    getBidBalance({ contractAddress: user.walletAddress, user: user }).then((res) => {
+    getBidBalance({ contractAddress: user.walletAddress, user: user })?.then((res) => {
       setBidBalance(res);
     });
   }
 
   useEffect(() => {
     if (!show) return;
-    fetchBalance();
     fetchBidBalance();
   }, [show]);
 
@@ -190,7 +189,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
     dispatch(setUser({}));
     dispatch(removeAll());
     dispatch(removeBulkItems());
-    useLocalStorage().removeItem("connected_account");
+    removeItem("connected_account");
     onClose();
   }
 
@@ -221,14 +220,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
           </div>
         </div>
         <div className="grid p-[15px] grid-cols-2 gap-2.5 border-t border-gray">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href={`${FUEL_FAUCET_URL}/?address=${user?.walletAddress ?? user?.contractAddress ?? address}&redirectUrl=https%3A%2F%2Fthundernft.market%2F`}
-            className="btn btn-primary w-full"
-          >
-            GET TEST ETH <IconFaucet />
-          </a>
+          <GetTestEth user={user} address={address} />
           <Button
             className="btn-secondary w-full"
             onClick={() => {
@@ -247,7 +239,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 
   return (
-    <Modal className="cart" title="Wallet" onClose={onClose} show={show}>
+    <Modal className="cart" title="Wallet" onClose={onClose} show={false}>
       <div className="flex flex-col p-5 gap-5">
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col gap-2.5">
@@ -259,7 +251,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
               </div>
             </div>
             <h6 className="flex items-center gap text-h6 text-gray-light">
-              {balance.toFixed(5)} <IconEthereum />
+              {balance} <IconEthereum />
             </h6>
             <div
               className="flex items-center w-fit gap-x-1 p-1.5 cursor-pointer rounded-[5px] text-bodyMd text-gray-light border border-gray hover:text-white hover:bg-bg-light"
@@ -286,7 +278,7 @@ const Wallet = ({ show, onClose }: { show: boolean; onClose: any }) => {
                   dispatch(setUser({}));
                   dispatch(removeAll());
                   dispatch(removeBulkItems());
-                  useLocalStorage().removeItem("connected_account");
+                  removeItem("connected_account");
                   onClose();
                 }}
               >

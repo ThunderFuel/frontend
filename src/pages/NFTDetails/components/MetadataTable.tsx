@@ -4,7 +4,6 @@ import { IconListed } from "icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "store";
-import { RightMenuType, setPresetPrice, setRightMenu } from "store/NFTDetailsSlice";
 import "./MetadataTable.css";
 import { CheckoutType, setCheckout, toggleCheckoutModal } from "store/checkoutSlice";
 
@@ -38,7 +37,7 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
               <div className="text-white">{item.value}</div>
               <div>
                 {traitfloors.find((trait: any) => trait.traitType === item.traitType) ? (
-                  <EthereumPrice priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price} />
+                  <EthereumPrice isNull={true} priceClassName="text-head6 text-white" price={traitfloors.find((trait: any) => trait.traitType === item.traitType)?.price} />
                 ) : (
                   <span className="text-headline-01">NO LISTINGS</span>
                 )}
@@ -61,8 +60,6 @@ const MetadataTable = ({ metadata, traitfloors }: { metadata: any; traitfloors: 
                       })
                     );
                     dispatch(toggleCheckoutModal());
-                    // dispatch(setPresetPrice(getTraitFloor(item) === "-" ? "" : getTraitFloor(item)));
-                    // dispatch(setRightMenu(selectedNFT.salable ? RightMenuType.UpdateListing : RightMenuType.ListNFT));
                   }}
                 >
                   LIST AT TRAIT FLOOR <IconListed className="w-4 h-4" />

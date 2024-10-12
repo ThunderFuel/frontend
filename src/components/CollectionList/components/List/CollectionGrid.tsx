@@ -19,13 +19,13 @@ const CollectionGrid = ({ children, isLoading }: any) => {
   }, [displayType]);
 
   if (isLoading && !collectionItems.length) {
-    return <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:pl-5")}>{children}</div>;
+    return <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:px-5")}>{children}</div>;
   }
 
   return (
     <>
       {collectionItems.length > 0 && (
-        <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:pl-5")}>
+        <div className={clsx("grid grid-cols-2 gap-x-2 gap-y-7 pb-20 h-full", displayClass, !options?.hiddenSidebar && "lg:px-5")}>
           {collectionItems.map((collection: any, i: number) => (
             <CollectionItem key={`CollectionItem_${collection?.id}_${i}`} collection={collection} />
           ))}
