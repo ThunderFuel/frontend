@@ -46,5 +46,9 @@ export const getDefaultConnectors = ({ wcProjectId, ethWagmiConfig, chainId, fue
     connectors.push(new FuelWalletDevelopmentConnector());
   }
 
+  if (typeof window === "undefined") {
+    return [];
+  }
+
   return connectors;
 };
