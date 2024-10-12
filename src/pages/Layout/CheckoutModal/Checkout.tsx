@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import Button from "components/Button";
@@ -71,14 +71,24 @@ export const CheckoutCartItems = ({ items, itemCount, totalAmount, approved }: {
     </>
   );
 };
-const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
+
+const selectShowCheckout = (state: any) => state.checkout.show;
+const selectCartItems = (state: any) => state.cart.items;
+const selectCartBuyNowItem = (state: any) => state.cart.buyNowItem;
+const selectWalletUser = (state: any) => state.wallet.user;
+const selectWalletWallet = (state: any) => state.wallet.wallet;
+
+const Checkout = ({ onClose }: { onClose: any }) => {
+  const show = useAppSelector(selectShowCheckout);
+  const items = useAppSelector(selectCartItems);
+  const buyNowItem = useAppSelector(selectCartBuyNowItem);
+  const user = useAppSelector(selectWalletUser);
+  const wallet = useAppSelector(selectWalletWallet);
   const [successCheckout, setSuccessCheckout] = React.useState(false);
   const dispatch = useAppDispatch();
   const { handleCheckout } = useWallet();
-  const { totalAmount, itemCount, items, buyNowItem } = useAppSelector((state) => state.cart);
   const [_buyNowItem, set_BuyNowItem] = useState(buyNowItem);
   const [_items, set_Items] = useState(items);
-  const { user, wallet } = useAppSelector((state) => state.wallet);
   const [isFailed, setIsFailed] = useState(false);
 
   const [approved, setApproved] = useState(false);
@@ -200,4 +210,6 @@ const Checkout = ({ show, onClose }: { show: boolean; onClose: any }) => {
   );
 };
 
-export default Checkout;
+export default memo(Checkout, (prevProps, nextProps) => {
+  return false;
+});
