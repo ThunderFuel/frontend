@@ -1,13 +1,15 @@
 import {
+    type FunctionInvocationScope,
     Provider,
     WalletUnlocked,
-    WalletLocked,
-    CoinQuantityLike,
-    Contract,
-    BigNumberish,
-    FunctionInvocationScope,
+    type WalletLocked,
+    type CoinQuantityLike,
+    type Contract,
+    type BigNumberish,
     Script,
-    getMintedAssetId
+    getMintedAssetId,
+    type TransactionResult,
+    type TransactionType
 } from "fuels";
 import { ThunderExchange } from "../../types/thunder_exchange";
 import { StrategyFixedPriceSale } from "../../types/execution_strategies/strategy_fixed_price_sale";
@@ -16,13 +18,13 @@ import { ExecutionManager } from "../../types/execution_manager";
 import { RoyaltyManager } from "../../types/royalty_manager";
 import { AssetManager } from "../../types/asset_manager";
 import { NFTContract } from "../../types/erc721";
-import { IdentityInput,
-    ContractIdInput,
-    MakerOrderInput,
+import { type IdentityInput,
+    type ContractIdInput,
+    type MakerOrderInput,
     SideInput,
-    TakerOrderInput,
-    ExtraParamsInput,
-    AssetIdInput
+    type TakerOrderInput,
+    type ExtraParamsInput,
+    type AssetIdInput
 } from "../../types/thunder_exchange/ThunderExchange";
 
 import bytecode from "../../scripts/deposit_and_offer/binFile";
@@ -152,12 +154,13 @@ async function setup(
 ): Promise<ThunderExchange> {
     const _provider = await Provider.create(provider);
 
-    if (wallet && typeof wallet === "string") {
+    if (wallet) {
+        if ( typeof wallet === "string") {
         const _provider = await Provider.create(provider);
         const walletUnlocked: WalletUnlocked = new WalletUnlocked(wallet, _provider);
         return new ThunderExchange(contractId, walletUnlocked)
-    } else if (wallet && typeof wallet !== "string") {
-        return new ThunderExchange(contractId, wallet)
+        }
+            return new ThunderExchange(contractId, wallet)
     }
 
     return new ThunderExchange(contractId, _provider)
@@ -732,51 +735,57 @@ export async function bulkPurchase(
     wallet: string | WalletLocked,
     orders: TakerOrder[],
     assetId: string,
-) {
+  ) {
     try {
-        let calls: FunctionInvocationScope<any[], any>[] = [];
-
-        const contract = await setup(contractId, provider, wallet);
-        const _provider = await Provider.create(provider);
-        const _contract = new ThunderExchange(contract.id, _provider);
-        const _contracts = [pool, executionManager, assetManager, _contract, strategyFixedPrice, royaltyManager]
-
-        for (const order of orders) {
-            if (order.isBuySide) {
-                const takerOrder = _convertToTakerOrder(order);
-                const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
-                const _collection = new NFTContract(takerOrder.collection.bits, _provider);
-
-                //if (order.strategy == strategyAuction.id.toB256()) continue;
-                if (!_contracts.includes(_collection)) _contracts.push(_collection)
-                const call = contract.functions
-                    .execute_order(takerOrder)
-                    .txParams({variableOutputs: 4})
-                    .addContracts([strategyFixedPrice, _collection, royaltyManager, executionManager])
-                    .callParams({forward: coin})
-                calls.push(call);
-            }
+      const contract = await setup(contractId, provider, wallet);
+      const _provider = await Provider.create(provider);
+      const _contracts: Contract[] = [pool, executionManager, assetManager, strategyFixedPrice, royaltyManager];
+  
+      const calls: FunctionInvocationScope<any[], any>[] = [];
+  
+      for (const order of orders) {
+        if (!order.isBuySide || order.nonce === 0) continue;
+  
+        const takerOrderInput = _convertToTakerOrder(order);
+        const coin: CoinQuantityLike = { amount: order.price, assetId: assetId };
+        const _collection = new NFTContract(order.collection, _provider);
+  
+        if (!_contracts.some(contract => contract.id === _collection.id)) {
+          _contracts.push(_collection);
         }
+  
+        const call = contract.functions
+          .execute_order(takerOrderInput)
+          .txParams({ variableOutputs: 4 })
+          .addContracts([strategyFixedPrice, pool, executionManager, assetManager, _collection, royaltyManager])
+          .callParams({ forward: coin });
+  
+        calls.push(call);
+      }
 
-        if (calls.length === 0) return null;
-
-        const { gasUsed } = await contract.multiCall(calls)
-            .txParams({})
-            .addContracts(_contracts)
-            .getTransactionCost();
-
-        const gasLimit = Number(gasUsed) * 1.5
-
-        const call = await contract.multiCall(calls)
-            .txParams({gasLimit})
-            .addContracts(_contracts)
-            .call();
-        const { transactionResult } = await call.waitForResult()
-        return { transactionResult };
-    } catch(err: any) {
-        throw Error(`Exchange. setPool failed. Reason: ${err}`)
+  
+      // Disabled gas limit estimation to speed up the process
+    // //   Estimate gas for the batched transaction
+    //   const { gasUsed } = await contract.multiCall(calls)
+    //     .txParams({})
+    //     .addContracts(_contracts)
+    //     .getTransactionCost();
+  
+    //   const gasLimit = Math.floor(Number(gasUsed) * 1.5);
+  
+    //   Execute the batch transaction
+      const result = await contract.multiCall(calls)
+        .txParams({})
+        .addContracts(_contracts)
+        .call();
+  
+      const { transactionResult } = await result.waitForResult();
+      return { transactionResult };
+    } catch (err: any) {
+      console.error("Exchange.bulkPurchase failed:", err);
+      throw Error(`Exchange.bulkPurchase failed. Reason: ${err.message || err}`);
     }
-}
+  }
 
 export async function setPool(
     contractId: string,

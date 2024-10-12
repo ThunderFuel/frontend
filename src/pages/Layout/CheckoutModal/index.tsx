@@ -78,7 +78,7 @@ const Index = () => {
     case CheckoutType.MintCheckout:
       return <MintCheckout show={show} onClose={onClose} />;
     default:
-      return isInsufficientBalance ? <InsufficientFund show={show} onClose={onClose} /> : <Checkout show={show} onClose={onClose} />;
+      return isInsufficientBalance ? <InsufficientFund show={show} onClose={onClose} /> : <Checkout onClose={onClose} />;
   }
 };
 
